@@ -19,7 +19,8 @@
                     "ARTF1000",
                     "MATH1000"
                   ],
-                  "text": "ARTF 1000 or MATH 1000"
+                  "text": "ARTF 1000 or MATH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -27,28 +28,32 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1365"
                   ],
-                  "text": "MATH 1365"
+                  "text": "MATH 1365",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -62,7 +67,8 @@
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -70,7 +76,8 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -78,18 +85,21 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -103,15 +113,18 @@
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D fundamentals elective"
+                  "text": "A+D fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -122,15 +135,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "A+D fundamentals elective"
+                  "text": "A+D fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D fundamentals elective"
+                  "text": "A+D fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -149,29 +165,34 @@
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 1"
+                  "text": "Design option level 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D history elective"
+                  "text": "A+D history elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000 (For COS students)"
+                  "text": "EESC 2000 (For COS students)",
+                  "sh": 1
                 }
               ]
             },
@@ -182,7 +203,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -193,7 +215,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -204,11 +227,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -227,19 +252,23 @@
                   "codes": [
                     "MATH2331"
                   ],
-                  "text": "MATH 2331"
+                  "text": "MATH 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 2"
+                  "text": "Design option level 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Math elective"
+                  "text": "Math elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -250,7 +279,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -261,7 +291,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -272,11 +303,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -295,19 +328,23 @@
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design elective"
+                  "text": "Design elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Mathematics advanced elective"
+                  "text": "Mathematics advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -321,19 +358,23 @@
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Mathematics elective/capstone"
+                  "text": "Mathematics elective/capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

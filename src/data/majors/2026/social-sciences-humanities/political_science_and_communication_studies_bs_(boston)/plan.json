@@ -19,32 +19,37 @@
                     "POLS1000",
                     "COMM1000"
                   ],
-                  "text": "POLS 1000 or COMM 1000"
+                  "text": "POLS 1000 or COMM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1150"
                   ],
-                  "text": "POLS 1150"
+                  "text": "POLS 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -58,7 +63,8 @@
                   "codes": [
                     "POLS1155"
                   ],
-                  "text": "POLS 1155"
+                  "text": "POLS 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -66,22 +72,26 @@
                     "COMM1112",
                     "COMM2301"
                   ],
-                  "text": "COMM 1112 or 2301"
+                  "text": "COMM 1112 or 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -92,11 +102,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies Foundation Course"
+                  "text": "Communication Studies Foundation Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies Elective"
+                  "text": "Communication Studies Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -107,11 +119,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies Cluster Course"
+                  "text": "Communication Studies Cluster Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -130,29 +144,34 @@
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS2400"
                   ],
-                  "text": "POLS 2400"
+                  "text": "POLS 2400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies Elective"
+                  "text": "Communication Studies Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 }
               ]
             },
@@ -163,7 +182,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -174,7 +194,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -185,11 +206,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies Writing Intensive"
+                  "text": "Communication Studies Writing Intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -205,7 +228,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Political Thought Course"
+                  "text": "Political Thought Course",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -213,15 +237,18 @@
                     "POLS2399",
                     "COMM2301"
                   ],
-                  "text": "POLS 2399 or COMM 2301"
+                  "text": "POLS 2399 or COMM 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies Elective"
+                  "text": "Communication Studies Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Political Science Elective"
+                  "text": "Political Science Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -232,7 +259,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -243,7 +271,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -254,11 +283,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies Writing Intensive"
+                  "text": "Communication Studies Writing Intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Political Science Elective"
+                  "text": "Political Science Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -274,19 +305,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Political Science Elective"
+                  "text": "Political Science Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Political Science Elective"
+                  "text": "Political Science Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative Course"
+                  "text": "Integrative Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -297,19 +332,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

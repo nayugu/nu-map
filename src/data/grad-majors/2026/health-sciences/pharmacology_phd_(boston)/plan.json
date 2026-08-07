@@ -18,28 +18,32 @@
                   "codes": [
                     "PHSC5100"
                   ],
-                  "text": "PHSC 5100"
+                  "text": "PHSC 5100",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC5102"
                   ],
-                  "text": "PHSC 5102"
+                  "text": "PHSC 5102",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PMCL6250"
                   ],
-                  "text": "PMCL 6250"
+                  "text": "PMCL 6250",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC6300"
                   ],
-                  "text": "PHSC 6300"
+                  "text": "PHSC 6300",
+                  "sh": 1
                 }
               ]
             },
@@ -53,28 +57,32 @@
                   "codes": [
                     "PHSC5212"
                   ],
-                  "text": "PHSC 5212"
+                  "text": "PHSC 5212",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC6214"
                   ],
-                  "text": "PHSC 6214"
+                  "text": "PHSC 6214",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC6300"
                   ],
-                  "text": "PHSC 6300"
+                  "text": "PHSC 6300",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PMCL6252"
                   ],
-                  "text": "PMCL 6252"
+                  "text": "PMCL 6252",
+                  "sh": 4
                 }
               ]
             },
@@ -88,7 +96,8 @@
                   "codes": [
                     "PHSC7020"
                   ],
-                  "text": "PHSC 70201"
+                  "text": "PHSC 70201",
+                  "sh": 2
                 }
               ],
               "fullSummer": true
@@ -108,14 +117,16 @@
                   "codes": [
                     "PHSC6300"
                   ],
-                  "text": "PHSC 6300"
+                  "text": "PHSC 6300",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC8940"
                   ],
-                  "text": "PHSC 8940"
+                  "text": "PHSC 8940",
+                  "sh": 1
                 }
               ]
             },
@@ -129,14 +140,16 @@
                   "codes": [
                     "PHSC6300"
                   ],
-                  "text": "PHSC 6300"
+                  "text": "PHSC 6300",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC8986"
                   ],
-                  "text": "PHSC 8986"
+                  "text": "PHSC 8986",
+                  "sh": 0
                 }
               ]
             },
@@ -150,7 +163,8 @@
                   "codes": [
                     "PHSC9681"
                   ],
-                  "text": "PHSC 96812"
+                  "text": "PHSC 96812",
+                  "sh": 2
                 }
               ],
               "fullSummer": true
@@ -170,14 +184,16 @@
                   "codes": [
                     "PHSC6300"
                   ],
-                  "text": "PHSC 6300"
+                  "text": "PHSC 6300",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC9990"
                   ],
-                  "text": "PHSC 9990"
+                  "text": "PHSC 9990",
+                  "sh": 0
                 }
               ]
             },
@@ -191,14 +207,16 @@
                   "codes": [
                     "PHSC6300"
                   ],
-                  "text": "PHSC 6300"
+                  "text": "PHSC 6300",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC9991"
                   ],
-                  "text": "PHSC 9991"
+                  "text": "PHSC 9991",
+                  "sh": 0
                 }
               ]
             },
@@ -212,7 +230,8 @@
                   "codes": [
                     "PHSC9996"
                   ],
-                  "text": "PHSC 9996"
+                  "text": "PHSC 9996",
+                  "sh": 0
                 }
               ],
               "fullSummer": true
@@ -232,14 +251,16 @@
                   "codes": [
                     "PHSC5305"
                   ],
-                  "text": "PHSC 53054"
+                  "text": "PHSC 53054",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC6810"
                   ],
-                  "text": "PHSC 68103"
+                  "text": "PHSC 68103",
+                  "sh": 1
                 }
               ]
             },
@@ -253,14 +274,16 @@
                   "codes": [
                     "PHSC6213"
                   ],
-                  "text": "PHSC 62134"
+                  "text": "PHSC 62134",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC9996"
                   ],
-                  "text": "PHSC 9996"
+                  "text": "PHSC 9996",
+                  "sh": 0
                 }
               ]
             },
@@ -274,7 +297,8 @@
                   "codes": [
                     "PHSC9996"
                   ],
-                  "text": "PHSC 9996"
+                  "text": "PHSC 9996",
+                  "sh": 0
                 }
               ],
               "fullSummer": true
@@ -301,14 +325,16 @@
                   "codes": [
                     "PHSC6300"
                   ],
-                  "text": "PHSC 6300"
+                  "text": "PHSC 6300",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC8940"
                   ],
-                  "text": "PHSC 89401"
+                  "text": "PHSC 89401",
+                  "sh": 1
                 }
               ]
             },
@@ -322,7 +348,8 @@
                   "codes": [
                     "PHSC6300"
                   ],
-                  "text": "PHSC 6300"
+                  "text": "PHSC 6300",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -330,7 +357,8 @@
                     "PHSC8986",
                     "PHSC9681"
                   ],
-                  "text": "PHSC 8986 or 96811"
+                  "text": "PHSC 8986 or 96811",
+                  "sh": 0
                 }
               ]
             },
@@ -344,7 +372,8 @@
                   "codes": [
                     "PHSC9681"
                   ],
-                  "text": "PHSC 96811"
+                  "text": "PHSC 96811",
+                  "sh": 2
                 }
               ],
               "fullSummer": true
@@ -364,14 +393,16 @@
                   "codes": [
                     "PHSC6300"
                   ],
-                  "text": "PHSC 6300"
+                  "text": "PHSC 6300",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC9990"
                   ],
-                  "text": "PHSC 9990"
+                  "text": "PHSC 9990",
+                  "sh": 0
                 }
               ]
             },
@@ -385,14 +416,16 @@
                   "codes": [
                     "PHSC6300"
                   ],
-                  "text": "PHSC 6300"
+                  "text": "PHSC 6300",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC9991"
                   ],
-                  "text": "PHSC 9991"
+                  "text": "PHSC 9991",
+                  "sh": 0
                 }
               ]
             },
@@ -406,7 +439,8 @@
                   "codes": [
                     "PHSC9996"
                   ],
-                  "text": "PHSC 9996"
+                  "text": "PHSC 9996",
+                  "sh": 0
                 }
               ],
               "fullSummer": true
@@ -426,14 +460,16 @@
                   "codes": [
                     "PHSC6810"
                   ],
-                  "text": "PHSC 68102"
+                  "text": "PHSC 68102",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC9996"
                   ],
-                  "text": "PHSC 9996"
+                  "text": "PHSC 9996",
+                  "sh": 0
                 }
               ]
             },
@@ -447,14 +483,16 @@
                   "codes": [
                     "PHSC6213"
                   ],
-                  "text": "PHSC 6213"
+                  "text": "PHSC 6213",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC9996"
                   ],
-                  "text": "PHSC 9996"
+                  "text": "PHSC 9996",
+                  "sh": 0
                 }
               ]
             }

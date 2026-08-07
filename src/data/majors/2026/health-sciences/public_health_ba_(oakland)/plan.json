@@ -18,32 +18,37 @@
                   "codes": [
                     "BIOL1143"
                   ],
-                  "text": "BIOL 1143"
+                  "text": "BIOL 1143",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HSCI1000"
                   ],
-                  "text": "HSCI 1000"
+                  "text": "HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Introductory language course"
+                  "text": "Introductory language course",
+                  "sh": 4
                 }
               ]
             },
@@ -57,22 +62,26 @@
                   "codes": [
                     "BIOL1147"
                   ],
-                  "text": "BIOL 1147"
+                  "text": "BIOL 1147",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language course"
+                  "text": "Elementary language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 }
               ]
             },
@@ -83,11 +92,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -97,7 +108,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -117,26 +128,31 @@
                   "codes": [
                     "HSCI2000"
                   ],
-                  "text": "HSCI 2000"
+                  "text": "HSCI 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—introductory (1)"
+                  "text": "PH social science course—introductory (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate language course"
+                  "text": "Intermediate language course",
+                  "sh": 4
                 }
               ]
             },
@@ -147,11 +163,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective*"
+                  "text": "General elective*",
+                  "sh": 4
                 }
               ]
             },
@@ -162,7 +180,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -173,11 +192,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -196,19 +217,23 @@
                   "codes": [
                     "ENGW3306"
                   ],
-                  "text": "ENGW 3306"
+                  "text": "ENGW 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—introductory (2)"
+                  "text": "PH social science course—introductory (2)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—introductory (3)"
+                  "text": "PH social science course—introductory (3)",
+                  "sh": 4
                 }
               ]
             },
@@ -219,11 +244,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective*"
+                  "text": "General elective*",
+                  "sh": 4
                 }
               ]
             },
@@ -234,7 +261,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -245,11 +273,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -265,19 +295,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—upper level (1)"
+                  "text": "PH social science course—upper level (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 3
                 }
               ]
             },
@@ -288,15 +322,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General electives"
+                  "text": "General electives",
+                  "sh": 8
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—upper level (2)"
+                  "text": "PH social science course—upper level (2)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—upper level (3)"
+                  "text": "PH social science course—upper level (3)",
+                  "sh": 3
                 }
               ]
             }
@@ -323,32 +360,37 @@
                     "BIOL1111",
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1111 and BIOL 1112"
+                  "text": "BIOL 1111 and BIOL 1112",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HSCI1000"
                   ],
-                  "text": "HSCI 1000"
+                  "text": "HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Introductory language course"
+                  "text": "Introductory language course",
+                  "sh": 4
                 }
               ]
             },
@@ -363,22 +405,26 @@
                     "BIOL1113",
                     "BIOL1114"
                   ],
-                  "text": "BIOL 1113 and BIOL 1114"
+                  "text": "BIOL 1113 and BIOL 1114",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language course"
+                  "text": "Elementary language course",
+                  "sh": 4
                 }
               ]
             },
@@ -389,11 +435,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 }
               ]
             },
@@ -403,7 +451,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -420,19 +468,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate language course"
+                  "text": "Intermediate language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—introductory (1)"
+                  "text": "PH social science course—introductory (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—introductory (2)"
+                  "text": "PH social science course—introductory (2)",
+                  "sh": 4
                 }
               ]
             },
@@ -446,22 +498,26 @@
                   "codes": [
                     "HSCI2000"
                   ],
-                  "text": "HSCI 2000"
+                  "text": "HSCI 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—introductory (3)"
+                  "text": "PH social science course—introductory (3)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General electives"
+                  "text": "General electives",
+                  "sh": 8
                 }
               ]
             },
@@ -472,7 +528,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General electives"
+                  "text": "General electives",
+                  "sh": 8
                 }
               ]
             },
@@ -483,7 +540,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -499,11 +557,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -517,19 +577,23 @@
                   "codes": [
                     "ENGW3306"
                   ],
-                  "text": "ENGW 3306"
+                  "text": "ENGW 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—upper level (1)"
+                  "text": "PH social science course—upper level (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -540,11 +604,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—upper level (2)"
+                  "text": "PH social science course—upper level (2)",
+                  "sh": 4
                 }
               ]
             },
@@ -555,7 +621,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -571,11 +638,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -586,19 +655,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—upper level (3)"
+                  "text": "PH social science course—upper level (3)",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }

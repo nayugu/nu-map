@@ -18,7 +18,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,7 +27,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -34,14 +36,16 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -49,7 +53,8 @@
                     "ENVR1400",
                     "ENVR1401"
                   ],
-                  "text": "ENVR 1400 and ENVR 1401"
+                  "text": "ENVR 1400 and ENVR 1401",
+                  "sh": 5
                 }
               ]
             },
@@ -64,18 +69,21 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Skills Coures"
+                  "text": "ENVR Skills Coures",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -83,7 +91,8 @@
                     "EEMB2302",
                     "EEMB2303"
                   ],
-                  "text": "EEMB 2302 and EEMB 2303"
+                  "text": "EEMB 2302 and EEMB 2303",
+                  "sh": 5
                 }
               ]
             },
@@ -98,11 +107,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -113,7 +124,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -132,7 +144,8 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -141,21 +154,24 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR2515"
                   ],
-                  "text": "ENVR 2515"
+                  "text": "ENVR 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -163,7 +179,8 @@
                     "ENVR2200",
                     "ENVR1200"
                   ],
-                  "text": "ENVR 2200 or 1200"
+                  "text": "ENVR 2200 or 1200",
+                  "sh": 4
                 }
               ]
             },
@@ -174,7 +191,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -185,7 +203,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -200,11 +219,13 @@
                     "MATH1251",
                     "MATH1341"
                   ],
-                  "text": "MATH 1251 or 1341"
+                  "text": "MATH 1251 or 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -224,19 +245,23 @@
                     "MATH1252",
                     "MATH1342"
                   ],
-                  "text": "MATH 1252 or 1342"
+                  "text": "MATH 1252 or 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Elective"
+                  "text": "ENVR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -247,7 +272,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -258,7 +284,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -272,7 +299,8 @@
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -282,7 +310,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3303, 3307, or 3315"
+                  "text": "ENGW 3302, 3303, 3307, or 3315",
+                  "sh": 4
                 }
               ]
             }
@@ -301,19 +330,23 @@
                   "codes": [
                     "CS3800"
                   ],
-                  "text": "CS 3800"
+                  "text": "CS 3800",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Elective"
+                  "text": "ENVR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Elective"
+                  "text": "ENVR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -328,19 +361,23 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Elective"
+                  "text": "ENVR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and social issues"
+                  "text": "Computing and social issues",
+                  "sh": 4
                 }
               ]
             }
@@ -366,7 +403,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -374,7 +412,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -382,14 +421,16 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -397,7 +438,8 @@
                     "ENVR1400",
                     "ENVR1401"
                   ],
-                  "text": "ENVR 1400 and ENVR 1401"
+                  "text": "ENVR 1400 and ENVR 1401",
+                  "sh": 5
                 }
               ]
             },
@@ -412,18 +454,21 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Skills Coures"
+                  "text": "ENVR Skills Coures",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -431,7 +476,8 @@
                     "EEMB2302",
                     "EEMB2303"
                   ],
-                  "text": "EEMB 2302 and EEMB 2303"
+                  "text": "EEMB 2302 and EEMB 2303",
+                  "sh": 5
                 }
               ]
             },
@@ -446,11 +492,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -461,7 +509,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -480,7 +529,8 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -489,14 +539,16 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR2515"
                   ],
-                  "text": "ENVR 2515"
+                  "text": "ENVR 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -504,7 +556,8 @@
                     "ENVR2200",
                     "ENVR1200"
                   ],
-                  "text": "ENVR 2200 or 1200"
+                  "text": "ENVR 2200 or 1200",
+                  "sh": 4
                 }
               ]
             },
@@ -518,7 +571,8 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -526,19 +580,23 @@
                     "MATH1251",
                     "MATH1341"
                   ],
-                  "text": "MATH 1251 or 1341"
+                  "text": "MATH 1251 or 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Elective"
+                  "text": "ENVR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -553,11 +611,13 @@
                     "MATH1252",
                     "MATH1342"
                   ],
-                  "text": "MATH 1252 or 1342"
+                  "text": "MATH 1252 or 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -568,7 +628,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -584,7 +645,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -598,19 +660,23 @@
                   "codes": [
                     "CS3800"
                   ],
-                  "text": "CS 3800"
+                  "text": "CS 3800",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Elective"
+                  "text": "ENVR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Elective"
+                  "text": "ENVR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -627,14 +693,16 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3303, 3307, or 3315"
+                  "text": "ENGW 3302, 3303, 3307, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 }
               ]
             },
@@ -645,7 +713,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -661,7 +730,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -676,19 +746,23 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Elective"
+                  "text": "ENVR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and social issues"
+                  "text": "Computing and social issues",
+                  "sh": 4
                 }
               ]
             }

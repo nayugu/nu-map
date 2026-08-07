@@ -19,39 +19,45 @@
                     "ANTH1000",
                     "THTR1000"
                   ],
-                  "text": "ANTH 1000 or THTR 1000"
+                  "text": "ANTH 1000 or THTR 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ANTH1101"
                   ],
-                  "text": "ANTH 1101"
+                  "text": "ANTH 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1100"
                   ],
-                  "text": "THTR 1100"
+                  "text": "THTR 1100",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1101"
                   ],
-                  "text": "THTR 1101"
+                  "text": "THTR 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -65,32 +71,37 @@
                   "codes": [
                     "ANTH2305"
                   ],
-                  "text": "ANTH 2305"
+                  "text": "ANTH 2305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1120"
                   ],
-                  "text": "THTR 1120"
+                  "text": "THTR 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1131"
                   ],
-                  "text": "THTR 1131"
+                  "text": "THTR 1131",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -101,11 +112,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -116,11 +129,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -139,32 +154,37 @@
                   "codes": [
                     "INAM2000"
                   ],
-                  "text": "INAM 2000"
+                  "text": "INAM 2000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR2000"
                   ],
-                  "text": "THTR 2000"
+                  "text": "THTR 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR3325"
                   ],
-                  "text": "THTR 3325"
+                  "text": "THTR 3325",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ANTH3410"
                   ],
-                  "text": "ANTH 3410"
+                  "text": "ANTH 3410",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Texts, Community, & Social Context Course"
+                  "text": "THTR Texts, Community, & Social Context Course",
+                  "sh": 4
                 }
               ]
             },
@@ -178,29 +198,34 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ANTH3421"
                   ],
-                  "text": "ANTH 3421"
+                  "text": "ANTH 3421",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1270"
                   ],
-                  "text": "THTR 1270"
+                  "text": "THTR 1270",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Elective"
+                  "text": "THTR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 }
               ]
             },
@@ -211,11 +236,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -226,7 +253,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -242,7 +270,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -253,19 +282,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Anth elective"
+                  "text": "Anth elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR elective"
+                  "text": "THTR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Anth area course"
+                  "text": "Anth area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 }
               ]
             },
@@ -276,7 +309,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -287,7 +321,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -303,7 +338,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -317,19 +353,23 @@
                   "codes": [
                     "THTR4702"
                   ],
-                  "text": "THTR 4702"
+                  "text": "THTR 4702",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH area course"
+                  "text": "ANTH area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 }
               ]
             }

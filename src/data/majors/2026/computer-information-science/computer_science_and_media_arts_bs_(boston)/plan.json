@@ -19,7 +19,8 @@
                     "CS1200",
                     "ARTF1000"
                   ],
-                  "text": "CS 1200 or ARTF 1000"
+                  "text": "CS 1200 or ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -27,7 +28,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -35,7 +37,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -43,14 +46,16 @@
                     "ARTD1001",
                     "ARTD1002"
                   ],
-                  "text": "ARTD 1001 and ARTD 1002"
+                  "text": "ARTD 1001 and ARTD 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -64,7 +69,8 @@
                   "codes": [
                     "ARTF1200"
                   ],
-                  "text": "ARTF 1200"
+                  "text": "ARTF 1200",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -72,14 +78,16 @@
                     "ARTF1240",
                     "ARTF1241"
                   ],
-                  "text": "ARTF 1240 and ARTF 1241"
+                  "text": "ARTF 1240 and ARTF 1241",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTD2100"
                   ],
-                  "text": "ARTD 2100"
+                  "text": "ARTD 2100",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -87,21 +95,24 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD Students)"
+                  "text": "EEAM 2000 (For CAMD Students)",
+                  "sh": 1
                 }
               ]
             },
@@ -116,15 +127,18 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 }
               ]
             },
@@ -135,11 +149,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -158,29 +174,34 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210 (For Khoury Students)"
+                  "text": "CS 1210 (For Khoury Students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS2484"
                   ],
-                  "text": "CS 2484"
+                  "text": "CS 2484",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 }
               ]
             },
@@ -191,7 +212,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -202,7 +224,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -216,11 +239,13 @@
                   "codes": [
                     "MATH2331"
                   ],
-                  "text": "MATH 2331"
+                  "text": "MATH 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -239,19 +264,23 @@
                   "codes": [
                     "CS4300"
                   ],
-                  "text": "CS 4300"
+                  "text": "CS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 }
               ]
             },
@@ -262,7 +291,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -273,7 +303,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -289,11 +320,13 @@
                     "ENGW3314",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3314, or 3315"
+                  "text": "ENGW 3302, 3314, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -312,7 +345,8 @@
                   "codes": [
                     "ARTD3000"
                   ],
-                  "text": "ARTD 3000"
+                  "text": "ARTD 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -320,15 +354,18 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 }
               ]
             },
@@ -342,19 +379,23 @@
                   "codes": [
                     "ARTD4530"
                   ],
-                  "text": "ARTD 4530"
+                  "text": "ARTD 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and social issues"
+                  "text": "Computing and social issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 }
               ]
             }
@@ -381,7 +422,8 @@
                     "CS1200",
                     "ARTF1000"
                   ],
-                  "text": "CS 1200 or ARTF 1000"
+                  "text": "CS 1200 or ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -389,7 +431,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -397,7 +440,8 @@
                     "CS2000",
                     "CS2101"
                   ],
-                  "text": "CS 2000 and CS 2101"
+                  "text": "CS 2000 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -405,14 +449,16 @@
                     "ARTD1001",
                     "ARTD1002"
                   ],
-                  "text": "ARTD 1001 and ARTD 1002"
+                  "text": "ARTD 1001 and ARTD 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -426,7 +472,8 @@
                   "codes": [
                     "ARTF1200"
                   ],
-                  "text": "ARTF 1200"
+                  "text": "ARTF 1200",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -434,14 +481,16 @@
                     "ARTF1240",
                     "ARTF1241"
                   ],
-                  "text": "ARTF 1240 and ARTF 1241"
+                  "text": "ARTF 1240 and ARTF 1241",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTD2100"
                   ],
-                  "text": "ARTD 2100"
+                  "text": "ARTD 2100",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -449,21 +498,24 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD Students)"
+                  "text": "EEAM 2000 (For CAMD Students)",
+                  "sh": 1
                 }
               ]
             },
@@ -477,15 +529,18 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 }
               ]
             },
@@ -496,11 +551,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -520,19 +577,23 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and scial issues"
+                  "text": "Computing and scial issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 }
               ]
             },
@@ -546,26 +607,31 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210 (For Khoury Students)"
+                  "text": "CS 1210 (For Khoury Students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS2484"
                   ],
-                  "text": "CS 2484"
+                  "text": "CS 2484",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 }
               ]
             },
@@ -579,11 +645,13 @@
                   "codes": [
                     "MATH2331"
                   ],
-                  "text": "MATH 2331"
+                  "text": "MATH 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -594,7 +662,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -610,7 +679,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -624,22 +694,26 @@
                   "codes": [
                     "ARTD3000"
                   ],
-                  "text": "ARTD 3000"
+                  "text": "ARTD 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS4300"
                   ],
-                  "text": "CS 4300"
+                  "text": "CS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 }
               ]
             },
@@ -655,11 +729,13 @@
                     "ENGW3314",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3314, or 3315"
+                  "text": "ENGW 3302, 3314, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -670,7 +746,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -686,7 +763,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -700,7 +778,8 @@
                   "codes": [
                     "ARTD4530"
                   ],
-                  "text": "ARTD 4530"
+                  "text": "ARTD 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -708,15 +787,18 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTD elective"
+                  "text": "ARTD elective",
+                  "sh": 4
                 }
               ]
             }

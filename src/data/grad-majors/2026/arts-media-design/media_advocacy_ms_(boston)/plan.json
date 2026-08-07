@@ -18,18 +18,21 @@
                   "codes": [
                     "JRNL5400"
                   ],
-                  "text": "JRNL 5400"
+                  "text": "JRNL 5400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LW6400"
                   ],
-                  "text": "LW 6400"
+                  "text": "LW 6400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 1"
+                  "text": "Elective 1",
+                  "sh": 3
                 }
               ]
             },
@@ -43,15 +46,18 @@
                   "codes": [
                     "JRNL5480"
                   ],
-                  "text": "JRNL 5480"
+                  "text": "JRNL 5480",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 2"
+                  "text": "Elective 2",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 3"
+                  "text": "Elective 3",
+                  "sh": 3
                 }
               ]
             },
@@ -61,7 +67,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -72,7 +78,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -92,19 +98,23 @@
                   "codes": [
                     "LW7667"
                   ],
-                  "text": "LW 7667"
+                  "text": "LW 7667",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 4"
+                  "text": "Elective 4",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 5"
+                  "text": "Elective 5",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 6"
+                  "text": "Elective 6",
+                  "sh": 3
                 }
               ]
             }

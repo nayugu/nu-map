@@ -19,7 +19,8 @@
                     "CS1200",
                     "ARTF1000"
                   ],
-                  "text": "CS 1200 or ARTF 1000"
+                  "text": "CS 1200 or ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -27,7 +28,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -35,21 +37,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME1110"
                   ],
-                  "text": "GAME 1110"
+                  "text": "GAME 1110",
+                  "sh": 4
                 }
               ]
             },
@@ -64,35 +69,40 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS2386"
                   ],
-                  "text": "CS 2386"
+                  "text": "CS 2386",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME2500"
                   ],
-                  "text": "GAME 2500"
+                  "text": "GAME 2500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1260"
                   ],
-                  "text": "MATH 12601"
+                  "text": "MATH 12601",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD Students)"
+                  "text": "EEAM 2000 (For CAMD Students)",
+                  "sh": 1
                 }
               ]
             },
@@ -107,11 +117,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -130,28 +142,32 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3520"
                   ],
-                  "text": "CS 35201"
+                  "text": "CS 35201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME2950"
                   ],
-                  "text": "GAME 29501"
+                  "text": "GAME 29501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME3700"
                   ],
-                  "text": "GAME 3700"
+                  "text": "GAME 3700",
+                  "sh": 4
                 }
               ]
             },
@@ -165,35 +181,40 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210 (For Khoury Students)"
+                  "text": "CS 1210 (For Khoury Students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3386"
                   ],
-                  "text": "CS 3386"
+                  "text": "CS 3386",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3650"
                   ],
-                  "text": "CS 3650"
+                  "text": "CS 3650",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME3400"
                   ],
-                  "text": "GAME 34001"
+                  "text": "GAME 34001",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -204,11 +225,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Math Elective"
+                  "text": "Math Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -219,7 +242,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -235,7 +259,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -249,14 +274,16 @@
                   "codes": [
                     "CS4300"
                   ],
-                  "text": "CS 4300"
+                  "text": "CS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME3800"
                   ],
-                  "text": "GAME 3800"
+                  "text": "GAME 3800",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -264,11 +291,13 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3315, or 3315"
+                  "text": "ENGW 3302, 3315, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury/Game Elective"
+                  "text": "Khoury/Game Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -279,7 +308,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -290,7 +320,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -310,7 +341,8 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -318,15 +350,18 @@
                     "CS4700",
                     "CS4730"
                   ],
-                  "text": "CS 4700 or 4730"
+                  "text": "CS 4700 or 4730",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Game Design Elective1"
+                  "text": "Game Design Elective1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury/Game Elective"
+                  "text": "Khoury/Game Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -340,19 +375,23 @@
                   "codes": [
                     "GAME4700"
                   ],
-                  "text": "GAME 4700"
+                  "text": "GAME 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computer Science Elective"
+                  "text": "Computer Science Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury/Game Elective"
+                  "text": "Khoury/Game Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }

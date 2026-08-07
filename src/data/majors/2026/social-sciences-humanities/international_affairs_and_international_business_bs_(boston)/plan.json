@@ -19,7 +19,8 @@
                     "BUSN1102",
                     "INTL1000"
                   ],
-                  "text": "BUSN 1102 or INTL 1000"
+                  "text": "BUSN 1102 or INTL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -27,28 +28,32 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB1205"
                   ],
-                  "text": "INTB 1205"
+                  "text": "INTB 1205",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1101"
                   ],
-                  "text": "INTL 1101"
+                  "text": "INTL 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -62,7 +67,8 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -70,15 +76,18 @@
                     "MGSC2301",
                     "INTL2718"
                   ],
-                  "text": "MGSC 2301 or INTL 2718"
+                  "text": "MGSC 2301 or INTL 2718",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL undergraduate elective"
+                  "text": "INTL undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath"
+                  "text": "NUpath",
+                  "sh": 4
                 }
               ]
             },
@@ -92,11 +101,13 @@
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath"
+                  "text": "NUpath",
+                  "sh": 4
                 }
               ]
             },
@@ -110,11 +121,13 @@
                   "codes": [
                     "MKTG2201"
                   ],
-                  "text": "MKTG 2201"
+                  "text": "MKTG 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL undergraduate elective"
+                  "text": "INTL undergraduate elective",
+                  "sh": 4
                 }
               ]
             }
@@ -134,25 +147,29 @@
                     "BUSN1103",
                     "EESH2000"
                   ],
-                  "text": "BUSN 1103 or EESH 2000"
+                  "text": "BUSN 1103 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB2205"
                   ],
-                  "text": "INTB 2205"
+                  "text": "INTB 2205",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB2206"
                   ],
-                  "text": "INTB 2206"
+                  "text": "INTB 2206",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business Core Option:"
+                  "text": "Business Core Option:",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -166,11 +183,13 @@
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL undergraduate elective"
+                  "text": "INTL undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL undergraduate elective"
+                  "text": "INTL undergraduate elective",
+                  "sh": 4
                 }
               ]
             },
@@ -181,7 +200,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -192,7 +212,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -203,11 +224,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
@@ -231,7 +254,8 @@
                     "ENGW3304",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3304 or 3315"
+                  "text": "ENGW 3304 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -242,14 +266,16 @@
                     "MKTG4512",
                     "SCHM3301"
                   ],
-                  "text": "INTB 3310, FINA 4320, INTB 4983, MKTG 4512, or SCHM 3301"
+                  "text": "INTB 3310, FINA 4320, INTB 4983, MKTG 4512, or SCHM 3301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL3400"
                   ],
-                  "text": "INTL 3400"
+                  "text": "INTL 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -257,7 +283,8 @@
                     "ORGB3201",
                     "ORGB3203"
                   ],
-                  "text": "ORGB 3201 or 3203"
+                  "text": "ORGB 3201 or 3203",
+                  "sh": 4
                 }
               ]
             },
@@ -268,7 +295,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -279,7 +307,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -290,11 +319,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -313,19 +344,23 @@
                   "codes": [
                     "INTL4700"
                   ],
-                  "text": "INTL 4700"
+                  "text": "INTL 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL undergraduate elective"
+                  "text": "INTL undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath"
+                  "text": "NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -339,19 +374,23 @@
                   "codes": [
                     "INTB4202"
                   ],
-                  "text": "INTB 4202"
+                  "text": "INTB 4202",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath"
+                  "text": "NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

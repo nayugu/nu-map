@@ -18,32 +18,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1000"
                   ],
-                  "text": "PHIL 1000"
+                  "text": "PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective 1"
+                  "text": "PHIL elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -57,22 +62,26 @@
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language core course"
+                  "text": "Language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -83,11 +92,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL undergraduate elective"
+                  "text": "PHIL undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -97,7 +108,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -117,19 +128,23 @@
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Critical philosophy elective"
+                  "text": "Critical philosophy elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language core course"
+                  "text": "Language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective 2"
+                  "text": "PHIL elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -143,18 +158,21 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL undergraduate elective"
+                  "text": "PHIL undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
@@ -162,11 +180,13 @@
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -177,11 +197,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -192,7 +214,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -208,7 +231,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -222,22 +246,26 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced PHIL elective 1"
+                  "text": "Advanced PHIL elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -248,11 +276,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Advanced PHIL elective 2"
+                  "text": "Advanced PHIL elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -263,7 +293,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -279,7 +310,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -290,19 +322,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL seminar"
+                  "text": "PHIL seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL undergraduate elective"
+                  "text": "PHIL undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -313,11 +349,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -343,25 +381,29 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1101"
                   ],
-                  "text": "PHIL 1101"
+                  "text": "PHIL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language core course"
+                  "text": "Language core course",
+                  "sh": 4
                 }
               ]
             },
@@ -372,19 +414,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL undergraduate elective"
+                  "text": "PHIL undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -395,11 +441,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -409,7 +457,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -429,26 +477,31 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language core course"
+                  "text": "Language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -459,7 +512,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -470,7 +524,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -481,11 +536,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -504,19 +561,23 @@
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -527,7 +588,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -538,7 +600,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -549,11 +612,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL undergraduate elective"
+                  "text": "PHIL undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -572,22 +637,26 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced PHIL elective"
+                  "text": "Advanced PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -601,19 +670,23 @@
                   "codes": [
                     "PHIL6962"
                   ],
-                  "text": "PHIL 6962"
+                  "text": "PHIL 6962",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL seminar"
+                  "text": "PHIL seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL undergraduate elective"
+                  "text": "PHIL undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 }
               ]
             },
@@ -624,11 +697,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL undergraduate elective"
+                  "text": "PHIL undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -654,32 +729,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1000"
                   ],
-                  "text": "PHIL 1000"
+                  "text": "PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 }
               ]
             },
@@ -693,26 +773,31 @@
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -723,11 +808,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -737,7 +824,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -757,19 +844,23 @@
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Critical philosophy elective"
+                  "text": "Critical philosophy elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Law elective"
+                  "text": "Law elective",
+                  "sh": 4
                 }
               ]
             },
@@ -783,26 +874,31 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Law-related elective"
+                  "text": "Law-related elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -813,11 +909,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -828,7 +926,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -844,7 +943,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -858,25 +958,29 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL3435"
                   ],
-                  "text": "PHIL 3435"
+                  "text": "PHIL 3435",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL seminar"
+                  "text": "PHIL seminar",
+                  "sh": 4
                 }
               ]
             },
@@ -887,11 +991,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Ethics elective 1"
+                  "text": "Ethics elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -902,7 +1008,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -918,7 +1025,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -929,19 +1037,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Law-related elective"
+                  "text": "Law-related elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Moral and political elective"
+                  "text": "Moral and political elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL seminar"
+                  "text": "PHIL seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 }
               ]
             },
@@ -952,7 +1064,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 }
               ]
             }
@@ -978,25 +1091,29 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1101"
                   ],
-                  "text": "PHIL 1101"
+                  "text": "PHIL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 }
               ]
             },
@@ -1007,19 +1124,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Moral and political elective"
+                  "text": "Moral and political elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1030,11 +1151,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1044,7 +1167,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1064,26 +1187,31 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1094,7 +1222,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1105,7 +1234,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1116,11 +1246,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1139,19 +1271,23 @@
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Law-related elective"
+                  "text": "Law-related elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1162,7 +1298,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1173,7 +1310,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1184,11 +1322,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1207,25 +1347,29 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL3435"
                   ],
-                  "text": "PHIL 3435"
+                  "text": "PHIL 3435",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL seminar"
+                  "text": "PHIL seminar",
+                  "sh": 4
                 }
               ]
             },
@@ -1236,19 +1380,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Law-related elective"
+                  "text": "Law-related elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Moral and political elective"
+                  "text": "Moral and political elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1259,11 +1407,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1289,32 +1439,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1000"
                   ],
-                  "text": "PHIL 1000"
+                  "text": "PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1110"
                   ],
-                  "text": "PHIL 1110"
+                  "text": "PHIL 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language course"
+                  "text": "Foreign Language course",
+                  "sh": 4
                 }
               ]
             },
@@ -1328,22 +1483,26 @@
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Religious studies elective"
+                  "text": "Religious studies elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1357,11 +1516,13 @@
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1371,7 +1532,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1391,19 +1552,23 @@
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1417,26 +1582,31 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Religious studies elective 1"
+                  "text": "Religious studies elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1447,11 +1617,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Religious studies elective 2"
+                  "text": "Religious studies elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1462,7 +1634,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1478,7 +1651,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1492,25 +1666,29 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL3435"
                   ],
-                  "text": "PHIL 3435"
+                  "text": "PHIL 3435",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Religious studies seminar"
+                  "text": "Religious studies seminar",
+                  "sh": 4
                 }
               ]
             },
@@ -1521,11 +1699,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Advanced PHIL elective"
+                  "text": "Advanced PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Religious studies elective"
+                  "text": "Religious studies elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1536,7 +1716,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1552,7 +1733,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1563,19 +1745,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL seminar"
+                  "text": "PHIL seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1586,11 +1772,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1616,25 +1804,29 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1101"
                   ],
-                  "text": "PHIL 1101"
+                  "text": "PHIL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 }
               ]
             },
@@ -1645,19 +1837,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Religious studies elective"
+                  "text": "Religious studies elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1668,11 +1864,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1682,7 +1880,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1702,26 +1900,31 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1732,7 +1935,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1743,7 +1947,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1754,11 +1959,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1777,19 +1984,23 @@
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Religious studies elective"
+                  "text": "Religious studies elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1800,7 +2011,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1811,7 +2023,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1822,11 +2035,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1845,25 +2060,29 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL3435"
                   ],
-                  "text": "PHIL 3435"
+                  "text": "PHIL 3435",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL seminar"
+                  "text": "PHIL seminar",
+                  "sh": 4
                 }
               ]
             },
@@ -1874,19 +2093,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Religious studies seminar"
+                  "text": "Religious studies seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1897,11 +2120,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

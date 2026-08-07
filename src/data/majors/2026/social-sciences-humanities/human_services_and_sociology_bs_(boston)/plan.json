@@ -18,21 +18,24 @@
                   "codes": [
                     "HUSV1101"
                   ],
-                  "text": "HUSV 1101"
+                  "text": "HUSV 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL1101"
                   ],
-                  "text": "SOCL 1101"
+                  "text": "SOCL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -40,11 +43,13 @@
                     "SOCL1000",
                     "HUSV1000"
                   ],
-                  "text": "SOCL 1000 or HUSV 1000"
+                  "text": "SOCL 1000 or HUSV 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL Elective"
+                  "text": "SOCL Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -58,22 +63,26 @@
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV2300"
                   ],
-                  "text": "HUSV 2300"
+                  "text": "HUSV 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL Elective"
+                  "text": "SOCL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV Elective"
+                  "text": "HUSV Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -84,11 +93,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV Elective"
+                  "text": "HUSV Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -99,11 +110,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HUSV Elective"
+                  "text": "HUSV Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL Elective"
+                  "text": "SOCL Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -122,7 +135,8 @@
                   "codes": [
                     "HUSV3570"
                   ],
-                  "text": "HUSV 3570"
+                  "text": "HUSV 3570",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -131,7 +145,8 @@
                     "SOCL2321",
                     "INSH3101"
                   ],
-                  "text": "HUSV 2970, SOCL 2321, or INSH 3101"
+                  "text": "HUSV 2970, SOCL 2321, or INSH 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -139,11 +154,13 @@
                     "SOCL2320",
                     "INSH3102"
                   ],
-                  "text": "SOCL 2320 or INSH 3102"
+                  "text": "SOCL 2320 or INSH 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -157,7 +174,8 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -165,19 +183,23 @@
                     "SOCL2323",
                     "ANTH3410"
                   ],
-                  "text": "SOCL 2323 or ANTH 3410"
+                  "text": "SOCL 2323 or ANTH 3410",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL Elective"
+                  "text": "SOCL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -188,11 +210,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL Elective"
+                  "text": "SOCL Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -203,7 +227,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -219,7 +244,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -233,22 +259,26 @@
                   "codes": [
                     "HUSV3900"
                   ],
-                  "text": "HUSV 3900"
+                  "text": "HUSV 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL3300"
                   ],
-                  "text": "SOCL 3300"
+                  "text": "SOCL 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -262,11 +292,13 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -277,7 +309,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -293,7 +326,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -308,19 +342,23 @@
                     "HUSV4700",
                     "SOCL4600"
                   ],
-                  "text": "HUSV 4700 or SOCL 4600"
+                  "text": "HUSV 4700 or SOCL 4600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

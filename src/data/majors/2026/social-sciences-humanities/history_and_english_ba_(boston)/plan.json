@@ -18,39 +18,45 @@
                   "codes": [
                     "HIST1000"
                   ],
-                  "text": "HIST 1000"
+                  "text": "HIST 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1200"
                   ],
-                  "text": "HIST 1200"
+                  "text": "HIST 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1201"
                   ],
-                  "text": "HIST 1201"
+                  "text": "HIST 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL1400"
                   ],
-                  "text": "ENGL 1400"
+                  "text": "ENGL 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -61,11 +67,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HIST pre-1800 elective"
+                  "text": "HIST pre-1800 elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST 1000-level elective"
+                  "text": "HIST 1000-level elective",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -73,11 +81,13 @@
                     "ENGL1160",
                     "ENGL1410"
                   ],
-                  "text": "ENGL 1160 or 1410"
+                  "text": "ENGL 1160 or 1410",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -87,7 +97,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -98,7 +108,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -118,14 +128,16 @@
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2302"
                   ],
-                  "text": "HIST 2302"
+                  "text": "HIST 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -133,15 +145,18 @@
                     "ENGL1700",
                     "ENGL1701"
                   ],
-                  "text": "ENGL 1700 or 1701"
+                  "text": "ENGL 1700 or 1701",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Pre–1850 ENGL"
+                  "text": "Pre–1850 ENGL",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL theory and methods"
+                  "text": "ENGL theory and methods",
+                  "sh": 4
                 }
               ]
             },
@@ -155,26 +170,31 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST intermediate/advanced elective"
+                  "text": "HIST intermediate/advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST intermediate/advanced elective"
+                  "text": "HIST intermediate/advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL3400"
                   ],
-                  "text": "ENGL 3400"
+                  "text": "ENGL 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Post-1850 ENGL"
+                  "text": "Post-1850 ENGL",
+                  "sh": 4
                 }
               ]
             },
@@ -185,11 +205,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL Elective"
+                  "text": "ENGL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL Elective"
+                  "text": "ENGL Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -200,7 +222,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -216,11 +239,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "AWD (online)"
+                  "text": "AWD (online)",
+                  "sh": 4
                 }
               ]
             },
@@ -231,22 +256,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HIST intermediate/advanced elective"
+                  "text": "HIST intermediate/advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL writing"
+                  "text": "ENGL writing",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL3710"
                   ],
-                  "text": "ENGL 3710"
+                  "text": "ENGL 3710",
+                  "sh": 4
                 }
               ]
             },
@@ -257,11 +286,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -272,7 +303,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -288,7 +320,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -299,19 +332,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HIST intermediate/advanced elective"
+                  "text": "HIST intermediate/advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL diversity"
+                  "text": "ENGL diversity",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST advanced elective"
+                  "text": "HIST advanced elective",
+                  "sh": 4
                 }
               ]
             },
@@ -322,11 +359,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

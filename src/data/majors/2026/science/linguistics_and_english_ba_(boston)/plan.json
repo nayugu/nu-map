@@ -18,25 +18,29 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 }
               ]
             },
@@ -50,14 +54,16 @@
                   "codes": [
                     "ENGL1400"
                   ],
-                  "text": "ENGL 1400"
+                  "text": "ENGL 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING2350"
                   ],
-                  "text": "LING 2350"
+                  "text": "LING 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -65,11 +71,13 @@
                     "LING3412",
                     "LING3442"
                   ],
-                  "text": "LING 3412 or 3442"
+                  "text": "LING 3412 or 3442",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 }
               ]
             },
@@ -80,11 +88,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -95,11 +105,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -119,22 +131,26 @@
                     "ENGL1410",
                     "ENGL1160"
                   ],
-                  "text": "ENGL 1410 or 1160"
+                  "text": "ENGL 1410 or 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING3454"
                   ],
-                  "text": "LING 3454"
+                  "text": "LING 3454",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING structure course"
+                  "text": "LING structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING elective"
+                  "text": "LING elective",
+                  "sh": 4
                 }
               ]
             },
@@ -148,23 +164,28 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Diversity course"
+                  "text": "Diversity course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING structure course"
+                  "text": "LING structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING elective"
+                  "text": "LING elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Theories and methods course"
+                  "text": "Theories and methods course",
+                  "sh": 4
                 }
               ]
             },
@@ -175,11 +196,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL elective"
+                  "text": "ENGL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -190,7 +213,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -206,7 +230,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -221,22 +246,26 @@
                     "LING3412",
                     "LING3442"
                   ],
-                  "text": "LING 3412 or 3442"
+                  "text": "LING 3412 or 3442",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING structure course"
+                  "text": "LING structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL3710"
                   ],
-                  "text": "ENGL 3710"
+                  "text": "ENGL 3710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Pre-1850 literature course"
+                  "text": "Pre-1850 literature course",
+                  "sh": 4
                 }
               ]
             },
@@ -250,11 +279,13 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -265,7 +296,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -281,7 +313,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -292,19 +325,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Post-1850 literature course"
+                  "text": "Post-1850 literature course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Junior/senior seminar"
+                  "text": "Junior/senior seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Writing course"
+                  "text": "Writing course",
+                  "sh": 4
                 }
               ]
             }

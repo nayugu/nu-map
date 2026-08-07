@@ -18,14 +18,16 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1110"
                   ],
-                  "text": "PHIL 1110"
+                  "text": "PHIL 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -33,11 +35,13 @@
                     "PHIL1285",
                     "JWSS1285"
                   ],
-                  "text": "PHIL 1285 or JWSS 1285"
+                  "text": "PHIL 1285 or JWSS 1285",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -48,25 +52,29 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Lived religion elective"
+                  "text": "Lived religion elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Israel studies"
+                  "text": "Israel studies",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HBRW1101"
                   ],
-                  "text": "HBRW 1101"
+                  "text": "HBRW 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1100"
                   ],
-                  "text": "HIST 1100"
+                  "text": "HIST 1100",
+                  "sh": 4
                 }
               ]
             },
@@ -76,7 +84,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -88,11 +96,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -108,22 +118,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Jewish history course"
+                  "text": "Jewish history course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Comparative religion elective"
+                  "text": "Comparative religion elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HBRW1102"
                   ],
-                  "text": "HBRW 1102"
+                  "text": "HBRW 1102",
+                  "sh": 4
                 }
               ]
             },
@@ -134,7 +148,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -145,7 +160,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -156,11 +172,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JS elective"
+                  "text": "JS elective",
+                  "sh": 4
                 }
               ]
             }
@@ -176,19 +194,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL 2000-level elective"
+                  "text": "PHIL 2000-level elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Jewish art and culture course"
+                  "text": "Jewish art and culture course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JS elective"
+                  "text": "JS elective",
+                  "sh": 4
                 }
               ]
             },
@@ -199,14 +221,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JWSS4660"
                   ],
-                  "text": "JWSS 4660"
+                  "text": "JWSS 4660",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
@@ -214,7 +238,8 @@
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JS elective"
+                  "text": "JS elective",
+                  "sh": 4
                 }
               ]
             },
@@ -225,11 +250,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -240,11 +267,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -260,19 +289,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL 3000-level elective"
+                  "text": "PHIL 3000-level elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intergrative requirement course"
+                  "text": "Intergrative requirement course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL capstone"
+                  "text": "PHIL capstone",
+                  "sh": 4
                 }
               ]
             },
@@ -283,7 +316,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -294,7 +328,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -305,11 +340,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

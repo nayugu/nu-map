@@ -19,29 +19,34 @@
                     "JRNL1000",
                     "COMM1000"
                   ],
-                  "text": "JRNL 1000 or COMM 1000"
+                  "text": "JRNL 1000 or COMM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PREL1425"
                   ],
-                  "text": "PREL 1425"
+                  "text": "PREL 1425",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -55,29 +60,34 @@
                   "codes": [
                     "COMM1113"
                   ],
-                  "text": "COMM 1113"
+                  "text": "COMM 1113",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2200"
                   ],
-                  "text": "JRNL 2200"
+                  "text": "JRNL 2200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -88,11 +98,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -103,11 +115,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -126,19 +140,23 @@
                   "codes": [
                     "PREL3625"
                   ],
-                  "text": "PREL 3625"
+                  "text": "PREL 3625",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PR introductory/intermediate elective"
+                  "text": "PR introductory/intermediate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -152,19 +170,23 @@
                   "codes": [
                     "JRNL5480"
                   ],
-                  "text": "JRNL 5480"
+                  "text": "JRNL 5480",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PR introductory/intermediate elective"
+                  "text": "PR introductory/intermediate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Subject expertise"
+                  "text": "Subject expertise",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -175,11 +197,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -190,7 +214,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -206,7 +231,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -217,19 +243,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PR advanced elective"
+                  "text": "PR advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PR advanced elective"
+                  "text": "PR advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Subject expertise"
+                  "text": "Subject expertise",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -240,11 +270,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -255,7 +287,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -271,7 +304,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -285,22 +319,26 @@
                   "codes": [
                     "COMM4608"
                   ],
-                  "text": "COMM 4608"
+                  "text": "COMM 4608",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL5311"
                   ],
-                  "text": "JRNL 5311"
+                  "text": "JRNL 5311",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PR advanced elective"
+                  "text": "PR advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

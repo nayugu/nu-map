@@ -19,7 +19,8 @@
                     "BUSN1102",
                     "INTL1000"
                   ],
-                  "text": "BUSN 1102 or INTL 1000"
+                  "text": "BUSN 1102 or INTL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -27,28 +28,32 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB1205"
                   ],
-                  "text": "INTB 1205"
+                  "text": "INTB 1205",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1231"
                   ],
-                  "text": "MATH 1231"
+                  "text": "MATH 1231",
+                  "sh": 4
                 }
               ]
             },
@@ -62,7 +67,8 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -70,7 +76,8 @@
                     "ECON1116",
                     "ECON1115"
                   ],
-                  "text": "ECON 1116 or 1115"
+                  "text": "ECON 1116 or 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -78,11 +85,13 @@
                     "MGSC2301",
                     "ECON2350"
                   ],
-                  "text": "MGSC 2301 or ECON 2350"
+                  "text": "MGSC 2301 or ECON 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath"
+                  "text": "NUpath",
+                  "sh": 4
                 }
               ]
             },
@@ -96,11 +105,13 @@
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath"
+                  "text": "NUpath",
+                  "sh": 4
                 }
               ]
             },
@@ -114,11 +125,13 @@
                   "codes": [
                     "MKTG2201"
                   ],
-                  "text": "MKTG 2201"
+                  "text": "MKTG 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON undergraduate elective"
+                  "text": "ECON undergraduate elective",
+                  "sh": 4
                 }
               ]
             }
@@ -138,7 +151,8 @@
                     "BUSN1103",
                     "EESH2000"
                   ],
-                  "text": "BUSN 1103 or EESH 2000"
+                  "text": "BUSN 1103 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -146,25 +160,29 @@
                     "ECON2315",
                     "ECON2316"
                   ],
-                  "text": "ECON 2315 or 2316"
+                  "text": "ECON 2315 or 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB2205"
                   ],
-                  "text": "INTB 2205"
+                  "text": "INTB 2205",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB2206"
                   ],
-                  "text": "INTB 2206"
+                  "text": "INTB 2206",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Complete one of the approved business core:"
+                  "text": "Complete one of the approved business core:",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -178,7 +196,8 @@
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON undergraduate elective"
+                  "text": "ECON undergraduate elective",
+                  "sh": 4
                 }
               ]
             },
@@ -189,7 +208,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -200,7 +220,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -211,11 +232,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
@@ -239,14 +262,16 @@
                     "ECON2316",
                     "ECON2315"
                   ],
-                  "text": "ECON 2316 or 2315"
+                  "text": "ECON 2316 or 2315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2560"
                   ],
-                  "text": "ECON 2560"
+                  "text": "ECON 2560",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -254,11 +279,13 @@
                     "ORGB3201",
                     "ORGB3203"
                   ],
-                  "text": "ORGB 3201 or 3203"
+                  "text": "ORGB 3201 or 3203",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Complete one of the following:"
+                  "text": "Complete one of the following:",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -282,7 +309,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -293,7 +321,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -309,11 +338,13 @@
                     "ENGW3308",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3304, 3308, or 3315"
+                  "text": "ENGW 3304, 3308, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -333,19 +364,23 @@
                     "ECON3291",
                     "ECON3635"
                   ],
-                  "text": "ECON 3291 or 3635"
+                  "text": "ECON 3291 or 3635",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON undergraduate elective"
+                  "text": "ECON undergraduate elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath"
+                  "text": "NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -359,19 +394,23 @@
                   "codes": [
                     "INTB4202"
                   ],
-                  "text": "INTB 4202"
+                  "text": "INTB 4202",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath"
+                  "text": "NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

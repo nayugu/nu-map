@@ -19,7 +19,8 @@
                     "CS1200",
                     "SLPA1000"
                   ],
-                  "text": "CS 1200 or SLPA 1000"
+                  "text": "CS 1200 or SLPA 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -27,7 +28,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -35,7 +37,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -43,11 +46,13 @@
                     "ENGW1111",
                     "ENGW1102"
                   ],
-                  "text": "ENGW 1111 or 1102"
+                  "text": "ENGW 1111 or 1102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -62,21 +67,24 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1101"
                   ],
-                  "text": "SLPA 1101"
+                  "text": "SLPA 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1205"
                   ],
-                  "text": "SLPA 1205"
+                  "text": "SLPA 1205",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -84,7 +92,8 @@
                     "BIOL2217",
                     "BIOL2218"
                   ],
-                  "text": "BIOL 2217 and BIOL 2218"
+                  "text": "BIOL 2217 and BIOL 2218",
+                  "sh": 5
                 }
               ]
             },
@@ -98,7 +107,8 @@
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 }
               ]
             },
@@ -108,7 +118,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -128,28 +138,32 @@
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1103"
                   ],
-                  "text": "SLPA 1103"
+                  "text": "SLPA 1103",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1203"
                   ],
-                  "text": "SLPA 1203"
+                  "text": "SLPA 1203",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -157,7 +171,8 @@
                     "CS1210",
                     "SLPA2000"
                   ],
-                  "text": "CS 1210 or SLPA 2000"
+                  "text": "CS 1210 or SLPA 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -168,7 +183,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -179,7 +195,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -189,7 +206,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -209,7 +226,8 @@
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -217,15 +235,18 @@
                     "PHYS1145",
                     "PHYS1146"
                   ],
-                  "text": "PHYS 1145 and PHYS 1146"
+                  "text": "PHYS 1145 and PHYS 1146",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -239,28 +260,32 @@
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1200"
                   ],
-                  "text": "SLPA 1200"
+                  "text": "SLPA 1200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1102"
                   ],
-                  "text": "SLPA 1102"
+                  "text": "SLPA 1102",
+                  "sh": 4
                 }
               ]
             },
@@ -274,7 +299,8 @@
                   "codes": [
                     "PHIL1145"
                   ],
-                  "text": "PHIL 1145"
+                  "text": "PHIL 1145",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -283,7 +309,8 @@
                     "ENGW3306",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3306, or 3315"
+                  "text": "ENGW 3302, 3306, or 3315",
+                  "sh": 4
                 }
               ]
             },
@@ -293,7 +320,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -313,25 +340,29 @@
                   "codes": [
                     "SLPA4500"
                   ],
-                  "text": "SLPA 4500"
+                  "text": "SLPA 4500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA5107"
                   ],
-                  "text": "SLPA 5107"
+                  "text": "SLPA 5107",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS4120"
                   ],
-                  "text": "CS 4120"
+                  "text": "CS 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -345,28 +376,32 @@
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA4651"
                   ],
-                  "text": "SLPA 4651"
+                  "text": "SLPA 4651",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA6219"
                   ],
-                  "text": "SLPA 6219"
+                  "text": "SLPA 6219",
+                  "sh": 3
                 }
               ]
             }
@@ -393,7 +428,8 @@
                     "CS1200",
                     "SLPA1000"
                   ],
-                  "text": "CS 1200 or SLPA 1000"
+                  "text": "CS 1200 or SLPA 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -401,7 +437,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -409,7 +446,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -417,11 +455,13 @@
                     "ENGW1111",
                     "ENGW1102"
                   ],
-                  "text": "ENGW 1111 or 1102"
+                  "text": "ENGW 1111 or 1102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -436,21 +476,24 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1101"
                   ],
-                  "text": "SLPA 1101"
+                  "text": "SLPA 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1205"
                   ],
-                  "text": "SLPA 1205"
+                  "text": "SLPA 1205",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -458,7 +501,8 @@
                     "BIOL2217",
                     "BIOL2218"
                   ],
-                  "text": "BIOL 2217 and BIOL 2218"
+                  "text": "BIOL 2217 and BIOL 2218",
+                  "sh": 5
                 }
               ]
             },
@@ -472,7 +516,8 @@
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 }
               ]
             },
@@ -482,7 +527,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -502,28 +547,32 @@
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1103"
                   ],
-                  "text": "SLPA 1103"
+                  "text": "SLPA 1103",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1203"
                   ],
-                  "text": "SLPA 1203"
+                  "text": "SLPA 1203",
+                  "sh": 4
                 }
               ]
             },
@@ -537,7 +586,8 @@
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -545,15 +595,18 @@
                     "PHYS1145",
                     "PHYS1146"
                   ],
-                  "text": "PHYS 1145 and PHYS 1146"
+                  "text": "PHYS 1145 and PHYS 1146",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -561,7 +614,8 @@
                     "CS1210",
                     "SLPA2000"
                   ],
-                  "text": "CS 1210 or SLPA 2000"
+                  "text": "CS 1210 or SLPA 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -571,7 +625,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -583,7 +637,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -599,7 +654,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -613,28 +669,32 @@
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1200"
                   ],
-                  "text": "SLPA 1200"
+                  "text": "SLPA 1200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1102"
                   ],
-                  "text": "SLPA 1102"
+                  "text": "SLPA 1102",
+                  "sh": 4
                 }
               ]
             },
@@ -648,7 +708,8 @@
                   "codes": [
                     "PHIL1145"
                   ],
-                  "text": "PHIL 1145"
+                  "text": "PHIL 1145",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -657,7 +718,8 @@
                     "ENGW3306",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3306, or 3315"
+                  "text": "ENGW 3302, 3306, or 3315",
+                  "sh": 4
                 }
               ]
             },
@@ -667,7 +729,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -687,25 +749,29 @@
                   "codes": [
                     "SLPA4500"
                   ],
-                  "text": "SLPA 4500"
+                  "text": "SLPA 4500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA5107"
                   ],
-                  "text": "SLPA 5107"
+                  "text": "SLPA 5107",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS4120"
                   ],
-                  "text": "CS 4120"
+                  "text": "CS 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -719,28 +785,32 @@
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA4651"
                   ],
-                  "text": "SLPA 4651"
+                  "text": "SLPA 4651",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA6219"
                   ],
-                  "text": "SLPA 6219"
+                  "text": "SLPA 6219",
+                  "sh": 3
                 }
               ]
             }

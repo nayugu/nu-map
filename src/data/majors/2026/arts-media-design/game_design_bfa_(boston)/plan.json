@@ -18,14 +18,16 @@
                   "codes": [
                     "ARTF1000"
                   ],
-                  "text": "ARTF 1000"
+                  "text": "ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -33,7 +35,8 @@
                     "ARTF1230",
                     "ARTF1231"
                   ],
-                  "text": "ARTF 1230 and ARTF 1231"
+                  "text": "ARTF 1230 and ARTF 1231",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -41,21 +44,24 @@
                     "ARTF1240",
                     "ARTF1241"
                   ],
-                  "text": "ARTF 1240 and ARTF 1241"
+                  "text": "ARTF 1240 and ARTF 1241",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME1110"
                   ],
-                  "text": "GAME 1110"
+                  "text": "GAME 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -70,32 +76,37 @@
                     "ARTD2370",
                     "ARTD2371"
                   ],
-                  "text": "ARTD 2370 and ARTD 2371"
+                  "text": "ARTD 2370 and ARTD 2371",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME2500"
                   ],
-                  "text": "GAME 2500"
+                  "text": "GAME 2500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME2650"
                   ],
-                  "text": "GAME 2650"
+                  "text": "GAME 2650",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Game aesthetics and critical play elective"
+                  "text": "Game aesthetics and critical play elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -106,11 +117,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Art+design elective"
+                  "text": "Art+design elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 }
               ]
             },
@@ -121,11 +134,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Art+design elective"
+                  "text": "Art+design elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -145,25 +160,29 @@
                     "ARTG2262",
                     "ARTG2263"
                   ],
-                  "text": "ARTG 2262 and ARTG 2263"
+                  "text": "ARTG 2262 and ARTG 2263",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME2950"
                   ],
-                  "text": "GAME 2950"
+                  "text": "GAME 2950",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME3300"
                   ],
-                  "text": "GAME 3300"
+                  "text": "GAME 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Game aesthetics and critical play elective"
+                  "text": "Game aesthetics and critical play elective",
+                  "sh": 4
                 }
               ]
             },
@@ -174,7 +193,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -185,7 +205,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -196,11 +217,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -219,22 +242,26 @@
                   "codes": [
                     "GAME3400"
                   ],
-                  "text": "GAME 3400"
+                  "text": "GAME 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME3700"
                   ],
-                  "text": "GAME 3700"
+                  "text": "GAME 3700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art+design elective"
+                  "text": "Art+design elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Game design and development elective"
+                  "text": "Game design and development elective",
+                  "sh": 4
                 }
               ]
             },
@@ -245,7 +272,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -256,7 +284,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -267,11 +296,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -290,22 +321,26 @@
                   "codes": [
                     "GAME2010"
                   ],
-                  "text": "GAME 2010"
+                  "text": "GAME 2010",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME3800"
                   ],
-                  "text": "GAME 3800"
+                  "text": "GAME 3800",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Game aesthetics and critical play elective"
+                  "text": "Game aesthetics and critical play elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Game design and development elective"
+                  "text": "Game design and development elective",
+                  "sh": 4
                 }
               ]
             },
@@ -319,22 +354,26 @@
                   "codes": [
                     "GAME4600"
                   ],
-                  "text": "GAME 4600"
+                  "text": "GAME 4600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME4700"
                   ],
-                  "text": "GAME 4700"
+                  "text": "GAME 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Game design and development elective"
+                  "text": "Game design and development elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

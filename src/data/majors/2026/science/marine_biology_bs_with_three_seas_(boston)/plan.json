@@ -18,7 +18,8 @@
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,25 +27,29 @@
                     "EEMB1101",
                     "EEMB1102"
                   ],
-                  "text": "EEMB 1101 and EEMB 1102"
+                  "text": "EEMB 1101 and EEMB 1102",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1251"
                   ],
-                  "text": "MATH 1251"
+                  "text": "MATH 1251",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -59,7 +64,8 @@
                     "EEMB1105",
                     "EEMB1106"
                   ],
-                  "text": "EEMB 1105 and EEMB 1106"
+                  "text": "EEMB 1105 and EEMB 1106",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -67,7 +73,8 @@
                     "EEMB2700",
                     "EEMB2701"
                   ],
-                  "text": "EEMB 2700 and EEMB 2701"
+                  "text": "EEMB 2700 and EEMB 2701",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -76,11 +83,13 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -122,14 +131,16 @@
                     "EEMB2302",
                     "EEMB2303"
                   ],
-                  "text": "EEMB 2302 and EEMB 2303"
+                  "text": "EEMB 2302 and EEMB 2303",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB2400"
                   ],
-                  "text": "EEMB 2400"
+                  "text": "EEMB 2400",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -137,18 +148,21 @@
                     "ENVR1500",
                     "ENVR1501"
                   ],
-                  "text": "ENVR 1500 and ENVR 1501"
+                  "text": "ENVR 1500 and ENVR 1501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -159,7 +173,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -170,7 +185,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -186,11 +202,13 @@
                     "PHYS1162",
                     "PHYS1163"
                   ],
-                  "text": "PHYS 1161 and PHYS 1162 and PHYS 1163"
+                  "text": "PHYS 1161 and PHYS 1162 and PHYS 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -211,28 +229,32 @@
                     "ENVR2501",
                     "ENVR2502"
                   ],
-                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502"
+                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR3410"
                   ],
-                  "text": "ENVR 3410"
+                  "text": "ENVR 3410",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB3460"
                   ],
-                  "text": "EEMB 3460"
+                  "text": "EEMB 3460",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3307"
                   ],
-                  "text": "ENGW 3307"
+                  "text": "ENGW 3307",
+                  "sh": 4
                 }
               ]
             },
@@ -247,25 +269,29 @@
                     "BIOL2301",
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2301 and BIOL 2302"
+                  "text": "BIOL 2301 and BIOL 2302",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR4000"
                   ],
-                  "text": "ENVR 4000"
+                  "text": "ENVR 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR4997"
                   ],
-                  "text": "ENVR 4997"
+                  "text": "ENVR 4997",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -306,42 +332,48 @@
                   "codes": [
                     "EEMB5303"
                   ],
-                  "text": "EEMB 5303"
+                  "text": "EEMB 5303",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5510"
                   ],
-                  "text": "EEMB 5510"
+                  "text": "EEMB 5510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5522"
                   ],
-                  "text": "EEMB 5522"
+                  "text": "EEMB 5522",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5542"
                   ],
-                  "text": "EEMB 5542"
+                  "text": "EEMB 5542",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5546"
                   ],
-                  "text": "EEMB 5546"
+                  "text": "EEMB 5546",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5589"
                   ],
-                  "text": "EEMB 5589"
+                  "text": "EEMB 5589",
+                  "sh": 2
                 }
               ]
             },
@@ -356,7 +388,8 @@
                     "EEMB5504",
                     "EEMB5505"
                   ],
-                  "text": "EEMB 5504 and EEMB 5505"
+                  "text": "EEMB 5504 and EEMB 5505",
+                  "sh": 3
                 },
                 {
                   "kind": "courses",
@@ -364,14 +397,16 @@
                     "EEMB5506",
                     "EEMB5507"
                   ],
-                  "text": "EEMB 5506 and EEMB 5507"
+                  "text": "EEMB 5506 and EEMB 5507",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5508"
                   ],
-                  "text": "EEMB 5508"
+                  "text": "EEMB 5508",
+                  "sh": 3
                 },
                 {
                   "kind": "courses",
@@ -379,21 +414,24 @@
                     "EEMB5518",
                     "EEMB5519"
                   ],
-                  "text": "EEMB 5518 and EEMB 5519"
+                  "text": "EEMB 5518 and EEMB 5519",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5520"
                   ],
-                  "text": "EEMB 5520"
+                  "text": "EEMB 5520",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5538"
                   ],
-                  "text": "EEMB 5538"
+                  "text": "EEMB 5538",
+                  "sh": 3
                 },
                 {
                   "kind": "courses",
@@ -401,7 +439,8 @@
                     "EEMB5540",
                     "EEMB5541"
                   ],
-                  "text": "EEMB 5540 and EEMB 5541"
+                  "text": "EEMB 5540 and EEMB 5541",
+                  "sh": 3
                 }
               ]
             }

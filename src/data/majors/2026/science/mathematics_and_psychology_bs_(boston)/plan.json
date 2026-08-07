@@ -19,32 +19,37 @@
                     "INSC1000",
                     "MATH1000"
                   ],
-                  "text": "INSC 1000 or MATH 1000"
+                  "text": "INSC 1000 or MATH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1365"
                   ],
-                  "text": "MATH 1365"
+                  "text": "MATH 1365",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath EI"
+                  "text": "NUpath EI",
+                  "sh": 4
                 }
               ]
             },
@@ -55,22 +60,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area A"
+                  "text": "PSYC Area A",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath IC"
+                  "text": "NUpath IC",
+                  "sh": 4
                 }
               ]
             },
@@ -81,14 +90,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area B"
+                  "text": "PSYC Area B",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 }
               ]
             },
@@ -99,11 +110,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -122,22 +135,26 @@
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area A"
+                  "text": "PSYC Area A",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath DD"
+                  "text": "NUpath DD",
+                  "sh": 4
                 }
               ]
             },
@@ -151,26 +168,31 @@
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area B"
+                  "text": "PSYC Area B",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MATH Elective"
+                  "text": "MATH Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -181,11 +203,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Elective"
+                  "text": "PSYC Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -196,7 +220,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -212,7 +237,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -226,22 +252,26 @@
                   "codes": [
                     "MATH2331"
                   ],
-                  "text": "MATH 2331"
+                  "text": "MATH 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Lab"
+                  "text": "PSYC Lab",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing"
+                  "text": "Advanced Writing",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC4540"
                   ],
-                  "text": "PSYC 4540"
+                  "text": "PSYC 4540",
+                  "sh": 4
                 }
               ]
             },
@@ -255,11 +285,13 @@
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -270,7 +302,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -286,7 +319,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -297,19 +331,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Seminar"
+                  "text": "PSYC Seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Math Elective"
+                  "text": "Math Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath ER"
+                  "text": "NUpath ER",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -335,21 +373,24 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1365"
                   ],
-                  "text": "MATH 1365"
+                  "text": "MATH 1365",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -357,11 +398,13 @@
                     "MATH1000",
                     "INSC1000"
                   ],
-                  "text": "MATH 1000 or INSC 1000"
+                  "text": "MATH 1000 or INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath EI"
+                  "text": "NUpath EI",
+                  "sh": 4
                 }
               ]
             },
@@ -375,19 +418,23 @@
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area A"
+                  "text": "PSYC Area A",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath IC"
+                  "text": "NUpath IC",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -397,7 +444,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -408,7 +455,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -428,22 +475,26 @@
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area B"
+                  "text": "PSYC Area B",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath DD"
+                  "text": "NUpath DD",
+                  "sh": 4
                 }
               ]
             },
@@ -457,26 +508,31 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area A"
+                  "text": "PSYC Area A",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MATH elective"
+                  "text": "MATH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -486,7 +542,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -498,7 +554,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -514,7 +571,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -528,19 +586,23 @@
                   "codes": [
                     "MATH2331"
                   ],
-                  "text": "MATH 2331"
+                  "text": "MATH 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area B"
+                  "text": "PSYC Area B",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -554,11 +616,13 @@
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Adv writing"
+                  "text": "Adv writing",
+                  "sh": 4
                 }
               ]
             },
@@ -569,7 +633,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -585,7 +650,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -599,22 +665,26 @@
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC4540"
                   ],
-                  "text": "PSYC 4540"
+                  "text": "PSYC 4540",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab"
+                  "text": "PSYC lab",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath ER"
+                  "text": "NUpath ER",
+                  "sh": 4
                 }
               ]
             },
@@ -625,11 +695,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -640,7 +712,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -656,7 +729,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -667,19 +741,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar"
+                  "text": "PSYC seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MATH elective"
+                  "text": "MATH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }

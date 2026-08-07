@@ -18,14 +18,16 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1000"
                   ],
-                  "text": "MUSC 1000"
+                  "text": "MUSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -34,21 +36,24 @@
                     "MUSC1002",
                     "MUSC1003"
                   ],
-                  "text": "MUSC 1001 or 1002 and 1003"
+                  "text": "MUSC 1001 or 1002 and 1003",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1119"
                   ],
-                  "text": "MUSC 1119"
+                  "text": "MUSC 1119",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUST1220"
                   ],
-                  "text": "MUST 1220"
+                  "text": "MUST 1220",
+                  "sh": 4
                 }
               ]
             },
@@ -62,29 +67,34 @@
                   "codes": [
                     "MUSC1201"
                   ],
-                  "text": "MUSC 1201"
+                  "text": "MUSC 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC2350"
                   ],
-                  "text": "MUSC 2350"
+                  "text": "MUSC 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course: Western"
+                  "text": "Music in context course: Western",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -95,11 +105,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CAMD elective"
+                  "text": "CAMD elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -109,7 +121,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -129,22 +141,26 @@
                   "codes": [
                     "MUSC1202"
                   ],
-                  "text": "MUSC 1202"
+                  "text": "MUSC 1202",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUST2431"
                   ],
-                  "text": "MUST 2431"
+                  "text": "MUST 2431",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course: Ethnomusicology"
+                  "text": "Music in context course: Ethnomusicology",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music theory/composition elective"
+                  "text": "Music theory/composition elective",
+                  "sh": 4
                 }
               ]
             },
@@ -155,11 +171,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (online)"
+                  "text": "Elective (online)",
+                  "sh": 4
                 }
               ]
             },
@@ -170,11 +188,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (online)"
+                  "text": "Elective (online)",
+                  "sh": 4
                 }
               ]
             },
@@ -185,11 +205,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilization possible)"
+                  "text": "Elective (Dialogue of Civilization possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilization possible)"
+                  "text": "Elective (Dialogue of Civilization possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -208,19 +230,23 @@
                   "codes": [
                     "MUST2102"
                   ],
-                  "text": "MUST 2102"
+                  "text": "MUST 2102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music industry elective"
+                  "text": "Music industry elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music industry elective"
+                  "text": "Music industry elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music technology elective"
+                  "text": "Music technology elective",
+                  "sh": 4
                 }
               ]
             },
@@ -231,7 +257,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -242,7 +269,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -253,11 +281,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilization possible)"
+                  "text": "Elective (Dialogue of Civilization possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilization possible)"
+                  "text": "Elective (Dialogue of Civilization possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -276,19 +306,23 @@
                   "codes": [
                     "ENGW3314"
                   ],
-                  "text": "ENGW 3314"
+                  "text": "ENGW 3314",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music technology elective"
+                  "text": "Music technology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music technology elective"
+                  "text": "Music technology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -302,19 +336,23 @@
                   "codes": [
                     "MUST4611"
                   ],
-                  "text": "MUST 4611"
+                  "text": "MUST 4611",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -340,14 +378,16 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1000"
                   ],
-                  "text": "MUSC 1000"
+                  "text": "MUSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -355,21 +395,24 @@
                     "MUSC1002",
                     "MUSC1003"
                   ],
-                  "text": "MUSC 1002 and MUSC 1003"
+                  "text": "MUSC 1002 and MUSC 1003",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1201"
                   ],
-                  "text": "MUSC 1201"
+                  "text": "MUSC 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUST1220"
                   ],
-                  "text": "MUST 1220"
+                  "text": "MUST 1220",
+                  "sh": 4
                 }
               ]
             },
@@ -383,22 +426,26 @@
                   "codes": [
                     "MUSC1202"
                   ],
-                  "text": "MUSC 1202"
+                  "text": "MUSC 1202",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC2350"
                   ],
-                  "text": "MUSC 2350"
+                  "text": "MUSC 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music in context: Western"
+                  "text": "Music in context: Western",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -408,7 +455,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -419,7 +466,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -439,25 +486,29 @@
                   "codes": [
                     "MUSC2350"
                   ],
-                  "text": "MUSC 2350"
+                  "text": "MUSC 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUST2102"
                   ],
-                  "text": "MUST 2102"
+                  "text": "MUST 2102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUST2431"
                   ],
-                  "text": "MUST 2431"
+                  "text": "MUST 2431",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -468,19 +519,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context: Contemporary"
+                  "text": "Music in context: Contemporary",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music theory/composition elective"
+                  "text": "Music theory/composition elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -490,7 +545,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -501,7 +556,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -518,19 +573,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context: Ethnomusicological"
+                  "text": "Music in context: Ethnomusicological",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music industry elective"
+                  "text": "Music industry elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music technology elective"
+                  "text": "Music technology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music technology elective"
+                  "text": "Music technology elective",
+                  "sh": 4
                 }
               ]
             },
@@ -541,19 +600,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CAMD elective"
+                  "text": "CAMD elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -563,7 +626,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -574,7 +637,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -591,19 +654,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music technology restricted elective"
+                  "text": "Music technology restricted elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -617,19 +684,23 @@
                   "codes": [
                     "MUST4611"
                   ],
-                  "text": "MUST 4611"
+                  "text": "MUST 4611",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

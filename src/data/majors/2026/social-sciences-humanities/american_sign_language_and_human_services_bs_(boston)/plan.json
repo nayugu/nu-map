@@ -18,28 +18,32 @@
                   "codes": [
                     "AMSL1101"
                   ],
-                  "text": "AMSL 1101"
+                  "text": "AMSL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DEAF1500"
                   ],
-                  "text": "DEAF 1500"
+                  "text": "DEAF 1500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV1101"
                   ],
-                  "text": "HUSV 1101"
+                  "text": "HUSV 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -53,22 +57,26 @@
                   "codes": [
                     "AMSL1102"
                   ],
-                  "text": "AMSL 1102"
+                  "text": "AMSL 1102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HSVC elective"
+                  "text": "HSVC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -78,7 +86,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -89,7 +97,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -109,25 +117,29 @@
                   "codes": [
                     "AMSL2101"
                   ],
-                  "text": "AMSL 2101"
+                  "text": "AMSL 2101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTP3500"
                   ],
-                  "text": "INTP 3500"
+                  "text": "INTP 3500",
+                  "sh": 2
                 }
               ]
             },
@@ -141,25 +153,29 @@
                   "codes": [
                     "AMSL2102"
                   ],
-                  "text": "AMSL 2102"
+                  "text": "AMSL 2102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DEAF2700"
                   ],
-                  "text": "DEAF 2700"
+                  "text": "DEAF 2700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV2300"
                   ],
-                  "text": "HUSV 2300"
+                  "text": "HUSV 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -169,7 +185,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -180,7 +196,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -200,25 +216,29 @@
                   "codes": [
                     "DEAF2500"
                   ],
-                  "text": "DEAF 2500"
+                  "text": "DEAF 2500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTP3510"
                   ],
-                  "text": "INTP 3510"
+                  "text": "INTP 3510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AMSL3101"
                   ],
-                  "text": "AMSL 3101"
+                  "text": "AMSL 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HSVC elective"
+                  "text": "HSVC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -232,25 +252,29 @@
                   "codes": [
                     "HUSV2970"
                   ],
-                  "text": "HUSV 2970"
+                  "text": "HUSV 2970",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AMSL3102"
                   ],
-                  "text": "AMSL 3102"
+                  "text": "AMSL 3102",
+                  "sh": 4
                 }
               ]
             },
@@ -260,7 +284,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -271,7 +295,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -291,22 +315,26 @@
                   "codes": [
                     "HUSV3900"
                   ],
-                  "text": "HUSV 3900"
+                  "text": "HUSV 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV4994"
                   ],
-                  "text": "HUSV 4994"
+                  "text": "HUSV 4994",
+                  "sh": 6
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -320,22 +348,26 @@
                   "codes": [
                     "HUSV4700"
                   ],
-                  "text": "HUSV 4700"
+                  "text": "HUSV 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTP4940"
                   ],
-                  "text": "INTP 4940"
+                  "text": "INTP 4940",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

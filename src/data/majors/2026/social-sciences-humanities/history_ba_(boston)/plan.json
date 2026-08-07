@@ -18,39 +18,45 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1000"
                   ],
-                  "text": "HIST 1000"
+                  "text": "HIST 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1170"
                   ],
-                  "text": "HIST 1170"
+                  "text": "HIST 1170",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1200"
                   ],
-                  "text": "HIST 1200"
+                  "text": "HIST 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1201"
                   ],
-                  "text": "HIST 1201"
+                  "text": "HIST 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -64,22 +70,26 @@
                   "codes": [
                     "HIST1130"
                   ],
-                  "text": "HIST 1130"
+                  "text": "HIST 1130",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -89,7 +99,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -100,7 +110,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -117,19 +127,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Pre-1800 or non-U.S./Europe history course"
+                  "text": "Pre-1800 or non-U.S./Europe history course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -140,19 +154,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Pre-1800 or non-U.S./Europe History Course"
+                  "text": "Pre-1800 or non-U.S./Europe History Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate/Advanced History Elective"
+                  "text": "Intermediate/Advanced History Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -163,11 +181,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -178,7 +198,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -194,7 +215,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -208,26 +230,31 @@
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2302"
                   ],
-                  "text": "HIST 2302"
+                  "text": "HIST 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate/Advanced History Elective"
+                  "text": "Intermediate/Advanced History Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -238,11 +265,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -252,7 +281,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -269,19 +298,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate/Advanced History Elective"
+                  "text": "Intermediate/Advanced History Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -295,19 +328,23 @@
                   "codes": [
                     "HIST4701"
                   ],
-                  "text": "HIST 4701"
+                  "text": "HIST 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate/Advanced History Elective"
+                  "text": "Intermediate/Advanced History Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -333,32 +370,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1170"
                   ],
-                  "text": "HIST 1170"
+                  "text": "HIST 1170",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1200"
                   ],
-                  "text": "HIST 1200"
+                  "text": "HIST 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1201"
                   ],
-                  "text": "HIST 1201"
+                  "text": "HIST 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -372,22 +414,26 @@
                   "codes": [
                     "HIST1130"
                   ],
-                  "text": "HIST 1130"
+                  "text": "HIST 1130",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -397,7 +443,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -408,7 +454,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -425,19 +471,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Pre-1800 or non-U.S./Europe History Course"
+                  "text": "Pre-1800 or non-U.S./Europe History Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate/Advanced History Elective"
+                  "text": "Intermediate/Advanced History Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -448,7 +498,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -459,7 +510,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -470,11 +522,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -490,19 +544,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Pre-1800 or non-U.S./Europe History Course"
+                  "text": "Pre-1800 or non-U.S./Europe History Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate/Advanced History Elective"
+                  "text": "Intermediate/Advanced History Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -513,7 +571,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -524,7 +583,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -535,11 +595,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -558,26 +620,31 @@
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2302"
                   ],
-                  "text": "HIST 2302"
+                  "text": "HIST 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate/Advanced History Elective"
+                  "text": "Intermediate/Advanced History Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -588,7 +655,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -599,7 +667,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -609,7 +678,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -626,19 +695,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate/Advanced History Elective"
+                  "text": "Intermediate/Advanced History Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -652,19 +725,23 @@
                   "codes": [
                     "HIST4701"
                   ],
-                  "text": "HIST 4701"
+                  "text": "HIST 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

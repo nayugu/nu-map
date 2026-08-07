@@ -19,18 +19,21 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1121)"
+                  "text": "ARTF 1220 (with optional ARTF 1121)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + Design Fundamentals Elective 1"
+                  "text": "Art + Design Fundamentals Elective 1",
+                  "sh": 2
                 },
                 {
                   "kind": "choice",
@@ -38,7 +41,8 @@
                     "CS1200",
                     "ARTF1000"
                   ],
-                  "text": "CS 1200 or ARTF 1000"
+                  "text": "CS 1200 or ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -46,7 +50,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -54,7 +59,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 }
               ]
             },
@@ -69,7 +75,8 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -77,7 +84,8 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -85,21 +93,24 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (for CAMD Students)"
+                  "text": "EEAM 2000 (for CAMD Students)",
+                  "sh": 1
                 }
               ]
             },
@@ -114,15 +125,18 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + Design Fundamentals Elective 2"
+                  "text": "Art + Design Fundamentals Elective 2",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + Design Fundamentals Elective 3"
+                  "text": "Art + Design Fundamentals Elective 3",
+                  "sh": 2
                 }
               ]
             },
@@ -132,7 +146,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -153,29 +167,34 @@
                     "ARTG2262",
                     "ARTG2263"
                   ],
-                  "text": "ARTG 2262 and ARTG 2263"
+                  "text": "ARTG 2262 and ARTG 2263",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210 (For Khoury Students)"
+                  "text": "CS 1210 (For Khoury Students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design Option level 1"
+                  "text": "Design Option level 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Degree-focused elective 1"
+                  "text": "Degree-focused elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -186,7 +205,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -197,7 +217,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -208,11 +229,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -231,19 +254,23 @@
                   "codes": [
                     "CS2484"
                   ],
-                  "text": "CS 2484"
+                  "text": "CS 2484",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art+Design History elective"
+                  "text": "Art+Design History elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and social issues"
+                  "text": "Computing and social issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design Option level 2"
+                  "text": "Design Option level 2",
+                  "sh": 4
                 }
               ]
             },
@@ -254,7 +281,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -265,14 +293,16 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3302"
                   ],
-                  "text": "ENGW 3302"
+                  "text": "ENGW 3302",
+                  "sh": 4
                 }
               ]
             },
@@ -283,11 +313,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -307,19 +339,23 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + Design Elective"
+                  "text": "Art + Design Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -333,19 +369,23 @@
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 1"
+                  "text": "Khoury Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 2"
+                  "text": "Khoury Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Degree-focused elective 2"
+                  "text": "Degree-focused elective 2",
+                  "sh": 4
                 }
               ]
             }
@@ -372,18 +412,21 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + Design Fundamentals Elective 1"
+                  "text": "Art + Design Fundamentals Elective 1",
+                  "sh": 2
                 },
                 {
                   "kind": "choice",
@@ -391,7 +434,8 @@
                     "CS1200",
                     "ARTF1000"
                   ],
-                  "text": "CS 1200 or ARTF 1000"
+                  "text": "CS 1200 or ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -399,7 +443,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -407,7 +452,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 }
               ]
             },
@@ -422,7 +468,8 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -430,7 +477,8 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -438,21 +486,24 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD Students)"
+                  "text": "EEAM 2000 (For CAMD Students)",
+                  "sh": 1
                 }
               ]
             },
@@ -467,15 +518,18 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + Design Fundamentals Elective 2"
+                  "text": "Art + Design Fundamentals Elective 2",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + Design Fundamentals Elective 3"
+                  "text": "Art + Design Fundamentals Elective 3",
+                  "sh": 2
                 }
               ]
             },
@@ -485,7 +539,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -506,22 +560,26 @@
                     "ARTG2262",
                     "ARTG2263"
                   ],
-                  "text": "ARTG 2262 and ARTG 2263"
+                  "text": "ARTG 2262 and ARTG 2263",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design Option level 1"
+                  "text": "Design Option level 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Degree-focused elective 1"
+                  "text": "Degree-focused elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -535,26 +593,31 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210 (For Khoury Students)"
+                  "text": "CS 1210 (For Khoury Students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS2484"
                   ],
-                  "text": "CS 2484"
+                  "text": "CS 2484",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + Design History Elective"
+                  "text": "Art + Design History Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and Social Issues"
+                  "text": "Computing and Social Issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design Option level 2"
+                  "text": "Design Option level 2",
+                  "sh": 4
                 }
               ]
             },
@@ -565,11 +628,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -580,7 +645,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -596,7 +662,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -611,19 +678,23 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + Design Elective"
+                  "text": "Art + Design Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -634,11 +705,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -649,14 +722,16 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3302"
                   ],
-                  "text": "ENGW 3302"
+                  "text": "ENGW 3302",
+                  "sh": 4
                 }
               ]
             }
@@ -672,7 +747,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -686,19 +762,23 @@
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 1"
+                  "text": "Khoury Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 2"
+                  "text": "Khoury Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Degree-focused elective 2"
+                  "text": "Degree-focused elective 2",
+                  "sh": 4
                 }
               ]
             }

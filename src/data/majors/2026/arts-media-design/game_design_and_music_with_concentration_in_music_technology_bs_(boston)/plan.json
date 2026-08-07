@@ -19,32 +19,37 @@
                     "ARTF1000",
                     "MUSC1000"
                   ],
-                  "text": "ARTF 1000 or MUSC 1000"
+                  "text": "ARTF 1000 or MUSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME1110"
                   ],
-                  "text": "GAME 1110"
+                  "text": "GAME 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1201"
                   ],
-                  "text": "MUSC 1201"
+                  "text": "MUSC 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -58,35 +63,40 @@
                   "codes": [
                     "GAME2500"
                   ],
-                  "text": "GAME 2500"
+                  "text": "GAME 2500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1202"
                   ],
-                  "text": "MUSC 1202"
+                  "text": "MUSC 1202",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC2350"
                   ],
-                  "text": "MUSC 2350"
+                  "text": "MUSC 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUST1220"
                   ],
-                  "text": "MUST 1220"
+                  "text": "MUST 1220",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -97,11 +107,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Art + design elective"
+                  "text": "Art + design elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + design elective"
+                  "text": "Art + design elective",
+                  "sh": 4
                 }
               ]
             },
@@ -111,7 +123,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -131,14 +143,16 @@
                   "codes": [
                     "GAME2950"
                   ],
-                  "text": "GAME 2950"
+                  "text": "GAME 2950",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME3400"
                   ],
-                  "text": "GAME 3400"
+                  "text": "GAME 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -146,14 +160,16 @@
                     "MUSC1002",
                     "MUSC1003"
                   ],
-                  "text": "MUSC 1002 and MUSC 1003"
+                  "text": "MUSC 1002 and MUSC 1003",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUST2102"
                   ],
-                  "text": "MUST 2102"
+                  "text": "MUST 2102",
+                  "sh": 4
                 }
               ]
             },
@@ -164,11 +180,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (online)"
+                  "text": "Elective (online)",
+                  "sh": 4
                 }
               ]
             },
@@ -179,7 +197,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -193,11 +212,13 @@
                   "codes": [
                     "ENGW3302"
                   ],
-                  "text": "ENGW 3302"
+                  "text": "ENGW 3302",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + design elective"
+                  "text": "Art + design elective",
+                  "sh": 4
                 }
               ]
             }
@@ -216,7 +237,8 @@
                   "codes": [
                     "GAME3700"
                   ],
-                  "text": "GAME 3700"
+                  "text": "GAME 3700",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -225,18 +247,21 @@
                     "MUSC2111",
                     "MUSC3300"
                   ],
-                  "text": "MUSC 3541, 2111, or 3300"
+                  "text": "MUSC 3541, 2111, or 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUST2431"
                   ],
-                  "text": "MUST 2431"
+                  "text": "MUST 2431",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Contemporary music requirement"
+                  "text": "Contemporary music requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -247,11 +272,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (online)"
+                  "text": "Elective (online)",
+                  "sh": 4
                 }
               ]
             },
@@ -262,7 +289,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -273,11 +301,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -296,7 +326,8 @@
                   "codes": [
                     "GAME3800"
                   ],
-                  "text": "GAME 3800"
+                  "text": "GAME 3800",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -305,15 +336,18 @@
                     "MUSC2111",
                     "MUSC3300"
                   ],
-                  "text": "MUSC 3541, 2111, or 3300"
+                  "text": "MUSC 3541, 2111, or 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art + design elective"
+                  "text": "Art + design elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music technology elective"
+                  "text": "Music technology elective",
+                  "sh": 4
                 }
               ]
             },
@@ -327,19 +361,23 @@
                   "codes": [
                     "GAME4700"
                   ],
-                  "text": "GAME 4700"
+                  "text": "GAME 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and social issues"
+                  "text": "Computing and social issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music technology elective"
+                  "text": "Music technology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

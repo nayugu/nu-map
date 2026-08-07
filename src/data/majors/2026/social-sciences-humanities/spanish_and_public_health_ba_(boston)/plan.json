@@ -18,35 +18,40 @@
                   "codes": [
                     "HSCI1000"
                   ],
-                  "text": "HSCI 1000"
+                  "text": "HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SPNS2102"
                   ],
-                  "text": "SPNS 2102"
+                  "text": "SPNS 2102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1147"
                   ],
-                  "text": "BIOL 1147"
+                  "text": "BIOL 1147",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -60,14 +65,16 @@
                   "codes": [
                     "SPNS3101"
                   ],
-                  "text": "SPNS 3101"
+                  "text": "SPNS 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2350"
                   ],
-                  "text": "PHTH 2350"
+                  "text": "PHTH 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -75,14 +82,16 @@
                     "BIOL1141",
                     "BIOL1143"
                   ],
-                  "text": "BIOL 1141 or 1143"
+                  "text": "BIOL 1141 or 1143",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -96,11 +105,13 @@
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -111,11 +122,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -134,29 +147,34 @@
                   "codes": [
                     "HSCI2000"
                   ],
-                  "text": "HSCI 2000"
+                  "text": "HSCI 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SPNS3102"
                   ],
-                  "text": "SPNS 3102"
+                  "text": "SPNS 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CLTR elective"
+                  "text": "CLTR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social science course—introductory"
+                  "text": "PH Social science course—introductory",
+                  "sh": 4
                 }
               ]
             },
@@ -167,7 +185,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -178,7 +197,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -192,11 +212,13 @@
                   "codes": [
                     "PHTH2515"
                   ],
-                  "text": "PHTH 2515"
+                  "text": "PHTH 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -215,19 +237,23 @@
                   "codes": [
                     "SPNS3401"
                   ],
-                  "text": "SPNS 3401"
+                  "text": "SPNS 3401",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SPNS elective"
+                  "text": "SPNS elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social science course—upper"
+                  "text": "PH Social science course—upper",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing in the Discipline NUPath course"
+                  "text": "Advanced Writing in the Discipline NUPath course",
+                  "sh": 4
                 }
               ]
             },
@@ -238,7 +264,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -249,7 +276,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -263,14 +291,16 @@
                   "codes": [
                     "PHTH4120"
                   ],
-                  "text": "PHTH 4120"
+                  "text": "PHTH 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4540"
                   ],
-                  "text": "PHTH 4540"
+                  "text": "PHTH 4540",
+                  "sh": 4
                 }
               ]
             }
@@ -289,18 +319,21 @@
                   "codes": [
                     "SPNS3402"
                   ],
-                  "text": "SPNS 3402"
+                  "text": "SPNS 3402",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4202"
                   ],
-                  "text": "PHTH 4202"
+                  "text": "PHTH 4202",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Electives"
+                  "text": "General Electives",
+                  "sh": 8
                 }
               ]
             },
@@ -311,19 +344,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "SPNS elective"
+                  "text": "SPNS elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CLTR elective"
+                  "text": "CLTR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone course"
+                  "text": "Capstone course",
+                  "sh": 4
                 }
               ]
             }
@@ -349,35 +386,40 @@
                   "codes": [
                     "INSH1000"
                   ],
-                  "text": "INSH 1000"
+                  "text": "INSH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SPNS2102"
                   ],
-                  "text": "SPNS 2102"
+                  "text": "SPNS 2102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1147"
                   ],
-                  "text": "BIOL 1147"
+                  "text": "BIOL 1147",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -391,14 +433,16 @@
                   "codes": [
                     "SPNS3101"
                   ],
-                  "text": "SPNS 3101"
+                  "text": "SPNS 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2350"
                   ],
-                  "text": "PHTH 2350"
+                  "text": "PHTH 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -406,14 +450,16 @@
                     "BIOL1141",
                     "BIOL1143"
                   ],
-                  "text": "BIOL 1141 or 1143"
+                  "text": "BIOL 1141 or 1143",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -424,14 +470,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2515"
                   ],
-                  "text": "PHTH 2515"
+                  "text": "PHTH 2515",
+                  "sh": 4
                 }
               ]
             },
@@ -442,11 +490,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -465,22 +515,26 @@
                   "codes": [
                     "SPNS3102"
                   ],
-                  "text": "SPNS 3102"
+                  "text": "SPNS 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CLTR elective"
+                  "text": "CLTR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social science course—introductory"
+                  "text": "PH Social science course—introductory",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 }
               ]
             },
@@ -494,25 +548,29 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SPNS3401"
                   ],
-                  "text": "SPNS 3401"
+                  "text": "SPNS 3401",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Electives"
+                  "text": "General Electives",
+                  "sh": 8
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 }
               ]
             },
@@ -523,14 +581,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4202"
                   ],
-                  "text": "PHTH 4202"
+                  "text": "PHTH 4202",
+                  "sh": 4
                 }
               ]
             },
@@ -541,7 +601,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -557,7 +618,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -568,19 +630,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "SPNS elective"
+                  "text": "SPNS elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CLTR elective"
+                  "text": "CLTR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social science course—upper"
+                  "text": "PH Social science course—upper",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing in the Discipline NUPath course"
+                  "text": "Advanced Writing in the Discipline NUPath course",
+                  "sh": 4
                 }
               ]
             },
@@ -594,14 +660,16 @@
                   "codes": [
                     "PHTH4120"
                   ],
-                  "text": "PHTH 4120"
+                  "text": "PHTH 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4540"
                   ],
-                  "text": "PHTH 4540"
+                  "text": "PHTH 4540",
+                  "sh": 4
                 }
               ]
             },
@@ -612,7 +680,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -628,7 +697,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -639,22 +709,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "SPNS elective"
+                  "text": "SPNS elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone course"
+                  "text": "Capstone course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SPNS3402"
                   ],
-                  "text": "SPNS 3402"
+                  "text": "SPNS 3402",
+                  "sh": 4
                 }
               ]
             }

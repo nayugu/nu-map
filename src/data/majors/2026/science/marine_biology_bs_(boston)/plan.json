@@ -18,7 +18,8 @@
                   "codes": [
                     "ENVR1000"
                   ],
-                  "text": "ENVR 1000"
+                  "text": "ENVR 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,25 +27,29 @@
                     "EEMB1101",
                     "EEMB1102"
                   ],
-                  "text": "EEMB 1101 and EEMB 1102"
+                  "text": "EEMB 1101 and EEMB 1102",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1251"
                   ],
-                  "text": "MATH 1251"
+                  "text": "MATH 1251",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -59,7 +64,8 @@
                     "EEMB1105",
                     "EEMB1106"
                   ],
-                  "text": "EEMB 1105 and EEMB 1106"
+                  "text": "EEMB 1105 and EEMB 1106",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -67,7 +73,8 @@
                     "EEMB2700",
                     "EEMB2701"
                   ],
-                  "text": "EEMB 2700 and EEMB 2701"
+                  "text": "EEMB 2700 and EEMB 2701",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -76,11 +83,13 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -90,7 +99,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -102,11 +111,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -126,14 +137,16 @@
                     "EEMB2302",
                     "EEMB2303"
                   ],
-                  "text": "EEMB 2302 and EEMB 2303"
+                  "text": "EEMB 2302 and EEMB 2303",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB2400"
                   ],
-                  "text": "EEMB 2400"
+                  "text": "EEMB 2400",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -141,18 +154,21 @@
                     "ENVR1500",
                     "ENVR1501"
                   ],
-                  "text": "ENVR 1500 and ENVR 1501"
+                  "text": "ENVR 1500 and ENVR 1501",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -163,7 +179,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -174,7 +191,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -190,11 +208,13 @@
                     "PHYS1162",
                     "PHYS1163"
                   ],
-                  "text": "PHYS 1161 and PHYS 1162 and PHYS 1163"
+                  "text": "PHYS 1161 and PHYS 1162 and PHYS 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -215,25 +235,29 @@
                     "ENVR2501",
                     "ENVR2502"
                   ],
-                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502"
+                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR3410"
                   ],
-                  "text": "ENVR 3410"
+                  "text": "ENVR 3410",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR3600"
                   ],
-                  "text": "ENVR 3600"
+                  "text": "ENVR 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Marine biology elective"
+                  "text": "Marine biology elective",
+                  "sh": 4
                 }
               ]
             },
@@ -244,7 +268,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -255,7 +280,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -269,11 +295,13 @@
                   "codes": [
                     "ENGW3303"
                   ],
-                  "text": "ENGW 3303"
+                  "text": "ENGW 3303",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -293,22 +321,26 @@
                     "BIOL2301",
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2301 and BIOL 2302"
+                  "text": "BIOL 2301 and BIOL 2302",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB3460"
                   ],
-                  "text": "EEMB 3460"
+                  "text": "EEMB 3460",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Marine biology elective"
+                  "text": "Marine biology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Marine biology elective"
+                  "text": "Marine biology elective",
+                  "sh": 4
                 }
               ]
             },
@@ -322,22 +354,26 @@
                   "codes": [
                     "ENVR4000"
                   ],
-                  "text": "ENVR 4000"
+                  "text": "ENVR 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR4997"
                   ],
-                  "text": "ENVR 4997"
+                  "text": "ENVR 4997",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Marine biology elective"
+                  "text": "Marine biology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Marine biology elective"
+                  "text": "Marine biology elective",
+                  "sh": 4
                 }
               ]
             }

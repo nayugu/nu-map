@@ -19,14 +19,16 @@
                     "BIOL1107",
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1107 and BIOL 1108"
+                  "text": "BIOL 1107 and BIOL 1108",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BNSC1000"
                   ],
-                  "text": "BNSC 1000"
+                  "text": "BNSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -35,21 +37,24 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1145"
                   ],
-                  "text": "PHIL 1145"
+                  "text": "PHIL 1145",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -63,28 +68,32 @@
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -98,11 +107,13 @@
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -112,7 +123,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -133,28 +144,32 @@
                     "BIOL2301",
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2301 and BIOL 2302"
+                  "text": "BIOL 2301 and BIOL 2302",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1105"
                   ],
-                  "text": "PHIL 1105"
+                  "text": "PHIL 1105",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3200"
                   ],
-                  "text": "PSYC 3200"
+                  "text": "PSYC 3200",
+                  "sh": 4
                 }
               ]
             },
@@ -169,29 +184,34 @@
                     "CHEM2311",
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2311 and CHEM 2312"
+                  "text": "CHEM 2311 and CHEM 2312",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL restricted elective"
+                  "text": "PHIL restricted elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS core course"
+                  "text": "BNS core course",
+                  "sh": 4
                 }
               ]
             },
@@ -205,11 +225,13 @@
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -220,7 +242,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -236,7 +259,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -247,19 +271,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "BNS core course"
+                  "text": "BNS core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -270,11 +298,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -285,14 +315,16 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 }
               ]
             }
@@ -308,7 +340,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -323,7 +356,8 @@
                     "BIOL4709",
                     "BIOL5587"
                   ],
-                  "text": "BIOL 4709 or 5587"
+                  "text": "BIOL 4709 or 5587",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -331,15 +365,18 @@
                     "PHIL4535",
                     "PHIL4555"
                   ],
-                  "text": "PHIL 4535 or 4555"
+                  "text": "PHIL 4535 or 4555",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS upper-level elective"
+                  "text": "BNS upper-level elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -366,14 +403,16 @@
                     "BIOL1107",
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1107 and BIOL 1108"
+                  "text": "BIOL 1107 and BIOL 1108",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BNSC1000"
                   ],
-                  "text": "BNSC 1000"
+                  "text": "BNSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -382,21 +421,24 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1145"
                   ],
-                  "text": "PHIL 1145"
+                  "text": "PHIL 1145",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -410,28 +452,32 @@
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -441,7 +487,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -453,7 +499,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -473,28 +520,32 @@
                     "BIOL2301",
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2301 and BIOL 2302"
+                  "text": "BIOL 2301 and BIOL 2302",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1105"
                   ],
-                  "text": "PHIL 1105"
+                  "text": "PHIL 1105",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3200"
                   ],
-                  "text": "PSYC 3200"
+                  "text": "PSYC 3200",
+                  "sh": 4
                 }
               ]
             },
@@ -509,32 +560,37 @@
                     "CHEM2311",
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2311 and CHEM 2312"
+                  "text": "CHEM 2311 and CHEM 2312",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL restricted elective"
+                  "text": "PHIL restricted elective",
+                  "sh": 4
                 }
               ]
             },
@@ -544,7 +600,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -556,7 +612,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -572,7 +629,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -583,19 +641,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "BNS core course"
+                  "text": "BNS core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -609,11 +671,13 @@
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -624,7 +688,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -640,7 +705,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -655,22 +721,26 @@
                     "BIOL4709",
                     "BIOL5587"
                   ],
-                  "text": "BIOL 4709 or 5587"
+                  "text": "BIOL 4709 or 5587",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS core course"
+                  "text": "BNS core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 }
               ]
             },
@@ -680,7 +750,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -692,7 +762,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -708,7 +779,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -723,19 +795,23 @@
                     "PHIL4535",
                     "PHIL4555"
                   ],
-                  "text": "PHIL 4535 or 4555"
+                  "text": "PHIL 4535 or 4555",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS upper-level elective"
+                  "text": "BNS upper-level elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }

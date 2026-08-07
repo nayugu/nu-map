@@ -18,32 +18,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MSCR1000"
                   ],
-                  "text": "MSCR 1000"
+                  "text": "MSCR 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MSCR1220"
                   ],
-                  "text": "MSCR 1220"
+                  "text": "MSCR 1220",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 }
               ]
             },
@@ -58,7 +63,8 @@
                     "MSCR1320",
                     "MSCR1420"
                   ],
-                  "text": "MSCR 1320 or 1420"
+                  "text": "MSCR 1320 or 1420",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -66,22 +72,26 @@
                     "PHIL2325",
                     "POLS2325"
                   ],
-                  "text": "PHIL 2325 or POLS 2325"
+                  "text": "PHIL 2325 or POLS 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR foundation"
+                  "text": "MSCR foundation",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -92,11 +102,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -107,11 +119,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -130,26 +144,31 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR diversity/globalization"
+                  "text": "MSCR diversity/globalization",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective"
+                  "text": "MSCR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -160,19 +179,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "MSCR writing-intensive"
+                  "text": "MSCR writing-intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Restricted PHIL elective 1"
+                  "text": "Restricted PHIL elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Critical Philosophy Elective"
+                  "text": "Critical Philosophy Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -183,11 +206,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -198,7 +223,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -214,7 +240,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -225,19 +252,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "MSCR writing-intensive"
+                  "text": "MSCR writing-intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective"
+                  "text": "MSCR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Restricted PHIL elective 2"
+                  "text": "Restricted PHIL elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -248,11 +279,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -263,7 +296,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -279,7 +313,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -293,19 +328,23 @@
                   "codes": [
                     "MSCR3600"
                   ],
-                  "text": "MSCR 3600"
+                  "text": "MSCR 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective"
+                  "text": "MSCR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Restricted PHIL elective 3"
+                  "text": "Restricted PHIL elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

@@ -18,22 +18,26 @@
                   "codes": [
                     "MATH1365"
                   ],
-                  "text": "MATH 1365"
+                  "text": "MATH 1365",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -47,22 +51,26 @@
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2325"
                   ],
-                  "text": "PHIL 2325"
+                  "text": "PHIL 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -73,11 +81,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -88,11 +98,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -111,25 +123,29 @@
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -143,19 +159,23 @@
                   "codes": [
                     "MATH2331"
                   ],
-                  "text": "MATH 2331"
+                  "text": "MATH 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL advanced elective"
+                  "text": "PHIL advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -166,11 +186,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -181,7 +203,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -197,7 +220,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -211,14 +235,16 @@
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -226,11 +252,13 @@
                     "PHIL2001",
                     "PHIL3050"
                   ],
-                  "text": "PHIL 2001 or 3050"
+                  "text": "PHIL 2001 or 3050",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Course in the following range: MATH 3001 to Math 4999"
+                  "text": "Course in the following range: MATH 3001 to Math 4999",
+                  "sh": 4
                 }
               ]
             },
@@ -241,11 +269,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -256,7 +286,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -272,7 +303,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -286,19 +318,23 @@
                   "codes": [
                     "PHIL4515"
                   ],
-                  "text": "PHIL 4515"
+                  "text": "PHIL 4515",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone in PHIL or MATH"
+                  "text": "Capstone in PHIL or MATH",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Course in the following range: MATH 3001 to MATH 4999"
+                  "text": "Course in the following range: MATH 3001 to MATH 4999",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

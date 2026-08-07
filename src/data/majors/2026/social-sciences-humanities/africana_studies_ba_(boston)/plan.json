@@ -18,32 +18,37 @@
                   "codes": [
                     "AFCS1101"
                   ],
-                  "text": "AFCS 1101"
+                  "text": "AFCS 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CLTR1000"
                   ],
-                  "text": "CLTR 1000"
+                  "text": "CLTR 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -57,22 +62,26 @@
                   "codes": [
                     "AFCS1113"
                   ],
-                  "text": "AFCS 1113"
+                  "text": "AFCS 1113",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS1225"
                   ],
-                  "text": "AFCS 1225"
+                  "text": "AFCS 1225",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -83,11 +92,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -98,11 +109,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -121,22 +134,26 @@
                   "codes": [
                     "AFCS2355"
                   ],
-                  "text": "AFCS 2355"
+                  "text": "AFCS 2355",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS3900"
                   ],
-                  "text": "AFCS 3900"
+                  "text": "AFCS 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BA language requirement course 1"
+                  "text": "BA language requirement course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Course to fulfill NUPath requirement"
+                  "text": "Course to fulfill NUPath requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -150,26 +167,31 @@
                   "codes": [
                     "AFCS1261"
                   ],
-                  "text": "AFCS 1261"
+                  "text": "AFCS 1261",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BA language requirement course 2"
+                  "text": "BA language requirement course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -180,11 +202,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -195,7 +219,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -211,7 +236,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -225,25 +251,29 @@
                   "codes": [
                     "AFCS2410"
                   ],
-                  "text": "AFCS 2410"
+                  "text": "AFCS 2410",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS4526"
                   ],
-                  "text": "AFCS 4526"
+                  "text": "AFCS 4526",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BA language requirement course 3"
+                  "text": "BA language requirement course 3",
+                  "sh": 4
                 }
               ]
             },
@@ -254,11 +284,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -269,7 +301,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -285,7 +318,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -299,22 +333,26 @@
                   "codes": [
                     "AFCS3424"
                   ],
-                  "text": "AFCS 3424"
+                  "text": "AFCS 3424",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS4700"
                   ],
-                  "text": "AFCS 4700"
+                  "text": "AFCS 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

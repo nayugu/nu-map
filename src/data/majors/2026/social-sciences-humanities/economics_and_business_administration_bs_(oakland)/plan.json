@@ -18,7 +18,8 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -26,21 +27,24 @@
                     "ECON1000",
                     "BUSN1102"
                   ],
-                  "text": "ECON 1000 or BUSN 1102"
+                  "text": "ECON 1000 or BUSN 1102",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1115"
                   ],
-                  "text": "ECON 1115"
+                  "text": "ECON 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -52,7 +56,8 @@
                     "MATH1340",
                     "MATH1341"
                   ],
-                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341"
+                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -66,21 +71,24 @@
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB1203"
                   ],
-                  "text": "INTB 1203"
+                  "text": "INTB 1203",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -88,7 +96,8 @@
                     "MGSC2301",
                     "ECON2350"
                   ],
-                  "text": "MGSC 2301 or ECON 2350"
+                  "text": "MGSC 2301 or ECON 2350",
+                  "sh": 4
                 }
               ]
             },
@@ -102,11 +111,13 @@
                   "codes": [
                     "ECON2315"
                   ],
-                  "text": "ECON 2315"
+                  "text": "ECON 2315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath DD"
+                  "text": "NUpath DD",
+                  "sh": 4
                 }
               ]
             },
@@ -120,11 +131,13 @@
                   "codes": [
                     "MKTG2201"
                   ],
-                  "text": "MKTG 2201"
+                  "text": "MKTG 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -143,7 +156,8 @@
                   "codes": [
                     "ACCT2301"
                   ],
-                  "text": "ACCT 2301"
+                  "text": "ACCT 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -151,7 +165,8 @@
                     "BUSN1103",
                     "EESH2000"
                   ],
-                  "text": "BUSN 1103 or EESH 2000"
+                  "text": "BUSN 1103 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -159,18 +174,21 @@
                     "CS1100",
                     "MISM2510"
                   ],
-                  "text": "CS 1100 or MISM 2510"
+                  "text": "CS 1100 or MISM 2510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2316"
                   ],
-                  "text": "ECON 2316"
+                  "text": "ECON 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 1"
+                  "text": "ECON elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -181,7 +199,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -192,7 +211,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -207,11 +227,13 @@
                     "ORGB3201",
                     "ORGB3203"
                   ],
-                  "text": "ORGB 3201 or 3203"
+                  "text": "ORGB 3201 or 3203",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -230,19 +252,23 @@
                   "codes": [
                     "ECON2560"
                   ],
-                  "text": "ECON 2560"
+                  "text": "ECON 2560",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 1"
+                  "text": "Concentration course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 2"
+                  "text": "Concentration course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 2"
+                  "text": "ECON elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -253,7 +279,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -264,7 +291,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -275,11 +303,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Advanced writing in the disciplines"
+                  "text": "Advanced writing in the disciplines",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -298,19 +328,23 @@
                   "codes": [
                     "STRT4501"
                   ],
-                  "text": "STRT 4501"
+                  "text": "STRT 4501",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 3"
+                  "text": "Concentration course 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 3"
+                  "text": "ECON elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -321,19 +355,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 4"
+                  "text": "Concentration course 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 4"
+                  "text": "ECON elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 5"
+                  "text": "ECON elective 5",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

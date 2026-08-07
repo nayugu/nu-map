@@ -18,32 +18,37 @@
                   "codes": [
                     "CLTR1000"
                   ],
-                  "text": "CLTR 1000"
+                  "text": "CLTR 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215 (Potential option to cover NUPath requirement)"
+                  "text": "MATH 1215 (Potential option to cover NUPath requirement)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LPSC1101"
                   ],
-                  "text": "LPSC 1101 (Foundational core course)"
+                  "text": "LPSC 1101 (Foundational core course)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 }
               ]
             },
@@ -57,25 +62,29 @@
                   "codes": [
                     "ASNS1150"
                   ],
-                  "text": "ASNS 1150 (Concentration core course)"
+                  "text": "ASNS 1150 (Concentration core course)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CLTR3418"
                   ],
-                  "text": "CLTR 3418 (Major elective)"
+                  "text": "CLTR 3418 (Major elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LPSC2301"
                   ],
-                  "text": "LPSC 2301 (Foundational core elective)"
+                  "text": "LPSC 2301 (Foundational core elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 }
               ]
             },
@@ -86,11 +95,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -101,11 +112,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -124,29 +137,34 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1100"
                   ],
-                  "text": "HIST 1100 (Foundational core course)"
+                  "text": "HIST 1100 (Foundational core course)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1112"
                   ],
-                  "text": "PHIL 1112 (Major elective)"
+                  "text": "PHIL 1112 (Major elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration elective"
+                  "text": "Concentration elective",
+                  "sh": 4
                 }
               ]
             },
@@ -157,7 +175,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -168,7 +187,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -179,11 +199,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -202,28 +224,32 @@
                   "codes": [
                     "ANTH4515"
                   ],
-                  "text": "ANTH 4515 (Concentration writing-intensive course)"
+                  "text": "ANTH 4515 (Concentration writing-intensive course)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2000"
                   ],
-                  "text": "HIST 2000 (Major elective)"
+                  "text": "HIST 2000 (Major elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS4500"
                   ],
-                  "text": "POLS 4500 (Foundational core elective)"
+                  "text": "POLS 4500 (Foundational core elective)",
+                  "sh": 4
                 }
               ]
             },
@@ -234,7 +260,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -245,7 +272,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -256,11 +284,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -279,22 +309,26 @@
                   "codes": [
                     "ANTH4350"
                   ],
-                  "text": "ANTH 4350 (Concentration elective)"
+                  "text": "ANTH 4350 (Concentration elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1246"
                   ],
-                  "text": "HIST 1246 (Concentration elective)"
+                  "text": "HIST 1246 (Concentration elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -308,19 +342,23 @@
                   "codes": [
                     "HIST4701"
                   ],
-                  "text": "HIST 4701 (Capstone)"
+                  "text": "HIST 4701 (Capstone)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

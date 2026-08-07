@@ -18,7 +18,8 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -26,7 +27,8 @@
                     "CS1200",
                     "BUSN1102"
                   ],
-                  "text": "CS 1200 or BUSN 1102"
+                  "text": "CS 1200 or BUSN 1102",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -34,7 +36,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -42,14 +45,16 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -64,7 +69,8 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -72,7 +78,8 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -80,14 +87,16 @@
                     "MATH1341",
                     "MATH1231"
                   ],
-                  "text": "MATH 1341 or 1231"
+                  "text": "MATH 1341 or 1231",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MKTG2201"
                   ],
-                  "text": "MKTG 2201"
+                  "text": "MKTG 2201",
+                  "sh": 4
                 }
               ]
             },
@@ -102,11 +111,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -117,11 +128,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -140,28 +153,32 @@
                   "codes": [
                     "ACCT2301"
                   ],
-                  "text": "ACCT 2301"
+                  "text": "ACCT 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3650"
                   ],
-                  "text": "CS 3650"
+                  "text": "CS 3650",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CY2550"
                   ],
-                  "text": "CY 2550"
+                  "text": "CY 2550",
+                  "sh": 4
                 }
               ]
             },
@@ -176,7 +193,8 @@
                     "CS1210",
                     "BUSN1103"
                   ],
-                  "text": "CS 1210 or BUSN 1103"
+                  "text": "CS 1210 or BUSN 1103",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -184,25 +202,29 @@
                     "CS4700",
                     "CS4730"
                   ],
-                  "text": "CS 4700 or 4730"
+                  "text": "CS 4700 or 4730",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CY3740"
                   ],
-                  "text": "CY 3740"
+                  "text": "CY 3740",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business Concentration"
+                  "text": "Business Concentration",
+                  "sh": 4
                 }
               ]
             },
@@ -216,11 +238,13 @@
                   "codes": [
                     "MGSC2301"
                   ],
-                  "text": "MGSC 2301"
+                  "text": "MGSC 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -231,7 +255,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -247,7 +272,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -262,22 +288,26 @@
                     "CY4170",
                     "CY5240"
                   ],
-                  "text": "CY 4170 or 5240"
+                  "text": "CY 4170 or 5240",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CY4740"
                   ],
-                  "text": "CY 4740"
+                  "text": "CY 4740",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business Concentration"
+                  "text": "Business Concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business Concentration"
+                  "text": "Business Concentration",
+                  "sh": 4
                 }
               ]
             },
@@ -291,7 +321,8 @@
                   "codes": [
                     "MISM2301"
                   ],
-                  "text": "MISM 2301"
+                  "text": "MISM 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -299,7 +330,8 @@
                     "ORGB3201",
                     "ORGB3203"
                   ],
-                  "text": "ORGB 3201 or 3203"
+                  "text": "ORGB 3201 or 3203",
+                  "sh": 4
                 }
               ]
             },
@@ -310,7 +342,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -326,7 +359,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -342,22 +376,26 @@
                     "ENGW3304",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3304, or 3315"
+                  "text": "ENGW 3302, 3304, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "STRT4501"
                   ],
-                  "text": "STRT 4501"
+                  "text": "STRT 4501",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business Concentration"
+                  "text": "Business Concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Cybersecurity Elective"
+                  "text": "Cybersecurity Elective",
+                  "sh": 4
                 }
               ]
             }

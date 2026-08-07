@@ -18,25 +18,29 @@
                   "codes": [
                     "ENVR1101"
                   ],
-                  "text": "ENVR 1101"
+                  "text": "ENVR 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1180"
                   ],
-                  "text": "PHIL 1180"
+                  "text": "PHIL 1180",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -50,14 +54,16 @@
                   "codes": [
                     "ENVR2515"
                   ],
-                  "text": "ENVR 2515"
+                  "text": "ENVR 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR3150"
                   ],
-                  "text": "ENVR 3150"
+                  "text": "ENVR 3150",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -65,11 +71,13 @@
                     "PHIL2325",
                     "POLS2325"
                   ],
-                  "text": "PHIL 2325 or POLS 2325"
+                  "text": "PHIL 2325 or POLS 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -80,11 +88,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -95,11 +105,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -119,7 +131,8 @@
                     "ENVR3300",
                     "ENVR3301"
                   ],
-                  "text": "ENVR 3300 and ENVR 3301"
+                  "text": "ENVR 3300 and ENVR 3301",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -127,18 +140,21 @@
                     "PHIL1105",
                     "PHIL4510"
                   ],
-                  "text": "PHIL 1105 or 4510"
+                  "text": "PHIL 1105 or 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective; 1 of 4"
+                  "text": "ENVR elective; 1 of 4",
+                  "sh": 4
                 }
               ]
             },
@@ -149,19 +165,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective; 2 of 4"
+                  "text": "ENVR elective; 2 of 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Critical PHIL Elective"
+                  "text": "Critical PHIL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Elective"
+                  "text": "PHIL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -172,11 +192,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -187,7 +209,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -203,7 +226,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -214,19 +238,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective; 3 of 4"
+                  "text": "ENVR elective; 3 of 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective; 4 of 4"
+                  "text": "ENVR elective; 4 of 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL 3000/4000/5000 Elective"
+                  "text": "PHIL 3000/4000/5000 Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Science/Environment Elective"
+                  "text": "PHIL Science/Environment Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -237,11 +265,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Integrative Course #1"
+                  "text": "Integrative Course #1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative Course #2"
+                  "text": "Integrative Course #2",
+                  "sh": 4
                 }
               ]
             },
@@ -252,7 +282,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -268,7 +299,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -279,19 +311,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL 3000/4000/5000 Elective"
+                  "text": "PHIL 3000/4000/5000 Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

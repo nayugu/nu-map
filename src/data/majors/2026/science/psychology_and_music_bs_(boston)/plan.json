@@ -18,14 +18,16 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -33,7 +35,8 @@
                     "MUSC1000",
                     "PSYC1000"
                   ],
-                  "text": "MUSC 1000 or PSYC 1000"
+                  "text": "MUSC 1000 or PSYC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -42,14 +45,16 @@
                     "MUSC1002",
                     "MUSC1003"
                   ],
-                  "text": "MUSC 1001 or 1002 and 1003"
+                  "text": "MUSC 1001 or 1002 and 1003",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1119"
                   ],
-                  "text": "MUSC 1119"
+                  "text": "MUSC 1119",
+                  "sh": 4
                 }
               ]
             },
@@ -63,32 +68,37 @@
                   "codes": [
                     "MATH1213"
                   ],
-                  "text": "MATH 1213"
+                  "text": "MATH 1213",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1201"
                   ],
-                  "text": "MUSC 1201"
+                  "text": "MUSC 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath ER"
+                  "text": "NUpath ER",
+                  "sh": 4
                 }
               ]
             },
@@ -102,11 +112,13 @@
                   "codes": [
                     "PSYC3466"
                   ],
-                  "text": "PSYC 3466"
+                  "text": "PSYC 3466",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music elective"
+                  "text": "Music elective",
+                  "sh": 4
                 }
               ]
             },
@@ -117,11 +129,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -140,25 +154,29 @@
                   "codes": [
                     "MUSC1202"
                   ],
-                  "text": "MUSC 1202"
+                  "text": "MUSC 1202",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC3300"
                   ],
-                  "text": "MUSC 3300"
+                  "text": "MUSC 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -172,7 +190,8 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000 (For COS students)"
+                  "text": "EESC 2000 (For COS students)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -180,22 +199,26 @@
                     "MUSC2350",
                     "INAM3200"
                   ],
-                  "text": "MUSC 2350 or INAM 3200"
+                  "text": "MUSC 2350 or INAM 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3464"
                   ],
-                  "text": "PSYC 3464"
+                  "text": "PSYC 3464",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Contemporary/ethno course"
+                  "text": "Contemporary/ethno course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath DD"
+                  "text": "NUpath DD",
+                  "sh": 4
                 }
               ]
             },
@@ -206,11 +229,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -221,7 +246,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -237,7 +263,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -251,22 +278,26 @@
                   "codes": [
                     "MUSC4510"
                   ],
-                  "text": "MUSC 4510"
+                  "text": "MUSC 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3452"
                   ],
-                  "text": "PSYC 3452"
+                  "text": "PSYC 3452",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Creative music course"
+                  "text": "Creative music course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -277,11 +308,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab"
+                  "text": "PSYC lab",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -292,7 +325,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -308,7 +342,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -319,19 +354,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music elective"
+                  "text": "Music elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath WD"
+                  "text": "NUpath WD",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar"
+                  "text": "PSYC seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }

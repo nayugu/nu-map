@@ -19,21 +19,24 @@
                     "CRIM1000",
                     "SOCL1000"
                   ],
-                  "text": "CRIM 1000 or SOCL 1000"
+                  "text": "CRIM 1000 or SOCL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL1101"
                   ],
-                  "text": "SOCL 1101"
+                  "text": "SOCL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -41,14 +44,16 @@
                     "CS1100",
                     "CS2000"
                   ],
-                  "text": "CS 1100 or 2000"
+                  "text": "CS 1100 or 2000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 }
               ]
             },
@@ -62,19 +67,23 @@
                   "codes": [
                     "SOCL3300"
                   ],
-                  "text": "SOCL 3300"
+                  "text": "SOCL 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Criminology thematic elective"
+                  "text": "Criminology thematic elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Sociology introductory elective"
+                  "text": "Sociology introductory elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -84,7 +93,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -96,11 +105,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -119,29 +130,34 @@
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Sociology introductory elective"
+                  "text": "Sociology introductory elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -152,7 +168,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -163,7 +180,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -174,11 +192,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Criminology survey elective"
+                  "text": "Criminology survey elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Sociology intermediate elective"
+                  "text": "Sociology intermediate elective",
+                  "sh": 4
                 }
               ]
             }
@@ -198,7 +218,8 @@
                     "SOCL2321",
                     "INSH3101"
                   ],
-                  "text": "SOCL 2321 or INSH 3101"
+                  "text": "SOCL 2321 or INSH 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -206,22 +227,26 @@
                     "CRIM3700",
                     "INSH3102"
                   ],
-                  "text": "CRIM 3700 or INSH 3102"
+                  "text": "CRIM 3700 or INSH 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3000"
                   ],
-                  "text": "CRIM 3000"
+                  "text": "CRIM 3000",
+                  "sh": 1
                 }
               ]
             },
@@ -232,7 +257,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -243,7 +269,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -254,11 +281,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Criminal justice elective"
+                  "text": "Criminal justice elective",
+                  "sh": 4
                 }
               ]
             }
@@ -274,26 +303,31 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Criminology systemwide elective"
+                  "text": "Criminology systemwide elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Sociology advanced elective"
+                  "text": "Sociology advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course 1"
+                  "text": "Integrative course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Criminal justice elective"
+                  "text": "Criminal justice elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM4000"
                   ],
-                  "text": "CRIM 4000"
+                  "text": "CRIM 4000",
+                  "sh": 1
                 }
               ]
             },
@@ -308,19 +342,23 @@
                     "CRIM4949",
                     "SOCL4600"
                   ],
-                  "text": "CRIM 4949 or SOCL 4600"
+                  "text": "CRIM 4949 or SOCL 4600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course 2"
+                  "text": "Integrative course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -331,7 +369,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

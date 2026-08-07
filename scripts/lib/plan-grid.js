@@ -128,6 +128,15 @@ const COOP = /^(co-?op|cooperative education|experiential learning|industry plac
  */
 const COOP_COURSE = /^COOP\d/;
 
+/**
+ * A term the student is deliberately NOT studying. 758 cells say "Vacation",
+ * which is neither a course nor a slot to fill: reading it as a placeholder
+ * would put an empty requirement slot in a semester the department is telling
+ * you to take off, and it would carry credit hours toward a term load that is
+ * supposed to be zero.
+ */
+const VACATION = /^(vacation|break|no classes|off)\b/i;
+
 /** Normalize "CS 2100" / "CS 2100" → "CS2100". */
 function keyOf(raw) {
   const m = /^([A-Z]{2,6})\s*(\d{3,4}[A-Z]?)$/.exec(
@@ -144,7 +153,14 @@ const termTypeOf = (label) =>
  * @param {object} cell node-html-parser element
  * @returns {object|null} entry, or null for an empty cell
  */
-function readCell(cell) {
+function readCell(cell, hoursCell) {
+  // "4", "4-5", "1.5". A range takes its low end: a plan should never claim
+  // more credit than the student is certain to earn.
+  const rawHours = hoursCell?.text?.replace(/\s+/g, " ").trim() ?? "";
+  const shMatch = /(\d+(?:\.\d+)?)/.exec(rawHours);
+  const sh = shMatch ? parseFloat(shMatch[1]) : null;
+  const withSh = (entry) => (sh == null ? entry : { ...entry, sh });
+
   const text = cell.text.replace(/ /g, " ").replace(/\s+/g, " ").trim();
   if (!text) return null;
 
@@ -155,19 +171,20 @@ function readCell(cell) {
   }
 
   if (!codes.length) {
-    if (COOP.test(text)) return { kind: "coop", text };
-    return { kind: "placeholder", text };
+    if (VACATION.test(text)) return { kind: "vacation", text };
+    if (COOP.test(text)) return withSh({ kind: "coop", text });
+    return withSh({ kind: "placeholder", text });
   }
   // Every code being a co-op course means the cell IS a co-op, however it is
   // worded. Requiring all of them keeps a cell that merely mentions one
   // alongside real coursework from disappearing into a work term.
-  if (codes.every((c) => COOP_COURSE.test(c))) return { kind: "coop", codes, text };
-  if (codes.length === 1) return { kind: "course", codes, text };
+  if (codes.every((c) => COOP_COURSE.test(c))) return withSh({ kind: "coop", codes, text });
+  if (codes.length === 1) return withSh({ kind: "course", codes, text });
   // Two or more codes: the connector decides whether the student takes all of
   // them or picks one. Default to "courses" (all) — assuming a choice where
   // the catalog meant a pair would drop a required course, which is the
   // direction that hurts.
-  return { kind: /\bor\b/i.test(text) ? "choice" : "courses", codes, text };
+  return withSh({ kind: /\bor\b/i.test(text) ? "choice" : "courses", codes, text });
 }
 
 /**
@@ -312,7 +329,9 @@ function parseGridTable(table) {
       const cell = cells[i];
       const cls2 = cell.getAttribute("class") ?? "";
       if (cls2.includes("codecol")) {
-        const entry = readCell(cell);
+        const next = cells[i + 1];
+        const hoursCell = (next?.getAttribute("class") ?? "").includes("hourscol") ? next : null;
+        const entry = readCell(cell, hoursCell);
         if (entry) year.terms[termIndex].entries.push(entry);
         // Its hours cell belongs to the same term; step over it if present.
         i += (cells[i + 1]?.getAttribute("class") ?? "").includes("hourscol") ? 2 : 1;

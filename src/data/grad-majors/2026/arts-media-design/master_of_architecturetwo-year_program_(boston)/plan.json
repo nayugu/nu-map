@@ -18,7 +18,8 @@
                   "codes": [
                     "ARCH6115"
                   ],
-                  "text": "ARCH 6115"
+                  "text": "ARCH 6115",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -26,7 +27,8 @@
                     "ARCH5210",
                     "ARCH5211"
                   ],
-                  "text": "ARCH 5210 and ARCH 5211"
+                  "text": "ARCH 5210 and ARCH 5211",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -34,11 +36,13 @@
                     "ARCH5330",
                     "ARCH5310"
                   ],
-                  "text": "ARCH 5330 or 5310"
+                  "text": "ARCH 5330 or 5310",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 1"
+                  "text": "Elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -52,18 +56,21 @@
                   "codes": [
                     "ARCH5115"
                   ],
-                  "text": "ARCH 5115"
+                  "text": "ARCH 5115",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5340"
                   ],
-                  "text": "ARCH 5340"
+                  "text": "ARCH 5340",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 2"
+                  "text": "Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -73,7 +80,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -84,7 +91,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -104,21 +111,24 @@
                   "codes": [
                     "ARCH7120"
                   ],
-                  "text": "ARCH 7120"
+                  "text": "ARCH 7120",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH7220"
                   ],
-                  "text": "ARCH 7220"
+                  "text": "ARCH 7220",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH7430"
                   ],
-                  "text": "ARCH 7430"
+                  "text": "ARCH 7430",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
@@ -136,14 +146,16 @@
                   "codes": [
                     "ARCH6440"
                   ],
-                  "text": "ARCH 6440"
+                  "text": "ARCH 6440",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH7140"
                   ],
-                  "text": "ARCH 7140"
+                  "text": "ARCH 7140",
+                  "sh": 6
                 },
                 {
                   "kind": "choice",
@@ -151,7 +163,8 @@
                     "ARCH5330",
                     "ARCH6340"
                   ],
-                  "text": "ARCH 5330 or 6340"
+                  "text": "ARCH 5330 or 6340",
+                  "sh": 4
                 }
               ]
             }

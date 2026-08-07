@@ -18,7 +18,8 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -26,25 +27,29 @@
                     "HUSV1000",
                     "INSC1000"
                   ],
-                  "text": "HUSV 1000 or INSC 1000"
+                  "text": "HUSV 1000 or INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV1101"
                   ],
-                  "text": "HUSV 1101"
+                  "text": "HUSV 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EI NUpath elective"
+                  "text": "EI NUpath elective",
+                  "sh": 4
                 }
               ]
             },
@@ -58,7 +63,8 @@
                   "codes": [
                     "HUSV2300"
                   ],
-                  "text": "HUSV 2300"
+                  "text": "HUSV 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -67,21 +73,24 @@
                     "MATH1215",
                     "MATH1241"
                   ],
-                  "text": "MATH 1213, 1215, or 1241"
+                  "text": "MATH 1213, 1215, or 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3402"
                   ],
-                  "text": "PSYC 3402"
+                  "text": "PSYC 3402",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3450"
                   ],
-                  "text": "PSYC 3450"
+                  "text": "PSYC 3450",
+                  "sh": 4
                 }
               ]
             },
@@ -92,11 +101,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective 1"
+                  "text": "PSYC elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "IC NUpath elective"
+                  "text": "IC NUpath elective",
+                  "sh": 4
                 }
               ]
             },
@@ -107,11 +118,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -130,22 +143,26 @@
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3404"
                   ],
-                  "text": "PSYC 3404"
+                  "text": "PSYC 3404",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective 1"
+                  "text": "HUSV elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -160,32 +177,37 @@
                     "EESH2000",
                     "EESC2000"
                   ],
-                  "text": "EESH 2000 or EESC 2000"
+                  "text": "EESH 2000 or EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV2970"
                   ],
-                  "text": "HUSV 2970"
+                  "text": "HUSV 2970",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV3570"
                   ],
-                  "text": "HUSV 3570"
+                  "text": "HUSV 3570",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3466"
                   ],
-                  "text": "PSYC 3466"
+                  "text": "PSYC 3466",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective 2"
+                  "text": "PSYC elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -196,11 +218,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -211,7 +235,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -227,7 +252,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -241,22 +267,26 @@
                   "codes": [
                     "HUSV3900"
                   ],
-                  "text": "HUSV 3900"
+                  "text": "HUSV 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV4994"
                   ],
-                  "text": "HUSV 4994"
+                  "text": "HUSV 4994",
+                  "sh": 6
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab"
+                  "text": "PSYC lab",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -271,11 +301,13 @@
                     "ENGW3308",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3308 or 3315"
+                  "text": "ENGW 3308 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective 2"
+                  "text": "HUSV elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -286,7 +318,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -302,7 +335,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -316,22 +350,26 @@
                   "codes": [
                     "HUSV2355"
                   ],
-                  "text": "HUSV 2355"
+                  "text": "HUSV 2355",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV4700"
                   ],
-                  "text": "HUSV 4700"
+                  "text": "HUSV 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar"
+                  "text": "PSYC seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

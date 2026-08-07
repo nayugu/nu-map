@@ -18,14 +18,16 @@
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -33,7 +35,8 @@
                     "ENVR1400",
                     "ENVR1401"
                   ],
-                  "text": "ENVR 1400 and ENVR 1401"
+                  "text": "ENVR 1400 and ENVR 1401",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -41,11 +44,13 @@
                     "ENVR1500",
                     "ENVR1501"
                   ],
-                  "text": "ENVR 1500 and ENVR 1501"
+                  "text": "ENVR 1500 and ENVR 1501",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -60,7 +65,8 @@
                     "EEMB2302",
                     "EEMB2303"
                   ],
-                  "text": "EEMB 2302 and EEMB 2303"
+                  "text": "EEMB 2302 and EEMB 2303",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -68,18 +74,21 @@
                     "ENVR1200",
                     "ENVR1201"
                   ],
-                  "text": "ENVR 1200 and ENVR 1201"
+                  "text": "ENVR 1200 and ENVR 1201",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUPath Elective 1"
+                  "text": "NUPath Elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -89,7 +98,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -101,11 +110,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -124,14 +135,16 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR2515"
                   ],
-                  "text": "ENVR 2515"
+                  "text": "ENVR 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -139,15 +152,18 @@
                     "ENVR3300",
                     "ENVR3301"
                   ],
-                  "text": "ENVR 3300 and ENVR 3301"
+                  "text": "ENVR 3300 and ENVR 3301",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 1"
+                  "text": "ESS concentration 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS Concentration 2"
+                  "text": "ESS Concentration 2",
+                  "sh": 4
                 }
               ]
             },
@@ -158,7 +174,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -169,7 +186,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -180,11 +198,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUPath Requirement 2"
+                  "text": "NUPath Requirement 2",
+                  "sh": 4
                 }
               ]
             }
@@ -204,19 +224,23 @@
                     "ENVR2500",
                     "ENVR2501"
                   ],
-                  "text": "ENVR 2500 and ENVR 2501"
+                  "text": "ENVR 2500 and ENVR 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 3"
+                  "text": "ESS concentration 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 4"
+                  "text": "ESS concentration 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 5"
+                  "text": "ESS concentration 5",
+                  "sh": 4
                 }
               ]
             },
@@ -227,7 +251,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -238,7 +263,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -249,14 +275,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUPath Elective 3"
+                  "text": "NUPath Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3307"
                   ],
-                  "text": "ENGW 3307"
+                  "text": "ENGW 3307",
+                  "sh": 4
                 }
               ]
             }
@@ -272,19 +300,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 6"
+                  "text": "ESS concentration 6",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 7"
+                  "text": "ESS concentration 7",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS Concentration 8"
+                  "text": "ESS Concentration 8",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -298,22 +330,26 @@
                   "codes": [
                     "ENVR4000"
                   ],
-                  "text": "ENVR 4000"
+                  "text": "ENVR 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR4050"
                   ],
-                  "text": "ENVR 4050"
+                  "text": "ENVR 4050",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS Concentration 9"
+                  "text": "ESS Concentration 9",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS Concentration 10"
+                  "text": "ESS Concentration 10",
+                  "sh": 4
                 }
               ]
             }
@@ -339,14 +375,16 @@
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -354,7 +392,8 @@
                     "ENVR1400",
                     "ENVR1401"
                   ],
-                  "text": "ENVR 1400 and ENVR 1401"
+                  "text": "ENVR 1400 and ENVR 1401",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -362,11 +401,13 @@
                     "ENVR1500",
                     "ENVR1501"
                   ],
-                  "text": "ENVR 1500 and ENVR 1501"
+                  "text": "ENVR 1500 and ENVR 1501",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -381,7 +422,8 @@
                     "EEMB2302",
                     "EEMB2303"
                   ],
-                  "text": "EEMB 2302 and EEMB 2303"
+                  "text": "EEMB 2302 and EEMB 2303",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -389,18 +431,21 @@
                     "ENVR1200",
                     "ENVR1201"
                   ],
-                  "text": "ENVR 1200 and ENVR 1201"
+                  "text": "ENVR 1200 and ENVR 1201",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUPath Elective 1"
+                  "text": "NUPath Elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -410,7 +455,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -422,11 +467,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -445,14 +492,16 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR2515"
                   ],
-                  "text": "ENVR 2515"
+                  "text": "ENVR 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -460,15 +509,18 @@
                     "ENVR3300",
                     "ENVR3301"
                   ],
-                  "text": "ENVR 3300 and ENVR 3301"
+                  "text": "ENVR 3300 and ENVR 3301",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 1"
+                  "text": "ESS concentration 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS Concentration 2"
+                  "text": "ESS Concentration 2",
+                  "sh": 4
                 }
               ]
             },
@@ -483,19 +535,23 @@
                     "ENVR2500",
                     "ENVR2501"
                   ],
-                  "text": "ENVR 2500 and ENVR 2501"
+                  "text": "ENVR 2500 and ENVR 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 3"
+                  "text": "ESS concentration 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 4"
+                  "text": "ESS concentration 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 5"
+                  "text": "ESS concentration 5",
+                  "sh": 4
                 }
               ]
             },
@@ -506,11 +562,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUPath Elective 2"
+                  "text": "NUPath Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -521,7 +579,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -537,7 +596,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -548,19 +608,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 6"
+                  "text": "ESS concentration 6",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 7"
+                  "text": "ESS concentration 7",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS concentration 8"
+                  "text": "ESS concentration 8",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -571,14 +635,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUPath Elective 3"
+                  "text": "NUPath Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3307"
                   ],
-                  "text": "ENGW 3307"
+                  "text": "ENGW 3307",
+                  "sh": 4
                 }
               ]
             },
@@ -589,7 +655,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -605,7 +672,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -619,22 +687,26 @@
                   "codes": [
                     "ENVR4000"
                   ],
-                  "text": "ENVR 4000"
+                  "text": "ENVR 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR4050"
                   ],
-                  "text": "ENVR 4050"
+                  "text": "ENVR 4050",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS Concentration 9"
+                  "text": "ESS Concentration 9",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ESS Concentration 10"
+                  "text": "ESS Concentration 10",
+                  "sh": 4
                 }
               ]
             }

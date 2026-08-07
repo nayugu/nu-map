@@ -18,18 +18,21 @@
                   "codes": [
                     "INAM7000"
                   ],
-                  "text": "INAM 7000"
+                  "text": "INAM 7000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INAM7001"
                   ],
-                  "text": "INAM 7001"
+                  "text": "INAM 7001",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Discipline-specific coursework"
+                  "text": "Discipline-specific coursework",
+                  "sh": 4
                 }
               ]
             },
@@ -43,15 +46,18 @@
                   "codes": [
                     "INAM7900"
                   ],
-                  "text": "INAM 7900"
+                  "text": "INAM 7900",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Research methods elective"
+                  "text": "Research methods elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Discipline-specific coursework"
+                  "text": "Discipline-specific coursework",
+                  "sh": 4
                 }
               ]
             }
@@ -67,15 +73,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Discipline-specific coursework"
+                  "text": "Discipline-specific coursework",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Discipline-specific coursework"
+                  "text": "Discipline-specific coursework",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Discipline-specific coursework"
+                  "text": "Discipline-specific coursework",
+                  "sh": 4
                 }
               ]
             },
@@ -86,18 +95,21 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Discipline-specific coursework"
+                  "text": "Discipline-specific coursework",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Discipline-specific coursework"
+                  "text": "Discipline-specific coursework",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INAM7901"
                   ],
-                  "text": "INAM 7901"
+                  "text": "INAM 7901",
+                  "sh": 4
                 }
               ]
             }
@@ -113,11 +125,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Qualifying exams"
+                  "text": "Qualifying exams",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Teaching requirement, TA"
+                  "text": "Teaching requirement, TA",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
@@ -135,7 +149,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Teaching requirement, TA"
+                  "text": "Teaching requirement, TA",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
@@ -158,14 +173,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Teaching requirement, teacher of record"
+                  "text": "Teaching requirement, teacher of record",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INAM9996"
                   ],
-                  "text": "INAM 9996"
+                  "text": "INAM 9996",
+                  "sh": 0
                 }
               ]
             },
@@ -176,14 +193,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Teaching requirement, teacher of record"
+                  "text": "Teaching requirement, teacher of record",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INAM9996"
                   ],
-                  "text": "INAM 9996"
+                  "text": "INAM 9996",
+                  "sh": 0
                 }
               ]
             }
@@ -202,7 +221,8 @@
                   "codes": [
                     "INAM9996"
                   ],
-                  "text": "INAM 9996"
+                  "text": "INAM 9996",
+                  "sh": 0
                 }
               ]
             },
@@ -216,7 +236,8 @@
                   "codes": [
                     "INAM9996"
                   ],
-                  "text": "INAM 9996"
+                  "text": "INAM 9996",
+                  "sh": 0
                 }
               ]
             }

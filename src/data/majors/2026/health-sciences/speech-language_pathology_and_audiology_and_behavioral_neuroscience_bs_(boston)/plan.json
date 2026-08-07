@@ -19,7 +19,8 @@
                     "BIOL1107",
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1107 and BIOL 1108"
+                  "text": "BIOL 1107 and BIOL 1108",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -27,21 +28,24 @@
                     "CHEM1161",
                     "CHEM1162"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162"
+                  "text": "CHEM 1161 and CHEM 1162",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -49,7 +53,8 @@
                     "SLPA1000",
                     "INSC1000"
                   ],
-                  "text": "SLPA 1000 or INSC 1000"
+                  "text": "SLPA 1000 or INSC 1000",
+                  "sh": 1
                 }
               ]
             },
@@ -63,28 +68,32 @@
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1101"
                   ],
-                  "text": "SLPA 1101"
+                  "text": "SLPA 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1205"
                   ],
-                  "text": "SLPA 1205"
+                  "text": "SLPA 1205",
+                  "sh": 4
                 }
               ]
             },
@@ -94,7 +103,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -105,7 +114,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -126,28 +135,32 @@
                     "BIOL2301",
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2301 and BIOL 2302"
+                  "text": "BIOL 2301 and BIOL 2302",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1103"
                   ],
-                  "text": "SLPA 1103"
+                  "text": "SLPA 1103",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1203"
                   ],
-                  "text": "SLPA 1203"
+                  "text": "SLPA 1203",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -155,7 +168,8 @@
                     "SLPA2000",
                     "EESH2000"
                   ],
-                  "text": "SLPA 2000 or EESH 2000"
+                  "text": "SLPA 2000 or EESH 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -169,7 +183,8 @@
                   "codes": [
                     "COOP3945"
                   ],
-                  "text": "COOP 3945"
+                  "text": "COOP 3945",
+                  "sh": 0
                 }
               ]
             },
@@ -183,7 +198,8 @@
                   "codes": [
                     "COOP3945"
                   ],
-                  "text": "COOP 3945"
+                  "text": "COOP 3945",
+                  "sh": 0
                 }
               ]
             },
@@ -197,11 +213,13 @@
                   "codes": [
                     "BIOL3405"
                   ],
-                  "text": "BIOL 3405"
+                  "text": "BIOL 3405",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             }
@@ -222,28 +240,32 @@
                     "ENGW3308",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3306, 3308, or 3315"
+                  "text": "ENGW 3306, 3308, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA2400"
                   ],
-                  "text": "SLPA 2400"
+                  "text": "SLPA 2400",
+                  "sh": 4
                 }
               ]
             },
@@ -257,28 +279,32 @@
                   "codes": [
                     "HLTH5450"
                   ],
-                  "text": "HLTH 5450"
+                  "text": "HLTH 5450",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3200"
                   ],
-                  "text": "PSYC 3200"
+                  "text": "PSYC 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1200"
                   ],
-                  "text": "SLPA 1200"
+                  "text": "SLPA 1200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1102"
                   ],
-                  "text": "SLPA 1102"
+                  "text": "SLPA 1102",
+                  "sh": 4
                 }
               ]
             },
@@ -288,7 +314,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -300,11 +326,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -320,25 +348,29 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "BNSC elective"
+                  "text": "BNSC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNSC or PSYC upper elective"
+                  "text": "BNSC or PSYC upper elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA4500"
                   ],
-                  "text": "SLPA 4500"
+                  "text": "SLPA 4500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA5107"
                   ],
-                  "text": "SLPA 5107"
+                  "text": "SLPA 5107",
+                  "sh": 4
                 }
               ]
             },
@@ -349,28 +381,32 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "BNSC elective"
+                  "text": "BNSC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1165"
                   ],
-                  "text": "PHIL 1165"
+                  "text": "PHIL 1165",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA4651"
                   ],
-                  "text": "SLPA 4651"
+                  "text": "SLPA 4651",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA6219"
                   ],
-                  "text": "SLPA 6219"
+                  "text": "SLPA 6219",
+                  "sh": 3
                 }
               ]
             }

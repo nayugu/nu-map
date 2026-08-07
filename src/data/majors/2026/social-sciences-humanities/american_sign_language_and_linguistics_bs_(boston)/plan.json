@@ -18,25 +18,29 @@
                   "codes": [
                     "AMSL1101"
                   ],
-                  "text": "AMSL 1101"
+                  "text": "AMSL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DEAF1500"
                   ],
-                  "text": "DEAF 1500"
+                  "text": "DEAF 1500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath/Elective"
+                  "text": "NUpath/Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -50,25 +54,29 @@
                   "codes": [
                     "AMSL1102"
                   ],
-                  "text": "AMSL 1102"
+                  "text": "AMSL 1102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING2350"
                   ],
-                  "text": "LING 2350"
+                  "text": "LING 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING3412"
                   ],
-                  "text": "LING 3412"
+                  "text": "LING 3412",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath/Elective"
+                  "text": "NUpath/Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -87,25 +95,29 @@
                   "codes": [
                     "AMSL2101"
                   ],
-                  "text": "AMSL 2101"
+                  "text": "AMSL 2101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DEAF2500"
                   ],
-                  "text": "DEAF 2500"
+                  "text": "DEAF 2500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath/Elective"
+                  "text": "NUpath/Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -119,25 +131,29 @@
                   "codes": [
                     "AMSL2102"
                   ],
-                  "text": "AMSL 2102"
+                  "text": "AMSL 2102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DEAF2700"
                   ],
-                  "text": "DEAF 2700"
+                  "text": "DEAF 2700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath/Elective"
+                  "text": "NUpath/Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -156,29 +172,34 @@
                   "codes": [
                     "AMSL3101"
                   ],
-                  "text": "AMSL 3101"
+                  "text": "AMSL 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTP3500"
                   ],
-                  "text": "INTP 3500"
+                  "text": "INTP 3500",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTP3510"
                   ],
-                  "text": "INTP 3510"
+                  "text": "INTP 3510",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure course"
+                  "text": "Linguistic Structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath/Elective"
+                  "text": "NUpath/Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -189,22 +210,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure course"
+                  "text": "Linguistic Structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure course or Linguistics Elective"
+                  "text": "Linguistic Structure course or Linguistics Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3464"
                   ],
-                  "text": "PSYC 3464"
+                  "text": "PSYC 3464",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath/Elective"
+                  "text": "NUpath/Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -223,19 +248,23 @@
                   "codes": [
                     "INTP4940"
                   ],
-                  "text": "INTP 4940"
+                  "text": "INTP 4940",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics Elective or Linguistic Structure course"
+                  "text": "Linguistics Elective or Linguistic Structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath/Elective"
+                  "text": "NUpath/Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath/Elective"
+                  "text": "NUpath/Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -246,19 +275,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics Seminar"
+                  "text": "Linguistics Seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics Elective"
+                  "text": "Linguistics Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath/Elective"
+                  "text": "NUpath/Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath/Elective"
+                  "text": "NUpath/Elective",
+                  "sh": 4
                 }
               ]
             }

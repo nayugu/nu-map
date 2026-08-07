@@ -18,29 +18,34 @@
                   "codes": [
                     "HUSV1000"
                   ],
-                  "text": "HUSV 1000"
+                  "text": "HUSV 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV1101"
                   ],
-                  "text": "HUSV 1101"
+                  "text": "HUSV 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -54,22 +59,26 @@
                   "codes": [
                     "HUSV2300"
                   ],
-                  "text": "HUSV 2300"
+                  "text": "HUSV 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 }
               ]
             },
@@ -80,11 +89,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -95,11 +106,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -115,19 +128,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 }
               ]
             },
@@ -138,29 +155,34 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV3570"
                   ],
-                  "text": "HUSV 3570"
+                  "text": "HUSV 3570",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Human services and diverse populations course"
+                  "text": "Human services and diverse populations course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -171,11 +193,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -186,7 +210,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -202,7 +227,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -216,22 +242,26 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV2970"
                   ],
-                  "text": "HUSV 2970"
+                  "text": "HUSV 2970",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -242,11 +272,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -257,7 +289,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -273,7 +306,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -287,22 +321,26 @@
                   "codes": [
                     "HUSV3900"
                   ],
-                  "text": "HUSV 3900"
+                  "text": "HUSV 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV Elective"
+                  "text": "HUSV Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV4700"
                   ],
-                  "text": "HUSV 4700"
+                  "text": "HUSV 4700",
+                  "sh": 4
                 }
               ]
             }

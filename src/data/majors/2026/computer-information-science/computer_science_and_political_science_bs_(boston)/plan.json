@@ -19,7 +19,8 @@
                     "CS1200",
                     "POLS1000"
                   ],
-                  "text": "CS 1200 or POLS 1000"
+                  "text": "CS 1200 or POLS 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -27,7 +28,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -35,21 +37,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1150"
                   ],
-                  "text": "POLS 1150"
+                  "text": "POLS 1150",
+                  "sh": 4
                 }
               ]
             },
@@ -64,25 +69,29 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1155"
                   ],
-                  "text": "POLS 1155"
+                  "text": "POLS 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -97,11 +106,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -112,11 +123,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -136,32 +149,37 @@
                     "CS1210",
                     "EESH2000"
                   ],
-                  "text": "CS 1210 or EESH 2000"
+                  "text": "CS 1210 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS2399"
                   ],
-                  "text": "POLS 2399"
+                  "text": "POLS 2399",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Thought Elective"
+                  "text": "POLS Thought Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -172,7 +190,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -183,7 +202,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -194,11 +214,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -217,19 +239,23 @@
                   "codes": [
                     "POLS2400"
                   ],
-                  "text": "POLS 2400"
+                  "text": "POLS 2400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 1"
+                  "text": "Khoury Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective 1"
+                  "text": "POLS Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective 2"
+                  "text": "POLS Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -240,7 +266,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -251,7 +278,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -268,11 +296,13 @@
                     "ENGW3311",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3308, 3311, or 3315"
+                  "text": "ENGW 3302, 3308, 3311, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -288,19 +318,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Computing and Social Issues"
+                  "text": "Computing and Social Issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 2"
+                  "text": "Khoury Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective 3"
+                  "text": "POLS Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Integrative Requirement"
+                  "text": "POLS Integrative Requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -315,22 +349,26 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS4701"
                   ],
-                  "text": "POLS 4701"
+                  "text": "POLS 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 3"
+                  "text": "Khoury Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective"
+                  "text": "POLS Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -357,7 +395,8 @@
                     "CS1200",
                     "POLS1000"
                   ],
-                  "text": "CS 1200 or POLS 1000"
+                  "text": "CS 1200 or POLS 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -365,7 +404,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -373,21 +413,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1150"
                   ],
-                  "text": "POLS 1150"
+                  "text": "POLS 1150",
+                  "sh": 4
                 }
               ]
             },
@@ -402,25 +445,29 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1155"
                   ],
-                  "text": "POLS 1155"
+                  "text": "POLS 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -434,11 +481,13 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -449,11 +498,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -473,25 +524,29 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS2399"
                   ],
-                  "text": "POLS 2399"
+                  "text": "POLS 2399",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Thought Elective"
+                  "text": "POLS Thought Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -506,26 +561,31 @@
                     "CS1210",
                     "EESC2000"
                   ],
-                  "text": "CS 1210 or EESC 2000"
+                  "text": "CS 1210 or EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS2400"
                   ],
-                  "text": "POLS 2400"
+                  "text": "POLS 2400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 1"
+                  "text": "Khoury Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective 1"
+                  "text": "POLS Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective 2"
+                  "text": "POLS Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -536,11 +596,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -551,7 +613,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -567,7 +630,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -578,19 +642,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Computing and Social Issues"
+                  "text": "Computing and Social Issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 2"
+                  "text": "Khoury Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective 3"
+                  "text": "POLS Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Integrative Requirement"
+                  "text": "POLS Integrative Requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -607,11 +675,13 @@
                     "ENGW3311",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3308, 3311, or 3315"
+                  "text": "ENGW 3302, 3308, 3311, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -622,7 +692,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -638,7 +709,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -653,22 +725,26 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS4701"
                   ],
-                  "text": "POLS 4701"
+                  "text": "POLS 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 3"
+                  "text": "Khoury Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective 4"
+                  "text": "POLS Elective 4",
+                  "sh": 4
                 }
               ]
             }

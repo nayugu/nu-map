@@ -18,15 +18,18 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Focus area courses (2)"
+                  "text": "Focus area courses (2)",
+                  "sh": 8
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Restricted elective"
+                  "text": "Restricted elective",
+                  "sh": 4
                 }
               ]
             },
@@ -37,15 +40,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Focus area courses (2)"
+                  "text": "Focus area courses (2)",
+                  "sh": 8
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Restricted elective"
+                  "text": "Restricted elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -56,11 +62,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Focus area course"
+                  "text": "Focus area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -71,11 +79,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Restricted elective"
+                  "text": "Restricted elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -91,19 +101,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Focus area course"
+                  "text": "Focus area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Restricted elective"
+                  "text": "Restricted elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Minor course"
+                  "text": "Minor course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -114,7 +128,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -125,7 +140,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -136,11 +152,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Writing-intensive course"
+                  "text": "Writing-intensive course",
+                  "sh": 4
                 }
               ]
             }
@@ -159,19 +177,23 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Focus area course"
+                  "text": "Focus area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Restricted elective"
+                  "text": "Restricted elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Minor course"
+                  "text": "Minor course",
+                  "sh": 4
                 }
               ]
             },
@@ -182,7 +204,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -193,7 +216,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -204,11 +228,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Writing-intensive course"
+                  "text": "Writing-intensive course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -224,15 +250,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Focus area courses (2)"
+                  "text": "Focus area courses (2)",
+                  "sh": 8
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Restricted elective"
+                  "text": "Restricted elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Minor course"
+                  "text": "Minor course",
+                  "sh": 4
                 }
               ]
             },
@@ -243,15 +272,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Focus area courses (2)"
+                  "text": "Focus area courses (2)",
+                  "sh": 8
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Minor course"
+                  "text": "Minor course",
+                  "sh": 4
                 }
               ]
             }

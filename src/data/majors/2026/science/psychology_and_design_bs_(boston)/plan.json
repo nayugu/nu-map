@@ -19,18 +19,21 @@
                     "ARTF1000",
                     "INSC1000"
                   ],
-                  "text": "ARTF 1000 or INSC 1000"
+                  "text": "ARTF 1000 or INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -38,21 +41,24 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -66,7 +72,8 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -74,7 +81,8 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -82,21 +90,24 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD Students)"
+                  "text": "EEAM 2000 (For CAMD Students)",
+                  "sh": 1
                 }
               ]
             },
@@ -107,15 +118,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective/NUpath"
+                  "text": "Elective/NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 }
               ]
             },
@@ -126,11 +140,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective/NUpath"
+                  "text": "Elective/NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective/NUpath"
+                  "text": "Elective/NUpath",
+                  "sh": 4
                 }
               ]
             }
@@ -149,21 +165,24 @@
                   "codes": [
                     "PSYC3452"
                   ],
-                  "text": "PSYC 3452"
+                  "text": "PSYC 3452",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000 (For COS Students)"
+                  "text": "EESC 2000 (For COS Students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3466"
                   ],
-                  "text": "PSYC 3466"
+                  "text": "PSYC 3466",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -171,11 +190,13 @@
                     "ARTG2262",
                     "ARTG2263"
                   ],
-                  "text": "ARTG 2262 and ARTG 2263"
+                  "text": "ARTG 2262 and ARTG 2263",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 1"
+                  "text": "Design option course 1",
+                  "sh": 4
                 }
               ]
             },
@@ -186,7 +207,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -197,7 +219,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -208,11 +231,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective/NUpath"
+                  "text": "Elective/NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective/NUpath"
+                  "text": "Elective/NUpath",
+                  "sh": 4
                 }
               ]
             }
@@ -231,22 +256,26 @@
                   "codes": [
                     "ARTG5310"
                   ],
-                  "text": "ARTG 5310"
+                  "text": "ARTG 5310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3402"
                   ],
-                  "text": "PSYC 3402"
+                  "text": "PSYC 3402",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 2"
+                  "text": "Design option course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Psychology area B or elective/NUpath"
+                  "text": "Psychology area B or elective/NUpath",
+                  "sh": 4
                 }
               ]
             },
@@ -257,7 +286,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -268,7 +298,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -279,11 +310,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Psychology area A or area B or elective/NUpath"
+                  "text": "Psychology area A or area B or elective/NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective/NUpath"
+                  "text": "Elective/NUpath",
+                  "sh": 4
                 }
               ]
             }
@@ -299,19 +332,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Psychology laboratory"
+                  "text": "Psychology laboratory",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Psychology area A or elective/NUpath"
+                  "text": "Psychology area A or elective/NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective/NUpath"
+                  "text": "Elective/NUpath",
+                  "sh": 4
                 }
               ]
             },
@@ -322,22 +359,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Psychology seminar"
+                  "text": "Psychology seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Psychology elective"
+                  "text": "Psychology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective/NUpath"
+                  "text": "Elective/NUpath",
+                  "sh": 4
                 }
               ]
             }

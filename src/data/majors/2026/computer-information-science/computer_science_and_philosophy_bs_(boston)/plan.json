@@ -19,7 +19,8 @@
                     "CS1200",
                     "PHIL1000"
                   ],
-                  "text": "CS 1200 or PHIL 1000"
+                  "text": "CS 1200 or PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -27,7 +28,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -35,21 +37,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 }
               ]
             },
@@ -64,14 +69,16 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS2800"
                   ],
-                  "text": "CS 2800"
+                  "text": "CS 2800",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -80,11 +87,13 @@
                     "POLS2325",
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2325, POLS 2325, or PHIL 2330"
+                  "text": "PHIL 2325, POLS 2325, or PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -99,11 +108,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -114,11 +125,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -138,29 +151,34 @@
                     "CS1210",
                     "EESH2000"
                   ],
-                  "text": "CS 1210 or EESH 2000"
+                  "text": "CS 1210 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1145"
                   ],
-                  "text": "PHIL 1145"
+                  "text": "PHIL 1145",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Elective"
+                  "text": "PHIL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -171,7 +189,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -182,7 +201,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -193,11 +213,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -213,19 +235,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Elective"
+                  "text": "PHIL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Elective"
+                  "text": "PHIL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -236,7 +262,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -247,7 +274,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -263,11 +291,13 @@
                     "ENGW3309",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3309, or 3315"
+                  "text": "ENGW 3302, 3309, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -286,7 +316,8 @@
                   "codes": [
                     "CS3800"
                   ],
-                  "text": "CS 3800"
+                  "text": "CS 3800",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -294,15 +325,18 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Critical Philosophy Elective"
+                  "text": "Critical Philosophy Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -316,7 +350,8 @@
                   "codes": [
                     "PHIL4515"
                   ],
-                  "text": "PHIL 4515"
+                  "text": "PHIL 4515",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -325,15 +360,18 @@
                     "PHIL5010",
                     "PHIL4050"
                   ],
-                  "text": "PHIL 5005, 5010, or 4050"
+                  "text": "PHIL 5005, 5010, or 4050",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -360,7 +398,8 @@
                     "CS1200",
                     "PHIL1000"
                   ],
-                  "text": "CS 1200 or PHIL 1000"
+                  "text": "CS 1200 or PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -368,7 +407,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -376,21 +416,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 }
               ]
             },
@@ -405,14 +448,16 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS2800"
                   ],
-                  "text": "CS 2800"
+                  "text": "CS 2800",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -421,11 +466,13 @@
                     "POLS2325",
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2325, POLS 2325, or PHIL 2330"
+                  "text": "PHIL 2325, POLS 2325, or PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -439,11 +486,13 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -454,11 +503,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -478,22 +529,26 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1145"
                   ],
-                  "text": "PHIL 1145"
+                  "text": "PHIL 1145",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Elective"
+                  "text": "PHIL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -508,23 +563,28 @@
                     "CS1210",
                     "EESH2000"
                   ],
-                  "text": "CS 1210 or EESH 2000"
+                  "text": "CS 1210 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Elective"
+                  "text": "PHIL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Elective"
+                  "text": "PHIL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -535,11 +595,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -550,7 +612,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -566,7 +629,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -580,22 +644,26 @@
                   "codes": [
                     "CS3800"
                   ],
-                  "text": "CS 3800"
+                  "text": "CS 3800",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL4515"
                   ],
-                  "text": "PHIL 4515"
+                  "text": "PHIL 4515",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -611,11 +679,13 @@
                     "ENGW3309",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3309, or 3315"
+                  "text": "ENGW 3302, 3309, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -626,7 +696,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -642,7 +713,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -657,7 +729,8 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -666,15 +739,18 @@
                     "PHIL5010",
                     "PHIL4050"
                   ],
-                  "text": "PHIL 5005, 5010, or 4050"
+                  "text": "PHIL 5005, 5010, or 4050",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Critical Philosophy Elective"
+                  "text": "Critical Philosophy Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }

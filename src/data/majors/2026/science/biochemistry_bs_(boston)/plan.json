@@ -19,53 +19,61 @@
                     "BIOC1000",
                     "INSC1000"
                   ],
-                  "text": "BIOC 1000 or INSC 1000"
+                  "text": "BIOC 1000 or INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1107"
                   ],
-                  "text": "BIOL 1107"
+                  "text": "BIOL 1107",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1108"
+                  "text": "BIOL 1108",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1161"
                   ],
-                  "text": "CHEM 1161"
+                  "text": "CHEM 1161",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1162"
                   ],
-                  "text": "CHEM 1162"
+                  "text": "CHEM 1162",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1163"
+                  "text": "CHEM 1163",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 1"
+                  "text": "Elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -79,21 +87,24 @@
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2311"
                   ],
-                  "text": "CHEM 2311"
+                  "text": "CHEM 2311",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2312"
+                  "text": "CHEM 2312",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -101,14 +112,16 @@
                     "ENGW1111",
                     "ENGW1102"
                   ],
-                  "text": "ENGW 1111 or 1102"
+                  "text": "ENGW 1111 or 1102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 }
               ]
             },
@@ -122,18 +135,21 @@
                   "codes": [
                     "BIOL2301"
                   ],
-                  "text": "BIOL 2301"
+                  "text": "BIOL 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2302"
+                  "text": "BIOL 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 2"
+                  "text": "Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -144,11 +160,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective 3"
+                  "text": "Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 4"
+                  "text": "Elective 4",
+                  "sh": 4
                 }
               ]
             }
@@ -167,46 +185,53 @@
                   "codes": [
                     "BIOL2309"
                   ],
-                  "text": "BIOL 2309"
+                  "text": "BIOL 2309",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2313"
                   ],
-                  "text": "CHEM 2313"
+                  "text": "CHEM 2313",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2314"
                   ],
-                  "text": "CHEM 2314"
+                  "text": "CHEM 2314",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151"
+                  "text": "PHYS 1151",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152"
+                  "text": "PHYS 1152",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 5"
+                  "text": "Elective 5",
+                  "sh": 4
                 }
               ]
             },
@@ -220,50 +245,58 @@
                   "codes": [
                     "BIOL3611"
                   ],
-                  "text": "BIOL 3611"
+                  "text": "BIOL 3611",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL3612"
                   ],
-                  "text": "BIOL 3612"
+                  "text": "BIOL 3612",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1155"
+                  "text": "PHYS 1155",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1156"
+                  "text": "PHYS 1156",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1157"
+                  "text": "PHYS 1157",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 6"
+                  "text": "Elective 6",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 7"
+                  "text": "Elective 7",
+                  "sh": 4
                 }
               ]
             },
@@ -277,11 +310,13 @@
                   "codes": [
                     "BIOL4707"
                   ],
-                  "text": "BIOL 4707"
+                  "text": "BIOL 4707",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 8"
+                  "text": "Elective 8",
+                  "sh": 4
                 }
               ]
             },
@@ -292,7 +327,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -308,7 +344,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -322,14 +359,16 @@
                   "codes": [
                     "CHEM3431"
                   ],
-                  "text": "CHEM 3431"
+                  "text": "CHEM 3431",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM3432"
                   ],
-                  "text": "CHEM 3432"
+                  "text": "CHEM 3432",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -338,7 +377,8 @@
                     "CHEM3331",
                     "CHEM3332"
                   ],
-                  "text": "CHEM 5620 or 3331 and 3332"
+                  "text": "CHEM 5620 or 3331 and 3332",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -347,11 +387,13 @@
                     "ENVR2501",
                     "ENVR2502"
                   ],
-                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502 (or other statistics course)"
+                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502 (or other statistics course)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 9"
+                  "text": "Elective 9",
+                  "sh": 4
                 }
               ]
             },
@@ -366,11 +408,13 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3307 or 3315"
+                  "text": "ENGW 3307 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 10"
+                  "text": "Elective 10",
+                  "sh": 4
                 }
               ]
             },
@@ -381,7 +425,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -397,7 +442,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -411,19 +457,23 @@
                   "codes": [
                     "CHEM4750"
                   ],
-                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)"
+                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 }
               ]
             }
@@ -450,53 +500,61 @@
                     "BIOC1000",
                     "INSC1000"
                   ],
-                  "text": "BIOC 1000 or INSC 1000"
+                  "text": "BIOC 1000 or INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1107"
                   ],
-                  "text": "BIOL 1107"
+                  "text": "BIOL 1107",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1108"
+                  "text": "BIOL 1108",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1161"
                   ],
-                  "text": "CHEM 1161"
+                  "text": "CHEM 1161",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1162"
                   ],
-                  "text": "CHEM 1162"
+                  "text": "CHEM 1162",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1163"
+                  "text": "CHEM 1163",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 1"
+                  "text": "Elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -510,21 +568,24 @@
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2311"
                   ],
-                  "text": "CHEM 2311"
+                  "text": "CHEM 2311",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2312"
+                  "text": "CHEM 2312",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -532,14 +593,16 @@
                     "ENGW1111",
                     "ENGW1102"
                   ],
-                  "text": "ENGW 1111 or 1102"
+                  "text": "ENGW 1111 or 1102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 }
               ]
             },
@@ -553,18 +616,21 @@
                   "codes": [
                     "BIOL2301"
                   ],
-                  "text": "BIOL 2301"
+                  "text": "BIOL 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2302"
+                  "text": "BIOL 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 2"
+                  "text": "Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -575,11 +641,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective 3"
+                  "text": "Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 4"
+                  "text": "Elective 4",
+                  "sh": 4
                 }
               ]
             }
@@ -598,53 +666,61 @@
                   "codes": [
                     "BIOL2309"
                   ],
-                  "text": "BIOL 2309"
+                  "text": "BIOL 2309",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2313"
                   ],
-                  "text": "CHEM 2313"
+                  "text": "CHEM 2313",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2314"
                   ],
-                  "text": "CHEM 2314"
+                  "text": "CHEM 2314",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151"
+                  "text": "PHYS 1151",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152"
+                  "text": "PHYS 1152",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 5"
+                  "text": "Elective 5",
+                  "sh": 4
                 }
               ]
             },
@@ -655,7 +731,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -666,7 +743,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -680,18 +758,21 @@
                   "codes": [
                     "BIOL3611"
                   ],
-                  "text": "BIOL 3611"
+                  "text": "BIOL 3611",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL3612"
                   ],
-                  "text": "BIOL 3612"
+                  "text": "BIOL 3612",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 6"
+                  "text": "Elective 6",
+                  "sh": 4
                 }
               ]
             }
@@ -711,28 +792,32 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3307 or 3315"
+                  "text": "ENGW 3307 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1155"
+                  "text": "PHYS 1155",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1156"
+                  "text": "PHYS 1156",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1157"
+                  "text": "PHYS 1157",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -741,11 +826,13 @@
                     "ENVR2501",
                     "ENVR2502"
                   ],
-                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502 (or other statistics course)"
+                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502 (or other statistics course)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 7"
+                  "text": "Elective 7",
+                  "sh": 4
                 }
               ]
             },
@@ -756,7 +843,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -767,7 +855,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -781,11 +870,13 @@
                   "codes": [
                     "BIOL4707"
                   ],
-                  "text": "BIOL 4707"
+                  "text": "BIOL 4707",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 8"
+                  "text": "Elective 8",
+                  "sh": 4
                 }
               ]
             }
@@ -804,14 +895,16 @@
                   "codes": [
                     "CHEM3431"
                   ],
-                  "text": "CHEM 3431"
+                  "text": "CHEM 3431",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM3432"
                   ],
-                  "text": "CHEM 3432"
+                  "text": "CHEM 3432",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -820,15 +913,18 @@
                     "CHEM3331",
                     "CHEM3332"
                   ],
-                  "text": "CHEM 5620 or 3331 and 3332"
+                  "text": "CHEM 5620 or 3331 and 3332",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 9"
+                  "text": "Elective 9",
+                  "sh": 4
                 }
               ]
             },
@@ -842,19 +938,23 @@
                   "codes": [
                     "CHEM4750"
                   ],
-                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)"
+                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 10"
+                  "text": "Elective 10",
+                  "sh": 4
                 }
               ]
             }
@@ -881,53 +981,61 @@
                     "BIOC1000",
                     "INSC1000"
                   ],
-                  "text": "BIOC 1000 or INSC 1000"
+                  "text": "BIOC 1000 or INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1107"
                   ],
-                  "text": "BIOL 1107"
+                  "text": "BIOL 1107",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1108"
+                  "text": "BIOL 1108",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1161"
                   ],
-                  "text": "CHEM 1161"
+                  "text": "CHEM 1161",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1162"
                   ],
-                  "text": "CHEM 1162"
+                  "text": "CHEM 1162",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1163"
+                  "text": "CHEM 1163",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 1"
+                  "text": "Elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -941,21 +1049,24 @@
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2311"
                   ],
-                  "text": "CHEM 2311"
+                  "text": "CHEM 2311",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2312"
+                  "text": "CHEM 2312",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -963,14 +1074,16 @@
                     "ENGW1111",
                     "ENGW1102"
                   ],
-                  "text": "ENGW 1111 or 1102"
+                  "text": "ENGW 1111 or 1102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 }
               ]
             },
@@ -984,18 +1097,21 @@
                   "codes": [
                     "BIOL2301"
                   ],
-                  "text": "BIOL 2301"
+                  "text": "BIOL 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2302"
+                  "text": "BIOL 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 2"
+                  "text": "Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -1005,7 +1121,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1025,46 +1141,53 @@
                   "codes": [
                     "BIOL2309"
                   ],
-                  "text": "BIOL 2309"
+                  "text": "BIOL 2309",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2313"
                   ],
-                  "text": "CHEM 2313"
+                  "text": "CHEM 2313",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2314"
                   ],
-                  "text": "CHEM 2314"
+                  "text": "CHEM 2314",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151"
+                  "text": "PHYS 1151",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152"
+                  "text": "PHYS 1152",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 3"
+                  "text": "Elective 3",
+                  "sh": 4
                 }
               ]
             },
@@ -1078,50 +1201,58 @@
                   "codes": [
                     "BIOL3611"
                   ],
-                  "text": "BIOL 3611"
+                  "text": "BIOL 3611",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL3612"
                   ],
-                  "text": "BIOL 3612"
+                  "text": "BIOL 3612",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1155"
+                  "text": "PHYS 1155",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1156"
+                  "text": "PHYS 1156",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1157"
+                  "text": "PHYS 1157",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 4"
+                  "text": "Elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 5"
+                  "text": "Elective 5",
+                  "sh": 4
                 }
               ]
             },
@@ -1132,11 +1263,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 6"
+                  "text": "Elective 6",
+                  "sh": 4
                 }
               ]
             },
@@ -1147,7 +1280,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1163,7 +1297,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1177,14 +1312,16 @@
                   "codes": [
                     "CHEM3431"
                   ],
-                  "text": "CHEM 3431"
+                  "text": "CHEM 3431",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM3432"
                   ],
-                  "text": "CHEM 3432"
+                  "text": "CHEM 3432",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -1193,7 +1330,8 @@
                     "ENVR2501",
                     "ENVR2502"
                   ],
-                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502"
+                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -1201,11 +1339,13 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3307 or 3315"
+                  "text": "ENGW 3307 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 7"
+                  "text": "Elective 7",
+                  "sh": 4
                 }
               ]
             },
@@ -1215,7 +1355,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1227,7 +1367,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1243,7 +1384,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1259,19 +1401,23 @@
                     "CHEM3331",
                     "CHEM3332"
                   ],
-                  "text": "CHEM 5620 or 3331 and 3332"
+                  "text": "CHEM 5620 or 3331 and 3332",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 8"
+                  "text": "Elective 8",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 9"
+                  "text": "Elective 9",
+                  "sh": 4
                 }
               ]
             },
@@ -1281,7 +1427,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1293,7 +1439,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1309,7 +1456,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1323,22 +1471,26 @@
                   "codes": [
                     "BIOL4707"
                   ],
-                  "text": "BIOL 4707"
+                  "text": "BIOL 4707",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM4750"
                   ],
-                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)"
+                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 10"
+                  "text": "Elective 10",
+                  "sh": 4
                 }
               ]
             }
@@ -1364,53 +1516,61 @@
                   "codes": [
                     "BIOC1000"
                   ],
-                  "text": "BIOC 1000"
+                  "text": "BIOC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1107"
                   ],
-                  "text": "BIOL 1107"
+                  "text": "BIOL 1107",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1108"
+                  "text": "BIOL 1108",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1161"
                   ],
-                  "text": "CHEM 1161"
+                  "text": "CHEM 1161",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1162"
                   ],
-                  "text": "CHEM 1162"
+                  "text": "CHEM 1162",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1163"
+                  "text": "CHEM 1163",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 1"
+                  "text": "Elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -1424,21 +1584,24 @@
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2311"
                   ],
-                  "text": "CHEM 2311"
+                  "text": "CHEM 2311",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2312"
+                  "text": "CHEM 2312",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1446,14 +1609,16 @@
                     "ENGW1111",
                     "ENGW1102"
                   ],
-                  "text": "ENGW 1111 or 1102"
+                  "text": "ENGW 1111 or 1102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 }
               ]
             },
@@ -1467,18 +1632,21 @@
                   "codes": [
                     "BIOL2301"
                   ],
-                  "text": "BIOL 2301"
+                  "text": "BIOL 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2302"
+                  "text": "BIOL 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 2"
+                  "text": "Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -1488,7 +1656,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1508,53 +1676,61 @@
                   "codes": [
                     "BIOL2309"
                   ],
-                  "text": "BIOL 2309"
+                  "text": "BIOL 2309",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2313"
                   ],
-                  "text": "CHEM 2313"
+                  "text": "CHEM 2313",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM2314"
                   ],
-                  "text": "CHEM 2314"
+                  "text": "CHEM 2314",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151"
+                  "text": "PHYS 1151",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152"
+                  "text": "PHYS 1152",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 3"
+                  "text": "Elective 3",
+                  "sh": 4
                 }
               ]
             },
@@ -1565,7 +1741,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1576,7 +1753,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1590,18 +1768,21 @@
                   "codes": [
                     "BIOL3611"
                   ],
-                  "text": "BIOL 3611"
+                  "text": "BIOL 3611",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL3612"
                   ],
-                  "text": "BIOL 3612"
+                  "text": "BIOL 3612",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 4"
+                  "text": "Elective 4",
+                  "sh": 4
                 }
               ]
             }
@@ -1622,21 +1803,24 @@
                     "ENVR2501",
                     "ENVR2502"
                   ],
-                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502 (or other statistics course)"
+                  "text": "ENVR 2500 and ENVR 2501 and ENVR 2502 (or other statistics course)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1155"
+                  "text": "PHYS 1155",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1156"
+                  "text": "PHYS 1156",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1644,18 +1828,21 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3307 or 3315"
+                  "text": "ENGW 3307 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1157"
+                  "text": "PHYS 1157",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 5"
+                  "text": "Elective 5",
+                  "sh": 4
                 }
               ]
             },
@@ -1666,7 +1853,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1677,7 +1865,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1687,7 +1876,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1707,21 +1896,24 @@
                   "codes": [
                     "BIOL4707"
                   ],
-                  "text": "BIOL 4707"
+                  "text": "BIOL 4707",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM3431"
                   ],
-                  "text": "CHEM 3431"
+                  "text": "CHEM 3431",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM3432"
                   ],
-                  "text": "CHEM 3432"
+                  "text": "CHEM 3432",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1730,11 +1922,13 @@
                     "CHEM3331",
                     "CHEM3332"
                   ],
-                  "text": "CHEM 5620 or 3331 and 3332"
+                  "text": "CHEM 5620 or 3331 and 3332",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 6"
+                  "text": "Elective 6",
+                  "sh": 4
                 }
               ]
             },
@@ -1745,7 +1939,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1756,7 +1951,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1766,7 +1962,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1783,19 +1979,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 7"
+                  "text": "Elective 7",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 8"
+                  "text": "Elective 8",
+                  "sh": 4
                 }
               ]
             },
@@ -1809,19 +2009,23 @@
                   "codes": [
                     "CHEM4750"
                   ],
-                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)"
+                  "text": "CHEM 4750 (or BIOL 4701 or BIOC 4971 or xxxx4991+BIOC 4900)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL or CHEM advanced elective"
+                  "text": "BIOL or CHEM advanced elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 9"
+                  "text": "Elective 9",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 10"
+                  "text": "Elective 10",
+                  "sh": 4
                 }
               ]
             }

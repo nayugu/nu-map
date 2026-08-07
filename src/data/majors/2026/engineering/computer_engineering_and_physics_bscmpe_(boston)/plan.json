@@ -18,56 +18,64 @@
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151"
+                  "text": "CHEM 1151",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1161"
                   ],
-                  "text": "PHYS 1161"
+                  "text": "PHYS 1161",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1162"
                   ],
-                  "text": "PHYS 1162"
+                  "text": "PHYS 1162",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1163"
                   ],
-                  "text": "PHYS 1163"
+                  "text": "PHYS 1163",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 }
               ]
             },
@@ -81,42 +89,48 @@
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1165"
                   ],
-                  "text": "PHYS 1165"
+                  "text": "PHYS 1165",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1166"
                   ],
-                  "text": "PHYS 1166"
+                  "text": "PHYS 1166",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1167"
                   ],
-                  "text": "PHYS 1167"
+                  "text": "PHYS 1167",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502"
+                  "text": "GE 1502",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -130,7 +144,8 @@
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -140,7 +155,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -160,28 +175,32 @@
                   "codes": [
                     "EECE2140"
                   ],
-                  "text": "EECE 2140"
+                  "text": "EECE 2140",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2160"
                   ],
-                  "text": "EECE 2160"
+                  "text": "EECE 2160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS2303"
                   ],
-                  "text": "PHYS 2303"
+                  "text": "PHYS 2303",
+                  "sh": 4
                 }
               ]
             },
@@ -195,39 +214,45 @@
                   "codes": [
                     "PHYS4305"
                   ],
-                  "text": "PHYS 4305"
+                  "text": "PHYS 4305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2150"
                   ],
-                  "text": "EECE 2150"
+                  "text": "EECE 2150",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800"
+                  "text": "CS 1800",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamental"
+                  "text": "CE Fundamental",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -237,7 +262,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -249,7 +274,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -265,7 +291,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -279,19 +306,23 @@
                   "codes": [
                     "PHYS3602"
                   ],
-                  "text": "PHYS 3602"
+                  "text": "PHYS 3602",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamental"
+                  "text": "CE Fundamental",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamental"
+                  "text": "CE Fundamental",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -301,7 +332,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -316,14 +347,16 @@
                   "codes": [
                     "PHYS3600"
                   ],
-                  "text": "PHYS 3600"
+                  "text": "PHYS 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE4791"
                   ],
-                  "text": "EECE 4791"
+                  "text": "EECE 4791",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -331,7 +364,8 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315"
+                  "text": "ENGW 3302 or 3315",
+                  "sh": 4
                 }
               ]
             }
@@ -350,32 +384,37 @@
                   "codes": [
                     "PHYS4115"
                   ],
-                  "text": "PHYS 4115"
+                  "text": "PHYS 4115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE3468"
                   ],
-                  "text": "EECE 3468"
+                  "text": "EECE 3468",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE4792"
                   ],
-                  "text": "EECE 4792"
+                  "text": "EECE 4792",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical Elective"
+                  "text": "Technical Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -386,19 +425,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Technical Elective"
+                  "text": "Technical Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Physics Elective"
+                  "text": "Advanced Physics Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EE Fundamental"
+                  "text": "EE Fundamental",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -424,35 +467,40 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -460,7 +508,8 @@
                     "PHYS1161",
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1161 or 1151 (ND)"
+                  "text": "PHYS 1161 or 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -468,7 +517,8 @@
                     "PHYS1162",
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1162 or 1152 (AD)"
+                  "text": "PHYS 1162 or 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -476,7 +526,8 @@
                     "PHYS1163",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1163 or 1153"
+                  "text": "PHYS 1163 or 1153",
+                  "sh": 0
                 }
               ]
             },
@@ -490,21 +541,24 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -512,7 +566,8 @@
                     "PHYS1165",
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1165 or 1155 (ND)"
+                  "text": "PHYS 1165 or 1155 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -520,7 +575,8 @@
                     "PHYS1166",
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1166 or 1156 (AD)"
+                  "text": "PHYS 1166 or 1156 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -528,7 +584,8 @@
                     "PHYS1167",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1167 or 1157"
+                  "text": "PHYS 1167 or 1157",
+                  "sh": 0
                 }
               ]
             },
@@ -542,7 +599,8 @@
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -552,7 +610,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -572,35 +630,40 @@
                   "codes": [
                     "EECE2140"
                   ],
-                  "text": "EECE 2140"
+                  "text": "EECE 2140",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2160"
                   ],
-                  "text": "EECE 2160"
+                  "text": "EECE 2160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS2303"
                   ],
-                  "text": "PHYS 2303 (ND)"
+                  "text": "PHYS 2303 (ND)",
+                  "sh": 4
                 }
               ]
             },
@@ -614,32 +677,37 @@
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800 (FQ)"
+                  "text": "CS 1800 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2150"
                   ],
-                  "text": "EECE 2150 (AD)"
+                  "text": "EECE 2150 (AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS4305"
                   ],
-                  "text": "PHYS 4305 (ND)"
+                  "text": "PHYS 4305 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamentals"
+                  "text": "CE Fundamentals",
+                  "sh": 4
                 }
               ]
             },
@@ -649,7 +717,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -660,7 +728,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -680,19 +748,23 @@
                   "codes": [
                     "PHYS3602"
                   ],
-                  "text": "PHYS 3602 (ND)"
+                  "text": "PHYS 3602 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamentals"
+                  "text": "CE Fundamentals",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamentals"
+                  "text": "CE Fundamentals",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -703,7 +775,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -714,7 +787,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -728,7 +802,8 @@
                   "codes": [
                     "EECE4791"
                   ],
-                  "text": "EECE 4791 (EI, WI, CE)1"
+                  "text": "EECE 4791 (EI, WI, CE)1",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -736,14 +811,16 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS3600"
                   ],
-                  "text": "PHYS 3600 (ND, AD, WI)"
+                  "text": "PHYS 3600 (ND, AD, WI)",
+                  "sh": 4
                 }
               ]
             }
@@ -762,32 +839,37 @@
                   "codes": [
                     "EECE4792"
                   ],
-                  "text": "EECE 4792 (EI, WI, CE)1"
+                  "text": "EECE 4792 (EI, WI, CE)1",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE3468"
                   ],
-                  "text": "EECE 3468"
+                  "text": "EECE 3468",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS4115"
                   ],
-                  "text": "PHYS 4115 (ND, FQ)"
+                  "text": "PHYS 4115 (ND, FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical Elective"
+                  "text": "Technical Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -798,19 +880,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "EE Fundamentals"
+                  "text": "EE Fundamentals",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical Elective"
+                  "text": "Technical Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHYS Advanced Elective"
+                  "text": "PHYS Advanced Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -836,56 +922,64 @@
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151"
+                  "text": "CHEM 1151",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1161"
                   ],
-                  "text": "PHYS 1161"
+                  "text": "PHYS 1161",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1162"
                   ],
-                  "text": "PHYS 1162"
+                  "text": "PHYS 1162",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1163"
                   ],
-                  "text": "PHYS 1163"
+                  "text": "PHYS 1163",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 }
               ]
             },
@@ -899,42 +993,48 @@
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1165"
                   ],
-                  "text": "PHYS 1165"
+                  "text": "PHYS 1165",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1166"
                   ],
-                  "text": "PHYS 1166"
+                  "text": "PHYS 1166",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1167"
                   ],
-                  "text": "PHYS 1167"
+                  "text": "PHYS 1167",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502"
+                  "text": "GE 1502",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -944,7 +1044,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -955,7 +1055,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -975,35 +1075,40 @@
                   "codes": [
                     "EECE2140"
                   ],
-                  "text": "EECE 2140"
+                  "text": "EECE 2140",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS2303"
                   ],
-                  "text": "PHYS 2303"
+                  "text": "PHYS 2303",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -1014,7 +1119,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1025,7 +1131,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1035,7 +1142,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1055,35 +1162,40 @@
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800"
+                  "text": "CS 1800",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2150"
                   ],
-                  "text": "EECE 2150"
+                  "text": "EECE 2150",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2160"
                   ],
-                  "text": "EECE 2160"
+                  "text": "EECE 2160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS3602"
                   ],
-                  "text": "PHYS 3602"
+                  "text": "PHYS 3602",
+                  "sh": 4
                 }
               ]
             },
@@ -1094,7 +1206,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1105,7 +1218,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1119,7 +1233,8 @@
                   "codes": [
                     "PHYS3600"
                   ],
-                  "text": "PHYS 3600"
+                  "text": "PHYS 3600",
+                  "sh": 4
                 }
               ]
             }
@@ -1138,19 +1253,23 @@
                   "codes": [
                     "PHYS4115"
                   ],
-                  "text": "PHYS 4115"
+                  "text": "PHYS 4115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamental"
+                  "text": "CE Fundamental",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamental"
+                  "text": "CE Fundamental",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamental"
+                  "text": "CE Fundamental",
+                  "sh": 5
                 }
               ]
             },
@@ -1161,7 +1280,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1172,7 +1292,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1186,7 +1307,8 @@
                   "codes": [
                     "EECE4791"
                   ],
-                  "text": "EECE 4791"
+                  "text": "EECE 4791",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1194,11 +1316,13 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical Elective"
+                  "text": "Technical Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1217,32 +1341,37 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE3468"
                   ],
-                  "text": "EECE 3468"
+                  "text": "EECE 3468",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS4305"
                   ],
-                  "text": "PHYS 4305"
+                  "text": "PHYS 4305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE4792"
                   ],
-                  "text": "EECE 4792"
+                  "text": "EECE 4792",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1253,19 +1382,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Technical Elective"
+                  "text": "Technical Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Physics Elective"
+                  "text": "Advanced Physics Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EE Fundamental"
+                  "text": "EE Fundamental",
+                  "sh": 4
                 }
               ]
             }
@@ -1291,35 +1424,40 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1327,7 +1465,8 @@
                     "PHYS1161",
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1161 or 1151 (ND)"
+                  "text": "PHYS 1161 or 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1335,7 +1474,8 @@
                     "PHYS1162",
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1162 or 1152 (AD)"
+                  "text": "PHYS 1162 or 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1343,7 +1483,8 @@
                     "PHYS1163",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1163 or 1153"
+                  "text": "PHYS 1163 or 1153",
+                  "sh": 0
                 }
               ]
             },
@@ -1357,21 +1498,24 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1379,7 +1523,8 @@
                     "PHYS1165",
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1165 or 1155 (ND)"
+                  "text": "PHYS 1165 or 1155 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1387,7 +1532,8 @@
                     "PHYS1166",
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1166 or 1156 (AD)"
+                  "text": "PHYS 1166 or 1156 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1395,7 +1541,8 @@
                     "PHYS1167",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1167 or 1157"
+                  "text": "PHYS 1167 or 1157",
+                  "sh": 0
                 }
               ]
             },
@@ -1405,7 +1552,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1416,7 +1563,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1436,28 +1583,32 @@
                   "codes": [
                     "EECE2140"
                   ],
-                  "text": "EECE 2140"
+                  "text": "EECE 2140",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS2303"
                   ],
-                  "text": "PHYS 2303 (ND)"
+                  "text": "PHYS 2303 (ND)",
+                  "sh": 4
                 }
               ]
             },
@@ -1471,42 +1622,48 @@
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800 (FQ)"
+                  "text": "CS 1800 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2150"
                   ],
-                  "text": "EECE 2150 (AD)"
+                  "text": "EECE 2150 (AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2160"
                   ],
-                  "text": "EECE 2160"
+                  "text": "EECE 2160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS3602"
                   ],
-                  "text": "PHYS 3602 (ND)"
+                  "text": "PHYS 3602 (ND)",
+                  "sh": 4
                 }
               ]
             },
@@ -1516,7 +1673,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1528,7 +1685,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1544,7 +1702,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1558,19 +1717,23 @@
                   "codes": [
                     "PHYS4115"
                   ],
-                  "text": "PHYS 4115 (ND, FQ)"
+                  "text": "PHYS 4115 (ND, FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamentals"
+                  "text": "CE Fundamentals",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamentals"
+                  "text": "CE Fundamentals",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CE Fundamentals"
+                  "text": "CE Fundamentals",
+                  "sh": 4
                 }
               ]
             },
@@ -1584,7 +1747,8 @@
                   "codes": [
                     "PHYS3600"
                   ],
-                  "text": "PHYS 3600 (ND, AD, WI)"
+                  "text": "PHYS 3600 (ND, AD, WI)",
+                  "sh": 4
                 }
               ]
             },
@@ -1595,7 +1759,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1611,7 +1776,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1625,29 +1791,34 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE3468"
                   ],
-                  "text": "EECE 3468"
+                  "text": "EECE 3468",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS4305"
                   ],
-                  "text": "PHYS 4305 (ND)"
+                  "text": "PHYS 4305 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EE Fundamentals"
+                  "text": "EE Fundamentals",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1661,7 +1832,8 @@
                   "codes": [
                     "EECE4791"
                   ],
-                  "text": "EECE 4791 (EI, WI, CE)1"
+                  "text": "EECE 4791 (EI, WI, CE)1",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1669,11 +1841,13 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical Elective"
+                  "text": "Technical Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1684,7 +1858,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1700,7 +1875,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1714,19 +1890,23 @@
                   "codes": [
                     "EECE4792"
                   ],
-                  "text": "EECE 4792 (EI, WI, CE)1"
+                  "text": "EECE 4792 (EI, WI, CE)1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical Elective"
+                  "text": "Technical Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHYS Advanced Elective"
+                  "text": "PHYS Advanced Elective",
+                  "sh": 4
                 }
               ]
             }

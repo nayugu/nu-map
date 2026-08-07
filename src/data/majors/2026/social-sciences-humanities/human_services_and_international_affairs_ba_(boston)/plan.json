@@ -18,32 +18,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV1101"
                   ],
-                  "text": "HUSV 1101"
+                  "text": "HUSV 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1000"
                   ],
-                  "text": "INTL 1000"
+                  "text": "INTL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1101"
                   ],
-                  "text": "INTL 1101"
+                  "text": "INTL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 }
               ]
             },
@@ -57,25 +62,29 @@
                   "codes": [
                     "ECON3290"
                   ],
-                  "text": "ECON 3290"
+                  "text": "ECON 3290",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV2300"
                   ],
-                  "text": "HUSV 2300"
+                  "text": "HUSV 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 }
               ]
             },
@@ -86,11 +95,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             },
@@ -101,11 +112,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -124,19 +137,23 @@
                   "codes": [
                     "ECON1115"
                   ],
-                  "text": "ECON 1115"
+                  "text": "ECON 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL elective"
+                  "text": "INTL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -150,7 +167,8 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -158,25 +176,29 @@
                     "HUSV2970",
                     "INTL2718"
                   ],
-                  "text": "HUSV 2970 or INTL 2718"
+                  "text": "HUSV 2970 or INTL 2718",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV3900"
                   ],
-                  "text": "HUSV 3900"
+                  "text": "HUSV 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL3400"
                   ],
-                  "text": "INTL 3400"
+                  "text": "INTL 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -187,11 +209,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             },
@@ -202,7 +226,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -218,7 +243,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -232,22 +258,26 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV4994"
                   ],
-                  "text": "HUSV 4994"
+                  "text": "HUSV 4994",
+                  "sh": 6
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -258,11 +288,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             },
@@ -273,7 +305,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -289,7 +322,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -303,22 +337,26 @@
                   "codes": [
                     "HUSV4700"
                   ],
-                  "text": "HUSV 4700"
+                  "text": "HUSV 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL4700"
                   ],
-                  "text": "INTL 4700"
+                  "text": "INTL 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

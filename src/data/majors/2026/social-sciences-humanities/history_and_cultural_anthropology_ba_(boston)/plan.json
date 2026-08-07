@@ -18,29 +18,34 @@
                   "codes": [
                     "ANTH1000"
                   ],
-                  "text": "ANTH 1000"
+                  "text": "ANTH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ANTH1101"
                   ],
-                  "text": "ANTH 1101"
+                  "text": "ANTH 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -54,19 +59,23 @@
                   "codes": [
                     "ANTH2305"
                   ],
-                  "text": "ANTH 2305"
+                  "text": "ANTH 2305",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Anthropology elective"
+                  "text": "Anthropology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -77,11 +86,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -92,11 +103,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -115,19 +128,23 @@
                   "codes": [
                     "ANTH3410"
                   ],
-                  "text": "ANTH 3410"
+                  "text": "ANTH 3410",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Anthropology elective"
+                  "text": "Anthropology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -141,26 +158,31 @@
                   "codes": [
                     "ANTH3421"
                   ],
-                  "text": "ANTH 3421"
+                  "text": "ANTH 3421",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Anth area course"
+                  "text": "Anth area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -171,11 +193,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -186,7 +210,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -202,7 +227,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -213,19 +239,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ANTH area course"
+                  "text": "ANTH area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Anthropology elective"
+                  "text": "Anthropology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -236,11 +266,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -251,7 +283,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -267,7 +300,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -278,19 +312,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course 1 (History)"
+                  "text": "Integrative course 1 (History)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course 2 (Anthropology)"
+                  "text": "Integrative course 2 (Anthropology)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -316,39 +354,45 @@
                   "codes": [
                     "ANTH1101"
                   ],
-                  "text": "ANTH 1101"
+                  "text": "ANTH 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1000"
                   ],
-                  "text": "HIST 1000"
+                  "text": "HIST 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1200"
                   ],
-                  "text": "HIST 1200"
+                  "text": "HIST 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1201"
                   ],
-                  "text": "HIST 1201"
+                  "text": "HIST 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -362,19 +406,23 @@
                   "codes": [
                     "ANTH2305"
                   ],
-                  "text": "ANTH 2305"
+                  "text": "ANTH 2305",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective or integrative 1"
+                  "text": "HIST elective or integrative 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective or integrative 2"
+                  "text": "HIST elective or integrative 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -384,7 +432,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -395,7 +443,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -415,29 +463,34 @@
                   "codes": [
                     "ANTH3410"
                   ],
-                  "text": "ANTH 3410"
+                  "text": "ANTH 3410",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2302"
                   ],
-                  "text": "HIST 2302"
+                  "text": "HIST 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH area course 1"
+                  "text": "ANTH area course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -451,19 +504,23 @@
                   "codes": [
                     "ANTH3421"
                   ],
-                  "text": "ANTH 3421"
+                  "text": "ANTH 3421",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective or integrative 3"
+                  "text": "HIST elective or integrative 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective or integrative 4"
+                  "text": "HIST elective or integrative 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -473,7 +530,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -485,7 +542,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -501,7 +559,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -512,19 +571,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ANTH area course 2"
+                  "text": "ANTH area course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective 1"
+                  "text": "ANTH elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective or integrative 5"
+                  "text": "HIST elective or integrative 5",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -535,11 +598,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -550,7 +615,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -566,7 +632,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -577,19 +644,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective 2"
+                  "text": "ANTH elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective 3"
+                  "text": "ANTH elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective or integrative 6"
+                  "text": "HIST elective or integrative 6",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -600,11 +671,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -615,7 +688,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -631,7 +705,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -642,19 +717,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HIST capstone or HIST senior project or ANTH capstone"
+                  "text": "HIST capstone or HIST senior project or ANTH capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective or integrative 7"
+                  "text": "HIST elective or integrative 7",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

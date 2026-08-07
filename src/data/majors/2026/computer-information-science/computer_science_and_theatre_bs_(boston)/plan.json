@@ -18,7 +18,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,7 +27,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -34,21 +36,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1101"
                   ],
-                  "text": "THTR 1101"
+                  "text": "THTR 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1120"
                   ],
-                  "text": "THTR 1120"
+                  "text": "THTR 1120",
+                  "sh": 4
                 }
               ]
             },
@@ -63,35 +68,40 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1131"
                   ],
-                  "text": "THTR 1131"
+                  "text": "THTR 1131",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -106,11 +116,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -121,11 +133,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -144,42 +158,48 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210 (For Khoury students)"
+                  "text": "CS 1210 (For Khoury students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INAM2000"
                   ],
-                  "text": "INAM 2000"
+                  "text": "INAM 2000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1100"
                   ],
-                  "text": "THTR 1100"
+                  "text": "THTR 1100",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1270"
                   ],
-                  "text": "THTR 1270"
+                  "text": "THTR 1270",
+                  "sh": 4
                 }
               ]
             },
@@ -190,7 +210,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -201,7 +222,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -212,11 +234,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -235,29 +259,34 @@
                   "codes": [
                     "CS4550"
                   ],
-                  "text": "CS 4550"
+                  "text": "CS 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR2000"
                   ],
-                  "text": "THTR 2000"
+                  "text": "THTR 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR3325"
                   ],
-                  "text": "THTR 3325"
+                  "text": "THTR 3325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Text, Community, & Social Context Course"
+                  "text": "THTR Text, Community, & Social Context Course",
+                  "sh": 4
                 }
               ]
             },
@@ -268,7 +297,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -279,7 +309,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -290,11 +321,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -313,7 +346,8 @@
                   "codes": [
                     "CS2484"
                   ],
-                  "text": "CS 2484"
+                  "text": "CS 2484",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -321,15 +355,18 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Elective"
+                  "text": "THTR Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -343,19 +380,23 @@
                   "codes": [
                     "THTR4702"
                   ],
-                  "text": "THTR 4702"
+                  "text": "THTR 4702",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and Social Issues"
+                  "text": "Computing and Social Issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative Requirement"
+                  "text": "Integrative Requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Elective"
+                  "text": "THTR Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -381,7 +422,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -389,7 +431,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -397,21 +440,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1101"
                   ],
-                  "text": "THTR 1101"
+                  "text": "THTR 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1120"
                   ],
-                  "text": "THTR 1120"
+                  "text": "THTR 1120",
+                  "sh": 4
                 }
               ]
             },
@@ -426,35 +472,40 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1131"
                   ],
-                  "text": "THTR 1131"
+                  "text": "THTR 1131",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -468,11 +519,13 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -483,11 +536,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -507,35 +562,40 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INAM2000"
                   ],
-                  "text": "INAM 2000"
+                  "text": "INAM 2000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1100"
                   ],
-                  "text": "THTR 1100"
+                  "text": "THTR 1100",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR3325"
                   ],
-                  "text": "THTR 3325"
+                  "text": "THTR 3325",
+                  "sh": 4
                 }
               ]
             },
@@ -549,33 +609,39 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210 (For Khoury students)"
+                  "text": "CS 1210 (For Khoury students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1270"
                   ],
-                  "text": "THTR 1270"
+                  "text": "THTR 1270",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR2000"
                   ],
-                  "text": "THTR 2000"
+                  "text": "THTR 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Text, Community & Social Context"
+                  "text": "THTR Text, Community & Social Context",
+                  "sh": 4
                 }
               ]
             },
@@ -586,11 +652,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -601,7 +669,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -617,7 +686,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -631,22 +701,26 @@
                   "codes": [
                     "CS2484"
                   ],
-                  "text": "CS 2484"
+                  "text": "CS 2484",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS4550"
                   ],
-                  "text": "CS 4550"
+                  "text": "CS 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and Social Issues"
+                  "text": "Computing and Social Issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Elective"
+                  "text": "THTR Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -657,11 +731,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -672,7 +748,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -688,7 +765,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -703,22 +781,26 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR4702"
                   ],
-                  "text": "THTR 4702"
+                  "text": "THTR 4702",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative Requirement"
+                  "text": "Integrative Requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Elective"
+                  "text": "THTR Elective",
+                  "sh": 4
                 }
               ]
             }

@@ -18,35 +18,40 @@
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "COMM1112"
                   ],
-                  "text": "COMM 1112"
+                  "text": "COMM 1112",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1000"
                   ],
-                  "text": "LING 1000"
+                  "text": "LING 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 }
               ]
             },
@@ -60,29 +65,34 @@
                   "codes": [
                     "LING2350"
                   ],
-                  "text": "LING 2350"
+                  "text": "LING 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING3412"
                   ],
-                  "text": "LING 3412"
+                  "text": "LING 3412",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Foundation Course"
+                  "text": "COMM Studies Foundation Course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -93,11 +103,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Elective"
+                  "text": "COMM Studies Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -108,11 +120,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -131,26 +145,31 @@
                   "codes": [
                     "COMM2301"
                   ],
-                  "text": "COMM 2301"
+                  "text": "COMM 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000 (For COS students)"
+                  "text": "EESC 2000 (For COS students)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Cluster Course"
+                  "text": "COMM Studies Cluster Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language Course"
+                  "text": "Foreign Language Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure or Linguistics Elective"
+                  "text": "Linguistic Structure or Linguistics Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -164,19 +183,23 @@
                   "codes": [
                     "LING3442"
                   ],
-                  "text": "LING 3442 (Or Linguistics Elective)"
+                  "text": "LING 3442 (Or Linguistics Elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Elective"
+                  "text": "COMM Studies Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language Course"
+                  "text": "Foreign Language Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure or Linguistics Elective"
+                  "text": "Linguistic Structure or Linguistics Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -187,11 +210,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Elective"
+                  "text": "COMM Studies Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -202,7 +227,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -218,7 +244,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -232,22 +259,26 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING3442"
                   ],
-                  "text": "LING 3442 (or Linguistics Elective)"
+                  "text": "LING 3442 (or Linguistics Elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language Course"
+                  "text": "Foreign Language Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure or Linguistics Elective"
+                  "text": "Linguistic Structure or Linguistics Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -258,11 +289,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Writing Intensive"
+                  "text": "COMM Studies Writing Intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -273,7 +306,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -289,7 +323,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -303,19 +338,23 @@
                   "codes": [
                     "COMM3415"
                   ],
-                  "text": "COMM 3415"
+                  "text": "COMM 3415",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Writing Intensive"
+                  "text": "COMM Studies Writing Intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative Capstone Experience"
+                  "text": "Integrative Capstone Experience",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure or Linguistics Elective"
+                  "text": "Linguistic Structure or Linguistics Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -341,35 +380,40 @@
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "COMM1112"
                   ],
-                  "text": "COMM 1112"
+                  "text": "COMM 1112",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1000"
                   ],
-                  "text": "LING 1000"
+                  "text": "LING 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 }
               ]
             },
@@ -383,22 +427,26 @@
                   "codes": [
                     "LING2350"
                   ],
-                  "text": "LING 2350"
+                  "text": "LING 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING3412"
                   ],
-                  "text": "LING 3412"
+                  "text": "LING 3412",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Foundation Course"
+                  "text": "COMM Studies Foundation Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -408,7 +456,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -419,7 +467,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -439,19 +487,23 @@
                   "codes": [
                     "COMM2301"
                   ],
-                  "text": "COMM 2301"
+                  "text": "COMM 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Cluster Course"
+                  "text": "COMM Studies Cluster Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language Course"
+                  "text": "Foreign Language Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure or Linguistics Elective"
+                  "text": "Linguistic Structure or Linguistics Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -466,23 +518,28 @@
                     "EEAM2000",
                     "EESC2000"
                   ],
-                  "text": "EEAM 2000 or EESC 2000"
+                  "text": "EEAM 2000 or EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Elective"
+                  "text": "COMM Studies Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Elective"
+                  "text": "COMM Studies Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language Course"
+                  "text": "Foreign Language Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure or Linguistics Elective"
+                  "text": "Linguistic Structure or Linguistics Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -492,7 +549,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -504,7 +561,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -520,7 +578,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -534,22 +593,26 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING3442"
                   ],
-                  "text": "LING 3442 (or Linguistics Elective)"
+                  "text": "LING 3442 (or Linguistics Elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language Course"
+                  "text": "Foreign Language Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure or Linguistics Elective"
+                  "text": "Linguistic Structure or Linguistics Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -560,11 +623,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Elective"
+                  "text": "COMM Studies Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -575,7 +640,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -591,7 +657,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -605,19 +672,23 @@
                   "codes": [
                     "LING3442"
                   ],
-                  "text": "LING 3442 (or Linguistics Elective)"
+                  "text": "LING 3442 (or Linguistics Elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Writing Intensive"
+                  "text": "COMM Studies Writing Intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistic Structure or Linguistics Elective"
+                  "text": "Linguistic Structure or Linguistics Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -628,11 +699,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -643,7 +716,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -659,7 +733,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -673,19 +748,23 @@
                   "codes": [
                     "COMM3415"
                   ],
-                  "text": "COMM 3415"
+                  "text": "COMM 3415",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Studies Elective"
+                  "text": "COMM Studies Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative Capstone Experience"
+                  "text": "Integrative Capstone Experience",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

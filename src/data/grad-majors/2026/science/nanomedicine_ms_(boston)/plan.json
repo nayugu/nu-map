@@ -18,28 +18,32 @@
                   "codes": [
                     "EESC6500"
                   ],
-                  "text": "EESC 6500"
+                  "text": "EESC 6500",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD5270"
                   ],
-                  "text": "NNMD 5270"
+                  "text": "NNMD 5270",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD5310"
                   ],
-                  "text": "NNMD 5310"
+                  "text": "NNMD 5310",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC5560"
                   ],
-                  "text": "PHSC 5560"
+                  "text": "PHSC 5560",
+                  "sh": 3
                 }
               ]
             },
@@ -53,21 +57,24 @@
                   "codes": [
                     "NNMD5271"
                   ],
-                  "text": "NNMD 5271"
+                  "text": "NNMD 5271",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD5570"
                   ],
-                  "text": "NNMD 5570"
+                  "text": "NNMD 5570",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD6272"
                   ],
-                  "text": "NNMD 6272"
+                  "text": "NNMD 6272",
+                  "sh": 0
                 },
                 {
                   "kind": "choice",
@@ -75,7 +82,8 @@
                     "PHSC6214",
                     "BIOT6214"
                   ],
-                  "text": "PHSC 6214 or BIOT 6214"
+                  "text": "PHSC 6214 or BIOT 6214",
+                  "sh": 2
                 }
               ]
             },
@@ -90,7 +98,8 @@
                     "EESC6964",
                     "EESC6965"
                   ],
-                  "text": "EESC 6964 or 6965 (*)"
+                  "text": "EESC 6964 or 6965 (*)",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
@@ -122,21 +131,24 @@
                     "BIOE5820",
                     "CHME5631"
                   ],
-                  "text": "BIOE 5820 or CHME 5631"
+                  "text": "BIOE 5820 or CHME 5631",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD5370"
                   ],
-                  "text": "NNMD 5370"
+                  "text": "NNMD 5370",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD6272"
                   ],
-                  "text": "NNMD 6272"
+                  "text": "NNMD 6272",
+                  "sh": 0
                 }
               ]
             },
@@ -151,14 +163,16 @@
                     "CHEM5648",
                     "PMST6252"
                   ],
-                  "text": "CHEM 5648 or PMST 6252"
+                  "text": "CHEM 5648 or PMST 6252",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD6370"
                   ],
-                  "text": "NNMD 6370"
+                  "text": "NNMD 6370",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -166,11 +180,13 @@
                     "NNMD6272",
                     "NNMD7500"
                   ],
-                  "text": "NNMD 6272 or 7500"
+                  "text": "NNMD 6272 or 7500",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ]
             },
@@ -185,14 +201,16 @@
                     "EESC6964",
                     "EESC6965"
                   ],
-                  "text": "EESC 6964 or 6965 (*)"
+                  "text": "EESC 6964 or 6965 (*)",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD7500"
                   ],
-                  "text": "NNMD 7500"
+                  "text": "NNMD 7500",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
@@ -228,35 +246,40 @@
                     "BIOT5145",
                     "BIOT5220"
                   ],
-                  "text": "BIOT 5145 or 5220"
+                  "text": "BIOT 5145 or 5220",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOT5219"
                   ],
-                  "text": "BIOT 5219"
+                  "text": "BIOT 5219",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOT6310"
                   ],
-                  "text": "BIOT 6310"
+                  "text": "BIOT 6310",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD5470"
                   ],
-                  "text": "NNMD 5470"
+                  "text": "NNMD 5470",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD6272"
                   ],
-                  "text": "NNMD 6272"
+                  "text": "NNMD 6272",
+                  "sh": 0
                 }
               ]
             },
@@ -270,14 +293,16 @@
                   "codes": [
                     "BIOT5120"
                   ],
-                  "text": "BIOT 5120"
+                  "text": "BIOT 5120",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOT5225"
                   ],
-                  "text": "BIOT 5225"
+                  "text": "BIOT 5225",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -285,11 +310,13 @@
                     "NNMD6272",
                     "NNMD7500"
                   ],
-                  "text": "NNMD 6272 or 7500"
+                  "text": "NNMD 6272 or 7500",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ]
             },
@@ -304,14 +331,16 @@
                     "EESC6964",
                     "EESC6965"
                   ],
-                  "text": "EESC 6964 or 6965 (*)"
+                  "text": "EESC 6964 or 6965 (*)",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD7500"
                   ],
-                  "text": "NNMD 7500"
+                  "text": "NNMD 7500",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
@@ -346,35 +375,40 @@
                   "codes": [
                     "BIOT5220"
                   ],
-                  "text": "BIOT 5220"
+                  "text": "BIOT 5220",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOT5630"
                   ],
-                  "text": "BIOT 5630"
+                  "text": "BIOT 5630",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOT5910"
                   ],
-                  "text": "BIOT 5910"
+                  "text": "BIOT 5910",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOT6310"
                   ],
-                  "text": "BIOT 6310"
+                  "text": "BIOT 6310",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD6272"
                   ],
-                  "text": "NNMD 6272"
+                  "text": "NNMD 6272",
+                  "sh": 0
                 }
               ]
             },
@@ -388,14 +422,16 @@
                   "codes": [
                     "BIOT5920"
                   ],
-                  "text": "BIOT 5920"
+                  "text": "BIOT 5920",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOT5930"
                   ],
-                  "text": "BIOT 5930"
+                  "text": "BIOT 5930",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -403,11 +439,13 @@
                     "NNMD6272",
                     "NNMD7500"
                   ],
-                  "text": "NNMD 6272 or 7500"
+                  "text": "NNMD 6272 or 7500",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ]
             },
@@ -422,14 +460,16 @@
                     "EESC6964",
                     "EESC6965"
                   ],
-                  "text": "EESC 6964 or 6965 (*)"
+                  "text": "EESC 6964 or 6965 (*)",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD7500"
                   ],
-                  "text": "NNMD 7500"
+                  "text": "NNMD 7500",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
@@ -464,21 +504,24 @@
                   "codes": [
                     "NNMD5370"
                   ],
-                  "text": "NNMD 5370"
+                  "text": "NNMD 5370",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD6370"
                   ],
-                  "text": "NNMD 6370"
+                  "text": "NNMD 6370",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD6272"
                   ],
-                  "text": "NNMD 6272"
+                  "text": "NNMD 6272",
+                  "sh": 0
                 }
               ]
             },
@@ -492,22 +535,26 @@
                   "codes": [
                     "NNMD6984"
                   ],
-                  "text": "NNMD 6984"
+                  "text": "NNMD 6984",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "NNMD7500"
                   ],
-                  "text": "NNMD 7500"
+                  "text": "NNMD 7500",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ]
             }

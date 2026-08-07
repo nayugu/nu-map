@@ -18,7 +18,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,7 +27,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -34,21 +36,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -63,22 +68,26 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Personality/social basis of behavior 1"
+                  "text": "Personality/social basis of behavior 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -89,11 +98,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PYSC elective"
+                  "text": "PYSC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -104,11 +115,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -127,25 +140,29 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Cognitive/biological basis of behavior 1"
+                  "text": "Cognitive/biological basis of behavior 1",
+                  "sh": 4
                 }
               ]
             },
@@ -159,29 +176,34 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Cognitive/biological basis of behavior 2"
+                  "text": "Cognitive/biological basis of behavior 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Personality/social basis of behavior 2"
+                  "text": "Personality/social basis of behavior 2",
+                  "sh": 4
                 }
               ]
             },
@@ -192,11 +214,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -207,7 +231,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -223,7 +248,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -237,22 +263,26 @@
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC laboratory"
+                  "text": "PSYC laboratory",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar"
+                  "text": "PSYC seminar",
+                  "sh": 4
                 }
               ]
             },
@@ -268,11 +298,13 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3307, or 3315"
+                  "text": "ENGW 3302, 3307, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -283,7 +315,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -299,7 +332,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -313,19 +347,23 @@
                   "codes": [
                     "DS4420"
                   ],
-                  "text": "DS 4420"
+                  "text": "DS 4420",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative requirement"
+                  "text": "Integrative requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -351,7 +389,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -359,7 +398,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -367,21 +407,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -396,22 +439,26 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Personality/social basis of behavior 1"
+                  "text": "Personality/social basis of behavior 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -422,11 +469,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PYSC elective"
+                  "text": "PYSC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -437,11 +486,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -460,32 +511,37 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Cognitive/biological basis of behavior 1"
+                  "text": "Cognitive/biological basis of behavior 1",
+                  "sh": 4
                 }
               ]
             },
@@ -496,7 +552,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -507,7 +564,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -518,11 +576,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -541,22 +601,26 @@
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Cognitive/biological basis of behavior 2"
+                  "text": "Cognitive/biological basis of behavior 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Personality/social basis of behavior 2"
+                  "text": "Personality/social basis of behavior 2",
+                  "sh": 4
                 }
               ]
             },
@@ -567,7 +631,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -578,7 +643,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -594,11 +660,13 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3307, or 3315"
+                  "text": "ENGW 3302, 3307, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -617,22 +685,26 @@
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC laboratory"
+                  "text": "PSYC laboratory",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar"
+                  "text": "PSYC seminar",
+                  "sh": 4
                 }
               ]
             },
@@ -646,19 +718,23 @@
                   "codes": [
                     "DS4420"
                   ],
-                  "text": "DS 4420"
+                  "text": "DS 4420",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative requirement"
+                  "text": "Integrative requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             }

@@ -18,14 +18,16 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BUSN1102"
                   ],
-                  "text": "BUSN 1102"
+                  "text": "BUSN 1102",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -33,21 +35,24 @@
                     "ECON1116",
                     "INNO2301"
                   ],
-                  "text": "ECON 1116 or INNO 2301"
+                  "text": "ECON 1116 or INNO 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB1205"
                   ],
-                  "text": "INTB 1205"
+                  "text": "INTB 1205",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MGSC2301"
                   ],
-                  "text": "MGSC 2301"
+                  "text": "MGSC 2301",
+                  "sh": 4
                 }
               ]
             },
@@ -62,35 +67,40 @@
                     "ECON1116",
                     "INNO2301"
                   ],
-                  "text": "ECON 1116 or INNO 2301"
+                  "text": "ECON 1116 or INNO 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB2205"
                   ],
-                  "text": "INTB 2205"
+                  "text": "INTB 2205",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB2206"
                   ],
-                  "text": "INTB 2206"
+                  "text": "INTB 2206",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MKTG2201"
                   ],
-                  "text": "MKTG 2201"
+                  "text": "MKTG 2201",
+                  "sh": 4
                 }
               ]
             },
@@ -104,11 +114,13 @@
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -119,11 +131,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -142,26 +156,31 @@
                   "codes": [
                     "BUSN1103"
                   ],
-                  "text": "BUSN 1103"
+                  "text": "BUSN 1103",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB3205"
                   ],
-                  "text": "INTB 3205"
+                  "text": "INTB 3205",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -172,7 +191,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -183,7 +203,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -194,11 +215,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -214,23 +237,28 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Semester abroad"
+                  "text": "Semester abroad",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -241,7 +269,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op (may be abroad)"
+                  "text": "Co-op (may be abroad)",
+                  "sh": 0
                 }
               ]
             },
@@ -252,7 +281,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op (may be abroad)"
+                  "text": "Co-op (may be abroad)",
+                  "sh": 0
                 }
               ]
             },
@@ -263,11 +293,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -286,7 +318,8 @@
                   "codes": [
                     "ENGW3304"
                   ],
-                  "text": "ENGW 3304"
+                  "text": "ENGW 3304",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -294,15 +327,18 @@
                     "ORGB3201",
                     "ORGB3203"
                   ],
-                  "text": "ORGB 3201 or 3203"
+                  "text": "ORGB 3201 or 3203",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -316,19 +352,23 @@
                   "codes": [
                     "INTB4202"
                   ],
-                  "text": "INTB 4202"
+                  "text": "INTB 4202",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

@@ -18,35 +18,40 @@
                   "codes": [
                     "AFCS1101"
                   ],
-                  "text": "AFCS 1101"
+                  "text": "AFCS 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS1113"
                   ],
-                  "text": "AFCS 1113"
+                  "text": "AFCS 1113",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CLTR1000"
                   ],
-                  "text": "CLTR 1000"
+                  "text": "CLTR 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS4526"
                   ],
-                  "text": "AFCS 4526"
+                  "text": "AFCS 4526",
+                  "sh": 4
                 }
               ]
             },
@@ -60,32 +65,37 @@
                   "codes": [
                     "MSCR1220"
                   ],
-                  "text": "MSCR 1220"
+                  "text": "MSCR 1220",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS2690"
                   ],
-                  "text": "AFCS 2690"
+                  "text": "AFCS 2690",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS1270"
                   ],
-                  "text": "AFCS 1270"
+                  "text": "AFCS 1270",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -96,11 +106,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -111,11 +123,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -135,25 +149,29 @@
                     "MSCR1320",
                     "MSCR1420"
                   ],
-                  "text": "MSCR 1320 or 1420"
+                  "text": "MSCR 1320 or 1420",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS2296"
                   ],
-                  "text": "AFCS 2296"
+                  "text": "AFCS 2296",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS3424"
                   ],
-                  "text": "AFCS 3424"
+                  "text": "AFCS 3424",
+                  "sh": 4
                 }
               ]
             },
@@ -167,35 +185,40 @@
                   "codes": [
                     "MSCR2220"
                   ],
-                  "text": "MSCR 2220"
+                  "text": "MSCR 2220",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MSCR2505"
                   ],
-                  "text": "MSCR 2505"
+                  "text": "MSCR 2505",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MSCR3420"
                   ],
-                  "text": "MSCR 3420"
+                  "text": "MSCR 3420",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS3900"
                   ],
-                  "text": "AFCS 3900"
+                  "text": "AFCS 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 }
               ]
             },
@@ -209,14 +232,16 @@
                   "codes": [
                     "AFCS3664"
                   ],
-                  "text": "AFCS 3664"
+                  "text": "AFCS 3664",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "COMM3655"
                   ],
-                  "text": "COMM 3655"
+                  "text": "COMM 3655",
+                  "sh": 4
                 }
               ]
             },
@@ -227,7 +252,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -243,7 +269,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -257,28 +284,32 @@
                   "codes": [
                     "ARTD2380"
                   ],
-                  "text": "ARTD 2380"
+                  "text": "ARTD 2380",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS2619"
                   ],
-                  "text": "AFCS 2619"
+                  "text": "AFCS 2619",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "COMM2655"
                   ],
-                  "text": "COMM 2655"
+                  "text": "COMM 2655",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MSCR2335"
                   ],
-                  "text": "MSCR 2335"
+                  "text": "MSCR 2335",
+                  "sh": 4
                 }
               ]
             },
@@ -289,11 +320,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective"
+                  "text": "MSCR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -304,7 +337,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -320,7 +354,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -334,22 +369,26 @@
                   "codes": [
                     "COMM4755"
                   ],
-                  "text": "COMM 4755"
+                  "text": "COMM 4755",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath elective"
+                  "text": "NUpath elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath elective"
+                  "text": "NUpath elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS4700"
                   ],
-                  "text": "AFCS 4700"
+                  "text": "AFCS 4700",
+                  "sh": 4
                 }
               ]
             }

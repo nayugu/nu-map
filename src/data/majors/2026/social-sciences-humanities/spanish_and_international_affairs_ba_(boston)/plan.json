@@ -18,35 +18,40 @@
                   "codes": [
                     "CLTR1120"
                   ],
-                  "text": "CLTR 1120"
+                  "text": "CLTR 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1000"
                   ],
-                  "text": "INTL 1000"
+                  "text": "INTL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1101"
                   ],
-                  "text": "INTL 1101"
+                  "text": "INTL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SPNS2102"
                   ],
-                  "text": "SPNS 2102"
+                  "text": "SPNS 2102",
+                  "sh": 4
                 }
               ]
             },
@@ -61,25 +66,29 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SPNS3101"
                   ],
-                  "text": "SPNS 3101"
+                  "text": "SPNS 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -90,11 +99,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Language elective"
+                  "text": "Language elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -105,11 +116,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -128,19 +141,23 @@
                   "codes": [
                     "SPNS3102"
                   ],
-                  "text": "SPNS 3102"
+                  "text": "SPNS 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL elective"
+                  "text": "INTL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -151,19 +168,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "INTL elective"
+                  "text": "INTL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language elective"
+                  "text": "Language elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -174,11 +195,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Culture elective"
+                  "text": "Culture elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL elective"
+                  "text": "INTL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -189,7 +212,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -205,7 +229,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -216,19 +241,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Culture elective"
+                  "text": "Culture elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Culture elective"
+                  "text": "Culture elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL elective"
+                  "text": "INTL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL elective"
+                  "text": "INTL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -239,11 +268,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Culture elective"
+                  "text": "Culture elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL elective"
+                  "text": "INTL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -254,7 +285,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -270,7 +302,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -284,25 +317,29 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL3400"
                   ],
-                  "text": "INTL 3400"
+                  "text": "INTL 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL4700"
                   ],
-                  "text": "INTL 4700"
+                  "text": "INTL 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

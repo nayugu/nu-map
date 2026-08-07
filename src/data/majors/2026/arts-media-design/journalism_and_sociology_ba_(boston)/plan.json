@@ -19,28 +19,32 @@
                     "SOCL1000",
                     "JRNL1000"
                   ],
-                  "text": "SOCL 1000 or JRNL 1000"
+                  "text": "SOCL 1000 or JRNL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL1101"
                   ],
-                  "text": "SOCL 1101"
+                  "text": "SOCL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL1150"
                   ],
-                  "text": "JRNL 1150"
+                  "text": "JRNL 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -48,7 +52,8 @@
                     "SOCL2320",
                     "INSH3102"
                   ],
-                  "text": "SOCL 2320 or INSH 3102"
+                  "text": "SOCL 2320 or INSH 3102",
+                  "sh": 4
                 }
               ]
             },
@@ -63,7 +68,8 @@
                     "SOCL2321",
                     "INSH3101"
                   ],
-                  "text": "SOCL 2321 or INSH 3101"
+                  "text": "SOCL 2321 or INSH 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -71,22 +77,26 @@
                     "JRNL1101",
                     "JRNL1102"
                   ],
-                  "text": "JRNL 1101 and JRNL 1102"
+                  "text": "JRNL 1101 and JRNL 1102",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language"
+                  "text": "Language",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -97,11 +107,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language"
+                  "text": "Language",
+                  "sh": 4
                 }
               ]
             },
@@ -112,11 +124,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -135,26 +149,31 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2201"
                   ],
-                  "text": "JRNL 2201"
+                  "text": "JRNL 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language"
+                  "text": "Language",
+                  "sh": 4
                 }
               ]
             },
@@ -165,7 +184,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -176,7 +196,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -187,11 +208,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -210,15 +233,18 @@
                   "codes": [
                     "SOCL3300"
                   ],
-                  "text": "SOCL 3300"
+                  "text": "SOCL 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL visual storytelling requirement"
+                  "text": "JRNL visual storytelling requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -226,7 +252,8 @@
                     "JRNL3550",
                     "JRNL4650"
                   ],
-                  "text": "JRNL 3550 or 4650"
+                  "text": "JRNL 3550 or 4650",
+                  "sh": 4
                 }
               ]
             },
@@ -237,7 +264,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -248,7 +276,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -259,11 +288,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -279,19 +310,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL Elective"
+                  "text": "SOCL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 }
               ]
             },
@@ -306,19 +341,23 @@
                     "SOCL4600",
                     "ANTH4100"
                   ],
-                  "text": "SOCL 4600 or ANTH 4100"
+                  "text": "SOCL 4600 or ANTH 4100",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 }
               ]
             }

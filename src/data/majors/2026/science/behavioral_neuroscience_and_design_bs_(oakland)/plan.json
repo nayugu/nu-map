@@ -19,7 +19,8 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -27,7 +28,8 @@
                     "BIOL1107",
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1107 and BIOL 1108"
+                  "text": "BIOL 1107 and BIOL 1108",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -35,7 +37,8 @@
                     "BNSC1000",
                     "ARTF1000"
                   ],
-                  "text": "BNSC 1000 or ARTF 1000"
+                  "text": "BNSC 1000 or ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -44,14 +47,16 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -65,32 +70,37 @@
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -105,14 +115,16 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 }
               ]
             },
@@ -127,14 +139,16 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3452"
                   ],
-                  "text": "PSYC 3452"
+                  "text": "PSYC 3452",
+                  "sh": 4
                 }
               ]
             }
@@ -154,7 +168,8 @@
                     "BIOL2301",
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2301 and BIOL 2302"
+                  "text": "BIOL 2301 and BIOL 2302",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -162,7 +177,8 @@
                     "CHEM2311",
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2311 and CHEM 2312"
+                  "text": "CHEM 2311 and CHEM 2312",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -170,18 +186,21 @@
                     "EESC2000",
                     "EEAM2000"
                   ],
-                  "text": "EESC 2000 or EEAM 2000"
+                  "text": "EESC 2000 or EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 1"
+                  "text": "Design option course 1",
+                  "sh": 4
                 }
               ]
             },
@@ -192,7 +211,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -203,7 +223,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -214,15 +235,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -241,22 +265,26 @@
                   "codes": [
                     "ARTG5310"
                   ],
-                  "text": "ARTG 5310"
+                  "text": "ARTG 5310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3200"
                   ],
-                  "text": "PSYC 3200"
+                  "text": "PSYC 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 2"
+                  "text": "Design option course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -267,7 +295,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -278,7 +307,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -292,11 +322,13 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -315,19 +347,23 @@
                   "codes": [
                     "BIOL5587"
                   ],
-                  "text": "BIOL 5587"
+                  "text": "BIOL 5587",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS core course"
+                  "text": "BNS core course",
+                  "sh": 4
                 }
               ]
             },
@@ -341,19 +377,23 @@
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS core course"
+                  "text": "BNS core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -380,7 +420,8 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -388,7 +429,8 @@
                     "BIOL1107",
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1107 and BIOL 1108"
+                  "text": "BIOL 1107 and BIOL 1108",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -396,7 +438,8 @@
                     "BNSC1000",
                     "ARTF1000"
                   ],
-                  "text": "BNSC 1000 or ARTF 1000"
+                  "text": "BNSC 1000 or ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -405,14 +448,16 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -426,32 +471,37 @@
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -461,7 +511,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -472,7 +522,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -493,7 +543,8 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -501,7 +552,8 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -509,7 +561,8 @@
                     "CHEM2311",
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2311 and CHEM 2312"
+                  "text": "CHEM 2311 and CHEM 2312",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -517,14 +570,16 @@
                     "EESC2000",
                     "EEAM2000"
                   ],
-                  "text": "EESC 2000 or EEAM 2000"
+                  "text": "EESC 2000 or EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3452"
                   ],
-                  "text": "PSYC 3452"
+                  "text": "PSYC 3452",
+                  "sh": 4
                 }
               ]
             },
@@ -535,7 +590,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -546,7 +602,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -560,15 +617,18 @@
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 }
               ]
             }
@@ -588,25 +648,29 @@
                     "BIOL2301",
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2301 and BIOL 2302"
+                  "text": "BIOL 2301 and BIOL 2302",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3200"
                   ],
-                  "text": "PSYC 3200"
+                  "text": "PSYC 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 1"
+                  "text": "Design option course 1",
+                  "sh": 4
                 }
               ]
             },
@@ -617,7 +681,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -628,7 +693,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -638,7 +704,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -655,19 +721,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS core course"
+                  "text": "BNS core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -678,7 +748,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -689,7 +760,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -703,11 +775,13 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -726,22 +800,26 @@
                   "codes": [
                     "ARTG5310"
                   ],
-                  "text": "ARTG 5310"
+                  "text": "ARTG 5310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL5587"
                   ],
-                  "text": "BIOL 5587"
+                  "text": "BIOL 5587",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 2"
+                  "text": "Design option level 2",
+                  "sh": 4
                 }
               ]
             },
@@ -755,19 +833,23 @@
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS core course"
+                  "text": "BNS core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper-division elective"
+                  "text": "Upper-division elective",
+                  "sh": 4
                 }
               ]
             }

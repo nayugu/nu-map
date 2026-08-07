@@ -103,7 +103,7 @@ test("sample plans › no plan is empty", () => {
 });
 
 test("sample plans › every entry is a kind the applier knows", () => {
-  const KINDS = new Set(["course", "courses", "choice", "coop", "placeholder"]);
+  const KINDS = new Set(["course", "courses", "choice", "coop", "placeholder", "vacation"]);
   for (const [path, grid] of PLANS) {
     for (const plan of grid.plans) {
       for (const year of plan.years) {
@@ -120,8 +120,10 @@ test("sample plans › every entry is a kind the applier knows", () => {
               for (const c of e.codes ?? []) {
                 assert.match(c, /^COOP\d/, `${path}: coop entry carries a non-coop code ${c}`);
               }
-            } else if (e.kind === "placeholder") {
-              assert.equal(e.codes, undefined, `${path}: placeholder carries codes`);
+            } else if (e.kind === "placeholder" || e.kind === "vacation") {
+              // Neither names a course: one is a slot to fill, the other a
+              // term off. Both would be a lie with a code attached.
+              assert.equal(e.codes, undefined, `${path}: ${e.kind} carries codes`);
             } else {
               assert.ok(e.codes?.length, `${path}: ${e.kind} with no codes`);
             }
@@ -149,4 +151,53 @@ test("sample plans › course codes are well formed", () => {
       }
     }
   }
+});
+
+test("sample plans › a vacation is a term off, not a slot to fill", () => {
+  // 782 cells say "Vacation". Reading one as a placeholder would put an empty
+  // requirement slot in a semester the department is telling you to take off,
+  // and would carry credit hours toward a term load meant to be zero.
+  let seen = 0;
+  for (const [path, grid] of PLANS) {
+    for (const plan of grid.plans) {
+      for (const year of plan.years) {
+        for (const term of year.terms) {
+          for (const e of term.entries) {
+            if (e.kind !== "vacation") continue;
+            seen++;
+            assert.equal(e.codes, undefined, `${path}: vacation carries codes`);
+            assert.equal(e.sh, undefined, `${path}: vacation carries credit hours`);
+          }
+        }
+      }
+    }
+  }
+  assert.ok(seen > 100, `only ${seen} vacation entries — the classification may have been dropped`);
+});
+
+test("sample plans › entries carry the credit hours the grid states", () => {
+  // An unfilled slot has to contribute to its term's load, or a freshly loaded
+  // template reads at roughly half the credits the department states and every
+  // semester looks like a warning that is not real. The grid gives each cell
+  // its own hours; this is the check that we are still reading them.
+  let withSh = 0, total = 0;
+  for (const [path, grid] of PLANS) {
+    for (const plan of grid.plans) {
+      for (const year of plan.years) {
+        for (const term of year.terms) {
+          for (const e of term.entries) {
+            if (e.kind === "vacation") continue;
+            total++;
+            if (e.sh == null) continue;
+            withSh++;
+            assert.ok(Number.isFinite(e.sh) && e.sh >= 0, `${path}: sh ${e.sh} on "${e.text}"`);
+            assert.ok(e.sh <= 24, `${path}: implausible sh ${e.sh} on "${e.text}"`);
+          }
+        }
+      }
+    }
+  }
+  // Cells with no hours column are prose notes rather than slots, so the bar
+  // is high coverage, not total.
+  assert.ok(withSh / total > 0.95, `only ${(100 * withSh / total).toFixed(1)}% of entries carry credit hours`);
 });

@@ -18,7 +18,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,7 +27,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -34,18 +36,21 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -60,22 +65,26 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and Social Issues"
+                  "text": "Computing and Social Issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -90,11 +99,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -105,11 +116,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -128,35 +141,40 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3101"
                   ],
-                  "text": "LAW 3101"
+                  "text": "LAW 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3102"
                   ],
-                  "text": "LAW 3102"
+                  "text": "LAW 3102",
+                  "sh": 4
                 }
               ]
             },
@@ -167,7 +185,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -178,7 +197,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -189,11 +209,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -212,28 +234,32 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CY4170"
                   ],
-                  "text": "CY 4170"
+                  "text": "CY 4170",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3130"
                   ],
-                  "text": "LAW 3130"
+                  "text": "LAW 3130",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3140"
                   ],
-                  "text": "LAW 3140"
+                  "text": "LAW 3140",
+                  "sh": 4
                 }
               ]
             },
@@ -244,7 +270,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -255,7 +282,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -266,11 +294,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -290,22 +320,26 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315"
+                  "text": "ENGW 3302 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3235"
                   ],
-                  "text": "LAW 3235"
+                  "text": "LAW 3235",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LAW Elective"
+                  "text": "LAW Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -319,22 +353,26 @@
                   "codes": [
                     "LAW3120"
                   ],
-                  "text": "LAW 3120"
+                  "text": "LAW 3120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CY2550"
                   ],
-                  "text": "CY 2550"
+                  "text": "CY 2550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LAW Elective"
+                  "text": "LAW Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LAW Elective"
+                  "text": "LAW Elective",
+                  "sh": 4
                 }
               ]
             }

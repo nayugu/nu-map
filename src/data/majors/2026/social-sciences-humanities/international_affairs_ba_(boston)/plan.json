@@ -18,32 +18,37 @@
                   "codes": [
                     "ANTH1101"
                   ],
-                  "text": "ANTH 1101"
+                  "text": "ANTH 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1000"
                   ],
-                  "text": "INTL 1000"
+                  "text": "INTL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1101"
                   ],
-                  "text": "INTL 1101"
+                  "text": "INTL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 }
               ]
             },
@@ -57,22 +62,26 @@
                   "codes": [
                     "HIST2211"
                   ],
-                  "text": "HIST 2211"
+                  "text": "HIST 2211",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 }
               ]
             },
@@ -83,11 +92,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             },
@@ -98,11 +109,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -121,29 +134,34 @@
                   "codes": [
                     "ECON1115"
                   ],
-                  "text": "ECON 1115"
+                  "text": "ECON 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL2718"
                   ],
-                  "text": "INTL 2718"
+                  "text": "INTL 2718",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS 1155 or international affairs elective"
+                  "text": "POLS 1155 or international affairs elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 }
               ]
             },
@@ -154,7 +172,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -165,7 +184,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -176,11 +196,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -199,22 +221,26 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL3400"
                   ],
-                  "text": "INTL 3400"
+                  "text": "INTL 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -225,7 +251,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -236,7 +263,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -247,11 +275,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -270,19 +300,23 @@
                   "codes": [
                     "INTL4700"
                   ],
-                  "text": "INTL 4700"
+                  "text": "INTL 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -293,19 +327,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

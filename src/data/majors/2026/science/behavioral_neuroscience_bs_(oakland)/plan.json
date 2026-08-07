@@ -18,7 +18,8 @@
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,7 +27,8 @@
                     "BIOL1107",
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1107 and BIOL 1108"
+                  "text": "BIOL 1107 and BIOL 1108",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -35,21 +37,24 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -63,7 +68,8 @@
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -71,21 +77,24 @@
                     "CHEM2311",
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2311 and CHEM 2312"
+                  "text": "CHEM 2311 and CHEM 2312",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 }
               ]
             },
@@ -100,11 +109,13 @@
                     "BIOL2301",
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2301 and BIOL 2302"
+                  "text": "BIOL 2301 and BIOL 2302",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced PSYC elective"
+                  "text": "Advanced PSYC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -114,7 +125,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -134,7 +145,8 @@
                   "codes": [
                     "BIOL3405"
                   ],
-                  "text": "BIOL 3405"
+                  "text": "BIOL 3405",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -142,18 +154,21 @@
                     "CHEM2313",
                     "CHEM2314"
                   ],
-                  "text": "CHEM 2313 and CHEM 2314"
+                  "text": "CHEM 2313 and CHEM 2314",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3200"
                   ],
-                  "text": "PSYC 3200"
+                  "text": "PSYC 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -167,14 +182,16 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL2309"
                   ],
-                  "text": "BIOL 2309"
+                  "text": "BIOL 2309",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -182,15 +199,18 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS advanced course 1"
+                  "text": "BNS advanced course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -204,11 +224,13 @@
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -219,7 +241,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -235,7 +258,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -246,19 +270,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Advanced BIOL elective"
+                  "text": "Advanced BIOL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS advanced course 2"
+                  "text": "BNS advanced course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS advanced course 3"
+                  "text": "BNS advanced course 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -272,11 +300,13 @@
                   "codes": [
                     "ENGW3307"
                   ],
-                  "text": "ENGW 3307"
+                  "text": "ENGW 3307",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -287,7 +317,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -303,11 +334,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (online)"
+                  "text": "Elective (online)",
+                  "sh": 4
                 }
               ]
             },
@@ -318,19 +351,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "BNS advanced course 4"
+                  "text": "BNS advanced course 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -356,7 +393,8 @@
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -364,7 +402,8 @@
                     "BIOL1107",
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1107 and BIOL 1108"
+                  "text": "BIOL 1107 and BIOL 1108",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -372,21 +411,24 @@
                     "CHEM1161",
                     "CHEM1162"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162"
+                  "text": "CHEM 1161 and CHEM 1162",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -400,25 +442,29 @@
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -428,7 +474,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -439,7 +485,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -459,7 +505,8 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -467,7 +514,8 @@
                     "BIOL2301",
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2301 and BIOL 2302"
+                  "text": "BIOL 2301 and BIOL 2302",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -475,18 +523,21 @@
                     "CHEM2311",
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2311 and CHEM 2312"
+                  "text": "CHEM 2311 and CHEM 2312",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3200"
                   ],
-                  "text": "PSYC 3200"
+                  "text": "PSYC 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -497,7 +548,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -508,7 +560,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -523,14 +576,16 @@
                     "CHEM2313",
                     "CHEM2314"
                   ],
-                  "text": "CHEM 2313 and CHEM 2314"
+                  "text": "CHEM 2313 and CHEM 2314",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 }
               ]
             }
@@ -549,22 +604,26 @@
                   "codes": [
                     "BIOL2309"
                   ],
-                  "text": "BIOL 2309"
+                  "text": "BIOL 2309",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL3405"
                   ],
-                  "text": "BIOL 3405"
+                  "text": "BIOL 3405",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advancd PSYC elective"
+                  "text": "Advancd PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -575,7 +634,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -586,7 +646,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -596,7 +657,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -617,19 +678,23 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS advanced course 1"
+                  "text": "BNS advanced course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS advanced course 2"
+                  "text": "BNS advanced course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -640,7 +705,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -651,7 +717,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -662,7 +729,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -681,19 +749,23 @@
                   "codes": [
                     "ENGW3307"
                   ],
-                  "text": "ENGW 3307"
+                  "text": "ENGW 3307",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced BIOL elective"
+                  "text": "Advanced BIOL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS advanced course 3"
+                  "text": "BNS advanced course 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -704,19 +776,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "BNS advanced course 4"
+                  "text": "BNS advanced course 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone course"
+                  "text": "Capstone course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

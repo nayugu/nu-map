@@ -19,14 +19,16 @@
                     "GSND5110",
                     "GSND5111"
                   ],
-                  "text": "GSND 5110 and GSND 5111"
+                  "text": "GSND 5110 and GSND 5111",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GSND5130"
                   ],
-                  "text": "GSND 5130"
+                  "text": "GSND 5130",
+                  "sh": 4
                 }
               ]
             },
@@ -37,11 +39,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -52,7 +56,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op (optional)"
+                  "text": "Co-op (optional)",
+                  "sh": 0
                 }
               ],
               "fullSummer": true
@@ -72,18 +77,21 @@
                   "codes": [
                     "GSND5122"
                   ],
-                  "text": "GSND 5122"
+                  "text": "GSND 5122",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GSND7995"
                   ],
-                  "text": "GSND 7995"
+                  "text": "GSND 7995",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -98,11 +106,13 @@
                     "GSND7990",
                     "GSND7995"
                   ],
-                  "text": "GSND 7990 or 7995"
+                  "text": "GSND 7990 or 7995",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

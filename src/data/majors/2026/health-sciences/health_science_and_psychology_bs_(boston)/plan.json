@@ -18,14 +18,16 @@
                   "codes": [
                     "BIOL1111"
                   ],
-                  "text": "BIOL 1111"
+                  "text": "BIOL 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1112"
+                  "text": "BIOL 1112",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -33,14 +35,16 @@
                     "HSCI1000",
                     "PSYC1000"
                   ],
-                  "text": "HSCI 1000 or PSYC 1000"
+                  "text": "HSCI 1000 or PSYC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -48,14 +52,16 @@
                     "PHTH1260",
                     "PHTH1261"
                   ],
-                  "text": "PHTH 1260 or 1261"
+                  "text": "PHTH 1260 or 1261",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -69,14 +75,16 @@
                   "codes": [
                     "BIOL1113"
                   ],
-                  "text": "BIOL 1113"
+                  "text": "BIOL 1113",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1114"
                   ],
-                  "text": "BIOL 1114"
+                  "text": "BIOL 1114",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -85,18 +93,21 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -106,7 +117,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -117,7 +128,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -137,22 +148,26 @@
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Area A course"
+                  "text": "Area A course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 }
               ]
             },
@@ -163,19 +178,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Area A course"
+                  "text": "Area A course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -186,11 +205,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Area B course"
+                  "text": "Area B course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -200,7 +221,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -221,29 +242,34 @@
                     "HSCI2000",
                     "EESC2000"
                   ],
-                  "text": "HSCI 2000 or EESC 2000 (*)"
+                  "text": "HSCI 2000 or EESC 2000 (*)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1165"
                   ],
-                  "text": "PHIL 1165"
+                  "text": "PHIL 1165",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab"
+                  "text": "PSYC lab",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3306"
                   ],
-                  "text": "ENGW 3306"
+                  "text": "ENGW 3306",
+                  "sh": 4
                 }
               ]
             },
@@ -254,7 +280,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -265,7 +292,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -276,11 +304,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 }
               ]
             }
@@ -296,15 +326,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General electives"
+                  "text": "General electives",
+                  "sh": 8
                 }
               ]
             },
@@ -320,15 +353,18 @@
                     "PSYC4514",
                     "CAEP2012"
                   ],
-                  "text": "PSYC 3510, 4514, or CAEP 2012"
+                  "text": "PSYC 3510, 4514, or CAEP 2012",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar"
+                  "text": "PSYC seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Electives"
+                  "text": "General Electives",
+                  "sh": 8
                 }
               ]
             }
@@ -354,21 +390,24 @@
                   "codes": [
                     "BIOL1111"
                   ],
-                  "text": "BIOL 1111"
+                  "text": "BIOL 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1112"
+                  "text": "BIOL 1112",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -376,7 +415,8 @@
                     "PHTH1260",
                     "PHTH1261"
                   ],
-                  "text": "PHTH 1260 or 1261"
+                  "text": "PHTH 1260 or 1261",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -384,14 +424,16 @@
                     "PSYC1000",
                     "HSCI1000"
                   ],
-                  "text": "PSYC 1000 or HSCI 1000"
+                  "text": "PSYC 1000 or HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -405,14 +447,16 @@
                   "codes": [
                     "BIOL1113"
                   ],
-                  "text": "BIOL 1113"
+                  "text": "BIOL 1113",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1114"
                   ],
-                  "text": "BIOL 1114"
+                  "text": "BIOL 1114",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -421,18 +465,21 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area A selective"
+                  "text": "PSYC Area A selective",
+                  "sh": 4
                 }
               ]
             },
@@ -443,11 +490,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area B selective"
+                  "text": "PSYC Area B selective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 }
               ]
             },
@@ -458,7 +507,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Electives"
+                  "text": "General Electives",
+                  "sh": 8
                 }
               ]
             }
@@ -478,29 +528,34 @@
                     "HSCI2000",
                     "EESC2000"
                   ],
-                  "text": "HSCI 2000 or EESC 2000 (*)"
+                  "text": "HSCI 2000 or EESC 2000 (*)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 }
               ]
             },
@@ -511,7 +566,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -522,7 +578,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -536,14 +593,16 @@
                   "codes": [
                     "ENGW3306"
                   ],
-                  "text": "ENGW 3306"
+                  "text": "ENGW 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1165"
                   ],
-                  "text": "PHIL 1165"
+                  "text": "PHIL 1165",
+                  "sh": 4
                 }
               ]
             }
@@ -559,19 +618,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area A selective"
+                  "text": "PSYC Area A selective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -582,7 +645,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -593,7 +657,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -604,7 +669,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Electives"
+                  "text": "General Electives",
+                  "sh": 8
                 }
               ]
             }
@@ -620,19 +686,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab"
+                  "text": "PSYC lab",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYCH elective"
+                  "text": "PSYCH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -648,19 +718,23 @@
                     "PSYC4514",
                     "CAEP2012"
                   ],
-                  "text": "PSYC 3510, 4514, or CAEP 2012"
+                  "text": "PSYC 3510, 4514, or CAEP 2012",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar"
+                  "text": "PSYC seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -686,21 +760,24 @@
                   "codes": [
                     "BIOL1111"
                   ],
-                  "text": "BIOL 1111"
+                  "text": "BIOL 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1112"
+                  "text": "BIOL 1112",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -708,7 +785,8 @@
                     "PHTH1260",
                     "PHTH1261"
                   ],
-                  "text": "PHTH 1260 or 1261"
+                  "text": "PHTH 1260 or 1261",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -716,14 +794,16 @@
                     "PSYC1000",
                     "HSCI1000"
                   ],
-                  "text": "PSYC 1000 or HSCI 1000"
+                  "text": "PSYC 1000 or HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -737,14 +817,16 @@
                   "codes": [
                     "BIOL1113"
                   ],
-                  "text": "BIOL 1113"
+                  "text": "BIOL 1113",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1114"
                   ],
-                  "text": "BIOL 1114"
+                  "text": "BIOL 1114",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -753,18 +835,21 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area A selective"
+                  "text": "PSYC Area A selective",
+                  "sh": 4
                 }
               ]
             },
@@ -775,11 +860,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area B selective"
+                  "text": "PSYC Area B selective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 }
               ]
             },
@@ -790,7 +877,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General electives"
+                  "text": "General electives",
+                  "sh": 8
                 }
               ]
             }
@@ -809,25 +897,29 @@
                   "codes": [
                     "PHIL1165"
                   ],
-                  "text": "PHIL 1165"
+                  "text": "PHIL 1165",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 }
               ]
             },
@@ -842,23 +934,28 @@
                     "EESC2000",
                     "HSCI2000"
                   ],
-                  "text": "EESC 2000 or HSCI 2000 (*)"
+                  "text": "EESC 2000 or HSCI 2000 (*)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Area A selective"
+                  "text": "PSYC Area A selective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -869,11 +966,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -884,7 +983,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -900,7 +1000,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -914,7 +1015,8 @@
                   "codes": [
                     "ENGW3306"
                   ],
-                  "text": "ENGW 3306"
+                  "text": "ENGW 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -923,15 +1025,18 @@
                     "PSYC4514",
                     "CAEP2012"
                   ],
-                  "text": "PSYC 3510, 4514, or CAEP 2012"
+                  "text": "PSYC 3510, 4514, or CAEP 2012",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab"
+                  "text": "PSYC lab",
+                  "sh": 4
                 }
               ]
             },
@@ -942,7 +1047,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Electives"
+                  "text": "General Electives",
+                  "sh": 8
                 }
               ]
             },
@@ -953,7 +1059,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -969,7 +1076,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -980,15 +1088,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar"
+                  "text": "PSYC seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Electives"
+                  "text": "General Electives",
+                  "sh": 8
                 }
               ]
             }

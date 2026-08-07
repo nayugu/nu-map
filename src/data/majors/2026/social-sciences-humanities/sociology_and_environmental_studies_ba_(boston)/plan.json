@@ -19,29 +19,34 @@
                     "SOCL1000",
                     "INSC1000"
                   ],
-                  "text": "SOCL 1000 or INSC 1000"
+                  "text": "SOCL 1000 or INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR1101"
                   ],
-                  "text": "ENVR 1101"
+                  "text": "ENVR 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL1101"
                   ],
-                  "text": "SOCL 1101"
+                  "text": "SOCL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -55,14 +60,16 @@
                   "codes": [
                     "ENVR2515"
                   ],
-                  "text": "ENVR 2515"
+                  "text": "ENVR 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1180"
                   ],
-                  "text": "PHIL 1180"
+                  "text": "PHIL 1180",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -70,11 +77,13 @@
                     "SOCL2321",
                     "INSH3101"
                   ],
-                  "text": "SOCL 2321 or INSH 3101"
+                  "text": "SOCL 2321 or INSH 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Statistics requirement"
+                  "text": "Statistics requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -85,11 +94,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -100,11 +111,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -124,22 +137,26 @@
                     "ENVR3300",
                     "ENVR3301"
                   ],
-                  "text": "ENVR 3300 and ENVR 3301"
+                  "text": "ENVR 3300 and ENVR 3301",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL3300"
                   ],
-                  "text": "SOCL 3300"
+                  "text": "SOCL 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -154,23 +171,28 @@
                     "EESH2000",
                     "EESC2000"
                   ],
-                  "text": "EESH 2000 or EESC 2000"
+                  "text": "EESH 2000 or EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective 1"
+                  "text": "ENVR elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective 2"
+                  "text": "ENVR elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -181,11 +203,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -196,7 +220,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -212,7 +237,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -223,19 +249,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective 3"
+                  "text": "ENVR elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective 4"
+                  "text": "ENVR elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -246,11 +276,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -261,7 +293,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -277,7 +310,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -288,19 +322,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone requirement"
+                  "text": "Capstone requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative requirement"
+                  "text": "Integrative requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

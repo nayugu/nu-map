@@ -18,32 +18,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1000"
                   ],
-                  "text": "POLS 1000"
+                  "text": "POLS 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1155"
                   ],
-                  "text": "POLS 1155"
+                  "text": "POLS 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 }
               ]
             },
@@ -57,25 +62,29 @@
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1150"
                   ],
-                  "text": "POLS 1150"
+                  "text": "POLS 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -90,11 +99,13 @@
                     "PHIL2325",
                     "POLS2325"
                   ],
-                  "text": "PHIL 2325 or POLS 2325"
+                  "text": "PHIL 2325 or POLS 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Restricted Elective"
+                  "text": "PHIL Restricted Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -105,11 +116,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Elective"
+                  "text": "PHIL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -128,29 +141,34 @@
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS2399"
                   ],
-                  "text": "POLS 2399"
+                  "text": "POLS 2399",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Thought"
+                  "text": "POLS Thought",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -161,7 +179,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -172,7 +191,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -183,11 +203,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Critical Philosophy elective"
+                  "text": "Critical Philosophy elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective"
+                  "text": "POLS Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -206,22 +228,26 @@
                   "codes": [
                     "PHIL5001"
                   ],
-                  "text": "PHIL 5001"
+                  "text": "PHIL 5001",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS2400"
                   ],
-                  "text": "POLS 2400"
+                  "text": "POLS 2400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 }
               ]
             },
@@ -232,7 +258,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -243,7 +270,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -254,11 +282,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -274,19 +304,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Elective"
+                  "text": "PHIL Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Thought course"
+                  "text": "POLS Thought course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 }
               ]
             },
@@ -297,19 +331,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Restricted Elective"
+                  "text": "PHIL Restricted Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

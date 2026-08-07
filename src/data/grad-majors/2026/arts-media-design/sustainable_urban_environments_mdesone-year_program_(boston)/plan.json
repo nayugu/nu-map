@@ -18,14 +18,16 @@
                   "codes": [
                     "SUEN7130"
                   ],
-                  "text": "SUEN 7130"
+                  "text": "SUEN 7130",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SUEN7230"
                   ],
-                  "text": "SUEN 7230"
+                  "text": "SUEN 7230",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -33,11 +35,13 @@
                     "SUEN7320",
                     "SUEN6340"
                   ],
-                  "text": "SUEN 7320 or 6340"
+                  "text": "SUEN 7320 or 6340",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (required)"
+                  "text": "Elective (required)",
+                  "sh": 4
                 }
               ]
             },
@@ -51,25 +55,29 @@
                   "codes": [
                     "SUEN7140"
                   ],
-                  "text": "SUEN 7140 (or co-op*)"
+                  "text": "SUEN 7140 (or co-op*)",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SUEN7240"
                   ],
-                  "text": "SUEN 7240"
+                  "text": "SUEN 7240",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SUEN7320"
                   ],
-                  "text": "SUEN 7320"
+                  "text": "SUEN 7320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (required)"
+                  "text": "Elective (required)",
+                  "sh": 4
                 }
               ]
             }

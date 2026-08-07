@@ -18,25 +18,29 @@
                   "codes": [
                     "ARCH6330"
                   ],
-                  "text": "ARCH 6330"
+                  "text": "ARCH 6330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH6430"
                   ],
-                  "text": "ARCH 6430"
+                  "text": "ARCH 6430",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH7130"
                   ],
-                  "text": "ARCH 7130"
+                  "text": "ARCH 7130",
+                  "sh": 6
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Required)"
+                  "text": "Elective (Required)",
+                  "sh": 4
                 }
               ]
             },
@@ -50,21 +54,24 @@
                   "codes": [
                     "ARCH6340"
                   ],
-                  "text": "ARCH 6340"
+                  "text": "ARCH 6340",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH6440"
                   ],
-                  "text": "ARCH 6440"
+                  "text": "ARCH 6440",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH7140"
                   ],
-                  "text": "ARCH 7140"
+                  "text": "ARCH 7140",
+                  "sh": 6
                 }
               ]
             },
@@ -74,7 +81,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -85,7 +92,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]

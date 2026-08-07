@@ -19,7 +19,8 @@
                     "ARCH1310",
                     "ARCH1311"
                   ],
-                  "text": "ARCH 1310 and ARCH 1311"
+                  "text": "ARCH 1310 and ARCH 1311",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -27,18 +28,21 @@
                     "ARTF1000",
                     "ARCH1000"
                   ],
-                  "text": "ARTF 1000 or ARCH 1000"
+                  "text": "ARTF 1000 or ARCH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -46,14 +50,16 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -67,14 +73,16 @@
                   "codes": [
                     "ARCH1110"
                   ],
-                  "text": "ARCH 1110"
+                  "text": "ARCH 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1120"
                   ],
-                  "text": "ARCH 1120"
+                  "text": "ARCH 1120",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -82,11 +90,13 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARCH history elective"
+                  "text": "ARCH history elective",
+                  "sh": 4
                 }
               ]
             },
@@ -97,15 +107,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -115,7 +128,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -135,14 +148,16 @@
                   "codes": [
                     "ARCH2130"
                   ],
-                  "text": "ARCH 2130"
+                  "text": "ARCH 2130",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH2260"
                   ],
-                  "text": "ARCH 2260"
+                  "text": "ARCH 2260",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -150,11 +165,13 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARCH elective"
+                  "text": "ARCH elective",
+                  "sh": 4
                 }
               ]
             },
@@ -169,29 +186,34 @@
                     "ARCH2340",
                     "ARCH2341"
                   ],
-                  "text": "ARCH 2340 and ARCH 2341"
+                  "text": "ARCH 2340 and ARCH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH3450"
                   ],
-                  "text": "ARCH 3450"
+                  "text": "ARCH 3450",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 1"
+                  "text": "Design option level 1",
+                  "sh": 4
                 }
               ]
             },
@@ -202,11 +224,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -217,7 +241,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -233,7 +258,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "choice",
@@ -241,7 +267,8 @@
                     "ENGW3314",
                     "ENGW3302"
                   ],
-                  "text": "ENGW 3314 or 3302 (online)"
+                  "text": "ENGW 3314 or 3302 (online)",
+                  "sh": 4
                 }
               ]
             },
@@ -252,19 +279,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ARCH elective"
+                  "text": "ARCH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 2"
+                  "text": "Design option level 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -275,11 +306,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -290,7 +323,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -306,11 +340,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (online)"
+                  "text": "Elective (online)",
+                  "sh": 4
                 }
               ]
             },
@@ -324,19 +360,23 @@
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARCH elective"
+                  "text": "ARCH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design elective"
+                  "text": "Design elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

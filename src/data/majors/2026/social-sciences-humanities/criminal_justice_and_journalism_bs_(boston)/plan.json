@@ -19,32 +19,37 @@
                     "CRIM1000",
                     "JRNL1000"
                   ],
-                  "text": "CRIM 1000 or JRNL 1000"
+                  "text": "CRIM 1000 or JRNL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL1150"
                   ],
-                  "text": "JRNL 1150"
+                  "text": "JRNL 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -59,26 +64,31 @@
                     "JRNL1101",
                     "JRNL1102"
                   ],
-                  "text": "JRNL 1101 and JRNL 1102"
+                  "text": "JRNL 1101 and JRNL 1102",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Criminology thematic elective"
+                  "text": "Criminology thematic elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computer or data requirement"
+                  "text": "Computer or data requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -89,11 +99,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -104,11 +116,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -127,32 +141,37 @@
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2201"
                   ],
-                  "text": "JRNL 2201"
+                  "text": "JRNL 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Journalism elective 1"
+                  "text": "Journalism elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -185,11 +204,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Criminology survey elective"
+                  "text": "Criminology survey elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -208,32 +229,37 @@
                   "codes": [
                     "CRIM1700"
                   ],
-                  "text": "CRIM 1700"
+                  "text": "CRIM 1700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3000"
                   ],
-                  "text": "CRIM 3000"
+                  "text": "CRIM 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3600"
                   ],
-                  "text": "CRIM 3600"
+                  "text": "CRIM 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2301"
                   ],
-                  "text": "JRNL 2301"
+                  "text": "JRNL 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Journalism elective 2"
+                  "text": "Journalism elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -266,11 +292,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -289,25 +317,29 @@
                   "codes": [
                     "CRIM3700"
                   ],
-                  "text": "CRIM 3700"
+                  "text": "CRIM 3700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL3550"
                   ],
-                  "text": "JRNL 3550"
+                  "text": "JRNL 3550",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL3610"
                   ],
-                  "text": "JRNL 3610"
+                  "text": "JRNL 3610",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Criminology systemwide elective"
+                  "text": "Criminology systemwide elective",
+                  "sh": 4
                 }
               ]
             },
@@ -321,22 +353,26 @@
                   "codes": [
                     "CRIM4949"
                   ],
-                  "text": "CRIM 4949"
+                  "text": "CRIM 4949",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL4650"
                   ],
-                  "text": "JRNL 4650"
+                  "text": "JRNL 4650",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Criminology elective"
+                  "text": "Criminology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Journalism elective 3"
+                  "text": "Journalism elective 3",
+                  "sh": 4
                 }
               ]
             }

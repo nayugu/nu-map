@@ -18,14 +18,16 @@
                   "codes": [
                     "ENGL1400"
                   ],
-                  "text": "ENGL 1400"
+                  "text": "ENGL 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -33,18 +35,21 @@
                     "JRNL1000",
                     "ENGL1000"
                   ],
-                  "text": "JRNL 1000 or ENGL 1000"
+                  "text": "JRNL 1000 or ENGL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL1150"
                   ],
-                  "text": "JRNL 1150"
+                  "text": "JRNL 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Pre-1850 literature requirement"
+                  "text": "Pre-1850 literature requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -59,7 +64,8 @@
                     "ENGL1160",
                     "ENGL1410"
                   ],
-                  "text": "ENGL 1160 or 1410"
+                  "text": "ENGL 1160 or 1410",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -67,22 +73,26 @@
                     "JRNL1101",
                     "JRNL1102"
                   ],
-                  "text": "JRNL 1101 and JRNL 1102"
+                  "text": "JRNL 1101 and JRNL 1102",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "English diversity requirement"
+                  "text": "English diversity requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -93,11 +103,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -108,11 +120,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -131,26 +145,31 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2201"
                   ],
-                  "text": "JRNL 2201"
+                  "text": "JRNL 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Post-1850 requirement"
+                  "text": "Post-1850 requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Theories and methods requirement"
+                  "text": "Theories and methods requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -161,7 +180,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -172,7 +192,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -183,11 +204,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -206,22 +229,26 @@
                   "codes": [
                     "JRNL2301"
                   ],
-                  "text": "JRNL 2301"
+                  "text": "JRNL 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "English writing requirement"
+                  "text": "English writing requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL3710"
                   ],
-                  "text": "ENGL 3710"
+                  "text": "ENGL 3710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Journalism elective 1"
+                  "text": "Journalism elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -232,7 +259,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -243,7 +271,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -254,11 +283,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "English elective 1"
+                  "text": "English elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -277,22 +308,26 @@
                   "codes": [
                     "ENGL2850"
                   ],
-                  "text": "ENGL 2850"
+                  "text": "ENGL 2850",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL3610"
                   ],
-                  "text": "JRNL 3610"
+                  "text": "JRNL 3610",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "English elective 2"
+                  "text": "English elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Journalism elective 2"
+                  "text": "Journalism elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -306,7 +341,8 @@
                   "codes": [
                     "ENGL4710"
                   ],
-                  "text": "ENGL 4710"
+                  "text": "ENGL 4710",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -314,18 +350,21 @@
                     "JRNL3550",
                     "JRNL4650"
                   ],
-                  "text": "JRNL 3550 or 4650"
+                  "text": "JRNL 3550 or 4650",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL3630"
                   ],
-                  "text": "JRNL 3630"
+                  "text": "JRNL 3630",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Journalism elective 3"
+                  "text": "Journalism elective 3",
+                  "sh": 4
                 }
               ]
             }

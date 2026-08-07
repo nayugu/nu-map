@@ -18,7 +18,8 @@
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -26,7 +27,8 @@
                     "COMM1112",
                     "COMM2301"
                   ],
-                  "text": "COMM 1112 or 2301"
+                  "text": "COMM 1112 or 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -34,18 +36,21 @@
                     "ENGL1000",
                     "COMM1000"
                   ],
-                  "text": "ENGL 1000 or COMM 1000"
+                  "text": "ENGL 1000 or COMM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL1400"
                   ],
-                  "text": "ENGL 1400"
+                  "text": "ENGL 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -60,26 +65,31 @@
                     "ENGL1160",
                     "ENGL1410"
                   ],
-                  "text": "ENGL 1160 or 1410"
+                  "text": "ENGL 1160 or 1410",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies foundational course"
+                  "text": "Communication Studies foundational course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "English diversity course"
+                  "text": "English diversity course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "English Pre-1850 elective"
+                  "text": "English Pre-1850 elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -90,11 +100,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies cluster course"
+                  "text": "Communication Studies cluster course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies elective"
+                  "text": "Communication Studies elective",
+                  "sh": 4
                 }
               ]
             },
@@ -105,11 +117,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies elective"
+                  "text": "Communication Studies elective",
+                  "sh": 4
                 }
               ]
             }
@@ -125,26 +139,31 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "English Post-1850 elective"
+                  "text": "English Post-1850 elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "English Theories and Methods course"
+                  "text": "English Theories and Methods course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 }
               ]
             },
@@ -155,7 +174,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -166,7 +186,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -177,11 +198,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies writing-intensive"
+                  "text": "Communication Studies writing-intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies elective"
+                  "text": "Communication Studies elective",
+                  "sh": 4
                 }
               ]
             }
@@ -197,22 +220,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Communication Studies writing-intensive"
+                  "text": "Communication Studies writing-intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "English Writing elective"
+                  "text": "English Writing elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL3710"
                   ],
-                  "text": "ENGL 3710"
+                  "text": "ENGL 3710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 }
               ]
             },
@@ -223,7 +250,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -234,7 +262,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -245,11 +274,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -265,19 +296,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "English elective"
+                  "text": "English elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "English elective"
+                  "text": "English elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative ENGL course"
+                  "text": "Integrative ENGL course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -288,19 +323,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "English capstone"
+                  "text": "English capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative COMM Course"
+                  "text": "Integrative COMM Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

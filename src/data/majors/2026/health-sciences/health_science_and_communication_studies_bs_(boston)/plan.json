@@ -18,14 +18,16 @@
                   "codes": [
                     "BIOL1111"
                   ],
-                  "text": "BIOL 1111"
+                  "text": "BIOL 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1112"
+                  "text": "BIOL 1112",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -33,28 +35,32 @@
                     "HSCI1000",
                     "COMM1000"
                   ],
-                  "text": "HSCI 1000 or COMM 1000"
+                  "text": "HSCI 1000 or COMM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -68,14 +74,16 @@
                   "codes": [
                     "BIOL1113"
                   ],
-                  "text": "BIOL 1113"
+                  "text": "BIOL 1113",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1114"
                   ],
-                  "text": "BIOL 1114"
+                  "text": "BIOL 1114",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -84,18 +92,21 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -106,11 +117,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -120,7 +133,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -140,7 +153,8 @@
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -148,7 +162,8 @@
                     "COMM1112",
                     "COMM2301"
                   ],
-                  "text": "COMM 1112 or 2301"
+                  "text": "COMM 1112 or 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -156,18 +171,21 @@
                     "HSCI2000",
                     "EEAM2000"
                   ],
-                  "text": "HSCI 2000 or EEAM 2000"
+                  "text": "HSCI 2000 or EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 }
               ]
             },
@@ -178,11 +196,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -193,7 +213,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -207,11 +228,13 @@
                   "codes": [
                     "ENGW3306"
                   ],
-                  "text": "ENGW 3306"
+                  "text": "ENGW 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -227,19 +250,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Cluster course"
+                  "text": "Cluster course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foundation course"
+                  "text": "Foundation course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 }
               ]
             },
@@ -250,11 +277,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -265,7 +294,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -276,11 +306,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 }
               ]
             }
@@ -296,19 +328,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM WI course"
+                  "text": "COMM WI course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone course"
+                  "text": "Capstone course",
+                  "sh": 3
                 }
               ]
             },
@@ -319,15 +355,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM WI course"
+                  "text": "COMM WI course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Electives"
+                  "text": "General Electives",
+                  "sh": 8
                 }
               ]
             }
@@ -353,14 +392,16 @@
                   "codes": [
                     "BIOL1111"
                   ],
-                  "text": "BIOL 1111"
+                  "text": "BIOL 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1112"
+                  "text": "BIOL 1112",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -368,28 +409,32 @@
                     "HSCI1000",
                     "COMM1000"
                   ],
-                  "text": "HSCI 1000 or COMM 1000"
+                  "text": "HSCI 1000 or COMM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -403,14 +448,16 @@
                   "codes": [
                     "BIOL1113"
                   ],
-                  "text": "BIOL 1113"
+                  "text": "BIOL 1113",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1114"
                   ],
-                  "text": "BIOL 1114"
+                  "text": "BIOL 1114",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -419,18 +466,21 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -440,7 +490,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -451,7 +501,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -471,7 +521,8 @@
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -479,15 +530,18 @@
                     "COMM1112",
                     "COMM2301"
                   ],
-                  "text": "COMM 1112 or 2301"
+                  "text": "COMM 1112 or 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 }
               ]
             },
@@ -502,26 +556,31 @@
                     "HSCI2000",
                     "EEAM2000"
                   ],
-                  "text": "HSCI 2000 or EEAM 2000"
+                  "text": "HSCI 2000 or EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Cluster course"
+                  "text": "Cluster course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foundation course"
+                  "text": "Foundation course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 }
               ]
             },
@@ -531,7 +590,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -543,7 +602,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -559,7 +619,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -573,15 +634,18 @@
                   "codes": [
                     "ENGW3306"
                   ],
-                  "text": "ENGW 3306"
+                  "text": "ENGW 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM electives"
+                  "text": "COMM electives",
+                  "sh": 8
                 }
               ]
             },
@@ -591,7 +655,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -602,7 +666,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -619,15 +683,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM WI course"
+                  "text": "COMM WI course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core courses"
+                  "text": "PHTH core courses",
+                  "sh": 8
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 }
               ]
             },
@@ -638,7 +705,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -649,7 +717,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -659,7 +728,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -676,15 +745,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM WI course"
+                  "text": "COMM WI course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Electives"
+                  "text": "General Electives",
+                  "sh": 8
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core"
+                  "text": "PHTH core",
+                  "sh": 4
                 }
               ]
             },
@@ -695,11 +767,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Electives"
+                  "text": "General Electives",
+                  "sh": 12
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone course"
+                  "text": "Capstone course",
+                  "sh": 3
                 }
               ]
             }

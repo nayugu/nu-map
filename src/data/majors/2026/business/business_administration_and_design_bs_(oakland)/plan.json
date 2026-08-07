@@ -18,18 +18,21 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective 1"
+                  "text": "ARTF elective 1",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -37,7 +40,8 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -45,14 +49,16 @@
                     "BUSN1102",
                     "ARTF1000"
                   ],
-                  "text": "BUSN 1102 or ARTF 1000"
+                  "text": "BUSN 1102 or ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -67,7 +73,8 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -75,18 +82,21 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MGSC2301"
                   ],
-                  "text": "MGSC 2301"
+                  "text": "MGSC 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MATH elective"
+                  "text": "MATH elective",
+                  "sh": 4
                 }
               ]
             },
@@ -101,11 +111,13 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -116,15 +128,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective 2"
+                  "text": "ARTF elective 2",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective 3"
+                  "text": "ARTF elective 3",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -144,25 +159,29 @@
                     "ARTG2262",
                     "ARTG2263"
                   ],
-                  "text": "ARTG 2262 and ARTG 2263"
+                  "text": "ARTG 2262 and ARTG 2263",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB1203"
                   ],
-                  "text": "INTB 1203"
+                  "text": "INTB 1203",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MKTG2201"
                   ],
-                  "text": "MKTG 2201"
+                  "text": "MKTG 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 1"
+                  "text": "Design option level 1",
+                  "sh": 4
                 }
               ]
             },
@@ -177,23 +196,28 @@
                     "BUSN1103",
                     "EEAM2000"
                   ],
-                  "text": "BUSN 1103 or EEAM 2000"
+                  "text": "BUSN 1103 or EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business concentration introductory course"
+                  "text": "Business concentration introductory course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business core option"
+                  "text": "Business core option",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 2"
+                  "text": "Design option level 2",
+                  "sh": 4
                 }
               ]
             },
@@ -207,11 +231,13 @@
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -222,7 +248,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -238,7 +265,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -253,7 +281,8 @@
                     "ENGW3314",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3314 or 3315"
+                  "text": "ENGW 3314 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -261,15 +290,18 @@
                     "ORGB3201",
                     "ORGB3203"
                   ],
-                  "text": "ORGB 3201 or 3203"
+                  "text": "ORGB 3201 or 3203",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business concentration elective 1"
+                  "text": "Business concentration elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -280,11 +312,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Business concentration elective 2"
+                  "text": "Business concentration elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -295,7 +329,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -311,7 +346,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -325,22 +361,26 @@
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "STRT4501"
                   ],
-                  "text": "STRT 4501"
+                  "text": "STRT 4501",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business concentration"
+                  "text": "Business concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

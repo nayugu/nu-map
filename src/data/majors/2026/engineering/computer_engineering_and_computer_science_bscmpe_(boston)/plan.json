@@ -18,42 +18,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -67,7 +73,8 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -75,35 +82,40 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001 (ND, FQ)"
+                  "text": "CS 2000 and CS 2001 (ND, FQ)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 }
               ]
             },
@@ -117,28 +129,32 @@
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1155 (ND)"
+                  "text": "PHYS 1155 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1156 (AD)"
+                  "text": "PHYS 1156 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1157"
+                  "text": "PHYS 1157",
+                  "sh": 1
                 }
               ]
             },
@@ -149,11 +165,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -172,21 +190,24 @@
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800 (FQ)"
+                  "text": "CS 1800 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2140"
                   ],
-                  "text": "EECE 2140"
+                  "text": "EECE 2140",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -194,14 +215,16 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101 (ND, AD)"
+                  "text": "CS 2100 and CS 2101 (ND, AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2150"
                   ],
-                  "text": "EECE 2150 (AD)"
+                  "text": "EECE 2150 (AD)",
+                  "sh": 5
                 }
               ]
             },
@@ -215,35 +238,40 @@
                   "codes": [
                     "CS2800"
                   ],
-                  "text": "CS 2800"
+                  "text": "CS 2800",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2160"
                   ],
-                  "text": "EECE 2160"
+                  "text": "EECE 2160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2540"
                   ],
-                  "text": "EECE 2540"
+                  "text": "EECE 2540",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE3468"
                   ],
-                  "text": "EECE 3468"
+                  "text": "EECE 3468",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -257,11 +285,13 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 }
               ]
             },
@@ -272,7 +302,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -288,7 +319,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -302,25 +334,29 @@
                   "codes": [
                     "EECE2322"
                   ],
-                  "text": "EECE 2322"
+                  "text": "EECE 2322",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2323"
                   ],
-                  "text": "EECE 2323"
+                  "text": "EECE 2323",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -328,11 +364,13 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EE fundamentals"
+                  "text": "EE fundamentals",
+                  "sh": 4
                 }
               ]
             },
@@ -346,7 +384,8 @@
                   "codes": [
                     "EECE4791"
                   ],
-                  "text": "EECE 4791 (EI, WI, CE)1"
+                  "text": "EECE 4791 (EI, WI, CE)1",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -354,11 +393,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101 (ND, AD)"
+                  "text": "CS 3100 and CS 3101 (ND, AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EECE technical elective"
+                  "text": "EECE technical elective",
+                  "sh": 4
                 }
               ]
             },
@@ -369,7 +410,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -385,7 +427,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -400,25 +443,29 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE4792"
                   ],
-                  "text": "EECE 4792 (EI, WI, CE)1"
+                  "text": "EECE 4792 (EI, WI, CE)1",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3650"
                   ],
-                  "text": "CS 3650"
+                  "text": "CS 3650",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EECE technical elective"
+                  "text": "EECE technical elective",
+                  "sh": 4
                 }
               ]
             }
@@ -444,42 +491,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -493,7 +546,8 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -501,35 +555,40 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001 (ND, FQ)"
+                  "text": "CS 2000 and CS 2001 (ND, FQ)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 }
               ]
             },
@@ -543,28 +602,32 @@
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1155 (ND)"
+                  "text": "PHYS 1155 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1156 (AD)"
+                  "text": "PHYS 1156 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1157"
+                  "text": "PHYS 1157",
+                  "sh": 1
                 }
               ]
             },
@@ -575,11 +638,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -598,14 +663,16 @@
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800 (FQ)"
+                  "text": "CS 1800 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -613,28 +680,32 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101 (ND, AD)"
+                  "text": "CS 2100 and CS 2101 (ND, AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2140"
                   ],
-                  "text": "EECE 2140"
+                  "text": "EECE 2140",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2150"
                   ],
-                  "text": "EECE 2150 (AD)"
+                  "text": "EECE 2150 (AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -645,7 +716,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -656,7 +728,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -670,11 +743,13 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 }
               ]
             }
@@ -693,35 +768,40 @@
                   "codes": [
                     "CS2800"
                   ],
-                  "text": "CS 2800"
+                  "text": "CS 2800",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2160"
                   ],
-                  "text": "EECE 2160"
+                  "text": "EECE 2160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2540"
                   ],
-                  "text": "EECE 2540"
+                  "text": "EECE 2540",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE3468"
                   ],
-                  "text": "EECE 3468"
+                  "text": "EECE 3468",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 }
               ]
             },
@@ -732,7 +812,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -743,7 +824,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -757,15 +839,18 @@
                   "codes": [
                     "EECE4791"
                   ],
-                  "text": "EECE 4791 (EI, WI, CE)1"
+                  "text": "EECE 4791 (EI, WI, CE)1",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EECE technical elective"
+                  "text": "EECE technical elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 }
               ]
             }
@@ -784,7 +869,8 @@
                   "codes": [
                     "EECE2322"
                   ],
-                  "text": "EECE 2322"
+                  "text": "EECE 2322",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -792,25 +878,29 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101 (ND, AD)"
+                  "text": "CS 3100 and CS 3101 (ND, AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2323"
                   ],
-                  "text": "EECE 2323"
+                  "text": "EECE 2323",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE4792"
                   ],
-                  "text": "EECE 4792 (EI, WI, CE)1"
+                  "text": "EECE 4792 (EI, WI, CE)1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EE fundamentals"
+                  "text": "EE fundamentals",
+                  "sh": 4
                 }
               ]
             },
@@ -824,7 +914,8 @@
                   "codes": [
                     "CS3650"
                   ],
-                  "text": "CS 3650"
+                  "text": "CS 3650",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -832,7 +923,8 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -840,11 +932,13 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EECE technical elective"
+                  "text": "EECE technical elective",
+                  "sh": 4
                 }
               ]
             }
@@ -870,42 +964,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -919,39 +1019,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -961,7 +1067,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -972,7 +1078,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -992,14 +1098,16 @@
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800 (FQ)"
+                  "text": "CS 1800 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -1007,21 +1115,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001 (ND, FQ)"
+                  "text": "CS 2000 and CS 2001 (ND, FQ)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2140"
                   ],
-                  "text": "EECE 2140"
+                  "text": "EECE 2140",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -1035,7 +1146,8 @@
                   "codes": [
                     "CS2800"
                   ],
-                  "text": "CS 2800"
+                  "text": "CS 2800",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1043,42 +1155,48 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101 (ND, AD)"
+                  "text": "CS 2100 and CS 2101 (ND, AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2160"
                   ],
-                  "text": "EECE 2160"
+                  "text": "EECE 2160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1155 (ND)"
+                  "text": "PHYS 1155 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1156 (AD)"
+                  "text": "PHYS 1156 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1157"
+                  "text": "PHYS 1157",
+                  "sh": 1
                 }
               ]
             },
@@ -1088,7 +1206,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1100,7 +1218,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1116,7 +1235,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1130,35 +1250,40 @@
                   "codes": [
                     "EECE2150"
                   ],
-                  "text": "EECE 2150 (AD)"
+                  "text": "EECE 2150 (AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2322"
                   ],
-                  "text": "EECE 2322"
+                  "text": "EECE 2322",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2323"
                   ],
-                  "text": "EECE 2323"
+                  "text": "EECE 2323",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2540"
                   ],
-                  "text": "EECE 2540"
+                  "text": "EECE 2540",
+                  "sh": 4
                 }
               ]
             },
@@ -1173,7 +1298,8 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1181,7 +1307,8 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101 (ND, AD)"
+                  "text": "CS 3100 and CS 3101 (ND, AD)",
+                  "sh": 5
                 }
               ]
             },
@@ -1192,7 +1319,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1208,7 +1336,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1222,26 +1351,31 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE3468"
                   ],
-                  "text": "EECE 3468"
+                  "text": "EECE 3468",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EE fundamentals"
+                  "text": "EE fundamentals",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1255,18 +1389,21 @@
                   "codes": [
                     "EECE4791"
                   ],
-                  "text": "EECE 4791 (EI, WI, CE)1"
+                  "text": "EECE 4791 (EI, WI, CE)1",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3650"
                   ],
-                  "text": "CS 3650"
+                  "text": "CS 3650",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1277,7 +1414,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1293,7 +1431,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1308,22 +1447,26 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE4792"
                   ],
-                  "text": "EECE 4792 (EI, WI, CE)1"
+                  "text": "EECE 4792 (EI, WI, CE)1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EECE technical elective"
+                  "text": "EECE technical elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EECE technical elective"
+                  "text": "EECE technical elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1349,42 +1492,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -1398,39 +1547,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1440,7 +1595,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1451,7 +1606,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1471,14 +1626,16 @@
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800 (FQ)"
+                  "text": "CS 1800 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -1486,28 +1643,32 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001 (ND, FQ)"
+                  "text": "CS 2000 and CS 2001 (ND, FQ)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2140"
                   ],
-                  "text": "EECE 2140"
+                  "text": "EECE 2140",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -1518,7 +1679,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1529,7 +1691,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1539,7 +1702,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1559,7 +1722,8 @@
                   "codes": [
                     "CS2800"
                   ],
-                  "text": "CS 2800"
+                  "text": "CS 2800",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1567,35 +1731,40 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101 (ND, AD)"
+                  "text": "CS 2100 and CS 2101 (ND, AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2160"
                   ],
-                  "text": "EECE 2160"
+                  "text": "EECE 2160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1155 (ND)"
+                  "text": "PHYS 1155 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1156 (AD)"
+                  "text": "PHYS 1156 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1157"
+                  "text": "PHYS 1157",
+                  "sh": 1
                 }
               ]
             },
@@ -1606,7 +1775,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1617,7 +1787,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1632,14 +1803,16 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE3468"
                   ],
-                  "text": "EECE 3468"
+                  "text": "EECE 3468",
+                  "sh": 4
                 }
               ]
             }
@@ -1658,7 +1831,8 @@
                   "codes": [
                     "EECE2150"
                   ],
-                  "text": "EECE 2150 (AD)"
+                  "text": "EECE 2150 (AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -1666,25 +1840,29 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101 (ND, AD)"
+                  "text": "CS 3100 and CS 3101 (ND, AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2540"
                   ],
-                  "text": "EECE 2540"
+                  "text": "EECE 2540",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1695,7 +1873,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1706,7 +1885,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1720,18 +1900,21 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE4791"
                   ],
-                  "text": "EECE 4791 (EI, WI, CE)1"
+                  "text": "EECE 4791 (EI, WI, CE)1",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EECE technical elective"
+                  "text": "EECE technical elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1750,32 +1933,37 @@
                   "codes": [
                     "EECE2322"
                   ],
-                  "text": "EECE 2322"
+                  "text": "EECE 2322",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE2323"
                   ],
-                  "text": "EECE 2323"
+                  "text": "EECE 2323",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EECE4792"
                   ],
-                  "text": "EECE 4792 (EI, WI, CE)1"
+                  "text": "EECE 4792 (EI, WI, CE)1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3650"
                   ],
-                  "text": "CS 3650"
+                  "text": "CS 3650",
+                  "sh": 4
                 }
               ]
             },
@@ -1790,19 +1978,23 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EE fundamentals"
+                  "text": "EE fundamentals",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EECE technical elective"
+                  "text": "EECE technical elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }

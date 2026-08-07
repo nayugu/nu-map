@@ -18,14 +18,16 @@
                   "codes": [
                     "JRNL1150"
                   ],
-                  "text": "JRNL 1150"
+                  "text": "JRNL 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -33,18 +35,21 @@
                     "MSCR1000",
                     "JRNL1000"
                   ],
-                  "text": "MSCR 1000 or JRNL 1000"
+                  "text": "MSCR 1000 or JRNL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MSCR1220"
                   ],
-                  "text": "MSCR 1220"
+                  "text": "MSCR 1220",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -59,7 +64,8 @@
                     "JRNL1101",
                     "JRNL1102"
                   ],
-                  "text": "JRNL 1101 and JRNL 1102"
+                  "text": "JRNL 1101 and JRNL 1102",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -67,7 +73,8 @@
                     "MSCR1230",
                     "MSCR2220"
                   ],
-                  "text": "MSCR 1230 or 2220"
+                  "text": "MSCR 1230 or 2220",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -75,18 +82,21 @@
                     "MSCR1320",
                     "MSCR1420"
                   ],
-                  "text": "MSCR 1320 or 1420"
+                  "text": "MSCR 1320 or 1420",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 }
               ]
             },
@@ -97,11 +107,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -112,11 +124,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language"
+                  "text": "Foreign language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -135,19 +149,23 @@
                   "codes": [
                     "JRNL2201"
                   ],
-                  "text": "JRNL 2201"
+                  "text": "JRNL 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Journalism elective 1"
+                  "text": "Journalism elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR diversity or globalization"
+                  "text": "MSCR diversity or globalization",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective 1"
+                  "text": "MSCR elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -158,7 +176,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -169,7 +188,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -180,11 +200,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -203,22 +225,26 @@
                   "codes": [
                     "JRNL2301"
                   ],
-                  "text": "JRNL 2301"
+                  "text": "JRNL 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL5314"
                   ],
-                  "text": "JRNL 5314"
+                  "text": "JRNL 5314",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR writing intensive 1"
+                  "text": "MSCR writing intensive 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -229,7 +255,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -240,7 +267,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -251,11 +279,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -274,19 +304,23 @@
                   "codes": [
                     "JRNL4650"
                   ],
-                  "text": "JRNL 4650"
+                  "text": "JRNL 4650",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Journalism elective 2"
+                  "text": "Journalism elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective 2"
+                  "text": "MSCR elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR writing intensive 2"
+                  "text": "MSCR writing intensive 2",
+                  "sh": 4
                 }
               ]
             },
@@ -300,19 +334,23 @@
                   "codes": [
                     "MSCR4623"
                   ],
-                  "text": "MSCR 4623"
+                  "text": "MSCR 4623",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective 3"
+                  "text": "MSCR elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Journalism elective 3"
+                  "text": "Journalism elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

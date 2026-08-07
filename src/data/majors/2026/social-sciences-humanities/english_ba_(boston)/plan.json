@@ -18,29 +18,34 @@
                   "codes": [
                     "ENGL1000"
                   ],
-                  "text": "ENGL 1000"
+                  "text": "ENGL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL1400"
                   ],
-                  "text": "ENGL 1400"
+                  "text": "ENGL 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -54,7 +59,8 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -62,7 +68,8 @@
                     "ENGL1160",
                     "ENGL1410"
                   ],
-                  "text": "ENGL 1160 or 1410"
+                  "text": "ENGL 1160 or 1410",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -70,15 +77,18 @@
                     "ENGL1700",
                     "ENGL1701"
                   ],
-                  "text": "ENGL 1700 or 1701"
+                  "text": "ENGL 1700 or 1701",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -89,11 +99,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Literary period elective"
+                  "text": "Literary period elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -104,11 +116,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -127,19 +141,23 @@
                   "codes": [
                     "ENGL3710"
                   ],
-                  "text": "ENGL 3710"
+                  "text": "ENGL 3710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Literary period elective"
+                  "text": "Literary period elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -150,7 +168,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -161,7 +180,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -172,11 +192,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Writing and experiential education elective"
+                  "text": "Writing and experiential education elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -192,19 +214,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Literary period elective"
+                  "text": "Literary period elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Writing and experiential learning elective"
+                  "text": "Writing and experiential learning elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "English elective"
+                  "text": "English elective",
+                  "sh": 4
                 }
               ]
             },
@@ -215,7 +241,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -226,7 +253,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -237,11 +265,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing in the Disciplines"
+                  "text": "Advanced Writing in the Disciplines",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -257,19 +287,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "English elective"
+                  "text": "English elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Literary period elective"
+                  "text": "Literary period elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Theories and methods elective"
+                  "text": "Theories and methods elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -280,19 +314,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

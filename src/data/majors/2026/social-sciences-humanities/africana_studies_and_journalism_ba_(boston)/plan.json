@@ -18,32 +18,37 @@
                   "codes": [
                     "AFCS1101"
                   ],
-                  "text": "AFCS 1101"
+                  "text": "AFCS 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL1000"
                   ],
-                  "text": "JRNL 1000"
+                  "text": "JRNL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL1150"
                   ],
-                  "text": "JRNL 1150"
+                  "text": "JRNL 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language"
+                  "text": "Language",
+                  "sh": 4
                 }
               ]
             },
@@ -57,14 +62,16 @@
                   "codes": [
                     "AFCS1270"
                   ],
-                  "text": "AFCS 1270"
+                  "text": "AFCS 1270",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS2325"
                   ],
-                  "text": "AFCS 2325"
+                  "text": "AFCS 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -72,18 +79,21 @@
                     "JRNL1101",
                     "JRNL1102"
                   ],
-                  "text": "JRNL 1101 and JRNL 1102"
+                  "text": "JRNL 1101 and JRNL 1102",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language"
+                  "text": "Language",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -94,11 +104,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -109,11 +121,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -132,29 +146,34 @@
                   "codes": [
                     "AFCS2355"
                   ],
-                  "text": "AFCS 2355"
+                  "text": "AFCS 2355",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2201"
                   ],
-                  "text": "JRNL 2201"
+                  "text": "JRNL 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language"
+                  "text": "Language",
+                  "sh": 4
                 }
               ]
             },
@@ -165,7 +184,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -176,7 +196,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -187,11 +208,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -210,22 +233,26 @@
                   "codes": [
                     "AFCS3424"
                   ],
-                  "text": "AFCS 3424"
+                  "text": "AFCS 3424",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS3900"
                   ],
-                  "text": "AFCS 3900"
+                  "text": "AFCS 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL visual storytelling"
+                  "text": "JRNL visual storytelling",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -236,7 +263,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -247,7 +275,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -258,11 +287,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -282,19 +313,23 @@
                     "JRNL3550",
                     "JRNL4650"
                   ],
-                  "text": "JRNL 3550 or 4650"
+                  "text": "JRNL 3550 or 4650",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "AFAM/AFRS/AFCS elective (2000 level)"
+                  "text": "AFAM/AFRS/AFCS elective (2000 level)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -308,19 +343,23 @@
                   "codes": [
                     "AFCS4700"
                   ],
-                  "text": "AFCS 4700"
+                  "text": "AFCS 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "AFAM/AFRS/AFCS elective (3000 level)"
+                  "text": "AFAM/AFRS/AFCS elective (3000 level)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 }
               ]
             }

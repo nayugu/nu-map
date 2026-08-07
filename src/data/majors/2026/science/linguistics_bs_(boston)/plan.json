@@ -18,29 +18,34 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -54,19 +59,23 @@
                   "codes": [
                     "LING2350"
                   ],
-                  "text": "LING 2350"
+                  "text": "LING 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -77,11 +86,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -91,7 +102,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -111,19 +122,23 @@
                   "codes": [
                     "LING3412"
                   ],
-                  "text": "LING 3412"
+                  "text": "LING 3412",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language Change course"
+                  "text": "Language Change course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -137,23 +152,28 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language in Context course"
+                  "text": "Language in Context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -164,11 +184,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -179,7 +201,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -195,7 +218,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -209,19 +233,23 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -232,11 +260,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -247,7 +277,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -263,7 +294,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -277,19 +309,23 @@
                   "codes": [
                     "LING4654"
                   ],
-                  "text": "LING 4654"
+                  "text": "LING 4654",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Research Experience"
+                  "text": "LING Research Experience",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -300,11 +336,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             }
@@ -330,29 +368,34 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -366,19 +409,23 @@
                   "codes": [
                     "LING2350"
                   ],
-                  "text": "LING 2350"
+                  "text": "LING 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -388,7 +435,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -399,7 +446,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -419,19 +466,23 @@
                   "codes": [
                     "LING3412"
                   ],
-                  "text": "LING 3412"
+                  "text": "LING 3412",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language Change course"
+                  "text": "Language Change course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -445,23 +496,28 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language in Context course"
+                  "text": "Language in Context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -471,7 +527,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -483,7 +539,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -499,7 +556,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -513,19 +571,23 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -536,11 +598,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -551,7 +615,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -567,7 +632,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -578,19 +644,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -601,11 +671,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -616,7 +688,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -632,7 +705,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -646,19 +720,23 @@
                   "codes": [
                     "LING4654"
                   ],
-                  "text": "LING 4654"
+                  "text": "LING 4654",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Research Experience"
+                  "text": "LING Research Experience",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             }

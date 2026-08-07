@@ -18,18 +18,21 @@
                   "codes": [
                     "JRNL6340"
                   ],
-                  "text": "JRNL 6340"
+                  "text": "JRNL 6340",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL6341"
                   ],
-                  "text": "JRNL 6341"
+                  "text": "JRNL 6341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -43,18 +46,21 @@
                   "codes": [
                     "JRNL6306"
                   ],
-                  "text": "JRNL 6306"
+                  "text": "JRNL 6306",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5330"
                   ],
-                  "text": "ARTG 5330"
+                  "text": "ARTG 5330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -73,15 +79,18 @@
                   "codes": [
                     "JRNL6307"
                   ],
-                  "text": "JRNL 6307"
+                  "text": "JRNL 6307",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -107,18 +116,21 @@
                   "codes": [
                     "JRNL6340"
                   ],
-                  "text": "JRNL 6340"
+                  "text": "JRNL 6340",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL6341"
                   ],
-                  "text": "JRNL 6341"
+                  "text": "JRNL 6341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -132,18 +144,21 @@
                   "codes": [
                     "JRNL6306"
                   ],
-                  "text": "JRNL 6306"
+                  "text": "JRNL 6306",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5330"
                   ],
-                  "text": "ARTG 5330"
+                  "text": "ARTG 5330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -153,7 +168,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -165,7 +180,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -184,11 +200,13 @@
                   "codes": [
                     "JRNL6307"
                   ],
-                  "text": "JRNL 6307"
+                  "text": "JRNL 6307",
+                  "sh": 4
                 },
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -199,11 +217,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -229,18 +249,21 @@
                   "codes": [
                     "JRNL6340"
                   ],
-                  "text": "JRNL 6340"
+                  "text": "JRNL 6340",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL6341"
                   ],
-                  "text": "JRNL 6341"
+                  "text": "JRNL 6341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -254,18 +277,21 @@
                   "codes": [
                     "JRNL6306"
                   ],
-                  "text": "JRNL 6306"
+                  "text": "JRNL 6306",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5330"
                   ],
-                  "text": "ARTG 5330"
+                  "text": "ARTG 5330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -276,7 +302,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ],
               "fullSummer": true
@@ -296,15 +323,18 @@
                   "codes": [
                     "JRNL6307"
                   ],
-                  "text": "JRNL 6307"
+                  "text": "JRNL 6307",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

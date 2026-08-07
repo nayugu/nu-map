@@ -20,14 +20,16 @@
                     "MUSC1000",
                     "THTR1000"
                   ],
-                  "text": "ARTF 1000, MUSC 1000, or THTR 1000"
+                  "text": "ARTF 1000, MUSC 1000, or THTR 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -35,15 +37,18 @@
                     "INAM1300",
                     "INAM1301"
                   ],
-                  "text": "INAM 1300 and INAM 1301"
+                  "text": "INAM 1300 and INAM 1301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Basic course 1"
+                  "text": "Basic course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Basic course 2"
+                  "text": "Basic course 2",
+                  "sh": 4
                 }
               ]
             },
@@ -58,29 +63,34 @@
                     "ARTG2262",
                     "ARTG2263"
                   ],
-                  "text": "ARTG 2262 and ARTG 2263"
+                  "text": "ARTG 2262 and ARTG 2263",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INAM2000"
                   ],
-                  "text": "INAM 2000"
+                  "text": "INAM 2000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Basic course 3"
+                  "text": "Basic course 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Basic course 4"
+                  "text": "Basic course 4",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -91,11 +101,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -106,11 +118,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -126,22 +140,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Basic course 5"
+                  "text": "Basic course 5",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTD2000"
                   ],
-                  "text": "ARTD 2000"
+                  "text": "ARTD 2000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Breadth course 1"
+                  "text": "Breadth course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Major elective 1"
+                  "text": "Major elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -152,7 +170,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -163,7 +182,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -174,11 +194,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -194,19 +216,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Breadth course 2"
+                  "text": "Breadth course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Breadth course 3"
+                  "text": "Breadth course 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Major elective 2"
+                  "text": "Major elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -217,7 +243,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -228,7 +255,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -239,11 +267,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -259,19 +289,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Breadth course 4"
+                  "text": "Breadth course 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Major elective 3"
+                  "text": "Major elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Major elective 4"
+                  "text": "Major elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Depth course 1"
+                  "text": "Depth course 1",
+                  "sh": 4
                 }
               ]
             },
@@ -282,19 +316,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Depth course 2"
+                  "text": "Depth course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone project"
+                  "text": "Capstone project",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

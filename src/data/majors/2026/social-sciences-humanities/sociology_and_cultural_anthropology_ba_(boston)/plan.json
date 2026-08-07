@@ -18,29 +18,34 @@
                   "codes": [
                     "ANTH1000"
                   ],
-                  "text": "ANTH 1000"
+                  "text": "ANTH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ANTH1101"
                   ],
-                  "text": "ANTH 1101"
+                  "text": "ANTH 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL1101"
                   ],
-                  "text": "SOCL 1101"
+                  "text": "SOCL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -54,11 +59,13 @@
                   "codes": [
                     "ANTH3410"
                   ],
-                  "text": "ANTH 3410"
+                  "text": "ANTH 3410",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -66,7 +73,8 @@
                     "SOCL2321",
                     "INSH3101"
                   ],
-                  "text": "SOCL 2321 or INSH 3101"
+                  "text": "SOCL 2321 or INSH 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -74,7 +82,8 @@
                     "SOCL2320",
                     "INSH3102"
                   ],
-                  "text": "SOCL 2320 or INSH 3102"
+                  "text": "SOCL 2320 or INSH 3102",
+                  "sh": 4
                 }
               ]
             },
@@ -85,11 +94,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -100,11 +111,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -120,19 +133,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH area course"
+                  "text": "ANTH area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -146,7 +163,8 @@
                   "codes": [
                     "ANTH2305"
                   ],
-                  "text": "ANTH 2305"
+                  "text": "ANTH 2305",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -154,22 +172,26 @@
                     "SOCL3300",
                     "ANTH3421"
                   ],
-                  "text": "SOCL 3300 or ANTH 3421"
+                  "text": "SOCL 3300 or ANTH 3421",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -180,11 +202,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -195,7 +219,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -211,7 +236,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -222,19 +248,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -245,11 +275,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -260,7 +292,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -276,7 +309,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -291,19 +325,23 @@
                     "ANTH4600",
                     "SOCL4600"
                   ],
-                  "text": "ANTH 4600 or SOCL 4600"
+                  "text": "ANTH 4600 or SOCL 4600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH area course"
+                  "text": "ANTH area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective"
+                  "text": "SOCL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 }
               ]
             }

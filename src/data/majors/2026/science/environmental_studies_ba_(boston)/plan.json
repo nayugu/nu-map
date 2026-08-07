@@ -18,32 +18,37 @@
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR1101"
                   ],
-                  "text": "ENVR 1101"
+                  "text": "ENVR 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR2515"
                   ],
-                  "text": "ENVR 2515"
+                  "text": "ENVR 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language requirement"
+                  "text": "Elementary language requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -57,25 +62,29 @@
                   "codes": [
                     "ENVR1110"
                   ],
-                  "text": "ENVR 1110"
+                  "text": "ENVR 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR3150"
                   ],
-                  "text": "ENVR 3150"
+                  "text": "ENVR 3150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1180"
                   ],
-                  "text": "PHIL 1180"
+                  "text": "PHIL 1180",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate language requirement"
+                  "text": "Intermediate language requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -86,7 +95,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -97,11 +107,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUPath Elective 1"
+                  "text": "NUPath Elective 1",
+                  "sh": 4
                 }
               ]
             }
@@ -120,7 +132,8 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -128,22 +141,26 @@
                     "ENVR3300",
                     "ENVR3301"
                   ],
-                  "text": "ENVR 3300 and ENVR 3301"
+                  "text": "ENVR 3300 and ENVR 3301",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR3540"
                   ],
-                  "text": "ENVR 3540"
+                  "text": "ENVR 3540",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 1"
+                  "text": "Concentration course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 2"
+                  "text": "Concentration course 2",
+                  "sh": 4
                 }
               ]
             },
@@ -154,7 +171,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -165,7 +183,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -176,11 +195,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUPath Elective 2"
+                  "text": "NUPath Elective 2",
+                  "sh": 4
                 }
               ]
             }
@@ -199,19 +220,23 @@
                   "codes": [
                     "ENVR3200"
                   ],
-                  "text": "ENVR 3200"
+                  "text": "ENVR 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Required research methods course"
+                  "text": "Required research methods course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 3"
+                  "text": "Concentration course 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 4"
+                  "text": "Concentration course 4",
+                  "sh": 4
                 }
               ]
             },
@@ -222,7 +247,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -233,7 +259,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -244,14 +271,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUPath Elective 3"
+                  "text": "NUPath Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 }
               ]
             }
@@ -270,19 +299,23 @@
                   "codes": [
                     "SOCL4522"
                   ],
-                  "text": "SOCL 4522"
+                  "text": "SOCL 4522",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 5"
+                  "text": "Concentration course 5",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 6"
+                  "text": "Concentration course 6",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUPath Elective 4"
+                  "text": "NUPath Elective 4",
+                  "sh": 4
                 }
               ]
             },
@@ -293,25 +326,29 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 7"
+                  "text": "Concentration course 7",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 8"
+                  "text": "Concentration course 8",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR4000"
                   ],
-                  "text": "ENVR 4000"
+                  "text": "ENVR 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR4050"
                   ],
-                  "text": "ENVR 4050"
+                  "text": "ENVR 4050",
+                  "sh": 4
                 }
               ]
             }

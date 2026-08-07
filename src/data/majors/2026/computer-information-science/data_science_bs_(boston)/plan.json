@@ -18,7 +18,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,14 +27,16 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -41,14 +44,16 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -63,25 +68,29 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1145"
                   ],
-                  "text": "PHIL 1145"
+                  "text": "PHIL 1145",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -95,14 +104,16 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 }
               ]
             },
@@ -116,11 +127,13 @@
                   "codes": [
                     "MATH2331"
                   ],
-                  "text": "MATH 2331"
+                  "text": "MATH 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -139,25 +152,29 @@
                   "codes": [
                     "CS3520"
                   ],
-                  "text": "CS 3520"
+                  "text": "CS 3520",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Presentation Requirement"
+                  "text": "Presentation Requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -171,29 +188,34 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -207,11 +229,13 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -222,7 +246,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -238,7 +263,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -252,19 +278,23 @@
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Data Science Elective 2"
+                  "text": "Data Science Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Data Science Elective 1"
+                  "text": "Data Science Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -278,11 +308,13 @@
                   "codes": [
                     "ENGW3302"
                   ],
-                  "text": "ENGW 3302"
+                  "text": "ENGW 3302",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -293,7 +325,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -309,7 +342,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -324,19 +358,23 @@
                     "DS4420",
                     "DS4440"
                   ],
-                  "text": "DS 4420 or 4440"
+                  "text": "DS 4420 or 4440",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Data Science Related Elective"
+                  "text": "Data Science Related Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Data Science Elective 3"
+                  "text": "Data Science Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -362,7 +400,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -370,14 +409,16 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -385,14 +426,16 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -407,25 +450,29 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1145"
                   ],
-                  "text": "PHIL 1145"
+                  "text": "PHIL 1145",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -439,14 +486,16 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 }
               ]
             },
@@ -460,11 +509,13 @@
                   "codes": [
                     "MATH2331"
                   ],
-                  "text": "MATH 2331"
+                  "text": "MATH 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -483,32 +534,37 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3520"
                   ],
-                  "text": "CS 3520"
+                  "text": "CS 3520",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Presentation Requirement"
+                  "text": "Presentation Requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -519,7 +575,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -530,7 +587,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -541,11 +599,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -564,25 +624,29 @@
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -593,7 +657,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -604,7 +669,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -618,11 +684,13 @@
                   "codes": [
                     "ENGW3302"
                   ],
-                  "text": "ENGW 3302"
+                  "text": "ENGW 3302",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -641,19 +709,23 @@
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Data Science Elective 1"
+                  "text": "Data Science Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Data Science Elective 2"
+                  "text": "Data Science Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -668,19 +740,23 @@
                     "DS4420",
                     "DS4440"
                   ],
-                  "text": "DS 4420 or 4440"
+                  "text": "DS 4420 or 4440",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Data Science Related Elective"
+                  "text": "Data Science Related Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Data Science Elective 3"
+                  "text": "Data Science Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 }
               ]
             }

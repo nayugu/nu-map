@@ -18,42 +18,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -67,39 +73,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -113,14 +125,16 @@
                   "codes": [
                     "CHME2308"
                   ],
-                  "text": "CHME 2308"
+                  "text": "CHME 2308",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -130,7 +144,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -150,28 +164,32 @@
                   "codes": [
                     "CHME2320"
                   ],
-                  "text": "CHME 2320"
+                  "text": "CHME 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800 (FQ)"
+                  "text": "CS 1800 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -179,7 +197,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 }
               ]
             },
@@ -193,39 +212,45 @@
                   "codes": [
                     "CHME2310"
                   ],
-                  "text": "CHME 2310"
+                  "text": "CHME 2310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS2500"
                   ],
-                  "text": "DS 2500"
+                  "text": "DS 2500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS2501"
                   ],
-                  "text": "DS 2501"
+                  "text": "DS 2501",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 }
               ]
             },
@@ -239,7 +264,8 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200 (FQ, AD)"
+                  "text": "CS 3200 (FQ, AD)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -248,7 +274,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3307, or 3315 (WD)"
+                  "text": "ENGW 3302, 3307, or 3315 (WD)",
+                  "sh": 4
                 }
               ]
             },
@@ -258,7 +285,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -278,28 +305,32 @@
                   "codes": [
                     "CHME3312"
                   ],
-                  "text": "CHME 3312"
+                  "text": "CHME 3312",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3322"
                   ],
-                  "text": "CHME 3322"
+                  "text": "CHME 3322",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 }
               ]
             },
@@ -313,42 +344,48 @@
                   "codes": [
                     "CHME3305"
                   ],
-                  "text": "CHME 3305"
+                  "text": "CHME 3305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3306"
                   ],
-                  "text": "CHME 3306"
+                  "text": "CHME 3306",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4510"
                   ],
-                  "text": "CHME 4510"
+                  "text": "CHME 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4701"
                   ],
-                  "text": "CHME 4701"
+                  "text": "CHME 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 }
               ]
             },
@@ -358,7 +395,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -370,7 +407,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -386,7 +424,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -400,35 +439,40 @@
                   "codes": [
                     "CHME4512"
                   ],
-                  "text": "CHME 4512"
+                  "text": "CHME 4512",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4703"
                   ],
-                  "text": "CHME 4703 (EI, WI, CE)"
+                  "text": "CHME 4703 (EI, WI, CE)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4705"
                   ],
-                  "text": "CHME 4705"
+                  "text": "CHME 4705",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 }
               ]
             }
@@ -454,42 +498,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -503,39 +553,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -549,14 +605,16 @@
                   "codes": [
                     "CHME2308"
                   ],
-                  "text": "CHME 2308"
+                  "text": "CHME 2308",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -566,7 +624,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -586,28 +644,32 @@
                   "codes": [
                     "CHME2320"
                   ],
-                  "text": "CHME 2320"
+                  "text": "CHME 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800 (FQ)"
+                  "text": "CS 1800 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -615,7 +677,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 }
               ]
             },
@@ -629,39 +692,45 @@
                   "codes": [
                     "CHME2310"
                   ],
-                  "text": "CHME 2310"
+                  "text": "CHME 2310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS2100"
                   ],
-                  "text": "CS 2100"
+                  "text": "CS 2100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS2101"
                   ],
-                  "text": "CS 2101"
+                  "text": "CS 2101",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -675,7 +744,8 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200 (FQ, AD)"
+                  "text": "CS 3200 (FQ, AD)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -684,7 +754,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3307, or 3315 (WD)"
+                  "text": "ENGW 3302, 3307, or 3315 (WD)",
+                  "sh": 4
                 }
               ]
             },
@@ -694,7 +765,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -714,35 +785,40 @@
                   "codes": [
                     "CHME3312"
                   ],
-                  "text": "CHME 3312"
+                  "text": "CHME 3312",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3322"
                   ],
-                  "text": "CHME 3322"
+                  "text": "CHME 3322",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3100"
                   ],
-                  "text": "CS 3100"
+                  "text": "CS 3100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3101"
                   ],
-                  "text": "CS 3101"
+                  "text": "CS 3101",
+                  "sh": 1
                 }
               ]
             },
@@ -756,42 +832,48 @@
                   "codes": [
                     "CHME3305"
                   ],
-                  "text": "CHME 3305"
+                  "text": "CHME 3305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3306"
                   ],
-                  "text": "CHME 3306"
+                  "text": "CHME 3306",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4510"
                   ],
-                  "text": "CHME 4510"
+                  "text": "CHME 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4701"
                   ],
-                  "text": "CHME 4701"
+                  "text": "CHME 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 }
               ]
             },
@@ -801,7 +883,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -813,7 +895,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -829,7 +912,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -843,35 +927,40 @@
                   "codes": [
                     "CHME4512"
                   ],
-                  "text": "CHME 4512"
+                  "text": "CHME 4512",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4703"
                   ],
-                  "text": "CHME 4703 (EI, WI, CE)"
+                  "text": "CHME 4703 (EI, WI, CE)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4705"
                   ],
-                  "text": "CHME 4705"
+                  "text": "CHME 4705",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 }
               ]
             }
@@ -898,35 +987,40 @@
                     "CHEM1151",
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1151 and CHEM 1153"
+                  "text": "CHEM 1151 and CHEM 1153",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -940,14 +1034,16 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502"
+                  "text": "GE 1502",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -956,11 +1052,13 @@
                     "PHYS1152",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153"
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -974,14 +1072,16 @@
                   "codes": [
                     "CHME2308"
                   ],
-                  "text": "CHME 2308"
+                  "text": "CHME 2308",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 }
               ]
             },
@@ -991,7 +1091,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1011,7 +1111,8 @@
                   "codes": [
                     "CHME2320"
                   ],
-                  "text": "CHME 2320"
+                  "text": "CHME 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1019,14 +1120,16 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1034,7 +1137,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 }
               ]
             },
@@ -1048,7 +1152,8 @@
                   "codes": [
                     "CHME2310"
                   ],
-                  "text": "CHME 2310"
+                  "text": "CHME 2310",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1056,25 +1161,29 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1088,7 +1197,8 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1097,7 +1207,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3307, or 3315 (WD)"
+                  "text": "ENGW 3302, 3307, or 3315 (WD)",
+                  "sh": 4
                 }
               ]
             },
@@ -1107,7 +1218,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1127,35 +1238,40 @@
                   "codes": [
                     "CHME3312"
                   ],
-                  "text": "CHME 3312"
+                  "text": "CHME 3312",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3322"
                   ],
-                  "text": "CHME 3322"
+                  "text": "CHME 3322",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 }
               ]
             },
@@ -1166,7 +1282,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1177,7 +1294,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1187,7 +1305,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1208,28 +1326,32 @@
                     "CHME3305",
                     "CHME3306"
                   ],
-                  "text": "CHME 3305 and CHME 3306"
+                  "text": "CHME 3305 and CHME 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4510"
                   ],
-                  "text": "CHME 4510"
+                  "text": "CHME 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4701"
                   ],
-                  "text": "CHME 4701"
+                  "text": "CHME 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 }
               ]
             },
@@ -1243,35 +1365,40 @@
                   "codes": [
                     "CHME4512"
                   ],
-                  "text": "CHME 4512"
+                  "text": "CHME 4512",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4703"
                   ],
-                  "text": "CHME 4703"
+                  "text": "CHME 4703",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4705"
                   ],
-                  "text": "CHME 4705"
+                  "text": "CHME 4705",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 }
               ]
             }
@@ -1298,35 +1425,40 @@
                     "CHEM1151",
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1151 and CHEM 1153"
+                  "text": "CHEM 1151 and CHEM 1153",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -1340,14 +1472,16 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502"
+                  "text": "GE 1502",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1356,11 +1490,13 @@
                     "PHYS1152",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153"
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1374,14 +1510,16 @@
                   "codes": [
                     "CHME2308"
                   ],
-                  "text": "CHME 2308"
+                  "text": "CHME 2308",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 }
               ]
             },
@@ -1391,7 +1529,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1411,7 +1549,8 @@
                   "codes": [
                     "CHME2320"
                   ],
-                  "text": "CHME 2320"
+                  "text": "CHME 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1419,14 +1558,16 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1434,7 +1575,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 }
               ]
             },
@@ -1448,14 +1590,16 @@
                   "codes": [
                     "CHME2310"
                   ],
-                  "text": "CHME 2310"
+                  "text": "CHME 2310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -1463,18 +1607,21 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1488,7 +1635,8 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1497,7 +1645,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3307, or 3315 (WD)"
+                  "text": "ENGW 3302, 3307, or 3315 (WD)",
+                  "sh": 4
                 }
               ]
             },
@@ -1507,7 +1656,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1527,21 +1676,24 @@
                   "codes": [
                     "CHME3312"
                   ],
-                  "text": "CHME 3312"
+                  "text": "CHME 3312",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3322"
                   ],
-                  "text": "CHME 3322"
+                  "text": "CHME 3322",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1549,14 +1701,16 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 }
               ]
             },
@@ -1567,7 +1721,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1578,7 +1733,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1588,7 +1744,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1609,28 +1765,32 @@
                     "CHME3305",
                     "CHME3306"
                   ],
-                  "text": "CHME 3305 and CHME 3306"
+                  "text": "CHME 3305 and CHME 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4510"
                   ],
-                  "text": "CHME 4510"
+                  "text": "CHME 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4701"
                   ],
-                  "text": "CHME 4701"
+                  "text": "CHME 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 }
               ]
             },
@@ -1644,35 +1804,40 @@
                   "codes": [
                     "CHME4512"
                   ],
-                  "text": "CHME 4512"
+                  "text": "CHME 4512",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4703"
                   ],
-                  "text": "CHME 4703"
+                  "text": "CHME 4703",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4705"
                   ],
-                  "text": "CHME 4705"
+                  "text": "CHME 4705",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 }
               ]
             }
@@ -1699,35 +1864,40 @@
                     "CHEM1151",
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1151 and CHEM 1153"
+                  "text": "CHEM 1151 and CHEM 1153",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -1741,14 +1911,16 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502"
+                  "text": "GE 1502",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1757,11 +1929,13 @@
                     "PHYS1152",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153"
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1775,14 +1949,16 @@
                   "codes": [
                     "CHME2308"
                   ],
-                  "text": "CHME 2308"
+                  "text": "CHME 2308",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 }
               ]
             },
@@ -1792,7 +1968,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1812,7 +1988,8 @@
                   "codes": [
                     "CHME2310"
                   ],
-                  "text": "CHME 2310"
+                  "text": "CHME 2310",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1820,14 +1997,16 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -1835,14 +2014,16 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -1853,7 +2034,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1864,7 +2046,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1878,7 +2061,8 @@
                   "codes": [
                     "CHME2320"
                   ],
-                  "text": "CHME 2320"
+                  "text": "CHME 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1887,7 +2071,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3307, or 3315 (WD)"
+                  "text": "ENGW 3302, 3307, or 3315 (WD)",
+                  "sh": 4
                 }
               ]
             }
@@ -1906,21 +2091,24 @@
                   "codes": [
                     "CHME3312"
                   ],
-                  "text": "CHME 3312"
+                  "text": "CHME 3312",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3322"
                   ],
-                  "text": "CHME 3322"
+                  "text": "CHME 3322",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1928,7 +2116,8 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 }
               ]
             },
@@ -1939,7 +2128,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1950,7 +2140,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1960,7 +2151,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1981,35 +2172,40 @@
                     "CHME3305",
                     "CHME3306"
                   ],
-                  "text": "CHME 3305 and CHME 3306"
+                  "text": "CHME 3305 and CHME 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 }
               ]
             },
@@ -2020,7 +2216,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -2031,7 +2228,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -2041,7 +2239,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -2061,25 +2259,29 @@
                   "codes": [
                     "CHME4510"
                   ],
-                  "text": "CHME 4510"
+                  "text": "CHME 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4701"
                   ],
-                  "text": "CHME 4701"
+                  "text": "CHME 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -2093,35 +2295,40 @@
                   "codes": [
                     "CHME4512"
                   ],
-                  "text": "CHME 4512"
+                  "text": "CHME 4512",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4703"
                   ],
-                  "text": "CHME 4703"
+                  "text": "CHME 4703",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4705"
                   ],
-                  "text": "CHME 4705"
+                  "text": "CHME 4705",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 }
               ]
             }
@@ -2148,35 +2355,40 @@
                     "CHEM1151",
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1151 and CHEM 1153"
+                  "text": "CHEM 1151 and CHEM 1153",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -2190,14 +2402,16 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502"
+                  "text": "GE 1502",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -2206,11 +2420,13 @@
                     "PHYS1152",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153"
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -2224,14 +2440,16 @@
                   "codes": [
                     "CHME2308"
                   ],
-                  "text": "CHME 2308"
+                  "text": "CHME 2308",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 }
               ]
             },
@@ -2241,7 +2459,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -2261,7 +2479,8 @@
                   "codes": [
                     "CHME2310"
                   ],
-                  "text": "CHME 2310"
+                  "text": "CHME 2310",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -2269,14 +2488,16 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -2284,14 +2505,16 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -2302,7 +2525,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -2313,7 +2537,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -2327,7 +2552,8 @@
                   "codes": [
                     "CHME2320"
                   ],
-                  "text": "CHME 2320"
+                  "text": "CHME 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -2336,7 +2562,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3307, or 3315 (WD)"
+                  "text": "ENGW 3302, 3307, or 3315 (WD)",
+                  "sh": 4
                 }
               ]
             }
@@ -2355,21 +2582,24 @@
                   "codes": [
                     "CHME3312"
                   ],
-                  "text": "CHME 3312"
+                  "text": "CHME 3312",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3322"
                   ],
-                  "text": "CHME 3322"
+                  "text": "CHME 3322",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -2377,7 +2607,8 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 }
               ]
             },
@@ -2388,7 +2619,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -2399,7 +2631,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -2409,7 +2642,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -2430,35 +2663,40 @@
                     "CHME3305",
                     "CHME3306"
                   ],
-                  "text": "CHME 3305 and CHME 3306"
+                  "text": "CHME 3305 and CHME 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 }
               ]
             },
@@ -2469,7 +2707,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -2480,7 +2719,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -2490,7 +2730,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -2510,14 +2750,16 @@
                   "codes": [
                     "CHME4510"
                   ],
-                  "text": "CHME 4510"
+                  "text": "CHME 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4701"
                   ],
-                  "text": "CHME 4701"
+                  "text": "CHME 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -2525,11 +2767,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -2543,35 +2787,40 @@
                   "codes": [
                     "CHME4512"
                   ],
-                  "text": "CHME 4512"
+                  "text": "CHME 4512",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4703"
                   ],
-                  "text": "CHME 4703"
+                  "text": "CHME 4703",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4705"
                   ],
-                  "text": "CHME 4705"
+                  "text": "CHME 4705",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 }
               ]
             }
@@ -2597,42 +2846,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -2646,39 +2901,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -2692,14 +2953,16 @@
                   "codes": [
                     "CHME2308"
                   ],
-                  "text": "CHME 2308"
+                  "text": "CHME 2308",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -2709,7 +2972,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -2729,21 +2992,24 @@
                   "codes": [
                     "CHME2320"
                   ],
-                  "text": "CHME 2320"
+                  "text": "CHME 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800 (FQ)"
+                  "text": "CS 1800 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -2751,14 +3017,16 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -2772,39 +3040,45 @@
                   "codes": [
                     "CHME2310"
                   ],
-                  "text": "CHME 2310"
+                  "text": "CHME 2310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS2500"
                   ],
-                  "text": "DS 2500"
+                  "text": "DS 2500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS2501"
                   ],
-                  "text": "DS 2501"
+                  "text": "DS 2501",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -2814,7 +3088,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -2826,7 +3100,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -2842,7 +3117,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -2856,28 +3132,32 @@
                   "codes": [
                     "CHME3312"
                   ],
-                  "text": "CHME 3312"
+                  "text": "CHME 3312",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3322"
                   ],
-                  "text": "CHME 3322"
+                  "text": "CHME 3322",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 }
               ]
             },
@@ -2891,7 +3171,8 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200 (FQ, AD)"
+                  "text": "CS 3200 (FQ, AD)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -2900,7 +3181,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3307, or 3315 (WD)"
+                  "text": "ENGW 3302, 3307, or 3315 (WD)",
+                  "sh": 4
                 }
               ]
             },
@@ -2911,7 +3193,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -2927,7 +3210,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -2941,42 +3225,48 @@
                   "codes": [
                     "CHME3305"
                   ],
-                  "text": "CHME 3305"
+                  "text": "CHME 3305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3306"
                   ],
-                  "text": "CHME 3306"
+                  "text": "CHME 3306",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4510"
                   ],
-                  "text": "CHME 4510"
+                  "text": "CHME 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4701"
                   ],
-                  "text": "CHME 4701"
+                  "text": "CHME 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 }
               ]
             },
@@ -2986,7 +3276,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -2998,7 +3288,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -3014,7 +3305,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -3028,35 +3320,40 @@
                   "codes": [
                     "CHME4512"
                   ],
-                  "text": "CHME 4512 (EI, CE, WI)"
+                  "text": "CHME 4512 (EI, CE, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4703"
                   ],
-                  "text": "CHME 4703"
+                  "text": "CHME 4703",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4705"
                   ],
-                  "text": "CHME 4705"
+                  "text": "CHME 4705",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 }
               ]
             }
@@ -3082,42 +3379,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -3131,39 +3434,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -3177,14 +3486,16 @@
                   "codes": [
                     "CHME2308"
                   ],
-                  "text": "CHME 2308"
+                  "text": "CHME 2308",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -3194,7 +3505,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -3214,21 +3525,24 @@
                   "codes": [
                     "CHME2320"
                   ],
-                  "text": "CHME 2320"
+                  "text": "CHME 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1800"
                   ],
-                  "text": "CS 1800 (FQ)"
+                  "text": "CS 1800 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1802"
                   ],
-                  "text": "CS 1802"
+                  "text": "CS 1802",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -3236,14 +3550,16 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -3257,21 +3573,24 @@
                   "codes": [
                     "CHME2310"
                   ],
-                  "text": "CHME 2310"
+                  "text": "CHME 2310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -3279,11 +3598,13 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -3293,7 +3614,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -3305,7 +3626,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -3321,7 +3643,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -3335,21 +3658,24 @@
                   "codes": [
                     "CHME3312"
                   ],
-                  "text": "CHME 3312"
+                  "text": "CHME 3312",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3322"
                   ],
-                  "text": "CHME 3322"
+                  "text": "CHME 3322",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -3357,7 +3683,8 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 }
               ]
             },
@@ -3371,7 +3698,8 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200 (FQ, AD)"
+                  "text": "CS 3200 (FQ, AD)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -3380,7 +3708,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3307, or 3315 (WD)"
+                  "text": "ENGW 3302, 3307, or 3315 (WD)",
+                  "sh": 4
                 }
               ]
             },
@@ -3391,7 +3720,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -3407,7 +3737,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -3421,42 +3752,48 @@
                   "codes": [
                     "CHME3305"
                   ],
-                  "text": "CHME 3305"
+                  "text": "CHME 3305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME3306"
                   ],
-                  "text": "CHME 3306"
+                  "text": "CHME 3306",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4510"
                   ],
-                  "text": "CHME 4510"
+                  "text": "CHME 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4701"
                   ],
-                  "text": "CHME 4701"
+                  "text": "CHME 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 }
               ]
             },
@@ -3466,7 +3803,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -3478,7 +3815,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -3494,7 +3832,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -3508,35 +3847,40 @@
                   "codes": [
                     "CHME4512"
                   ],
-                  "text": "CHME 4512 (EI, CE, WI)"
+                  "text": "CHME 4512 (EI, CE, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4703"
                   ],
-                  "text": "CHME 4703"
+                  "text": "CHME 4703",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHME4705"
                   ],
-                  "text": "CHME 4705"
+                  "text": "CHME 4705",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 }
               ]
             }

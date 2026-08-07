@@ -19,14 +19,16 @@
                     "EXRE5010",
                     "EXRE5011"
                   ],
-                  "text": "EXRE 5010 and EXRE 5011"
+                  "text": "EXRE 5010 and EXRE 5011",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EXRE5020"
                   ],
-                  "text": "EXRE 5020"
+                  "text": "EXRE 5020",
+                  "sh": 4
                 }
               ]
             },
@@ -40,7 +42,8 @@
                   "codes": [
                     "EXRE5030"
                   ],
-                  "text": "EXRE 5030"
+                  "text": "EXRE 5030",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -48,7 +51,8 @@
                     "GSND5110",
                     "GSND5111"
                   ],
-                  "text": "GSND 5110 and GSND 5111"
+                  "text": "GSND 5110 and GSND 5111",
+                  "sh": 5
                 }
               ]
             }
@@ -67,18 +71,21 @@
                   "codes": [
                     "EXRE6500"
                   ],
-                  "text": "EXRE 6500"
+                  "text": "EXRE 6500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GSND5122"
                   ],
-                  "text": "GSND 5122"
+                  "text": "GSND 5122",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "XR and games elective 1"
+                  "text": "XR and games elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -92,11 +99,13 @@
                   "codes": [
                     "EXRE7500"
                   ],
-                  "text": "EXRE 7500"
+                  "text": "EXRE 7500",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "XR and games elective 2"
+                  "text": "XR and games elective 2",
+                  "sh": 4
                 }
               ]
             }

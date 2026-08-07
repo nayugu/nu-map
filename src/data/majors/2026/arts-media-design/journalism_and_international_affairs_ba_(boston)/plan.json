@@ -18,14 +18,16 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1101"
                   ],
-                  "text": "INTL 1101"
+                  "text": "INTL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -33,18 +35,21 @@
                     "JRNL1000",
                     "INTL1000"
                   ],
-                  "text": "JRNL 1000 or INTL 1000"
+                  "text": "JRNL 1000 or INTL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL1150"
                   ],
-                  "text": "JRNL 1150"
+                  "text": "JRNL 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language"
+                  "text": "Language",
+                  "sh": 4
                 }
               ]
             },
@@ -61,7 +66,8 @@
                     "HIST2311",
                     "POLS1155"
                   ],
-                  "text": "ANTH 1101, HIST 2211, HIST 2311, or POLS 1155"
+                  "text": "ANTH 1101, HIST 2211, HIST 2311, or POLS 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -69,25 +75,29 @@
                     "JRNL1101",
                     "JRNL1102"
                   ],
-                  "text": "JRNL 1101 and JRNL 1102"
+                  "text": "JRNL 1101 and JRNL 1102",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language"
+                  "text": "Language",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -98,11 +108,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -113,11 +125,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -136,29 +150,34 @@
                   "codes": [
                     "ECON1115"
                   ],
-                  "text": "ECON 1115"
+                  "text": "ECON 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2201"
                   ],
-                  "text": "JRNL 2201"
+                  "text": "JRNL 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language"
+                  "text": "Language",
+                  "sh": 4
                 }
               ]
             },
@@ -191,11 +210,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -214,14 +235,16 @@
                   "codes": [
                     "INTL2718"
                   ],
-                  "text": "INTL 2718"
+                  "text": "INTL 2718",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL3400"
                   ],
-                  "text": "INTL 3400"
+                  "text": "INTL 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -229,11 +252,13 @@
                     "JRNL3550",
                     "JRNL4650"
                   ],
-                  "text": "JRNL 3550 or 4650"
+                  "text": "JRNL 3550 or 4650",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Visual storytelling requirement"
+                  "text": "Visual storytelling requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -266,11 +291,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -286,19 +313,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Integrative requirement"
+                  "text": "Integrative requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language"
+                  "text": "Language",
+                  "sh": 4
                 }
               ]
             },
@@ -309,19 +340,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective"
+                  "text": "JRNL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative requirement"
+                  "text": "Integrative requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

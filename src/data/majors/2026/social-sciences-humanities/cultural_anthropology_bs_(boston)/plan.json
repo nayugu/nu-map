@@ -18,29 +18,34 @@
                   "codes": [
                     "ANTH1000"
                   ],
-                  "text": "ANTH 1000"
+                  "text": "ANTH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ANTH1101"
                   ],
-                  "text": "ANTH 1101"
+                  "text": "ANTH 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -54,22 +59,26 @@
                   "codes": [
                     "ANTH2305"
                   ],
-                  "text": "ANTH 2305"
+                  "text": "ANTH 2305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL1101"
                   ],
-                  "text": "SOCL 1101"
+                  "text": "SOCL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -80,11 +89,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -95,11 +106,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -118,22 +131,26 @@
                   "codes": [
                     "ANTH3410"
                   ],
-                  "text": "ANTH 3410"
+                  "text": "ANTH 3410",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ANTH3421"
                   ],
-                  "text": "ANTH 3421"
+                  "text": "ANTH 3421",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH area course"
+                  "text": "ANTH area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -147,23 +164,28 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH area course"
+                  "text": "ANTH area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH Elective"
+                  "text": "ANTH Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -174,11 +196,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -189,7 +213,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -205,7 +230,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -216,19 +242,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -239,11 +269,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -254,7 +286,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -270,7 +303,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -284,19 +318,23 @@
                   "codes": [
                     "ANTH4600"
                   ],
-                  "text": "ANTH 4600"
+                  "text": "ANTH 4600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH elective"
+                  "text": "ANTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

@@ -18,39 +18,45 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1000"
                   ],
-                  "text": "THTR 1000"
+                  "text": "THTR 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1100"
                   ],
-                  "text": "THTR 1100"
+                  "text": "THTR 1100",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1101"
                   ],
-                  "text": "THTR 1101"
+                  "text": "THTR 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1120"
                   ],
-                  "text": "THTR 1120"
+                  "text": "THTR 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -64,29 +70,34 @@
                   "codes": [
                     "INAM2000"
                   ],
-                  "text": "INAM 2000"
+                  "text": "INAM 2000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1131"
                   ],
-                  "text": "THTR 1131"
+                  "text": "THTR 1131",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Theatre texts and context"
+                  "text": "Theatre texts and context",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Theatre elective 1"
+                  "text": "Theatre elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -97,11 +108,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -111,7 +124,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -131,29 +144,34 @@
                   "codes": [
                     "THTR1270"
                   ],
-                  "text": "THTR 1270"
+                  "text": "THTR 1270",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR2000"
                   ],
-                  "text": "THTR 2000"
+                  "text": "THTR 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR3325"
                   ],
-                  "text": "THTR 3325"
+                  "text": "THTR 3325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Community Engage Theatre Course"
+                  "text": "Community Engage Theatre Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -164,11 +182,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 1"
+                  "text": "Co-op 1",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Online elective"
+                  "text": "Online elective",
+                  "sh": 4
                 }
               ]
             },
@@ -179,7 +199,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 1"
+                  "text": "Co-op 1",
+                  "sh": 0
                 }
               ]
             },
@@ -190,11 +211,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -213,23 +236,28 @@
                   "codes": [
                     "THTR3702"
                   ],
-                  "text": "THTR 3702"
+                  "text": "THTR 3702",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Theatre elective 2"
+                  "text": "Theatre elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Theatre elective 3"
+                  "text": "Theatre elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -240,11 +268,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 2"
+                  "text": "Co-op 2",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Online elective"
+                  "text": "Online elective",
+                  "sh": 4
                 }
               ]
             },
@@ -255,7 +285,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 2"
+                  "text": "Co-op 2",
+                  "sh": 0
                 }
               ]
             },
@@ -266,11 +297,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -286,19 +319,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Theatre elective 4"
+                  "text": "Theatre elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Theatre elective 5"
+                  "text": "Theatre elective 5",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -312,19 +349,23 @@
                   "codes": [
                     "THTR4702"
                   ],
-                  "text": "THTR 4702"
+                  "text": "THTR 4702",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Theatre Advanced Course"
+                  "text": "Theatre Advanced Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

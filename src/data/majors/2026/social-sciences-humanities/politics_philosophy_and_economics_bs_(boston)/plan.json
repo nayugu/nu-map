@@ -23,32 +23,37 @@
                     "MATH1340",
                     "MATH1341"
                   ],
-                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341"
+                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1000"
                   ],
-                  "text": "PHIL 1000"
+                  "text": "PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1160"
                   ],
-                  "text": "PHIL 1160"
+                  "text": "PHIL 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -62,28 +67,32 @@
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2303"
                   ],
-                  "text": "PHIL 2303"
+                  "text": "PHIL 2303",
+                  "sh": 4
                 }
               ]
             },
@@ -94,11 +103,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -108,7 +119,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -128,7 +139,8 @@
                   "codes": [
                     "ECON1115"
                   ],
-                  "text": "ECON 1115"
+                  "text": "ECON 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -136,7 +148,8 @@
                     "PHIL3435",
                     "PHIL2325"
                   ],
-                  "text": "PHIL 3435 or 2325"
+                  "text": "PHIL 3435 or 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -144,11 +157,13 @@
                     "POLS1150",
                     "POLS1155"
                   ],
-                  "text": "POLS 1150 or 1155"
+                  "text": "POLS 1150 or 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Supporting course in race or gender justice"
+                  "text": "Supporting course in race or gender justice",
+                  "sh": 4
                 }
               ]
             },
@@ -163,19 +178,23 @@
                     "ECON2315",
                     "ECON2316"
                   ],
-                  "text": "ECON 2315 or 2316"
+                  "text": "ECON 2315 or 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Statistics and mathematics requirement"
+                  "text": "Statistics and mathematics requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Major elective"
+                  "text": "Major elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 }
               ]
             },
@@ -186,11 +205,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -201,7 +222,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -217,7 +239,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -231,19 +254,23 @@
                   "codes": [
                     "PHIL3000"
                   ],
-                  "text": "PHIL 3000"
+                  "text": "PHIL 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Major elective"
+                  "text": "Major elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -254,11 +281,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -269,7 +298,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -285,7 +315,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -296,19 +327,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone requirement"
+                  "text": "Capstone requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -319,11 +354,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }

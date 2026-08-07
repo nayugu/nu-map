@@ -19,28 +19,32 @@
                     "ECON1000",
                     "HIST1000"
                   ],
-                  "text": "ECON 1000 or HIST 1000"
+                  "text": "ECON 1000 or HIST 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1115"
                   ],
-                  "text": "ECON 1115"
+                  "text": "ECON 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1200"
                   ],
-                  "text": "HIST 1200"
+                  "text": "HIST 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1201"
                   ],
-                  "text": "HIST 1201"
+                  "text": "HIST 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -52,11 +56,13 @@
                     "MATH1340",
                     "MATH1341"
                   ],
-                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341"
+                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -70,19 +76,23 @@
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 1"
+                  "text": "ECON elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 1"
+                  "text": "HIST elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 2"
+                  "text": "HIST elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -93,11 +103,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 2"
+                  "text": "ECON elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -108,11 +120,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -132,32 +146,37 @@
                     "CS1100",
                     "MISM2510"
                   ],
-                  "text": "CS 1100, DS 2000 and DS 2001, or MISM 2510"
+                  "text": "CS 1100, DS 2000 and DS 2001, or MISM 2510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2315"
                   ],
-                  "text": "ECON 2315"
+                  "text": "ECON 2315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2302"
                   ],
-                  "text": "HIST 2302"
+                  "text": "HIST 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -171,19 +190,23 @@
                   "codes": [
                     "ECON2316"
                   ],
-                  "text": "ECON 2316"
+                  "text": "ECON 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 3"
+                  "text": "HIST elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 4"
+                  "text": "HIST elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -194,11 +217,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 5"
+                  "text": "HIST elective 5",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -209,7 +234,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -225,7 +251,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -239,19 +266,23 @@
                   "codes": [
                     "ECON2350"
                   ],
-                  "text": "ECON 2350"
+                  "text": "ECON 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 3"
+                  "text": "ECON elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 6"
+                  "text": "HIST elective 6",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -265,11 +296,13 @@
                   "codes": [
                     "ECON2560"
                   ],
-                  "text": "ECON 2560"
+                  "text": "ECON 2560",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 4"
+                  "text": "ECON elective 4",
+                  "sh": 4
                 }
               ]
             },
@@ -280,7 +313,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -296,7 +330,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -312,7 +347,8 @@
                     "HIST2011",
                     "ECON1292"
                   ],
-                  "text": "ECON 3470, HIST 2011, or ECON 1292"
+                  "text": "ECON 3470, HIST 2011, or ECON 1292",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -321,15 +357,18 @@
                     "HIST4701",
                     "ECON4997"
                   ],
-                  "text": "ECON 4692, HIST 4701, or ECON 4997"
+                  "text": "ECON 4692, HIST 4701, or ECON 4997",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 7"
+                  "text": "HIST elective 7",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

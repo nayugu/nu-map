@@ -18,7 +18,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,7 +27,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -34,28 +36,32 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1200"
                   ],
-                  "text": "HIST 1200"
+                  "text": "HIST 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1201"
                   ],
-                  "text": "HIST 1201"
+                  "text": "HIST 1201",
+                  "sh": 4
                 }
               ]
             },
@@ -70,22 +76,26 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "History pre-1800 elective"
+                  "text": "History pre-1800 elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "History elective 1"
+                  "text": "History elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -100,11 +110,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -115,11 +127,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -138,36 +152,42 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2302"
                   ],
-                  "text": "HIST 2302"
+                  "text": "HIST 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Research methods requirement"
+                  "text": "Research methods requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -178,7 +198,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -189,7 +210,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -200,11 +222,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -220,19 +244,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "History outside the United States and Europe elective"
+                  "text": "History outside the United States and Europe elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 1"
+                  "text": "Khoury Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 2"
+                  "text": "Khoury Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate history elective"
+                  "text": "Intermediate history elective",
+                  "sh": 4
                 }
               ]
             },
@@ -243,7 +271,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -254,7 +283,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -265,11 +295,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -288,19 +320,23 @@
                   "codes": [
                     "HIST2211"
                   ],
-                  "text": "HIST 2211"
+                  "text": "HIST 2211",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and social issues"
+                  "text": "Computing and social issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "History elective 2"
+                  "text": "History elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 3"
+                  "text": "Khoury Elective 3",
+                  "sh": 4
                 }
               ]
             },
@@ -315,19 +351,23 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced history elective"
+                  "text": "Advanced history elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "History capstone seminar or senior project"
+                  "text": "History capstone seminar or senior project",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 4"
+                  "text": "Khoury Elective 4",
+                  "sh": 4
                 }
               ]
             }
@@ -353,7 +393,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -361,7 +402,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -369,28 +411,32 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1200"
                   ],
-                  "text": "HIST 1200"
+                  "text": "HIST 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1201"
                   ],
-                  "text": "HIST 1201"
+                  "text": "HIST 1201",
+                  "sh": 4
                 }
               ]
             },
@@ -405,22 +451,26 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "History pre-1800 elective"
+                  "text": "History pre-1800 elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "History elective 1"
+                  "text": "History elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -435,11 +485,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -450,11 +502,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -473,29 +527,34 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2302"
                   ],
-                  "text": "HIST 2302"
+                  "text": "HIST 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Research methods requirement"
+                  "text": "Research methods requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -509,23 +568,28 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "History elective 2"
+                  "text": "History elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 1"
+                  "text": "Khoury Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "History outside the United States and Europe elective"
+                  "text": "History outside the United States and Europe elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate history elective"
+                  "text": "Intermediate history elective",
+                  "sh": 4
                 }
               ]
             },
@@ -536,11 +600,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -551,7 +617,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -567,7 +634,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -578,19 +646,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Advanced history elective"
+                  "text": "Advanced history elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and social issues"
+                  "text": "Computing and social issues",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 2"
+                  "text": "Khoury Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 3"
+                  "text": "Khoury Elective 3",
+                  "sh": 4
                 }
               ]
             },
@@ -601,11 +673,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -616,7 +690,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -632,7 +707,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -646,7 +722,8 @@
                   "codes": [
                     "HIST2211"
                   ],
-                  "text": "HIST 2211"
+                  "text": "HIST 2211",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -654,15 +731,18 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "History capstone seminar or senior project"
+                  "text": "History capstone seminar or senior project",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective 4"
+                  "text": "Khoury Elective 4",
+                  "sh": 4
                 }
               ]
             }

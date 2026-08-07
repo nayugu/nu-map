@@ -19,35 +19,40 @@
                     "BUSN1102",
                     "CRIM1000"
                   ],
-                  "text": "BUSN 1102 or CRIM 1000"
+                  "text": "BUSN 1102 or CRIM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1231"
                   ],
-                  "text": "MATH 1231"
+                  "text": "MATH 1231",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -62,7 +67,8 @@
                     "MGSC2301",
                     "CRIM3700"
                   ],
-                  "text": "MGSC 2301 or CRIM 3700"
+                  "text": "MGSC 2301 or CRIM 3700",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -70,18 +76,21 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 }
               ]
             },
@@ -92,11 +101,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath ND requirement"
+                  "text": "NUpath ND requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 }
               ]
             },
@@ -107,11 +118,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath ER requirement or open elective"
+                  "text": "NUpath ER requirement or open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 }
               ]
             }
@@ -127,25 +140,29 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3600"
                   ],
-                  "text": "CRIM 3600"
+                  "text": "CRIM 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -153,7 +170,8 @@
                     "BUSN1103",
                     "EESH2000"
                   ],
-                  "text": "BUSN 1103 or EESH 2000"
+                  "text": "BUSN 1103 or EESH 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -168,7 +186,8 @@
                     "COOP3945",
                     "COOP3948"
                   ],
-                  "text": "COOP 3945 or 3948"
+                  "text": "COOP 3945 or 3948",
+                  "sh": 0
                 }
               ]
             },
@@ -183,7 +202,8 @@
                     "COOP3945",
                     "COOP3948"
                   ],
-                  "text": "COOP 3945 or 3948"
+                  "text": "COOP 3945 or 3948",
+                  "sh": 0
                 }
               ]
             },
@@ -194,11 +214,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Current criminal justice issues elective"
+                  "text": "Current criminal justice issues elective",
+                  "sh": 4
                 }
               ]
             }
@@ -214,15 +236,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Nupath IC requirement"
+                  "text": "Nupath IC requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Crime problems and criminal justice institutions elective"
+                  "text": "Crime problems and criminal justice institutions elective",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -231,7 +256,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3304, 3307, or 3315 ( OR)"
+                  "text": "ENGW 3304, 3307, or 3315 ( OR)",
+                  "sh": 4
                 }
               ]
             },
@@ -246,7 +272,8 @@
                     "COOP3945",
                     "COOP3948"
                   ],
-                  "text": "COOP 3945 or 3948"
+                  "text": "COOP 3945 or 3948",
+                  "sh": 0
                 }
               ]
             },
@@ -261,7 +288,8 @@
                     "COOP3945",
                     "COOP3948"
                   ],
-                  "text": "COOP 3945 or 3948"
+                  "text": "COOP 3945 or 3948",
+                  "sh": 0
                 }
               ]
             },
@@ -272,11 +300,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath EI requirement or open elective"
+                  "text": "NUpath EI requirement or open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -292,19 +322,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Systemic issues in criminal justice elective"
+                  "text": "Systemic issues in criminal justice elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective 3001–5999"
+                  "text": "CRIM elective 3001–5999",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 }
               ]
             },
@@ -318,19 +352,23 @@
                   "codes": [
                     "STRT4501"
                   ],
-                  "text": "STRT 4501"
+                  "text": "STRT 4501",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Crime problems elective"
+                  "text": "Crime problems elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -357,35 +395,40 @@
                     "BUSN1102",
                     "CRIM1000"
                   ],
-                  "text": "BUSN 1102 or CRIM 1000"
+                  "text": "BUSN 1102 or CRIM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1231"
                   ],
-                  "text": "MATH 1231"
+                  "text": "MATH 1231",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 }
               ]
             },
@@ -400,14 +443,16 @@
                     "MGSC2301",
                     "CRIM3700"
                   ],
-                  "text": "MGSC 2301 or CRIM 3700"
+                  "text": "MGSC 2301 or CRIM 3700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -415,11 +460,13 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 }
               ]
             },
@@ -430,11 +477,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath ND requirement"
+                  "text": "NUpath ND requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 }
               ]
             },
@@ -445,11 +494,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath ER requirement or open elective"
+                  "text": "NUpath ER requirement or open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 }
               ]
             }
@@ -465,25 +516,29 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3600"
                   ],
-                  "text": "CRIM 3600"
+                  "text": "CRIM 3600",
+                  "sh": 4
                 }
               ]
             },
@@ -498,23 +553,28 @@
                     "BUSN1103",
                     "EESH2000"
                   ],
-                  "text": "BUSN 1103 or EESH 2000"
+                  "text": "BUSN 1103 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Current criminal justice issues elective"
+                  "text": "Current criminal justice issues elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Crime problems and criminal justice institutions elective"
+                  "text": "Crime problems and criminal justice institutions elective",
+                  "sh": 4
                 }
               ]
             },
@@ -525,11 +585,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Nupath IC requirement"
+                  "text": "Nupath IC requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -545,7 +607,8 @@
                     "COOP3948",
                     "COOP3946"
                   ],
-                  "text": "COOP 3945, 3948, or 3946"
+                  "text": "COOP 3945, 3948, or 3946",
+                  "sh": 0
                 }
               ]
             }
@@ -566,7 +629,8 @@
                     "COOP3948",
                     "COOP3946"
                   ],
-                  "text": "COOP 3945, 3948, or 3946"
+                  "text": "COOP 3945, 3948, or 3946",
+                  "sh": 0
                 }
               ]
             },
@@ -582,19 +646,23 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3304, 3307, or 3315"
+                  "text": "ENGW 3304, 3307, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Crime problems elective"
+                  "text": "Crime problems elective",
+                  "sh": 4
                 }
               ]
             },
@@ -605,11 +673,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath EI requirement or open elective"
+                  "text": "NUpath EI requirement or open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -625,7 +695,8 @@
                     "COOP3948",
                     "COOP3946"
                   ],
-                  "text": "COOP 3945, 3948, or 3946"
+                  "text": "COOP 3945, 3948, or 3946",
+                  "sh": 0
                 }
               ]
             }
@@ -646,7 +717,8 @@
                     "COOP3948",
                     "COOP3946"
                   ],
-                  "text": "COOP 3945, 3948, or 3946"
+                  "text": "COOP 3945, 3948, or 3946",
+                  "sh": 0
                 }
               ]
             },
@@ -660,19 +732,23 @@
                   "codes": [
                     "STRT4501"
                   ],
-                  "text": "STRT 4501"
+                  "text": "STRT 4501",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective 3001–5999"
+                  "text": "CRIM elective 3001–5999",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Systemic issues in criminal justice elective"
+                  "text": "Systemic issues in criminal justice elective",
+                  "sh": 4
                 }
               ]
             }

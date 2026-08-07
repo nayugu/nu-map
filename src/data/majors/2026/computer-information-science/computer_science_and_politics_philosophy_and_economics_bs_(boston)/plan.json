@@ -19,7 +19,8 @@
                     "CS1200",
                     "PHIL1000"
                   ],
-                  "text": "CS 1200 or PHIL 1000"
+                  "text": "CS 1200 or PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -27,7 +28,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -35,21 +37,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1160"
                   ],
-                  "text": "PHIL 1160"
+                  "text": "PHIL 1160",
+                  "sh": 4
                 }
               ]
             },
@@ -64,7 +69,8 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -72,21 +78,24 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 }
               ]
             },
@@ -100,11 +109,13 @@
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -119,11 +130,13 @@
                     "MATH1231",
                     "MATH1341"
                   ],
-                  "text": "MATH 1231 or 1341"
+                  "text": "MATH 1231 or 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -143,7 +156,8 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -151,7 +165,8 @@
                     "PHIL3435",
                     "PHIL2325"
                   ],
-                  "text": "PHIL 3435 or 2325"
+                  "text": "PHIL 3435 or 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -159,14 +174,16 @@
                     "POLS1150",
                     "POLS1155"
                   ],
-                  "text": "POLS 1150 or 1155"
+                  "text": "POLS 1150 or 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS3405"
                   ],
-                  "text": "POLS 3405"
+                  "text": "POLS 3405",
+                  "sh": 4
                 }
               ]
             },
@@ -181,14 +198,16 @@
                     "CS1210",
                     "EESH2000"
                   ],
-                  "text": "CS 1210 or EESH 2000"
+                  "text": "CS 1210 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -197,7 +216,8 @@
                     "POLS2400",
                     "MATH2280"
                   ],
-                  "text": "ECON 2350, POLS 2400, or MATH 2280"
+                  "text": "ECON 2350, POLS 2400, or MATH 2280",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -205,11 +225,13 @@
                     "PHIL2303",
                     "PHIL3822"
                   ],
-                  "text": "PHIL 2303 or 3822"
+                  "text": "PHIL 2303 or 3822",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -224,11 +246,13 @@
                     "ECON2315",
                     "ECON2316"
                   ],
-                  "text": "ECON 2315 or 2316"
+                  "text": "ECON 2315 or 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -239,7 +263,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -255,7 +280,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -269,25 +295,29 @@
                   "codes": [
                     "CS2484"
                   ],
-                  "text": "CS 2484"
+                  "text": "CS 2484",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL3000"
                   ],
-                  "text": "PHIL 3000"
+                  "text": "PHIL 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS2390"
                   ],
-                  "text": "POLS 2390"
+                  "text": "POLS 2390",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -303,7 +333,8 @@
                     "ENGW3309",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3309, or 3315"
+                  "text": "ENGW 3302, 3309, or 3315",
+                  "sh": 4
                 }
               ]
             },
@@ -314,7 +345,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -330,7 +362,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -345,19 +378,23 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PPE Capstone"
+                  "text": "PPE Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PPE Elective"
+                  "text": "PPE Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -384,7 +421,8 @@
                     "CS1200",
                     "PHIL1000"
                   ],
-                  "text": "CS 1200 or PHIL 1000"
+                  "text": "CS 1200 or PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -392,7 +430,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -400,21 +439,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1160"
                   ],
-                  "text": "PHIL 1160"
+                  "text": "PHIL 1160",
+                  "sh": 4
                 }
               ]
             },
@@ -429,7 +471,8 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -437,21 +480,24 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 }
               ]
             },
@@ -466,11 +512,13 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -485,11 +533,13 @@
                     "MATH1231",
                     "MATH1341"
                   ],
-                  "text": "MATH 1231 or 1341"
+                  "text": "MATH 1231 or 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -509,14 +559,16 @@
                     "CS1210",
                     "EESH2000"
                   ],
-                  "text": "CS 1210 or EESH 2000"
+                  "text": "CS 1210 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -524,7 +576,8 @@
                     "PHIL3435",
                     "PHIL2325"
                   ],
-                  "text": "PHIL 3435 or 2325"
+                  "text": "PHIL 3435 or 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -532,14 +585,16 @@
                     "POLS1150",
                     "POLS1155"
                   ],
-                  "text": "POLS 1150 or 1155"
+                  "text": "POLS 1150 or 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS3405"
                   ],
-                  "text": "POLS 3405"
+                  "text": "POLS 3405",
+                  "sh": 4
                 }
               ]
             },
@@ -550,7 +605,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -561,7 +617,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -576,11 +633,13 @@
                     "ECON2315",
                     "ECON2316"
                   ],
-                  "text": "ECON 2315 or 2316"
+                  "text": "ECON 2315 or 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -599,7 +658,8 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -608,7 +668,8 @@
                     "POLS2400",
                     "MATH2280"
                   ],
-                  "text": "ECON 2350, POLS 2400, or MATH 2280"
+                  "text": "ECON 2350, POLS 2400, or MATH 2280",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -616,11 +677,13 @@
                     "PHIL2303",
                     "PHIL3822"
                   ],
-                  "text": "PHIL 2303 or 3822"
+                  "text": "PHIL 2303 or 3822",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -631,7 +694,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -642,7 +706,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -658,7 +723,8 @@
                     "ENGW3309",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3309, or 3315"
+                  "text": "ENGW 3302, 3309, or 3315",
+                  "sh": 4
                 }
               ]
             }
@@ -678,25 +744,29 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL3000"
                   ],
-                  "text": "PHIL 3000"
+                  "text": "PHIL 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS2390"
                   ],
-                  "text": "POLS 2390"
+                  "text": "POLS 2390",
+                  "sh": 4
                 }
               ]
             },
@@ -710,19 +780,23 @@
                   "codes": [
                     "CS2484"
                   ],
-                  "text": "CS 2484"
+                  "text": "CS 2484",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PPE Capstone"
+                  "text": "PPE Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PPE Elective"
+                  "text": "PPE Elective",
+                  "sh": 4
                 }
               ]
             }

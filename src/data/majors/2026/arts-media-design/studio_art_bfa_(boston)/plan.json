@@ -18,7 +18,8 @@
                   "codes": [
                     "ARTF1000"
                   ],
-                  "text": "ARTF 1000"
+                  "text": "ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,21 +27,24 @@
                     "ARTH1001",
                     "ARTH1002"
                   ],
-                  "text": "ARTH 1001 and ARTH 1002"
+                  "text": "ARTH 1001 and ARTH 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SMFA3000"
                   ],
-                  "text": "SMFA 3000"
+                  "text": "SMFA 3000",
+                  "sh": 10
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -54,15 +58,18 @@
                   "codes": [
                     "SMFA3000"
                   ],
-                  "text": "SMFA 3000"
+                  "text": "SMFA 3000",
+                  "sh": 10
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and Design History Elective 1"
+                  "text": "Art and Design History Elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -73,11 +80,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -87,7 +96,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -107,28 +116,32 @@
                   "codes": [
                     "ARTH3000"
                   ],
-                  "text": "ARTH 3000"
+                  "text": "ARTH 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SMFA3000"
                   ],
-                  "text": "SMFA 3000"
+                  "text": "SMFA 3000",
+                  "sh": 10
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SMFA3000"
                   ],
-                  "text": "SMFA 3000"
+                  "text": "SMFA 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2010"
                   ],
-                  "text": "EEAM 2010"
+                  "text": "EEAM 2010",
+                  "sh": 1
                 }
               ]
             },
@@ -139,7 +152,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -150,7 +164,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -161,11 +176,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -184,21 +201,24 @@
                   "codes": [
                     "ARTH4000"
                   ],
-                  "text": "ARTH 4000"
+                  "text": "ARTH 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SMFA3000"
                   ],
-                  "text": "SMFA 3000"
+                  "text": "SMFA 3000",
+                  "sh": 10
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SMFA3000"
                   ],
-                  "text": "SMFA 3000"
+                  "text": "SMFA 3000",
+                  "sh": 4
                 }
               ]
             },
@@ -209,14 +229,16 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3314"
                   ],
-                  "text": "ENGW 3314 (Online)"
+                  "text": "ENGW 3314 (Online)",
+                  "sh": 4
                 }
               ]
             },
@@ -227,7 +249,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -238,11 +261,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -261,18 +286,21 @@
                   "codes": [
                     "SMFA3000"
                   ],
-                  "text": "SMFA 3000"
+                  "text": "SMFA 3000",
+                  "sh": 10
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SMFA4000"
                   ],
-                  "text": "SMFA 4000"
+                  "text": "SMFA 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and Design History Elective 2"
+                  "text": "Art and Design History Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -286,18 +314,21 @@
                   "codes": [
                     "SMFA3000"
                   ],
-                  "text": "SMFA 3000"
+                  "text": "SMFA 3000",
+                  "sh": 10
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SMFA4000"
                   ],
-                  "text": "SMFA 4000"
+                  "text": "SMFA 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

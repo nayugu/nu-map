@@ -18,29 +18,34 @@
                   "codes": [
                     "INSH1300"
                   ],
-                  "text": "INSH 1300"
+                  "text": "INSH 1300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Introduction to college"
+                  "text": "Introduction to college",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course"
+                  "text": "BIOL course",
+                  "sh": 4
                 }
               ]
             },
@@ -54,19 +59,23 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course"
+                  "text": "BIOL course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core humanities course (1)"
+                  "text": "Core humanities course (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Introductory language course"
+                  "text": "Introductory language course",
+                  "sh": 4
                 }
               ]
             },
@@ -80,14 +89,16 @@
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2350"
                   ],
-                  "text": "PHTH 2350"
+                  "text": "PHTH 2350",
+                  "sh": 4
                 }
               ]
             },
@@ -98,11 +109,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -121,26 +134,31 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core humanities course (2)"
+                  "text": "Core humanities course (2)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social science course (introductory)"
+                  "text": "PH Social science course (introductory)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language course"
+                  "text": "Elementary language course",
+                  "sh": 4
                 }
               ]
             },
@@ -151,7 +169,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -162,7 +181,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -176,14 +196,16 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2515"
                   ],
-                  "text": "PHTH 2515"
+                  "text": "PHTH 2515",
+                  "sh": 4
                 }
               ]
             }
@@ -202,22 +224,26 @@
                   "codes": [
                     "INSH2300"
                   ],
-                  "text": "INSH 2300"
+                  "text": "INSH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core Health Humanities course (1)"
+                  "text": "Core Health Humanities course (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate language course"
+                  "text": "Intermediate language course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4202"
                   ],
-                  "text": "PHTH 4202"
+                  "text": "PHTH 4202",
+                  "sh": 4
                 }
               ]
             },
@@ -228,7 +254,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -239,7 +266,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -253,14 +281,16 @@
                   "codes": [
                     "PHTH4540"
                   ],
-                  "text": "PHTH 4540"
+                  "text": "PHTH 4540",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4120"
                   ],
-                  "text": "PHTH 4120"
+                  "text": "PHTH 4120",
+                  "sh": 4
                 }
               ]
             }
@@ -276,19 +306,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core digital health humanities elective (1)"
+                  "text": "Core digital health humanities elective (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core health humanities course (2)"
+                  "text": "Core health humanities course (2)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -299,19 +333,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Core digital health humanities elective (2)"
+                  "text": "Core digital health humanities elective (2)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core health humanities course (3)"
+                  "text": "Core health humanities course (3)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social science course (upper-level)"
+                  "text": "PH Social science course (upper-level)",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -337,32 +375,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HSCI1000"
                   ],
-                  "text": "HSCI 1000"
+                  "text": "HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INSH1300"
                   ],
-                  "text": "INSH 1300"
+                  "text": "INSH 1300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course"
+                  "text": "BIOL course",
+                  "sh": 4
                 }
               ]
             },
@@ -376,19 +419,23 @@
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course"
+                  "text": "BIOL course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Introductory language course"
+                  "text": "Introductory language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -402,14 +449,16 @@
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2350"
                   ],
-                  "text": "PHTH 2350"
+                  "text": "PHTH 2350",
+                  "sh": 4
                 }
               ]
             },
@@ -420,11 +469,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -440,19 +491,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Core humanities course (1)"
+                  "text": "Core humanities course (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core humanities elective (2)"
+                  "text": "Core humanities elective (2)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social Science Course (introductory)"
+                  "text": "PH Social Science Course (introductory)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language course"
+                  "text": "Elementary language course",
+                  "sh": 4
                 }
               ]
             },
@@ -466,29 +521,34 @@
                   "codes": [
                     "HSCI2000"
                   ],
-                  "text": "HSCI 2000"
+                  "text": "HSCI 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core health humanities course (1)"
+                  "text": "Core health humanities course (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate language course"
+                  "text": "Intermediate language course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2515"
                   ],
-                  "text": "PHTH 2515"
+                  "text": "PHTH 2515",
+                  "sh": 4
                 }
               ]
             },
@@ -502,11 +562,13 @@
                   "codes": [
                     "PHTH4202"
                   ],
-                  "text": "PHTH 4202"
+                  "text": "PHTH 4202",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -517,7 +579,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -533,7 +596,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -547,22 +611,26 @@
                   "codes": [
                     "INSH2300"
                   ],
-                  "text": "INSH 2300"
+                  "text": "INSH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core digital health humanities course (1)"
+                  "text": "Core digital health humanities course (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3306"
                   ],
-                  "text": "ENGW 3306"
+                  "text": "ENGW 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core health humanities course (2)"
+                  "text": "Core health humanities course (2)",
+                  "sh": 4
                 }
               ]
             },
@@ -576,14 +644,16 @@
                   "codes": [
                     "PHTH4120"
                   ],
-                  "text": "PHTH 4120"
+                  "text": "PHTH 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4540"
                   ],
-                  "text": "PHTH 4540"
+                  "text": "PHTH 4540",
+                  "sh": 4
                 }
               ]
             },
@@ -594,7 +664,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -610,7 +681,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -621,19 +693,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Core digital health humanities course (2)"
+                  "text": "Core digital health humanities course (2)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core health humanities course (3)"
+                  "text": "Core health humanities course (3)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social Science course (upper)"
+                  "text": "PH Social Science course (upper)",
+                  "sh": 3
                 }
               ]
             }

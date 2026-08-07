@@ -18,21 +18,24 @@
                   "codes": [
                     "ECON1000"
                   ],
-                  "text": "ECON 1000"
+                  "text": "ECON 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1115"
                   ],
-                  "text": "ECON 1115"
+                  "text": "ECON 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -44,11 +47,13 @@
                     "MATH1340",
                     "MATH1341"
                   ],
-                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341"
+                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 }
               ]
             },
@@ -62,7 +67,8 @@
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -71,15 +77,18 @@
                     "CS1100",
                     "CS1101"
                   ],
-                  "text": "MISM 2510 or CS 1100 and CS 1101"
+                  "text": "MISM 2510 or CS 1100 and CS 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -90,11 +99,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 1"
+                  "text": "ECON elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -105,11 +116,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -128,22 +141,26 @@
                   "codes": [
                     "ECON2315"
                   ],
-                  "text": "ECON 2315"
+                  "text": "ECON 2315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2350"
                   ],
-                  "text": "ECON 2350"
+                  "text": "ECON 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language core course"
+                  "text": "Foreign language core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -157,26 +174,31 @@
                   "codes": [
                     "ECON2316"
                   ],
-                  "text": "ECON 2316"
+                  "text": "ECON 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 2"
+                  "text": "ECON elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -187,11 +209,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -202,7 +226,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -218,7 +243,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -232,22 +258,26 @@
                   "codes": [
                     "ECON2560"
                   ],
-                  "text": "ECON 2560"
+                  "text": "ECON 2560",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3308"
                   ],
-                  "text": "ENGW 3308"
+                  "text": "ENGW 3308",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 3"
+                  "text": "ECON elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -258,11 +288,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 4"
+                  "text": "ECON elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -273,7 +305,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -289,7 +322,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -304,19 +338,23 @@
                     "ECON4692",
                     "ECON4997"
                   ],
-                  "text": "ECON 4692 or 4997"
+                  "text": "ECON 4692 or 4997",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 5"
+                  "text": "ECON elective 5",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

@@ -18,42 +18,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -67,14 +73,16 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -82,7 +90,8 @@
                     "PHYS1171",
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1171 or 1151 (ND)"
+                  "text": "PHYS 1171 or 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -90,7 +99,8 @@
                     "PHYS1172",
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1172 or 1152 (AD)"
+                  "text": "PHYS 1172 or 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -98,11 +108,13 @@
                     "PHYS1173",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1173 or 1153"
+                  "text": "PHYS 1173 or 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -116,18 +128,21 @@
                   "codes": [
                     "BIOL1111"
                   ],
-                  "text": "BIOL 1111 (ND)"
+                  "text": "BIOL 1111 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1112"
+                  "text": "BIOL 1112",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -138,11 +153,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -161,21 +178,24 @@
                   "codes": [
                     "BIOE2365"
                   ],
-                  "text": "BIOE 2365 (AD, WI)"
+                  "text": "BIOE 2365 (AD, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE2366"
                   ],
-                  "text": "BIOE 2366"
+                  "text": "BIOE 2366",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -183,7 +203,8 @@
                     "PHYS1175",
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1175 or 1155 (ND)"
+                  "text": "PHYS 1175 or 1155 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -191,7 +212,8 @@
                     "PHYS1176",
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1176 or 1156 (AD)"
+                  "text": "PHYS 1176 or 1156 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -199,11 +221,13 @@
                     "PHYS1177",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1177 or 1157"
+                  "text": "PHYS 1177 or 1157",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -217,32 +241,37 @@
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE2350"
                   ],
-                  "text": "BIOE 2350"
+                  "text": "BIOE 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE2355"
                   ],
-                  "text": "BIOE 2355"
+                  "text": "BIOE 2355",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -256,11 +285,13 @@
                   "codes": [
                     "BIOE3310"
                   ],
-                  "text": "BIOE 3310"
+                  "text": "BIOE 3310",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -271,7 +302,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -287,7 +319,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -301,29 +334,34 @@
                   "codes": [
                     "BIOE3210"
                   ],
-                  "text": "BIOE 3210"
+                  "text": "BIOE 3210",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE3380"
                   ],
-                  "text": "BIOE 3380"
+                  "text": "BIOE 3380",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 }
               ]
             },
@@ -337,7 +375,8 @@
                   "codes": [
                     "BIOE4790"
                   ],
-                  "text": "BIOE 4790 (EI, CE, WI)"
+                  "text": "BIOE 4790 (EI, CE, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -345,7 +384,8 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 }
               ]
             },
@@ -356,7 +396,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -372,7 +413,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -386,19 +428,23 @@
                   "codes": [
                     "BIOE4792"
                   ],
-                  "text": "BIOE 4792 (EI, CE, WI)"
+                  "text": "BIOE 4792 (EI, CE, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 }
               ]
             }
@@ -424,42 +470,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -473,14 +525,16 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -488,7 +542,8 @@
                     "PHYS1171",
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1171 or 1151 (ND)"
+                  "text": "PHYS 1171 or 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -496,7 +551,8 @@
                     "PHYS1172",
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1172 or 1152 (AD)"
+                  "text": "PHYS 1172 or 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -504,11 +560,13 @@
                     "PHYS1173",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1173 or 1153"
+                  "text": "PHYS 1173 or 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -522,14 +580,16 @@
                   "codes": [
                     "BIOL1111"
                   ],
-                  "text": "BIOL 1111 (ND)"
+                  "text": "BIOL 1111 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1112"
+                  "text": "BIOL 1112",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -537,7 +597,8 @@
                     "PHYS1175",
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1175 or 1155 (ND)"
+                  "text": "PHYS 1175 or 1155 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -545,7 +606,8 @@
                     "PHYS1176",
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1176 or 1156 (AD)"
+                  "text": "PHYS 1176 or 1156 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -553,7 +615,8 @@
                     "PHYS1177",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1177 or 1157"
+                  "text": "PHYS 1177 or 1157",
+                  "sh": 1
                 }
               ]
             },
@@ -564,11 +627,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -587,42 +652,48 @@
                   "codes": [
                     "BIOE2355"
                   ],
-                  "text": "BIOE 2355"
+                  "text": "BIOE 2355",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE2365"
                   ],
-                  "text": "BIOE 2365 (AD, WI)"
+                  "text": "BIOE 2365 (AD, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE2366"
                   ],
-                  "text": "BIOE 2366"
+                  "text": "BIOE 2366",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -633,7 +704,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -644,7 +716,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -658,11 +731,13 @@
                   "codes": [
                     "BIOE3210"
                   ],
-                  "text": "BIOE 3210"
+                  "text": "BIOE 3210",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -681,22 +756,26 @@
                   "codes": [
                     "BIOE2350"
                   ],
-                  "text": "BIOE 2350"
+                  "text": "BIOE 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE3380"
                   ],
-                  "text": "BIOE 3380"
+                  "text": "BIOE 3380",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -707,7 +786,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -718,7 +798,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -732,11 +813,13 @@
                   "codes": [
                     "BIOE4790"
                   ],
-                  "text": "BIOE 4790 (EI, CE, WI)"
+                  "text": "BIOE 4790 (EI, CE, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -755,29 +838,34 @@
                   "codes": [
                     "BIOE3310"
                   ],
-                  "text": "BIOE 3310"
+                  "text": "BIOE 3310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE4792"
                   ],
-                  "text": "BIOE 4792 (EI, CE, WI)"
+                  "text": "BIOE 4792 (EI, CE, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -792,19 +880,23 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 }
               ]
             }
@@ -830,42 +922,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -879,14 +977,16 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -894,7 +994,8 @@
                     "PHYS1171",
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1171 or 1151 (ND)"
+                  "text": "PHYS 1171 or 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -902,7 +1003,8 @@
                     "PHYS1172",
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1172 or 1152 (AD)"
+                  "text": "PHYS 1172 or 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -910,11 +1012,13 @@
                     "PHYS1173",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1173 or 1153"
+                  "text": "PHYS 1173 or 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -924,7 +1028,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -935,7 +1039,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -955,35 +1059,40 @@
                   "codes": [
                     "BIOE2365"
                   ],
-                  "text": "BIOE 2365 (AD, WI)"
+                  "text": "BIOE 2365 (AD, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE2366"
                   ],
-                  "text": "BIOE 2366"
+                  "text": "BIOE 2366",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1111"
                   ],
-                  "text": "BIOL 1111 (ND)"
+                  "text": "BIOL 1111 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1112"
+                  "text": "BIOL 1112",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -991,7 +1100,8 @@
                     "PHYS1175",
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1175 or 1155 (ND)"
+                  "text": "PHYS 1175 or 1155 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -999,7 +1109,8 @@
                     "PHYS1176",
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1176 or 1156 (AD)"
+                  "text": "PHYS 1176 or 1156 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1007,7 +1118,8 @@
                     "PHYS1177",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1177 or 1157"
+                  "text": "PHYS 1177 or 1157",
+                  "sh": 1
                 }
               ]
             },
@@ -1021,32 +1133,37 @@
                   "codes": [
                     "BIOE2350"
                   ],
-                  "text": "BIOE 2350"
+                  "text": "BIOE 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE2355"
                   ],
-                  "text": "BIOE 2355"
+                  "text": "BIOE 2355",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1056,7 +1173,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1068,7 +1185,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1084,7 +1202,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1098,14 +1217,16 @@
                   "codes": [
                     "BIOE3210"
                   ],
-                  "text": "BIOE 3210"
+                  "text": "BIOE 3210",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE3380"
                   ],
-                  "text": "BIOE 3380"
+                  "text": "BIOE 3380",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1113,11 +1234,13 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 }
               ]
             },
@@ -1131,11 +1254,13 @@
                   "codes": [
                     "BIOE3310"
                   ],
-                  "text": "BIOE 3310"
+                  "text": "BIOE 3310",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1146,7 +1271,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1162,7 +1288,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1176,23 +1303,28 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1206,11 +1338,13 @@
                   "codes": [
                     "BIOE4790"
                   ],
-                  "text": "BIOE 4790 (EI, CE, WI)"
+                  "text": "BIOE 4790 (EI, CE, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1221,7 +1355,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1237,7 +1372,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1251,19 +1387,23 @@
                   "codes": [
                     "BIOE4792"
                   ],
-                  "text": "BIOE 4792 (EI, CE, WI)"
+                  "text": "BIOE 4792 (EI, CE, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1289,42 +1429,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -1338,14 +1484,16 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1353,7 +1501,8 @@
                     "PHYS1171",
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1171 or 1151 (ND)"
+                  "text": "PHYS 1171 or 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -1361,7 +1510,8 @@
                     "PHYS1172",
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1172 or 1152 (AD)"
+                  "text": "PHYS 1172 or 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1369,11 +1519,13 @@
                     "PHYS1173",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1173 or 1153"
+                  "text": "PHYS 1173 or 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1383,7 +1535,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1394,7 +1546,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1414,42 +1566,48 @@
                   "codes": [
                     "BIOE2365"
                   ],
-                  "text": "BIOE 2365 (AD, WI)"
+                  "text": "BIOE 2365 (AD, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE2366"
                   ],
-                  "text": "BIOE 2366"
+                  "text": "BIOE 2366",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1111"
                   ],
-                  "text": "BIOL 1111 (ND)"
+                  "text": "BIOL 1111 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1112"
+                  "text": "BIOL 1112",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1457,7 +1615,8 @@
                     "PHYS1175",
                     "PHYS1155"
                   ],
-                  "text": "PHYS 1175 or 1155 (ND)"
+                  "text": "PHYS 1175 or 1155 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -1465,7 +1624,8 @@
                     "PHYS1176",
                     "PHYS1156"
                   ],
-                  "text": "PHYS 1176 or 1156 (AD)"
+                  "text": "PHYS 1176 or 1156 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1473,7 +1633,8 @@
                     "PHYS1177",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1177 or 1157"
+                  "text": "PHYS 1177 or 1157",
+                  "sh": 1
                 }
               ]
             },
@@ -1484,7 +1645,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1495,7 +1657,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1505,7 +1668,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1525,25 +1688,29 @@
                   "codes": [
                     "BIOE2350"
                   ],
-                  "text": "BIOE 2350"
+                  "text": "BIOE 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE2355"
                   ],
-                  "text": "BIOE 2355"
+                  "text": "BIOE 2355",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1554,7 +1721,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1565,7 +1733,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1579,11 +1748,13 @@
                   "codes": [
                     "BIOE3210"
                   ],
-                  "text": "BIOE 3210"
+                  "text": "BIOE 3210",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1602,21 +1773,24 @@
                   "codes": [
                     "BIOE3310"
                   ],
-                  "text": "BIOE 3310"
+                  "text": "BIOE 3310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOE3380"
                   ],
-                  "text": "BIOE 3380"
+                  "text": "BIOE 3380",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1624,11 +1798,13 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 }
               ]
             },
@@ -1639,7 +1815,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1650,7 +1827,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1664,11 +1842,13 @@
                   "codes": [
                     "BIOE4790"
                   ],
-                  "text": "BIOE 4790 (EI, CE, WI)"
+                  "text": "BIOE 4790 (EI, CE, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1687,19 +1867,23 @@
                   "codes": [
                     "BIOE4792"
                   ],
-                  "text": "BIOE 4792 (EI, CE, WI)"
+                  "text": "BIOE 4792 (EI, CE, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1710,19 +1894,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOE concentration"
+                  "text": "BIOE concentration",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }

@@ -18,7 +18,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,7 +27,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -34,21 +36,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1101"
                   ],
-                  "text": "INTL 1101"
+                  "text": "INTL 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -64,7 +69,8 @@
                     "HIST2211",
                     "HIST2311"
                   ],
-                  "text": "ANTH 1101, HIST 2211, or HIST 2311"
+                  "text": "ANTH 1101, HIST 2211, or HIST 2311",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -72,21 +78,24 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -100,14 +109,16 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2350"
                   ],
-                  "text": "ECON 2350"
+                  "text": "ECON 2350",
+                  "sh": 4
                 }
               ]
             },
@@ -118,11 +129,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -141,22 +154,26 @@
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Global Dynamics Course 1"
+                  "text": "Global Dynamics Course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "International Affairs Elective"
+                  "text": "International Affairs Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -170,29 +187,34 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL2718"
                   ],
-                  "text": "INTL 2718"
+                  "text": "INTL 2718",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Regional Analysis Requirement 1"
+                  "text": "Regional Analysis Requirement 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -203,11 +225,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             },
@@ -218,7 +242,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -234,7 +259,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -248,22 +274,26 @@
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL3400"
                   ],
-                  "text": "INTL 3400"
+                  "text": "INTL 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Global Dynamics Course 2"
+                  "text": "Global Dynamics Course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Regional Analysis Requirement 2"
+                  "text": "Regional Analysis Requirement 2",
+                  "sh": 4
                 }
               ]
             },
@@ -274,11 +304,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             },
@@ -289,7 +321,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -305,7 +338,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "choice",
@@ -314,7 +348,8 @@
                     "ENGW3308",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3308, or 3315"
+                  "text": "ENGW 3302, 3308, or 3315",
+                  "sh": 4
                 }
               ]
             },
@@ -328,25 +363,29 @@
                   "codes": [
                     "CY4170"
                   ],
-                  "text": "CY 4170"
+                  "text": "CY 4170",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL4700"
                   ],
-                  "text": "INTL 4700"
+                  "text": "INTL 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Regional Analysis Requirement 3"
+                  "text": "Regional Analysis Requirement 3",
+                  "sh": 4
                 }
               ]
             }
@@ -372,7 +411,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -380,7 +420,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -388,21 +429,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1101"
                   ],
-                  "text": "INTL 1101"
+                  "text": "INTL 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -418,7 +462,8 @@
                     "HIST2211",
                     "HIST2311"
                   ],
-                  "text": "ANTH 1101, HIST 2211, or HIST 2311"
+                  "text": "ANTH 1101, HIST 2211, or HIST 2311",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -426,21 +471,24 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -454,14 +502,16 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2350"
                   ],
-                  "text": "ECON 2350"
+                  "text": "ECON 2350",
+                  "sh": 4
                 }
               ]
             },
@@ -472,11 +522,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -495,29 +547,34 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Global Dynamics Course 1"
+                  "text": "Global Dynamics Course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "International Affairs Elective"
+                  "text": "International Affairs Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -528,7 +585,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -539,7 +597,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -550,11 +609,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -573,22 +634,26 @@
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL2718"
                   ],
-                  "text": "INTL 2718"
+                  "text": "INTL 2718",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Regional Analysis Requirement 1"
+                  "text": "Regional Analysis Requirement 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -599,7 +664,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "choice",
@@ -608,7 +674,8 @@
                     "ENGW3308",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3308, or 3315"
+                  "text": "ENGW 3302, 3308, or 3315",
+                  "sh": 4
                 }
               ]
             },
@@ -619,7 +686,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -630,11 +698,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             }
@@ -653,22 +723,26 @@
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL3400"
                   ],
-                  "text": "INTL 3400"
+                  "text": "INTL 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Global Dynamics Course 2"
+                  "text": "Global Dynamics Course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Regional Analysis Requirement 2"
+                  "text": "Regional Analysis Requirement 2",
+                  "sh": 4
                 }
               ]
             },
@@ -682,25 +756,29 @@
                   "codes": [
                     "CY4170"
                   ],
-                  "text": "CY 4170"
+                  "text": "CY 4170",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL4700"
                   ],
-                  "text": "INTL 4700"
+                  "text": "INTL 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Regional Analysis Requirement 3"
+                  "text": "Regional Analysis Requirement 3",
+                  "sh": 4
                 }
               ]
             }

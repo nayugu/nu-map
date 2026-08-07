@@ -18,29 +18,34 @@
                   "codes": [
                     "CRIM1000"
                   ],
-                  "text": "CRIM 1000"
+                  "text": "CRIM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Current crime and justice issues course"
+                  "text": "Current crime and justice issues course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -54,22 +59,26 @@
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Digital skills course and lab"
+                  "text": "Digital skills course and lab",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -80,7 +89,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -90,7 +100,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -107,19 +117,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Systems and institutions course"
+                  "text": "Systems and institutions course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Sequence elective"
+                  "text": "Sequence elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -130,22 +144,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Systems and institutions course"
+                  "text": "Systems and institutions course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3600"
                   ],
-                  "text": "CRIM 3600"
+                  "text": "CRIM 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -156,7 +174,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -166,7 +185,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -186,26 +205,31 @@
                   "codes": [
                     "CRIM3700"
                   ],
-                  "text": "CRIM 3700"
+                  "text": "CRIM 3700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Crime problems elective"
+                  "text": "Crime problems elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Systemic issues elective"
+                  "text": "Systemic issues elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -216,7 +240,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -227,7 +252,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -238,7 +264,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -254,26 +281,31 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Sequence elective"
+                  "text": "Sequence elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3000"
                   ],
-                  "text": "CRIM 3000"
+                  "text": "CRIM 3000",
+                  "sh": 1
                 }
               ]
             },
@@ -284,19 +316,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Solutions and reform course"
+                  "text": "Solutions and reform course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Sequence elective"
+                  "text": "Sequence elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -322,29 +358,34 @@
                   "codes": [
                     "CRIM1000"
                   ],
-                  "text": "CRIM 1000"
+                  "text": "CRIM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Current crime and justice issues course"
+                  "text": "Current crime and justice issues course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -358,22 +399,26 @@
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Digital skills course and lab"
+                  "text": "Digital skills course and lab",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -384,11 +429,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -398,7 +445,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -415,23 +462,28 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Systems and institutions course"
+                  "text": "Systems and institutions course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Sequence elective"
+                  "text": "Sequence elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "EESH2000 Co-Op Preparation"
+                  "text": "EESH2000 Co-Op Preparation",
+                  "sh": 1
                 }
               ]
             },
@@ -442,7 +494,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-Op"
+                  "text": "Co-Op",
+                  "sh": 0
                 }
               ]
             },
@@ -453,7 +506,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-Op"
+                  "text": "Co-Op",
+                  "sh": 0
                 }
               ]
             },
@@ -464,11 +518,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -487,26 +543,31 @@
                   "codes": [
                     "CRIM3700"
                   ],
-                  "text": "CRIM 3700"
+                  "text": "CRIM 3700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Crime problems elective"
+                  "text": "Crime problems elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Systemic issues elective"
+                  "text": "Systemic issues elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3000"
                   ],
-                  "text": "CRIM 3000"
+                  "text": "CRIM 3000",
+                  "sh": 1
                 }
               ]
             },
@@ -517,7 +578,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -528,7 +590,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -539,11 +602,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -559,26 +624,31 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Sequence elective"
+                  "text": "Sequence elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM4000"
                   ],
-                  "text": "CRIM 4000"
+                  "text": "CRIM 4000",
+                  "sh": 1
                 }
               ]
             },
@@ -589,19 +659,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM Elective"
+                  "text": "CRIM Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Sequence elective"
+                  "text": "Sequence elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -612,7 +686,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

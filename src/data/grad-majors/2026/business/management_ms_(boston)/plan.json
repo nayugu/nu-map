@@ -15,15 +15,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Core area course 1"
+                  "text": "Core area course 1",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core area course 2"
+                  "text": "Core area course 2",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 1 or elective"
+                  "text": "Concentration course 1 or elective",
+                  "sh": 3
                 }
               ]
             },
@@ -34,19 +37,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Core area course 3"
+                  "text": "Core area course 3",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 2 or elective"
+                  "text": "Concentration course 2 or elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 3 or elective"
+                  "text": "Concentration course 3 or elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ]
             },
@@ -57,15 +64,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Core area course 4"
+                  "text": "Core area course 4",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 4 or elective"
+                  "text": "Concentration course 4 or elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ],
               "fullSummer": true
@@ -89,15 +99,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Core area course 1"
+                  "text": "Core area course 1",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Core area course 2"
+                  "text": "Core area course 2",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 1 or elective"
+                  "text": "Concentration course 1 or elective",
+                  "sh": 3
                 }
               ]
             },
@@ -108,19 +121,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Core area course 3"
+                  "text": "Core area course 3",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 2 or elective"
+                  "text": "Concentration course 2 or elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 3 or elective"
+                  "text": "Concentration course 3 or elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ]
             }
@@ -136,15 +153,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Core area course 4"
+                  "text": "Core area course 4",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 4 or elective"
+                  "text": "Concentration course 4 or elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ]
             }
@@ -170,25 +190,29 @@
                   "codes": [
                     "INNO6200"
                   ],
-                  "text": "INNO 6200"
+                  "text": "INNO 6200",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "STRT6220"
                   ],
-                  "text": "STRT 6220"
+                  "text": "STRT 6220",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MGSC6281"
                   ],
-                  "text": "MGSC 6281"
+                  "text": "MGSC 6281",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ]
             },
@@ -202,28 +226,32 @@
                   "codes": [
                     "MISM6200"
                   ],
-                  "text": "MISM 6200"
+                  "text": "MISM 6200",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HINF6404"
                   ],
-                  "text": "HINF 6404"
+                  "text": "HINF 6404",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SCHM6223"
                   ],
-                  "text": "SCHM 6223"
+                  "text": "SCHM 6223",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HINF5101"
                   ],
-                  "text": "HINF 5101"
+                  "text": "HINF 5101",
+                  "sh": 3
                 }
               ]
             },
@@ -237,11 +265,13 @@
                   "codes": [
                     "MGMT6213"
                   ],
-                  "text": "MGMT 6213"
+                  "text": "MGMT 6213",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ],
               "fullSummer": true
@@ -268,28 +298,32 @@
                   "codes": [
                     "INNO6200"
                   ],
-                  "text": "INNO 6200"
+                  "text": "INNO 6200",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "STRT6220"
                   ],
-                  "text": "STRT 6220"
+                  "text": "STRT 6220",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HRMG6200"
                   ],
-                  "text": "HRMG 6200"
+                  "text": "HRMG 6200",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "FINA6309"
                   ],
-                  "text": "FINA 6309 (or elective)"
+                  "text": "FINA 6309 (or elective)",
+                  "sh": 3
                 }
               ]
             },
@@ -303,28 +337,32 @@
                   "codes": [
                     "MISM6200"
                   ],
-                  "text": "MISM 6200"
+                  "text": "MISM 6200",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HRMG6222"
                   ],
-                  "text": "HRMG 6222"
+                  "text": "HRMG 6222",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MGMT6214"
                   ],
-                  "text": "MGMT 6214"
+                  "text": "MGMT 6214",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SCHM6214"
                   ],
-                  "text": "SCHM 6214 (or elective)"
+                  "text": "SCHM 6214 (or elective)",
+                  "sh": 3
                 }
               ]
             },
@@ -338,11 +376,13 @@
                   "codes": [
                     "MGMT6213"
                   ],
-                  "text": "MGMT 6213"
+                  "text": "MGMT 6213",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ],
               "fullSummer": true
@@ -369,28 +409,32 @@
                   "codes": [
                     "INNO6222"
                   ],
-                  "text": "INNO 6222"
+                  "text": "INNO 6222",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB6226"
                   ],
-                  "text": "INTB 6226"
+                  "text": "INTB 6226",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INNO6250"
                   ],
-                  "text": "INNO 6250"
+                  "text": "INNO 6250",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INNO6240"
                   ],
-                  "text": "INNO 6240"
+                  "text": "INNO 6240",
+                  "sh": 1
                 }
               ]
             },
@@ -404,28 +448,32 @@
                   "codes": [
                     "MKTG6230"
                   ],
-                  "text": "MKTG 6230"
+                  "text": "MKTG 6230",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MISM6212"
                   ],
-                  "text": "MISM 6212"
+                  "text": "MISM 6212",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INNO6250"
                   ],
-                  "text": "INNO 6250"
+                  "text": "INNO 6250",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INNO6241"
                   ],
-                  "text": "INNO 6241"
+                  "text": "INNO 6241",
+                  "sh": 1
                 }
               ]
             },
@@ -436,11 +484,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ],
               "fullSummer": true
@@ -460,21 +510,24 @@
                   "codes": [
                     "INNO6242"
                   ],
-                  "text": "INNO 6242"
+                  "text": "INNO 6242",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INNO6250"
                   ],
-                  "text": "INNO 6250"
+                  "text": "INNO 6250",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INNO6254"
                   ],
-                  "text": "INNO 6254"
+                  "text": "INNO 6254",
+                  "sh": 3
                 }
               ]
             }

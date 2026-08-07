@@ -18,32 +18,37 @@
                   "codes": [
                     "HSCI1000"
                   ],
-                  "text": "HSCI 1000"
+                  "text": "HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1147"
                   ],
-                  "text": "BIOL 1147"
+                  "text": "BIOL 1147",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Introductory language course"
+                  "text": "Introductory language course",
+                  "sh": 4
                 }
               ]
             },
@@ -57,7 +62,8 @@
                   "codes": [
                     "PHTH2350"
                   ],
-                  "text": "PHTH 2350"
+                  "text": "PHTH 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -65,18 +71,21 @@
                     "BIOL1141",
                     "BIOL1143"
                   ],
-                  "text": "BIOL 1141 or 1143"
+                  "text": "BIOL 1141 or 1143",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language course"
+                  "text": "Elementary language course",
+                  "sh": 4
                 }
               ]
             },
@@ -90,11 +99,13 @@
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -104,7 +115,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -124,32 +135,37 @@
                   "codes": [
                     "HSCI2000"
                   ],
-                  "text": "HSCI 2000"
+                  "text": "HSCI 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3101"
                   ],
-                  "text": "LAW 3101"
+                  "text": "LAW 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3102"
                   ],
-                  "text": "LAW 3102"
+                  "text": "LAW 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate language course"
+                  "text": "Intermediate language course",
+                  "sh": 4
                 }
               ]
             },
@@ -160,11 +176,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Co-op1"
+                  "text": "Co-op1",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -175,7 +193,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -189,11 +208,13 @@
                   "codes": [
                     "PHTH2515"
                   ],
-                  "text": "PHTH 2515"
+                  "text": "PHTH 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -212,25 +233,29 @@
                   "codes": [
                     "LAW3120"
                   ],
-                  "text": "LAW 3120"
+                  "text": "LAW 3120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3130"
                   ],
-                  "text": "LAW 3130"
+                  "text": "LAW 3130",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW4335"
                   ],
-                  "text": "LAW 4335"
+                  "text": "LAW 4335",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social science course (introductory)"
+                  "text": "PH Social science course (introductory)",
+                  "sh": 4
                 }
               ]
             },
@@ -241,11 +266,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Co-op1"
+                  "text": "Co-op1",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing in the Discipline NUPath course"
+                  "text": "Advanced Writing in the Discipline NUPath course",
+                  "sh": 4
                 }
               ]
             },
@@ -256,7 +283,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -270,14 +298,16 @@
                   "codes": [
                     "PHTH4120"
                   ],
-                  "text": "PHTH 4120"
+                  "text": "PHTH 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4540"
                   ],
-                  "text": "PHTH 4540"
+                  "text": "PHTH 4540",
+                  "sh": 4
                 }
               ]
             }
@@ -296,25 +326,29 @@
                   "codes": [
                     "PHTH4202"
                   ],
-                  "text": "PHTH 4202"
+                  "text": "PHTH 4202",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3140"
                   ],
-                  "text": "LAW 3140"
+                  "text": "LAW 3140",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3235"
                   ],
-                  "text": "LAW 3235"
+                  "text": "LAW 3235",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LAW elective"
+                  "text": "LAW elective",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -323,7 +357,8 @@
                     "LAW3801",
                     "LAW4983"
                   ],
-                  "text": "LAW 3800, 3801, or 4983 (LAW elective)"
+                  "text": "LAW 3800, 3801, or 4983 (LAW elective)",
+                  "sh": 1
                 }
               ]
             },
@@ -334,19 +369,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social science course (upper)"
+                  "text": "PH Social science course (upper)",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LAW elective"
+                  "text": "LAW elective",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -355,7 +394,8 @@
                     "LAW3801",
                     "LAW4983"
                   ],
-                  "text": "LAW 3800, 3801, or 4983 (LAW elective)"
+                  "text": "LAW 3800, 3801, or 4983 (LAW elective)",
+                  "sh": 1
                 }
               ]
             }
@@ -381,14 +421,16 @@
                   "codes": [
                     "HSCI1000"
                   ],
-                  "text": "HSCI 1000"
+                  "text": "HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -396,18 +438,21 @@
                     "BIOL1141",
                     "BIOL1143"
                   ],
-                  "text": "BIOL 1141 or 1143"
+                  "text": "BIOL 1141 or 1143",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Introductory language course"
+                  "text": "Introductory language course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -421,25 +466,29 @@
                   "codes": [
                     "PHTH2350"
                   ],
-                  "text": "PHTH 2350"
+                  "text": "PHTH 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BIOL1147"
                   ],
-                  "text": "BIOL 1147"
+                  "text": "BIOL 1147",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language course"
+                  "text": "Elementary language course",
+                  "sh": 4
                 }
               ]
             },
@@ -453,11 +502,13 @@
                   "codes": [
                     "PHTH2515"
                   ],
-                  "text": "PHTH 2515"
+                  "text": "PHTH 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -467,7 +518,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -487,19 +538,23 @@
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate language course"
+                  "text": "Intermediate language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social science course (introductory)"
+                  "text": "PH Social science course (introductory)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -513,32 +568,37 @@
                   "codes": [
                     "HSCI2000"
                   ],
-                  "text": "HSCI 2000"
+                  "text": "HSCI 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3102"
                   ],
-                  "text": "LAW 3102"
+                  "text": "LAW 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3101"
                   ],
-                  "text": "LAW 3101"
+                  "text": "LAW 3101",
+                  "sh": 4
                 }
               ]
             },
@@ -549,14 +609,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4202"
                   ],
-                  "text": "PHTH 4202"
+                  "text": "PHTH 4202",
+                  "sh": 4
                 }
               ]
             },
@@ -567,7 +629,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -583,11 +646,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Co-op1"
+                  "text": "Co-op1",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH Social science course (upper)"
+                  "text": "PH Social science course (upper)",
+                  "sh": 3
                 }
               ]
             },
@@ -601,25 +666,29 @@
                   "codes": [
                     "LAW4335"
                   ],
-                  "text": "LAW 4335"
+                  "text": "LAW 4335",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing in the Discipline NUPath course"
+                  "text": "Advanced Writing in the Discipline NUPath course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3120"
                   ],
-                  "text": "LAW 3120"
+                  "text": "LAW 3120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3130"
                   ],
-                  "text": "LAW 3130"
+                  "text": "LAW 3130",
+                  "sh": 4
                 }
               ]
             },
@@ -633,14 +702,16 @@
                   "codes": [
                     "PHTH4120"
                   ],
-                  "text": "PHTH 4120"
+                  "text": "PHTH 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4540"
                   ],
-                  "text": "PHTH 4540"
+                  "text": "PHTH 4540",
+                  "sh": 4
                 }
               ]
             },
@@ -651,7 +722,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -667,11 +739,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Co-op1"
+                  "text": "Co-op1",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LAW elective"
+                  "text": "LAW elective",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -680,7 +754,8 @@
                     "LAW3801",
                     "LAW4983"
                   ],
-                  "text": "LAW 3800, 3801, or 4983 (LAW elective)"
+                  "text": "LAW 3800, 3801, or 4983 (LAW elective)",
+                  "sh": 1
                 }
               ]
             },
@@ -694,22 +769,26 @@
                   "codes": [
                     "LAW3140"
                   ],
-                  "text": "LAW 3140"
+                  "text": "LAW 3140",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone Course"
+                  "text": "Capstone Course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3235"
                   ],
-                  "text": "LAW 3235"
+                  "text": "LAW 3235",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LAW elective"
+                  "text": "LAW elective",
+                  "sh": 3
                 },
                 {
                   "kind": "choice",
@@ -718,7 +797,8 @@
                     "LAW3801",
                     "LAW4983"
                   ],
-                  "text": "LAW 3800, 3801, or 4983 (LAW elective)"
+                  "text": "LAW 3800, 3801, or 4983 (LAW elective)",
+                  "sh": 1
                 }
               ]
             }

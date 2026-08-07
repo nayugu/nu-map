@@ -22,42 +22,48 @@
                   "codes": [
                     "PHMD5120"
                   ],
-                  "text": "PHMD 5120"
+                  "text": "PHMD 5120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5140"
                   ],
-                  "text": "PHMD 5140"
+                  "text": "PHMD 5140",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5191"
                   ],
-                  "text": "PHMD 5191"
+                  "text": "PHMD 5191",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC5110"
                   ],
-                  "text": "PHSC 5110"
+                  "text": "PHSC 5110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC5130"
                   ],
-                  "text": "PHSC 5130"
+                  "text": "PHSC 5130",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC5181"
                   ],
-                  "text": "PHSC 5181"
+                  "text": "PHSC 5181",
+                  "sh": 1
                 }
               ]
             },
@@ -75,7 +81,8 @@
                   "codes": [
                     "PHMD6964"
                   ],
-                  "text": "PHMD 6964 (IPPE)"
+                  "text": "PHMD 6964 (IPPE)",
+                  "sh": 0
                 }
               ]
             },
@@ -93,7 +100,8 @@
                   "codes": [
                     "PHMD6964"
                   ],
-                  "text": "PHMD 6964"
+                  "text": "PHMD 6964",
+                  "sh": 0
                 }
               ]
             },
@@ -111,25 +119,29 @@
                   "codes": [
                     "PHMD5115"
                   ],
-                  "text": "PHMD 5115"
+                  "text": "PHMD 5115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5182"
                   ],
-                  "text": "PHMD 5182"
+                  "text": "PHMD 5182",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5192"
                   ],
-                  "text": "PHMD 5192"
+                  "text": "PHMD 5192",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 2
                 }
               ]
             }
@@ -152,39 +164,45 @@
                   "codes": [
                     "PHMD5240"
                   ],
-                  "text": "PHMD 5240"
+                  "text": "PHMD 5240",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5283"
                   ],
-                  "text": "PHMD 5283"
+                  "text": "PHMD 5283",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5293"
                   ],
-                  "text": "PHMD 5293"
+                  "text": "PHMD 5293",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC5205"
                   ],
-                  "text": "PHSC 5205"
+                  "text": "PHSC 5205",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHSC5230"
                   ],
-                  "text": "PHSC 5230"
+                  "text": "PHSC 5230",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 2
                 }
               ]
             },
@@ -202,39 +220,45 @@
                   "codes": [
                     "PHMD5210"
                   ],
-                  "text": "PHMD 5210"
+                  "text": "PHMD 5210",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5215"
                   ],
-                  "text": "PHMD 5215"
+                  "text": "PHMD 5215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5245"
                   ],
-                  "text": "PHMD 5245"
+                  "text": "PHMD 5245",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5284"
                   ],
-                  "text": "PHMD 5284"
+                  "text": "PHMD 5284",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5294"
                   ],
-                  "text": "PHMD 5294"
+                  "text": "PHMD 5294",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 2
                 }
               ]
             },
@@ -252,25 +276,29 @@
                   "codes": [
                     "PHMD5220"
                   ],
-                  "text": "PHMD 5220"
+                  "text": "PHMD 5220",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5285"
                   ],
-                  "text": "PHMD 5285"
+                  "text": "PHMD 5285",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5295"
                   ],
-                  "text": "PHMD 5295"
+                  "text": "PHMD 5295",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 2
                 }
               ]
             },
@@ -288,7 +316,8 @@
                   "codes": [
                     "PHMD6964"
                   ],
-                  "text": "PHMD 6964"
+                  "text": "PHMD 6964",
+                  "sh": 0
                 }
               ]
             }
@@ -311,7 +340,8 @@
                   "codes": [
                     "PHMD6964"
                   ],
-                  "text": "PHMD 6964"
+                  "text": "PHMD 6964",
+                  "sh": 0
                 }
               ]
             },
@@ -329,39 +359,45 @@
                   "codes": [
                     "PHMD5320"
                   ],
-                  "text": "PHMD 5320"
+                  "text": "PHMD 5320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5335"
                   ],
-                  "text": "PHMD 5335"
+                  "text": "PHMD 5335",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5345"
                   ],
-                  "text": "PHMD 5345"
+                  "text": "PHMD 5345",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5386"
                   ],
-                  "text": "PHMD 5386"
+                  "text": "PHMD 5386",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHMD5396"
                   ],
-                  "text": "PHMD 5396"
+                  "text": "PHMD 5396",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 2
                 }
               ]
             },
@@ -376,7 +412,8 @@
                 },
                 {
                   "kind": "placeholder",
-                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)",
+                  "sh": 6
                 }
               ]
             },
@@ -391,7 +428,8 @@
                 },
                 {
                   "kind": "placeholder",
-                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)",
+                  "sh": 6
                 }
               ]
             }
@@ -407,11 +445,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)",
+                  "sh": 6
                 },
                 {
                   "kind": "placeholder",
-                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)",
+                  "sh": 6
                 }
               ]
             },
@@ -422,11 +462,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)",
+                  "sh": 6
                 },
                 {
                   "kind": "placeholder",
-                  "text": "APPE (choose from PHMD 6440–PHMD 6474)"
+                  "text": "APPE (choose from PHMD 6440–PHMD 6474)",
+                  "sh": 6
                 }
               ]
             }

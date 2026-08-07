@@ -19,35 +19,40 @@
                     "CHEM1151",
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1151 and CHEM 1153 (ND)"
+                  "text": "CHEM 1151 and CHEM 1153 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -62,21 +67,24 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -85,7 +93,8 @@
                     "PHYS1152",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)"
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)",
+                  "sh": 5
                 }
               ]
             },
@@ -95,7 +104,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -106,7 +115,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -126,25 +135,29 @@
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ME2350"
                   ],
-                  "text": "ME 2350"
+                  "text": "ME 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -153,7 +166,8 @@
                     "PHYS1156",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157 (ND)"
+                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157 (ND)",
+                  "sh": 5
                 }
               ]
             },
@@ -168,21 +182,24 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -190,7 +207,8 @@
                     "ME2355",
                     "ME2356"
                   ],
-                  "text": "ME 2355 and ME 2356"
+                  "text": "ME 2355 and ME 2356",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -198,7 +216,8 @@
                     "ME2380",
                     "ME2381"
                   ],
-                  "text": "ME 2380 and ME 2381"
+                  "text": "ME 2380 and ME 2381",
+                  "sh": 4
                 }
               ]
             },
@@ -213,15 +232,18 @@
                     "ME3475",
                     "ME3480"
                   ],
-                  "text": "ME 3475 or 3480"
+                  "text": "ME 3475 or 3480",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 }
               ]
             },
@@ -231,7 +253,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -252,7 +274,8 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -261,7 +284,8 @@
                     "ENGW3314",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3314, or 3315 (WD)"
+                  "text": "ENGW 3302, 3314, or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -269,11 +293,13 @@
                     "ME2340",
                     "ME2341"
                   ],
-                  "text": "ME 2340 and ME 2341 (WI)"
+                  "text": "ME 2340 and ME 2341 (WI)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 1"
+                  "text": "Design option course 1",
+                  "sh": 4
                 }
               ]
             },
@@ -288,7 +314,8 @@
                     "ME3455",
                     "ME3456"
                   ],
-                  "text": "ME 3455 and ME 3456"
+                  "text": "ME 3455 and ME 3456",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -296,22 +323,26 @@
                     "ME4505",
                     "ME4506"
                   ],
-                  "text": "ME 4505 and ME 4506 (AD)"
+                  "text": "ME 4505 and ME 4506 (AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 2"
+                  "text": "Design option course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper mechanical elective"
+                  "text": "Upper mechanical elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 }
               ]
             },
@@ -325,15 +356,18 @@
                   "codes": [
                     "MEIE4701"
                   ],
-                  "text": "MEIE 4701 (EI, WI, CE)"
+                  "text": "MEIE 4701 (EI, WI, CE)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper mechanical elective"
+                  "text": "Upper mechanical elective",
+                  "sh": 4
                 }
               ]
             },
@@ -344,7 +378,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -360,7 +395,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -375,22 +411,26 @@
                     "ARTG2262",
                     "ARTG2263"
                   ],
-                  "text": "ARTG 2262 and ARTG 2263"
+                  "text": "ARTG 2262 and ARTG 2263",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4702"
                   ],
-                  "text": "MEIE 4702 (EI, WI, CE)"
+                  "text": "MEIE 4702 (EI, WI, CE)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective (NUpath DD)"
+                  "text": "General elective (NUpath DD)",
+                  "sh": 4
                 }
               ]
             }
@@ -417,35 +457,40 @@
                     "CHEM1151",
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1151 and CHEM 1153 (ND)"
+                  "text": "CHEM 1151 and CHEM 1153 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -460,21 +505,24 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -483,7 +531,8 @@
                     "PHYS1156",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1151 and PHYS 1156 and PHYS 1157 (ND)"
+                  "text": "PHYS 1151 and PHYS 1156 and PHYS 1157 (ND)",
+                  "sh": 5
                 }
               ]
             },
@@ -493,7 +542,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -504,7 +553,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -525,28 +574,32 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ME2350"
                   ],
-                  "text": "ME 2350"
+                  "text": "ME 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -555,7 +608,8 @@
                     "PHYS1156",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157 (ND)"
+                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157 (ND)",
+                  "sh": 5
                 }
               ]
             },
@@ -569,7 +623,8 @@
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -577,7 +632,8 @@
                     "ME2340",
                     "ME2341"
                   ],
-                  "text": "ME 2340 and ME 2341 (WI)"
+                  "text": "ME 2340 and ME 2341 (WI)",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -585,7 +641,8 @@
                     "ME2355",
                     "ME2356"
                   ],
-                  "text": "ME 2355 and ME 2356"
+                  "text": "ME 2355 and ME 2356",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -593,7 +650,8 @@
                     "ME2380",
                     "ME2381"
                   ],
-                  "text": "ME 2380 and ME 2381"
+                  "text": "ME 2380 and ME 2381",
+                  "sh": 4
                 }
               ]
             },
@@ -603,7 +661,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -618,11 +676,13 @@
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "choice",
@@ -630,7 +690,8 @@
                     "ME3475",
                     "ME3480"
                   ],
-                  "text": "ME 3475 or 3480"
+                  "text": "ME 3475 or 3480",
+                  "sh": 4
                 }
               ]
             }
@@ -650,7 +711,8 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -658,7 +720,8 @@
                     "ME3455",
                     "ME3456"
                   ],
-                  "text": "ME 3455 and ME 3456"
+                  "text": "ME 3455 and ME 3456",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -666,11 +729,13 @@
                     "ME4505",
                     "ME4506"
                   ],
-                  "text": "ME 4505 and ME 4506 (AD)"
+                  "text": "ME 4505 and ME 4506 (AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 1"
+                  "text": "Design option course 1",
+                  "sh": 4
                 }
               ]
             },
@@ -681,7 +746,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -692,7 +758,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -708,18 +775,21 @@
                     "ENGW3314",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3314, or 3315 (WD)"
+                  "text": "ENGW 3302, 3314, or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4701"
                   ],
-                  "text": "MEIE 4701 (EI, WI, CE)"
+                  "text": "MEIE 4701 (EI, WI, CE)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper mechanical elective"
+                  "text": "Upper mechanical elective",
+                  "sh": 4
                 }
               ]
             }
@@ -738,26 +808,31 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4702"
                   ],
-                  "text": "MEIE 4702 (EI, WI, CE)"
+                  "text": "MEIE 4702 (EI, WI, CE)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 2"
+                  "text": "Design option course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective (NUpath DD)"
+                  "text": "General elective (NUpath DD)",
+                  "sh": 4
                 }
               ]
             },
@@ -772,23 +847,28 @@
                     "ARTG2262",
                     "ARTG2263"
                   ],
-                  "text": "ARTG 2262 and ARTG 2263"
+                  "text": "ARTG 2262 and ARTG 2263",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper mechanical elective"
+                  "text": "Upper mechanical elective",
+                  "sh": 4
                 }
               ]
             }
@@ -815,35 +895,40 @@
                     "CHEM1151",
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1151 and CHEM 1153 (ND)"
+                  "text": "CHEM 1151 and CHEM 1153 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -858,21 +943,24 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -881,7 +969,8 @@
                     "PHYS1152",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)"
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)",
+                  "sh": 5
                 }
               ]
             },
@@ -891,7 +980,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -902,7 +991,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -923,21 +1012,24 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ME2350"
                   ],
-                  "text": "ME 2350"
+                  "text": "ME 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -946,7 +1038,8 @@
                     "PHYS1156",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157 (ND)"
+                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157 (ND)",
+                  "sh": 5
                 }
               ]
             },
@@ -960,25 +1053,29 @@
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -986,7 +1083,8 @@
                     "ME2340",
                     "ME2341"
                   ],
-                  "text": "ME 2340 and ME 2341 (WI)"
+                  "text": "ME 2340 and ME 2341 (WI)",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -994,7 +1092,8 @@
                     "ME2380",
                     "ME2381"
                   ],
-                  "text": "ME 2380 and ME 2381"
+                  "text": "ME 2380 and ME 2381",
+                  "sh": 4
                 }
               ]
             },
@@ -1004,7 +1103,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1016,7 +1115,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1032,7 +1132,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1048,7 +1149,8 @@
                     "ENGW3314",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3314, or 3315 (WD)"
+                  "text": "ENGW 3302, 3314, or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1056,19 +1158,23 @@
                     "ME2355",
                     "ME2356"
                   ],
-                  "text": "ME 2355 and ME 2356"
+                  "text": "ME 2355 and ME 2356",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 1"
+                  "text": "Design option course 1",
+                  "sh": 4
                 }
               ]
             },
@@ -1083,7 +1189,8 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1091,7 +1198,8 @@
                     "ME3475",
                     "ME3480"
                   ],
-                  "text": "ME 3475 or 3480"
+                  "text": "ME 3475 or 3480",
+                  "sh": 4
                 }
               ]
             },
@@ -1102,7 +1210,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1118,7 +1227,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1132,7 +1242,8 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -1140,7 +1251,8 @@
                     "ME3455",
                     "ME3456"
                   ],
-                  "text": "ME 3455 and ME 3456"
+                  "text": "ME 3455 and ME 3456",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -1148,15 +1260,18 @@
                     "ME4505",
                     "ME4506"
                   ],
-                  "text": "ME 4505 and ME 4506 (AD)"
+                  "text": "ME 4505 and ME 4506 (AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 2"
+                  "text": "Design option course 2",
+                  "sh": 4
                 }
               ]
             },
@@ -1170,15 +1285,18 @@
                   "codes": [
                     "MEIE4701"
                   ],
-                  "text": "MEIE 4701 (EI, WI, CE)"
+                  "text": "MEIE 4701 (EI, WI, CE)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper mechanical elective"
+                  "text": "Upper mechanical elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1189,7 +1307,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1205,7 +1324,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1220,22 +1340,26 @@
                     "ARTG2262",
                     "ARTG2263"
                   ],
-                  "text": "ARTG 2262 and ARTG 2263"
+                  "text": "ARTG 2262 and ARTG 2263",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4702"
                   ],
-                  "text": "MEIE 4702 (EI, WI, CE)"
+                  "text": "MEIE 4702 (EI, WI, CE)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper mechanical elective"
+                  "text": "Upper mechanical elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective (NUpath DD)"
+                  "text": "General elective (NUpath DD)",
+                  "sh": 4
                 }
               ]
             }
@@ -1261,35 +1385,40 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -1304,21 +1433,24 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1327,7 +1459,8 @@
                     "PHYS1152",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)"
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)",
+                  "sh": 5
                 }
               ]
             },
@@ -1337,7 +1470,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1348,7 +1481,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1369,28 +1502,32 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ME2350"
                   ],
-                  "text": "ME 2350"
+                  "text": "ME 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1399,7 +1536,8 @@
                     "PHYS1156",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157 (ND)"
+                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157 (ND)",
+                  "sh": 5
                 }
               ]
             },
@@ -1410,7 +1548,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1421,7 +1560,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1431,7 +1571,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1451,7 +1591,8 @@
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1459,7 +1600,8 @@
                     "ME2355",
                     "ME2356"
                   ],
-                  "text": "ME 2355 and ME 2356"
+                  "text": "ME 2355 and ME 2356",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -1467,15 +1609,18 @@
                     "ME2380",
                     "ME2381"
                   ],
-                  "text": "ME 2380 and ME 2381"
+                  "text": "ME 2380 and ME 2381",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 }
               ]
             },
@@ -1486,7 +1631,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1497,7 +1643,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1511,11 +1658,13 @@
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "choice",
@@ -1523,7 +1672,8 @@
                     "ME3475",
                     "ME3480"
                   ],
-                  "text": "ME 3475 or 3480"
+                  "text": "ME 3475 or 3480",
+                  "sh": 4
                 }
               ]
             }
@@ -1542,7 +1692,8 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -1550,7 +1701,8 @@
                     "ME2340",
                     "ME2341"
                   ],
-                  "text": "ME 2340 and ME 2341 (WI)"
+                  "text": "ME 2340 and ME 2341 (WI)",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -1558,7 +1710,8 @@
                     "ME3455",
                     "ME3456"
                   ],
-                  "text": "ME 3455 and ME 3456"
+                  "text": "ME 3455 and ME 3456",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -1566,11 +1719,13 @@
                     "ME4505",
                     "ME4506"
                   ],
-                  "text": "ME 4505 and ME 4506 (AD)"
+                  "text": "ME 4505 and ME 4506 (AD)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 1"
+                  "text": "Design option course 1",
+                  "sh": 4
                 }
               ]
             },
@@ -1581,7 +1736,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1592,7 +1748,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1607,18 +1764,21 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4701"
                   ],
-                  "text": "MEIE 4701 (EI, WI, CE)"
+                  "text": "MEIE 4701 (EI, WI, CE)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper mechanical elective"
+                  "text": "Upper mechanical elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1637,19 +1797,23 @@
                   "codes": [
                     "MEIE4702"
                   ],
-                  "text": "MEIE 4702 (EI, WI, CE)"
+                  "text": "MEIE 4702 (EI, WI, CE)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option course 2"
+                  "text": "Design option course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Upper mechanical elective"
+                  "text": "Upper mechanical elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1664,7 +1828,8 @@
                     "ARTG2262",
                     "ARTG2263"
                   ],
-                  "text": "ARTG 2262 and ARTG 2263"
+                  "text": "ARTG 2262 and ARTG 2263",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1673,15 +1838,18 @@
                     "ENGW3314",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3314, or 3315 (WD)"
+                  "text": "ENGW 3302, 3314, or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective (NUpath DD)"
+                  "text": "General elective (NUpath DD)",
+                  "sh": 4
                 }
               ]
             }

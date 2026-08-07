@@ -18,36 +18,42 @@
                   "codes": [
                     "HIST1000"
                   ],
-                  "text": "HIST 1000"
+                  "text": "HIST 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1200"
                   ],
-                  "text": "HIST 1200"
+                  "text": "HIST 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1201"
                   ],
-                  "text": "HIST 1201"
+                  "text": "HIST 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JPNS1101"
                   ],
-                  "text": "JPNS 1101"
+                  "text": "JPNS 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ASNS Elective"
+                  "text": "ASNS Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ASNS Elective"
+                  "text": "ASNS Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -61,28 +67,32 @@
                   "codes": [
                     "ASNS1150"
                   ],
-                  "text": "ASNS 1150"
+                  "text": "ASNS 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1100"
                   ],
-                  "text": "HIST 1100"
+                  "text": "HIST 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1246"
                   ],
-                  "text": "HIST 1246"
+                  "text": "HIST 1246",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JPNS1102"
                   ],
-                  "text": "JPNS 1102"
+                  "text": "JPNS 1102",
+                  "sh": 4
                 }
               ]
             },
@@ -93,11 +103,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -108,11 +120,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -131,35 +145,40 @@
                   "codes": [
                     "HIST1215"
                   ],
-                  "text": "HIST 1215"
+                  "text": "HIST 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2302"
                   ],
-                  "text": "HIST 2302"
+                  "text": "HIST 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2308"
                   ],
-                  "text": "HIST 2308"
+                  "text": "HIST 2308",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JPNS2101"
                   ],
-                  "text": "JPNS 2101"
+                  "text": "JPNS 2101",
+                  "sh": 4
                 }
               ]
             },
@@ -173,28 +192,32 @@
                   "codes": [
                     "HIST1252"
                   ],
-                  "text": "HIST 1252"
+                  "text": "HIST 1252",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2351"
                   ],
-                  "text": "HIST 2351"
+                  "text": "HIST 2351",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2360"
                   ],
-                  "text": "HIST 2360"
+                  "text": "HIST 2360",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JPNS2102"
                   ],
-                  "text": "JPNS 2102"
+                  "text": "JPNS 2102",
+                  "sh": 4
                 }
               ]
             },
@@ -235,25 +258,29 @@
                   "codes": [
                     "HIST3350"
                   ],
-                  "text": "HIST 3350"
+                  "text": "HIST 3350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JPNS1700"
                   ],
-                  "text": "JPNS 1700"
+                  "text": "JPNS 1700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2395"
                   ],
-                  "text": "PHIL 2395"
+                  "text": "PHIL 2395",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST Elective"
+                  "text": "HIST Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -275,7 +302,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -286,7 +314,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -305,19 +334,23 @@
                   "codes": [
                     "HIST4701"
                   ],
-                  "text": "HIST 4701"
+                  "text": "HIST 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ASNS Elective"
+                  "text": "ASNS Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST Elective"
+                  "text": "HIST Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST Elective"
+                  "text": "HIST Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -331,14 +364,16 @@
                   "codes": [
                     "ANTH4350"
                   ],
-                  "text": "ANTH 4350"
+                  "text": "ANTH 4350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS3487"
                   ],
-                  "text": "POLS 3487"
+                  "text": "POLS 3487",
+                  "sh": 4
                 }
               ]
             }

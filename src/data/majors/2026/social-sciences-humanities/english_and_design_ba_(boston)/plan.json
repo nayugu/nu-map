@@ -19,32 +19,37 @@
                     "ENGL1000",
                     "ARTF1000"
                   ],
-                  "text": "ENGL 1000 or ARTF 1000"
+                  "text": "ENGL 1000 or ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL1400"
                   ],
-                  "text": "ENGL 1400"
+                  "text": "ENGL 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL1450"
                   ],
-                  "text": "ENGL 1450"
+                  "text": "ENGL 1450",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -52,7 +57,8 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 }
               ]
             },
@@ -67,7 +73,8 @@
                     "ENGL1160",
                     "ENGL1410"
                   ],
-                  "text": "ENGL 1160 or 1410"
+                  "text": "ENGL 1160 or 1410",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -75,15 +82,18 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MATH elective"
+                  "text": "MATH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -98,11 +108,13 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -113,15 +125,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -140,19 +155,23 @@
                   "codes": [
                     "ENGL1700"
                   ],
-                  "text": "ENGL 1700"
+                  "text": "ENGL 1700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL pre-19th-century requirement"
+                  "text": "ENGL pre-19th-century requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 1"
+                  "text": "Design option level 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 }
               ]
             },
@@ -163,19 +182,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL 19th-century requirement"
+                  "text": "ENGL 19th-century requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL theories and methods requirement"
+                  "text": "ENGL theories and methods requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 2"
+                  "text": "Design option level 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 }
               ]
             },
@@ -186,11 +209,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -201,7 +226,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -217,7 +243,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -228,19 +255,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL comparative requirement"
+                  "text": "ENGL comparative requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL diversity requirement"
+                  "text": "ENGL diversity requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTG elective"
+                  "text": "ARTG elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -251,11 +282,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -266,7 +299,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -282,7 +316,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -293,22 +328,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL 20th-century requirement"
+                  "text": "ENGL 20th-century requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL elective"
+                  "text": "ENGL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 }
               ]
             }
@@ -335,32 +374,37 @@
                     "ENGL1000",
                     "ARTF1000"
                   ],
-                  "text": "ENGL 1000 or ARTF 1000"
+                  "text": "ENGL 1000 or ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL1400"
                   ],
-                  "text": "ENGL 1400"
+                  "text": "ENGL 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL1450"
                   ],
-                  "text": "ENGL 1450"
+                  "text": "ENGL 1450",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTF1220"
                   ],
-                  "text": "ARTF 1220 (with optional ARTF 1221)"
+                  "text": "ARTF 1220 (with optional ARTF 1221)",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -368,7 +412,8 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 }
               ]
             },
@@ -383,7 +428,8 @@
                     "ENGL1160",
                     "ENGL1410"
                   ],
-                  "text": "ENGL 1160 or 1410"
+                  "text": "ENGL 1160 or 1410",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -391,19 +437,23 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MATH elective"
+                  "text": "MATH elective",
+                  "sh": 4
                 }
               ]
             },
@@ -413,7 +463,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -424,7 +474,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -444,11 +494,13 @@
                   "codes": [
                     "ENGL1700"
                   ],
-                  "text": "ENGL 1700"
+                  "text": "ENGL 1700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL pre-19th-century requirement"
+                  "text": "ENGL pre-19th-century requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -456,11 +508,13 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 1"
+                  "text": "Design option level 1",
+                  "sh": 4
                 }
               ]
             },
@@ -471,19 +525,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL 19th-century requirement"
+                  "text": "ENGL 19th-century requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL theories and methods requirement"
+                  "text": "ENGL theories and methods requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 2"
+                  "text": "Design option level 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 }
               ]
             },
@@ -493,7 +551,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -505,7 +563,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -521,7 +580,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -532,19 +592,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL comparative requirement"
+                  "text": "ENGL comparative requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL diversity requirement"
+                  "text": "ENGL diversity requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTG elective"
+                  "text": "ARTG elective",
+                  "sh": 4
                 }
               ]
             },
@@ -554,7 +618,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -566,7 +630,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -582,7 +647,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -593,19 +659,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL 20th-century requirement"
+                  "text": "ENGL 20th-century requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL elective"
+                  "text": "ENGL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -615,7 +685,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -626,7 +696,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -646,19 +716,23 @@
                   "codes": [
                     "ENGL4710"
                   ],
-                  "text": "ENGL 4710"
+                  "text": "ENGL 4710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL elective"
+                  "text": "ENGL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -672,19 +746,23 @@
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL writing requirement"
+                  "text": "ENGL writing requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

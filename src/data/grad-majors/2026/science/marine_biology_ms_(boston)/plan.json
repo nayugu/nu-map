@@ -18,28 +18,32 @@
                   "codes": [
                     "EEMB5303"
                   ],
-                  "text": "EEMB 5303"
+                  "text": "EEMB 5303",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5522"
                   ],
-                  "text": "EEMB 5522"
+                  "text": "EEMB 5522",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5546"
                   ],
-                  "text": "EEMB 5546"
+                  "text": "EEMB 5546",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5542"
                   ],
-                  "text": "EEMB 5542"
+                  "text": "EEMB 5542",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -47,7 +51,8 @@
                     "EEMB5533",
                     "EEMB5535"
                   ],
-                  "text": "EEMB 5533 and EEMB 5535"
+                  "text": "EEMB 5533 and EEMB 5535",
+                  "sh": 3
                 }
               ]
             },
@@ -62,7 +67,8 @@
                     "EEMB5504",
                     "EEMB5505"
                   ],
-                  "text": "EEMB 5504 and EEMB 5505"
+                  "text": "EEMB 5504 and EEMB 5505",
+                  "sh": 3
                 },
                 {
                   "kind": "courses",
@@ -70,14 +76,16 @@
                     "EEMB5506",
                     "EEMB5507"
                   ],
-                  "text": "EEMB 5506 and EEMB 5507"
+                  "text": "EEMB 5506 and EEMB 5507",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5508"
                   ],
-                  "text": "EEMB 5508"
+                  "text": "EEMB 5508",
+                  "sh": 3
                 },
                 {
                   "kind": "courses",
@@ -85,21 +93,24 @@
                     "EEMB5518",
                     "EEMB5519"
                   ],
-                  "text": "EEMB 5518 and EEMB 5519"
+                  "text": "EEMB 5518 and EEMB 5519",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5520"
                   ],
-                  "text": "EEMB 5520"
+                  "text": "EEMB 5520",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB5538"
                   ],
-                  "text": "EEMB 5538"
+                  "text": "EEMB 5538",
+                  "sh": 3
                 },
                 {
                   "kind": "courses",
@@ -107,7 +118,8 @@
                     "EEMB5540",
                     "EEMB5541"
                   ],
-                  "text": "EEMB 5540 and EEMB 5541"
+                  "text": "EEMB 5540 and EEMB 5541",
+                  "sh": 3
                 }
               ]
             },
@@ -121,7 +133,8 @@
                   "codes": [
                     "EEMB7674"
                   ],
-                  "text": "EEMB 7674"
+                  "text": "EEMB 7674",
+                  "sh": 1
                 }
               ],
               "fullSummer": true
@@ -141,7 +154,8 @@
                   "codes": [
                     "EEMB7674"
                   ],
-                  "text": "EEMB 7674"
+                  "text": "EEMB 7674",
+                  "sh": 1
                 }
               ]
             }

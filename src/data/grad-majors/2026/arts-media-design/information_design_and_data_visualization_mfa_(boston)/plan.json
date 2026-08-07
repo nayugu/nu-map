@@ -18,28 +18,32 @@
                   "codes": [
                     "ARTG5100"
                   ],
-                  "text": "ARTG 5100"
+                  "text": "ARTG 5100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5110"
                   ],
-                  "text": "ARTG 5110"
+                  "text": "ARTG 5110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5310"
                   ],
-                  "text": "ARTG 5310"
+                  "text": "ARTG 5310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5320"
                   ],
-                  "text": "ARTG 5320"
+                  "text": "ARTG 5320",
+                  "sh": 4
                 }
               ]
             },
@@ -53,28 +57,32 @@
                   "codes": [
                     "ARTG5120"
                   ],
-                  "text": "ARTG 5120"
+                  "text": "ARTG 5120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5330"
                   ],
-                  "text": "ARTG 5330"
+                  "text": "ARTG 5330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6100"
                   ],
-                  "text": "ARTG 6100"
+                  "text": "ARTG 6100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6110"
                   ],
-                  "text": "ARTG 6110"
+                  "text": "ARTG 6110",
+                  "sh": 4
                 }
               ]
             },
@@ -85,7 +93,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op or vacation"
+                  "text": "Co-op or vacation",
+                  "sh": 0
                 }
               ],
               "fullSummer": true
@@ -105,25 +114,29 @@
                   "codes": [
                     "ARTG5710"
                   ],
-                  "text": "ARTG 5710"
+                  "text": "ARTG 5710",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6700"
                   ],
-                  "text": "ARTG 6700"
+                  "text": "ARTG 6700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG7100"
                   ],
-                  "text": "ARTG 7100"
+                  "text": "ARTG 7100",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -137,18 +150,21 @@
                   "codes": [
                     "ARTG7910"
                   ],
-                  "text": "ARTG 7910"
+                  "text": "ARTG 7910",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG7990"
                   ],
-                  "text": "ARTG 7990"
+                  "text": "ARTG 7990",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -174,25 +190,29 @@
                   "codes": [
                     "ARTG5100"
                   ],
-                  "text": "ARTG 5100"
+                  "text": "ARTG 5100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5110"
                   ],
-                  "text": "ARTG 5110"
+                  "text": "ARTG 5110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5310"
                   ],
-                  "text": "ARTG 5310"
+                  "text": "ARTG 5310",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -206,28 +226,32 @@
                   "codes": [
                     "ARTG5120"
                   ],
-                  "text": "ARTG 5120"
+                  "text": "ARTG 5120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5330"
                   ],
-                  "text": "ARTG 5330"
+                  "text": "ARTG 5330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6100"
                   ],
-                  "text": "ARTG 6100"
+                  "text": "ARTG 6100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6110"
                   ],
-                  "text": "ARTG 6110"
+                  "text": "ARTG 6110",
+                  "sh": 4
                 }
               ]
             }
@@ -246,11 +270,13 @@
                   "codes": [
                     "ARTG5320"
                   ],
-                  "text": "ARTG 5320"
+                  "text": "ARTG 5320",
+                  "sh": 4
                 },
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -264,18 +290,21 @@
                   "codes": [
                     "ARTG7910"
                   ],
-                  "text": "ARTG 7910"
+                  "text": "ARTG 7910",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG7990"
                   ],
-                  "text": "ARTG 7990"
+                  "text": "ARTG 7990",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -294,21 +323,24 @@
                   "codes": [
                     "ARTG5710"
                   ],
-                  "text": "ARTG 5710"
+                  "text": "ARTG 5710",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6700"
                   ],
-                  "text": "ARTG 6700"
+                  "text": "ARTG 6700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG7100"
                   ],
-                  "text": "ARTG 7100"
+                  "text": "ARTG 7100",
+                  "sh": 4
                 }
               ]
             }
@@ -334,28 +366,32 @@
                   "codes": [
                     "ARTG5100"
                   ],
-                  "text": "ARTG 5100"
+                  "text": "ARTG 5100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5110"
                   ],
-                  "text": "ARTG 5110"
+                  "text": "ARTG 5110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5310"
                   ],
-                  "text": "ARTG 5310"
+                  "text": "ARTG 5310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5320"
                   ],
-                  "text": "ARTG 5320"
+                  "text": "ARTG 5320",
+                  "sh": 4
                 }
               ]
             },
@@ -369,28 +405,32 @@
                   "codes": [
                     "ARTG5120"
                   ],
-                  "text": "ARTG 5120"
+                  "text": "ARTG 5120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5330"
                   ],
-                  "text": "ARTG 5330"
+                  "text": "ARTG 5330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6100"
                   ],
-                  "text": "ARTG 6100"
+                  "text": "ARTG 6100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6110"
                   ],
-                  "text": "ARTG 6110"
+                  "text": "ARTG 6110",
+                  "sh": 4
                 }
               ]
             }
@@ -409,11 +449,13 @@
                   "codes": [
                     "ARTG5710"
                   ],
-                  "text": "ARTG 5710"
+                  "text": "ARTG 5710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -424,7 +466,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -443,14 +486,16 @@
                   "codes": [
                     "ARTG6700"
                   ],
-                  "text": "ARTG 6700"
+                  "text": "ARTG 6700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG7100"
                   ],
-                  "text": "ARTG 7100"
+                  "text": "ARTG 7100",
+                  "sh": 4
                 }
               ]
             },
@@ -464,18 +509,21 @@
                   "codes": [
                     "ARTG7910"
                   ],
-                  "text": "ARTG 7910"
+                  "text": "ARTG 7910",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG7990"
                   ],
-                  "text": "ARTG 7990"
+                  "text": "ARTG 7990",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -501,28 +549,32 @@
                   "codes": [
                     "ARTG5100"
                   ],
-                  "text": "ARTG 5100"
+                  "text": "ARTG 5100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5110"
                   ],
-                  "text": "ARTG 5110"
+                  "text": "ARTG 5110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5310"
                   ],
-                  "text": "ARTG 5310"
+                  "text": "ARTG 5310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5320"
                   ],
-                  "text": "ARTG 5320"
+                  "text": "ARTG 5320",
+                  "sh": 4
                 }
               ]
             },
@@ -536,28 +588,32 @@
                   "codes": [
                     "ARTG5120"
                   ],
-                  "text": "ARTG 5120"
+                  "text": "ARTG 5120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5330"
                   ],
-                  "text": "ARTG 5330"
+                  "text": "ARTG 5330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6100"
                   ],
-                  "text": "ARTG 6100"
+                  "text": "ARTG 6100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6110"
                   ],
-                  "text": "ARTG 6110"
+                  "text": "ARTG 6110",
+                  "sh": 4
                 }
               ]
             }
@@ -576,11 +632,13 @@
                   "codes": [
                     "ARTG5710"
                   ],
-                  "text": "ARTG 5710"
+                  "text": "ARTG 5710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Co-op1"
+                  "text": "Co-op1",
+                  "sh": 0
                 }
               ]
             },
@@ -591,7 +649,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Co-op2"
+                  "text": "Co-op2",
+                  "sh": 0
                 }
               ]
             }
@@ -610,18 +669,21 @@
                   "codes": [
                     "ARTG6700"
                   ],
-                  "text": "ARTG 6700"
+                  "text": "ARTG 6700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG7100"
                   ],
-                  "text": "ARTG 7100"
+                  "text": "ARTG 7100",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -635,18 +697,21 @@
                   "codes": [
                     "ARTG7910"
                   ],
-                  "text": "ARTG 7910"
+                  "text": "ARTG 7910",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG7990"
                   ],
-                  "text": "ARTG 7990"
+                  "text": "ARTG 7990",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

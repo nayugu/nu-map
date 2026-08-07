@@ -19,32 +19,37 @@
                     "COMM1000",
                     "MSCR1000"
                   ],
-                  "text": "COMM 1000 or MSCR 1000"
+                  "text": "COMM 1000 or MSCR 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MSCR1220"
                   ],
-                  "text": "MSCR 1220"
+                  "text": "MSCR 1220",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language Elementary 1"
+                  "text": "Foreign language Elementary 1",
+                  "sh": 4
                 }
               ]
             },
@@ -58,29 +63,34 @@
                   "codes": [
                     "COMM2301"
                   ],
-                  "text": "COMM 2301"
+                  "text": "COMM 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MSCR2220"
                   ],
-                  "text": "MSCR 2220"
+                  "text": "MSCR 2220",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Foundational Course"
+                  "text": "COMM Foundational Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language Elementary 2"
+                  "text": "Foreign language Elementary 2",
+                  "sh": 4
                 }
               ]
             },
@@ -91,11 +101,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "MSCR Foundational Course"
+                  "text": "MSCR Foundational Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Diversity & Globalization course"
+                  "text": "COMM Diversity & Globalization course",
+                  "sh": 4
                 }
               ]
             },
@@ -106,11 +118,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "MSCR Diversity & Globalization course"
+                  "text": "MSCR Diversity & Globalization course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -126,19 +140,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Creative expression course"
+                  "text": "Creative expression course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Writing Intensive course"
+                  "text": "COMM Writing Intensive course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective 1"
+                  "text": "COMM elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective 1"
+                  "text": "MSCR elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -149,7 +167,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -160,7 +179,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -171,11 +191,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -191,19 +213,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "MSCR Writing Intensive course"
+                  "text": "MSCR Writing Intensive course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM Elective 2"
+                  "text": "COMM Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR Elective 2"
+                  "text": "MSCR Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate Foreign Language"
+                  "text": "Intermediate Foreign Language",
+                  "sh": 4
                 }
               ]
             },
@@ -214,7 +240,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -225,7 +252,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -236,11 +264,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing in the Discipline course"
+                  "text": "Advanced Writing in the Discipline course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -256,19 +286,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM Elective 3"
+                  "text": "COMM Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR Elective 3"
+                  "text": "MSCR Elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -279,19 +313,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone course"
+                  "text": "Capstone course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

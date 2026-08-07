@@ -18,28 +18,32 @@
                   "codes": [
                     "PHYS7210"
                   ],
-                  "text": "PHYS 7210"
+                  "text": "PHYS 7210",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS7301"
                   ],
-                  "text": "PHYS 7301"
+                  "text": "PHYS 7301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS7302"
                   ],
-                  "text": "PHYS 7302"
+                  "text": "PHYS 7302",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS7315"
                   ],
-                  "text": "PHYS 7315"
+                  "text": "PHYS 7315",
+                  "sh": 4
                 }
               ]
             },
@@ -53,28 +57,32 @@
                   "codes": [
                     "PHYS5318"
                   ],
-                  "text": "PHYS 5318"
+                  "text": "PHYS 5318",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS7210"
                   ],
-                  "text": "PHYS 7210"
+                  "text": "PHYS 7210",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS7305"
                   ],
-                  "text": "PHYS 7305"
+                  "text": "PHYS 7305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS7316"
                   ],
-                  "text": "PHYS 7316"
+                  "text": "PHYS 7316",
+                  "sh": 4
                 }
               ]
             }
@@ -93,11 +101,13 @@
                   "codes": [
                     "PHYS7321"
                   ],
-                  "text": "PHYS 7321"
+                  "text": "PHYS 7321",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Electives"
+                  "text": "Electives",
+                  "sh": 8
                 }
               ]
             },
@@ -111,11 +121,13 @@
                   "codes": [
                     "PHYS9984"
                   ],
-                  "text": "PHYS 9984"
+                  "text": "PHYS 9984",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced elective"
+                  "text": "Advanced elective",
+                  "sh": 4
                 }
               ]
             }
@@ -134,7 +146,8 @@
                   "codes": [
                     "PHYS9990"
                   ],
-                  "text": "PHYS 9990"
+                  "text": "PHYS 9990",
+                  "sh": 0
                 }
               ]
             },
@@ -148,7 +161,8 @@
                   "codes": [
                     "PHYS9991"
                   ],
-                  "text": "PHYS 9991"
+                  "text": "PHYS 9991",
+                  "sh": 0
                 }
               ]
             }

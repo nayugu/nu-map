@@ -19,14 +19,16 @@
                     "HSCI1000",
                     "CRIM1000"
                   ],
-                  "text": "HSCI 1000 or CRIM 1000"
+                  "text": "HSCI 1000 or CRIM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -34,21 +36,24 @@
                     "BIOL1111",
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1111 and BIOL 1112"
+                  "text": "BIOL 1111 and BIOL 1112",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 }
               ]
             },
@@ -63,7 +68,8 @@
                     "BIOL1113",
                     "BIOL1114"
                   ],
-                  "text": "BIOL 1113 and BIOL 1114"
+                  "text": "BIOL 1113 and BIOL 1114",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -72,18 +78,21 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective/First-Year Writing NUpath course"
+                  "text": "Open elective/First-Year Writing NUpath course",
+                  "sh": 4
                 }
               ]
             },
@@ -97,14 +106,16 @@
                   "codes": [
                     "PHTH2350"
                   ],
-                  "text": "PHTH 2350"
+                  "text": "PHTH 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 }
               ]
             },
@@ -115,11 +126,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -139,7 +152,8 @@
                     "HSCI2000",
                     "EESH2000"
                   ],
-                  "text": "HSCI 2000 or EESH 2000"
+                  "text": "HSCI 2000 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -148,7 +162,8 @@
                     "CRIM3700",
                     "INSH3102"
                   ],
-                  "text": "PHTH 2210, CRIM 3700, or INSH 3102"
+                  "text": "PHTH 2210, CRIM 3700, or INSH 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -156,21 +171,24 @@
                     "CS1100",
                     "CS1101"
                   ],
-                  "text": "CS 1100 and CS 1101"
+                  "text": "CS 1100 and CS 1101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2515"
                   ],
-                  "text": "PHTH 2515"
+                  "text": "PHTH 2515",
+                  "sh": 4
                 }
               ]
             },
@@ -181,7 +199,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -192,7 +211,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -203,11 +223,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective/Advanced Writing in the Disciplines NUpath course"
+                  "text": "Open elective/Advanced Writing in the Disciplines NUpath course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective/Ethical Reasoning NUpath course"
+                  "text": "Open elective/Ethical Reasoning NUpath course",
+                  "sh": 4
                 }
               ]
             }
@@ -226,15 +248,18 @@
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM electives"
+                  "text": "CRIM electives",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open electives"
+                  "text": "Open electives",
+                  "sh": 8
                 }
               ]
             },
@@ -245,7 +270,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -256,7 +282,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -270,14 +297,16 @@
                   "codes": [
                     "PHTH4120"
                   ],
-                  "text": "PHTH 4120"
+                  "text": "PHTH 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4540"
                   ],
-                  "text": "PHTH 4540"
+                  "text": "PHTH 4540",
+                  "sh": 4
                 }
               ]
             }
@@ -297,18 +326,21 @@
                     "PHTH4202",
                     "CRIM3600"
                   ],
-                  "text": "PHTH 4202 or CRIM 3600"
+                  "text": "PHTH 4202 or CRIM 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3040"
                   ],
-                  "text": "CRIM 3040"
+                  "text": "CRIM 3040",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM electives"
+                  "text": "CRIM electives",
+                  "sh": 8
                 }
               ]
             },
@@ -319,11 +351,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone course"
+                  "text": "Capstone course",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM electives"
+                  "text": "CRIM electives",
+                  "sh": 12
                 }
               ]
             }
@@ -350,14 +384,16 @@
                     "HSCI1000",
                     "CRIM1000"
                   ],
-                  "text": "HSCI 1000 or CRIM 1000"
+                  "text": "HSCI 1000 or CRIM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -365,18 +401,21 @@
                     "BIOL1111",
                     "BIOL1112"
                   ],
-                  "text": "BIOL 1111 and BIOL 1112"
+                  "text": "BIOL 1111 and BIOL 1112",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "First-year writing course"
+                  "text": "First-year writing course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 }
               ]
             },
@@ -391,7 +430,8 @@
                     "BIOL1113",
                     "BIOL1114"
                   ],
-                  "text": "BIOL 1113 and BIOL 1114"
+                  "text": "BIOL 1113 and BIOL 1114",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -400,21 +440,24 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 }
               ]
             },
@@ -428,14 +471,16 @@
                   "codes": [
                     "PHTH2350"
                   ],
-                  "text": "PHTH 2350"
+                  "text": "PHTH 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 }
               ]
             },
@@ -446,11 +491,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -470,25 +517,29 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2515"
                   ],
-                  "text": "PHTH 2515"
+                  "text": "PHTH 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -503,7 +554,8 @@
                     "HSCI2000",
                     "EESH2000"
                   ],
-                  "text": "HSCI 2000 or EESH 2000"
+                  "text": "HSCI 2000 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -512,22 +564,26 @@
                     "CRIM3700",
                     "INSH3102"
                   ],
-                  "text": "PHTH 2210, CRIM 3700, or INSH 3102"
+                  "text": "PHTH 2210, CRIM 3700, or INSH 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Criminal justice elective"
+                  "text": "Criminal justice elective",
+                  "sh": 4
                 }
               ]
             },
@@ -538,11 +594,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective/Ethical Reasoning NUpath course"
+                  "text": "Open elective/Ethical Reasoning NUpath course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -553,7 +611,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -569,7 +628,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -580,14 +640,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3040"
                   ],
-                  "text": "CRIM 3040"
+                  "text": "CRIM 3040",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -595,11 +657,13 @@
                     "PHTH4202",
                     "CRIM3600"
                   ],
-                  "text": "PHTH 4202 or CRIM 3600"
+                  "text": "PHTH 4202 or CRIM 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing in the Disciplines NUpath course"
+                  "text": "Advanced Writing in the Disciplines NUpath course",
+                  "sh": 4
                 }
               ]
             },
@@ -613,14 +677,16 @@
                   "codes": [
                     "PHTH4120"
                   ],
-                  "text": "PHTH 4120"
+                  "text": "PHTH 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4540"
                   ],
-                  "text": "PHTH 4540"
+                  "text": "PHTH 4540",
+                  "sh": 4
                 }
               ]
             },
@@ -631,7 +697,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -647,7 +714,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -658,11 +726,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone course"
+                  "text": "Capstone course",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM electives"
+                  "text": "CRIM electives",
+                  "sh": 12
                 }
               ]
             }

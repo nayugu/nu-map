@@ -18,7 +18,8 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -26,28 +27,32 @@
                     "BUSN1102",
                     "COMM1000"
                   ],
-                  "text": "BUSN 1102 or COMM 1000"
+                  "text": "BUSN 1102 or COMM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1231"
                   ],
-                  "text": "MATH 1231"
+                  "text": "MATH 1231",
+                  "sh": 4
                 }
               ]
             },
@@ -63,32 +68,37 @@
                     "COMM1113",
                     "COMM2301"
                   ],
-                  "text": "COMM 1112, 1113, or 2301"
+                  "text": "COMM 1112, 1113, or 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MGSC2301"
                   ],
-                  "text": "MGSC 2301"
+                  "text": "MGSC 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MKTG2201"
                   ],
-                  "text": "MKTG 2201"
+                  "text": "MKTG 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication studies foundation course"
+                  "text": "Communication studies foundation course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -99,11 +109,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Communication studies elective"
+                  "text": "Communication studies elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath course"
+                  "text": "NUpath course",
+                  "sh": 4
                 }
               ]
             },
@@ -114,11 +126,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -137,14 +151,16 @@
                   "codes": [
                     "BUSN1103"
                   ],
-                  "text": "BUSN 1103 (For DMSB students)"
+                  "text": "BUSN 1103 (For DMSB students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -152,15 +168,18 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business core option"
+                  "text": "Business core option",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication studies cluster course"
+                  "text": "Communication studies cluster course",
+                  "sh": 4
                 }
               ]
             },
@@ -174,7 +193,8 @@
                   "codes": [
                     "COOP3945"
                   ],
-                  "text": "COOP 3945"
+                  "text": "COOP 3945",
+                  "sh": 0
                 }
               ]
             },
@@ -188,7 +208,8 @@
                   "codes": [
                     "COOP3945"
                   ],
-                  "text": "COOP 3945"
+                  "text": "COOP 3945",
+                  "sh": 0
                 }
               ]
             },
@@ -199,11 +220,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -222,19 +245,23 @@
                   "codes": [
                     "MKTG4504"
                   ],
-                  "text": "MKTG 4504"
+                  "text": "MKTG 4504",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business core option 1"
+                  "text": "Business core option 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication studies writing-intensive 1"
+                  "text": "Communication studies writing-intensive 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 }
               ]
             },
@@ -248,7 +275,8 @@
                   "codes": [
                     "COOP3945"
                   ],
-                  "text": "COOP 3945"
+                  "text": "COOP 3945",
+                  "sh": 0
                 }
               ]
             },
@@ -262,7 +290,8 @@
                   "codes": [
                     "COOP3945"
                   ],
-                  "text": "COOP 3945"
+                  "text": "COOP 3945",
+                  "sh": 0
                 }
               ]
             },
@@ -273,11 +302,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Communication studies elective"
+                  "text": "Communication studies elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath course"
+                  "text": "NUpath course",
+                  "sh": 4
                 }
               ]
             }
@@ -293,19 +324,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Communication studies writing-intensive 2"
+                  "text": "Communication studies writing-intensive 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Communication studies elective"
+                  "text": "Communication studies elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 }
               ]
             },
@@ -322,7 +357,8 @@
                     "ENGW3314",
                     "ENGW3315"
                   ],
-                  "text": "COMM 3409, ENGW 3304, ENGW 3314, or ENGW 3315"
+                  "text": "COMM 3409, ENGW 3304, ENGW 3314, or ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -330,15 +366,18 @@
                     "COMM4608",
                     "STRT4501"
                   ],
-                  "text": "COMM 4608 or STRT 4501"
+                  "text": "COMM 4608 or STRT 4501",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course"
+                  "text": "Concentration course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

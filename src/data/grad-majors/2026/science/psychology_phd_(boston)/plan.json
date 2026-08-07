@@ -22,21 +22,24 @@
                   "codes": [
                     "PSYC5110"
                   ],
-                  "text": "PSYC 5110"
+                  "text": "PSYC 5110",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC5180"
                   ],
-                  "text": "PSYC 5180"
+                  "text": "PSYC 5180",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC8401"
                   ],
-                  "text": "PSYC 8401"
+                  "text": "PSYC 8401",
+                  "sh": 3
                 }
               ]
             },
@@ -54,25 +57,29 @@
                   "codes": [
                     "PSYC5170"
                   ],
-                  "text": "PSYC 5170"
+                  "text": "PSYC 5170",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC5181"
                   ],
-                  "text": "PSYC 5181"
+                  "text": "PSYC 5181",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC8401"
                   ],
-                  "text": "PSYC 8401"
+                  "text": "PSYC 8401",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Complete one of the following:"
+                  "text": "Complete one of the following:",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
@@ -121,15 +128,18 @@
                   "codes": [
                     "PSYC8401"
                   ],
-                  "text": "PSYC 8401"
+                  "text": "PSYC 8401",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 2
                 }
               ],
               "fullSummer": true
@@ -146,7 +156,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
@@ -157,14 +168,16 @@
                   "codes": [
                     "PSYC7990"
                   ],
-                  "text": "PSYC 7990"
+                  "text": "PSYC 7990",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC5301"
                   ],
-                  "text": "PSYC 5301"
+                  "text": "PSYC 5301",
+                  "sh": 3
                 }
               ]
             },
@@ -175,7 +188,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
@@ -186,7 +200,8 @@
                   "codes": [
                     "PSYC7990"
                   ],
-                  "text": "PSYC 7990"
+                  "text": "PSYC 7990",
+                  "sh": 3
                 }
               ]
             },
@@ -200,18 +215,21 @@
                   "codes": [
                     "PSYC7302"
                   ],
-                  "text": "PSYC 7302"
+                  "text": "PSYC 7302",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC7996"
                   ],
-                  "text": "PSYC 7996"
+                  "text": "PSYC 7996",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 3
                 }
               ],
               "fullSummer": true
@@ -231,7 +249,8 @@
                   "codes": [
                     "PSYC9990"
                   ],
-                  "text": "PSYC 9990"
+                  "text": "PSYC 9990",
+                  "sh": 0
                 }
               ]
             },
@@ -245,7 +264,8 @@
                   "codes": [
                     "PSYC9991"
                   ],
-                  "text": "PSYC 9991"
+                  "text": "PSYC 9991",
+                  "sh": 0
                 }
               ]
             },
@@ -259,7 +279,8 @@
                   "codes": [
                     "PSYC9996"
                   ],
-                  "text": "PSYC 9996"
+                  "text": "PSYC 9996",
+                  "sh": 0
                 }
               ],
               "fullSummer": true
@@ -279,7 +300,8 @@
                   "codes": [
                     "PSYC9996"
                   ],
-                  "text": "PSYC 9996"
+                  "text": "PSYC 9996",
+                  "sh": 0
                 }
               ]
             },
@@ -293,7 +315,8 @@
                   "codes": [
                     "PSYC9996"
                   ],
-                  "text": "PSYC 9996"
+                  "text": "PSYC 9996",
+                  "sh": 0
                 }
               ]
             },
@@ -307,7 +330,8 @@
                   "codes": [
                     "PSYC9996"
                   ],
-                  "text": "PSYC 9996"
+                  "text": "PSYC 9996",
+                  "sh": 0
                 }
               ],
               "fullSummer": true
@@ -327,7 +351,8 @@
                   "codes": [
                     "PSYC9996"
                   ],
-                  "text": "PSYC 9996"
+                  "text": "PSYC 9996",
+                  "sh": 0
                 }
               ]
             },
@@ -341,7 +366,8 @@
                   "codes": [
                     "PSYC9996"
                   ],
-                  "text": "PSYC 9996"
+                  "text": "PSYC 9996",
+                  "sh": 0
                 }
               ]
             },
@@ -355,7 +381,8 @@
                   "codes": [
                     "PSYC9996"
                   ],
-                  "text": "PSYC 9996"
+                  "text": "PSYC 9996",
+                  "sh": 0
                 }
               ],
               "fullSummer": true

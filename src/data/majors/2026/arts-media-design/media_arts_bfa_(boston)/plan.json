@@ -18,7 +18,8 @@
                   "codes": [
                     "ARTF1000"
                   ],
-                  "text": "ARTF 1000"
+                  "text": "ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,11 +27,13 @@
                     "ARTF1240",
                     "ARTF1241"
                   ],
-                  "text": "ARTF 1240 and ARTF 1241"
+                  "text": "ARTF 1240 and ARTF 1241",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals electives"
+                  "text": "Art and design fundamentals electives",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -38,7 +41,8 @@
                     "ARTD1001",
                     "ARTD1002"
                   ],
-                  "text": "ARTD 1001 and ARTD 1002"
+                  "text": "ARTD 1001 and ARTD 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -46,14 +50,16 @@
                     "ARTH1001",
                     "ARTH1002"
                   ],
-                  "text": "ARTH 1001 and ARTH 1002"
+                  "text": "ARTH 1001 and ARTH 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -68,30 +74,36 @@
                     "ARTD2370",
                     "ARTD2371"
                   ],
-                  "text": "ARTD 2370 and ARTD 2371"
+                  "text": "ARTD 2370 and ARTD 2371",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals elective"
+                  "text": "Art and design fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals elective"
+                  "text": "Art and design fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Media arts history elective"
+                  "text": "Media arts history elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -102,11 +114,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Media arts basics elective 1"
+                  "text": "Media arts basics elective 1",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -117,11 +131,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -140,22 +156,26 @@
                   "codes": [
                     "ARTD2100"
                   ],
-                  "text": "ARTD 2100"
+                  "text": "ARTD 2100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTD3470"
                   ],
-                  "text": "ARTD 3470"
+                  "text": "ARTD 3470",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Animation elective 1"
+                  "text": "Animation elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Media arts basics elective 2"
+                  "text": "Media arts basics elective 2",
+                  "sh": 5
                 }
               ]
             },
@@ -166,7 +186,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -177,7 +198,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -188,11 +210,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -211,7 +235,8 @@
                   "codes": [
                     "ARTD4570"
                   ],
-                  "text": "ARTD 4570"
+                  "text": "ARTD 4570",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -219,18 +244,21 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTH3000"
                   ],
-                  "text": "ARTH 3000"
+                  "text": "ARTH 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Animation elective 2"
+                  "text": "Animation elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -241,7 +269,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -252,7 +281,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -263,11 +293,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -286,19 +318,23 @@
                   "codes": [
                     "ARTH4000"
                   ],
-                  "text": "ARTH 4000"
+                  "text": "ARTH 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Animation elective 3"
+                  "text": "Animation elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design elective 1"
+                  "text": "Art and design elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design elective 2"
+                  "text": "Art and design elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -312,19 +348,23 @@
                   "codes": [
                     "ARTD4530"
                   ],
-                  "text": "ARTD 4530"
+                  "text": "ARTD 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Animation elective 4"
+                  "text": "Animation elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -350,7 +390,8 @@
                   "codes": [
                     "ARTF1000"
                   ],
-                  "text": "ARTF 1000"
+                  "text": "ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -358,11 +399,13 @@
                     "ARTF1240",
                     "ARTF1241"
                   ],
-                  "text": "ARTF 1240 and ARTF 1241"
+                  "text": "ARTF 1240 and ARTF 1241",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals electives"
+                  "text": "Art and design fundamentals electives",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -370,7 +413,8 @@
                     "ARTD1001",
                     "ARTD1002"
                   ],
-                  "text": "ARTD 1001 and ARTD 1002"
+                  "text": "ARTD 1001 and ARTD 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -378,14 +422,16 @@
                     "ARTH1001",
                     "ARTH1002"
                   ],
-                  "text": "ARTH 1001 and ARTH 1002"
+                  "text": "ARTH 1001 and ARTH 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -400,30 +446,36 @@
                     "ARTD2360",
                     "ARTD2361"
                   ],
-                  "text": "ARTD 2360 and ARTD 2361"
+                  "text": "ARTD 2360 and ARTD 2361",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals elective"
+                  "text": "Art and design fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals elective"
+                  "text": "Art and design fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Media arts history elective"
+                  "text": "Media arts history elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -434,11 +486,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Media arts basics elective 1"
+                  "text": "Media arts basics elective 1",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -449,11 +503,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -472,22 +528,26 @@
                   "codes": [
                     "ARTD3460"
                   ],
-                  "text": "ARTD 3460"
+                  "text": "ARTD 3460",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTH3000"
                   ],
-                  "text": "ARTH 3000"
+                  "text": "ARTH 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design elective 1"
+                  "text": "Art and design elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -498,7 +558,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -509,7 +570,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -520,11 +582,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -543,7 +607,8 @@
                   "codes": [
                     "ARTD4565"
                   ],
-                  "text": "ARTD 4565"
+                  "text": "ARTD 4565",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -551,18 +616,21 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTH4000"
                   ],
-                  "text": "ARTH 4000"
+                  "text": "ARTH 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Media arts basics elective 2"
+                  "text": "Media arts basics elective 2",
+                  "sh": 5
                 }
               ]
             },
@@ -573,7 +641,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -584,7 +653,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -595,11 +665,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -615,19 +687,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Photography elective 1"
+                  "text": "Photography elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design elective 2"
+                  "text": "Art and design elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design elective 3"
+                  "text": "Art and design elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -641,19 +717,23 @@
                   "codes": [
                     "ARTD4530"
                   ],
-                  "text": "ARTD 4530"
+                  "text": "ARTD 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Photography elective 2"
+                  "text": "Photography elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design elective 4"
+                  "text": "Art and design elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -679,7 +759,8 @@
                   "codes": [
                     "ARTF1000"
                   ],
-                  "text": "ARTF 1000"
+                  "text": "ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -687,11 +768,13 @@
                     "ARTF1240",
                     "ARTF1241"
                   ],
-                  "text": "ARTF 1240 and ARTF 1241"
+                  "text": "ARTF 1240 and ARTF 1241",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals elective"
+                  "text": "Art and design fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -699,7 +782,8 @@
                     "ARTD1001",
                     "ARTD1002"
                   ],
-                  "text": "ARTD 1001 and ARTD 1002"
+                  "text": "ARTD 1001 and ARTD 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
@@ -711,14 +795,16 @@
                     "ARTH1001",
                     "ARTH1002"
                   ],
-                  "text": "ARTH 1001 and ARTH 1002"
+                  "text": "ARTH 1001 and ARTH 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -729,30 +815,36 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals elective"
+                  "text": "Art and design fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals elective"
+                  "text": "Art and design fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design elective 1"
+                  "text": "Art and design elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Media arts history elective"
+                  "text": "Media arts history elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -763,11 +855,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Media arts basics elective 1"
+                  "text": "Media arts basics elective 1",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -778,11 +872,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -802,22 +898,26 @@
                     "ARTD2380",
                     "ARTD2381"
                   ],
-                  "text": "ARTD 2380 and ARTD 2381"
+                  "text": "ARTD 2380 and ARTD 2381",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Video arts elective 1"
+                  "text": "Video arts elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Video arts elective 2"
+                  "text": "Video arts elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTH3000"
                   ],
-                  "text": "ARTH 3000"
+                  "text": "ARTH 3000",
+                  "sh": 4
                 }
               ]
             },
@@ -828,7 +928,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -839,7 +940,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -850,11 +952,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -873,7 +977,8 @@
                   "codes": [
                     "ARTD3480"
                   ],
-                  "text": "ARTD 3480"
+                  "text": "ARTD 3480",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -881,18 +986,21 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTH4000"
                   ],
-                  "text": "ARTH 4000"
+                  "text": "ARTH 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Media arts basics elective 2"
+                  "text": "Media arts basics elective 2",
+                  "sh": 5
                 }
               ]
             },
@@ -903,7 +1011,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -914,7 +1023,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -925,11 +1035,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -945,19 +1057,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Video arts elective 3"
+                  "text": "Video arts elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Video arts elective 4"
+                  "text": "Video arts elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design elective 2"
+                  "text": "Art and design elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -971,19 +1087,23 @@
                   "codes": [
                     "ARTD4530"
                   ],
-                  "text": "ARTD 4530"
+                  "text": "ARTD 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Video arts elective 5"
+                  "text": "Video arts elective 5",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design elective 3"
+                  "text": "Art and design elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design elective 4"
+                  "text": "Art and design elective 4",
+                  "sh": 4
                 }
               ]
             }
@@ -1009,7 +1129,8 @@
                   "codes": [
                     "ARTF1000"
                   ],
-                  "text": "ARTF 1000"
+                  "text": "ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -1017,11 +1138,13 @@
                     "ARTF1240",
                     "ARTF1241"
                   ],
-                  "text": "ARTF 1240 and ARTF 1241"
+                  "text": "ARTF 1240 and ARTF 1241",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals electives"
+                  "text": "Art and design fundamentals electives",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -1029,7 +1152,8 @@
                     "ARTD1001",
                     "ARTD1002"
                   ],
-                  "text": "ARTD 1001 and ARTD 1002"
+                  "text": "ARTD 1001 and ARTD 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1037,14 +1161,16 @@
                     "ARTH1001",
                     "ARTH1002"
                   ],
-                  "text": "ARTH 1001 and ARTH 1002"
+                  "text": "ARTH 1001 and ARTH 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -1055,26 +1181,31 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Media arts basics elective 1"
+                  "text": "Media arts basics elective 1",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Media arts history elective"
+                  "text": "Media arts history elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1085,11 +1216,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1100,11 +1233,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1120,23 +1255,28 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals elective"
+                  "text": "Art and design fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Art and design fundamentals elective"
+                  "text": "Art and design fundamentals elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Media arts basics elective 2"
+                  "text": "Media arts basics elective 2",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1147,7 +1287,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1158,7 +1299,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1169,11 +1311,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1193,22 +1337,26 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTH3000"
                   ],
-                  "text": "ARTH 3000"
+                  "text": "ARTH 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Electives option 1"
+                  "text": "Electives option 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Electives option 2"
+                  "text": "Electives option 2",
+                  "sh": 4
                 }
               ]
             },
@@ -1219,7 +1367,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1230,7 +1379,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1241,11 +1391,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1264,19 +1416,23 @@
                   "codes": [
                     "ARTH4000"
                   ],
-                  "text": "ARTH 4000"
+                  "text": "ARTH 4000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Electives option 3"
+                  "text": "Electives option 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Electives option 4"
+                  "text": "Electives option 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1290,19 +1446,23 @@
                   "codes": [
                     "ARTD4530"
                   ],
-                  "text": "ARTD 4530"
+                  "text": "ARTD 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Electives option 5"
+                  "text": "Electives option 5",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Electives option 6"
+                  "text": "Electives option 6",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },

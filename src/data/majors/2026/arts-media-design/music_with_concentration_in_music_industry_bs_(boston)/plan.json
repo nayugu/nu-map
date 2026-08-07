@@ -18,14 +18,16 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1000"
                   ],
-                  "text": "MUSC 1000"
+                  "text": "MUSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -33,21 +35,24 @@
                     "MUSC1002",
                     "MUSC1003"
                   ],
-                  "text": "MUSC 1002 and MUSC 1003"
+                  "text": "MUSC 1002 and MUSC 1003",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1119"
                   ],
-                  "text": "MUSC 1119"
+                  "text": "MUSC 1119",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSI1230"
                   ],
-                  "text": "MUSI 1230"
+                  "text": "MUSI 1230",
+                  "sh": 4
                 }
               ]
             },
@@ -61,32 +66,37 @@
                   "codes": [
                     "ACCT1209"
                   ],
-                  "text": "ACCT 1209"
+                  "text": "ACCT 1209",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1201"
                   ],
-                  "text": "MUSC 1201"
+                  "text": "MUSC 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -97,11 +107,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -111,7 +123,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -131,19 +143,23 @@
                   "codes": [
                     "MUSC1204"
                   ],
-                  "text": "MUSC 1204"
+                  "text": "MUSC 1204",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -154,11 +170,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (online)"
+                  "text": "Elective (online)",
+                  "sh": 4
                 }
               ]
             },
@@ -169,7 +187,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -180,11 +199,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
@@ -204,19 +225,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 }
               ]
             },
@@ -227,11 +252,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (online)"
+                  "text": "Elective (online)",
+                  "sh": 4
                 }
               ]
             },
@@ -242,7 +269,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -253,11 +281,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
@@ -280,19 +310,23 @@
                   "codes": [
                     "ENGW3314"
                   ],
-                  "text": "ENGW 3314"
+                  "text": "ENGW 3314",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -303,19 +337,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI capstone"
+                  "text": "MUSI capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -341,14 +379,16 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1000"
                   ],
-                  "text": "MUSC 1000"
+                  "text": "MUSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -356,21 +396,24 @@
                     "MUSC1002",
                     "MUSC1003"
                   ],
-                  "text": "MUSC 1002 and MUSC 1003"
+                  "text": "MUSC 1002 and MUSC 1003",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1119"
                   ],
-                  "text": "MUSC 1119"
+                  "text": "MUSC 1119",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSI1230"
                   ],
-                  "text": "MUSI 1230"
+                  "text": "MUSI 1230",
+                  "sh": 4
                 }
               ]
             },
@@ -384,32 +427,37 @@
                   "codes": [
                     "ACCT1209"
                   ],
-                  "text": "ACCT 1209"
+                  "text": "ACCT 1209",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1201"
                   ],
-                  "text": "MUSC 1201"
+                  "text": "MUSC 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -420,11 +468,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -434,7 +484,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -454,19 +504,23 @@
                   "codes": [
                     "MUSC1204"
                   ],
-                  "text": "MUSC 1204"
+                  "text": "MUSC 1204",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -477,19 +531,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -499,7 +557,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -511,7 +569,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 1"
+                  "text": "Co-op 1",
+                  "sh": 0
                 }
               ]
             }
@@ -527,7 +586,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 1"
+                  "text": "Co-op 1",
+                  "sh": 0
                 }
               ]
             },
@@ -538,19 +598,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -561,11 +625,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -576,7 +642,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 2"
+                  "text": "Co-op 2",
+                  "sh": 0
                 }
               ]
             }
@@ -592,7 +659,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 2"
+                  "text": "Co-op 2",
+                  "sh": 0
                 }
               ]
             },
@@ -603,19 +671,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -625,7 +697,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -637,7 +709,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 3"
+                  "text": "Co-op 3",
+                  "sh": 0
                 }
               ]
             }
@@ -653,7 +726,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 3"
+                  "text": "Co-op 3",
+                  "sh": 0
                 }
               ]
             },
@@ -664,19 +738,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "MUSI capstone"
+                  "text": "MUSI capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -702,14 +780,16 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1000"
                   ],
-                  "text": "MUSC 1000"
+                  "text": "MUSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -717,21 +797,24 @@
                     "MUSC1002",
                     "MUSC1003"
                   ],
-                  "text": "MUSC 1002 and MUSC 1003"
+                  "text": "MUSC 1002 and MUSC 1003",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1119"
                   ],
-                  "text": "MUSC 1119"
+                  "text": "MUSC 1119",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSI1230"
                   ],
-                  "text": "MUSI 1230"
+                  "text": "MUSI 1230",
+                  "sh": 4
                 }
               ]
             },
@@ -745,32 +828,37 @@
                   "codes": [
                     "ACCT1209"
                   ],
-                  "text": "ACCT 1209"
+                  "text": "ACCT 1209",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1201"
                   ],
-                  "text": "MUSC 1201"
+                  "text": "MUSC 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -781,11 +869,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -795,7 +885,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -815,19 +905,23 @@
                   "codes": [
                     "MUSC1204"
                   ],
-                  "text": "MUSC 1204"
+                  "text": "MUSC 1204",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -838,7 +932,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 1"
+                  "text": "Co-op 1",
+                  "sh": 0
                 }
               ]
             },
@@ -849,7 +944,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 1"
+                  "text": "Co-op 1",
+                  "sh": 0
                 }
               ]
             },
@@ -860,11 +956,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -880,19 +978,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business elective"
+                  "text": "Business elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -903,7 +1005,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 2"
+                  "text": "Co-op 2",
+                  "sh": 0
                 }
               ]
             },
@@ -914,7 +1017,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 2"
+                  "text": "Co-op 2",
+                  "sh": 0
                 }
               ]
             },
@@ -924,7 +1028,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -941,19 +1045,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -964,7 +1072,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 3"
+                  "text": "Co-op 3",
+                  "sh": 0
                 }
               ]
             },
@@ -975,7 +1084,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op 3"
+                  "text": "Co-op 3",
+                  "sh": 0
                 }
               ]
             },
@@ -985,7 +1095,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1002,19 +1112,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Music in context course"
+                  "text": "Music in context course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1025,19 +1139,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "MUSI capstone"
+                  "text": "MUSI capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MUSI elective"
+                  "text": "MUSI elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

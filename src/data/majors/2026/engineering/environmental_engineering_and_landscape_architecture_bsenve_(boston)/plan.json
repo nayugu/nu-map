@@ -18,42 +18,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -67,39 +73,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151"
+                  "text": "PHYS 1151",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152"
+                  "text": "PHYS 1152",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Science Elective (Earth)"
+                  "text": "Science Elective (Earth)",
+                  "sh": 4
                 }
               ]
             },
@@ -113,21 +125,24 @@
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2221"
                   ],
-                  "text": "CIVE 2221"
+                  "text": "CIVE 2221",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2222"
                   ],
-                  "text": "CIVE 2222"
+                  "text": "CIVE 2222",
+                  "sh": 0
                 }
               ]
             },
@@ -137,7 +152,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -157,35 +172,40 @@
                   "codes": [
                     "CIVE2334"
                   ],
-                  "text": "CIVE 2334"
+                  "text": "CIVE 2334",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2300"
                   ],
-                  "text": "CIVE 2300"
+                  "text": "CIVE 2300",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2301"
                   ],
-                  "text": "CIVE 2301"
+                  "text": "CIVE 2301",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1110"
                   ],
-                  "text": "ARCH 1110"
+                  "text": "ARCH 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1120"
                   ],
-                  "text": "ARCH 1120"
+                  "text": "ARCH 1120",
+                  "sh": 6
                 }
               ]
             },
@@ -199,42 +219,48 @@
                   "codes": [
                     "ARCH1310"
                   ],
-                  "text": "ARCH 1310 (IC, DD)"
+                  "text": "ARCH 1310 (IC, DD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1311"
                   ],
-                  "text": "ARCH 1311"
+                  "text": "ARCH 1311",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2440"
                   ],
-                  "text": "LARC 2440"
+                  "text": "LARC 2440",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE3430"
                   ],
-                  "text": "CIVE 3430"
+                  "text": "CIVE 3430",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2331"
                   ],
-                  "text": "CIVE 2331"
+                  "text": "CIVE 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -248,14 +274,16 @@
                   "codes": [
                     "GE3300"
                   ],
-                  "text": "GE 3300"
+                  "text": "GE 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -266,7 +294,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -282,7 +311,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -296,35 +326,40 @@
                   "codes": [
                     "ARCH2340"
                   ],
-                  "text": "ARCH 2340 (IC, SI, WI)"
+                  "text": "ARCH 2340 (IC, SI, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH2341"
                   ],
-                  "text": "ARCH 2341"
+                  "text": "ARCH 2341",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2240"
                   ],
-                  "text": "LARC 2240"
+                  "text": "LARC 2240",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE3435"
                   ],
-                  "text": "CIVE 3435"
+                  "text": "CIVE 3435",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE3464"
                   ],
-                  "text": "CIVE 3464"
+                  "text": "CIVE 3464",
+                  "sh": 4
                 }
               ]
             },
@@ -334,7 +369,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -345,7 +380,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -365,21 +400,24 @@
                   "codes": [
                     "CIVE4534"
                   ],
-                  "text": "CIVE 4534 (WI)"
+                  "text": "CIVE 4534 (WI)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE4535"
                   ],
-                  "text": "CIVE 4535"
+                  "text": "CIVE 4535",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -387,21 +425,24 @@
                     "ENGW3302",
                     "ENGW3314"
                   ],
-                  "text": "ENGW 3302 or 3314 (WD)"
+                  "text": "ENGW 3302 or 3314 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2230"
                   ],
-                  "text": "LARC 2230"
+                  "text": "LARC 2230",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2430"
                   ],
-                  "text": "LARC 2430"
+                  "text": "LARC 2430",
+                  "sh": 4
                 }
               ]
             },
@@ -415,7 +456,8 @@
                   "codes": [
                     "CIVE4765"
                   ],
-                  "text": "CIVE 4765 (EI, CE, WI)"
+                  "text": "CIVE 4765 (EI, CE, WI)",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -423,15 +465,18 @@
                     "LARC5420",
                     "LARC2340"
                   ],
-                  "text": "LARC 5420 or 2340 (IC, SI, WI)"
+                  "text": "LARC 5420 or 2340 (IC, SI, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Environmental Tech. Elective"
+                  "text": "Environmental Tech. Elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Environmental Tech. Elective"
+                  "text": "Environmental Tech. Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -457,42 +502,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -506,39 +557,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151"
+                  "text": "PHYS 1151",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152"
+                  "text": "PHYS 1152",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Earth Science Elective"
+                  "text": "Earth Science Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -552,21 +609,24 @@
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2221"
                   ],
-                  "text": "CIVE 2221"
+                  "text": "CIVE 2221",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2222"
                   ],
-                  "text": "CIVE 2222"
+                  "text": "CIVE 2222",
+                  "sh": 0
                 }
               ]
             },
@@ -576,7 +636,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -596,35 +656,40 @@
                   "codes": [
                     "CIVE2334"
                   ],
-                  "text": "CIVE 2334"
+                  "text": "CIVE 2334",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2300"
                   ],
-                  "text": "CIVE 2300"
+                  "text": "CIVE 2300",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2301"
                   ],
-                  "text": "CIVE 2301"
+                  "text": "CIVE 2301",
+                  "sh": 2
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1110"
                   ],
-                  "text": "ARCH 1110"
+                  "text": "ARCH 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1120"
                   ],
-                  "text": "ARCH 1120"
+                  "text": "ARCH 1120",
+                  "sh": 6
                 }
               ]
             },
@@ -638,49 +703,56 @@
                   "codes": [
                     "CIVE3430"
                   ],
-                  "text": "CIVE 3430"
+                  "text": "CIVE 3430",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2331"
                   ],
-                  "text": "CIVE 2331"
+                  "text": "CIVE 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH2340"
                   ],
-                  "text": "ARCH 2340"
+                  "text": "ARCH 2340",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH2341"
                   ],
-                  "text": "ARCH 2341"
+                  "text": "ARCH 2341",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1310"
                   ],
-                  "text": "ARCH 1310"
+                  "text": "ARCH 1310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1311"
                   ],
-                  "text": "ARCH 1311"
+                  "text": "ARCH 1311",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -694,14 +766,16 @@
                   "codes": [
                     "GE3300"
                   ],
-                  "text": "GE 3300"
+                  "text": "GE 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -711,7 +785,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -731,28 +805,32 @@
                   "codes": [
                     "CIVE3464"
                   ],
-                  "text": "CIVE 3464"
+                  "text": "CIVE 3464",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE3435"
                   ],
-                  "text": "CIVE 3435"
+                  "text": "CIVE 3435",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2230"
                   ],
-                  "text": "LARC 2230"
+                  "text": "LARC 2230",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2430"
                   ],
-                  "text": "LARC 2430"
+                  "text": "LARC 2430",
+                  "sh": 4
                 }
               ]
             },
@@ -763,7 +841,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -774,7 +853,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -784,7 +864,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -804,21 +884,24 @@
                   "codes": [
                     "CIVE4534"
                   ],
-                  "text": "CIVE 4534 (WI)"
+                  "text": "CIVE 4534 (WI)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE4535"
                   ],
-                  "text": "CIVE 4535"
+                  "text": "CIVE 4535",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -826,15 +909,18 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Environmental Tech. Elective"
+                  "text": "Environmental Tech. Elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Environmental Tech. Elective"
+                  "text": "Environmental Tech. Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -848,21 +934,24 @@
                   "codes": [
                     "CIVE4765"
                   ],
-                  "text": "CIVE 4765 (EI, CE, WI)"
+                  "text": "CIVE 4765 (EI, CE, WI)",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2440"
                   ],
-                  "text": "LARC 2440"
+                  "text": "LARC 2440",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2240"
                   ],
-                  "text": "LARC 2240"
+                  "text": "LARC 2240",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -870,7 +959,8 @@
                     "LARC5420",
                     "LARC2340"
                   ],
-                  "text": "LARC 5420 or 2340 (IC, SI, WI)"
+                  "text": "LARC 5420 or 2340 (IC, SI, WI)",
+                  "sh": 4
                 }
               ]
             }
@@ -896,42 +986,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -945,28 +1041,32 @@
                   "codes": [
                     "ARCH1110"
                   ],
-                  "text": "ARCH 1110 (EI)"
+                  "text": "ARCH 1110 (EI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1120"
                   ],
-                  "text": "ARCH 1120 (EI, ND)"
+                  "text": "ARCH 1120 (EI, ND)",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -980,28 +1080,32 @@
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 }
               ]
             },
@@ -1011,7 +1115,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1031,28 +1135,32 @@
                   "codes": [
                     "CIVE2334"
                   ],
-                  "text": "CIVE 2334"
+                  "text": "CIVE 2334",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2230"
                   ],
-                  "text": "LARC 2230 (ND)"
+                  "text": "LARC 2230 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2430"
                   ],
-                  "text": "LARC 2430 (ND)"
+                  "text": "LARC 2430 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -1066,28 +1174,32 @@
                   "codes": [
                     "ARCH1310"
                   ],
-                  "text": "ARCH 1310 (IC, DD)"
+                  "text": "ARCH 1310 (IC, DD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1311"
                   ],
-                  "text": "ARCH 1311"
+                  "text": "ARCH 1311",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE3430"
                   ],
-                  "text": "CIVE 3430"
+                  "text": "CIVE 3430",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE3464"
                   ],
-                  "text": "CIVE 3464"
+                  "text": "CIVE 3464",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -1095,14 +1207,16 @@
                     "CIVE2300",
                     "CIVE2301"
                   ],
-                  "text": "CIVE 2300 and CIVE 2301"
+                  "text": "CIVE 2300 and CIVE 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -1116,21 +1230,24 @@
                   "codes": [
                     "CIVE2221"
                   ],
-                  "text": "CIVE 2221"
+                  "text": "CIVE 2221",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE2222"
                   ],
-                  "text": "CIVE 2222"
+                  "text": "CIVE 2222",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE3300"
                   ],
-                  "text": "GE 3300"
+                  "text": "GE 3300",
+                  "sh": 4
                 }
               ]
             },
@@ -1141,7 +1258,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1157,7 +1275,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1171,25 +1290,29 @@
                   "codes": [
                     "CIVE2331"
                   ],
-                  "text": "CIVE 2331"
+                  "text": "CIVE 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE3435"
                   ],
-                  "text": "CIVE 3435"
+                  "text": "CIVE 3435",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2440"
                   ],
-                  "text": "LARC 2440"
+                  "text": "LARC 2440",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Science Elective (Earth)"
+                  "text": "Science Elective (Earth)",
+                  "sh": 4
                 }
               ]
             },
@@ -1199,7 +1322,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1211,7 +1334,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1227,7 +1351,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1241,35 +1366,40 @@
                   "codes": [
                     "ARCH2340"
                   ],
-                  "text": "ARCH 2340 (IC, SI, WI)"
+                  "text": "ARCH 2340 (IC, SI, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH2341"
                   ],
-                  "text": "ARCH 2341"
+                  "text": "ARCH 2341",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE4534"
                   ],
-                  "text": "CIVE 4534 (WI)"
+                  "text": "CIVE 4534 (WI)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CIVE4535"
                   ],
-                  "text": "CIVE 4535"
+                  "text": "CIVE 4535",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1277,14 +1407,16 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2240"
                   ],
-                  "text": "LARC 2240"
+                  "text": "LARC 2240",
+                  "sh": 4
                 }
               ]
             },
@@ -1294,7 +1426,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1306,7 +1438,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1322,7 +1455,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1336,7 +1470,8 @@
                   "codes": [
                     "CIVE4765"
                   ],
-                  "text": "CIVE 4765 (EI, CE, WI)"
+                  "text": "CIVE 4765 (EI, CE, WI)",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -1344,15 +1479,18 @@
                     "LARC5420",
                     "LARC2340"
                   ],
-                  "text": "LARC 5420 or 2340 (IC, SI, WI)"
+                  "text": "LARC 5420 or 2340 (IC, SI, WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Environmental Tech. Elective"
+                  "text": "Environmental Tech. Elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Environmental Tech. Elective"
+                  "text": "Environmental Tech. Elective",
+                  "sh": 4
                 }
               ]
             }

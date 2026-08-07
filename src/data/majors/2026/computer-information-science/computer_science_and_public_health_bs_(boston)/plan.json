@@ -19,7 +19,8 @@
                     "CS1200",
                     "HSCI1000"
                   ],
-                  "text": "CS 1200 or HSCI 1000"
+                  "text": "CS 1200 or HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -27,7 +28,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -35,18 +37,21 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course"
+                  "text": "BIOL course",
+                  "sh": 4
                 }
               ]
             },
@@ -60,7 +65,8 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -68,18 +74,21 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course"
+                  "text": "BIOL course",
+                  "sh": 4
                 }
               ]
             },
@@ -93,7 +102,8 @@
                   "codes": [
                     "PHTH2350"
                   ],
-                  "text": "PHTH 2350"
+                  "text": "PHTH 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -101,7 +111,8 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 }
               ]
             },
@@ -111,7 +122,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -132,25 +143,29 @@
                     "MATH1341",
                     "MATH1241"
                   ],
-                  "text": "MATH 1341 or 1241"
+                  "text": "MATH 1341 or 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -165,26 +180,31 @@
                     "CS1210",
                     "HSCI2000"
                   ],
-                  "text": "CS 1210 or HSCI 2000"
+                  "text": "CS 1210 or HSCI 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—introductory"
+                  "text": "PH social science course—introductory",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Statistics course"
+                  "text": "Statistics course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 }
               ]
             },
@@ -195,14 +215,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2515"
                   ],
-                  "text": "PHTH 2515"
+                  "text": "PHTH 2515",
+                  "sh": 4
                 }
               ]
             },
@@ -213,7 +235,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -229,7 +252,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "choice",
@@ -238,7 +262,8 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3306, 3302, or 33151"
+                  "text": "ENGW 3306, 3302, or 33151",
+                  "sh": 4
                 }
               ]
             },
@@ -252,22 +277,26 @@
                   "codes": [
                     "PHTH4202"
                   ],
-                  "text": "PHTH 4202"
+                  "text": "PHTH 4202",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Ethics"
+                  "text": "Ethics",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS2484"
                   ],
-                  "text": "CS 2484"
+                  "text": "CS 2484",
+                  "sh": 4
                 }
               ]
             },
@@ -281,11 +310,13 @@
                   "codes": [
                     "PHTH4540"
                   ],
-                  "text": "PHTH 4540"
+                  "text": "PHTH 4540",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -296,7 +327,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -312,11 +344,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective1"
+                  "text": "General elective1",
+                  "sh": 4
                 }
               ]
             },
@@ -330,7 +364,8 @@
                   "codes": [
                     "PHTH4120"
                   ],
-                  "text": "PHTH 4120"
+                  "text": "PHTH 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -338,15 +373,18 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—upper"
+                  "text": "PH social science course—upper",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -373,7 +411,8 @@
                     "CS1200",
                     "HSCI1000"
                   ],
-                  "text": "CS 1200 or HSCI 1000"
+                  "text": "CS 1200 or HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -381,7 +420,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -389,18 +429,21 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course"
+                  "text": "BIOL course",
+                  "sh": 4
                 }
               ]
             },
@@ -414,7 +457,8 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -422,18 +466,21 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course"
+                  "text": "BIOL course",
+                  "sh": 4
                 }
               ]
             },
@@ -447,7 +494,8 @@
                   "codes": [
                     "PHTH2350"
                   ],
-                  "text": "PHTH 2350"
+                  "text": "PHTH 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -455,7 +503,8 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 }
               ]
             },
@@ -465,7 +514,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -486,7 +535,8 @@
                     "CS1210",
                     "HSCI2000"
                   ],
-                  "text": "CS 1210 or HSCI 2000"
+                  "text": "CS 1210 or HSCI 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -494,25 +544,29 @@
                     "MATH1341",
                     "MATH1241"
                   ],
-                  "text": "MATH 1341 or 1241"
+                  "text": "MATH 1341 or 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3000"
                   ],
-                  "text": "CS 3000"
+                  "text": "CS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Statistics course"
+                  "text": "Statistics course",
+                  "sh": 4
                 }
               ]
             },
@@ -523,11 +577,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective1"
+                  "text": "General elective1",
+                  "sh": 4
                 }
               ]
             },
@@ -538,7 +594,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -549,14 +606,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2515"
                   ],
-                  "text": "PHTH 2515"
+                  "text": "PHTH 2515",
+                  "sh": 4
                 }
               ]
             }
@@ -575,22 +634,26 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Ethics"
+                  "text": "Ethics",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—introductory"
+                  "text": "PH social science course—introductory",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS2484"
                   ],
-                  "text": "CS 2484"
+                  "text": "CS 2484",
+                  "sh": 4
                 }
               ]
             },
@@ -601,7 +664,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "choice",
@@ -610,7 +674,8 @@
                     "ENGW3306",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3306, or 33151"
+                  "text": "ENGW 3302, 3306, or 33151",
+                  "sh": 4
                 }
               ]
             },
@@ -621,7 +686,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -632,14 +698,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH4540"
                   ],
-                  "text": "PHTH 4540"
+                  "text": "PHTH 4540",
+                  "sh": 4
                 }
               ]
             }
@@ -658,7 +726,8 @@
                   "codes": [
                     "PHTH4202"
                   ],
-                  "text": "PHTH 4202"
+                  "text": "PHTH 4202",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -666,15 +735,18 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -688,19 +760,23 @@
                   "codes": [
                     "PHTH4120"
                   ],
-                  "text": "PHTH 4120"
+                  "text": "PHTH 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course—upper"
+                  "text": "PH social science course—upper",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }

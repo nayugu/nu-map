@@ -19,7 +19,8 @@
                     "CHEM1000",
                     "INSC1000"
                   ],
-                  "text": "CHEM 1000 or INSC 1000"
+                  "text": "CHEM 1000 or INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -28,25 +29,29 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 1"
+                  "text": "Elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -62,14 +67,16 @@
                     "CHEM2316",
                     "CHEM2324"
                   ],
-                  "text": "CHEM 2315 and CHEM 2316 and CHEM 2324"
+                  "text": "CHEM 2315 and CHEM 2316 and CHEM 2324",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -78,11 +85,13 @@
                     "PHYS1152",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153"
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 2"
+                  "text": "Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -98,11 +107,13 @@
                     "PHYS1156",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157"
+                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 3"
+                  "text": "Elective 3",
+                  "sh": 4
                 }
               ]
             },
@@ -112,7 +123,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -134,7 +145,8 @@
                     "CHEM2162",
                     "CHEM2163"
                   ],
-                  "text": "CHEM 2161 and CHEM 2162 and CHEM 2163"
+                  "text": "CHEM 2161 and CHEM 2162 and CHEM 2163",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -143,15 +155,18 @@
                     "CHEM2318",
                     "CHEM2325"
                   ],
-                  "text": "CHEM 2317 and CHEM 2318 and CHEM 2325"
+                  "text": "CHEM 2317 and CHEM 2318 and CHEM 2325",
+                  "sh": 6
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 4"
+                  "text": "Elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 5"
+                  "text": "Elective 5",
+                  "sh": 4
                 }
               ]
             },
@@ -167,7 +182,8 @@
                     "CHEM2322",
                     "CHEM2323"
                   ],
-                  "text": "CHEM 2321 and CHEM 2322 and CHEM 2323"
+                  "text": "CHEM 2321 and CHEM 2322 and CHEM 2323",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -175,22 +191,26 @@
                     "CHEM3401",
                     "CHEM3402"
                   ],
-                  "text": "CHEM 3401 and CHEM 3402"
+                  "text": "CHEM 3401 and CHEM 3402",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 6"
+                  "text": "Elective 6",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 7"
+                  "text": "Elective 7",
+                  "sh": 4
                 }
               ]
             },
@@ -201,11 +221,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective 8"
+                  "text": "Elective 8",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 9"
+                  "text": "Elective 9",
+                  "sh": 4
                 }
               ]
             },
@@ -216,7 +238,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -232,7 +255,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -247,7 +271,8 @@
                     "CHEM3403",
                     "CHEM3404"
                   ],
-                  "text": "CHEM 3403 and CHEM 3404"
+                  "text": "CHEM 3403 and CHEM 3404",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -256,18 +281,21 @@
                     "CHEM3502",
                     "CHEM3503"
                   ],
-                  "text": "CHEM 3501 and CHEM 3502 and CHEM 3503"
+                  "text": "CHEM 3501 and CHEM 3502 and CHEM 3503",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3307"
                   ],
-                  "text": "ENGW 3307"
+                  "text": "ENGW 3307",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CHEM elective"
+                  "text": "CHEM elective",
+                  "sh": 3
                 }
               ]
             },
@@ -278,11 +306,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective 10"
+                  "text": "Elective 10",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 11"
+                  "text": "Elective 11",
+                  "sh": 4
                 }
               ]
             },
@@ -293,7 +323,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -309,7 +340,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -323,7 +355,8 @@
                   "codes": [
                     "CHEM4750"
                   ],
-                  "text": "CHEM 4750"
+                  "text": "CHEM 4750",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -331,15 +364,18 @@
                     "CHEM5621",
                     "CHEM5622"
                   ],
-                  "text": "CHEM 5621 and CHEM 5622"
+                  "text": "CHEM 5621 and CHEM 5622",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CHEM elective"
+                  "text": "CHEM elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 12"
+                  "text": "Elective 12",
+                  "sh": 4
                 }
               ]
             }
@@ -366,7 +402,8 @@
                     "CHEM1000",
                     "INSC1000"
                   ],
-                  "text": "CHEM 1000 or INSC 1000"
+                  "text": "CHEM 1000 or INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -375,25 +412,29 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 1"
+                  "text": "Elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -409,14 +450,16 @@
                     "CHEM2316",
                     "CHEM2324"
                   ],
-                  "text": "CHEM 2315 and CHEM 2316 and CHEM 2324"
+                  "text": "CHEM 2315 and CHEM 2316 and CHEM 2324",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -425,11 +468,13 @@
                     "PHYS1152",
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153"
+                  "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 2"
+                  "text": "Elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -439,7 +484,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -450,7 +495,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -472,7 +517,8 @@
                     "CHEM2162",
                     "CHEM2163"
                   ],
-                  "text": "CHEM 2161 and CHEM 2162 and CHEM 2163"
+                  "text": "CHEM 2161 and CHEM 2162 and CHEM 2163",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -481,7 +527,8 @@
                     "CHEM2318",
                     "CHEM2325"
                   ],
-                  "text": "CHEM 2317 and CHEM 2318 and CHEM 2325"
+                  "text": "CHEM 2317 and CHEM 2318 and CHEM 2325",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -490,11 +537,13 @@
                     "PHYS1156",
                     "PHYS1157"
                   ],
-                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157"
+                  "text": "PHYS 1155 and PHYS 1156 and PHYS 1157",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 3"
+                  "text": "Elective 3",
+                  "sh": 4
                 }
               ]
             },
@@ -510,26 +559,31 @@
                     "CHEM2322",
                     "CHEM2323"
                   ],
-                  "text": "CHEM 2321 and CHEM 2322 and CHEM 2323"
+                  "text": "CHEM 2321 and CHEM 2322 and CHEM 2323",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 4"
+                  "text": "Elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 5"
+                  "text": "Elective 5",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 6"
+                  "text": "Elective 6",
+                  "sh": 4
                 }
               ]
             },
@@ -539,7 +593,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -551,7 +605,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -567,7 +622,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -582,7 +638,8 @@
                     "CHEM3401",
                     "CHEM3402"
                   ],
-                  "text": "CHEM 3401 and CHEM 3402"
+                  "text": "CHEM 3401 and CHEM 3402",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -591,18 +648,21 @@
                     "CHEM3502",
                     "CHEM3503"
                   ],
-                  "text": "CHEM 3501 and CHEM 3502 and CHEM 3503"
+                  "text": "CHEM 3501 and CHEM 3502 and CHEM 3503",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3307"
                   ],
-                  "text": "ENGW 3307"
+                  "text": "ENGW 3307",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 7"
+                  "text": "Elective 7",
+                  "sh": 4
                 }
               ]
             },
@@ -613,11 +673,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective 8"
+                  "text": "Elective 8",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 9"
+                  "text": "Elective 9",
+                  "sh": 4
                 }
               ]
             },
@@ -628,7 +690,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -644,7 +707,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -659,19 +723,23 @@
                     "CHEM3403",
                     "CHEM3404"
                   ],
-                  "text": "CHEM 3403 and CHEM 3404"
+                  "text": "CHEM 3403 and CHEM 3404",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Chemistry elective"
+                  "text": "Chemistry elective",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 10"
+                  "text": "Elective 10",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 11"
+                  "text": "Elective 11",
+                  "sh": 4
                 }
               ]
             },
@@ -681,7 +749,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -693,7 +761,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -709,7 +778,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -723,7 +793,8 @@
                   "codes": [
                     "CHEM4750"
                   ],
-                  "text": "CHEM 4750"
+                  "text": "CHEM 4750",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -731,15 +802,18 @@
                     "CHEM5621",
                     "CHEM5622"
                   ],
-                  "text": "CHEM 5621 and CHEM 5622"
+                  "text": "CHEM 5621 and CHEM 5622",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Chemistry elective"
+                  "text": "Chemistry elective",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 12"
+                  "text": "Elective 12",
+                  "sh": 4
                 }
               ]
             }

@@ -18,7 +18,8 @@
                   "codes": [
                     "ECON1115"
                   ],
-                  "text": "ECON 1115"
+                  "text": "ECON 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -26,7 +27,8 @@
                     "ENGW1111",
                     "ENGW1102"
                   ],
-                  "text": "ENGW 1111 or 1102"
+                  "text": "ENGW 1111 or 1102",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -34,7 +36,8 @@
                     "ENVR1000",
                     "ECON1000"
                   ],
-                  "text": "ENVR 1000 or ECON 1000"
+                  "text": "ENVR 1000 or ECON 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -42,7 +45,8 @@
                     "ENVR1400",
                     "ENVR1401"
                   ],
-                  "text": "ENVR 1400 and ENVR 1401"
+                  "text": "ENVR 1400 and ENVR 1401",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -54,7 +58,8 @@
                     "MATH1340",
                     "MATH1341"
                   ],
-                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341"
+                  "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -71,14 +76,16 @@
                     "CS2001",
                     "MISM2510"
                   ],
-                  "text": "CS 1100, 2000 and 2001, or MISM 2510"
+                  "text": "CS 1100, 2000 and 2001, or MISM 2510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -87,11 +94,13 @@
                     "ENVR1200",
                     "ENVR1201"
                   ],
-                  "text": "ENVR 2200 or 1200 and 1201"
+                  "text": "ENVR 2200 or 1200 and 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective 1"
+                  "text": "ENVR elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -102,11 +111,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -117,11 +128,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -140,29 +153,34 @@
                   "codes": [
                     "ECON2315"
                   ],
-                  "text": "ECON 2315"
+                  "text": "ECON 2315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB2302"
                   ],
-                  "text": "EEMB 2302"
+                  "text": "EEMB 2302",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEMB2303"
                   ],
-                  "text": "EEMB 2303"
+                  "text": "EEMB 2303",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 1"
+                  "text": "ECON elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective 2"
+                  "text": "ENVR elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -176,25 +194,29 @@
                   "codes": [
                     "ECON2316"
                   ],
-                  "text": "ECON 2316"
+                  "text": "ECON 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2350"
                   ],
-                  "text": "ECON 2350"
+                  "text": "ECON 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR2515"
                   ],
-                  "text": "ENVR 2515"
+                  "text": "ENVR 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective 3"
+                  "text": "ENVR elective 3",
+                  "sh": 4
                 }
               ]
             },
@@ -205,11 +227,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -220,7 +244,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -236,7 +261,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -250,14 +276,16 @@
                   "codes": [
                     "ECON2560"
                   ],
-                  "text": "ECON 2560"
+                  "text": "ECON 2560",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON3423"
                   ],
-                  "text": "ECON 3423"
+                  "text": "ECON 3423",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -266,7 +294,8 @@
                     "ENGW3307",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3308, 3307, or 3315"
+                  "text": "ENGW 3308, 3307, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -276,7 +305,8 @@
                     "ENVR5450",
                     "ENVR5563"
                   ],
-                  "text": "ENVR 3150, 5350, 5450, or 5563"
+                  "text": "ENVR 3150, 5350, 5450, or 5563",
+                  "sh": 4
                 }
               ]
             },
@@ -287,11 +317,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective 4"
+                  "text": "ENVR elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -302,7 +334,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -318,7 +351,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -335,7 +369,8 @@
                     "ECON4692",
                     "ECON4997"
                   ],
-                  "text": "ENVR 4050, 4997, ECON 4692, or ECON 4997"
+                  "text": "ENVR 4050, 4997, ECON 4692, or ECON 4997",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -344,15 +379,18 @@
                     "ECON3404",
                     "ECON3425"
                   ],
-                  "text": "ECON 1711, 3404, or 3425"
+                  "text": "ECON 1711, 3404, or 3425",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective 2"
+                  "text": "ECON elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective 5"
+                  "text": "ENVR elective 5",
+                  "sh": 4
                 }
               ]
             }

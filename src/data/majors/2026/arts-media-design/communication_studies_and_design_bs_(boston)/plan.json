@@ -19,22 +19,26 @@
                     "ARTF1000",
                     "COMM1000"
                   ],
-                  "text": "ARTF 1000 or COMM 1000"
+                  "text": "ARTF 1000 or COMM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF 1220 with optional ARTF 1221"
+                  "text": "ARTF 1220 with optional ARTF 1221",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -42,14 +46,16 @@
                     "ARTG1001",
                     "ARTG1002"
                   ],
-                  "text": "ARTG 1001 and ARTG 1002"
+                  "text": "ARTG 1001 and ARTG 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -64,7 +70,8 @@
                     "COMM1112",
                     "COMM2301"
                   ],
-                  "text": "COMM 1112 or 2301"
+                  "text": "COMM 1112 or 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -72,22 +79,26 @@
                     "ARTG1270",
                     "ARTG1271"
                   ],
-                  "text": "ARTG 1270 and ARTG 1271"
+                  "text": "ARTG 1270 and ARTG 1271",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM foundation course"
+                  "text": "COMM foundation course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -98,7 +109,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM cluster course"
+                  "text": "COMM cluster course",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -106,7 +118,8 @@
                     "ARTG1290",
                     "ARTG1291"
                   ],
-                  "text": "ARTG 1290 and ARTG 1291"
+                  "text": "ARTG 1290 and ARTG 1291",
+                  "sh": 4
                 }
               ]
             },
@@ -117,15 +130,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -141,19 +157,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM writing-intensive 1"
+                  "text": "COMM writing-intensive 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 1"
+                  "text": "Design option level 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -164,19 +184,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective 1"
+                  "text": "COMM elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Design option level 2"
+                  "text": "Design option level 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "A+D elective"
+                  "text": "A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -187,11 +211,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective 2"
+                  "text": "COMM elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -202,7 +228,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -218,7 +245,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -229,15 +257,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM writing-intensive 2"
+                  "text": "COMM writing-intensive 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTG elective"
+                  "text": "ARTG elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -245,7 +276,8 @@
                     "ENGW3314",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3314 or 3315"
+                  "text": "ENGW 3314 or 3315",
+                  "sh": 4
                 }
               ]
             },
@@ -256,11 +288,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective 3"
+                  "text": "COMM elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -271,7 +305,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -287,7 +322,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -301,22 +337,26 @@
                   "codes": [
                     "ARTG4550"
                   ],
-                  "text": "ARTG 4550"
+                  "text": "ARTG 4550",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "COMM2200"
                   ],
-                  "text": "COMM 2200"
+                  "text": "COMM 2200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

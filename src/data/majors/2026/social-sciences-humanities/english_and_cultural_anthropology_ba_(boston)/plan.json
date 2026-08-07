@@ -18,32 +18,37 @@
                   "codes": [
                     "ENGL1000"
                   ],
-                  "text": "ENGL 1000"
+                  "text": "ENGL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL1400"
                   ],
-                  "text": "ENGL 1400"
+                  "text": "ENGL 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "English elective"
+                  "text": "English elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ANTH1101"
                   ],
-                  "text": "ANTH 1101"
+                  "text": "ANTH 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ANTH2305"
                   ],
-                  "text": "ANTH 2305"
+                  "text": "ANTH 2305",
+                  "sh": 4
                 }
               ]
             },
@@ -57,25 +62,29 @@
                   "codes": [
                     "ENGL1160"
                   ],
-                  "text": "ENGL 1160"
+                  "text": "ENGL 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ANTH3410"
                   ],
-                  "text": "ANTH 3410"
+                  "text": "ANTH 3410",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Anthropology elective"
+                  "text": "Anthropology elective",
+                  "sh": 4
                 }
               ]
             },
@@ -86,11 +95,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -101,11 +112,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -121,19 +134,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Pre-1850 period course"
+                  "text": "Pre-1850 period course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Area Course"
+                  "text": "Area Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Anthropology elective"
+                  "text": "Anthropology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Theories & Methods course"
+                  "text": "Theories & Methods course",
+                  "sh": 4
                 }
               ]
             },
@@ -144,7 +161,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -155,7 +173,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -166,11 +185,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "English Diversity course"
+                  "text": "English Diversity course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Writing course"
+                  "text": "Writing course",
+                  "sh": 4
                 }
               ]
             }
@@ -189,22 +210,26 @@
                   "codes": [
                     "ANTH3421"
                   ],
-                  "text": "ANTH 3421"
+                  "text": "ANTH 3421",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL3710"
                   ],
-                  "text": "ENGL 3710"
+                  "text": "ENGL 3710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Area course"
+                  "text": "Area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -215,7 +240,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -226,7 +252,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -237,11 +264,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "English elective"
+                  "text": "English elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing in the Disciplines"
+                  "text": "Advanced Writing in the Disciplines",
+                  "sh": 4
                 }
               ]
             }
@@ -257,11 +286,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL Integrative course"
+                  "text": "ENGL Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Post-1850 period course"
+                  "text": "Post-1850 period course",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -269,11 +300,13 @@
                     "ANTH4600",
                     "ANTH4100"
                   ],
-                  "text": "ANTH 4600 or 4100"
+                  "text": "ANTH 4600 or 4100",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -287,19 +320,23 @@
                   "codes": [
                     "ENGL4710"
                   ],
-                  "text": "ENGL 4710"
+                  "text": "ENGL 4710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Anthropology elective"
+                  "text": "Anthropology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

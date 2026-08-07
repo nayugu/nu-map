@@ -18,7 +18,8 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -26,21 +27,24 @@
                     "BUSN1102",
                     "PHIL1000"
                   ],
-                  "text": "BUSN 1102 or PHIL 1000"
+                  "text": "BUSN 1102 or PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1231"
                   ],
-                  "text": "MATH 1231"
+                  "text": "MATH 1231",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1160"
                   ],
-                  "text": "PHIL 1160"
+                  "text": "PHIL 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -48,7 +52,8 @@
                     "POLS1150",
                     "POLS1155"
                   ],
-                  "text": "POLS 1150 or 1155"
+                  "text": "POLS 1150 or 1155",
+                  "sh": 4
                 }
               ]
             },
@@ -62,21 +67,24 @@
                   "codes": [
                     "ACCT2301"
                   ],
-                  "text": "ACCT 2301"
+                  "text": "ACCT 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -85,7 +93,8 @@
                     "ECON2350",
                     "POLS2400"
                   ],
-                  "text": "MGSC 2301, ECON 2350, or POLS 2400"
+                  "text": "MGSC 2301, ECON 2350, or POLS 2400",
+                  "sh": 4
                 }
               ]
             },
@@ -100,14 +109,16 @@
                     "MISM2301",
                     "SCHM2301"
                   ],
-                  "text": "MISM 2301 or SCHM 2301"
+                  "text": "MISM 2301 or SCHM 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MKTG2201"
                   ],
-                  "text": "MKTG 2201"
+                  "text": "MKTG 2201",
+                  "sh": 4
                 }
               ]
             },
@@ -118,11 +129,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "DD NUpath"
+                  "text": "DD NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -142,35 +155,40 @@
                     "BUSN1103",
                     "EESH2000"
                   ],
-                  "text": "BUSN 1103 or EESH 2000"
+                  "text": "BUSN 1103 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2316"
                   ],
-                  "text": "ECON 2316"
+                  "text": "ECON 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INNO2301"
                   ],
-                  "text": "INNO 2301"
+                  "text": "INNO 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1170"
                   ],
-                  "text": "PHIL 1170"
+                  "text": "PHIL 1170",
+                  "sh": 4
                 }
               ]
             },
@@ -181,7 +199,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -192,7 +211,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -207,11 +227,13 @@
                     "ORGB3201",
                     "ORGB3203"
                   ],
-                  "text": "ORGB 3201 or 3203"
+                  "text": "ORGB 3201 or 3203",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -231,22 +253,26 @@
                     "PHIL2303",
                     "PHIL3822"
                   ],
-                  "text": "PHIL 2303 or 3822"
+                  "text": "PHIL 2303 or 3822",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration class"
+                  "text": "Concentration class",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration class"
+                  "text": "Concentration class",
+                  "sh": 4
                 }
               ]
             },
@@ -257,7 +283,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -268,7 +295,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -284,11 +312,13 @@
                     "ENGW3304",
                     "ENGW3308"
                   ],
-                  "text": "ENGW 3315, 3304, or 3308"
+                  "text": "ENGW 3315, 3304, or 3308",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -308,22 +338,26 @@
                     "PHIL3435",
                     "PHIL2325"
                   ],
-                  "text": "PHIL 3435 or 2325"
+                  "text": "PHIL 3435 or 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS3405"
                   ],
-                  "text": "POLS 3405"
+                  "text": "POLS 3405",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration class"
+                  "text": "Concentration class",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PPE elective"
+                  "text": "PPE elective",
+                  "sh": 4
                 }
               ]
             },
@@ -334,19 +368,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone class"
+                  "text": "Capstone class",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration class"
+                  "text": "Concentration class",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -372,7 +410,8 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -380,21 +419,24 @@
                     "BUSN1102",
                     "PHIL1000"
                   ],
-                  "text": "BUSN 1102 or PHIL 1000"
+                  "text": "BUSN 1102 or PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1231"
                   ],
-                  "text": "MATH 1231"
+                  "text": "MATH 1231",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1160"
                   ],
-                  "text": "PHIL 1160"
+                  "text": "PHIL 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -402,7 +444,8 @@
                     "POLS1150",
                     "POLS1155"
                   ],
-                  "text": "POLS 1150 or 1155"
+                  "text": "POLS 1150 or 1155",
+                  "sh": 4
                 }
               ]
             },
@@ -416,14 +459,16 @@
                   "codes": [
                     "ACCT2301"
                   ],
-                  "text": "ACCT 2301"
+                  "text": "ACCT 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -432,14 +477,16 @@
                     "MGSC2301",
                     "POLS2400"
                   ],
-                  "text": "ECON 2350, MGSC 2301, or POLS 2400"
+                  "text": "ECON 2350, MGSC 2301, or POLS 2400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -454,14 +501,16 @@
                     "MISM2301",
                     "SCHM2301"
                   ],
-                  "text": "MISM 2301 or SCHM 2301"
+                  "text": "MISM 2301 or SCHM 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MKTG2201"
                   ],
-                  "text": "MKTG 2201"
+                  "text": "MKTG 2201",
+                  "sh": 4
                 }
               ]
             },
@@ -472,11 +521,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "DD NUpath"
+                  "text": "DD NUpath",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -495,28 +546,32 @@
                   "codes": [
                     "ECON2316"
                   ],
-                  "text": "ECON 2316"
+                  "text": "ECON 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INNO2301"
                   ],
-                  "text": "INNO 2301"
+                  "text": "INNO 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1170"
                   ],
-                  "text": "PHIL 1170"
+                  "text": "PHIL 1170",
+                  "sh": 4
                 }
               ]
             },
@@ -531,7 +586,8 @@
                     "BUSN1103",
                     "EESH2000"
                   ],
-                  "text": "BUSN 1103 or EESH 2000"
+                  "text": "BUSN 1103 or EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -539,22 +595,26 @@
                     "PHIL2303",
                     "PHIL3822"
                   ],
-                  "text": "PHIL 2303 or 3822"
+                  "text": "PHIL 2303 or 3822",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration class"
+                  "text": "Concentration class",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -565,11 +625,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -580,7 +642,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -596,7 +659,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -611,22 +675,26 @@
                     "ORGB3201",
                     "ORGB3203"
                   ],
-                  "text": "ORGB 3201 or 3203"
+                  "text": "ORGB 3201 or 3203",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS3405"
                   ],
-                  "text": "POLS 3405"
+                  "text": "POLS 3405",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration class"
+                  "text": "Concentration class",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -642,11 +710,13 @@
                     "ENGW3304",
                     "ENGW3308"
                   ],
-                  "text": "ENGW 3315, 3304, or 3308"
+                  "text": "ENGW 3315, 3304, or 3308",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PPE elective"
+                  "text": "PPE elective",
+                  "sh": 4
                 }
               ]
             },
@@ -657,7 +727,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -673,7 +744,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -684,15 +756,18 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Concentration class"
+                  "text": "Concentration class",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration class"
+                  "text": "Concentration class",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone class"
+                  "text": "Capstone class",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -700,7 +775,8 @@
                     "PHIL3435",
                     "PHIL2325"
                   ],
-                  "text": "PHIL 3435 or 2325"
+                  "text": "PHIL 3435 or 2325",
+                  "sh": 4
                 }
               ]
             }

@@ -18,14 +18,16 @@
                   "codes": [
                     "ARTF1000"
                   ],
-                  "text": "ARTF 1000"
+                  "text": "ARTF 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME2500"
                   ],
-                  "text": "GAME 2500"
+                  "text": "GAME 2500",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -33,11 +35,13 @@
                     "ARTF1240",
                     "ARTF1241"
                   ],
-                  "text": "ARTF 1240 and ARTF 1241"
+                  "text": "ARTF 1240 and ARTF 1241",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "courses",
@@ -45,14 +49,16 @@
                     "ARTD1001",
                     "ARTD1002"
                   ],
-                  "text": "ARTD 1001 and ARTD 1002"
+                  "text": "ARTD 1001 and ARTD 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -67,33 +73,39 @@
                     "ARTD2370",
                     "ARTD2371"
                   ],
-                  "text": "ARTD 2370 and ARTD 2371"
+                  "text": "ARTD 2370 and ARTD 2371",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GAME1110"
                   ],
-                  "text": "GAME 1110"
+                  "text": "GAME 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTF elective"
+                  "text": "ARTF elective",
+                  "sh": 2
                 },
                 {
                   "kind": "placeholder",
-                  "text": "GAME or A+D elective"
+                  "text": "GAME or A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -104,11 +116,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "GAME or A+D elective"
+                  "text": "GAME or A+D elective",
+                  "sh": 4
                 }
               ]
             },
@@ -119,11 +133,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -142,14 +158,16 @@
                   "codes": [
                     "ARTD3470"
                   ],
-                  "text": "ARTD 3470"
+                  "text": "ARTD 3470",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTD3473"
                   ],
-                  "text": "ARTD 3473"
+                  "text": "ARTD 3473",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -157,7 +175,8 @@
                     "ARTH1001",
                     "ARTH1002"
                   ],
-                  "text": "ARTH 1001 and ARTH 1002"
+                  "text": "ARTH 1001 and ARTH 1002",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -165,7 +184,8 @@
                     "GAME2355",
                     "ARTD2100"
                   ],
-                  "text": "GAME 2355 or ARTD 2100"
+                  "text": "GAME 2355 or ARTD 2100",
+                  "sh": 4
                 }
               ]
             },
@@ -176,7 +196,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -187,7 +208,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -198,11 +220,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -221,25 +245,29 @@
                   "codes": [
                     "ARTD3472"
                   ],
-                  "text": "ARTD 3472"
+                  "text": "ARTD 3472",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTD4570"
                   ],
-                  "text": "ARTD 4570"
+                  "text": "ARTD 4570",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTH2212"
                   ],
-                  "text": "ARTH 2212"
+                  "text": "ARTH 2212",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Advanced writing in the disciplines"
+                  "text": "Advanced writing in the disciplines",
+                  "sh": 4
                 }
               ]
             },
@@ -250,7 +278,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -261,7 +290,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -272,11 +302,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -295,19 +327,23 @@
                   "codes": [
                     "ARTD4575"
                   ],
-                  "text": "ARTD 4575"
+                  "text": "ARTD 4575",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ARTH elective"
+                  "text": "ARTH elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "GAME or A+D elective"
+                  "text": "GAME or A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intro to photo or video basics"
+                  "text": "Intro to photo or video basics",
+                  "sh": 5
                 }
               ]
             },
@@ -321,19 +357,23 @@
                   "codes": [
                     "ARTD4530"
                   ],
-                  "text": "ARTD 4530"
+                  "text": "ARTD 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "GAME or A+D elective"
+                  "text": "GAME or A+D elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

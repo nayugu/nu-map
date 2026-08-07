@@ -19,14 +19,16 @@
                     "ENGL1160",
                     "ENGL1410"
                   ],
-                  "text": "ENGL 1160 or 1410"
+                  "text": "ENGL 1160 or 1410",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL1400"
                   ],
-                  "text": "ENGL 1400"
+                  "text": "ENGL 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -34,18 +36,21 @@
                     "MSCR1000",
                     "ENGL1000"
                   ],
-                  "text": "MSCR 1000 or ENGL 1000"
+                  "text": "MSCR 1000 or ENGL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MSCR1220"
                   ],
-                  "text": "MSCR 1220"
+                  "text": "MSCR 1220",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 }
               ]
             },
@@ -60,26 +65,31 @@
                     "MSCR1320",
                     "MSCR1420"
                   ],
-                  "text": "MSCR 1320 or 1420"
+                  "text": "MSCR 1320 or 1420",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR foundation"
+                  "text": "MSCR foundation",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL pre-1850 literature elective"
+                  "text": "ENGL pre-1850 literature elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -90,11 +100,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective"
+                  "text": "MSCR elective",
+                  "sh": 4
                 }
               ]
             },
@@ -105,11 +117,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -125,19 +139,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL post-1850 literature elective"
+                  "text": "ENGL post-1850 literature elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL diversity elective"
+                  "text": "ENGL diversity elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR diversity/globalization"
+                  "text": "MSCR diversity/globalization",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective"
+                  "text": "MSCR elective",
+                  "sh": 4
                 }
               ]
             },
@@ -148,7 +166,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -159,7 +178,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -170,11 +190,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -190,19 +212,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL theories and methods elective"
+                  "text": "ENGL theories and methods elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL elective"
+                  "text": "ENGL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL elective"
+                  "text": "ENGL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR writing-intensive"
+                  "text": "MSCR writing-intensive",
+                  "sh": 4
                 }
               ]
             },
@@ -217,22 +243,26 @@
                     "ENGL1450",
                     "ENGL3340"
                   ],
-                  "text": "ENGL 1450 or 3340"
+                  "text": "ENGL 1450 or 3340",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR writing-intensive"
+                  "text": "MSCR writing-intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL3710"
                   ],
-                  "text": "ENGL 3710"
+                  "text": "ENGL 3710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective"
+                  "text": "MSCR elective",
+                  "sh": 4
                 }
               ]
             },
@@ -243,11 +273,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -258,7 +290,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -274,7 +307,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -288,22 +322,26 @@
                   "codes": [
                     "MSCR3600"
                   ],
-                  "text": "MSCR 3600"
+                  "text": "MSCR 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL4710"
                   ],
-                  "text": "ENGL 4710"
+                  "text": "ENGL 4710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL writing elective"
+                  "text": "ENGL writing elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

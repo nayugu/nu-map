@@ -19,35 +19,40 @@
                     "CLTR1000",
                     "POLS1000"
                   ],
-                  "text": "CLTR 1000 or POLS 1000"
+                  "text": "CLTR 1000 or POLS 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1150"
                   ],
-                  "text": "POLS 1150"
+                  "text": "POLS 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS1101"
                   ],
-                  "text": "AFCS 1101"
+                  "text": "AFCS 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS1270"
                   ],
-                  "text": "AFCS 1270"
+                  "text": "AFCS 1270",
+                  "sh": 4
                 }
               ]
             },
@@ -61,22 +66,26 @@
                   "codes": [
                     "POLS1155"
                   ],
-                  "text": "POLS 1155"
+                  "text": "POLS 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS supporting course"
+                  "text": "POLS supporting course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language requirement course 1"
+                  "text": "Language requirement course 1",
+                  "sh": 4
                 }
               ]
             },
@@ -87,11 +96,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language requirement course 2"
+                  "text": "Language requirement course 2",
+                  "sh": 4
                 }
               ]
             },
@@ -102,11 +113,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -125,25 +138,29 @@
                   "codes": [
                     "POLS2400"
                   ],
-                  "text": "POLS 2400"
+                  "text": "POLS 2400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Language requirement course 3"
+                  "text": "Language requirement course 3",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS2325"
                   ],
-                  "text": "AFCS 2325"
+                  "text": "AFCS 2325",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS2296"
                   ],
-                  "text": "AFCS 2296"
+                  "text": "AFCS 2296",
+                  "sh": 4
                 }
               ]
             },
@@ -154,25 +171,29 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "POLS political thought course"
+                  "text": "POLS political thought course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS3900"
                   ],
-                  "text": "AFCS 3900"
+                  "text": "AFCS 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS1261"
                   ],
-                  "text": "AFCS 1261"
+                  "text": "AFCS 1261",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 }
               ]
             },
@@ -186,11 +207,13 @@
                   "codes": [
                     "POLS2399"
                   ],
-                  "text": "POLS 2399"
+                  "text": "POLS 2399",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -201,7 +224,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -217,7 +241,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -231,22 +256,26 @@
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101 (ND NUpath)"
+                  "text": "PSYC 1101 (ND NUpath)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "AFCS4526"
                   ],
-                  "text": "AFCS 4526"
+                  "text": "AFCS 4526",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 }
               ]
             },
@@ -257,11 +286,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing in the Disciplines"
+                  "text": "Advanced Writing in the Disciplines",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -272,7 +303,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -288,7 +320,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -299,19 +332,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 }
               ]
             }

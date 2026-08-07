@@ -19,21 +19,24 @@
                     "BIOL2217",
                     "BIOL2218"
                   ],
-                  "text": "BIOL 2217 and BIOL 2218"
+                  "text": "BIOL 2217 and BIOL 2218",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV1101"
                   ],
-                  "text": "HUSV 1101"
+                  "text": "HUSV 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -41,7 +44,8 @@
                     "SLPA1000",
                     "HUSV1000"
                   ],
-                  "text": "SLPA 1000 or HUSV 1000"
+                  "text": "SLPA 1000 or HUSV 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -49,7 +53,8 @@
                     "MATH1215",
                     "MATH1241"
                   ],
-                  "text": "MATH 1215 or 1241"
+                  "text": "MATH 1215 or 1241",
+                  "sh": 4
                 }
               ]
             },
@@ -64,28 +69,32 @@
                     "BIOL2219",
                     "BIOL2220"
                   ],
-                  "text": "BIOL 2219 and BIOL 2220"
+                  "text": "BIOL 2219 and BIOL 2220",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV2300"
                   ],
-                  "text": "HUSV 2300"
+                  "text": "HUSV 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1101"
                   ],
-                  "text": "SLPA 1101"
+                  "text": "SLPA 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1205"
                   ],
-                  "text": "SLPA 1205"
+                  "text": "SLPA 1205",
+                  "sh": 4
                 }
               ]
             },
@@ -95,7 +104,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -106,7 +115,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -126,7 +135,8 @@
                   "codes": [
                     "HUSV2355"
                   ],
-                  "text": "HUSV 2355"
+                  "text": "HUSV 2355",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -134,21 +144,24 @@
                     "PHYS1145",
                     "PHYS1146"
                   ],
-                  "text": "PHYS 1145 and PHYS 1146"
+                  "text": "PHYS 1145 and PHYS 1146",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1103"
                   ],
-                  "text": "SLPA 1103"
+                  "text": "SLPA 1103",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1203"
                   ],
-                  "text": "SLPA 1203"
+                  "text": "SLPA 1203",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -156,7 +169,8 @@
                     "SLPA2000",
                     "EESH2000"
                   ],
-                  "text": "SLPA 2000 or EESH 2000"
+                  "text": "SLPA 2000 or EESH 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -170,7 +184,8 @@
                   "codes": [
                     "COOP3945"
                   ],
-                  "text": "COOP 3945"
+                  "text": "COOP 3945",
+                  "sh": 0
                 }
               ]
             },
@@ -184,7 +199,8 @@
                   "codes": [
                     "COOP3945"
                   ],
-                  "text": "COOP 3945"
+                  "text": "COOP 3945",
+                  "sh": 0
                 }
               ]
             },
@@ -195,11 +211,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -220,28 +238,32 @@
                     "ENGW3308",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3306, 3308, or 3315"
+                  "text": "ENGW 3306, 3308, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV3570"
                   ],
-                  "text": "HUSV 3570"
+                  "text": "HUSV 3570",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 }
               ]
             },
@@ -257,28 +279,32 @@
                     "HUSV2970",
                     "INSH3101"
                   ],
-                  "text": "HLTH 5450, HUSV 2970, or INSH 3101"
+                  "text": "HLTH 5450, HUSV 2970, or INSH 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV2340"
                   ],
-                  "text": "HUSV 2340"
+                  "text": "HUSV 2340",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1200"
                   ],
-                  "text": "SLPA 1200"
+                  "text": "SLPA 1200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1102"
                   ],
-                  "text": "SLPA 1102"
+                  "text": "SLPA 1102",
+                  "sh": 4
                 }
               ]
             },
@@ -288,7 +314,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -300,11 +326,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -320,25 +348,29 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA4500"
                   ],
-                  "text": "SLPA 4500"
+                  "text": "SLPA 4500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA5107"
                   ],
-                  "text": "SLPA 5107"
+                  "text": "SLPA 5107",
+                  "sh": 4
                 }
               ]
             },
@@ -352,25 +384,29 @@
                   "codes": [
                     "HUSV3900"
                   ],
-                  "text": "HUSV 3900"
+                  "text": "HUSV 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA4651"
                   ],
-                  "text": "SLPA 4651"
+                  "text": "SLPA 4651",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA6219"
                   ],
-                  "text": "SLPA 6219"
+                  "text": "SLPA 6219",
+                  "sh": 3
                 }
               ]
             }
@@ -397,21 +433,24 @@
                     "BIOL2217",
                     "BIOL2218"
                   ],
-                  "text": "BIOL 2217 and BIOL 2218"
+                  "text": "BIOL 2217 and BIOL 2218",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV1101"
                   ],
-                  "text": "HUSV 1101"
+                  "text": "HUSV 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -419,7 +458,8 @@
                     "MATH1215",
                     "MATH1241"
                   ],
-                  "text": "MATH 1215 or 1241"
+                  "text": "MATH 1215 or 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -427,7 +467,8 @@
                     "SLPA1000",
                     "HUSV1000"
                   ],
-                  "text": "SLPA 1000 or HUSV 1000"
+                  "text": "SLPA 1000 or HUSV 1000",
+                  "sh": 1
                 }
               ]
             },
@@ -442,28 +483,32 @@
                     "BIOL2219",
                     "BIOL2220"
                   ],
-                  "text": "BIOL 2219 and BIOL 2220"
+                  "text": "BIOL 2219 and BIOL 2220",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV2300"
                   ],
-                  "text": "HUSV 2300"
+                  "text": "HUSV 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1101"
                   ],
-                  "text": "SLPA 1101"
+                  "text": "SLPA 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1205"
                   ],
-                  "text": "SLPA 1205"
+                  "text": "SLPA 1205",
+                  "sh": 4
                 }
               ]
             }
@@ -482,7 +527,8 @@
                   "codes": [
                     "HUSV2355"
                   ],
-                  "text": "HUSV 2355"
+                  "text": "HUSV 2355",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -490,21 +536,24 @@
                     "PHYS1145",
                     "PHYS1146"
                   ],
-                  "text": "PHYS 1145 and PHYS 1146"
+                  "text": "PHYS 1145 and PHYS 1146",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1103"
                   ],
-                  "text": "SLPA 1103"
+                  "text": "SLPA 1103",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1203"
                   ],
-                  "text": "SLPA 1203"
+                  "text": "SLPA 1203",
+                  "sh": 4
                 }
               ]
             },
@@ -515,22 +564,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1200"
                   ],
-                  "text": "SLPA 1200"
+                  "text": "SLPA 1200",
+                  "sh": 4
                 }
               ]
             }
@@ -551,28 +604,32 @@
                     "ENGW3308",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3306, 3308, or 3315"
+                  "text": "ENGW 3306, 3308, or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV3570"
                   ],
-                  "text": "HUSV 3570"
+                  "text": "HUSV 3570",
+                  "sh": 4
                 }
               ]
             },
@@ -588,25 +645,29 @@
                     "HUSV2970",
                     "INSH3101"
                   ],
-                  "text": "HLTH 5450, HUSV 2970, or INSH 3101"
+                  "text": "HLTH 5450, HUSV 2970, or INSH 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HUSV elective"
+                  "text": "HUSV elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV2340"
                   ],
-                  "text": "HUSV 2340"
+                  "text": "HUSV 2340",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1102"
                   ],
-                  "text": "SLPA 1102"
+                  "text": "SLPA 1102",
+                  "sh": 4
                 }
               ]
             }
@@ -622,28 +683,32 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV4994"
                   ],
-                  "text": "HUSV 4994"
+                  "text": "HUSV 4994",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA4500"
                   ],
-                  "text": "SLPA 4500"
+                  "text": "SLPA 4500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA5107"
                   ],
-                  "text": "SLPA 5107"
+                  "text": "SLPA 5107",
+                  "sh": 4
                 }
               ]
             },
@@ -654,28 +719,32 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HUSV3900"
                   ],
-                  "text": "HUSV 3900"
+                  "text": "HUSV 3900",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA4651"
                   ],
-                  "text": "SLPA 4651"
+                  "text": "SLPA 4651",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA6219"
                   ],
-                  "text": "SLPA 6219"
+                  "text": "SLPA 6219",
+                  "sh": 3
                 }
               ]
             }

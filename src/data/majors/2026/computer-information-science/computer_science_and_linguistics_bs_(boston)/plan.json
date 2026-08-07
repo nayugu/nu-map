@@ -18,7 +18,8 @@
                   "codes": [
                     "CS1200"
                   ],
-                  "text": "CS 1200"
+                  "text": "CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -26,7 +27,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -34,21 +36,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 }
               ]
             },
@@ -63,25 +68,29 @@
                     "CS2100",
                     "CS2101"
                   ],
-                  "text": "CS 2100 and CS 2101"
+                  "text": "CS 2100 and CS 2101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING2350"
                   ],
-                  "text": "LING 2350"
+                  "text": "LING 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -96,11 +105,13 @@
                     "CS3000",
                     "CS3001"
                   ],
-                  "text": "CS 3000 and CS 3001"
+                  "text": "CS 3000 and CS 3001",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -111,11 +122,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -135,22 +148,26 @@
                     "CS3100",
                     "CS3101"
                   ],
-                  "text": "CS 3100 and CS 3101"
+                  "text": "CS 3100 and CS 3101",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING3412"
                   ],
-                  "text": "LING 3412"
+                  "text": "LING 3412",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure 2"
+                  "text": "LING Structure 2",
+                  "sh": 4
                 }
               ]
             },
@@ -164,26 +181,31 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210"
+                  "text": "CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3800"
                   ],
-                  "text": "CS 3800"
+                  "text": "CS 3800",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and Social Issues"
+                  "text": "Computing and Social Issues",
+                  "sh": 4
                 }
               ]
             },
@@ -194,11 +216,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -209,7 +233,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -225,7 +250,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -239,22 +265,26 @@
                   "codes": [
                     "CS4120"
                   ],
-                  "text": "CS 4120"
+                  "text": "CS 4120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS4400"
                   ],
-                  "text": "CS 4400"
+                  "text": "CS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Structure"
+                  "text": "LING Structure",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Seminar"
+                  "text": "LING Seminar",
+                  "sh": 4
                 }
               ]
             },
@@ -268,11 +298,13 @@
                   "codes": [
                     "ENGW3302"
                   ],
-                  "text": "ENGW 3302"
+                  "text": "ENGW 3302",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -283,7 +315,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -299,7 +332,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -313,7 +347,8 @@
                   "codes": [
                     "CS4100"
                   ],
-                  "text": "CS 4100"
+                  "text": "CS 4100",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -321,15 +356,18 @@
                     "CS4530",
                     "CS4535"
                   ],
-                  "text": "CS 4530 or 4535"
+                  "text": "CS 4530 or 4535",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Elective"
+                  "text": "LING Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LING Lab (or directed study)"
+                  "text": "LING Lab (or directed study)",
+                  "sh": 4
                 }
               ]
             }

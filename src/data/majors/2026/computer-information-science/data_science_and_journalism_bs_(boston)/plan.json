@@ -19,7 +19,8 @@
                     "CS1200",
                     "JRNL1000"
                   ],
-                  "text": "CS 1200 or JRNL 1000"
+                  "text": "CS 1200 or JRNL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -27,7 +28,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -35,21 +37,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL1150"
                   ],
-                  "text": "JRNL 1150"
+                  "text": "JRNL 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -63,7 +68,8 @@
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -71,7 +77,8 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -79,21 +86,24 @@
                     "JRNL1101",
                     "JRNL1102"
                   ],
-                  "text": "JRNL 1101 and JRNL 1102"
+                  "text": "JRNL 1101 and JRNL 1102",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL3550"
                   ],
-                  "text": "JRNL 3550"
+                  "text": "JRNL 3550",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -107,14 +117,16 @@
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -125,11 +137,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -148,25 +162,29 @@
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2201"
                   ],
-                  "text": "JRNL 2201"
+                  "text": "JRNL 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2301"
                   ],
-                  "text": "JRNL 2301"
+                  "text": "JRNL 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and social issues"
+                  "text": "Computing and social issues",
+                  "sh": 4
                 }
               ]
             },
@@ -180,28 +198,32 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210 (For Khoury students)"
+                  "text": "CS 1210 (For Khoury students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL3610"
                   ],
-                  "text": "JRNL 3610"
+                  "text": "JRNL 3610",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -209,7 +231,8 @@
                     "JRNL3700",
                     "JRNL5500"
                   ],
-                  "text": "JRNL 3700 or 5500"
+                  "text": "JRNL 3700 or 5500",
+                  "sh": 4
                 }
               ]
             },
@@ -223,11 +246,13 @@
                   "codes": [
                     "ECON2350"
                   ],
-                  "text": "ECON 2350"
+                  "text": "ECON 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -238,7 +263,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -254,7 +280,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -268,22 +295,26 @@
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL4650"
                   ],
-                  "text": "JRNL 4650"
+                  "text": "JRNL 4650",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective 1"
+                  "text": "JRNL elective 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -294,11 +325,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -309,7 +342,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -325,7 +359,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -339,22 +374,26 @@
                   "codes": [
                     "CY4170"
                   ],
-                  "text": "CY 4170"
+                  "text": "CY 4170",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4420"
                   ],
-                  "text": "DS 4420"
+                  "text": "DS 4420",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective 2"
+                  "text": "JRNL elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective 3"
+                  "text": "JRNL elective 3",
+                  "sh": 4
                 }
               ]
             }
@@ -381,7 +420,8 @@
                     "CS1200",
                     "JRNL1000"
                   ],
-                  "text": "CS 1200 or JRNL 1000"
+                  "text": "CS 1200 or JRNL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -389,7 +429,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -397,21 +438,24 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL1150"
                   ],
-                  "text": "JRNL 1150"
+                  "text": "JRNL 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -426,14 +470,16 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2350"
                   ],
-                  "text": "ECON 2350"
+                  "text": "ECON 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -441,21 +487,24 @@
                     "JRNL1101",
                     "JRNL1102"
                   ],
-                  "text": "JRNL 1101 and JRNL 1102"
+                  "text": "JRNL 1101 and JRNL 1102",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL3550"
                   ],
-                  "text": "JRNL 3550"
+                  "text": "JRNL 3550",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -469,14 +518,16 @@
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -487,11 +538,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -510,32 +563,37 @@
                   "codes": [
                     "CS1210"
                   ],
-                  "text": "CS 1210 (For Khoury students)"
+                  "text": "CS 1210 (For Khoury students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2201"
                   ],
-                  "text": "JRNL 2201"
+                  "text": "JRNL 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL2301"
                   ],
-                  "text": "JRNL 2301"
+                  "text": "JRNL 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Computing and social issues"
+                  "text": "Computing and social issues",
+                  "sh": 4
                 }
               ]
             },
@@ -546,7 +604,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -557,7 +616,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -568,11 +628,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -591,28 +653,32 @@
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL3610"
                   ],
-                  "text": "JRNL 3610"
+                  "text": "JRNL 3610",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL3700"
                   ],
-                  "text": "JRNL 3700"
+                  "text": "JRNL 3700",
+                  "sh": 4
                 }
               ]
             },
@@ -623,7 +689,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -634,7 +701,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -645,11 +713,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Khoury Elective"
+                  "text": "Khoury Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -668,25 +738,29 @@
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "JRNL4650"
                   ],
-                  "text": "JRNL 4650"
+                  "text": "JRNL 4650",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective 1"
+                  "text": "JRNL elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -700,22 +774,26 @@
                   "codes": [
                     "CY4170"
                   ],
-                  "text": "CY 4170"
+                  "text": "CY 4170",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4420"
                   ],
-                  "text": "DS 4420"
+                  "text": "DS 4420",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective 2"
+                  "text": "JRNL elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "JRNL elective 3"
+                  "text": "JRNL elective 3",
+                  "sh": 4
                 }
               ]
             }

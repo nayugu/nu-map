@@ -19,35 +19,40 @@
                     "CRIM1000",
                     "ECON1000"
                   ],
-                  "text": "CRIM 1000 or ECON 1000"
+                  "text": "CRIM 1000 or ECON 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1115"
                   ],
-                  "text": "ECON 1115"
+                  "text": "ECON 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1231"
                   ],
-                  "text": "MATH 1231"
+                  "text": "MATH 1231",
+                  "sh": 4
                 }
               ]
             },
@@ -61,21 +66,24 @@
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2315"
                   ],
-                  "text": "ECON 2315"
+                  "text": "ECON 2315",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -83,7 +91,8 @@
                     "CS1100",
                     "CS1101"
                   ],
-                  "text": "CS 1100 and CS 1101"
+                  "text": "CS 1100 and CS 1101",
+                  "sh": 5
                 }
               ]
             },
@@ -97,11 +106,13 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective"
+                  "text": "ECON elective",
+                  "sh": 4
                 }
               ]
             },
@@ -111,7 +122,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -131,32 +142,37 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3600"
                   ],
-                  "text": "CRIM 3600"
+                  "text": "CRIM 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2316"
                   ],
-                  "text": "ECON 2316"
+                  "text": "ECON 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2560"
                   ],
-                  "text": "ECON 2560"
+                  "text": "ECON 2560",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 }
               ]
             },
@@ -167,7 +183,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -178,7 +195,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -188,7 +206,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -208,19 +226,23 @@
                   "codes": [
                     "ECON2350"
                   ],
-                  "text": "ECON 2350"
+                  "text": "ECON 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective"
+                  "text": "ECON elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -231,22 +253,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3308"
                   ],
-                  "text": "ENGW 3308"
+                  "text": "ENGW 3308",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 }
               ]
             },
@@ -257,11 +283,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective"
+                  "text": "ECON elective",
+                  "sh": 4
                 }
               ]
             },
@@ -271,7 +299,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -291,19 +319,23 @@
                   "codes": [
                     "ECON3424"
                   ],
-                  "text": "ECON 3424"
+                  "text": "ECON 3424",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective"
+                  "text": "ECON elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -314,19 +346,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective"
+                  "text": "ECON elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -353,35 +389,40 @@
                     "CRIM1000",
                     "ECON1000"
                   ],
-                  "text": "CRIM 1000 or ECON 1000"
+                  "text": "CRIM 1000 or ECON 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1115"
                   ],
-                  "text": "ECON 1115"
+                  "text": "ECON 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON1116"
                   ],
-                  "text": "ECON 1116"
+                  "text": "ECON 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1231"
                   ],
-                  "text": "MATH 1231"
+                  "text": "MATH 1231",
+                  "sh": 4
                 }
               ]
             },
@@ -395,21 +436,24 @@
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2315"
                   ],
-                  "text": "ECON 2315"
+                  "text": "ECON 2315",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -417,7 +461,8 @@
                     "CS1100",
                     "CS1101"
                   ],
-                  "text": "CS 1100 and CS 1101"
+                  "text": "CS 1100 and CS 1101",
+                  "sh": 5
                 }
               ]
             },
@@ -431,11 +476,13 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective"
+                  "text": "ECON elective",
+                  "sh": 4
                 }
               ]
             },
@@ -446,11 +493,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 }
               ]
             }
@@ -469,32 +518,37 @@
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3600"
                   ],
-                  "text": "CRIM 3600"
+                  "text": "CRIM 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2316"
                   ],
-                  "text": "ECON 2316"
+                  "text": "ECON 2316",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ECON2560"
                   ],
-                  "text": "ECON 2560"
+                  "text": "ECON 2560",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 }
               ]
             },
@@ -505,7 +559,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -516,7 +571,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -530,11 +586,13 @@
                   "codes": [
                     "ENGW3308"
                   ],
-                  "text": "ENGW 3308"
+                  "text": "ENGW 3308",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 }
               ]
             }
@@ -553,19 +611,23 @@
                   "codes": [
                     "ECON2350"
                   ],
-                  "text": "ECON 2350"
+                  "text": "ECON 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective"
+                  "text": "ECON elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -576,7 +638,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -587,7 +650,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -598,11 +662,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective"
+                  "text": "ECON elective",
+                  "sh": 4
                 }
               ]
             }
@@ -621,19 +687,23 @@
                   "codes": [
                     "ECON3424"
                   ],
-                  "text": "ECON 3424"
+                  "text": "ECON 3424",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective"
+                  "text": "ECON elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             },
@@ -644,19 +714,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ECON elective"
+                  "text": "ECON elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }

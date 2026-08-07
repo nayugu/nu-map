@@ -19,21 +19,24 @@
                     "SOCL1000",
                     "CS1200"
                   ],
-                  "text": "SOCL 1000 or CS 1200"
+                  "text": "SOCL 1000 or CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL1101"
                   ],
-                  "text": "SOCL 1101"
+                  "text": "SOCL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -41,7 +44,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -49,7 +53,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 }
               ]
             },
@@ -64,7 +69,8 @@
                     "SOCL2320",
                     "INSH3102"
                   ],
-                  "text": "SOCL 2320 or INSH 3102"
+                  "text": "SOCL 2320 or INSH 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -72,15 +78,18 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective—introductory"
+                  "text": "SOCL elective—introductory",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -94,11 +103,13 @@
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -108,7 +119,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -129,7 +140,8 @@
                     "EESH2000",
                     "CS1210"
                   ],
-                  "text": "EESH 2000 or CS 1210"
+                  "text": "EESH 2000 or CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -137,25 +149,29 @@
                     "SOCL2321",
                     "INSH3101"
                   ],
-                  "text": "SOCL 2321 or INSH 3101"
+                  "text": "SOCL 2321 or INSH 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective - introductory"
+                  "text": "SOCL elective - introductory",
+                  "sh": 4
                 }
               ]
             },
@@ -166,7 +182,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -177,7 +194,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -188,11 +206,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -211,22 +231,26 @@
                   "codes": [
                     "SOCL3300"
                   ],
-                  "text": "SOCL 3300"
+                  "text": "SOCL 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective—intermediate"
+                  "text": "SOCL elective—intermediate",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -237,7 +261,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -248,7 +273,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "choice",
@@ -257,7 +283,8 @@
                     "ENGW3308",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3308, or 3315"
+                  "text": "ENGW 3302, 3308, or 3315",
+                  "sh": 4
                 }
               ]
             },
@@ -268,11 +295,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General Elective"
+                  "text": "General Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -291,19 +320,23 @@
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective—intermediate"
+                  "text": "SOCL elective—intermediate",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 }
               ]
             },
@@ -317,25 +350,29 @@
                   "codes": [
                     "SOCL4600"
                   ],
-                  "text": "SOCL 4600"
+                  "text": "SOCL 4600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective—intermediate"
+                  "text": "SOCL elective—intermediate",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 }
               ]
             }
@@ -362,21 +399,24 @@
                     "SOCL1000",
                     "CS1200"
                   ],
-                  "text": "SOCL 1000 or CS 1200"
+                  "text": "SOCL 1000 or CS 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL1101"
                   ],
-                  "text": "SOCL 1101"
+                  "text": "SOCL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -384,7 +424,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -392,7 +433,8 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 }
               ]
             },
@@ -407,7 +449,8 @@
                     "SOCL2320",
                     "INSH3102"
                   ],
-                  "text": "SOCL 2320 or INSH 3102"
+                  "text": "SOCL 2320 or INSH 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -415,15 +458,18 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective—introductory"
+                  "text": "SOCL elective—introductory",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -437,11 +483,13 @@
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -451,7 +499,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -472,25 +520,29 @@
                     "SOCL2321",
                     "INSH3101"
                   ],
-                  "text": "SOCL 2321 or INSH 3101"
+                  "text": "SOCL 2321 or INSH 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective - introductory"
+                  "text": "SOCL elective - introductory",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 }
               ]
             },
@@ -505,29 +557,34 @@
                     "EESH2000",
                     "CS1210"
                   ],
-                  "text": "EESH 2000 or CS 1210"
+                  "text": "EESH 2000 or CS 1210",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL3300"
                   ],
-                  "text": "SOCL 3300"
+                  "text": "SOCL 3300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective—intermediate"
+                  "text": "SOCL elective—intermediate",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 }
               ]
             },
@@ -538,11 +595,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -553,7 +612,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -569,7 +629,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -583,19 +644,23 @@
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective—intermediate"
+                  "text": "SOCL elective—intermediate",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 }
               ]
             },
@@ -606,11 +671,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -621,7 +688,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "choice",
@@ -630,7 +698,8 @@
                     "ENGW3308",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302, 3308, or 3315"
+                  "text": "ENGW 3302, 3308, or 3315",
+                  "sh": 4
                 }
               ]
             }
@@ -646,7 +715,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -660,25 +730,29 @@
                   "codes": [
                     "SOCL4600"
                   ],
-                  "text": "SOCL 4600"
+                  "text": "SOCL 4600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "SOCL elective—intermediate"
+                  "text": "SOCL elective—intermediate",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 }
               ]
             }

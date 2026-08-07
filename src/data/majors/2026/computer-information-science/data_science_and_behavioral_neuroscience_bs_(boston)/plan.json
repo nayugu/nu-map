@@ -19,7 +19,8 @@
                     "BIOL1107",
                     "BIOL1108"
                   ],
-                  "text": "BIOL 1107 and BIOL 1108"
+                  "text": "BIOL 1107 and BIOL 1108",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -28,7 +29,8 @@
                     "BNSC1000",
                     "INSC1000"
                   ],
-                  "text": "CS 1200, BNSC 1000, or INSC 1000"
+                  "text": "CS 1200, BNSC 1000, or INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -36,7 +38,8 @@
                     "CS1800",
                     "CS1802"
                   ],
-                  "text": "CS 1800 and CS 1802"
+                  "text": "CS 1800 and CS 1802",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -44,14 +47,16 @@
                     "CS2000",
                     "CS2001"
                   ],
-                  "text": "CS 2000 and CS 2001"
+                  "text": "CS 2000 and CS 2001",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -65,7 +70,8 @@
                   "codes": [
                     "BIOL2299"
                   ],
-                  "text": "BIOL 2299"
+                  "text": "BIOL 2299",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -74,7 +80,8 @@
                     "CHEM1162",
                     "CHEM1163"
                   ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "sh": 5
                 },
                 {
                   "kind": "courses",
@@ -82,14 +89,16 @@
                     "DS2500",
                     "DS2501"
                   ],
-                  "text": "DS 2500 and DS 2501"
+                  "text": "DS 2500 and DS 2501",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 }
               ]
             },
@@ -103,11 +112,13 @@
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -118,11 +129,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -142,7 +155,8 @@
                     "BIOL2301",
                     "BIOL2302"
                   ],
-                  "text": "BIOL 2301 and BIOL 2302"
+                  "text": "BIOL 2301 and BIOL 2302",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -150,21 +164,24 @@
                     "BIOL3405",
                     "BIOL5587"
                   ],
-                  "text": "BIOL 3405 or 5587"
+                  "text": "BIOL 3405 or 5587",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS3200"
                   ],
-                  "text": "CS 3200"
+                  "text": "CS 3200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3000"
                   ],
-                  "text": "DS 3000"
+                  "text": "DS 3000",
+                  "sh": 4
                 }
               ]
             },
@@ -179,7 +196,8 @@
                     "CHEM2311",
                     "CHEM2312"
                   ],
-                  "text": "CHEM 2311 and CHEM 2312"
+                  "text": "CHEM 2311 and CHEM 2312",
+                  "sh": 5
                 },
                 {
                   "kind": "choice",
@@ -187,22 +205,26 @@
                     "CS1210",
                     "EESC2000"
                   ],
-                  "text": "CS 1210 or EESC 2000"
+                  "text": "CS 1210 or EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS3500"
                   ],
-                  "text": "DS 3500"
+                  "text": "DS 3500",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS core 1"
+                  "text": "BNS core 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Statistics foundation"
+                  "text": "Statistics foundation",
+                  "sh": 4
                 }
               ]
             },
@@ -213,11 +235,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -228,7 +252,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -244,7 +269,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -258,14 +284,16 @@
                   "codes": [
                     "DS4200"
                   ],
-                  "text": "DS 4200"
+                  "text": "DS 4200",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4300"
                   ],
-                  "text": "DS 4300"
+                  "text": "DS 4300",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -273,11 +301,13 @@
                     "PT5410",
                     "PT5411"
                   ],
-                  "text": "PT 5410 and PT 5411"
+                  "text": "PT 5410 and PT 5411",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Khoury elective"
+                  "text": "Khoury elective",
+                  "sh": 4
                 }
               ]
             },
@@ -291,7 +321,8 @@
                   "codes": [
                     "ENGW3302"
                   ],
-                  "text": "ENGW 3302"
+                  "text": "ENGW 3302",
+                  "sh": 4
                 }
               ]
             },
@@ -302,7 +333,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -318,7 +350,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -333,25 +366,29 @@
                     "BINF6308",
                     "PSYC4540"
                   ],
-                  "text": "BINF 6308 or PSYC 4540"
+                  "text": "BINF 6308 or PSYC 4540",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS4100"
                   ],
-                  "text": "CS 4100"
+                  "text": "CS 4100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "DS4400"
                   ],
-                  "text": "DS 4400"
+                  "text": "DS 4400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BNS core 2"
+                  "text": "BNS core 2",
+                  "sh": 4
                 }
               ]
             }

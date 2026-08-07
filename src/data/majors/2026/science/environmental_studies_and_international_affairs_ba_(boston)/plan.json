@@ -18,28 +18,32 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR1101"
                   ],
-                  "text": "ENVR 1101"
+                  "text": "ENVR 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL1101"
                   ],
-                  "text": "INTL 1101"
+                  "text": "INTL 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SOCL1246"
                   ],
-                  "text": "SOCL 1246"
+                  "text": "SOCL 1246",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -47,7 +51,8 @@
                     "ENVR1000",
                     "INTL1000"
                   ],
-                  "text": "ENVR 1000 or INTL 1000"
+                  "text": "ENVR 1000 or INTL 1000",
+                  "sh": 1
                 }
               ]
             },
@@ -61,25 +66,29 @@
                   "codes": [
                     "ENVR1110"
                   ],
-                  "text": "ENVR 1110"
+                  "text": "ENVR 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR2515"
                   ],
-                  "text": "ENVR 2515"
+                  "text": "ENVR 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language Course 1"
+                  "text": "Foreign Language Course 1",
+                  "sh": 4
                 }
               ]
             },
@@ -90,11 +99,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             },
@@ -105,11 +116,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Regional Analysis course 1"
+                  "text": "Regional Analysis course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course 2"
+                  "text": "Foreign language course 2",
+                  "sh": 4
                 }
               ]
             }
@@ -129,19 +142,23 @@
                     "ENVR3300",
                     "ENVR3301"
                   ],
-                  "text": "ENVR 3300 and ENVR 3301"
+                  "text": "ENVR 3300 and ENVR 3301",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Global Dynamics course 1"
+                  "text": "Global Dynamics course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Elective; 1 of 4"
+                  "text": "ENVR Elective; 1 of 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Regional Analysis course 2"
+                  "text": "Regional Analysis course 2",
+                  "sh": 4
                 }
               ]
             },
@@ -155,11 +172,13 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective; 2 of 4"
+                  "text": "ENVR elective; 2 of 4",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -167,15 +186,18 @@
                     "ENVR3300",
                     "ENVR3301"
                   ],
-                  "text": "ENVR 3300 and ENVR 3301"
+                  "text": "ENVR 3300 and ENVR 3301",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective; 3 of 4"
+                  "text": "ENVR elective; 3 of 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language Course 3"
+                  "text": "Foreign Language Course 3",
+                  "sh": 4
                 }
               ]
             },
@@ -186,11 +208,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (Dialogue of Civilizations possible)"
+                  "text": "Elective (Dialogue of Civilizations possible)",
+                  "sh": 4
                 }
               ]
             },
@@ -201,7 +225,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -217,7 +242,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -228,22 +254,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENVR Elective; 4 of 4"
+                  "text": "ENVR Elective; 4 of 4",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL3400"
                   ],
-                  "text": "INTL 3400"
+                  "text": "INTL 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Global Dynamics course 2"
+                  "text": "Global Dynamics course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language Course 4"
+                  "text": "Foreign Language Course 4",
+                  "sh": 4
                 }
               ]
             },
@@ -254,11 +284,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Regional Analysis course 3"
+                  "text": "Regional Analysis course 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Quantitative methods course"
+                  "text": "Quantitative methods course",
+                  "sh": 4
                 }
               ]
             },
@@ -269,7 +301,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -285,7 +318,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -299,7 +333,8 @@
                   "codes": [
                     "ECON3423"
                   ],
-                  "text": "ECON 3423"
+                  "text": "ECON 3423",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -307,18 +342,21 @@
                     "ENGW3308",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3308 or 3315"
+                  "text": "ENGW 3308 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTL4700"
                   ],
-                  "text": "INTL 4700"
+                  "text": "INTL 4700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "INTL Elective"
+                  "text": "INTL Elective",
+                  "sh": 4
                 }
               ]
             }

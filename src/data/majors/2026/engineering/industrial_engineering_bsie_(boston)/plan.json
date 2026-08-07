@@ -18,42 +18,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -67,39 +73,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -113,11 +125,13 @@
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -128,11 +142,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -151,39 +167,45 @@
                   "codes": [
                     "IE2310"
                   ],
-                  "text": "IE 2310 (WI)"
+                  "text": "IE 2310 (WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE2311"
                   ],
-                  "text": "IE 2311"
+                  "text": "IE 2311",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE3425"
                   ],
-                  "text": "IE 3425"
+                  "text": "IE 3425",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE3426"
                   ],
-                  "text": "IE 3426"
+                  "text": "IE 3426",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Science elective"
+                  "text": "Science elective",
+                  "sh": 5
                 }
               ]
             },
@@ -197,7 +219,8 @@
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -205,7 +228,8 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -213,18 +237,21 @@
                     "IE3412",
                     "MATH3081"
                   ],
-                  "text": "IE 3412 or MATH 3081 (AD)"
+                  "text": "IE 3412 or MATH 3081 (AD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4512"
                   ],
-                  "text": "IE 4512"
+                  "text": "IE 4512",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 }
               ]
             },
@@ -235,11 +262,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -250,7 +279,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -266,7 +296,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -280,35 +311,40 @@
                   "codes": [
                     "IE4510"
                   ],
-                  "text": "IE 4510"
+                  "text": "IE 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4515"
                   ],
-                  "text": "IE 4515"
+                  "text": "IE 4515",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4516"
                   ],
-                  "text": "IE 4516"
+                  "text": "IE 4516",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4530"
                   ],
-                  "text": "IE 4530"
+                  "text": "IE 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4531"
                   ],
-                  "text": "IE 4531"
+                  "text": "IE 4531",
+                  "sh": 1
                 }
               ]
             },
@@ -322,15 +358,18 @@
                   "codes": [
                     "MEIE4701"
                   ],
-                  "text": "MEIE 4701 (EI, WI, CE)"
+                  "text": "MEIE 4701 (EI, WI, CE)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 }
               ]
             },
@@ -341,7 +380,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -357,7 +397,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -371,42 +412,48 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4520"
                   ],
-                  "text": "IE 4520"
+                  "text": "IE 4520",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4522"
                   ],
-                  "text": "IE 4522"
+                  "text": "IE 4522",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4523"
                   ],
-                  "text": "IE 4523"
+                  "text": "IE 4523",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4525"
                   ],
-                  "text": "IE 4525"
+                  "text": "IE 4525",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4702"
                   ],
-                  "text": "MEIE 4702 (EI, WI, CE)"
+                  "text": "MEIE 4702 (EI, WI, CE)",
+                  "sh": 5
                 }
               ]
             }
@@ -432,42 +479,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -481,39 +534,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -527,11 +586,13 @@
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -542,11 +603,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -565,46 +628,53 @@
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE2310"
                   ],
-                  "text": "IE 2310 (WI)"
+                  "text": "IE 2310 (WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE2311"
                   ],
-                  "text": "IE 2311"
+                  "text": "IE 2311",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE3425"
                   ],
-                  "text": "IE 3425"
+                  "text": "IE 3425",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE3426"
                   ],
-                  "text": "IE 3426"
+                  "text": "IE 3426",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Science elective"
+                  "text": "Science elective",
+                  "sh": 5
                 }
               ]
             },
@@ -615,7 +685,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -626,7 +697,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -640,11 +712,13 @@
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081 (AD)"
+                  "text": "MATH 3081 (AD)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -664,35 +738,40 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4510"
                   ],
-                  "text": "IE 4510"
+                  "text": "IE 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4515"
                   ],
-                  "text": "IE 4515"
+                  "text": "IE 4515",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4530"
                   ],
-                  "text": "IE 4530"
+                  "text": "IE 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4531"
                   ],
-                  "text": "IE 4531"
+                  "text": "IE 4531",
+                  "sh": 1
                 }
               ]
             },
@@ -703,7 +782,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -714,7 +794,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -725,11 +806,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -748,39 +831,45 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4512"
                   ],
-                  "text": "IE 4512"
+                  "text": "IE 4512",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4516"
                   ],
-                  "text": "IE 4516"
+                  "text": "IE 4516",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4525"
                   ],
-                  "text": "IE 4525"
+                  "text": "IE 4525",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4701"
                   ],
-                  "text": "MEIE 4701 (EI, WI, CE)"
+                  "text": "MEIE 4701 (EI, WI, CE)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 }
               ]
             },
@@ -794,32 +883,37 @@
                   "codes": [
                     "IE4520"
                   ],
-                  "text": "IE 4520"
+                  "text": "IE 4520",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4522"
                   ],
-                  "text": "IE 4522"
+                  "text": "IE 4522",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4523"
                   ],
-                  "text": "IE 4523"
+                  "text": "IE 4523",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4702"
                   ],
-                  "text": "MEIE 4702 (EI, WI, CE)"
+                  "text": "MEIE 4702 (EI, WI, CE)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 }
               ]
             }
@@ -845,42 +939,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -894,39 +994,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -936,7 +1042,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -947,7 +1053,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -967,39 +1073,45 @@
                   "codes": [
                     "IE2310"
                   ],
-                  "text": "IE 2310 (WI)"
+                  "text": "IE 2310 (WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE2311"
                   ],
-                  "text": "IE 2311"
+                  "text": "IE 2311",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE3425"
                   ],
-                  "text": "IE 3425"
+                  "text": "IE 3425",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE3426"
                   ],
-                  "text": "IE 3426"
+                  "text": "IE 3426",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Science elective"
+                  "text": "Science elective",
+                  "sh": 5
                 }
               ]
             },
@@ -1013,7 +1125,8 @@
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -1021,25 +1134,29 @@
                     "IE3412",
                     "MATH3081"
                   ],
-                  "text": "IE 3412 or MATH 3081 (AD)"
+                  "text": "IE 3412 or MATH 3081 (AD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4512"
                   ],
-                  "text": "IE 4512"
+                  "text": "IE 4512",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1049,7 +1166,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1061,7 +1178,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1077,7 +1195,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1092,28 +1211,32 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4510"
                   ],
-                  "text": "IE 4510"
+                  "text": "IE 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4515"
                   ],
-                  "text": "IE 4515"
+                  "text": "IE 4515",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4516"
                   ],
-                  "text": "IE 4516"
+                  "text": "IE 4516",
+                  "sh": 4
                 }
               ]
             },
@@ -1124,11 +1247,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1139,7 +1264,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1155,7 +1281,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1169,39 +1296,45 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4520"
                   ],
-                  "text": "IE 4520"
+                  "text": "IE 4520",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4525"
                   ],
-                  "text": "IE 4525"
+                  "text": "IE 4525",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4530"
                   ],
-                  "text": "IE 4530"
+                  "text": "IE 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4531"
                   ],
-                  "text": "IE 4531"
+                  "text": "IE 4531",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1215,15 +1348,18 @@
                   "codes": [
                     "MEIE4701"
                   ],
-                  "text": "MEIE 4701 (EI, CE, WI)"
+                  "text": "MEIE 4701 (EI, CE, WI)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1234,7 +1370,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1250,7 +1387,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1264,29 +1402,34 @@
                   "codes": [
                     "IE4522"
                   ],
-                  "text": "IE 4522"
+                  "text": "IE 4522",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4523"
                   ],
-                  "text": "IE 4523"
+                  "text": "IE 4523",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4702"
                   ],
-                  "text": "MEIE 4702 (EI, WI, CE)"
+                  "text": "MEIE 4702 (EI, WI, CE)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1312,42 +1455,48 @@
                   "codes": [
                     "CHEM1151"
                   ],
-                  "text": "CHEM 1151 (ND)"
+                  "text": "CHEM 1151 (ND)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1153"
                   ],
-                  "text": "CHEM 1153"
+                  "text": "CHEM 1153",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111 (WF)"
+                  "text": "ENGW 1111 (WF)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1000"
                   ],
-                  "text": "GE 1000"
+                  "text": "GE 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "GE1501"
                   ],
-                  "text": "GE 1501"
+                  "text": "GE 1501",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341 (FQ)"
+                  "text": "MATH 1341 (FQ)",
+                  "sh": 4
                 }
               ]
             },
@@ -1361,39 +1510,45 @@
                   "codes": [
                     "GE1502"
                   ],
-                  "text": "GE 1502 (ER)"
+                  "text": "GE 1502 (ER)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342 (FQ)"
+                  "text": "MATH 1342 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1151"
                   ],
-                  "text": "PHYS 1151 (ND)"
+                  "text": "PHYS 1151 (ND)",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1152"
                   ],
-                  "text": "PHYS 1152 (AD)"
+                  "text": "PHYS 1152 (AD)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1153"
                   ],
-                  "text": "PHYS 1153"
+                  "text": "PHYS 1153",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1403,7 +1558,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1414,7 +1569,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1434,46 +1589,53 @@
                   "codes": [
                     "ENCP2000"
                   ],
-                  "text": "ENCP 2000"
+                  "text": "ENCP 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE2310"
                   ],
-                  "text": "IE 2310 (WI)"
+                  "text": "IE 2310 (WI)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE2311"
                   ],
-                  "text": "IE 2311"
+                  "text": "IE 2311",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE3425"
                   ],
-                  "text": "IE 3425"
+                  "text": "IE 3425",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE3426"
                   ],
-                  "text": "IE 3426"
+                  "text": "IE 3426",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321 (FQ)"
+                  "text": "MATH 2321 (FQ)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Science elective"
+                  "text": "Science elective",
+                  "sh": 5
                 }
               ]
             },
@@ -1484,7 +1646,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1495,7 +1658,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1505,7 +1669,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1526,7 +1690,8 @@
                     "ENGW3302",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3302 or 3315 (WD)"
+                  "text": "ENGW 3302 or 3315 (WD)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -1534,21 +1699,24 @@
                     "IE3412",
                     "MATH3081"
                   ],
-                  "text": "IE 3412 or MATH 3081 (AD)"
+                  "text": "IE 3412 or MATH 3081 (AD)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4512"
                   ],
-                  "text": "IE 4512"
+                  "text": "IE 4512",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             },
@@ -1559,7 +1727,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1570,7 +1739,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1581,11 +1751,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1604,42 +1776,48 @@
                   "codes": [
                     "ENCP3000"
                   ],
-                  "text": "ENCP 3000"
+                  "text": "ENCP 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4510"
                   ],
-                  "text": "IE 4510"
+                  "text": "IE 4510",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4515"
                   ],
-                  "text": "IE 4515"
+                  "text": "IE 4515",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4516"
                   ],
-                  "text": "IE 4516"
+                  "text": "IE 4516",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4530"
                   ],
-                  "text": "IE 4530"
+                  "text": "IE 4530",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4531"
                   ],
-                  "text": "IE 4531"
+                  "text": "IE 4531",
+                  "sh": 1
                 }
               ]
             },
@@ -1650,7 +1828,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1661,7 +1840,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1672,11 +1852,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1695,29 +1877,34 @@
                   "codes": [
                     "IE4520"
                   ],
-                  "text": "IE 4520"
+                  "text": "IE 4520",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4525"
                   ],
-                  "text": "IE 4525"
+                  "text": "IE 4525",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4701"
                   ],
-                  "text": "MEIE 4701 (EI, WI, CE)"
+                  "text": "MEIE 4701 (EI, WI, CE)",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1731,29 +1918,34 @@
                   "codes": [
                     "IE4522"
                   ],
-                  "text": "IE 4522"
+                  "text": "IE 4522",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "IE4523"
                   ],
-                  "text": "IE 4523"
+                  "text": "IE 4523",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MEIE4702"
                   ],
-                  "text": "MEIE 4702 (EI, WI, CE)"
+                  "text": "MEIE 4702 (EI, WI, CE)",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 }
               ]
             }

@@ -18,29 +18,34 @@
                   "codes": [
                     "HSCI1000"
                   ],
-                  "text": "HSCI 1000"
+                  "text": "HSCI 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course (see options)"
+                  "text": "BIOL course (see options)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language course"
+                  "text": "Elementary language course",
+                  "sh": 4
                 }
               ]
             },
@@ -54,19 +59,23 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course (see options)"
+                  "text": "BIOL course (see options)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language course"
+                  "text": "Elementary language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -77,11 +86,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 }
               ]
             }
@@ -100,21 +111,24 @@
                   "codes": [
                     "HSCI2000"
                   ],
-                  "text": "HSCI 2000"
+                  "text": "HSCI 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -122,11 +136,13 @@
                     "COMM1112",
                     "COMM2301"
                   ],
-                  "text": "COMM 1112 or 2301"
+                  "text": "COMM 1112 or 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 }
               ]
             },
@@ -137,7 +153,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -148,11 +165,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -166,11 +185,13 @@
                   "codes": [
                     "ENGW3306"
                   ],
-                  "text": "ENGW 3306"
+                  "text": "ENGW 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 }
               ]
             }
@@ -186,19 +207,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course (introductory)"
+                  "text": "PH social science course (introductory)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM foundation course"
+                  "text": "COMM foundation course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 }
               ]
             },
@@ -209,7 +234,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -220,11 +246,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -235,7 +263,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core courses"
+                  "text": "PHTH core courses",
+                  "sh": 8
                 }
               ]
             }
@@ -251,19 +280,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM cluster course"
+                  "text": "COMM cluster course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM writing-intensive course"
+                  "text": "COMM writing-intensive course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone course"
+                  "text": "Capstone course",
+                  "sh": 3
                 }
               ]
             },
@@ -274,19 +307,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM writing-intensive course"
+                  "text": "COMM writing-intensive course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course (upper)"
+                  "text": "PH social science course (upper)",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate language course"
+                  "text": "Intermediate language course",
+                  "sh": 4
                 }
               ]
             }
@@ -312,29 +349,34 @@
                   "codes": [
                     "COMM1000"
                   ],
-                  "text": "COMM 1000"
+                  "text": "COMM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH1260"
                   ],
-                  "text": "PHTH 1260"
+                  "text": "PHTH 1260",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course (see options)"
+                  "text": "BIOL course (see options)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language course"
+                  "text": "Elementary language course",
+                  "sh": 4
                 }
               ]
             },
@@ -348,19 +390,23 @@
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "BIOL course (see options)"
+                  "text": "BIOL course (see options)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elementary language course"
+                  "text": "Elementary language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -371,11 +417,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 }
               ]
             }
@@ -394,7 +442,8 @@
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -402,15 +451,18 @@
                     "COMM1112",
                     "COMM2301"
                   ],
-                  "text": "COMM 1112 or 2301"
+                  "text": "COMM 1112 or 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM foundation course"
+                  "text": "COMM foundation course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 }
               ]
             },
@@ -424,26 +476,31 @@
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM cluster course"
+                  "text": "COMM cluster course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course (introductory)"
+                  "text": "PH social science course (introductory)",
+                  "sh": 4
                 }
               ]
             },
@@ -457,11 +514,13 @@
                   "codes": [
                     "ENGW3314"
                   ],
-                  "text": "ENGW 3314"
+                  "text": "ENGW 3314",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core course"
+                  "text": "PHTH core course",
+                  "sh": 4
                 }
               ]
             },
@@ -472,7 +531,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -488,11 +548,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -506,19 +568,23 @@
                   "codes": [
                     "PHTH4202"
                   ],
-                  "text": "PHTH 4202"
+                  "text": "PHTH 4202",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM writing-intensive course"
+                  "text": "COMM writing-intensive course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Intermediate language course"
+                  "text": "Intermediate language course",
+                  "sh": 4
                 }
               ]
             },
@@ -529,7 +595,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHTH core courses"
+                  "text": "PHTH core courses",
+                  "sh": 8
                 }
               ]
             },
@@ -540,7 +607,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -556,11 +624,13 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
-                  "text": "General elective"
+                  "text": "General elective",
+                  "sh": 4
                 }
               ]
             },
@@ -571,19 +641,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone course"
+                  "text": "Capstone course",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM writing-intensive course"
+                  "text": "COMM writing-intensive course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PH social science course (upper)"
+                  "text": "PH social science course (upper)",
+                  "sh": 3
                 }
               ]
             }

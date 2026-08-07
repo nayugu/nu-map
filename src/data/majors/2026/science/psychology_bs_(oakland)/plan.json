@@ -18,32 +18,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1214"
                   ],
-                  "text": "PSYC 1214 (or other PSYC elective)"
+                  "text": "PSYC 1214 (or other PSYC elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Math requirement"
+                  "text": "Math requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -54,19 +59,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area A elective"
+                  "text": "PSYC area A elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -77,11 +86,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -91,7 +102,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -111,26 +122,31 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area B elective"
+                  "text": "PSYC area B elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -141,19 +157,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area A elective"
+                  "text": "PSYC area A elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area B elective"
+                  "text": "PSYC area B elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -164,11 +184,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (or AP credit, etc.)"
+                  "text": "Elective (or AP credit, etc.)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (or AP credit, etc.)"
+                  "text": "Elective (or AP credit, etc.)",
+                  "sh": 4
                 }
               ]
             },
@@ -179,7 +201,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -195,7 +218,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -209,19 +233,23 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab elective"
+                  "text": "PSYC lab elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -232,11 +260,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (or AP credit, etc.)"
+                  "text": "Elective (or AP credit, etc.)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (or AP credit, etc.)"
+                  "text": "Elective (or AP credit, etc.)",
+                  "sh": 4
                 }
               ]
             },
@@ -247,7 +277,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -263,7 +294,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -274,19 +306,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab elective"
+                  "text": "PSYC lab elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar elective"
+                  "text": "PSYC seminar elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -297,11 +333,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -327,32 +365,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1214"
                   ],
-                  "text": "PSYC 1214 (or other PSYC elective)"
+                  "text": "PSYC 1214 (or other PSYC elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Math requirement"
+                  "text": "Math requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -363,19 +406,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area A elective"
+                  "text": "PSYC area A elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -386,11 +433,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -400,7 +449,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -420,26 +469,31 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area B elective"
+                  "text": "PSYC area B elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -450,7 +504,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -461,7 +516,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -472,11 +528,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (or AP credit, etc.)"
+                  "text": "Elective (or AP credit, etc.)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (or AP credit, etc.)"
+                  "text": "Elective (or AP credit, etc.)",
+                  "sh": 4
                 }
               ]
             }
@@ -492,19 +550,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area A elective"
+                  "text": "PSYC area A elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area B elective"
+                  "text": "PSYC area B elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -515,7 +577,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -526,7 +589,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -537,11 +601,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (or AP credit, etc.)"
+                  "text": "Elective (or AP credit, etc.)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (or AP credit, etc.)"
+                  "text": "Elective (or AP credit, etc.)",
+                  "sh": 4
                 }
               ]
             }
@@ -560,19 +626,23 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab"
+                  "text": "PSYC lab",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -583,19 +653,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab elective"
+                  "text": "PSYC lab elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar elective"
+                  "text": "PSYC seminar elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -606,11 +680,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -636,32 +712,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1214"
                   ],
-                  "text": "PSYC 1214 (or other PSYC elective)"
+                  "text": "PSYC 1214 (or other PSYC elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Math requirement"
+                  "text": "Math requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -672,19 +753,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area A elective"
+                  "text": "PSYC area A elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -694,7 +779,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -705,7 +790,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -725,19 +810,23 @@
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area B elective"
+                  "text": "PSYC area B elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -751,23 +840,28 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area A elective"
+                  "text": "PSYC area A elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area B elective"
+                  "text": "PSYC area B elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -777,7 +871,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -789,7 +883,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -805,7 +900,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -819,19 +915,23 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab elective"
+                  "text": "PSYC lab elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -842,11 +942,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -857,7 +959,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -873,7 +976,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -884,19 +988,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab elective"
+                  "text": "PSYC lab elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -907,11 +1015,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -922,7 +1032,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -938,7 +1049,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -949,19 +1061,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar elective"
+                  "text": "PSYC seminar elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -987,32 +1103,37 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1214"
                   ],
-                  "text": "PSYC 1214 (or other PSYC elective)"
+                  "text": "PSYC 1214 (or other PSYC elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Math requirement"
+                  "text": "Math requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -1023,19 +1144,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area A elective"
+                  "text": "PSYC area A elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1045,7 +1170,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1056,7 +1181,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1076,26 +1201,31 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area B elective"
+                  "text": "PSYC area B elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1106,7 +1236,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1117,7 +1248,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1128,11 +1260,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1151,19 +1285,23 @@
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area A elective"
+                  "text": "PSYC area A elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC area B elective"
+                  "text": "PSYC area B elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1174,7 +1312,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1185,7 +1324,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1196,11 +1336,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1216,19 +1358,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab elective"
+                  "text": "PSYC lab elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1239,7 +1385,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1250,7 +1397,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1260,7 +1408,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1277,19 +1425,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC lab elective"
+                  "text": "PSYC lab elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1300,19 +1452,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC seminar elective"
+                  "text": "PSYC seminar elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC interdisciplinary cluster"
+                  "text": "PSYC interdisciplinary cluster",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC elective"
+                  "text": "PSYC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

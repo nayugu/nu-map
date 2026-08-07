@@ -18,25 +18,29 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1150"
                   ],
-                  "text": "POLS 1150"
+                  "text": "POLS 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1155"
                   ],
-                  "text": "POLS 1155"
+                  "text": "POLS 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 1"
+                  "text": "HIST elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -50,29 +54,34 @@
                   "codes": [
                     "HIST1200"
                   ],
-                  "text": "HIST 1200"
+                  "text": "HIST 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1201"
                   ],
-                  "text": "HIST 1201"
+                  "text": "HIST 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Supporting course"
+                  "text": "POLS Supporting course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 2"
+                  "text": "HIST elective 2",
+                  "sh": 4
                 }
               ]
             },
@@ -83,11 +92,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -98,11 +109,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -121,19 +134,23 @@
                   "codes": [
                     "POLS2399"
                   ],
-                  "text": "POLS 2399"
+                  "text": "POLS 2399",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Thought"
+                  "text": "POLS Thought",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 3"
+                  "text": "HIST elective 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 }
               ]
             },
@@ -144,7 +161,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -155,7 +173,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -166,11 +185,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 4"
+                  "text": "HIST elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 }
               ]
             }
@@ -189,32 +210,37 @@
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2302"
                   ],
-                  "text": "HIST 2302"
+                  "text": "HIST 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS2400"
                   ],
-                  "text": "POLS 2400"
+                  "text": "POLS 2400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL5001"
                   ],
-                  "text": "PHIL 5001"
+                  "text": "PHIL 5001",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 }
               ]
             },
@@ -225,7 +251,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -236,7 +263,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -247,11 +275,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Advanced Writing"
+                  "text": "Advanced Writing",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 5"
+                  "text": "HIST elective 5",
+                  "sh": 4
                 }
               ]
             }
@@ -267,19 +297,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective 6"
+                  "text": "HIST elective 6",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS elective"
+                  "text": "POLS elective",
+                  "sh": 4
                 }
               ]
             },
@@ -290,19 +324,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HIST or POLS capstone"
+                  "text": "HIST or POLS capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

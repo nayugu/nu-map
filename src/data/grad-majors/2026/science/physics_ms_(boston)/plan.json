@@ -18,28 +18,32 @@
                   "codes": [
                     "PHYS7301"
                   ],
-                  "text": "PHYS 7301"
+                  "text": "PHYS 7301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS7302"
                   ],
-                  "text": "PHYS 7302"
+                  "text": "PHYS 7302",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS7315"
                   ],
-                  "text": "PHYS 7315"
+                  "text": "PHYS 7315",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS7321"
                   ],
-                  "text": "PHYS 7321 (can be taken year 1 or year 2)"
+                  "text": "PHYS 7321 (can be taken year 1 or year 2)",
+                  "sh": 4
                 }
               ]
             },
@@ -53,18 +57,21 @@
                   "codes": [
                     "PHYS7305"
                   ],
-                  "text": "PHYS 7305"
+                  "text": "PHYS 7305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS7316"
                   ],
-                  "text": "PHYS 7316"
+                  "text": "PHYS 7316",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective (optional)"
+                  "text": "Elective (optional)",
+                  "sh": 4
                 }
               ]
             }
@@ -80,11 +87,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective or thesis"
+                  "text": "Elective or thesis",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Additional elective"
+                  "text": "Additional elective",
+                  "sh": 4
                 }
               ]
             }

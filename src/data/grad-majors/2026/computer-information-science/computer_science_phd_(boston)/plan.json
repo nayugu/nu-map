@@ -15,11 +15,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Area course"
+                  "text": "Area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Readings"
+                  "text": "Readings",
+                  "sh": 4
                 }
               ]
             },
@@ -30,11 +32,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Area course"
+                  "text": "Area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Readings"
+                  "text": "Readings",
+                  "sh": 4
                 }
               ]
             }
@@ -50,11 +54,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Area course"
+                  "text": "Area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Readings"
+                  "text": "Readings",
+                  "sh": 4
                 }
               ]
             },
@@ -65,11 +71,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Area course"
+                  "text": "Area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Readings"
+                  "text": "Readings",
+                  "sh": 4
                 }
               ]
             }
@@ -85,11 +93,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Area course"
+                  "text": "Area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Readings"
+                  "text": "Readings",
+                  "sh": 4
                 }
               ]
             },
@@ -100,11 +110,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Area course"
+                  "text": "Area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Readings"
+                  "text": "Readings",
+                  "sh": 4
                 }
               ]
             }
@@ -123,7 +135,8 @@
                   "codes": [
                     "CS9990"
                   ],
-                  "text": "CS 9990"
+                  "text": "CS 9990",
+                  "sh": 0
                 }
               ]
             },
@@ -137,7 +150,8 @@
                   "codes": [
                     "CS9991"
                   ],
-                  "text": "CS 9991"
+                  "text": "CS 9991",
+                  "sh": 0
                 }
               ]
             }

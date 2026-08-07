@@ -18,35 +18,40 @@
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1100"
                   ],
-                  "text": "CS 1100"
+                  "text": "CS 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1101"
                   ],
-                  "text": "CS 1101"
+                  "text": "CS 1101",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1150"
                   ],
-                  "text": "POLS 1150"
+                  "text": "POLS 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS1160"
                   ],
-                  "text": "POLS 1160"
+                  "text": "POLS 1160",
+                  "sh": 4
                 }
               ]
             },
@@ -60,19 +65,23 @@
                   "codes": [
                     "POLS1155"
                   ],
-                  "text": "POLS 1155"
+                  "text": "POLS 1155",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM Elective"
+                  "text": "CRIM Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective"
+                  "text": "POLS Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -83,11 +92,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -98,11 +109,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM Elective"
+                  "text": "CRIM Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective"
+                  "text": "POLS Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -121,22 +134,26 @@
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -169,11 +186,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM Elective"
+                  "text": "CRIM Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Elective"
+                  "text": "POLS Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -192,22 +211,26 @@
                   "codes": [
                     "CRIM3700"
                   ],
-                  "text": "CRIM 3700"
+                  "text": "CRIM 3700",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "POLS2400"
                   ],
-                  "text": "POLS 2400"
+                  "text": "POLS 2400",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -240,11 +263,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -260,19 +285,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM Advanced Elective"
+                  "text": "CRIM Advanced Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "POLS Advanced Elective"
+                  "text": "POLS Advanced Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative Course 1"
+                  "text": "Integrative Course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -286,19 +315,23 @@
                   "codes": [
                     "POLS4701"
                   ],
-                  "text": "POLS 4701"
+                  "text": "POLS 4701",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative Course 2"
+                  "text": "Integrative Course 2",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

@@ -19,28 +19,32 @@
                     "BIOL2217",
                     "BIOL2218"
                   ],
-                  "text": "BIOL 2217 and BIOL 2218"
+                  "text": "BIOL 2217 and BIOL 2218",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -48,7 +52,8 @@
                     "SLPA1000",
                     "LING1000"
                   ],
-                  "text": "SLPA 1000 or LING 1000"
+                  "text": "SLPA 1000 or LING 1000",
+                  "sh": 1
                 }
               ]
             },
@@ -63,28 +68,32 @@
                     "BIOL2219",
                     "BIOL2220"
                   ],
-                  "text": "BIOL 2219 and BIOL 2220"
+                  "text": "BIOL 2219 and BIOL 2220",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LING2350"
                   ],
-                  "text": "LING 2350"
+                  "text": "LING 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1101"
                   ],
-                  "text": "SLPA 1101"
+                  "text": "SLPA 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1205"
                   ],
-                  "text": "SLPA 1205"
+                  "text": "SLPA 1205",
+                  "sh": 4
                 }
               ]
             },
@@ -94,7 +103,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -105,7 +114,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -125,7 +134,8 @@
                   "codes": [
                     "LING3420"
                   ],
-                  "text": "LING 3420"
+                  "text": "LING 3420",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -133,28 +143,32 @@
                     "PHYS1145",
                     "PHYS1146"
                   ],
-                  "text": "PHYS 1145 and PHYS 1146"
+                  "text": "PHYS 1145 and PHYS 1146",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1103"
                   ],
-                  "text": "SLPA 1103"
+                  "text": "SLPA 1103",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1203"
                   ],
-                  "text": "SLPA 1203"
+                  "text": "SLPA 1203",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA2000"
                   ],
-                  "text": "SLPA 2000"
+                  "text": "SLPA 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -165,7 +179,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -176,7 +191,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -187,11 +203,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -210,7 +228,8 @@
                   "codes": [
                     "ENGW3306"
                   ],
-                  "text": "ENGW 3306"
+                  "text": "ENGW 3306",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -218,18 +237,21 @@
                     "LING3422",
                     "LING3450"
                   ],
-                  "text": "LING 3422 or 3450"
+                  "text": "LING 3422 or 3450",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2300"
                   ],
-                  "text": "PHTH 2300"
+                  "text": "PHTH 2300",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics elective"
+                  "text": "Linguistics elective",
+                  "sh": 4
                 }
               ]
             },
@@ -244,7 +266,8 @@
                     "HLTH2100",
                     "PHIL1165"
                   ],
-                  "text": "HLTH 2100 or PHIL 1165"
+                  "text": "HLTH 2100 or PHIL 1165",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -252,21 +275,24 @@
                     "LING3422",
                     "LING3450"
                   ],
-                  "text": "LING 3422 or 3450"
+                  "text": "LING 3422 or 3450",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHTH2210"
                   ],
-                  "text": "PHTH 2210"
+                  "text": "PHTH 2210",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA1102"
                   ],
-                  "text": "SLPA 1102"
+                  "text": "SLPA 1102",
+                  "sh": 4
                 }
               ]
             },
@@ -276,7 +302,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -288,11 +314,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -311,25 +339,29 @@
                   "codes": [
                     "LING3412"
                   ],
-                  "text": "LING 3412"
+                  "text": "LING 3412",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA4500"
                   ],
-                  "text": "SLPA 4500"
+                  "text": "SLPA 4500",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA5107"
                   ],
-                  "text": "SLPA 5107"
+                  "text": "SLPA 5107",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics elective"
+                  "text": "Linguistics elective",
+                  "sh": 4
                 }
               ]
             },
@@ -344,25 +376,29 @@
                     "LING3424",
                     "LING3452"
                   ],
-                  "text": "LING 3424 or 3452"
+                  "text": "LING 3424 or 3452",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA4651"
                   ],
-                  "text": "SLPA 4651"
+                  "text": "SLPA 4651",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "SLPA6219"
                   ],
-                  "text": "SLPA 6219"
+                  "text": "SLPA 6219",
+                  "sh": 3
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics elective"
+                  "text": "Linguistics elective",
+                  "sh": 4
                 }
               ]
             }

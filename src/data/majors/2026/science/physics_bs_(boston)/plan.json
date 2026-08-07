@@ -18,46 +18,53 @@
                   "codes": [
                     "PHYS1000"
                   ],
-                  "text": "PHYS 1000"
+                  "text": "PHYS 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1161"
                   ],
-                  "text": "PHYS 1161"
+                  "text": "PHYS 1161",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1162"
                   ],
-                  "text": "PHYS 1162"
+                  "text": "PHYS 1162",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1163"
                   ],
-                  "text": "PHYS 1163"
+                  "text": "PHYS 1163",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -71,39 +78,45 @@
                   "codes": [
                     "PHYS1165"
                   ],
-                  "text": "PHYS 1165"
+                  "text": "PHYS 1165",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1166"
                   ],
-                  "text": "PHYS 1166"
+                  "text": "PHYS 1166",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1167"
                   ],
-                  "text": "PHYS 1167"
+                  "text": "PHYS 1167",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1211"
                   ],
-                  "text": "PHYS 1211"
+                  "text": "PHYS 1211",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -113,7 +126,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -124,7 +137,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -144,49 +157,56 @@
                   "codes": [
                     "PHYS2303"
                   ],
-                  "text": "PHYS 2303"
+                  "text": "PHYS 2303",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS2371"
                   ],
-                  "text": "PHYS 2371"
+                  "text": "PHYS 2371",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS2372"
                   ],
-                  "text": "PHYS 2372"
+                  "text": "PHYS 2372",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1211"
                   ],
-                  "text": "CHEM 1211"
+                  "text": "CHEM 1211",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1212"
                   ],
-                  "text": "CHEM 1212"
+                  "text": "CHEM 1212",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1213"
                   ],
-                  "text": "CHEM 1213"
+                  "text": "CHEM 1213",
+                  "sh": 0
                 }
               ]
             },
@@ -200,32 +220,37 @@
                   "codes": [
                     "PHYS3601"
                   ],
-                  "text": "PHYS 3601"
+                  "text": "PHYS 3601",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2331"
                   ],
-                  "text": "MATH 2331"
+                  "text": "MATH 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -235,7 +260,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -247,7 +272,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -263,7 +289,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -277,22 +304,26 @@
                   "codes": [
                     "PHYS3602"
                   ],
-                  "text": "PHYS 3602"
+                  "text": "PHYS 3602",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -306,14 +337,16 @@
                   "codes": [
                     "PHYS3600"
                   ],
-                  "text": "PHYS 3600"
+                  "text": "PHYS 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS3603"
                   ],
-                  "text": "PHYS 3603"
+                  "text": "PHYS 3603",
+                  "sh": 4
                 }
               ]
             },
@@ -324,7 +357,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -340,7 +374,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -354,25 +389,29 @@
                   "codes": [
                     "PHYS4115"
                   ],
-                  "text": "PHYS 4115"
+                  "text": "PHYS 4115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS4305"
                   ],
-                  "text": "PHYS 4305"
+                  "text": "PHYS 4305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3307"
                   ],
-                  "text": "ENGW 3307"
+                  "text": "ENGW 3307",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -383,11 +422,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -398,7 +439,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -414,7 +456,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -428,19 +471,23 @@
                   "codes": [
                     "PHYS5318"
                   ],
-                  "text": "PHYS 5318"
+                  "text": "PHYS 5318",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHYS advanced elective"
+                  "text": "PHYS advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -466,46 +513,53 @@
                   "codes": [
                     "PHYS1000"
                   ],
-                  "text": "PHYS 1000"
+                  "text": "PHYS 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1161"
                   ],
-                  "text": "PHYS 1161"
+                  "text": "PHYS 1161",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1162"
                   ],
-                  "text": "PHYS 1162"
+                  "text": "PHYS 1162",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1163"
                   ],
-                  "text": "PHYS 1163"
+                  "text": "PHYS 1163",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1341"
                   ],
-                  "text": "MATH 1341"
+                  "text": "MATH 1341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -519,56 +573,64 @@
                   "codes": [
                     "PHYS1165"
                   ],
-                  "text": "PHYS 1165"
+                  "text": "PHYS 1165",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1166"
                   ],
-                  "text": "PHYS 1166"
+                  "text": "PHYS 1166",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1167"
                   ],
-                  "text": "PHYS 1167"
+                  "text": "PHYS 1167",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1342"
                   ],
-                  "text": "MATH 1342"
+                  "text": "MATH 1342",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1211"
                   ],
-                  "text": "PHYS 1211"
+                  "text": "PHYS 1211",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1211"
                   ],
-                  "text": "CHEM 1211"
+                  "text": "CHEM 1211",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1212"
                   ],
-                  "text": "CHEM 1212"
+                  "text": "CHEM 1212",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CHEM1213"
                   ],
-                  "text": "CHEM 1213"
+                  "text": "CHEM 1213",
+                  "sh": 0
                 }
               ]
             },
@@ -582,11 +644,13 @@
                   "codes": [
                     "MATH2321"
                   ],
-                  "text": "MATH 2321"
+                  "text": "MATH 2321",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -600,14 +664,16 @@
                   "codes": [
                     "MATH2331"
                   ],
-                  "text": "MATH 2331"
+                  "text": "MATH 2331",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH2341"
                   ],
-                  "text": "MATH 2341"
+                  "text": "MATH 2341",
+                  "sh": 4
                 }
               ]
             }
@@ -626,39 +692,45 @@
                   "codes": [
                     "PHYS2303"
                   ],
-                  "text": "PHYS 2303"
+                  "text": "PHYS 2303",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS2371"
                   ],
-                  "text": "PHYS 2371"
+                  "text": "PHYS 2371",
+                  "sh": 3
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS2372"
                   ],
-                  "text": "PHYS 2372"
+                  "text": "PHYS 2372",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS3602"
                   ],
-                  "text": "PHYS 3602"
+                  "text": "PHYS 3602",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -669,7 +741,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -680,7 +753,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -694,11 +768,13 @@
                   "codes": [
                     "PHYS3600"
                   ],
-                  "text": "PHYS 3600"
+                  "text": "PHYS 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -717,22 +793,26 @@
                   "codes": [
                     "PHYS3601"
                   ],
-                  "text": "PHYS 3601"
+                  "text": "PHYS 3601",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS3603"
                   ],
-                  "text": "PHYS 3603"
+                  "text": "PHYS 3603",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -743,7 +823,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -754,7 +835,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -768,11 +850,13 @@
                   "codes": [
                     "MATH3081"
                   ],
-                  "text": "MATH 3081"
+                  "text": "MATH 3081",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -791,25 +875,29 @@
                   "codes": [
                     "PHYS4115"
                   ],
-                  "text": "PHYS 4115"
+                  "text": "PHYS 4115",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS4305"
                   ],
-                  "text": "PHYS 4305"
+                  "text": "PHYS 4305",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3307"
                   ],
-                  "text": "ENGW 3307"
+                  "text": "ENGW 3307",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 }
               ]
             },
@@ -823,19 +911,23 @@
                   "codes": [
                     "PHYS5318"
                   ],
-                  "text": "PHYS 5318"
+                  "text": "PHYS 5318",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHYS advanced elective"
+                  "text": "PHYS advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Technical elective"
+                  "text": "Technical elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

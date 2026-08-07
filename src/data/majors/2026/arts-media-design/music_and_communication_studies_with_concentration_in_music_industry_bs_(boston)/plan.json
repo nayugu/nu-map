@@ -18,7 +18,8 @@
                   "codes": [
                     "COMM1101"
                   ],
-                  "text": "COMM 1101"
+                  "text": "COMM 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -26,7 +27,8 @@
                     "COMM1112",
                     "COMM2301"
                   ],
-                  "text": "COMM 1112 or 2301"
+                  "text": "COMM 1112 or 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -34,7 +36,8 @@
                     "MUSC1000",
                     "COMM1000"
                   ],
-                  "text": "MUSC 1000 or COMM 1000"
+                  "text": "MUSC 1000 or COMM 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "courses",
@@ -42,14 +45,16 @@
                     "MUSC1002",
                     "MUSC1003"
                   ],
-                  "text": "MUSC 1002 and MUSC 1003"
+                  "text": "MUSC 1002 and MUSC 1003",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSI1230"
                   ],
-                  "text": "MUSI 1230"
+                  "text": "MUSI 1230",
+                  "sh": 4
                 }
               ]
             },
@@ -63,29 +68,34 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MUSC1201"
                   ],
-                  "text": "MUSC 1201"
+                  "text": "MUSC 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM foundational course"
+                  "text": "COMM foundational course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music in context elective"
+                  "text": "Music in context elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -96,11 +106,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -111,11 +123,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -131,19 +145,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM cluster course"
+                  "text": "COMM cluster course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music industry elective"
+                  "text": "Music industry elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -154,19 +172,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music industry elective"
+                  "text": "Music industry elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -177,11 +199,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -192,7 +216,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -208,7 +233,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -222,7 +248,8 @@
                   "codes": [
                     "ACCT1209"
                   ],
-                  "text": "ACCT 1209"
+                  "text": "ACCT 1209",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -230,15 +257,18 @@
                     "ENGW3314",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3314 or 3315"
+                  "text": "ENGW 3314 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -249,11 +279,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "COMM writing-intensive"
+                  "text": "COMM writing-intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM elective"
+                  "text": "COMM elective",
+                  "sh": 4
                 }
               ]
             },
@@ -264,7 +296,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -280,7 +313,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -291,19 +325,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "COMM writing-intensive"
+                  "text": "COMM writing-intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Music industry elective"
+                  "text": "Music industry elective",
+                  "sh": 4
                 }
               ]
             }

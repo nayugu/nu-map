@@ -19,35 +19,40 @@
                     "MSCR1000",
                     "THTR1000"
                   ],
-                  "text": "MSCR 1000 or THTR 1000"
+                  "text": "MSCR 1000 or THTR 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MSCR1220"
                   ],
-                  "text": "MSCR 1220"
+                  "text": "MSCR 1220",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1101"
                   ],
-                  "text": "THTR 1101"
+                  "text": "THTR 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1120"
                   ],
-                  "text": "THTR 1120"
+                  "text": "THTR 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -62,39 +67,45 @@
                     "MSCR1320",
                     "MSCR1420"
                   ],
-                  "text": "MSCR 1320 or 1420"
+                  "text": "MSCR 1320 or 1420",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1131"
                   ],
-                  "text": "THTR 1131"
+                  "text": "THTR 1131",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1270"
                   ],
-                  "text": "THTR 1270"
+                  "text": "THTR 1270",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1100"
                   ],
-                  "text": "THTR 1100"
+                  "text": "THTR 1100",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR foundation"
+                  "text": "MSCR foundation",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -105,11 +116,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -120,11 +133,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -143,29 +158,34 @@
                   "codes": [
                     "INAM2000"
                   ],
-                  "text": "INAM 2000"
+                  "text": "INAM 2000",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR2000"
                   ],
-                  "text": "THTR 2000"
+                  "text": "THTR 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR3325"
                   ],
-                  "text": "THTR 3325"
+                  "text": "THTR 3325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR diversity/globalization"
+                  "text": "MSCR diversity/globalization",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective"
+                  "text": "MSCR elective",
+                  "sh": 4
                 }
               ]
             },
@@ -198,11 +218,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -218,19 +240,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "MSCR writing-intensive"
+                  "text": "MSCR writing-intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective"
+                  "text": "MSCR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Texts, Community, & Social Context Course"
+                  "text": "THTR Texts, Community, & Social Context Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Elective"
+                  "text": "THTR Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -263,11 +289,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -283,19 +311,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "MSCR writing-intensive"
+                  "text": "MSCR writing-intensive",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Elective"
+                  "text": "THTR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -306,19 +338,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Integrative course"
+                  "text": "Integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "MSCR elective"
+                  "text": "MSCR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

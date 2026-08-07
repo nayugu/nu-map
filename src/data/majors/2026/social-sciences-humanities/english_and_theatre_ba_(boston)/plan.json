@@ -18,7 +18,8 @@
                   "codes": [
                     "ENGL1400"
                   ],
-                  "text": "ENGL 1400"
+                  "text": "ENGL 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -26,32 +27,37 @@
                     "THTR1000",
                     "ENGL1000"
                   ],
-                  "text": "THTR 1000 or ENGL 1000"
+                  "text": "THTR 1000 or ENGL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1100"
                   ],
-                  "text": "THTR 1100"
+                  "text": "THTR 1100",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1101"
                   ],
-                  "text": "THTR 1101"
+                  "text": "THTR 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1120"
                   ],
-                  "text": "THTR 1120"
+                  "text": "THTR 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Pre-1850 requirement"
+                  "text": "Pre-1850 requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -66,32 +72,37 @@
                     "ENGL1160",
                     "ENGL1410"
                   ],
-                  "text": "ENGL 1160 or 1410"
+                  "text": "ENGL 1160 or 1410",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1131"
                   ],
-                  "text": "THTR 1131"
+                  "text": "THTR 1131",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR1270"
                   ],
-                  "text": "THTR 1270"
+                  "text": "THTR 1270",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL elective"
+                  "text": "ENGL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000 (For CAMD students)"
+                  "text": "EEAM 2000 (For CAMD students)",
+                  "sh": 1
                 }
               ]
             },
@@ -102,11 +113,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -116,7 +129,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -136,39 +149,45 @@
                   "codes": [
                     "ENGL1600"
                   ],
-                  "text": "ENGL 1600"
+                  "text": "ENGL 1600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000 (For CSSH students)"
+                  "text": "EESH 2000 (For CSSH students)",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR2000"
                   ],
-                  "text": "THTR 2000"
+                  "text": "THTR 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR2330"
                   ],
-                  "text": "THTR 2330"
+                  "text": "THTR 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "THTR3325"
                   ],
-                  "text": "THTR 3325"
+                  "text": "THTR 3325",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL post-1850 requirement"
+                  "text": "ENGL post-1850 requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -179,7 +198,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -190,7 +210,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -200,7 +221,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -217,22 +238,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL Theories & Methods requirement"
+                  "text": "ENGL Theories & Methods requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGL3710"
                   ],
-                  "text": "ENGL 3710"
+                  "text": "ENGL 3710",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Text, Community, & Social Context Course"
+                  "text": "THTR Text, Community, & Social Context Course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Elective"
+                  "text": "THTR Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -246,19 +271,23 @@
                   "codes": [
                     "INAM2000"
                   ],
-                  "text": "INAM 2000"
+                  "text": "INAM 2000",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL diversity requirement"
+                  "text": "ENGL diversity requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "THTR Elective"
+                  "text": "THTR Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 }
               ]
             },
@@ -269,11 +298,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -283,7 +314,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -300,19 +331,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENGL writing requirement"
+                  "text": "ENGL writing requirement",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL elective"
+                  "text": "ENGL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -326,19 +361,23 @@
                   "codes": [
                     "THTR4702"
                   ],
-                  "text": "THTR 4702"
+                  "text": "THTR 4702",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENGL Capstone"
+                  "text": "ENGL Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign Language"
+                  "text": "Foreign Language",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

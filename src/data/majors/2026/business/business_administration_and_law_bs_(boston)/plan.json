@@ -18,14 +18,16 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "BUSN1102"
                   ],
-                  "text": "BUSN 1102"
+                  "text": "BUSN 1102",
+                  "sh": 1
                 },
                 {
                   "kind": "choice",
@@ -33,21 +35,24 @@
                     "ECON1115",
                     "ECON1116"
                   ],
-                  "text": "ECON 1115 or 1116"
+                  "text": "ECON 1115 or 1116",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB1203"
                   ],
-                  "text": "INTB 1203"
+                  "text": "INTB 1203",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1231"
                   ],
-                  "text": "MATH 1231"
+                  "text": "MATH 1231",
+                  "sh": 4
                 }
               ]
             },
@@ -61,14 +66,16 @@
                   "codes": [
                     "ACCT2301"
                   ],
-                  "text": "ACCT 2301"
+                  "text": "ACCT 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -78,14 +85,16 @@
                     "MKTG2201",
                     "SCHM2301"
                   ],
-                  "text": "INNO 2301, MISM 2301, MKTG 2201, or SCHM 2301"
+                  "text": "INNO 2301, MISM 2301, MKTG 2201, or SCHM 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MGSC2301"
                   ],
-                  "text": "MGSC 2301"
+                  "text": "MGSC 2301",
+                  "sh": 4
                 }
               ]
             },
@@ -99,11 +108,13 @@
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ND NUpath"
+                  "text": "ND NUpath",
+                  "sh": 4
                 }
               ]
             },
@@ -114,11 +125,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "EI NUpath or open elective"
+                  "text": "EI NUpath or open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -137,29 +150,34 @@
                   "codes": [
                     "BUSN1103"
                   ],
-                  "text": "BUSN 1103"
+                  "text": "BUSN 1103",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3101"
                   ],
-                  "text": "LAW 3101"
+                  "text": "LAW 3101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3102"
                   ],
-                  "text": "LAW 3102"
+                  "text": "LAW 3102",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 1"
+                  "text": "Concentration course 1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "DD NUpath"
+                  "text": "DD NUpath",
+                  "sh": 4
                 }
               ]
             },
@@ -170,7 +188,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -181,7 +200,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -196,11 +216,13 @@
                     "ORGB3201",
                     "ORGB3203"
                   ],
-                  "text": "ORGB 3201 or 3203"
+                  "text": "ORGB 3201 or 3203",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 2"
+                  "text": "Concentration course 2",
+                  "sh": 4
                 }
               ]
             }
@@ -216,22 +238,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 3"
+                  "text": "Concentration course 3",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "DMSB integrative course"
+                  "text": "DMSB integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LAW elective"
+                  "text": "LAW elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3120"
                   ],
-                  "text": "LAW 3120"
+                  "text": "LAW 3120",
+                  "sh": 4
                 }
               ]
             },
@@ -242,7 +268,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -253,7 +280,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -264,11 +292,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open elective"
+                  "text": "Open elective",
+                  "sh": 4
                 }
               ]
             }
@@ -284,22 +314,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Advanced writing"
+                  "text": "Advanced writing",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Concentration course 4"
+                  "text": "Concentration course 4",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LAW elective"
+                  "text": "LAW elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3130"
                   ],
-                  "text": "LAW 3130"
+                  "text": "LAW 3130",
+                  "sh": 4
                 }
               ]
             },
@@ -313,25 +347,29 @@
                   "codes": [
                     "STRT4501"
                   ],
-                  "text": "STRT 4501"
+                  "text": "STRT 4501",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LAW elective"
+                  "text": "LAW elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3235"
                   ],
-                  "text": "LAW 3235"
+                  "text": "LAW 3235",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LAW3140"
                   ],
-                  "text": "LAW 3140"
+                  "text": "LAW 3140",
+                  "sh": 4
                 }
               ]
             }

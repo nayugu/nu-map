@@ -18,7 +18,8 @@
                   "codes": [
                     "LARC2430"
                   ],
-                  "text": "LARC 2430"
+                  "text": "LARC 2430",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -26,18 +27,21 @@
                     "ENVR1400",
                     "ENVR1401"
                   ],
-                  "text": "ENVR 1400 and ENVR 1401"
+                  "text": "ENVR 1400 and ENVR 1401",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENVR2200"
                   ],
-                  "text": "ENVR 2200"
+                  "text": "ENVR 2200",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -51,14 +55,16 @@
                   "codes": [
                     "ARCH1110"
                   ],
-                  "text": "ARCH 1110"
+                  "text": "ARCH 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1120"
                   ],
-                  "text": "ARCH 1120"
+                  "text": "ARCH 1120",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -66,14 +72,16 @@
                     "EEMB2302",
                     "EEMB2303"
                   ],
-                  "text": "EEMB 2302 and EEMB 2303"
+                  "text": "EEMB 2302 and EEMB 2303",
+                  "sh": 5
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -84,14 +92,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -102,11 +112,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -125,25 +137,29 @@
                   "codes": [
                     "LARC2130"
                   ],
-                  "text": "LARC 2130"
+                  "text": "LARC 2130",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2230"
                   ],
-                  "text": "LARC 2230"
+                  "text": "LARC 2230",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "LARC2330"
                   ],
-                  "text": "LARC 2330"
+                  "text": "LARC 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective"
+                  "text": "ENVR elective",
+                  "sh": 4
                 }
               ]
             },
@@ -157,7 +173,8 @@
                   "codes": [
                     "LARC2340"
                   ],
-                  "text": "LARC 2340"
+                  "text": "LARC 2340",
+                  "sh": 4
                 },
                 {
                   "kind": "courses",
@@ -165,15 +182,18 @@
                     "ENVR3300",
                     "ENVR3301"
                   ],
-                  "text": "ENVR 3300 and ENVR 3301"
+                  "text": "ENVR 3300 and ENVR 3301",
+                  "sh": 5
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LARC elective"
+                  "text": "LARC elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -184,11 +204,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -199,7 +221,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -215,7 +238,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -226,19 +250,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective"
+                  "text": "ENVR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective"
+                  "text": "ENVR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective"
+                  "text": "ENVR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LARC elective"
+                  "text": "LARC elective",
+                  "sh": 4
                 }
               ]
             },
@@ -252,11 +280,13 @@
                   "codes": [
                     "ENGW3314"
                   ],
-                  "text": "ENGW 3314"
+                  "text": "ENGW 3314",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -267,7 +297,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -283,7 +314,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -297,19 +329,23 @@
                   "codes": [
                     "ENVR2515"
                   ],
-                  "text": "ENVR 2515"
+                  "text": "ENVR 2515",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Capstone"
+                  "text": "Capstone",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ENVR elective"
+                  "text": "ENVR elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "LARC elective"
+                  "text": "LARC elective",
+                  "sh": 4
                 }
               ]
             }

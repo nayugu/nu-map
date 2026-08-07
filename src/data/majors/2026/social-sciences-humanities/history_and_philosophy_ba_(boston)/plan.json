@@ -18,28 +18,32 @@
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1200"
                   ],
-                  "text": "HIST 1200"
+                  "text": "HIST 1200",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST1201"
                   ],
-                  "text": "HIST 1201"
+                  "text": "HIST 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -47,7 +51,8 @@
                     "PHIL2325",
                     "POLS2325"
                   ],
-                  "text": "PHIL 2325 or POLS 2325"
+                  "text": "PHIL 2325 or POLS 2325",
+                  "sh": 4
                 }
               ]
             },
@@ -61,26 +66,31 @@
                   "codes": [
                     "HIST1000"
                   ],
-                  "text": "HIST 1000"
+                  "text": "HIST 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST introductory level"
+                  "text": "HIST introductory level",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST pre-1800 history elective"
+                  "text": "HIST pre-1800 history elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Critical PHIL elective"
+                  "text": "Critical PHIL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -91,11 +101,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -105,7 +117,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -125,26 +137,31 @@
                   "codes": [
                     "HIST2301"
                   ],
-                  "text": "HIST 2301"
+                  "text": "HIST 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "HIST2302"
                   ],
-                  "text": "HIST 2302"
+                  "text": "HIST 2302",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "ANTH area course"
+                  "text": "ANTH area course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 }
               ]
             },
@@ -155,23 +172,28 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HIST intermediate/advanced elective"
+                  "text": "HIST intermediate/advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST intermediate/advanced elective"
+                  "text": "HIST intermediate/advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL advanced elective"
+                  "text": "PHIL advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 1
                 }
               ]
             },
@@ -182,11 +204,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PHIL elective"
+                  "text": "PHIL elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -197,7 +221,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -213,7 +238,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -224,19 +250,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HIST advanced elective"
+                  "text": "HIST advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST intermediate/advanced elective"
+                  "text": "HIST intermediate/advanced elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL integrative course or elective"
+                  "text": "PHIL integrative course or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -247,11 +277,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -262,7 +294,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -278,7 +311,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -289,19 +323,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "HIST capstone or senior project"
+                  "text": "HIST capstone or senior project",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective or integrative course"
+                  "text": "HIST elective or integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "HIST elective or integrative course"
+                  "text": "HIST elective or integrative course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL advanced elective"
+                  "text": "PHIL advanced elective",
+                  "sh": 4
                 }
               ]
             },
@@ -312,7 +350,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

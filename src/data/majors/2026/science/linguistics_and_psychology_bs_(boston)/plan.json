@@ -18,25 +18,29 @@
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Math requirement"
+                  "text": "Math requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -50,22 +54,26 @@
                   "codes": [
                     "LING2350"
                   ],
-                  "text": "LING 2350"
+                  "text": "LING 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3464"
                   ],
-                  "text": "PSYC 3464"
+                  "text": "PSYC 3464",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -75,7 +83,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -86,7 +94,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -106,25 +114,29 @@
                   "codes": [
                     "LING3412"
                   ],
-                  "text": "LING 3412"
+                  "text": "LING 3412",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3466"
                   ],
-                  "text": "PSYC 3466"
+                  "text": "PSYC 3466",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 }
               ]
             },
@@ -135,29 +147,34 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics structure course"
+                  "text": "Linguistics structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics elective"
+                  "text": "Linguistics elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3402"
                   ],
-                  "text": "PSYC 3402"
+                  "text": "PSYC 3402",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Psychology elective"
+                  "text": "Psychology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 }
               ]
             },
@@ -167,7 +184,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -179,7 +196,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -195,7 +213,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -206,22 +225,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics structure course"
+                  "text": "Linguistics structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics or psychology elective"
+                  "text": "Linguistics or psychology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Psychology laboratory"
+                  "text": "Psychology laboratory",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 }
               ]
             },
@@ -232,11 +255,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -247,7 +272,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -263,7 +289,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -274,19 +301,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics structure course"
+                  "text": "Linguistics structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics elective"
+                  "text": "Linguistics elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics or psychology elective"
+                  "text": "Linguistics or psychology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Psychology seminar"
+                  "text": "Psychology seminar",
+                  "sh": 4
                 }
               ]
             },
@@ -297,11 +328,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -312,7 +345,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -328,7 +362,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -339,19 +374,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -377,25 +416,29 @@
                   "codes": [
                     "LING1150"
                   ],
-                  "text": "LING 1150"
+                  "text": "LING 1150",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Math requirement"
+                  "text": "Math requirement",
+                  "sh": 4
                 }
               ]
             },
@@ -409,22 +452,26 @@
                   "codes": [
                     "LING2350"
                   ],
-                  "text": "LING 2350"
+                  "text": "LING 2350",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3464"
                   ],
-                  "text": "PSYC 3464"
+                  "text": "PSYC 3464",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 }
               ]
             },
@@ -434,7 +481,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -445,7 +492,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -465,25 +512,29 @@
                   "codes": [
                     "LING3412"
                   ],
-                  "text": "LING 3412"
+                  "text": "LING 3412",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3466"
                   ],
-                  "text": "PSYC 3466"
+                  "text": "PSYC 3466",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Foreign language course"
+                  "text": "Foreign language course",
+                  "sh": 4
                 }
               ]
             },
@@ -494,22 +545,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics structure course"
+                  "text": "Linguistics structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics elective"
+                  "text": "Linguistics elective",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3402"
                   ],
-                  "text": "PSYC 3402"
+                  "text": "PSYC 3402",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Psychology elective"
+                  "text": "Psychology elective",
+                  "sh": 4
                 }
               ]
             },
@@ -519,7 +574,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -530,7 +585,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -547,22 +602,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics structure course"
+                  "text": "Linguistics structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics elective"
+                  "text": "Linguistics elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Psychology lab"
+                  "text": "Psychology lab",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3315"
+                  "text": "ENGW 3315",
+                  "sh": 4
                 }
               ]
             },
@@ -573,19 +632,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics structure course"
+                  "text": "Linguistics structure course",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics or psychology elective"
+                  "text": "Linguistics or psychology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -595,7 +658,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -606,7 +669,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -623,19 +686,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Linguistics or psychology elective"
+                  "text": "Linguistics or psychology elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Psychology seminar"
+                  "text": "Psychology seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -646,19 +713,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NUpath or elective"
+                  "text": "NUpath or elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

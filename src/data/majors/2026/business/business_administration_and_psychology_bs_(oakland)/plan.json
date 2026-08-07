@@ -18,21 +18,24 @@
                   "codes": [
                     "ACCT1201"
                   ],
-                  "text": "ACCT 1201"
+                  "text": "ACCT 1201",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1231"
                   ],
-                  "text": "MATH 1231"
+                  "text": "MATH 1231",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -40,11 +43,13 @@
                     "INSC1000",
                     "BUSN1102"
                   ],
-                  "text": "INSC 1000 or BUSN 1102"
+                  "text": "INSC 1000 or BUSN 1102",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NUpath Difference and Diversity"
+                  "text": "NUpath Difference and Diversity",
+                  "sh": 4
                 }
               ]
             },
@@ -59,28 +64,32 @@
                     "PSYC2320",
                     "MGSC2301"
                   ],
-                  "text": "PSYC 2320 or MGSC 2301"
+                  "text": "PSYC 2320 or MGSC 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3402"
                   ],
-                  "text": "PSYC 3402"
+                  "text": "PSYC 3402",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INTB1203"
                   ],
-                  "text": "INTB 1203"
+                  "text": "INTB 1203",
+                  "sh": 4
                 }
               ]
             },
@@ -95,11 +104,13 @@
                     "ECON1116",
                     "ECON1115"
                   ],
-                  "text": "ECON 1116 or 1115"
+                  "text": "ECON 1116 or 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective 1"
+                  "text": "Elective 1",
+                  "sh": 4
                 }
               ]
             },
@@ -110,14 +121,16 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective 2"
+                  "text": "Elective 2",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "FINA2201"
                   ],
-                  "text": "FINA 2201"
+                  "text": "FINA 2201",
+                  "sh": 4
                 }
               ]
             }
@@ -136,28 +149,32 @@
                   "codes": [
                     "PSYC3400"
                   ],
-                  "text": "PSYC 3400"
+                  "text": "PSYC 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3466"
                   ],
-                  "text": "PSYC 3466"
+                  "text": "PSYC 3466",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ACCT2301"
                   ],
-                  "text": "ACCT 2301"
+                  "text": "ACCT 2301",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INNO2301"
                   ],
-                  "text": "INNO 2301"
+                  "text": "INNO 2301",
+                  "sh": 4
                 }
               ]
             },
@@ -171,15 +188,18 @@
                   "codes": [
                     "PSYC3404"
                   ],
-                  "text": "PSYC 3404"
+                  "text": "PSYC 3404",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business Concentration (1)"
+                  "text": "Business Concentration (1)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business Concentration (2)"
+                  "text": "Business Concentration (2)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -187,11 +207,13 @@
                     "EESC2000",
                     "BUSN1103"
                   ],
-                  "text": "EESC 2000 or BUSN 1103"
+                  "text": "EESC 2000 or BUSN 1103",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Elective (1)"
+                  "text": "PSYC Elective (1)",
+                  "sh": 4
                 }
               ]
             },
@@ -202,7 +224,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective (3)"
+                  "text": "Elective (3)",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -210,7 +233,8 @@
                     "MISM2301",
                     "SCHM2301"
                   ],
-                  "text": "MISM 2301 or SCHM 2301"
+                  "text": "MISM 2301 or SCHM 2301",
+                  "sh": 4
                 }
               ]
             },
@@ -221,7 +245,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -237,7 +262,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -248,7 +274,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Laboratory"
+                  "text": "PSYC Laboratory",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -256,18 +283,21 @@
                     "ENGW3304",
                     "ENGW3315"
                   ],
-                  "text": "ENGW 3304 or 3315"
+                  "text": "ENGW 3304 or 3315",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business Concentration (3)"
+                  "text": "Business Concentration (3)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MKTG2201"
                   ],
-                  "text": "MKTG 2201"
+                  "text": "MKTG 2201",
+                  "sh": 4
                 }
               ]
             },
@@ -278,7 +308,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective 4"
+                  "text": "Elective 4",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -286,7 +317,8 @@
                     "ORGB3201",
                     "ORGB3203"
                   ],
-                  "text": "ORGB 3201 or 3203"
+                  "text": "ORGB 3201 or 3203",
+                  "sh": 4
                 }
               ]
             },
@@ -297,7 +329,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -313,7 +346,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -324,22 +358,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Seminar"
+                  "text": "PSYC Seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Elective (2)"
+                  "text": "PSYC Elective (2)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Business Concentration (4)"
+                  "text": "Business Concentration (4)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "STRT4501"
                   ],
-                  "text": "STRT 4501"
+                  "text": "STRT 4501",
+                  "sh": 4
                 }
               ]
             }

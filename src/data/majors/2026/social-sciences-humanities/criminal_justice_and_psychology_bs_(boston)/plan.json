@@ -18,35 +18,40 @@
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1215"
                   ],
-                  "text": "MATH 1215"
+                  "text": "MATH 1215",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC1101"
                   ],
-                  "text": "PSYC 1101"
+                  "text": "PSYC 1101",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "INSC1000"
                   ],
-                  "text": "INSC 1000"
+                  "text": "INSC 1000",
+                  "sh": 1
                 }
               ]
             },
@@ -60,28 +65,32 @@
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CS1100"
                   ],
-                  "text": "CS 1100"
+                  "text": "CS 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3400"
                   ],
-                  "text": "PSYC 3400"
+                  "text": "PSYC 3400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3450"
                   ],
-                  "text": "PSYC 3450"
+                  "text": "PSYC 3450",
+                  "sh": 4
                 }
               ]
             },
@@ -95,14 +104,16 @@
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3402"
                   ],
-                  "text": "PSYC 3402"
+                  "text": "PSYC 3402",
+                  "sh": 4
                 }
               ]
             },
@@ -113,11 +124,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "NU Path EI"
+                  "text": "NU Path EI",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -136,22 +149,26 @@
                   "codes": [
                     "PSYC2320"
                   ],
-                  "text": "PSYC 2320"
+                  "text": "PSYC 2320",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC3458"
                   ],
-                  "text": "PSYC 3458"
+                  "text": "PSYC 3458",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM Justice Thematic Elective"
+                  "text": "CRIM Justice Thematic Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NU Path IC"
+                  "text": "NU Path IC",
+                  "sh": 4
                 }
               ]
             },
@@ -165,23 +182,28 @@
                   "codes": [
                     "EESC2000"
                   ],
-                  "text": "EESC 2000"
+                  "text": "EESC 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NU Path DD"
+                  "text": "NU Path DD",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CJ Survey Elective"
+                  "text": "CJ Survey Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Elective"
+                  "text": "PSYC Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -192,11 +214,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "PSYC Elective"
+                  "text": "PSYC Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -207,7 +231,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -223,7 +248,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -237,25 +263,29 @@
                   "codes": [
                     "CRIM3040"
                   ],
-                  "text": "CRIM 3040"
+                  "text": "CRIM 3040",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3600"
                   ],
-                  "text": "CRIM 3600"
+                  "text": "CRIM 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PSYC4612"
                   ],
-                  "text": "PSYC 4612"
+                  "text": "PSYC 4612",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM Elective"
+                  "text": "CRIM Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -266,11 +296,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Adv. Writing"
+                  "text": "Adv. Writing",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "NU Path ER"
+                  "text": "NU Path ER",
+                  "sh": 4
                 }
               ]
             },
@@ -281,7 +313,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -297,7 +330,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -308,19 +342,23 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Psychology Seminar"
+                  "text": "Psychology Seminar",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CJ System Wide Elective"
+                  "text": "CJ System Wide Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM Elective"
+                  "text": "CRIM Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Open Elective"
+                  "text": "Open Elective",
+                  "sh": 4
                 }
               ]
             }

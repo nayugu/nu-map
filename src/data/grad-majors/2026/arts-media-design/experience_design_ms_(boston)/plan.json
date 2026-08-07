@@ -18,25 +18,29 @@
                   "codes": [
                     "ARTG5120"
                   ],
-                  "text": "ARTG 5120"
+                  "text": "ARTG 5120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5600"
                   ],
-                  "text": "ARTG 5600"
+                  "text": "ARTG 5600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG5620"
                   ],
-                  "text": "ARTG 5620"
+                  "text": "ARTG 5620",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -50,25 +54,29 @@
                   "codes": [
                     "ARTG5610"
                   ],
-                  "text": "ARTG 5610"
+                  "text": "ARTG 5610",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6310"
                   ],
-                  "text": "ARTG 6310"
+                  "text": "ARTG 6310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARTG6600"
                   ],
-                  "text": "ARTG 6600"
+                  "text": "ARTG 6600",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }

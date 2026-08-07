@@ -18,21 +18,24 @@
                   "codes": [
                     "ARCH1000"
                   ],
-                  "text": "ARCH 1000"
+                  "text": "ARCH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1110"
                   ],
-                  "text": "ARCH 1110"
+                  "text": "ARCH 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1120"
                   ],
-                  "text": "ARCH 1120"
+                  "text": "ARCH 1120",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -40,14 +43,16 @@
                     "ARCH1310",
                     "ARCH1311"
                   ],
-                  "text": "ARCH 1310 and ARCH 1311"
+                  "text": "ARCH 1310 and ARCH 1311",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1141"
                   ],
-                  "text": "PHYS 1141 (or elective)"
+                  "text": "PHYS 1141 (or elective)",
+                  "sh": 4
                 }
               ]
             },
@@ -61,32 +66,37 @@
                   "codes": [
                     "ARCH2130"
                   ],
-                  "text": "ARCH 2130"
+                  "text": "ARCH 2130",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH2240"
                   ],
-                  "text": "ARCH 2240"
+                  "text": "ARCH 2240",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Architecture history elective (1 of 2)"
+                  "text": "Architecture history elective (1 of 2)",
+                  "sh": 4
                 }
               ]
             },
@@ -100,11 +110,13 @@
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -114,7 +126,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -134,25 +146,29 @@
                   "codes": [
                     "ARCH2140"
                   ],
-                  "text": "ARCH 2140"
+                  "text": "ARCH 2140",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH3450"
                   ],
-                  "text": "ARCH 3450"
+                  "text": "ARCH 3450",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241 (or elective)"
+                  "text": "MATH 1241 (or elective)",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Architecture history elective (2 of 2)"
+                  "text": "Architecture history elective (2 of 2)",
+                  "sh": 4
                 }
               ]
             },
@@ -167,14 +183,16 @@
                     "ARCH2340",
                     "ARCH2341"
                   ],
-                  "text": "ARCH 2340 and ARCH 2341"
+                  "text": "ARCH 2340 and ARCH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH3170"
                   ],
-                  "text": "ARCH 3170"
+                  "text": "ARCH 3170",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -182,11 +200,13 @@
                     "ARCH3210",
                     "ARCH3211"
                   ],
-                  "text": "ARCH 3210 and ARCH 3211"
+                  "text": "ARCH 3210 and ARCH 3211",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -197,11 +217,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -212,7 +234,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -228,7 +251,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -239,7 +263,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Travel study"
+                  "text": "Travel study",
+                  "sh": 16
                 },
                 {
                   "kind": "placeholder",
@@ -277,7 +302,7 @@
                   "text": "or"
                 },
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -312,7 +337,7 @@
                   "text": "or"
                 },
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -332,28 +357,32 @@
                   "codes": [
                     "ARCH5115"
                   ],
-                  "text": "ARCH 5115"
+                  "text": "ARCH 5115",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5330"
                   ],
-                  "text": "ARCH 5330"
+                  "text": "ARCH 5330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5430"
                   ],
-                  "text": "ARCH 5430"
+                  "text": "ARCH 5430",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3314"
                   ],
-                  "text": "ENGW 3314"
+                  "text": "ENGW 3314",
+                  "sh": 4
                 }
               ]
             },
@@ -367,14 +396,16 @@
                   "codes": [
                     "ARCH3370"
                   ],
-                  "text": "ARCH 3370"
+                  "text": "ARCH 3370",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5140"
                   ],
-                  "text": "ARCH 5140"
+                  "text": "ARCH 5140",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -382,14 +413,16 @@
                     "ARCH5230",
                     "ARCH5231"
                   ],
-                  "text": "ARCH 5230 and ARCH 5231"
+                  "text": "ARCH 5230 and ARCH 5231",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5310"
                   ],
-                  "text": "ARCH 5310"
+                  "text": "ARCH 5310",
+                  "sh": 4
                 }
               ]
             }
@@ -415,21 +448,24 @@
                   "codes": [
                     "ARCH1000"
                   ],
-                  "text": "ARCH 1000"
+                  "text": "ARCH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1110"
                   ],
-                  "text": "ARCH 1110"
+                  "text": "ARCH 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1120"
                   ],
-                  "text": "ARCH 1120"
+                  "text": "ARCH 1120",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -437,14 +473,16 @@
                     "ARCH1310",
                     "ARCH1311"
                   ],
-                  "text": "ARCH 1310 and ARCH 1311"
+                  "text": "ARCH 1310 and ARCH 1311",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1141"
                   ],
-                  "text": "PHYS 1141 (or elective)"
+                  "text": "PHYS 1141 (or elective)",
+                  "sh": 4
                 }
               ]
             },
@@ -458,32 +496,37 @@
                   "codes": [
                     "ARCH2130"
                   ],
-                  "text": "ARCH 2130"
+                  "text": "ARCH 2130",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH2240"
                   ],
-                  "text": "ARCH 2240"
+                  "text": "ARCH 2240",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Architecture history elective (1 of 2)"
+                  "text": "Architecture history elective (1 of 2)",
+                  "sh": 4
                 }
               ]
             },
@@ -497,11 +540,13 @@
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -511,7 +556,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -531,22 +576,26 @@
                   "codes": [
                     "ARCH2140"
                   ],
-                  "text": "ARCH 2140"
+                  "text": "ARCH 2140",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH3450"
                   ],
-                  "text": "ARCH 3450"
+                  "text": "ARCH 3450",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Architecture history elective (2 of 2)1"
+                  "text": "Architecture history elective (2 of 2)1",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -561,14 +610,16 @@
                     "ARCH2340",
                     "ARCH2341"
                   ],
-                  "text": "ARCH 2340 and ARCH 2341"
+                  "text": "ARCH 2340 and ARCH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH3170"
                   ],
-                  "text": "ARCH 3170"
+                  "text": "ARCH 3170",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -576,11 +627,13 @@
                     "ARCH3210",
                     "ARCH3211"
                   ],
-                  "text": "ARCH 3210 and ARCH 3211"
+                  "text": "ARCH 3210 and ARCH 3211",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -614,7 +667,7 @@
                   "text": "or"
                 },
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -626,7 +679,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Optional 4-month co-op"
+                  "text": "Optional 4-month co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "placeholder",
@@ -649,7 +703,7 @@
                   "text": "or"
                 },
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -666,7 +720,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Travel study"
+                  "text": "Travel study",
+                  "sh": 16
                 },
                 {
                   "kind": "placeholder",
@@ -703,11 +758,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -726,28 +783,32 @@
                   "codes": [
                     "ARCH5115"
                   ],
-                  "text": "ARCH 5115"
+                  "text": "ARCH 5115",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH6330"
                   ],
-                  "text": "ARCH 6330"
+                  "text": "ARCH 6330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH6430"
                   ],
-                  "text": "ARCH 6430"
+                  "text": "ARCH 6430",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3314"
                   ],
-                  "text": "ENGW 3314"
+                  "text": "ENGW 3314",
+                  "sh": 4
                 }
               ]
             },
@@ -761,14 +822,16 @@
                   "codes": [
                     "ARCH3370"
                   ],
-                  "text": "ARCH 3370"
+                  "text": "ARCH 3370",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5140"
                   ],
-                  "text": "ARCH 5140"
+                  "text": "ARCH 5140",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -776,14 +839,16 @@
                     "ARCH5230",
                     "ARCH5231"
                   ],
-                  "text": "ARCH 5230 and ARCH 5231"
+                  "text": "ARCH 5230 and ARCH 5231",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5310"
                   ],
-                  "text": "ARCH 5310"
+                  "text": "ARCH 5310",
+                  "sh": 4
                 }
               ]
             }
@@ -809,21 +874,24 @@
                   "codes": [
                     "ARCH1000"
                   ],
-                  "text": "ARCH 1000"
+                  "text": "ARCH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1110"
                   ],
-                  "text": "ARCH 1110"
+                  "text": "ARCH 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1120"
                   ],
-                  "text": "ARCH 1120"
+                  "text": "ARCH 1120",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -831,11 +899,13 @@
                     "ARCH1310",
                     "ARCH1311"
                   ],
-                  "text": "ARCH 1310 and ARCH 1311"
+                  "text": "ARCH 1310 and ARCH 1311",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -849,32 +919,37 @@
                   "codes": [
                     "ARCH2130"
                   ],
-                  "text": "ARCH 2130"
+                  "text": "ARCH 2130",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH2240"
                   ],
-                  "text": "ARCH 2240"
+                  "text": "ARCH 2240",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Architecture history elective (1 of 2)"
+                  "text": "Architecture history elective (1 of 2)",
+                  "sh": 4
                 }
               ]
             },
@@ -884,7 +959,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -895,7 +970,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -915,25 +990,29 @@
                   "codes": [
                     "ARCH2140"
                   ],
-                  "text": "ARCH 2140"
+                  "text": "ARCH 2140",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH3450"
                   ],
-                  "text": "ARCH 3450"
+                  "text": "ARCH 3450",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1141"
                   ],
-                  "text": "PHYS 1141"
+                  "text": "PHYS 1141",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Architecture history elective (2 of 2)1"
+                  "text": "Architecture history elective (2 of 2)1",
+                  "sh": 4
                 }
               ]
             },
@@ -948,14 +1027,16 @@
                     "ARCH2340",
                     "ARCH2341"
                   ],
-                  "text": "ARCH 2340 and ARCH 2341"
+                  "text": "ARCH 2340 and ARCH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH3170"
                   ],
-                  "text": "ARCH 3170"
+                  "text": "ARCH 3170",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -963,11 +1044,13 @@
                     "ARCH3210",
                     "ARCH3211"
                   ],
-                  "text": "ARCH 3210 and ARCH 3211"
+                  "text": "ARCH 3210 and ARCH 3211",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -977,7 +1060,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -989,7 +1072,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1005,7 +1089,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1016,7 +1101,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Travel study"
+                  "text": "Travel study",
+                  "sh": 16
                 },
                 {
                   "kind": "placeholder",
@@ -1030,7 +1116,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1041,7 +1127,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1061,25 +1147,29 @@
                   "codes": [
                     "ARCH5330"
                   ],
-                  "text": "ARCH 5330"
+                  "text": "ARCH 5330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5430"
                   ],
-                  "text": "ARCH 5430"
+                  "text": "ARCH 5430",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3314"
                   ],
-                  "text": "ENGW 3314"
+                  "text": "ENGW 3314",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1093,25 +1183,29 @@
                   "codes": [
                     "ARCH5115"
                   ],
-                  "text": "ARCH 5115 (1 of 2)"
+                  "text": "ARCH 5115 (1 of 2)",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5310"
                   ],
-                  "text": "ARCH 5310"
+                  "text": "ARCH 5310",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1121,7 +1215,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1133,7 +1227,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -1149,7 +1244,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1163,14 +1259,16 @@
                   "codes": [
                     "ARCH3370"
                   ],
-                  "text": "ARCH 3370"
+                  "text": "ARCH 3370",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5140"
                   ],
-                  "text": "ARCH 5140"
+                  "text": "ARCH 5140",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -1178,11 +1276,13 @@
                     "ARCH5230",
                     "ARCH5231"
                   ],
-                  "text": "ARCH 5230 and ARCH 5231"
+                  "text": "ARCH 5230 and ARCH 5231",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -1208,21 +1308,24 @@
                   "codes": [
                     "ARCH1000"
                   ],
-                  "text": "ARCH 1000"
+                  "text": "ARCH 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1110"
                   ],
-                  "text": "ARCH 1110"
+                  "text": "ARCH 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH1120"
                   ],
-                  "text": "ARCH 1120"
+                  "text": "ARCH 1120",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -1230,11 +1333,13 @@
                     "ARCH1310",
                     "ARCH1311"
                   ],
-                  "text": "ARCH 1310 and ARCH 1311"
+                  "text": "ARCH 1310 and ARCH 1311",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1248,32 +1353,37 @@
                   "codes": [
                     "ARCH2130"
                   ],
-                  "text": "ARCH 2130"
+                  "text": "ARCH 2130",
+                  "sh": 6
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Architecture history elective (1 of 2)"
+                  "text": "Architecture history elective (1 of 2)",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH2240"
                   ],
-                  "text": "ARCH 2240"
+                  "text": "ARCH 2240",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EEAM2000"
                   ],
-                  "text": "EEAM 2000"
+                  "text": "EEAM 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 }
               ]
             },
@@ -1283,7 +1393,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1294,7 +1404,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1314,25 +1424,29 @@
                   "codes": [
                     "ARCH2140"
                   ],
-                  "text": "ARCH 2140"
+                  "text": "ARCH 2140",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH3450"
                   ],
-                  "text": "ARCH 3450"
+                  "text": "ARCH 3450",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHYS1141"
                   ],
-                  "text": "PHYS 1141"
+                  "text": "PHYS 1141",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Architecture history elective (2 of 2)"
+                  "text": "Architecture history elective (2 of 2)",
+                  "sh": 4
                 }
               ]
             },
@@ -1347,25 +1461,29 @@
                     "ARCH2340",
                     "ARCH2341"
                   ],
-                  "text": "ARCH 2340 and ARCH 2341"
+                  "text": "ARCH 2340 and ARCH 2341",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH3170"
                   ],
-                  "text": "ARCH 3170"
+                  "text": "ARCH 3170",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH3210"
                   ],
-                  "text": "ARCH 3210"
+                  "text": "ARCH 3210",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1375,7 +1493,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1386,7 +1504,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1403,7 +1521,8 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Travel study"
+                  "text": "Travel study",
+                  "sh": 16
                 },
                 {
                   "kind": "placeholder",
@@ -1418,7 +1537,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1429,7 +1549,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1439,7 +1560,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1459,22 +1580,26 @@
                   "codes": [
                     "ARCH5115"
                   ],
-                  "text": "ARCH 5115"
+                  "text": "ARCH 5115",
+                  "sh": 6
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5430"
                   ],
-                  "text": "ARCH 5430"
+                  "text": "ARCH 5430",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1485,7 +1610,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1496,7 +1622,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -1506,7 +1633,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -1526,25 +1653,29 @@
                   "codes": [
                     "ARCH5330"
                   ],
-                  "text": "ARCH 5330"
+                  "text": "ARCH 5330",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3314"
                   ],
-                  "text": "ENGW 3314"
+                  "text": "ENGW 3314",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "MATH1241"
                   ],
-                  "text": "MATH 1241"
+                  "text": "MATH 1241",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -1558,14 +1689,16 @@
                   "codes": [
                     "ARCH3370"
                   ],
-                  "text": "ARCH 3370"
+                  "text": "ARCH 3370",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5140"
                   ],
-                  "text": "ARCH 5140"
+                  "text": "ARCH 5140",
+                  "sh": 6
                 },
                 {
                   "kind": "courses",
@@ -1573,14 +1706,16 @@
                     "ARCH5230",
                     "ARCH5231"
                   ],
-                  "text": "ARCH 5230 and ARCH 5231"
+                  "text": "ARCH 5230 and ARCH 5231",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ARCH5310"
                   ],
-                  "text": "ARCH 5310"
+                  "text": "ARCH 5310",
+                  "sh": 4
                 }
               ]
             }

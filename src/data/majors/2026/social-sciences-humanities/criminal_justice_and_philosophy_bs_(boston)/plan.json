@@ -18,32 +18,37 @@
                   "codes": [
                     "CRIM1100"
                   ],
-                  "text": "CRIM 1100"
+                  "text": "CRIM 1100",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW1111"
                   ],
-                  "text": "ENGW 1111"
+                  "text": "ENGW 1111",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1000"
                   ],
-                  "text": "PHIL 1000"
+                  "text": "PHIL 1000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL1115"
                   ],
-                  "text": "PHIL 1115"
+                  "text": "PHIL 1115",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM thematic elective"
+                  "text": "CRIM thematic elective",
+                  "sh": 4
                 }
               ]
             },
@@ -57,21 +62,24 @@
                   "codes": [
                     "CRIM1110"
                   ],
-                  "text": "CRIM 1110"
+                  "text": "CRIM 1110",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM1120"
                   ],
-                  "text": "CRIM 1120"
+                  "text": "CRIM 1120",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2303"
                   ],
-                  "text": "PHIL 2303"
+                  "text": "PHIL 2303",
+                  "sh": 4
                 },
                 {
                   "kind": "choice",
@@ -79,7 +87,8 @@
                     "PHIL2325",
                     "POLS2325"
                   ],
-                  "text": "PHIL 2325 or POLS 2325"
+                  "text": "PHIL 2325 or POLS 2325",
+                  "sh": 4
                 }
               ]
             },
@@ -90,11 +99,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -105,11 +116,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
@@ -128,29 +141,34 @@
                   "codes": [
                     "CRIM3600"
                   ],
-                  "text": "CRIM 3600"
+                  "text": "CRIM 3600",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "EESH2000"
                   ],
-                  "text": "EESH 2000"
+                  "text": "EESH 2000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2330"
                   ],
-                  "text": "PHIL 2330"
+                  "text": "PHIL 2330",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM survey elective"
+                  "text": "CRIM survey elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Critical philosophy elective"
+                  "text": "Critical philosophy elective",
+                  "sh": 4
                 }
               ]
             },
@@ -161,22 +179,26 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "CRIM thematic elective"
+                  "text": "CRIM thematic elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM elective"
+                  "text": "CRIM elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL 2303"
+                  "text": "PHIL 2303",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "PHIL2301"
                   ],
-                  "text": "PHIL 2301"
+                  "text": "PHIL 2301",
+                  "sh": 4
                 }
               ]
             },
@@ -187,11 +209,13 @@
               "entries": [
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -202,7 +226,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             }
@@ -218,7 +243,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -232,26 +258,31 @@
                   "codes": [
                     "CRIM3000"
                   ],
-                  "text": "CRIM 3000"
+                  "text": "CRIM 3000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM3700"
                   ],
-                  "text": "CRIM 3700"
+                  "text": "CRIM 3700",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "CRIM systemwide elective"
+                  "text": "CRIM systemwide elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL 3000, 4000, or 5000 Elective"
+                  "text": "PHIL 3000, 4000, or 5000 Elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL Elective"
+                  "text": "PHIL Elective",
+                  "sh": 4
                 }
               ]
             },
@@ -261,7 +292,7 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
+                  "kind": "vacation",
                   "text": "Vacation"
                 }
               ]
@@ -273,14 +304,16 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "ENGW3309"
                   ],
-                  "text": "ENGW 3309"
+                  "text": "ENGW 3309",
+                  "sh": 4
                 }
               ]
             }
@@ -296,7 +329,8 @@
               "entries": [
                 {
                   "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "sh": 0
                 }
               ]
             },
@@ -310,29 +344,34 @@
                   "codes": [
                     "CRIM1400"
                   ],
-                  "text": "CRIM 1400"
+                  "text": "CRIM 1400",
+                  "sh": 4
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM4000"
                   ],
-                  "text": "CRIM 4000"
+                  "text": "CRIM 4000",
+                  "sh": 1
                 },
                 {
                   "kind": "course",
                   "codes": [
                     "CRIM4949"
                   ],
-                  "text": "CRIM 4949"
+                  "text": "CRIM 4949",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "PHIL 4000 or 5000 elective"
+                  "text": "PHIL 4000 or 5000 elective",
+                  "sh": 4
                 },
                 {
                   "kind": "placeholder",
-                  "text": "Elective"
+                  "text": "Elective",
+                  "sh": 4
                 }
               ]
             }
