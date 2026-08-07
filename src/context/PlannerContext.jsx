@@ -1966,6 +1966,45 @@ export function PlannerProvider({ children }) {
     return result;
   };
 
+  /**
+   * Lay the sample plan out in a NEW plan instead of this one.
+   *
+   * The default once a student has work of their own, and the better answer to
+   * "what does the department actually suggest?" — nothing of theirs is at
+   * risk, and the two sit side by side in the library to compare. Trying a
+   * what-if here is already just making another plan.
+   *
+   * Mapped against an EMPTY plan rather than the current one: in a fresh plan
+   * nothing is "already placed", so a course the student happens to have in
+   * the plan they are looking at must still be laid out here.
+   *
+   * The programs come along too. A sample plan in a plan with no major would
+   * be a pile of courses with nothing to check them against.
+   */
+  const openSamplePlanAsNewPlan = (plan, planName, startYearIndex = 0) => {
+    const coopType = specialTerms.types?.find(t => t.id === "coop") ?? specialTerms.types?.[0];
+    const result = mapSamplePlan(plan, {
+      semesters: SEMESTERS,
+      courseMap,
+      placements: {},
+      specialTermPl: {},
+      startYearIndex,
+      coopTypeId: coopType?.id ?? "coop",
+      coopDurations: (coopType?.durations ?? []).map(d => d.duration),
+    });
+    createPlan(
+      planName,
+      { entSem: planEntSem, entYear: planEntYear, gradSem: planGradSem, gradYear: planGradYear, studentType },
+      null,
+      {
+        placements: result.placements,
+        specialTermPl: result.specialTermPl,
+        major, major2, conc, conc2, minor1, minor2,
+      },
+    );
+    return result;
+  };
+
   const onDropOnCard = (e, targetId, targetSemId) => {
     e.preventDefault(); e.stopPropagation();
     setHoveredCardId(null); setHoveredSem(null); setHoveredZone(null);
@@ -2822,7 +2861,13 @@ export function PlannerProvider({ children }) {
   // useEffect calls restorePlan (with the given cohort) instead of resetPlanToDefaults.
   // parentId files the new plan straight into a folder ("+ New plan" from
   // inside one); null puts it at the root.
-  const createPlan = (name, cohort = null, parentId = null) => {
+  /**
+   * @param {object} [seed]  content the new plan is BORN with, merged over the
+   *   empty slot. Creating a plan and then writing into it would race the
+   *   activePlanId effect that loads the slot back, so anything the plan
+   *   should start with has to be in the slot before it exists.
+   */
+  const createPlan = (name, cohort = null, parentId = null, seed = null) => {
     saveCurrentPlanToSlot();
     const id = `plan_${Date.now()}`;
     if (cohort) {
@@ -2839,6 +2884,7 @@ export function PlannerProvider({ children }) {
           shOverrides: {}, offeredOverrides: {}, collapsedSubs: {},
           bonusSH: 0, major: "", major2: "", conc: "", conc2: "",
           minor1: "", minor2: "", placedOut: [],
+          ...(seed ?? {}),
         }));
       } catch {}
     }
@@ -3641,7 +3687,7 @@ export function PlannerProvider({ children }) {
     onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard, onDropPlacedOut,
     canDropSem,
     doUndo, doRedo, pushUndo,
-    previewSamplePlan, applySamplePlan, summarizeSamplePlan,
+    previewSamplePlan, applySamplePlan, openSamplePlanAsNewPlan, summarizeSamplePlan,
   };
 
   return <PlannerContext.Provider value={value}>{children}</PlannerContext.Provider>;

@@ -1245,14 +1245,24 @@ function ExpandToggleBar({ expanded, onToggle }) {
 //   · what it reports afterwards is the summary of the change that actually
 //     happened, not a second estimate of it, because both come from one call
 //     to the same mapping
-function SamplePlanRow({ path, isGrad, isPhone }) {
+function SamplePlanRow({ path, isGrad, isPhone, programName }) {
   const { t } = useLanguage();
   const majorRequirements = usePort(IMajorRequirements);
-  const { applySamplePlan, summarizeSamplePlan } = usePlanner();
+  const {
+    applySamplePlan, openSamplePlanAsNewPlan, summarizeSamplePlan,
+    placements, specialTermPl,
+  } = usePlanner();
 
   const [plans,  setPlans]  = useState(null);
   const [pick,   setPick]   = useState(0);
   const [result, setResult] = useState(null);
+
+  // An empty plan has nothing to protect: laying out in place is unambiguous,
+  // fully reversible, and a new plan would just be duplication the student has
+  // to tidy up. The moment work exists, that flips — see below.
+  const planIsEmpty =
+    Object.keys(placements ?? {}).length === 0 &&
+    Object.keys(specialTermPl ?? {}).length === 0;
 
   useEffect(() => {
     let live = true;
@@ -1266,9 +1276,21 @@ function SamplePlanRow({ path, isGrad, isPhone }) {
 
   if (!plans?.length) return null;
 
-  const onLoad = () => setResult(summarizeSamplePlan(applySamplePlan(plans[pick])));
+  const chosen = plans[pick];
+  const onHere = () => setResult({ ...summarizeSamplePlan(applySamplePlan(chosen)), where: "here" });
+  const onNew  = () => {
+    const name = programName ? `${programName} \u00b7 ${chosen.label}` : chosen.label;
+    setResult({ ...summarizeSamplePlan(openSamplePlanAsNewPlan(chosen, name)), where: "new" });
+  };
 
   const label = { fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" };
+  const btn = (primary) => ({
+    fontSize: isPhone ? 10 : 11, fontWeight: 600, padding: "4px 10px",
+    borderRadius: 6, cursor: "pointer", whiteSpace: "nowrap",
+    border: `1px solid ${primary ? "var(--accent, #64748b)" : "var(--border-1)"}`,
+    background: primary ? "var(--accent, #64748b)" : "var(--bg-2)",
+    color: primary ? "#fff" : "var(--text-2)",
+  });
 
   return (
     <div style={{ marginTop: 12, paddingTop: 10, borderTop: "1px solid var(--border-1)" }}>
@@ -1292,27 +1314,36 @@ function SamplePlanRow({ path, isGrad, isPhone }) {
             {plans[0].label}
           </span>
         )}
-        <button
-          onClick={onLoad}
-          style={{
-            fontSize: isPhone ? 10 : 11, fontWeight: 600, padding: "4px 10px",
-            borderRadius: 6, border: "1px solid var(--border-1)",
-            background: "var(--bg-2)", color: "var(--text-1)", cursor: "pointer",
-          }}
-        >
-          {t("grad.plan.load")}
-        </button>
+        {/* Which action leads depends on what is at stake. With an empty plan
+            there is one obvious thing to do. Once the student has work of
+            their own, the department's plan goes somewhere else by default —
+            nothing of theirs is at risk, and the two sit side by side to
+            compare, which is the actual question being asked. Adding to this
+            plan stays one click away and is additive either way. */}
+        {planIsEmpty ? (
+          <button onClick={onHere} style={btn(true)}>{t("grad.plan.load")}</button>
+        ) : (
+          <>
+            <button onClick={onNew}  style={btn(true)}>{t("grad.plan.newplan")}</button>
+            <button onClick={onHere} style={btn(false)}>{t("grad.plan.addhere")}</button>
+          </>
+        )}
       </div>
 
       {result && (
         <div style={{ marginTop: 6, fontSize: isPhone ? 9 : 10, lineHeight: 1.5, color: "var(--text-3)" }}>
           {/* Placed first, then what was deliberately left undone — a plan that
               reported only its successes would look like it had finished. */}
-          <div>{t("grad.plan.placed", { n: result.placed, c: result.coops })}</div>
+          <div>
+            {result.where === "new"
+              ? t("grad.plan.placed.new", { n: result.placed, c: result.coops })
+              : t("grad.plan.placed", { n: result.placed, c: result.coops })}
+          </div>
           {(result.choices > 0 || result.placeholders > 0) && (
             <div>{t("grad.plan.left", { choices: result.choices, slots: result.placeholders })}</div>
           )}
-          {result.alreadyPlaced > 0 && <div>{t("grad.plan.kept", { n: result.alreadyPlaced })}</div>}
+          {result.where === "here" && result.alreadyPlaced > 0 &&
+            <div>{t("grad.plan.kept", { n: result.alreadyPlaced })}</div>}
           {result.outsideRange > 0 && <div>{t("grad.plan.overflow", { n: result.outsideRange })}</div>}
         </div>
       )}
@@ -1991,7 +2022,7 @@ export default function GradPanel({ wideCatalog = false }) {
             </>
           )}
           <GpaRules program={major} />
-          <SamplePlanRow path={selPath} isGrad={isGrad} isPhone={isPhone} />
+          <SamplePlanRow path={selPath} isGrad={isGrad} isPhone={isPhone} programName={major?.name} />
         </MajorCard>}
 
         {/* ── Major 2 framed card ──────────────────────────────── */}
