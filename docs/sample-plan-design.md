@@ -138,14 +138,18 @@ allowed* with *what is suggested* — two questions with different answers.
 
 **Label-slug slot identity.** Directly caused the 11-term data loss.
 
-**Binding as a runtime query.** A binding is a fact about a *program*, not a
-student. Computing it live means a slot's meaning changes as the student places
-courses: satisfy Khoury by hand and the `Khoury Elective` slot re-binds
-somewhere else. It still means Khoury.
+**Binding as a runtime query.** Computing it live means a slot's meaning changes
+as the student places courses: satisfy Khoury by hand and the `Khoury Elective`
+slot re-binds somewhere else. It still means Khoury. (Its *resolution* against
+the student's concentration and placements stays live — see §3.)
 
-**Requirement-section pointers as the load-bearing key.** `title#ordinal` is
-fragile across re-scrapes and collides outright on dual majors — two programs
-both offer `Capstone#0`.
+**`filledBy`, and the two-store duality it served.** Answered-ness is derivable
+from `placements` plus the audit, so storing it only created a second copy to
+keep consistent — and `reopenOrphanedSlots` existed solely to repair it.
+
+**Materializing the plan into the student's state.** A reference is 10–20×
+smaller on the wire, stays current with the scrape, and makes re-application
+idempotent by construction.
 
 ---
 
@@ -216,144 +220,174 @@ decide, which is different from what they may decide.
 
 ---
 
-## 2. The structural question
+## 2. What is stored
 
-**This is the decision that needs making, and it is the only one I am not
-prepared to make unilaterally.** It sets how invasive the change is.
+Three facts. Everything else is derived.
 
-### Option A — reservations stored beside placements (incremental-clean)
+```jsonc
+placements:  { "CS2500": "fall2026", … }        // unchanged, authoritative
+appliedPlans: [{ programKey, planLabel, startYearIndex }]
+planEdits:   { "<entryId>": { semId?, deleted? } }   // divergences only
+```
 
-A plan writes `placements` for named courses and a separate `reservations` map
-for unanswered ones. The grid renders a derived view of both.
+The entry tree is **re-derived from the shipped `plan.json`** on load. It is not
+copied into the student's state.
 
-- **Cost:** low. `placements` keeps its shape; the share codec, audit, MCP and
-  every renderer are untouched except where they already read the derived view.
-- **Keeps:** the duality. Two stores that must be kept consistent — the
-  `reopenOrphanedSlots` class of bug is inherent to it.
+### Why a reference and not a copy
 
-### Option B — the plan *is* the structure, answers attach to it (structural)
+A materialized plan is a median **3.4 KB** of JSON (max 6.3 KB); a reference
+plus divergences is 150–400 bytes. Slots already serialize whole into share
+links, so this is a 10–20× difference on the wire. The reference also stays
+current with the monthly scrape for free, and — the part that matters more —
+**"apply a plan" becomes idempotent by construction**, because applying twice
+sets the same reference. The previous design needed slot-id de-duplication to
+achieve that, and got it wrong (11 terms silently lost a reservation to a
+case-folding collision).
 
-The student holds a plan instance: years → terms → entries. A placement is
-"course X answers entry N". There is no separate notion of a slot; an entry is
-answered or it is not.
+### The rule that decides what may be keyed by what
 
-- **Gains:** the duality disappears. Ordering, credit, and provenance live in
-  one place. "Which requirement was this course chosen for" is a field, not a
-  reverse lookup. Re-applying a template is a merge over one structure.
-- **Cost:** high, and honestly so. It touches the share codec (`p`, `sl`, `so`),
-  the graduation audit's input, MCP action semantics (which would need a
-  redeploy), and every renderer. It also has to answer what happens to a course
-  placed *without* a plan — which is the common case today.
+Positional entry ids (`p0.Year 2.Fall.3`) are the only handle a derived tree
+offers, and they are **not stable**. Measured against archived editions:
 
-**Recommendation: A, with the entry model of §1 as the reservation payload.**
-Option B is the better model, but its cost is concentrated in exactly the
-surfaces that are hardest to test (share links, MCP) and it would block the
-feature behind a migration. A is reversible; B can be reached later from A once
-entries are first-class, because A's `reservations` are already §1 nodes.
+| edition → 2026 | positions compared | stability |
+|---|---|---|
+| 2025 | 114 | 95.6% |
+| 2024 | 38 | 86.8% |
+| 2021–23 | 38 | 39.5% |
 
-**Decision required before any code.**
+The sample is small — few archived programs carry a `planGrid` and slugs were
+renamed — so the magnitude is not trustworthy. That is precisely the point:
+
+> **If id stability cannot be proven, nothing that matters may be keyed by an
+> id. Anchor consequential state on course ids, which do not drift; anchor only
+> cosmetic state on positions.**
+
+~96%/year compounds to ~83% across a four-year plan — about one answer in six
+re-pointing to the wrong entry. Under this rule that is survivable, because the
+only things keyed positionally are **moves and deletions**. A drifted id makes a
+reservation reappear where the student dismissed it, or sit in its published
+term rather than the one they dragged it to. Their courses are untouched.
+
+### Answered-ness is derived, never stored
+
+This is what removes the duality entirely. There is no `filledBy`, no
+`reopenOrphanedSlots`, no second store to keep consistent.
+
+- An entry with `options` is answered iff one of its option **groups** is fully
+  placed — computable from `placements` alone.
+- An entry with `options: []` is answered iff the requirement it binds to has
+  been satisfied beyond what other entries bound to it already claim — which is
+  exactly what the graduation audit computes.
+
+Delete a course and its reservation returns, with no bookkeeping. No stored
+mapping means no id-stability exposure on the one thing that would have been
+corrupting. The audit consumes `placements`; entries are not placements; there
+is no cycle.
+
+**Accepted consequence:** placing a course for one reason can retire a
+reservation created for another — put any Khoury-eligible course anywhere and
+the `Khoury Elective` reservation goes. That is correct (the requirement *is*
+satisfied), but with ~51% of a plan's credit being reservations it will be
+visible, and the UI has to make it legible rather than surprising.
 
 ---
 
-## 3. Binding happens in the scraper
+## 3. Binding is computed in the scraper and shipped beside the requirements
 
-A binding is a fact about a program. The same plan resolves to the same
-requirements for every student who loads it, so it is computed at scrape time
-and shipped inside `plan.json`.
+A binding says which requirement a cell stands for. It is computed at scrape
+time, written into `plan.json`, and reviewed as a git diff.
 
-What this buys:
+What this buys: the 36 and/or cells and 14 nested plans surface under review
+rather than in an audit months later; binding quality joins
+`planTermsAgree`/`planTermsDisagree` as a gate that can refuse a write; and a
+slot's meaning can no longer drift as a student places courses, because it is
+no longer a query.
 
-- **Diffable.** The 36 and/or cells and 14 nested plans appear in a git diff
-  under review, instead of being found by an audit months later.
-- **Gated.** Binding quality joins `planTermsAgree`/`planTermsDisagree` as a
-  data-quality counter that can refuse a write, matching the rails the
-  requirements side already has.
-- **No meaning drift.** A slot's binding cannot change as a student places
-  courses, because it is not a query.
-- **No runtime cost**, which is what makes §4 affordable.
+### The pointer cannot dangle, so it can be an index
 
-The genuinely per-student question — *is this requirement still outstanding for
-me?* — is separate, live, and derived from the graduation audit that already
-runs. Conflating the two was the central error of the previous attempt.
+Earlier drafts avoided requirement pointers because `title#ordinal` is fragile
+across re-scrapes and collides on dual majors. **That concern dissolves once
+binding is generated at scrape time**: `plan.json` and `parsed.initial.json` are
+produced in the same run and shipped together, so a binding always references
+the requirement list it was computed against. It cannot outlive it.
+
+So the binding is a **section index**, and `admits` is derived at runtime from
+`requirementSections[i]` — already loaded, because the audit needs it. No spec
+duplication in the shipped data, no staleness, no identity scheme.
+
+### Student-level inputs are named, not baked
+
+Binding is *not* purely program-level, and the earlier draft was wrong to say
+so. Concentrations are a student choice and **51 programs require one**; plan
+variant, substitutions, dual majors and placed-out credit are all student-level.
+
+The split: a binding names its target (`section 7`, or the sentinel
+`~concentration` / `~general`), and *resolution* happens at runtime against the
+student's actual selections. Nothing student-specific is ever baked.
 
 **Sequencing constraint, easy to get backwards:** binding is computed against
-the plan's *own* named courses as though placed. Computed against an empty
-plan, every requirement looks outstanding and every binding is noise.
+the plan's own named courses as though placed. Against an empty plan every
+requirement looks outstanding and every binding is noise.
 
 ---
 
-## 4. Assignment is solved exactly, not heuristically
+## 4. Assignment is solved exactly
 
-The problem is: assign unanswered entries to outstanding requirements such that
-no requirement takes more credit than it needs. That is a capacitated
-assignment, and min-cost max-flow answers it exactly:
+Assign unanswered entries to outstanding requirements without exceeding any
+requirement's capacity — a capacitated assignment, answered exactly by min-cost
+max-flow:
 
 - an edge is **forced** if every maximum flow contains it,
 - **impossible** if none does,
 - **possible** otherwise.
 
-This replaces a hand-tuned ladder with a `pass < 8` bound and a hand-written
-strength table — constants chosen by the author rather than derived. Both are
-symptoms of approximating a problem that has an exact answer. Build-time
-execution (§3) removes any performance argument against it.
+This replaces a hand-tuned relaxation ladder with a `pass < 8` bound and a
+hand-written strength table — constants chosen by an author rather than derived,
+which is what approximating an exactly-solvable problem looks like.
 
-Wording still participates, but only as an **edge filter applied before the
-flow**, and only where it can be checked against course sets rather than titles:
+**Honest scope:** this buys *rigor*, not *coverage*. The ~35% ambiguity in the
+previous attempt came from genuinely ambiguous data and from requirements
+missing from our source; an exact solver creates no information that is not
+there. It is worth doing because build-time execution makes its cost irrelevant
+and because "forced" then means something provable.
 
-| evidence | check | may be relaxed |
+**Two kinds of evidence, and they must not be mixed** — conflating them is the
+entire reason relaxation had to exist:
+
+| evidence | role | example |
 |---|---|---|
-| catalog printed the codes | — | never |
-| cell states its own range (`MATH 3001 to Math 4999`) | — | never |
-| subject (`MATH elective`) | does the requirement admit any MATH course? | if infeasible |
-| title similarity (`Khoury Elective`) | shared rare tokens | first |
+| checkable against course sets | edge **existence** (hard) | `MATH elective` — Khoury admits no MATH course, so that edge does not exist |
+| wording only | edge **cost** (soft) | `Khoury Elective` ~ `Khoury Approved Electives` |
 
-**Title similarity should use corpus IDF, not a hand-written stopword list.**
-The previous attempt hand-listed `course`, `elective`, `requirement`… which is
-an approximation of inverse document frequency computed by a person. Deriving it
-from the corpus of section titles self-maintains through monthly scrapes and
-grades the evidence instead of making it boolean. Not fuzzy/edit-distance
-matching: our failure is *paraphrase*, not typo, and no edit-distance threshold
-separates `Computing and social issues` / `Supporting Course` from a true match.
+As cost rather than filter, a maximum flow always exists and well-worded
+assignments are merely preferred. Relaxation stops being a concept.
 
-**Open question (B1):** relaxation currently reruns the whole solve. With exact
-flow it may be cleaner to model wording as edge *cost* rather than edge
-*existence* — a min-cost flow then prefers well-worded assignments without ever
-being unable to find one. Leaning strongly this way; it removes relaxation as a
-concept.
+Title similarity should use **corpus IDF over section titles**, not a
+hand-written stopword list — that list was an author's approximation of IDF, and
+a derived one self-maintains through monthly scrapes. Not edit-distance: our
+failure mode is paraphrase, and no threshold separates `Computing and social
+issues` / `Supporting Course` from a true match.
 
 ---
 
 ## 5. What may fill an entry
 
-Ship the **spec**, not a pointer.
-
-```jsonc
-"admits": { "keys": ["AFCS2600", "CY4170", "…"], "ranges": [] },
-"requirement": { "title": "Supporting Course", "confidence": "forced" }
-```
-
-`admits` is self-contained and load-bearing. `requirement` is display metadata
-and is **allowed to fail** — if a re-scrape renames the section, the entry
-degrades to "we know what fits, we can no longer name why", which is a far
-better failure than an unresolvable key. This dissolves the `title#ordinal`
-identity problem and the dual-major collision at once.
-
-Three tiers, only the first stored:
-
 | tier | question | source |
 |---|---|---|
-| **admits** | what does this requirement accept? | shipped spec |
+| **admits** | what does the bound requirement accept? | derived from `requirementSections[i]` |
 | **allowed** | may the student put this here? | *always yes* — a planner warns, never blocks |
-| **recommended** | what should we show first? | `admits` minus already-placed, filtered by term offering and prereq reachability |
+| **recommended** | what to show first | `admits` minus already-placed, filtered by term offering and prereq reachability |
+
+Only `recommended` needs computing per student, and it depends on live state, so
+none of this is storable anyway.
 
 **Attributes are a separate axis.** `General elective (NUpath DD)` is a free
 elective *plus* an attribute constraint; it never enters `admits`. Codes are
 read only where the cell says they are attributes — it names NUpath, or a
-parenthetical consists entirely of codes — because `CE` collides with
-Computer/Civil Engineering in ~90 cells and a naive match is wrong on four in
-five of them. `COMM WI course` is deliberately missed: a bare code with no
-parenthetical cannot be told from an abbreviation, and a false attribute
-narrows a picker to nothing.
+parenthetical consists entirely of codes — because `CE` means Computer/Civil
+Engineering in ~90 cells and a naive two-letter match is wrong on four in five
+of them. `COMM WI course` is deliberately missed: a bare code cannot be told
+from an abbreviation, and a false attribute narrows a picker to nothing.
 
 ---
 
@@ -382,11 +416,13 @@ in one direction. This set is a work queue for the requirements scraper.
 
 | # | question | leaning |
 |---|---|---|
-| **S1** | §2 — reservations beside placements (A) or plan-as-structure (B)? | **A**, reaching B later |
+| **S1** | §2 — resolved: reference + derived answered-ness, per the id-stability rule | settled |
 | **E1** | is `optional` distinct from an `either`? | yes |
 | **B1** | wording as edge cost rather than edge filter? | yes |
 | **V1** | should binding over-subscription *block* a scrape write, or only report? | report first, block once a baseline exists |
 | **C1** | model college-wide requirements (CSSH foreign language), or leave them honestly unbound? | unbound now; §6 turns them into a queue |
+| **D1** | how legible must a reservation retiring itself be (§2)? | UI question, deferred |
+| **D2** | widen the id-stability sample — few archived programs carry a planGrid | not blocking; the rule makes the number non-load-bearing |
 
 ---
 
