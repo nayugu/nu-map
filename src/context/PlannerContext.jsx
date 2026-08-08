@@ -2037,11 +2037,17 @@ export function PlannerProvider({ children }) {
     // function (src/core/planDrop.js) so each case can be enumerated in a test
     // — this logic lived inline as setX calls, where three separate bugs
     // shipped because nothing could exercise it.
-    // Either end being a reservation goes through the shared resolver, because
-    // the course path below writes positions into `placements` and a
-    // reservation does not live there. The resolver implements the SAME rules —
-    // reorder in-term, swap across terms — so the two cannot diverge.
-    if (isReservationId(dragId) || isReservationId(targetId)) {
+    // Every drop that is purely a REORDER goes through the shared resolver,
+    // whatever the two cards are. Keeping a second copy of "which side of the
+    // target does it land on" is what made a forward drag a no-op: the copy
+    // below removed the card and then inserted at the target's OLD index, which
+    // after the removal is the position it came from. Backward drags worked, so
+    // it read as a per-semester quirk rather than one rule with a missing case.
+    //
+    // The course path below still owns what only it does — placing out,
+    // special-term validation, cross-term coreq carrying.
+    const sameSemReorder = !isReservationId(dragId) && placements[dragId] === targetSemId;
+    if (isReservationId(dragId) || isReservationId(targetId) || sameSemReorder) {
       const coreqPartners = [...new Set(
         allEdges
           .filter(e2 => e2.type === "corequisite" && (e2.from === dragId || e2.to === dragId))
@@ -2073,16 +2079,7 @@ export function PlannerProvider({ children }) {
     )];
     const allMoving = [dragId, ...coreqPartners];
 
-    if (fromSem === targetSemId) {
-      // Same-sem reorder (coreqs stay, just reorder the dragged card)
-      setSemOrders(prev => {
-        const cur = getOrderedCourses(targetSemId, gridPlacements, prev, gridCourseMap);
-        const fi  = cur.indexOf(dragId), ti = cur.indexOf(targetId);
-        if (fi < 0 || ti < 0) return prev;
-        const next = [...cur]; next.splice(fi, 1); next.splice(ti, 0, dragId);
-        return { ...prev, [targetSemId]: next };
-      });
-    } else if (targetSemType === "special") {
+    if (targetSemType === "special") {
       // Append to special/incoming sem — carry coreqs along
       setPlacements(p => {
         const n = { ...p, [dragId]: targetSemId };

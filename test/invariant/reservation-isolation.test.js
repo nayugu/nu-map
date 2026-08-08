@@ -137,6 +137,21 @@ test("no UI file re-derives a semester's contents for itself", () => {
   assert.deepEqual(bad, [], "a UI file deriving term contents instead of asking for them");
 });
 
+test("only ONE place decides where a dropped card lands", () => {
+  // Every hole in this feature came from the same shape: two implementations
+  // of one rule. SemRow and SummerRow. planDrop and the course path. And then
+  // the same-semester reorder, which kept its own copy of "which side of the
+  // target" long enough for a forward drag to be a no-op in one of them.
+  //
+  // splice-based reordering is that copy's signature, so its absence is what is
+  // asserted. planDrop.js is the one place allowed to answer the question.
+  const src = readFileSync(join(ROOT, "src/context/PlannerContext.jsx"), "utf8");
+  const bad = src.split("\n").filter(line =>
+    !line.trim().startsWith("//") &&
+    /\.splice\([^)]*,\s*0\s*,\s*dragId/.test(line));
+  assert.deepEqual(bad, [], "a second implementation of where a dropped card lands");
+});
+
 test("ordering is computed over the combined view everywhere, without exception", () => {
   // Ordering is a LAYOUT question, so every call must see reservations. Six of
   // the nine call sites did not, which meant any course drop into a term
