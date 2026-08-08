@@ -10,6 +10,7 @@ import {
   flattenPlan, positionEntries, resolveAnswers, surplusOf, summarize,
   academicYears, entryId, isReservation,
 } from "../../src/core/planInstance.js";
+import { planSurplus } from "../../src/core/requirementDemand.js";
 
 /** Four academic years in NU's shape, matching src/core/semGrid.js output. */
 const SEMESTERS = [
@@ -219,4 +220,38 @@ test("the summary counts the same derivation the planner would draw", () => {
   assert.equal(s.reservations, 3);
   assert.equal(s.coops, 1);
   assert.equal(s.answered, 1);
+});
+
+// ── Surplus, measured against the audit rather than by hand ────────
+
+test("surplus wires the audit to answered-ness with one measurement", () => {
+  // Both sides go through satisfiedByTarget, so the subtraction is meaningful
+  // rather than two estimates differenced.
+  const program = {
+    totalCreditsRequired: 16,
+    requirementSections: [
+      { type: "SECTION", title: "Khoury Approved Electives", minRequirementCount: 1,
+        requirements: [{ type: "XOM", numCreditsMin: 8,
+          courses: [{ type: "RANGE", subject: "CS", idRangeStart: 2500, idRangeEnd: 9999, exceptions: [] }] }] },
+    ],
+  };
+  const cm = Object.fromEntries(["CS2500", "CS3000", "CS4500"].map(
+    id => [id, { id, subject: "CS", number: id.slice(2), sh: 4 }]));
+
+  // The plan itself names nothing toward Khoury, so every Khoury course the
+  // student places is surplus and retires a reservation.
+  assert.deepEqual([...planSurplus(program, ["CS3000"], [], cm)], [[0, 1]]);
+  assert.deepEqual([...planSurplus(program, ["CS3000", "CS4500"], [], cm)], [[0, 2]]);
+  // A course the plan already named retires nothing — it was never surplus.
+  assert.deepEqual([...planSurplus(program, ["CS3000"], ["CS3000"], cm)], []);
+});
+
+test("surplus feeds resolveAnswers directly", () => {
+  const p = positionEntries(flat(), { semesters: SEMESTERS });
+  const khoury = p.filter(e => e.entry.text === "Khoury Elective");
+  // Binding target 1 in the fixture; one course beyond the plan's own retires
+  // exactly the earlier reservation.
+  const { answered } = resolveAnswers(p, { surplus: new Map([[1, 1]]) });
+  assert.equal(answered.has(khoury[0].id), true);
+  assert.equal(answered.has(khoury[1].id), false);
 });

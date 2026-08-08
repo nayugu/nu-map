@@ -59,13 +59,15 @@
 
 import { specForNode, specIsEmpty, courseEligible } from "../../src/core/programEligibility.js";
 import { allocateSections } from "../../src/core/gradRequirements.js";
+// Shared with the runtime on purpose. Sizing a requirement at scrape time and
+// measuring what a student has satisfied since must use the identical numbers,
+// or a reservation could bind to a requirement the audit considers met.
+import {
+  DEFAULT_UNIT_SH, GENERAL_ELECTIVE, CONCENTRATION,
+  typicalSH, demandOf, shortfallOf, deepPools,
+} from "../../src/core/requirementDemand.js";
 
-/** Northeastern's standard course. A parameter, not a fact about degrees. */
-const DEFAULT_UNIT_SH = 4;
-
-/** Targets that are not catalog sections, so they cannot collide with one. */
-export const GENERAL_ELECTIVE = "~general";
-export const CONCENTRATION = "~concentration";
+export { GENERAL_ELECTIVE, CONCENTRATION };
 
 // ── Obligations ────────────────────────────────────────────────────
 
@@ -94,11 +96,11 @@ export function obligationsOf(programData, { placedSet = new Set(), courseMap = 
     const spec = specForNode(section);
     const unitSH = typicalSH(spec, courseMap);
     const short = shortfallOf(alloc[i], unitSH);
-    demand += totalDemand(alloc[i], unitSH);
+    demand += demandOf(alloc[i], unitSH);
     // `shared` sections are deliberately cross-counted toward several
     // requirements, so charging their demand to the total would shrink the
     // derived general-elective allowance below.
-    if (section.shared) demand -= totalDemand(alloc[i], unitSH);
+    if (section.shared) demand -= demandOf(alloc[i], unitSH);
     if (short <= 0) return;
     out.push({ target: i, title: section.title ?? "", spec, shortfallSH: short, unitSH });
   });
@@ -114,7 +116,7 @@ export function obligationsOf(programData, { placedSet = new Set(), courseMap = 
     for (const option of conc.concentrationOptions) {
       const s = specForNode(option);
       const a = allocateSections([option], placedSet, new Set(), courseMap)[0];
-      floor = Math.min(floor, totalDemand(a, typicalSH(s, courseMap)));
+      floor = Math.min(floor, demandOf(a, typicalSH(s, courseMap)));
     }
     if (Number.isFinite(floor) && floor > 0) {
       const sh = floor * (conc.minOptions ?? 1);
@@ -145,64 +147,9 @@ export function obligationsOf(programData, { placedSet = new Set(), courseMap = 
   return out;
 }
 
-/**
- * Credit still unmet for one section, from the audit's own numbers.
- *
- * Only the section node and its immediate children are inspected. A child
- * carrying `reqSh` states its demand in credit hours (an XOM pool); anything
- * else is counted in courses. Measured across all 6,185 shipped sections, no
- * credit-bearing XOM sits deeper than an immediate child — so the shallow read
- * is sufficient for the real data, and `assertShallowPools` below exists to
- * fail loudly if that ever stops being true.
- */
-function shortfallOf(allocSection, unitSH) {
-  let reqSh = 0, satSh = 0, found = false;
-  for (const c of allocSection?.children ?? []) {
-    if (typeof c.reqSh === "number") { reqSh += c.reqSh; satSh += c.satSh ?? 0; found = true; }
-  }
-  if (found) return Math.max(0, reqSh - satSh);
-  const need = allocSection?.minRequired ?? allocSection?.total ?? 0;
-  return Math.max(0, need - (allocSection?.satCount ?? 0)) * unitSH;
-}
 
-/** Credit a section demands in total, regardless of what is placed. */
-function totalDemand(allocSection, unitSH) {
-  let reqSh = 0, found = false;
-  for (const c of allocSection?.children ?? []) {
-    if (typeof c.reqSh === "number") { reqSh += c.reqSh; found = true; }
-  }
-  return found ? reqSh : (allocSection?.minRequired ?? allocSection?.total ?? 0) * unitSH;
-}
 
-/** The credit value one course of this kind usually carries. */
-function typicalSH(spec, courseMap) {
-  const counts = new Map();
-  for (const key of spec?.keys ?? []) {
-    const sh = courseMap[key]?.sh;
-    if (sh) counts.set(sh, (counts.get(sh) ?? 0) + 1);
-  }
-  if (!counts.size) return DEFAULT_UNIT_SH;
-  return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0][0];
-}
 
-/**
- * Guard for the assumption `shortfallOf` rests on. Returns the sections whose
- * credit pools are nested deeper than the shallow read can see — empty for all
- * shipped data, and a scrape gate rather than a silent wrong answer.
- */
-export function assertShallowPools(programData) {
-  const bad = [];
-  const deep = (node, d) => {
-    if (node?.type === "XOM" && node.numCreditsMin && d > 0) return true;
-    return (node?.courses ?? []).some(c => deep(c, d + 1));
-  };
-  for (const s of programData?.requirementSections ?? []) {
-    for (const r of s.requirements ?? []) {
-      if (r.type !== "XOM" && deep(r, 0)) { bad.push(s.title ?? ""); break; }
-    }
-  }
-  return bad;
-}
 
 // ── Max flow ───────────────────────────────────────────────────────
 //
@@ -315,3 +262,6 @@ export function specAdmitsRange(spec, { subject, start, end }) {
 }
 
 export { specIsEmpty, courseEligible };
+
+/** Re-exported so the scrape gate reads from one place. */
+export const assertShallowPools = deepPools;
