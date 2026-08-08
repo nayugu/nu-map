@@ -1322,6 +1322,14 @@ export function PlannerProvider({ children }) {
       if (e.key === "Delete" || e.key === "Backspace") {
         const selId = selectedIdRef.current;
         const pl    = stateRef.current.placements;
+        // A reservation deletes with the same key as a course, because to the
+        // student it is the same act — it just lives in a different map.
+        if (selId && isReservationId(selId)) {
+          pushUndo();
+          setReservations(prev => removeReservation(prev, selId));
+          setSelectedId(null);
+          return;
+        }
         if (selId && pl[selId]) {
           pushUndo();
           const fromSem = pl[selId];
@@ -1780,6 +1788,17 @@ export function PlannerProvider({ children }) {
     if (!dragInfo) return;
     pushUndo();
     const { id, type } = dragInfo;
+
+    // A reservation dropped anywhere in a term is a move, and it moves in
+    // `reservations`. Falling through to the course path below would write a
+    // reservation id into `placements` — the pollution the whole split exists
+    // to prevent, and what made cards vanish or behave oddly after a drag.
+    if (isReservationId(id)) {
+      setReservations(prev => moveReservation(prev, id, semId));
+      setDragInfo(null);
+      return;
+    }
+
     // If the course was placed out, remove it from placedOut
     if (placedOut.has(id)) {
       setPlacedOut(prev => {
@@ -1858,6 +1877,16 @@ export function PlannerProvider({ children }) {
     if (!dragInfo) return;
     pushUndo();
     const { id, type, fromSem } = dragInfo;
+
+    // Dragging a reservation to the bank removes it from the plan. There is no
+    // bank entry to return it to — it was never a course — so this is a delete,
+    // which is what the gesture means for a card with nothing behind it.
+    if (isReservationId(id)) {
+      setReservations(prev => removeReservation(prev, id));
+      setDragInfo(null);
+      return;
+    }
+
     // If the course was placed out, remove it from placedOut
     if (placedOut.has(id)) {
       setPlacedOut(prev => {
@@ -1894,6 +1923,9 @@ export function PlannerProvider({ children }) {
   };
 
   const onDropPlacedOut = (dragInfo) => {
+    // Placing out means "I already have credit for this course". There is no
+    // course yet, so the gesture has no meaning — ignored rather than half-done.
+    if (isReservationId(dragInfo?.id)) { setDragInfo(null); return; }
     console.log('onDropPlacedOut called with:', dragInfo);
     try {
       if (!dragInfo || dragInfo.type !== "course") return;
@@ -1942,6 +1974,9 @@ export function PlannerProvider({ children }) {
   };
 
   const onDropPalette = (e) => {
+    // The palette holds courses to place later. A reservation is already in the
+    // plan and names no course, so there is nothing to park.
+    if (isReservationId(dragInfo?.id)) { setDragInfo(null); return; }
     e?.preventDefault?.();
     if (!dragInfo || dragInfo.type !== "course") return;
     const { id, fromSem } = dragInfo;
