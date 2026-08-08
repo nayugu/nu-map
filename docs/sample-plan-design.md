@@ -1161,8 +1161,10 @@ live formulation was the one worth having.
 | **X3** | does §15.2 elimination feed back into the §4 flow solve, or stay a display-time narrowing? | feed back — it removes candidate courses, which can change which requirements remain possible |
 | **X4** | do §15 checks extend to unnamed reservations via their candidate set? | not yet — a 100-course candidate set makes the OR trivially true and the elimination never fire |
 | **X5** | ~~resolve `#n` repeat keys before testing for a seat~~ | **WITHDRAWN — §18.1.** The first take uses the plain id, so `placements[dragId]` already asks the right question; `baseId` would answer a different one and reintroduce the swap-against-`undefined` bug |
-| **X10** | bank drag of a placed repeatable adds a take onto a semester but MOVES onto a card (§18.8) | report, do not change silently — long-standing and unrelated to this feature |
-| **X11** | close the 75.3% unbounded gap (§18.7) by looking ambiguous targets up from `plan.json` via `origin`, rather than storing them | yes — no change to what a reservation stores, so no I/O surface moves |
+| **X10** | ~~bank drag of a placed repeatable adds a take onto a semester but MOVES onto a card~~ | **DONE (§18.9)** — `resolveDropId`, one function called by both drops |
+| **X11** | ~~close the 75.3% unbounded gap~~ | **DONE (§18.9)**, but not via `origin` — the binding is recomputed live instead, which stores nothing and cannot go stale |
+| **X12** | the runtime solve needs `previous` threaded through the UI to stay monotone (§18.9) | required, not optional — without it a card can gain a candidate |
+| **X13** | who owns the `previous` baseline across a reload? | reset on reload; re-deriving against today's data beats inheriting a stale narrowing |
 | **X6** | prereq lines to a reservation — union over options, or only shared prereqs? (§15.4) | union — a line already means "feeds", not "requires", and the both-ends-placed filter keeps it quiet |
 | **X7** | prereq badge on a reservation — when? | only when **every** option is blocked; one open option means no warning |
 | **X8** | is a blocked option removed from the picker, or greyed with a reason? | greyed — removal claims the plan will not change |
@@ -1403,6 +1405,81 @@ Dragging an already-placed **repeatable** course from the bank:
 `onDropOnCard` never calls `resolveAddId`. Reported rather than fixed — it is
 long-standing, unrelated to this feature, and changing it silently would alter
 behaviour nobody asked about. Decision **X10**.
+
+---
+
+## 18.9 X10 and X11, and two more claims that were wrong
+
+**X10 — one gesture, two answers.** Dropping a repeatable course from the bank
+onto a *semester* resolved a fresh instance and added a take; onto a *card* it
+skipped that resolution and moved the existing take. `resolveDropId` is now one
+function called by both. The rule has no reason to differ by what is under the
+cursor.
+
+**X11 — candidates are recomputed, not carried.** Both options were measured
+first:
+
+| | |
+|---|---|
+| carry the answer | **+54%** on the reservations payload, and frozen at apply time |
+| recompute it | 0 bytes, cannot go stale, **6 ms** per plan |
+
+Result across all 678 shipped plan variants:
+
+| | before | after |
+|---|---|---|
+| forced to one requirement | 12.1% | **57.2%** |
+| cards with a preferred set | — | **58.6%**, median **15** courses |
+| impossible | 0 | 0 |
+
+The solver moved to `src/core/requirementBinding.js` and the wording hints to
+`src/adapters/northeastern/planHints.js`; the old `scripts/lib` paths remain as
+re-exports, and the scrape produces byte-identical output.
+
+### §11's monotonicity does not hold on its own
+
+A live solve **is not monotone**, and §11 assumed it was.
+
+Elimination is relative to competition: a cell is excluded from a requirement
+only because its rivals must go there. Satisfy those rivals by hand and the
+requirement has room again, so the cell **gains** a candidate. Observed on a
+real program, not reasoned about — a card acquired a target as the plan filled.
+
+More information making a card *more* ambiguous is exactly the churn §3 warned
+about, so monotonicity is now **imposed** rather than hoped for: the previous
+answer is fed back in and each solve refines it. The baseline resets on reload,
+which is correct — a fresh session should re-derive against today's data rather
+than inherit a stale narrowing.
+
+### §12.0's "structurally impossible" was wrong
+
+§12.0 said putting both populations in one solve makes over-subscription
+impossible. It does not, and cannot.
+
+**"Forced" means *no other requirement is possible for this cell*** — a per-cell
+test. Two cells can each have exactly one possible home and still not both fit,
+because the plan demands more of that requirement than it holds. One solve
+improves the count from **44 sections to 34**; the remainder is a fact about the
+catalog, and §6 already lists binding over-subscription as a verification gate.
+The invariant now pins 34 as a ceiling rather than asserting zero.
+
+### Unbounded barely moved, and that is correct
+
+75.3% → 65.6%, because most ambiguous cards carry `~general` among their
+candidates and one sentinel makes the whole card unbounded. Any course really
+does count.
+
+`preferredCourseIds` recovers what that discards: the union of the *non-sentinel*
+candidates, as a ranking hint with `courseIds` still the authority on what is
+allowed. A pure "General Elective" card expresses no preference, because
+inventing one would be the false confidence rule 4 forbids.
+
+### A fourth copy of one rule
+
+Option-group cleaning existed in `candidates.js`, `reservationEdges.js`,
+`reservationPrereqs.js` and — missing its guard — `runtimeBinding.js`, where
+`options: [null]` threw. `cleanOptionGroups` in `reservations.js` now answers it
+once. Found by a test, not by reading.
 
 ---
 
