@@ -18,6 +18,65 @@ import { moveReservation, removeReservation, isReservationId } from "./reservati
 import { getOrderedCourses } from "./planModel.js";
 
 /**
+ * A card with no seat, dropped onto a card that has one.
+ *
+ * A swap needs both ends to have somewhere to go. A course dragged in from the
+ * bank, the requirements panel or the info panel has no seat to give back, and
+ * a reservation has no home outside the grid — dropping one on the bank deletes
+ * it. So the symmetric gesture is undefined at that end, and the only total
+ * reading is: the arriving card takes the target's place.
+ *
+ * When the target is a reservation that is also the answer to it, so the
+ * reservation is removed in the same commit. That is the whole "fill" gesture;
+ * it needs no separate entry point, because filling and landing-on-a-course are
+ * the same motion differing only in what the target leaves behind.
+ *
+ * Before this existed, `dropOnCard` returned `null` for the whole family
+ * (`exists()` is false for an unplaced course), so dragging from the bank onto
+ * a reservation silently did nothing — and the course-onto-course case in
+ * `PlannerContext` wrote `placements[targetId] = undefined`, un-placing the card
+ * that was dropped on.
+ */
+function addOnto(state, { dragId, targetId }, { gridPlacements, gridCourseMap, coreqPartners }) {
+  const semId = semOf(state, targetId);
+  if (!semId) return null;
+
+  // Reservations have no coreqs of their own, and a partner that IS a
+  // reservation would be moved by a rule meant for courses.
+  const partners = coreqPartners.filter(c => c !== dragId && !isReservationId(c));
+  const moving = [dragId, ...partners];
+
+  // Terms a partner is leaving, so their orders can be tidied. The dragged card
+  // has no seat by definition, so it vacates nothing.
+  const vacated = new Set(
+    partners.map(c => state.placements[c]).filter(s => s && s !== semId));
+
+  let next = state;
+  for (const id of moving) next = place(next, id, semId);
+  if (isReservationId(targetId)) {
+    next = { ...next, reservations: removeReservation(next.reservations, targetId) };
+  }
+
+  // Position: the arriving card takes the target's slot. Landing at the end
+  // would make this a different gesture — dropping on a card is positional,
+  // which is exactly what distinguishes it from dropping on a term.
+  const order = getOrderedCourses(semId, gridPlacements, state.semOrders, gridCourseMap);
+  const base = order.filter(id => !moving.includes(id));
+  let at = base.indexOf(targetId);
+  if (at < 0) at = base.length;
+  // An answered reservation is gone; a course stays and is pushed down.
+  else if (isReservationId(targetId)) base.splice(at, 1);
+  base.splice(at, 0, ...moving);
+
+  const semOrders = { ...state.semOrders, [semId]: base };
+  for (const sid of vacated) {
+    semOrders[sid] = getOrderedCourses(sid, gridPlacements, state.semOrders, gridCourseMap)
+      .filter(id => !moving.includes(id));
+  }
+  return { ...next, semOrders };
+}
+
+/**
  * Drop a card onto another card.
  *
  * @param {object} state    { placements, reservations, semOrders }
@@ -72,9 +131,22 @@ const exists = (state, id) =>
 export function dropOnCard(state, { dragId, targetId, targetSemId }, ctx = {}) {
   const { semOrders } = state;
   if (!dragId || dragId === targetId) return null;
-  if (!exists(state, dragId)) return null;
 
   const { gridPlacements = state.placements, gridCourseMap = {}, coreqPartners = [] } = ctx;
+
+  // ── A card with no seat: it takes the target's place ────────────
+  // Cannot be a swap — there is nothing to hand back. See addOnto.
+  if (!exists(state, dragId)) {
+    // A RESERVATION with no record is not a card arriving from outside; it is a
+    // stale drag of one that has already been answered or deleted. Reservations
+    // only ever live in the grid, so "no seat" cannot mean "from the bank" for
+    // one — and treating it as an arrival inserted a ghost id into the term
+    // order, which is what the existing suite caught.
+    if (isReservationId(dragId)) return null;
+    if (!targetId || !exists(state, targetId)) return null;
+    return addOnto(state, { dragId, targetId },
+                   { gridPlacements, gridCourseMap, coreqPartners });
+  }
 
   // ALWAYS through getOrderedCourses, never a stored array directly. A stored
   // order is written by any drop and can predate the cards now in the term, so

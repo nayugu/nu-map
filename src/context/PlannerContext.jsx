@@ -2066,7 +2066,16 @@ export function PlannerProvider({ children }) {
     // The course path below still owns what only it does — placing out,
     // special-term validation, cross-term coreq carrying.
     const sameSemReorder = !isReservationId(dragId) && placements[dragId] === targetSemId;
-    if (isReservationId(dragId) || isReservationId(targetId) || sameSemReorder) {
+    // A card dragged in from OUTSIDE the grid — the bank, the requirements
+    // panel, the info panel — has no seat, so it cannot swap; it can only take
+    // the target's place. Routed to the shared resolver with the rest.
+    //
+    // The legacy path below assumes the dragged card has a seat and writes
+    // `placements[targetId] = placements[dragId]`, which for one of these drags
+    // is `undefined` — un-placing the card that was dropped on. The reservation
+    // half of the same family was a silent no-op. One rule now covers both.
+    const noSeat = !isReservationId(dragId) && placements[dragId] == null;
+    if (isReservationId(dragId) || isReservationId(targetId) || sameSemReorder || noSeat) {
       const coreqPartners = [...new Set(
         allEdges
           .filter(e2 => e2.type === "corequisite" && (e2.from === dragId || e2.to === dragId))
