@@ -669,19 +669,16 @@ const ROW_H   = 18; // px height of a gauge row (year labelled in the header abo
 // day(s) clearly dominate and secondary days recede rather than all lighting up like a daily
 // course. The real percentage stays in the tooltip. Day letters are localised.
 //
-// INK, NEVER HUE. The availability gauges sit directly above this strip and teach a
-// traffic-light scale (coral = competitive, mint = room), so painting these boxes in the
-// course's SUBJECT colour meant a red or green subject read as "full on Fridays" —
-// two unrelated meanings in one palette, a few pixels apart. The override control next
-// to the gauges already refuses that palette for exactly this reason. Frequency is a
-// quantity, not a status, so it is carried by the opacity of the primary ink alone.
-const DAY_INK_MAX = 0.85;   // opacity of the busiest day; gentler than a solid fill
-// Past this fill the box is dark enough that ink-on-ink loses contrast, so the letter
-// knocks out to the panel surface instead. Both themes cross over near the same point:
-// the fill is --text-2 (dark on light, light on dark) over --bg-surface either way.
-const DAY_KNOCKOUT = 0.6;
-const dayInk = frac => 0.10 + (DAY_INK_MAX - 0.10) * Math.pow(frac, 2.2);
-const dayLetter = op => (op >= DAY_KNOCKOUT ? "var(--bg-surface)" : "var(--text-1)");
+// THE LETTER CARRIES IT — no fill, no hue. The availability gauges sit directly above
+// this strip and teach a traffic-light scale (coral = competitive, mint = room), so
+// painting these boxes in the course's SUBJECT colour meant a red or green subject read
+// as "full on Fridays" — two unrelated meanings in one palette, a few pixels apart. The
+// override control beside the gauges already refuses that palette. Filling the boxes
+// with neutral ink instead fixed the meaning but kept the weight of a chart for what is
+// really one line of text, so the day itself now shows the frequency: a busy day is
+// black and heavy, a rare one light grey and thin, an unused one barely there.
+const dayInk    = frac => 0.3 + 0.7 * Math.pow(frac, 1.5);          // darkness, steep so peaks lead
+const dayWeight = frac => (frac >= 0.75 ? 800 : frac >= 0.4 ? 700 : 500);
 
 function WeekdayStrip({ dow }) {
   const { t } = useLanguage();
@@ -693,24 +690,17 @@ function WeekdayStrip({ dow }) {
         const pct  = dow?.[i] ?? 0;                      // real value, shown in tooltip
         const on   = pct > 0;
         const frac = pct / peak;                         // 0..1 relative to the busiest day
-        const op   = on ? dayInk(frac) : 0;              // steep: peaks dominate, rest recede
         return (
           <span key={i} title={`${label}: ${pct}%`}
             style={{
-              position: "relative", overflow: "hidden",
-              minWidth: 19, height: 19, borderRadius: 4, padding: "0 3px",
+              minWidth: 19, height: 19, padding: "0 3px",
               display: "flex", alignItems: "center", justifyContent: "center",
-              border: `1px solid ${on ? "transparent" : "var(--border-1)"}`,
+              fontSize: 11,
+              fontWeight: on ? dayWeight(frac) : 400,
+              color: on ? "var(--text-1)" : "var(--text-5)",
+              opacity: on ? dayInk(frac) : 0.4,
             }}>
-            {on && <span style={{ position: "absolute", inset: 0, background: "var(--text-2)", opacity: op }} />}
-            <span style={{
-              position: "relative",
-              fontSize: 10, fontWeight: frac >= 0.6 ? 800 : 600,
-              color: on ? dayLetter(op) : "var(--text-5)",
-              opacity: on ? 1 : 0.5,
-            }}>
-              {label}
-            </span>
+            {label}
           </span>
         );
       })}
@@ -1267,19 +1257,18 @@ function PatternStrip({ pattern, days, labels }) {
   return (
     <span style={{ display: "flex", gap: 3, flexShrink: 0 }}>
       {days.map((d, i) => {
+        // A pattern day is binary — on or off — so it reads at the strip's
+        // busiest-day weight, or recedes entirely. Same letters-only language.
         const on = pattern.includes(d);
         return (
           <span key={i} style={{
-            position: "relative", overflow: "hidden",
-            minWidth: 18, height: 18, borderRadius: 4,
+            minWidth: 18, height: 18,
             display: "flex", alignItems: "center", justifyContent: "center",
-            border: `1px solid ${on ? "transparent" : "var(--border-1)"}`,
-          }}>
-            {/* A pattern day is binary — on or off — so it is drawn at the strip's
-                busiest-day weight, in the same ink and with the same knockout rule. */}
-            {on && <span style={{ position: "absolute", inset: 0, background: "var(--text-2)", opacity: DAY_INK_MAX }} />}
-            <span style={{ position: "relative", fontSize: 9.5, fontWeight: on ? 800 : 500, color: on ? dayLetter(DAY_INK_MAX) : "var(--text-5)" }}>{labels[i]}</span>
-          </span>
+            fontSize: 10.5,
+            fontWeight: on ? 800 : 400,
+            color: on ? "var(--text-1)" : "var(--text-5)",
+            opacity: on ? 1 : 0.4,
+          }}>{labels[i]}</span>
         );
       })}
     </span>
@@ -1356,7 +1345,7 @@ function SchedulePopover({ pat, rect }) {
                       </bdi>}
               </span>
               <div style={{ flex: 1, height: 9, borderRadius: 5, background: "var(--bg-surface-2)", overflow: "hidden" }}>
-                <div style={{ width: `${Math.max(2, pct)}%`, height: "100%", borderRadius: 5, background: isOther ? "var(--text-5)" : "var(--text-2)", opacity: isOther ? 0.55 : DAY_INK_MAX }} />
+                <div style={{ width: `${Math.max(2, pct)}%`, height: "100%", borderRadius: 5, background: isOther ? "var(--text-5)" : "var(--text-2)", opacity: isOther ? 0.55 : 0.85 }} />
               </div>
               <span style={{ minWidth: 30, textAlign: "right", fontSize: 11, color: "var(--text-3)", fontVariantNumeric: "tabular-nums" }}>{pct}%</span>
             </div>
