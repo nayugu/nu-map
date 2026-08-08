@@ -4,8 +4,16 @@ Loading a department's published Sample Plan of Study into a student's planner,
 and making the ~51% of it that names no course into something they can act on.
 
 **Status: §§1–4 implemented on `feat/sample-plan-redesign`; §§9–14 are design
-only.** One shipped decision deliberately diverges from §2 — see §9.1. This
-supersedes two earlier attempts
+only.** One shipped decision deliberately diverges from §2 — see §9.1.
+
+**Branch state (2026-08-08):** everything here is merged to `main`.
+`feat/elective-slots` was deleted — it had **no commits** of its own, being
+strictly contained in the branch below. `feat/plan-slot-binding` is archived as
+**`origin/archive/plan-slot-binding`**, kept because it holds the only
+implementation of NUpath-on-placeholders (`43da88e84a`), which §16's X14 cites
+and nothing here replaces.
+
+This supersedes two earlier attempts
 (`feat/elective-slots`, `feat/plan-slot-binding`), which are kept as reference
 branches and are not merged. Everything asserted below is measured against the
 shipped corpus; the numbers are in [Evidence](#evidence), and every design
@@ -1163,7 +1171,7 @@ live formulation was the one worth having.
 | **X5** | ~~resolve `#n` repeat keys before testing for a seat~~ | **WITHDRAWN — §18.1.** The first take uses the plain id, so `placements[dragId]` already asks the right question; `baseId` would answer a different one and reintroduce the swap-against-`undefined` bug |
 | **X10** | ~~bank drag of a placed repeatable adds a take onto a semester but MOVES onto a card~~ | **DONE (§18.9)** — `resolveDropId`, one function called by both drops |
 | **X11** | ~~close the 75.3% unbounded gap~~ | **DONE (§18.9)**, but not via `origin` — the binding is recomputed live instead, which stores nothing and cannot go stale |
-| **X14** | **NOT BUILT.** §5 says attributes are a separate axis, and nothing implements it: `occupantCards` sets `nuPath: []` and no code ever fills it. ~212 cells name NUpath explicitly and ~150 name specific codes — *"General elective (NUpath DD)"*, *"Science elective (SI)"*. The superseded `feat/plan-slot-binding` built this (`43da88e84a`, with a `courseAttributes.js`), so the approach exists but is written against the slot model and does not transplant | reimplement against reservations when the picker needs it — an attribute layers **on top of** whatever the card binds to, including `~general`, so it is a filter on candidates rather than a target |
+| **X14** | **NOT BUILT.** §5 says attributes are a separate axis, and nothing implements it: `occupantCards` sets `nuPath: []` and no code ever fills it. ~212 cells name NUpath explicitly and ~150 name specific codes — *"General elective (NUpath DD)"*, *"Science elective (SI)"*. The superseded `feat/plan-slot-binding` built this (`43da88e84a`, with a `courseAttributes.js`), so the approach exists but is written against the slot model and does not transplant. Preserved as `origin/archive/plan-slot-binding` | reimplement against reservations when the picker needs it — an attribute layers **on top of** whatever the card binds to, including `~general`, so it is a filter on candidates rather than a target |
 | **X12** | the runtime solve needs `previous` threaded through the UI to stay monotone (§18.9) | required, not optional — without it a card can gain a candidate |
 | **X13** | who owns the `previous` baseline across a reload? | reset on reload; re-deriving against today's data beats inheriting a stale narrowing |
 | **X6** | prereq lines to a reservation — union over options, or only shared prereqs? (§15.4) | union — a line already means "feeds", not "requires", and the both-ends-placed filter keeps it quiet |
