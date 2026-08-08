@@ -1057,6 +1057,61 @@ Worth building either way: the graph and the placements are both already loaded,
 so the marginal cost is a lookup, and when it fires it is a *proof* rather than
 a preference.
 
+### 15.4 Lines and warnings are different mechanisms, and already are
+
+The awkward case: `CS 4300 or 4100` share `CS3100 or CS3500`, but CS 4300 also
+accepts `EECE 2560` and CS 4100 does not. Placing EECE 2560 opens one option and
+not the other. Collapsing that into a single boolean is what makes it awkward —
+and the planner already refuses to collapse it for ordinary courses.
+
+**What the planner does today.** `extractEdges` discards the boolean structure
+completely: every course named anywhere in a prereq expression becomes an edge,
+And/Or ignored. A line is then drawn only when **both endpoints are placed**
+(`PlannerContext.jsx:869`). So a line already means *"you took this, and it
+feeds that"* — never *"this is required"*. Satisfaction is computed separately,
+by `evalPrereqTree`, and shown as a badge.
+
+Two mechanisms, already decoupled. Reservations need no third one:
+
+| | rule for a course | rule for a reservation |
+|---|---|---|
+| **line** | every mentioned course, drawn when both ends are placed | **union over options** — draw if the course feeds *any* option |
+| **badge** | `evalPrereqTree` on the expression | **OR over options** — a violation only when *every* option is blocked |
+
+The union is not noisy, because "both endpoints placed" is already the filter:
+you only ever see arrows from courses you actually took.
+
+**Worked through, with `CS 4300 or 4100` in some term:**
+
+| placed before it | CS 4300 | CS 4100 | line drawn | badge |
+|---|---|---|---|---|
+| CS 3100 | open | open | `CS3100 → card` | none |
+| nothing | blocked | blocked | none | **"nothing here is takeable yet"** |
+| EECE 2560 + CS 2810 | open | blocked | `EECE2560 → card`, `CS2810 → card` | none — the card is still answerable |
+| CS 2510 only | blocked | blocked | `CS2510 → card` | violation |
+
+Row 3 is the case that felt awkward, and it resolves without a special rule: the
+line is honest (EECE 2560 really does feed this card), and the badge stays quiet
+because the card *can* still be answered. Row 4 shows lines and badges
+disagreeing on purpose — exactly as they already do for a plain course whose
+second clause is unmet.
+
+**The awkwardness only exists if the options are collapsed, so do not collapse
+them.** The picker shows per-option status:
+
+```
+CS 4300   open        EECE 2560 ✓   CS 2810 ✓
+CS 4100   blocked     needs CS 3100, CS 3500 or DS 3500
+```
+
+That is strictly more useful than any single verdict, and it is the same surface
+§15.2's elimination renders into — a blocked option and an eliminated option
+differ only in the reason printed beside them.
+
+**A blocked option is never removed.** Removal is a claim about the future, and
+the student may still reorder their plan. Grey it, print the reason, leave it
+choosable.
+
 ### 15.3 Why this ordering matters
 
 §13 stands and §15 is not a reversal of it. The distinction worth keeping:
@@ -1106,6 +1161,10 @@ live formulation was the one worth having.
 | **X3** | does §15.2 elimination feed back into the §4 flow solve, or stay a display-time narrowing? | feed back — it removes candidate courses, which can change which requirements remain possible |
 | **X4** | do §15 checks extend to unnamed reservations via their candidate set? | not yet — a 100-course candidate set makes the OR trivially true and the elimination never fire |
 | **X5** | repeat instances: `placements` keys can carry `#n`, so a bare course id may read as unplaced and take the fill path instead of the swap path (§10.1) | resolve the key the way `applySamplePlan` does (`split("#")[0]`) before testing |
+| **X6** | prereq lines to a reservation — union over options, or only shared prereqs? (§15.4) | union — a line already means "feeds", not "requires", and the both-ends-placed filter keeps it quiet |
+| **X7** | prereq badge on a reservation — when? | only when **every** option is blocked; one open option means no warning |
+| **X8** | is a blocked option removed from the picker, or greyed with a reason? | greyed — removal claims the plan will not change |
+| **X9** | do §15.4 lines also cover coreqs of options? | yes, same union; consistent with G4 carrying coreq partners on fill |
 
 ---
 
