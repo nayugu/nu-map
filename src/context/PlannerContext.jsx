@@ -20,7 +20,6 @@ import { baseId, isInstanceId, takesUsed, resolveAddId, retakeUnlocked, buildTak
 import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
          effectiveGradeOfTakes } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
-import { mapSamplePlan, summarizeSamplePlan } from "../core/samplePlan.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
@@ -1931,80 +1930,6 @@ export function PlannerProvider({ children }) {
     setPalette(prev => prev.filter(cid => cid !== id));
   };
 
-  /**
-   * Lay out the department's published sample plan of study.
-   *
-   * Strictly additive (src/core/samplePlan.js): a course already placed stays
-   * where it is, an existing co-op is never replaced, and applying the same
-   * plan twice is a no-op. It goes through pushUndo like any other edit, so a
-   * student who does not like the result gets it back with one undo rather
-   * than having to reason about what changed.
-   *
-   * `preview` runs the same mapping without committing, which is what the
-   * confirmation is built from — the summary shown must be the summary of the
-   * change that will actually happen, not a second estimate of it.
-   */
-  const previewSamplePlan = (plan, startYearIndex = 0) => {
-    const coopType = specialTerms.types?.find(t => t.id === "coop") ?? specialTerms.types?.[0];
-    return mapSamplePlan(plan, {
-      semesters: SEMESTERS,
-      courseMap,
-      placements,
-      specialTermPl,
-      startYearIndex,
-      coopTypeId: coopType?.id ?? "coop",
-      coopDurations: (coopType?.durations ?? []).map(d => d.duration),
-    });
-  };
-
-  const applySamplePlan = (plan, startYearIndex = 0) => {
-    const result = previewSamplePlan(plan, startYearIndex);
-    if (!result.placed.length && !result.coops.length) return result;
-    pushUndo();
-    setPlacements(result.placements);
-    setSpecialTermPl(result.specialTermPl);
-    return result;
-  };
-
-  /**
-   * Lay the sample plan out in a NEW plan instead of this one.
-   *
-   * The default once a student has work of their own, and the better answer to
-   * "what does the department actually suggest?" — nothing of theirs is at
-   * risk, and the two sit side by side in the library to compare. Trying a
-   * what-if here is already just making another plan.
-   *
-   * Mapped against an EMPTY plan rather than the current one: in a fresh plan
-   * nothing is "already placed", so a course the student happens to have in
-   * the plan they are looking at must still be laid out here.
-   *
-   * The programs come along too. A sample plan in a plan with no major would
-   * be a pile of courses with nothing to check them against.
-   */
-  const openSamplePlanAsNewPlan = (plan, planName, startYearIndex = 0) => {
-    const coopType = specialTerms.types?.find(t => t.id === "coop") ?? specialTerms.types?.[0];
-    const result = mapSamplePlan(plan, {
-      semesters: SEMESTERS,
-      courseMap,
-      placements: {},
-      specialTermPl: {},
-      startYearIndex,
-      coopTypeId: coopType?.id ?? "coop",
-      coopDurations: (coopType?.durations ?? []).map(d => d.duration),
-    });
-    createPlan(
-      planName,
-      { entSem: planEntSem, entYear: planEntYear, gradSem: planGradSem, gradYear: planGradYear, studentType },
-      null,
-      {
-        placements: result.placements,
-        specialTermPl: result.specialTermPl,
-        major, major2, conc, conc2, minor1, minor2,
-      },
-    );
-    return result;
-  };
-
   const onDropOnCard = (e, targetId, targetSemId) => {
     e.preventDefault(); e.stopPropagation();
     setHoveredCardId(null); setHoveredSem(null); setHoveredZone(null);
@@ -3687,7 +3612,6 @@ export function PlannerProvider({ children }) {
     onDragStart, onDragOver, onDragLeave, onDrop, onDropBank, onDropOnCard, onDropPlacedOut,
     canDropSem,
     doUndo, doRedo, pushUndo,
-    previewSamplePlan, applySamplePlan, openSamplePlanAsNewPlan, summarizeSamplePlan,
   };
 
   return <PlannerContext.Provider value={value}>{children}</PlannerContext.Provider>;

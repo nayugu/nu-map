@@ -21,7 +21,6 @@ import { computeGrantedAttrs } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { cohortCatalogYear } from "../data/programPaths.js";
 import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
-import { formatPlanLabel } from "../core/samplePlan.js";
 import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, countsInGPA, dropVoidTakes, dropUnearnedTakes, COOP_GPA } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
 import { REL_STYLE } from "../core/constants.js";
@@ -1228,134 +1227,6 @@ function ExpandToggleBar({ expanded, onToggle }) {
   );
 }
 
-// ── SamplePlanRow: the department's own plan of study, offered ────
-//
-// Advisors asked for this directly: opening a major should be able to lay out
-// the plan the department publishes. It sits inside the major card rather than
-// beside the program picker because it belongs to the program you have chosen,
-// not to the act of choosing one.
-//
-// Three things it is careful about:
-//
-//   · it does not fetch until the card is open. 385 programs ship a plan and
-//     the file is 3-18 KB, which is not worth downloading for someone who only
-//     wanted to see their requirements
-//   · a program can publish SIX plans that differ by co-op timing, so the
-//     selector is not a nicety — picking one for the student would be choosing
-//     the single variable the planner exists to get right
-//   · what it reports afterwards is the summary of the change that actually
-//     happened, not a second estimate of it, because both come from one call
-//     to the same mapping
-function SamplePlanRow({ path, isGrad, isPhone, programName }) {
-  const { t } = useLanguage();
-  const majorRequirements = usePort(IMajorRequirements);
-  const {
-    applySamplePlan, openSamplePlanAsNewPlan, summarizeSamplePlan,
-    placements, specialTermPl,
-  } = usePlanner();
-
-  const [plans,  setPlans]  = useState(null);
-  const [pick,   setPick]   = useState(0);
-  const [result, setResult] = useState(null);
-
-  // An empty plan has nothing to protect: laying out in place is unambiguous,
-  // fully reversible, and a new plan would just be duplication the student has
-  // to tidy up. The moment work exists, that flips — see below.
-  const planIsEmpty =
-    Object.keys(placements ?? {}).length === 0 &&
-    Object.keys(specialTermPl ?? {}).length === 0;
-
-  useEffect(() => {
-    let live = true;
-    setPlans(null); setPick(0); setResult(null);
-    if (!path || !majorRequirements.hasSamplePlan?.(path, isGrad)) return;
-    majorRequirements.loadSamplePlans(path, isGrad)
-      .then(grid => { if (live) setPlans(grid?.plans ?? null); })
-      .catch(() => { if (live) setPlans(null); });
-    return () => { live = false; };
-  }, [path, isGrad]);
-
-  if (!plans?.length) return null;
-
-  const chosen = plans[pick];
-  // "Spring cycle" / "Fall cycle" is Northeastern's own term and what students
-  // actually say, so the choice reads as the one they know they are making.
-  // The catalog writes the same two ideas 166 different ways, and 77 plans
-  // never name the timing at all — formatPlanLabel reads it off the grid.
-  const shown = (p) => formatPlanLabel(p, (c) => t(`grad.plan.cycle.${c}`));
-  const onHere = () => setResult({ ...summarizeSamplePlan(applySamplePlan(chosen)), where: "here" });
-  const onNew  = () => {
-    const name = programName ? `${programName} \u00b7 ${shown(chosen)}` : shown(chosen);
-    setResult({ ...summarizeSamplePlan(openSamplePlanAsNewPlan(chosen, name)), where: "new" });
-  };
-
-  const label = { fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" };
-  const btn = (primary) => ({
-    fontSize: isPhone ? 10 : 11, fontWeight: 600, padding: "4px 10px",
-    borderRadius: 6, cursor: "pointer", whiteSpace: "nowrap",
-    border: `1px solid ${primary ? "var(--accent, #64748b)" : "var(--border-1)"}`,
-    background: primary ? "var(--accent, #64748b)" : "var(--bg-2)",
-    color: primary ? "#fff" : "var(--text-2)",
-  });
-
-  return (
-    <div style={{ marginTop: 12, paddingTop: 10, borderTop: "1px solid var(--border-1)" }}>
-      <div style={{ ...label, marginBottom: 6 }}>{t("grad.plan.label")}</div>
-      <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
-        {plans.length > 1 && (
-          <select
-            value={pick}
-            onChange={e => { setPick(Number(e.target.value)); setResult(null); }}
-            style={{
-              flex: 1, minWidth: 0, fontSize: isPhone ? 10 : 11, padding: "4px 6px",
-              borderRadius: 6, border: "1px solid var(--border-1)",
-              background: "var(--bg-2)", color: "var(--text-1)",
-            }}
-          >
-            {plans.map((p, i) => <option key={i} value={i}>{shown(p)}</option>)}
-          </select>
-        )}
-        {plans.length === 1 && (
-          <span style={{ flex: 1, minWidth: 0, fontSize: isPhone ? 10 : 11, color: "var(--text-2)" }}>
-            {shown(plans[0])}
-          </span>
-        )}
-        {/* Which action leads depends on what is at stake. With an empty plan
-            there is one obvious thing to do. Once the student has work of
-            their own, the department's plan goes somewhere else by default —
-            nothing of theirs is at risk, and the two sit side by side to
-            compare, which is the actual question being asked. Adding to this
-            plan stays one click away and is additive either way. */}
-        {planIsEmpty ? (
-          <button onClick={onHere} style={btn(true)}>{t("grad.plan.load")}</button>
-        ) : (
-          <>
-            <button onClick={onNew}  style={btn(true)}>{t("grad.plan.newplan")}</button>
-            <button onClick={onHere} style={btn(false)}>{t("grad.plan.addhere")}</button>
-          </>
-        )}
-      </div>
-
-      {result && (
-        <div style={{ marginTop: 6, fontSize: isPhone ? 9 : 10, lineHeight: 1.5, color: "var(--text-3)" }}>
-          {/* Placed first, then what was deliberately left undone — a plan that
-              reported only its successes would look like it had finished. */}
-          <div>
-            {result.where === "new"
-              ? t("grad.plan.placed.new", { n: result.placed, c: result.coops })
-              : t("grad.plan.placed", { n: result.placed, c: result.coops })}
-          </div>
-          {(result.choices > 0 || result.placeholders > 0) && (
-            <div>{t("grad.plan.left", { choices: result.choices, slots: result.placeholders })}</div>
-          )}
-          {result.where === "here" && result.alreadyPlaced > 0 &&
-            <div>{t("grad.plan.kept", { n: result.alreadyPlaced })}</div>}
-          {result.outsideRange > 0 && <div>{t("grad.plan.overflow", { n: result.outsideRange })}</div>}
-        </div>
-      )}
-    </div>
-  );
-}
 
 // ── MajorCard: framed collapsible card for a major's requirements ─
 // Frame is a subtle background tint (no border line) matching MinorBlock.
@@ -2028,7 +1899,6 @@ export default function GradPanel({ wideCatalog = false }) {
             </>
           )}
           <GpaRules program={major} />
-          <SamplePlanRow path={selPath} isGrad={isGrad} isPhone={isPhone} programName={major?.name} />
         </MajorCard>}
 
         {/* ── Major 2 framed card ──────────────────────────────── */}
