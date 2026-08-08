@@ -103,14 +103,17 @@ const URL_ARG = (() => { const i = process.argv.indexOf('--url'); return i >= 0 
  * reads is a request nobody meant to make.
  */
 (() => {
-  const known = new Set(['--write', '--dry-run', '--url']);
+  // Flags that take a value are listed separately so their argument is not
+  // itself mistaken for an unrecognised one.
+  const flags = new Set(['--write', '--dry-run']);
+  const valued = new Set(['--url', '--edition']);
   const argv = process.argv.slice(2);
-  const unknown = argv.filter((a, i) => a.startsWith('-')
-    ? !known.has(a)
-    : argv[i - 1] !== '--url');
+  const unknown = argv.filter((a, i) => a.startsWith('--')
+    ? !flags.has(a) && !valued.has(a)
+    : !valued.has(argv[i - 1]));
   if (unknown.length) {
     console.error(`Unrecognised argument: ${unknown.join(' ')}`);
-    console.error('Usage: [--url <program-url>] [--dry-run] [--write]');
+    console.error('Usage: [--url <program-url>] [--edition YYYY-YYYY] [--dry-run] [--write]');
     process.exit(2);
   }
 })();
