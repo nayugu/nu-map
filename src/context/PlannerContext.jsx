@@ -1726,7 +1726,8 @@ export function PlannerProvider({ children }) {
     if (dragInfo.type === "specialTerm") {
       return specialTermDropValid(dragInfo.typeId, dragInfo.duration, semId, dragInfo.id).valid;
     }
-    // Course drop — blocked by any occupying special term
+    // Course and slot drops alike are blocked by an occupying special term —
+    // a co-op semester is not somewhere to plan study.
     if (specialTermStartMap[semId] || specialTermContMap[semId]) return false;
     return !!SEMESTERS.find(s => s.id === semId);
   };
@@ -1756,6 +1757,15 @@ export function PlannerProvider({ children }) {
         next.delete(id);
         return next;
       });
+    }
+    if (type === "slot") {
+      // A slot moves like a course: the student is rearranging their own plan,
+      // and a slot is part of it. Its id stays put — the id encodes where the
+      // template ORIGINALLY put it, which is what keeps re-applying the same
+      // template idempotent even after the student has moved things around.
+      setSlots(prev => (prev[id] ? { ...prev, [id]: { ...prev[id], semId } } : prev));
+      setDragInfo(null);
+      return;
     }
     if (type === "specialTerm") {
       const { typeId } = dragInfo;

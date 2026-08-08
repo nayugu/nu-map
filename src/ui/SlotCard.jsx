@@ -31,7 +31,7 @@ import { usePort } from "../context/InstitutionContext.jsx";
 import { ICreditSystem } from "../ports/ICreditSystem.js";
 
 export default function SlotCard({ slot, isPhone }) {
-  const { removeSlot } = usePlanner();
+  const { removeSlot, onDragStart, dragInfo } = usePlanner();
   const { t } = useLanguage();
   // "SH" here, "credits" elsewhere — the unit is the institution's to name.
   const unitName = usePort(ICreditSystem).getUnitName();
@@ -40,7 +40,15 @@ export default function SlotCard({ slot, isPhone }) {
     <div
       className="slot-card"
       title={slot.label}
+      // Draggable like a course, because it IS part of the plan: moving your
+      // "Khoury Elective" a semester later is a real planning decision, and
+      // being unable to make it would force the student to delete the slot and
+      // lose what the department told them belongs there.
+      draggable
+      onDragStart={(e) => onDragStart(e, slot.id, "slot", slot.semId)}
       style={{
+        opacity: dragInfo?.type === "slot" && dragInfo.id === slot.id ? 0.4 : 1,
+        cursor: "grab",
         position: "relative",
         minHeight: isPhone ? 0 : 70,
         display: "flex", flexDirection: "column", justifyContent: "space-between",

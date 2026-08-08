@@ -114,19 +114,25 @@ export default function SemRow({ sem }) {
   // Undergrad: fixed slots always visible (4 for fall/spring, 2 for summer).
   // Grad: 2 slots at rest for fall/spring (default load), expand up to 4 while dragging.
   //        1 slot at rest for summer, expand up to 2 while dragging.
+  // Slots occupy a position in the grid, exactly like a course. Counting only
+  // courses appended them PAST the term's fixed positions and then drew a full
+  // set of empty drop targets underneath, so a fall semester showed four
+  // occupied boxes and four more empty ones — the plan looked like it had
+  // grown holes rather than been filled in.
+  const mainOccupied = main4.length + semSlots.length;
   const mainSlots = (sem.type === "fall" || sem.type === "spring")
     ? (isGrad
-        ? (isDragging ? Math.min(4, Math.max(2, main4.length < 4 ? main4.length + 1 : 4)) : Math.max(2, main4.length))
+        ? (isDragging ? Math.min(4, Math.max(2, mainOccupied < 4 ? mainOccupied + 1 : 4)) : Math.max(2, mainOccupied))
         : 4)
     : sem.type === "summer"
       ? (isGrad
-          ? (isDragging ? Math.min(2, Math.max(1, main4.length < 2 ? main4.length + 1 : 2)) : Math.max(1, main4.length))
+          ? (isDragging ? Math.min(2, Math.max(1, mainOccupied < 2 ? mainOccupied + 1 : 2)) : Math.max(1, mainOccupied))
           : 2)
       : null;
-  const emptySlots = Math.max(0, (mainSlots ?? 0) - main4.length);
+  const emptySlots = Math.max(0, (mainSlots ?? 0) - mainOccupied);
   // Phone wraps the slots into a 2-wide grid (so 4 fall/spring slots become a
   // 2×2 block); desktop keeps every slot on a single row.
-  const slotCount = Math.max(1, mainSlots || main4.length || 1);
+  const slotCount = Math.max(1, mainSlots || mainOccupied || 1);
   const gridCols  = isPhone ? Math.min(2, slotCount) : slotCount;
 
   // Collapsible other credits
@@ -517,7 +523,7 @@ export default function SemRow({ sem }) {
             </div>
 
             {/* Override zone — only visible when all main slots full + dragging a ≥3 SH course */}
-            {main4.length >= mainSlots && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 3 && (
+            {mainOccupied >= mainSlots && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 3 && (
               <div
                 onDragOver={e => {
                   if (!dragInfo || dragInfo.type !== "course") return;
