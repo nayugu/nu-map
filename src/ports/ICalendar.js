@@ -103,13 +103,13 @@ export const ICalendar = "calendar";
  *   The semester ID the planner should treat as "now" — what everything before
  *   it counts as completed against.  Returns null if this calendar cannot say.
  *
- *   Two rules, and the second is the one that is easy to get wrong:
- *     · while a term is in session, return that term;
- *     · BETWEEN terms, return the one about to begin, not the one that just
- *       ended.  A calendar that only knows start dates has no choice but to
- *       return the last term that started, which leaves a finished semester
- *       claiming to be in progress for the whole of the break — five and a
- *       half weeks, in NU's case, and none of its courses counting as done.
+ *   One-sided by choice: return the most recent term to have BEGUN, so that
+ *   "in progress" is never a forecast.  The cost lands on the other side —
+ *   between terms, the one that just finished stays current until the next
+ *   actually starts.  Handing off at the old term's END instead would make
+ *   completion immediate, but would name a term nobody has attended yet for
+ *   up to three weeks of a winter break.  Choose a side deliberately: with a
+ *   single pointer, the break has to be spent on one term or the other.
  *
  * @property {(semTypeId: string, year: number) => Date|null} [getTermStart]
  * @property {(semTypeId: string, year: number) => Date|null} [getTermEnd]

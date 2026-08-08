@@ -161,33 +161,41 @@ const calendar = {
     return start ? _shift(start, SETTLE_DAYS) <= now : false;
   },
 
-  // The semId (e.g. "spr2026", "fall2026") the planner should treat as NOW.
+  // The semId (e.g. "spr2026", "fall2026") the planner should treat as NOW:
+  // the most recent term to have BEGUN.
   //
-  // In session, that is the term whose window contains today. Between terms it
-  // is the one about to BEGIN, not the one that just ended — that is the whole
-  // point of having end dates. Under the old start-only scheme "now" was
-  // whichever term had started most recently, so a Fall that finished on
-  // Dec 14 went on claiming to be in progress until Jan 22, and none of its
-  // courses counted as completed for 39 days.
+  // The rule is deliberately one-sided. "Now" never names a term that has not
+  // started yet, so when the planner says a semester is in progress, that is
+  // a fact rather than a forecast. The cost is paid at the other end: between
+  // terms, the one that just finished stays current until the next actually
+  // begins — 28 days over winter break. That is a chosen trade, not an
+  // oversight. The alternative (hand off at the old term's end, so a finished
+  // term counts as done immediately) makes the opposite claim false instead,
+  // by calling a term current for up to 23 days before anyone attends it.
   //
-  // Windows are disjoint by construction — derive-term-windows.js refuses to
-  // write a set that overlaps — so at most one can contain a given date.
+  // Note what this means for the END dates: they do NOT trigger the handoff.
+  // A term stops being current when the NEXT one starts, not when its own
+  // exams finish. getTermEnd is still the honest end of the term and is what
+  // any future "in session?" distinction would key off — during a break this
+  // function names a term whose exams are already over.
+  //
+  // Because the switch point is the next term's start threshold, every day of
+  // margin on that threshold is a day the finished term lingers. Fall costs
+  // nothing here (the Labor Day rule is exact); the other three carry the few
+  // days of margin that keeping this rule one-sided requires.
   getCurrentSemId(now = new Date()) {
     const year = now.getFullYear();
-    const windows = [];
+    const started = [];
     for (const t of _semesterTypes) {
       const prefix = t.idPrefix ?? t.id;
-      // year+1 so that late-December sees the January term as upcoming.
-      for (const yr of [year - 1, year, year + 1]) {
+      for (const yr of [year - 1, year]) {
         const start = _termStart(t.id, yr);
-        const end   = _termEnd(t.id, yr);
-        if (start && end) windows.push({ start, end, semId: `${prefix}${yr}` });
+        if (start && start <= now) started.push({ start, semId: `${prefix}${yr}` });
       }
     }
-    if (!windows.length) return null;
-    windows.sort((a, b) => a.start - b.start);
-    return (windows.find(w => w.start <= now && now <= w.end)
-         ?? windows.find(w => w.start > now))?.semId ?? null;
+    if (!started.length) return null;
+    started.sort((a, b) => b.start - a.start);
+    return started[0].semId;
   },
 
   getSources() { return []; },

@@ -51,9 +51,9 @@ const calendar = {
   // To implement: give each semester type a first and last day (see
   // northeastern/calendar.js, which derives both from the registrar's own
   // published section dates rather than hardcoding them), then return the
-  // term whose window contains `now` — and between terms, the term about to
-  // BEGIN. Returning the one that just ended leaves it looking in-progress
-  // for the length of the break.
+  // most recent term to have started. Between terms that keeps the finished
+  // term current until the next begins — deliberate, so that "in progress"
+  // is never claimed about a term nobody has attended yet.
   getTermStart(_semTypeId, _year) { return null; },
   getTermEnd(_semTypeId, _year)   { return null; },
   getCurrentSemId(_now)           { return null; },

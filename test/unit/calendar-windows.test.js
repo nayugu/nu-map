@@ -66,14 +66,50 @@ const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")
 
 // ── The two edges that define correctness ────────────────────────
 
-test("in session on the first day of classes", () => {
+test("a term is never current before its first day of classes", () => {
+  // The one-sided rule the design is built on: when the planner says a
+  // semester is in progress, that should be a fact about the past, not a
+  // forecast. It holds for every ordinary year in the corpus — and it is NOT
+  // absolute, which is worth stating plainly rather than hiding behind an
+  // exclusion list. A fixed threshold fitted to typical years necessarily
+  // fires early in a year that runs late: Spring 2021 began Jan 19 and
+  // Spring 2022 Jan 18, so the Jan 11 threshold led them by 8 and 7 days.
+  //
+  // Pinning the threshold to the latest year ever seen would close the hole,
+  // at the cost of letting one pandemic set the calendar forever — Fall would
+  // then linger 36 days instead of 31. The bounded exception is the better
+  // trade, so it is measured here rather than excused.
+  const early = [];
+  for (const [semId, , , first] of OBSERVED) {
+    let n = 0;
+    while (n <= 60 && calendar.getCurrentSemId(shift(at(first), -n - 1)) === semId) n++;
+    const allowed = ANOMALOUS.has(semId) ? 8 : 0;
+    if (n > allowed) early.push(`${semId}: current ${n}d before classes started ${first} (allowed ${allowed}d)`);
+  }
+  assert.deepEqual(early, [], "\"in progress\" must not precede the first class in an ordinary year");
+});
+
+test("and becomes current within a week of classes starting", () => {
+  // The price of the rule above: a threshold that must never fire early has to
+  // sit a little late, and that margin is the lateness. Fall pays nothing (the
+  // Labor Day rule is exact); the rest stay inside a week.
   const late = [];
   for (const [semId, , , first] of OBSERVED) {
     if (ANOMALOUS.has(semId)) continue;
-    const got = calendar.getCurrentSemId(at(first));
-    if (got !== semId) late.push(`${semId}: first class ${first} but "now" was ${got}`);
+    let n = 0;
+    while (n <= 60 && calendar.getCurrentSemId(shift(at(first), n)) !== semId) n++;
+    if (n > 7) late.push(`${semId}: classes started ${first}, "now" caught up ${n}d later`);
   }
-  assert.deepEqual(late, [], "a term must be current on its own first day of classes");
+  assert.deepEqual(late, [], "onset lag must stay under a week");
+});
+
+test("fall's onset is exact, because its rule is not an estimate", () => {
+  if (termWindows.types.fall.startRule !== "laborDayPlus2") return;
+  for (const [semId, type, , first] of OBSERVED) {
+    if (type !== "fall") continue;
+    assert.equal(calendar.getCurrentSemId(at(first)), semId,
+      `${semId}: fall must be current on day one — no margin needed`);
+  }
 });
 
 test("still in session on the last day of finals", () => {
@@ -86,50 +122,53 @@ test("still in session on the last day of finals", () => {
   assert.deepEqual(early, [], "a term must not be declared over while exams are running");
 });
 
-test("a finished term stops being \"now\" within days, not weeks", () => {
-  // One threshold has to cover every year, so a term that finishes early in
-  // its own range necessarily lingers by the width of that range. Full terms
-  // end within about 5 days of each other; the summer half-terms scatter over
-  // 8 (Summer 1 has ended anywhere from Jun 21 to Jun 28), and no single date
-  // can be tighter than the spread it has to cover. Hence the looser bar for
-  // the half-terms — it is the data's floor, not a concession.
-  const bar = { fall: 7, spring: 7, sumA: 10, sumB: 10 };
+test("a finished term lingers only until the next one begins", () => {
+  // The accepted cost of never being early. A term stays current through the
+  // break, so this lag is the REAL break length (fall→spring is 25 days of
+  // actual winter break) plus the next term's onset margin. It cannot be
+  // shrunk without either firing the next term early — forbidden above — or
+  // handing off at the old term's own end, which is the design that was
+  // weighed and turned down. These bars are the break lengths, not slack.
+  // Summer 1's bar is the loosest relative to its break because the merged
+  // summer term (AY2026+) compressed session A — it ended Jun 21 in 2026,
+  // while session B has begun as late as Jul 6 in other years, and one
+  // threshold has to sit past the latest of those. 8 days of real break plus
+  // 8 days of that margin is the 16 observed.
+  const bar = { fall: 31, spring: 17, sumA: 17, sumB: 16 };
   const slow = [];
   for (const [semId, type, , , fin] of OBSERVED) {
     let n = 0;
-    while (n <= 60 && calendar.getCurrentSemId(shift(at(fin), n)) === semId) n++;
+    while (n <= 90 && calendar.getCurrentSemId(shift(at(fin), n)) === semId) n++;
     if (n > bar[type]) slow.push(`${semId}: still "now" ${n}d after finals ended ${fin} (bar ${bar[type]}d)`);
   }
-  assert.deepEqual(slow, [], "completion must not wait for the next term to start");
+  assert.deepEqual(slow, [], "lingering must not exceed the break it sits in");
 });
 
-test("completion lag beats the start-only scheme it replaced", () => {
-  // The old thresholds — Sep 15 / Jan 22 / May 12 / Jul 16 with no end dates —
-  // left a finished term current until the NEXT one started: 39 days on
-  // average over winter break. This is the headline number; assert it rather
-  // than trust the commit message.
+test("completion lag still beats the scheme it replaced", () => {
+  // The old hand-picked thresholds — Sep 15 / Jan 22 / May 12 / Jul 16 — left
+  // a finished term current for 24.7d on average and 42d at worst. Keeping the
+  // one-sided rule gives up most of the gap, but the accurate start dates
+  // still buy a real improvement: 18.3d / 31d. Asserted rather than asserted
+  // ABOUT, because this is the number the whole exercise is judged on.
   const lag = [];
   for (const [semId, , , , fin] of OBSERVED) {
     let n = 0;
-    while (n <= 60 && calendar.getCurrentSemId(shift(at(fin), n)) === semId) n++;
+    while (n <= 90 && calendar.getCurrentSemId(shift(at(fin), n)) === semId) n++;
     lag.push(n);
   }
   const mean = lag.reduce((a, b) => a + b, 0) / lag.length;
-  assert.ok(mean < 8, `mean completion lag ${mean.toFixed(1)}d — was 24.7d across these same terms`);
-  assert.ok(Math.max(...lag) < 12, `worst completion lag ${Math.max(...lag)}d — was 42d`);
+  assert.ok(mean < 20, `mean completion lag ${mean.toFixed(1)}d — was 24.7d across these same terms`);
+  assert.ok(Math.max(...lag) < 35, `worst completion lag ${Math.max(...lag)}d — was 42d`);
 });
 
-test("never points at a term more than a month before it begins", () => {
-  // Between terms "now" is the UPCOMING one, so it necessarily arrives early.
-  // That is the trade that makes the finished term count as completed at once,
-  // but it must stay bounded: the longest gap is winter break.
-  const tooEarly = [];
-  for (const [semId, , , first] of OBSERVED) {
-    let n = 0;
-    while (n <= 90 && calendar.getCurrentSemId(shift(at(first), -n - 1)) === semId) n++;
-    if (n > 31) tooEarly.push(`${semId}: "now" ${n}d before classes start ${first}`);
-  }
-  assert.deepEqual(tooEarly, [], "the lead-in to a term must not exceed a month");
+test("the term named during a break is the one that just ended", () => {
+  // Not the one about to start. This is the half of the trade that is easy to
+  // regress by "fixing" the lingering, so it is pinned: on the day after
+  // Fall 2025's exams finished, "now" is still Fall — not Spring 2026.
+  assert.equal(calendar.getCurrentSemId(at("2025-12-15")), "fall2025");
+  assert.equal(calendar.getCurrentSemId(at("2025-12-31")), "fall2025");
+  assert.equal(calendar.getCurrentSemId(at("2026-01-06")), "fall2025", "spring had not started yet");
+  assert.equal(calendar.getCurrentSemId(at("2026-01-11")), "spr2026", "and hands over once it has");
 });
 
 // ── Structural properties ────────────────────────────────────────

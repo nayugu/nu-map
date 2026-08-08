@@ -50,6 +50,18 @@ Facts that follow from this:
   re-freeze these as constants: NU moved Spring to a Wednesday start in 2026.
   `isTermPast` is a *separate*, later threshold (start + 14d) about Banner
   enrolment settling after add/drop — do not re-merge the two.
+- **"Now" is the most recent term to have BEGUN**, never the one about to.
+  With one pointer the break has to be spent on one term or the other, and
+  the deliberate choice is that "in progress" is a fact, not a forecast: a
+  finished Fall stays current for the 28–31 days of winter break rather than
+  Spring being named before anyone attends it. This is the trade, not a bug —
+  don't "fix" the lingering by handing off at the old term's end without
+  re-deciding it. The guarantee is bounded, not absolute: a threshold fitted
+  to ordinary years fires early in one that runs late (Spring 2022 began
+  Jan 18 under COVID, 7 days after the threshold). If the lingering ever
+  needs fixing, the cheap route is gating the words "in progress"
+  (`planModel.js` prints them literally) on the end dates, which already
+  exist — not moving the pointer.
 - The runtime file is `public/northeastern/catalog-courses.json` (browser app,
   Node MCP server, and Cloudflare worker all load it). `all-courses.json` is the
   scrape intermediate; `merge-nupath.js` backfills nuPath from it at build time.
