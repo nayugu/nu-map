@@ -137,6 +137,23 @@ test("no UI file re-derives a semester's contents for itself", () => {
   assert.deepEqual(bad, [], "a UI file deriving term contents instead of asking for them");
 });
 
+test("anything that CLEARS a plan clears reservations too", () => {
+  // Reset cleared placements, special terms, orders, grades and the palette,
+  // and left every reserved card behind — a term full of "Khoury Elective" in
+  // a plan with no courses and no major, which reads as the reset having
+  // failed. The restore direction had already been fixed; the clear direction
+  // is the mirror of it and was missed for the same reason.
+  const src = readFileSync(join(ROOT, "src/context/PlannerContext.jsx"), "utf8");
+  const lines = src.split("\n");
+  const missing = [];
+  lines.forEach((line, i) => {
+    if (!/setPlacements\(\{\}\)/.test(line)) return;
+    const near = lines.slice(Math.max(0, i - 4), i + 12).join("\n");
+    if (!/setReservations\(\{\}\)/.test(near)) missing.push(`line ${i + 1}: ${line.trim()}`);
+  });
+  assert.deepEqual(missing, [], "a clear path that leaves reservations behind");
+});
+
 test("every door a plan comes through carries reservations", () => {
   // There are two restore functions — restorePlan for slots and applyPlanData
   // for share links and imported files — and reservations were added to one.

@@ -2327,6 +2327,11 @@ export function PlannerProvider({ children }) {
   // ── Reset ────────────────────────────────────────────────────
   const resetPlanToDefaults = () => {
     setPlacements({});
+    // Reservations are plan contents like any other card. Left behind, a reset
+    // plan keeps every reserved cell — a term full of "Khoury Elective" in a
+    // plan with no courses and no major, which reads as the reset having
+    // failed rather than as anything deliberate.
+    setReservations({});
     setSpecialTermPl({});
     setSemOrders({});
     setOfferedOverrides({});
@@ -2807,7 +2812,13 @@ export function PlannerProvider({ children }) {
 
   const restorePlan = (d, { initial = false } = {}) => {
     setPlacements(d.placements ?? {});
-    setReservations(d.reservations ?? {});
+    // Absent is not the same as empty — the same rule grades and substitutions
+    // follow below. A slot written before reservations existed has no key at
+    // all, and on the INITIAL restore of the active plan the live state is the
+    // better source: treating absence as "none" there would wipe a plan the
+    // student had just loaded but which had not yet been autosaved.
+    if (d.reservations && typeof d.reservations === "object") setReservations(d.reservations);
+    else if (!initial) setReservations({});
     setSpecialTermPl(migrateSpecialTermPl(d));
     setSemOrders(d.semOrders ?? {});
     setShOverrides(d.shOverrides ?? {});
@@ -3038,11 +3049,17 @@ export function PlannerProvider({ children }) {
     setCollapsedSubs(prev => d.collapsedSubs ?? prev);
     setBonusSH(d.bonusSH ?? 0);
     setPlacedOut(new Set(Array.isArray(d.placedOut) ? d.placedOut : []));
-    // Absent is not the same as empty. A slot written before substitutions were
-    // captured has no key at all, and treating that as "none" is what destroyed
-    // them; only an explicit empty array clears.
-    if (Array.isArray(d.substitutions)) setSubstitutions(d.substitutions);
-    else if (!initial) setSubstitutions([]);
+    // `initial` belongs to restorePlan, which is a SIBLING of this function —
+    // referencing it here threw a ReferenceError, and _isEmpty drops an empty
+    // array from the payload, so every plan without substitutions took that
+    // branch. Opening a share link or importing a file died before reaching
+    // the fields below it.
+    //
+    // The distinction restorePlan draws does not apply here anyway: this
+    // applies a COMPLETE plan the user chose to open, so absent means none.
+    // A slot being merged into live state is the only case where absent can
+    // mean "keep what we have".
+    setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
     if (d.currentSemId) setCurrentSemId(d.currentSemId);
     if (d.entSem)  { setPlanEntSem(d.entSem);   try { localStorage.setItem(key("ent-sem"),  d.entSem);  } catch {} }
     if (d.entYear) { setPlanEntYear(d.entYear);  try { localStorage.setItem(key("ent-year"), d.entYear); } catch {} }
