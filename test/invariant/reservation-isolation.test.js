@@ -137,6 +137,26 @@ test("no UI file re-derives a semester's contents for itself", () => {
   assert.deepEqual(bad, [], "a UI file deriving term contents instead of asking for them");
 });
 
+test("every door a plan comes through carries reservations", () => {
+  // There are two restore functions — restorePlan for slots and applyPlanData
+  // for share links and imported files — and reservations were added to one.
+  // So a shared plan arrived with its named courses and none of its reserved
+  // cards, which for a later year is most of the plan. Same defect as the
+  // `substitutions` note beside captureCurrentPlan, one door along.
+  //
+  // Asserted as source: every function that restores `placements` must restore
+  // `reservations` in the same breath.
+  const src = readFileSync(join(ROOT, "src/context/PlannerContext.jsx"), "utf8");
+  const lines = src.split("\n");
+  const missing = [];
+  lines.forEach((line, i) => {
+    if (!/setPlacements\(d\.placements/.test(line)) return;
+    const near = lines.slice(i, i + 12).join("\n");
+    if (!/setReservations\(/.test(near)) missing.push(`line ${i + 1}: ${line.trim()}`);
+  });
+  assert.deepEqual(missing, [], "a restore path that forgets reservations");
+});
+
 test("only ONE place decides where a dropped card lands", () => {
   // Every hole in this feature came from the same shape: two implementations
   // of one rule. SemRow and SummerRow. planDrop and the course path. And then

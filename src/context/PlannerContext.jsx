@@ -3026,6 +3026,11 @@ export function PlannerProvider({ children }) {
   const applyPlanData = (d) => {
     pushUndo();
     setPlacements(d.placements ?? {});
+    // Reservations travel with placements through EVERY door: a plan slot, a
+    // share link, an imported file. This one was missed, so opening a shared
+    // plan or importing a backup arrived with the named courses and none of the
+    // reserved cards — which for a later year is most of the plan.
+    setReservations(d.reservations ?? {});
     setSpecialTermPl(migrateSpecialTermPl(d));
     setSemOrders(d.semOrders ?? {});
     setShOverrides(prev => d.shOverrides ?? prev);
