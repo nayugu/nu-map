@@ -102,32 +102,39 @@ test("sample plans › no plan is empty", () => {
   }
 });
 
-test("sample plans › every entry is a kind the applier knows", () => {
-  const KINDS = new Set(["course", "courses", "choice", "coop", "placeholder", "vacation"]);
+test("sample plans › every entry is a shape the runtime knows", () => {
+  // The entry model is ONE node type; what varies is how precisely the catalog
+  // named the answer. `options` is a list of GROUPS — take every code in a
+  // group, pick any one group — and an empty `options` is a reservation whose
+  // answer the plan leaves open. Anything else here would be a shape no
+  // consumer has been written for.
   for (const [path, grid] of PLANS) {
     for (const plan of grid.plans) {
       for (const year of plan.years) {
         for (const term of year.terms) {
-          for (const e of term.entries) {
-            assert.ok(KINDS.has(e.kind), `${path}: unknown entry kind ${e.kind}`);
-            // Only the two courseless kinds may omit codes, and the three
-            // course kinds must never be empty — an entry with a course kind
-            // and no codes would place nothing while claiming to place
-            // something.
-            if (e.kind === "coop") {
-              // A co-op MAY name the course a student registers for
-              // (COOP 3945 and friends); it is still a work term, not a card.
-              for (const c of e.codes ?? []) {
-                assert.match(c, /^COOP\d/, `${path}: coop entry carries a non-coop code ${c}`);
+          const walk = (entries) => {
+            for (const e of entries) {
+              assert.ok(Array.isArray(e.options), `${path}: entry has no options array`);
+              for (const group of e.options) {
+                assert.ok(Array.isArray(group) && group.length,
+                  `${path}: an option group is empty, which can never be satisfied`);
               }
-            } else if (e.kind === "placeholder" || e.kind === "vacation") {
-              // Neither names a course: one is a slot to fill, the other a
-              // term off. Both would be a lie with a code attached.
-              assert.equal(e.codes, undefined, `${path}: ${e.kind} carries codes`);
-            } else {
-              assert.ok(e.codes?.length, `${path}: ${e.kind} with no codes`);
+              // A co-op MAY name the course a student registers for (COOP 3945
+              // and friends); it is still a work term, not a card.
+              if (e.coop) {
+                for (const c of e.options.flat()) {
+                  assert.match(c, /^COOP\d/, `${path}: coop entry carries a non-coop code ${c}`);
+                }
+              }
+              // Neither names a course: one is a term off, one labels the rows
+              // beneath it. Either would be a lie with a code attached.
+              if (e.vacation || e.heading) {
+                assert.equal(e.options.length, 0, `${path}: a vacation/heading carries codes`);
+              }
+              walk(e.children ?? []);
             }
-          }
+          };
+          walk(term.entries);
         }
       }
     }
@@ -163,9 +170,9 @@ test("sample plans › a vacation is a term off, not a slot to fill", () => {
       for (const year of plan.years) {
         for (const term of year.terms) {
           for (const e of term.entries) {
-            if (e.kind !== "vacation") continue;
+            if (!e.vacation) continue;
             seen++;
-            assert.equal(e.codes, undefined, `${path}: vacation carries codes`);
+            assert.equal(e.options.length, 0, `${path}: vacation carries codes`);
             assert.equal(e.sh, undefined, `${path}: vacation carries credit hours`);
           }
         }
@@ -186,7 +193,7 @@ test("sample plans › entries carry the credit hours the grid states", () => {
       for (const year of plan.years) {
         for (const term of year.terms) {
           for (const e of term.entries) {
-            if (e.kind === "vacation") continue;
+            if (e.vacation) continue;
             total++;
             if (e.sh == null) continue;
             withSh++;

@@ -279,7 +279,12 @@ function readCell(cell, hoursCell) {
       const alsoVac  = vac  || /\bvacations?\b/i.test(text);
       const alsoCoop = coop || /\bco-?op\b/i.test(text);
       if (alsoVac && alsoCoop) return { ...base, either: ["coop", "vacation"], options: [] };
-      return { ...base, [vac ? "vacation" : "coop"]: true, options: [] };
+      // A co-op MAY state hours (they are zero, but the grid prints them). A
+      // vacation carries none at all: it is a term the department is telling
+      // you to take off, and `sh: 0` is a distinction without a difference
+      // that only invites a consumer to treat it as a zero-credit slot.
+      if (vac) return { text, vacation: true, options: [] };
+      return { ...base, coop: true, options: [] };
     }
     // Named nothing — a reservation whose answer the plan leaves open.
     return { ...base, options: [] };
