@@ -350,7 +350,28 @@ export function PlannerProvider({ children }) {
   // question a first action can raise. Anyone who prefers the compact view
   // turns it on once and the choice persists.
   const [collapseOtherCredits, setCollapseOtherCredits] = useState(() => {
-    try { const v = localStorage.getItem(key("collapse-other-credits")); return v === null ? false : v !== "false"; } catch { return false; }
+    try {
+      const v = localStorage.getItem(key("collapse-other-credits"));
+      // Chosen explicitly at some point — that choice wins, always.
+      if (v !== null) return v !== "false";
+
+      // Never chosen, so a default applies. But "never chosen" covers two very
+      // different people: someone opening the app for the first time, and
+      // someone who has used it for months and simply never touched this
+      // toggle. Changing a default is only free for the first.
+      //
+      // So a RETURNING install keeps the old behaviour. `seen-cohort-setup` is
+      // written when first-run setup completes, which makes it the honest
+      // marker for "has used this app before". Their layout does not move
+      // under them, and the toggle is still there if they want the change.
+      //
+      // A saved plan counts too: someone who cleared that flag, or who started
+      // before it existed, is plainly not a new user, and their plan is exactly
+      // the thing that should not rearrange itself.
+      const seen  = !!localStorage.getItem(key("seen-cohort-setup"));
+      const hasPlan = Object.keys(_saved?.placements ?? {}).length > 0;
+      return seen || hasPlan;
+    } catch { return false; }
   });
   const updateCollapseOtherCredits = (val) => {
     setCollapseOtherCredits(val);
