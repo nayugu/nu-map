@@ -750,8 +750,11 @@ export default function PlanLibrary() {
             }}
           />
           <div style={{ display: "flex", border: "1px solid var(--border-2)", borderRadius: 5, overflow: "hidden", flexShrink: 0 }}>
-            {[["name", t("folders.sort.name")], ["recent", t("folders.sort.recent")],
-              ["manual", t("folders.sort.manual")]].map(([mode, label]) => (
+            {/* Custom first: it is the default, and the only mode in which
+                dragging a plan somewhere means anything — the other two
+                re-sort under you, so the insertion line is not drawn there. */}
+            {[["manual", t("folders.sort.manual")], ["name", t("folders.sort.name")],
+              ["recent", t("folders.sort.recent")]].map(([mode, label]) => (
               <button key={mode} onClick={() => setFolderSort(mode)}
                 title={t("folders.sort.label")}
                 style={{

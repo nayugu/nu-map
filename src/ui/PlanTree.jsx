@@ -182,8 +182,14 @@ export default function PlanTree({
         const meta = metaOf?.(row) ?? "";
         // Manual-order insertion line. Drawn on the row itself rather than as a
         // separate element so it cannot desync from the list it describes.
+        // One boundary, ONE line. edgeZone names a gap from both sides —
+        // {beforeId: the row under it, afterId: the row over it} — so drawing
+        // both put a 2px line at the bottom of one row and another at the top
+        // of the next, one pixel apart, which reads as a single fat smudge.
+        // The line goes above `beforeId`; `afterId` is only consulted at the
+        // end of a list, where there is no next row to sit above.
         const lineAbove = insertAt?.beforeId === row.id;
-        const lineBelow = insertAt?.afterId === row.id;
+        const lineBelow = !insertAt?.beforeId && insertAt?.afterId === row.id;
 
         return (
           <div
@@ -204,10 +210,6 @@ export default function PlanTree({
             onContextMenu={e => onRowContextMenu?.(row, e)}
             style={{
               position: "relative",
-              // The line sits in the row's own box-shadow so it needs no layout
-              // space — inserting never shifts the rows you are aiming between.
-              ...(lineAbove ? { boxShadow: "inset 0 2px 0 0 var(--active)" } : {}),
-              ...(lineBelow ? { boxShadow: "inset 0 -2px 0 0 var(--active)" } : {}),
               display: "flex", alignItems: "center", gap: compact ? 3 : 7,
               padding: compact ? "3px 8px" : "7px 11px",
               paddingLeft: (compact ? 8 : 11) + rowIndent(row.depth),
@@ -233,6 +235,28 @@ export default function PlanTree({
               borderRadius: compact ? 3 : 6,
             }}
           >
+            {/* Manual-order insertion line, drawn ON the boundary between two
+                rows rather than inside one of them — that gap is what the
+                gesture is actually aiming at.
+
+                It was previously a box-shadow in the style object above, which
+                never rendered even once: the selection/focus ring sets
+                `boxShadow` further down the same object literal, and the later
+                key wins, so the line was overwritten by "none" on every single
+                render. An absolutely positioned element cannot be clobbered by
+                an unrelated style, takes no layout space either (so the rows
+                you are aiming between never shift), and is not clipped by the
+                row's border radius the way an inset shadow is. */}
+            {(lineAbove || lineBelow) && (
+              <span aria-hidden="true" style={{
+                position: "absolute",
+                left: Math.max(1, rowIndent(row.depth) - 1), right: compact ? 4 : 6,
+                ...(lineAbove ? { top: -1 } : { bottom: -1 }),
+                height: 2, borderRadius: 2, background: "var(--active)",
+                pointerEvents: "none", zIndex: 1,
+              }} />
+            )}
+
             {/* The active plan's left bar reads even when it is also selected. */}
             {isActive && (
               <span aria-hidden="true" style={{
