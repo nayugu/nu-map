@@ -46,6 +46,9 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   const {
     major2, appliedTemplate, placements, reservations, specialTermPl, placedOut,
     SEMESTERS, courseMap, applySamplePlanToPlan, createPlan, doUndo,
+    // The plan LIBRARY's slots, renamed: `plans` below is this component's
+    // list of sample-plan variants, which is a different thing entirely.
+    plans: planSlots,
     planEntSem, planEntYear, planGradSem, planGradYear, studentType,
   } = usePlanner();
 
@@ -135,7 +138,8 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   // touched at all, which is the whole point of this verb.
   const openAsNew = () => {
     const r = applySamplePlan(chosen, { semesters: SEMESTERS, courseMap, programData });
-    createPlan(t("grad.plan.newplan.name", { name: shortName(path) }), {
+    const name = planNameFor(path, majorRequirements.fmtProgramLabel, (planSlots ?? []).map(p => p.name));
+    createPlan(name, {
       entSem: planEntSem, entYear: planEntYear,
       gradSem: planGradSem, gradYear: planGradYear, studentType,
     }, null, {
@@ -323,7 +327,36 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
   );
 }
 
-const shortName = (p) => String(p ?? "").split("/").pop().replace(/_/g, " ");
+/**
+ * A name for a plan branched off a sample plan.
+ *
+ * Three things were wrong with what this produced:
+ *
+ *   "parsed.initial.json (sample plan)"
+ *
+ * The path ends in the FILE, so the program is the second-to-last segment —
+ * taking the last one named every plan after the JSON it was read from.
+ * `fmtProgramLabel` is what the rest of the app uses on that folder.
+ *
+ * Two branches then collided, because nothing checked the names already taken.
+ *
+ * And the "(sample plan)" suffix was translated at creation, so a plan made
+ * while the app was in Chinese kept 示例计划 in its name forever — a stored
+ * artefact in whatever language happened to be active. It is dropped entirely:
+ * `appliedTemplate` records the provenance properly now, and the collapsed
+ * section states it, so the name does not have to carry it.
+ */
+function planNameFor(path, fmtProgramLabel, taken) {
+  const parts = String(path ?? "").split("/");
+  const folder = parts[parts.length - 2] || parts[parts.length - 1] || "";
+  const base = (fmtProgramLabel?.(folder) || folder.replace(/_/g, " ") || "Plan").trim();
+  const used = new Set(taken ?? []);
+  if (!used.has(base)) return base;
+  for (let n = 2; ; n++) {
+    const candidate = `${base} (${n})`;
+    if (!used.has(candidate)) return candidate;
+  }
+}
 
 function Row({ children, isPhone }) {
   return (
