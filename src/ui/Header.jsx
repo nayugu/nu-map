@@ -642,7 +642,9 @@ export default function Header() {
     // Iterate through semesters in order
     for (const sem of SEMESTERS) {
       const semId = sem.id;
-      const idsInSem = getOrderedCourses(semId, placements, semOrders, courseMap);
+      // Combined view, like every other ordering call: this walks a semester's
+      // occupants, and a reservation is one.
+      const idsInSem = getOrderedCourses(semId, gridPlacements ?? placements, semOrders, gridCourseMap ?? courseMap);
       const hasStart = !!specialTermStartMap[semId];
       const hasCont  = !!specialTermContMap[semId];
 

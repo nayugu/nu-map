@@ -1861,7 +1861,7 @@ export function PlannerProvider({ children }) {
           if (cOld && cOld !== fromSem && cOld !== semId)
             next[cOld] = (next[cOld] || []).filter(x => x !== cid);
         });
-        const baseOrder = next[semId] || getOrderedCourses(semId, placements, prev, courseMap);
+        const baseOrder = next[semId] || getOrderedCourses(semId, gridPlacements, prev, gridCourseMap);
         const withoutDropped = baseOrder.filter(cid => !allMoving.includes(cid));
         next[semId] = [...withoutDropped, dropId, ...coreqPartners];
         return next;
@@ -2085,7 +2085,7 @@ export function PlannerProvider({ children }) {
     if (fromSem === targetSemId) {
       // Same-sem reorder (coreqs stay, just reorder the dragged card)
       setSemOrders(prev => {
-        const cur = getOrderedCourses(targetSemId, placements, prev, courseMap);
+        const cur = getOrderedCourses(targetSemId, gridPlacements, prev, gridCourseMap);
         const fi  = cur.indexOf(dragId), ti = cur.indexOf(targetId);
         if (fi < 0 || ti < 0) return prev;
         const next = [...cur]; next.splice(fi, 1); next.splice(ti, 0, dragId);
@@ -2102,16 +2102,16 @@ export function PlannerProvider({ children }) {
         const next = { ...prev };
         const toClean = new Set([fromSem, ...coreqPartners.map(cid => placements[cid])].filter(Boolean));
         toClean.forEach(sid => {
-          next[sid] = (next[sid] || getOrderedCourses(sid, placements, prev, courseMap)).filter(cid => !allMoving.includes(cid));
+          next[sid] = (next[sid] || getOrderedCourses(sid, gridPlacements, prev, gridCourseMap)).filter(cid => !allMoving.includes(cid));
         });
-        const toOrder = getOrderedCourses(targetSemId, placements, prev, courseMap);
+        const toOrder = getOrderedCourses(targetSemId, gridPlacements, prev, gridCourseMap);
         next[targetSemId] = [...toOrder.filter(cid => !allMoving.includes(cid)), dragId, ...coreqPartners];
         return next;
       });
     } else {
       // Different sem — swap targetId ↔ fromSem, move dragId+coreqs → targetSemId
-      const fromOrder = getOrderedCourses(fromSem,     placements, semOrders, courseMap);
-      const toOrder   = getOrderedCourses(targetSemId, placements, semOrders, courseMap);
+      const fromOrder = getOrderedCourses(fromSem,     gridPlacements, semOrders, gridCourseMap);
+      const toOrder   = getOrderedCourses(targetSemId, gridPlacements, semOrders, gridCourseMap);
       const fi = fromOrder.indexOf(dragId), ti = toOrder.indexOf(targetId);
       setPlacements(p => {
         const n = { ...p, [dragId]: targetSemId, [targetId]: fromSem };

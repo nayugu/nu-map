@@ -117,3 +117,31 @@ test("a reservation id can never be mistaken for a course id", () => {
     assert.ok(!isReservationId(id), `${id} must not read as a reservation`);
   }
 });
+
+test("ordering is computed over the combined view everywhere, without exception", () => {
+  // Ordering is a LAYOUT question, so every call must see reservations. Six of
+  // the nine call sites did not, which meant any course drop into a term
+  // holding reservations rewrote that term's order with them missing — and
+  // getOrderedCourses then re-appended them at the end. That is the "it added
+  // it alongside instead of swapping" report.
+  //
+  // Asserted as source, because the failure is a call site nobody updated
+  // rather than a value anyone can observe from outside.
+  const files = [
+    "src/context/PlannerContext.jsx",
+    "src/ui/SemRow.jsx",
+    "src/ui/SummerRow.jsx",
+    "src/ui/Header.jsx",
+  ];
+  const offenders = [];
+  for (const rel of files) {
+    const src = readFileSync(join(ROOT, rel), "utf8");
+    for (const line of src.split("\n")) {
+      if (!line.includes("getOrderedCourses(")) continue;
+      if (line.trim().startsWith("//")) continue;
+      if (line.includes("import")) continue;
+      if (!line.includes("gridPlacements")) offenders.push(`${rel}: ${line.trim()}`);
+    }
+  }
+  assert.deepEqual(offenders, [], "ordering computed without the combined view");
+});
