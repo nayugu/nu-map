@@ -1557,18 +1557,61 @@ architecture_bs         "LAST NAME BEGINS WITH A–L"
 get the fallback — a plain list — and are the only case that needs one. Do not
 design the main flow around them.
 
-### 20.4 Where it goes
+### 20.4 A plan is a whole canvas, not a patch
+
+`applySamplePlan` is additive, and that made "offer it whenever, it only adds"
+look reasonable. It is not, and the reason is about the artifact rather than the
+code:
+
+> **A published plan assumes year 1 is your first year and that nothing is done
+> yet.** It is not student-context-aware — there is no version of it for someone
+> who has already taken three semesters.
+
+Applied over existing work it does not destroy anything, but it produces
+nonsense: courses the student already placed are skipped, the rest land at
+*plan* positions rather than positions relative to what they have done, and
+terms end up lopsided. Nothing is lost and nothing is right.
+
+So there are only two coherent outcomes, and which one applies is decided by
+whether the canvas is empty:
+
+| canvas | what happens |
+|---|---|
+| **empty** | apply into it — there is nothing to disturb |
+| **not empty** | **create a new plan** seeded from the template |
+
+**"Replace the current plan" should not be a button.** It is the only lossy
+option, and it buys nothing that "new plan" does not: the plan library already
+exists, so a second slot is where comparing *"what if I did the five-year,
+three-co-op version?"* naturally lives. A student who genuinely wants to start
+over can clear the plan and then load — both actions already exist, and making
+them take two steps is correct for something irreversible.
+
+**The infrastructure is already there.** `createPlan(name, cohort, parentId,
+seed)` spreads `seed` into the new slot's stored data, so a plan seeded with
+`applySamplePlan`'s output needs no new persistence path.
+
+*(Noted while reading it: `createPlan`'s default shape lists `placements`,
+`specialTermPl`, `semOrders` and so on but omits `reservations`. Harmless today —
+a missing key restores as `{}` — but the shape should say what a plan contains.)*
+
+### 20.5 Where it goes
 
 | surface | behaviour |
 |---|---|
-| **Onboarding step 2**, after a major is chosen | a checkbox, shown **only if that program ships a plan**. Default **on** — the user is explicitly in setup, and a visible box they can untick is consent. Applies on *Finish*. |
-| **Changing major later, planner empty** | an inline, dismissible offer (the existing `StaleNotice` pattern). Not automatic. |
-| **Changing major later, planner NOT empty** | **nothing.** Apply is additive and idempotent, but dropping ~40 cards beside someone's existing work is a large uninvited action. It stays available from the requirements panel. |
+| **Onboarding step 2**, after a major is chosen | a checkbox, shown **only if that program ships a plan**. The canvas is empty by definition here, so it applies directly on *Finish*. Default **on** — the user is explicitly in setup, and a visible box they can untick is consent. |
+| **Later, canvas empty** | inline dismissible offer (the existing `StaleNotice` pattern). Applies directly. |
+| **Later, canvas NOT empty** | the same offer, but it reads **"Create a new plan from this"** and never touches the current one. |
 
-**Never silently.** The one thing worse than not offering is filling a planner
-without being asked.
+**Never silently**, in either case. The one thing worse than not offering is
+filling a planner without being asked.
 
-### 20.5 The checkbox has to be honest about what arrives
+**"Empty" needs a definition, and it is not "no placements".** A canvas holding
+only co-op blocks, or only reservations from a previous load, is not empty — and
+treating it as empty would apply a plan on top of one. The test is: no
+placements, no reservations, no special terms, and nothing placed out.
+
+### 20.6 The checkbox has to be honest about what arrives
 
 Half of what lands names no course. A box reading *"load the suggested plan"*
 sets the wrong expectation, and the student meets a planner full of blanks.
@@ -1579,7 +1622,7 @@ It should state both numbers, which `applySamplePlan` already returns
 > ☑ **Start from the department's suggested plan**
 > *adds 26 courses and 22 placeholders you'll choose later*
 
-### 20.6 Open
+### 20.7 Open
 
 | # | question | leaning |
 |---|---|---|
@@ -1587,6 +1630,8 @@ It should state both numbers, which `applySamplePlan` already returns
 | **U2** | a transfer student, or one entering mid-year — `startYearIndex` exists but onboarding does not ask | do not auto-apply when the cohort implies fewer years than the plan has |
 | **U3** | student picks a 4-year plan but their cohort spans 5 | offer only variants matching their year count; fall back to all if none match |
 | **U4** | where does the co-op cycle question live once asked — plan-local, or a real planner setting? | it is a fact about the student; worth promoting later, out of scope now |
+| **U5** | what does the new plan get called? | the variant label is unusable for 17 programs (§20.3) — prefer the program name, disambiguated only when a slot of that name exists |
+| **U6** | does a seeded new plan inherit the current cohort, or the plan's own length? | the student's cohort; a plan that does not fit their years is the U2/U3 problem, not a reason to rewrite their dates |
 
 ---
 
