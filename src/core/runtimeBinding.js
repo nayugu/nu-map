@@ -94,6 +94,19 @@ function optionsAdmitted(groups, obligation, courseMap) {
 }
 
 /**
+ * What the program still demands, given what the student has placed.
+ *
+ * Exposed because two callers need it and it is not cheap: the solve below, and
+ * whoever decides which cards are SPARE. A card whose stored requirement no
+ * longer appears here is one the plan has already covered — and stored
+ * requirements bypass the solve (§11), so nothing else would notice.
+ */
+export function outstandingObligations(programData, { placements = {}, courseMap = {} } = {}) {
+  if (!programData) return [];
+  return obligationsOf(programData, { placedSet: placedSetOf(placements), courseMap });
+}
+
+/**
  * Solve every undecided card against what the program still demands.
  *
  * @param {object} reservations   id → reservation
@@ -111,14 +124,16 @@ function optionsAdmitted(groups, obligation, courseMap) {
  */
 export function bindReservations(reservations, {
   programData, placements = {}, courseMap = {}, hints = null, previous = null,
+  obligations: given = null,
 } = {}) {
   const out = new Map();
   const list = Object.values(reservations ?? {}).filter(r => r?.id);
   if (!list.length || !programData) return out;
 
-  const obligations = obligationsOf(programData, {
-    placedSet: placedSetOf(placements), courseMap,
-  });
+  // `obligationsOf` runs the graduation audit's allocator, so a caller that
+  // already needs the outstanding set (to decide which cards are spare) passes
+  // it in rather than paying for it twice on every render.
+  const obligations = given ?? outstandingObligations(programData, { placements, courseMap });
   if (!obligations.length) return out;
 
   // Deterministic order. The target sets themselves do not depend on it — each

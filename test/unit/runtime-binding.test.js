@@ -12,10 +12,15 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 
-import { bindReservations } from "../../src/core/runtimeBinding.js";
+import { bindReservations, outstandingObligations } from "../../src/core/runtimeBinding.js";
 import { createReservation } from "../../src/core/reservations.js";
 import { specAdmitsSubject, specAdmitsRange } from "../../src/core/requirementBinding.js";
+import { specForNode } from "../../src/core/programEligibility.js";
 import { createPlanHints } from "../../src/adapters/northeastern/planHints.js";
+import {
+  candidatesForReservation, applyFilters, withoutSatisfiedRequirements,
+  isSpare, isUnbounded,
+} from "../../src/core/candidates.js";
 
 const courseMap = {
   CS3000: { id: "CS3000", subject: "CS", number: "3000", sh: 4 },
@@ -88,6 +93,47 @@ test("a stored requirement still wins once the plan has satisfied it", () => {
   const r = res("Khoury Elective", { requirement: { index: 0, title: "Khoury Approved Electives" } });
   const after = bind({ [r.id]: r }, { placements: { CS4300: "fall2026", CS4100: "spr2027" } });
   assert.deepEqual(after.get(r.id), [0], "the card re-pointed away from its own requirement");
+});
+
+test("a card whose stored requirement is met reads SPARE, end to end", () => {
+  // The §11 outcome, across both modules: the solve refuses to re-point the
+  // card, and the satisfied-requirement filter then leaves it with nothing,
+  // which is what "your plan already covers this" is made of.
+  //
+  // Neither half is enough alone. Without the filter the card keeps pointing at
+  // a finished requirement; without the solve's refusal it would silently
+  // become a general elective.
+  const r = res("Khoury Elective", { requirement: { index: 0, title: "Khoury Approved Electives" } });
+  const p = program();
+  const placements = { CS4300: "fall2026", CS4100: "spr2027" };
+
+  const targets = bindReservations({ [r.id]: r },
+    { programData: p, placements, courseMap, hints });
+  assert.deepEqual(targets.get(r.id), [0], "the solve re-pointed the card");
+
+  const outstanding = new Set(
+    outstandingObligations(p, { placements, courseMap }).map(o => o.target));
+  assert.ok(!outstanding.has(0), "fixture assumption: the Khoury section should be met");
+
+  const cands = applyFilters(
+    candidatesForReservation(r, { programData: p, targets: targets.get(r.id) }),
+    [withoutSatisfiedRequirements(outstanding)],
+    { specOf: (t) => (typeof t === "number" ? specForNode(p.requirementSections[t]) : null), courseMap });
+
+  assert.ok(isSpare(cands), "the card should read as already covered");
+  assert.ok(!isUnbounded(cands, {}), "a spare card must not fall back to offering everything");
+});
+
+test("a card whose requirement is only PARTLY met is not spare", () => {
+  const r = res("Khoury Elective", { requirement: { index: 0, title: "Khoury Approved Electives" } });
+  const p = program();
+  const placements = {};                       // nothing placed
+  const outstanding = new Set(
+    outstandingObligations(p, { placements, courseMap }).map(o => o.target));
+  const cands = applyFilters(
+    candidatesForReservation(r, { programData: p, targets: [0] }),
+    [withoutSatisfiedRequirements(outstanding)], { courseMap });
+  assert.ok(!isSpare(cands), "an outstanding requirement was treated as met");
 });
 
 test("a stored requirement whose title drifted is abandoned, not followed", () => {

@@ -27,10 +27,10 @@ import { createContext, useContext, useState, useEffect, useMemo, useRef } from 
 import { usePlanner }         from "./PlannerContext.jsx";
 import { usePort }            from "./InstitutionContext.jsx";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
-import { bindReservations }   from "../core/runtimeBinding.js";
+import { bindReservations, outstandingObligations } from "../core/runtimeBinding.js";
 import {
-  candidatesForReservation, courseIds, preferredCourseIds,
-  forcedRequirement, isUnbounded, isSpare,
+  candidatesForReservation, courseIds, preferredCourseIds, applyFilters,
+  withoutSatisfiedRequirements, forcedRequirement, isUnbounded, isSpare,
 } from "../core/candidates.js";
 import { specForNode }        from "../core/programEligibility.js";
 import { specAdmitsSubject, specAdmitsRange } from "../core/requirementBinding.js";
@@ -84,26 +84,42 @@ export function CandidatesProvider({ children }) {
     baselineFor.current = programData;
   }
 
+  // Computed once and shared: it runs the graduation audit's allocator, and
+  // both the solve and the spare test need it.
+  const obligations = useMemo(
+    () => outstandingObligations(programData, { placements, courseMap }),
+    [programData, placements, courseMap]);
+
   const targets = useMemo(() => {
     if (!programData || !Object.keys(reservations ?? {}).length) return EMPTY_MAP;
     const next = bindReservations(reservations, {
-      programData, placements, courseMap, hints,
+      programData, placements, courseMap, hints, obligations,
       previous: baseline.current.size ? baseline.current : null,
     });
     baseline.current = next;
     return next;
-  }, [reservations, placements, courseMap, programData, hints]);
+  }, [reservations, placements, courseMap, programData, hints, obligations]);
 
   const value = useMemo(() => {
     const sections = programData?.requirementSections ?? [];
     const specOf = (t) => (typeof t === "number" ? specForNode(sections[t]) : null);
     const ctx = { specOf, courseMap };
 
+    // A requirement the plan has already met cannot be what a card is for.
+    // This matters for STORED bindings specifically: they bypass the solve
+    // (§11 forbids re-pointing them), so nothing else would notice that the
+    // requirement is done. Dropping it here leaves the card with none, which
+    // `isSpare` reports as "your plan already covers this" — the outcome §11
+    // asks for instead of rebinding.
+    const outstanding = new Set(obligations.map(o => o.target));
+    const filters = [withoutSatisfiedRequirements(outstanding)];
+
     const built = new Map();
     for (const r of Object.values(reservations ?? {})) {
-      built.set(r.id, candidatesForReservation(r, {
+      const base = candidatesForReservation(r, {
         programData, targets: targets.has(r.id) ? targets.get(r.id) : null,
-      }));
+      });
+      built.set(r.id, applyFilters(base, filters, ctx));
     }
 
     const get = (id) => built.get(id) ?? null;
@@ -122,7 +138,7 @@ export function CandidatesProvider({ children }) {
       isUnboundedFor: (id) => { const c = get(id); return c ? isUnbounded(c, ctx) : true; },
       isSpareFor: (id) => { const c = get(id); return c ? isSpare(c) : false; },
     };
-  }, [reservations, targets, programData, courseMap]);
+  }, [reservations, targets, programData, courseMap, obligations]);
 
   return <CandidatesContext.Provider value={value}>{children}</CandidatesContext.Provider>;
 }
