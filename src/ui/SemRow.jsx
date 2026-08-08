@@ -185,51 +185,6 @@ export default function SemRow({ sem }) {
   ) : null;
 
   // Continuation row (any special term spanning from previous semester)
-  if (termContId && !termStartId) {
-    return (
-      <div key={sem.id}
-        onClick={onNowClick}
-        style={{
-          display: "flex", alignItems: "stretch", marginBottom: 3, cursor: isLive ? "not-allowed" : "pointer",
-          background: "var(--card-bg)",
-          border: isActive ? "2px solid var(--active)" : "1px solid var(--border-card)",
-          borderRadius: 6, padding: "6px 10px",
-          opacity: isDone ? 0.9 : 1,
-          boxShadow: isActive ? "var(--shadow-active-row)" : "none",
-          transition: "opacity 0.15s",
-        }}
-      >
-        {isPhone ? (
-          <div style={{ width: 34, flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center", gap: 1, paddingTop: 2 }}>
-            {statusDot}
-            <StackedSemLabel sem={sem} />
-          </div>
-        ) : (
-          <div style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0 }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 5, marginBottom: 2 }}>
-              {statusDot}
-              <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-3)" }}><TText>{sem.label}</TText></span>
-              {isActive && (
-                <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700 }}>NOW</span>
-              )}
-            </div>
-            <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19 }}><TText>{sem.sub}</TText></div>
-          </div>
-        )}
-        <div style={{ flex: 1, display: "flex", alignItems: "center", gap: 8, paddingLeft: 8 }}>
-          <div style={{ width: 3, alignSelf: "stretch", background: "var(--border-2)", borderRadius: 2 }} />
-          <div>
-            <div style={{ fontSize: isPhone ? 6 : 12, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-              <TText>{termContType?.label ?? "Work"}</TText> <TText>Continues</TText>
-            </div>
-            <div style={{ fontSize: isPhone ? 5 : 10, color: "var(--text-4)" }}>{termContData?.duration}-month block · drag to move</div>
-          </div>
-          {showContLogo && <CompanyLogo key={termContData?.companyDomain || ""} domain={termContData?.companyDomain} size={isPhone ? 20 : 40} />}
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div key={sem.id}
       data-sem-id={sem.id}
@@ -402,6 +357,31 @@ export default function SemRow({ sem }) {
                 <span style={{ fontSize: 8, color: "#facc15", lineHeight: "calc(1.3 * var(--lh-scale, 1))" }}>{t("sem.intern.petition")}</span>
               </div>
             )}
+          </div>
+
+        ) : termContId ? (
+          // A term that CONTINUES into this semester gets the SAME bounded card
+          // as the one that starts it, so a co-op reads as one object wherever
+          // you meet it. It used to replace the entire row instead: the semester
+          // lost its own frame and seasonal tint, the co-op stopped looking like
+          // a card at all, and a spring co-op and the fall it ran into looked
+          // like two unrelated things.
+          <div style={{
+            flex: 1, minHeight: 58, minWidth: 200,
+            background: "var(--card-bg)",
+            border: "1px solid var(--border-card)",
+            borderRadius: 6, padding: "8px 12px 8px 14px",
+            display: "flex", alignItems: "center", gap: 8,
+          }}>
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                <TText>{termContType?.label ?? "Work"}</TText> <TText>Continues</TText>
+              </div>
+              <div style={{ fontSize: isPhone ? 5 : 10, color: "var(--text-4)", marginTop: 2 }}>
+                {termContData?.duration}-month block · drag to move
+              </div>
+            </div>
+            {showContLogo && <CompanyLogo key={termContData?.companyDomain || ""} domain={termContData?.companyDomain} size={isPhone ? 20 : 40} />}
           </div>
 
         ) : mainSlots === null ? (
