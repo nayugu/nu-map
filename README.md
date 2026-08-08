@@ -152,7 +152,7 @@ Push to `main` → GitHub Actions publishes `dist/` to the `gh-pages` branch (mi
 NU Map is **dual-licensed**.
 
 - **Free under [AGPL-3.0](LICENSE)** — use it, study it, modify it, run your own copy, fork it for another university. No fee, no need to ask. Two conditions: keep the attribution notice visible ([`NOTICE`](NOTICE)), and if you run a modified version as a service for others, share your source with them.
-- **[Commercial license](COMMERCIAL.md)** — for building something closed-source on it. Schools pay $1 per enrolled student per year, counted from their public IPEDS filing. Companies and individuals pay by the trailing-twelve-month revenue of the product containing NU Map, and pay nothing below $10k — that tier is a one-time self-certification, no contract. Annual, with a perpetual fallback so nothing you ship can be taken away.
+- **[Commercial license](COMMERCIAL.md)** — for building something closed-source on it. Schools pay $1 per enrolled student per year, counted from their public IPEDS filing — no upper band, so the figure is one multiplication at any size, and a single college or department can license just itself at $2 per student in it. Companies and individuals pay by the trailing-twelve-month revenue of the product containing NU Map, and pay nothing below $10k — that tier is a one-time self-certification, no contract. Annual, with a perpetual fallback so nothing you ship can be taken away.
 
 Note that the AGPL already permits commercial use *with* source disclosure — the paid license buys relief from disclosure, not permission to earn revenue. The full terms are in [`LICENSING.md`](LICENSING.md); contributor terms are in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 

@@ -17,7 +17,11 @@ closed-source product or service. All other use, including commercial use with
 source disclosure, is already permitted at no cost under the AGPL.
 
 Institutions pay one US dollar per enrolled student per year, counted from their
-public IPEDS filing. Companies and individuals pay according to the revenue of
+public IPEDS filing. There is no upper band and nothing to negotiate: the fee is
+one multiplication at any size. An institution that wants only one college or
+department can license just that, at two dollars per student in it, and never
+pays more than the institution-wide figure would have been. Companies and
+individuals pay according to the revenue of
 the product incorporating NU Map, measured over the **trailing twelve months**,
 and pay nothing where that figure is below ten thousand US dollars — no contract
 needed for that tier, just a one-time self-certification. A company that supplies
@@ -112,24 +116,36 @@ basis as §2.5, is substituted.
 irrespective of the number of students, departments, colleges, campuses, or
 programs at which the Work is in fact deployed.** This is a deliberate
 simplification in favour of a single flat figure requiring no audit of
-deployment. A licensee wishing to license a single department or college on a
-pilot basis may request scoped terms under §3.4.
+deployment. A licensee wishing to license a single department or college, whether
+on a pilot basis or permanently, may do so under §3.9.
 
 3.4. The fee is determined by reference to the following bands:
 
 | Enrolled Students | Annual fee |
 |---|---|
 | Fewer than 2,000 | US$2,000, as a minimum fee |
-| 2,000 to 50,000 inclusive | US$1.00 × Enrolled Students |
-| More than 50,000 | By negotiation. System-wide, multi-campus, consortium, and departmental-pilot arrangements are individually quoted |
+| 2,000 or more | US$1.00 × Enrolled Students |
+
+&nbsp;&nbsp;&nbsp;&nbsp;(a) **There is no upper band.** The rate at §3.1 applies
+at every size, and the fee for an institution of any size is a single
+multiplication requiring no quotation, no negotiation, and no contact with the
+Licensor to compute. A prospective licensee can therefore determine what it will
+pay from a public figure before it makes an inquiry.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(b) The two bands are continuous: an institution
+reporting 1,999 Enrolled Students and one reporting 2,000 are each assessed
+US$2,000. Growth in an institution's size accordingly never reduces its fee.
 
 3.5. By way of illustration, an institution reporting 31,000 Enrolled Students is
-assessed **US$31,000 per annum**; an institution reporting 1,400 is assessed the
-minimum fee of **US$2,000**.
+assessed **US$31,000 per annum**; an institution reporting 145,000 is assessed
+**US$145,000**; an institution reporting 1,400 is assessed the minimum fee of
+**US$2,000**.
 
-3.6. Each institution reporting separately to IPEDS is assessed separately. A
-system or consortium seeking a single consolidated license shall proceed under
-the third band of §3.4.
+3.6. Each institution reporting separately to IPEDS is assessed separately, each
+at the rate in §3.4. A system, multi-campus body, or consortium may instead seek
+a single consolidated license covering named constituent institutions, which is
+individually quoted; absent such a license, §3.4 applies to each constituent
+institution on its own IPEDS figure.
 
 3.7. **An Institutional Licensee's license extends only to provision of the Work
 to its own enrolled students, faculty, and staff.** Provision of the Work, or of
@@ -141,6 +157,52 @@ license by that institution or a license by the licensee under §4 as a supplier
 license and is not directed at revenue. The Licensor will entertain a written
 request for its reduction or waiver from a community college or other institution
 for which it presents a genuine obstacle to adoption.
+
+3.9. **Scoped licenses.** An institution may license the Work for one or more
+named colleges, schools, departments, or programs, in place of the
+institution-wide assessment at §3.3.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(a) **"Scoped Unit"** means each college, school,
+department, or program identified by name in the license instrument. **"Scoped
+Student"** means one student enrolled in a Scoped Unit, counted on the same basis
+as §2.5 and certified in writing by an officer of the institution as at each
+Assessment Date.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(b) The annual fee is **two United States dollars
+(US$2.00) per Scoped Student**, subject to a minimum of US$2,000, being the
+minimum fee at §3.4, and to limb (c).
+
+&nbsp;&nbsp;&nbsp;&nbsp;(c) **The scoped fee is capped at the institution-wide
+fee.** Where the figure produced by limb (b) equals or exceeds the fee that would
+be assessed under §3.4 on the institution's Enrolled Students, the license is
+instead written institution-wide, at the §3.4 figure, and §3.3 applies to it. An
+institution is accordingly never worse off for having scoped.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(d) The rate at limb (b) stands above the rate at §3.1
+because a scoped license substitutes a figure certified by the licensee for the
+public and independently verifiable one at §2.5, and forgoes the simplification
+at §3.3. Together with limb (c) it follows that institution-wide licensing is the
+cheaper course for any institution in which more than half the Enrolled Students
+are Scoped Students, which is the intended outcome: the scoped license exists so
+that a single department may adopt the Work without its institution's total
+enrolment standing in the way, and not as a means of licensing a large
+institution at a fraction of its size.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(e) By way of illustration, an institution reporting
+41,000 Enrolled Students, licensing for a single college of 9,000, is assessed
+**US$18,000 per annum** in place of US$41,000. The same institution licensing for
+colleges totalling 24,000 students is assessed **US$41,000**, its scoped figure
+having reached the cap.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(f) The license extends to the Scoped Units only. §3.7
+applies to the institution as a whole, and provision of the Work to students
+enrolled in no Scoped Unit is outside the scope of the license. A Scoped Unit may
+be added at any time by variation of the instrument, with effect from the date of
+the variation.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(g) The perpetual fallback at §5.2 vests in respect of
+the Scoped Units, and at the certified figure under which it vested. §5.3 applies
+to an increase in either.
 
 ## 4. Consideration — corporate and individual licensees
 
@@ -221,26 +283,39 @@ irrespective of its usage.
 Supplier, the annual fee is **the greater of** (i) the fee determined under §4.1,
 and (ii) **fifty United States cents (US$0.50) per Served Student**.
 
-&nbsp;&nbsp;&nbsp;&nbsp;(a) **De minimis.** This §4.9 does not apply where the
-aggregate number of Served Students is fewer than 2,000. A small Supplier serving a
-single institution or a pilot is accordingly assessed on revenue alone.
+&nbsp;&nbsp;&nbsp;&nbsp;(a) **Small Suppliers.** Where the aggregate number of
+Served Students is fewer than 2,000, limb (ii) above is **US$1,000**. That figure
+is half the minimum fee at §3.4, and is the same figure limb (ii) produces at
+2,000 Served Students, so that the floor is continuous at that boundary. It
+mirrors the institutional minimum because an institution below 2,000 Enrolled
+Students licensing directly pays that minimum, and the Licensor's consideration
+should not fall away altogether merely because the same institution is reached
+through a Supplier.
 
-&nbsp;&nbsp;&nbsp;&nbsp;(b) Where the aggregate number of Served Students exceeds
-50,000, the fee is by negotiation, consistently with the third band of §3.4.
+&nbsp;&nbsp;&nbsp;&nbsp;(b) **Trials.** Notwithstanding limb (a), this §4.9 does
+not apply where the Supplier provides the Licensed Product to a single institution
+under a written trial or pilot, of not more than twelve months and not renewed. A
+Supplier in that position is assessed on revenue alone, and may be within the Nil
+Band.
 
-&nbsp;&nbsp;&nbsp;&nbsp;(c) **The Nil Band is displaced to the extent this §4.9
-applies.** A Supplier to which paragraph (a) does not apply is not within the Nil
+&nbsp;&nbsp;&nbsp;&nbsp;(c) There is no upper limit on limb (ii), consistently
+with §3.4(a). The floor is a single multiplication at any number of Served
+Students.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(d) **The Nil Band is displaced to the extent this §4.9
+applies.** A Supplier to which limb (b) does not apply is not within the Nil
 Band, irrespective of its Product Revenue.
 
-&nbsp;&nbsp;&nbsp;&nbsp;(d) **Reporting.** A Supplier shall provide, at each
+&nbsp;&nbsp;&nbsp;&nbsp;(e) **Reporting.** A Supplier shall provide, at each
 Assessment Date, a written statement of the institutions to which it provides a
 Licensed Product together with the §2.5 figure for each. This is a statement of
 customer identity and public enrolment figures only; the forbearance at §4.7 as to
 financial records is unaffected.
 
-&nbsp;&nbsp;&nbsp;&nbsp;(e) The rate at limb (ii) above is set at half the direct
-institutional rate under §3.1, in recognition of the distribution, integration, and
-support functions a Supplier discharges. Its purpose is to ensure that the
+&nbsp;&nbsp;&nbsp;&nbsp;(f) The rate at limb (ii) above is set at half the direct
+institutional rate under §3.1, and the minimum at limb (a) at half the minimum
+fee under §3.4, in recognition of the distribution, integration, and support
+functions a Supplier discharges. Its purpose is to ensure that the
 Licensor's consideration does not depend materially upon whether an institution
 licenses the Work directly or acquires it through a Supplier, while preserving a
 margin in favour of the Supplier's channel.

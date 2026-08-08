@@ -55,12 +55,15 @@ body:
       label: Which pricing band do you land in?
       description: >-
         Schools: your most recent IPEDS 12-Month Enrollment (E12) unduplicated
-        headcount, all levels — or the national equivalent. Companies and
-        individuals: gross revenue over the trailing twelve months for the product
-        containing NU Map, aggregated across your affiliates. Under $10k is the
-        free Nil Band — this form is also how you self-certify into it, and no
-        contract follows. Leave blank if you'd rather discuss it.
-      placeholder: "e.g. 31,000 students — or — under $10k TTM revenue (Nil Band)"
+        headcount, all levels — or the national equivalent — times $1. If only one
+        college or department wants it, say which and how many students are in it
+        instead: that's $2 per student in the named unit, capped at what the
+        whole-institution figure would have been. Companies and individuals: gross
+        revenue over the trailing twelve months for the product containing NU Map,
+        aggregated across your affiliates. Under $10k is the free Nil Band — this
+        form is also how you self-certify into it, and no contract follows. Leave
+        blank if you'd rather discuss it.
+      placeholder: "e.g. 31,000 students — or — College of Engineering, 4,200 students — or — under $10k TTM revenue (Nil Band)"
 
   - type: input
     id: contact
