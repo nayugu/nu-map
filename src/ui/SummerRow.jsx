@@ -16,6 +16,14 @@ import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
 import { FadeInput } from "./FadeText.jsx";
 
+// One card slot, in a summer column. Course cards, the empty dashed slots and
+// the co-op / internship cards all stand on this: a co-op sitting beside a
+// course in the same summer has to be the SAME height as it, or the two
+// sessions read as different kinds of thing. The special-term cards used to
+// carry their own 58, which was 8px short of a course on desktop and 23px
+// tall on a phone.
+const SLOT_H = isPhone => (isPhone ? 35 : 66);
+
 
 export default function SummerRow({ semA, semB }) {
   const {
@@ -109,7 +117,7 @@ export default function SummerRow({ semA, semB }) {
             data-drag-from={sem.id}
             onDragStart={e => onDragStart(e, termStartId, "specialTerm", sem.id, { duration: termStartData.duration, typeId: termStartData.typeId })}
             style={{
-              width: "100%", minHeight: 58,
+              width: "100%", minHeight: SLOT_H(isPhone),
               background: "var(--card-bg)",
               border: "1px solid var(--border-card)",
               borderRadius: 6, padding: "8px 10px 8px 12px",
@@ -153,7 +161,7 @@ export default function SummerRow({ semA, semB }) {
             <span style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-5)" }}><TText>{sem.sub}</TText></span>
           </div>
           <div style={{
-            width: "100%", minHeight: 58,
+            width: "100%", minHeight: SLOT_H(isPhone),
             border: "1px solid var(--border-card)",
             borderRadius: 6, padding: "8px 14px",
             display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
@@ -209,7 +217,7 @@ export default function SummerRow({ semA, semB }) {
         {/* Main ≥3 SH slots */}
         <div style={{
           display: "grid", gridTemplateColumns: `repeat(${Math.max(1, slotCount || 1)}, 1fr)`, gap: 4,
-          minHeight: isPhone ? 35 : 66,
+          minHeight: SLOT_H(isPhone),
           overflow: "visible",
           borderRadius: 4, padding: 2,
           border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "main"
@@ -233,7 +241,7 @@ export default function SummerRow({ semA, semB }) {
           {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
           {Array.from({ length: emptySlots }).map((_, i) => (
             <div key={`ms-${i}`} style={{
-              height: isPhone ? 35 : 66,
+              height: SLOT_H(isPhone),
               border: "1px dashed var(--border-slot)", borderRadius: 6, background: tb.bg,
             }} />
           ))}
