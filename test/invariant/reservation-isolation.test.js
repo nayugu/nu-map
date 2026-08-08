@@ -137,6 +137,21 @@ test("no UI file re-derives a semester's contents for itself", () => {
   assert.deepEqual(bad, [], "a UI file deriving term contents instead of asking for them");
 });
 
+test("the grid's view follows the Claude preview, like every other surface", () => {
+  // While a proposal is previewed, `pvPlacements` is the simulated plan and
+  // the header, grad panel and totals all render it. Building the semester
+  // view from the REAL `placements` — which is what I did first — left the
+  // grid showing the student's actual courses while everything around it
+  // showed the proposal.
+  const src = readFileSync(join(ROOT, "src/context/PlannerContext.jsx"), "utf8");
+  const build = /const semView = useMemo\([\s\S]*?\]\);/.exec(src)?.[0];
+  assert.ok(build, "semView is gone — the grid view has been restructured");
+  assert.match(build, /placements:\s*pvPlacements/,
+    "the semester view ignores the Claude preview");
+  assert.ok(!/buildSemesterView\(\{\s*placements,/.test(build),
+    "the semester view is built from real placements, not the previewed ones");
+});
+
 test("the printed report gets layout and degree maps SEPARATELY", () => {
   // exportReport computes the requirement audit, credit totals and the NUPath
   // grid from `placements`/`courseMap`, and lays out semesters from `view`.

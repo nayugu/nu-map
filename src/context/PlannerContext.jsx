@@ -1697,9 +1697,17 @@ export function PlannerProvider({ children }) {
   // it themselves and each had to choose correctly between the raw maps and a
   // combined one; three shipped bugs came from that choice, not from its
   // difficulty. See src/core/semesterView.js.
+  //
+  // Built from pvPlacements, NOT `placements`. While a Claude proposal is
+  // previewed, pvPlacements is the SIMULATED plan and every other surface
+  // renders it; a view built from the real state would have shown the grid the
+  // student's actual courses while the header and grad panel showed the
+  // proposal. Reservations are unsimulated on purpose — no proposal action
+  // touches them yet, so they carry over unchanged and stay visible under a
+  // preview rather than blinking out of the plan.
   const semView = useMemo(
-    () => buildSemesterView({ placements, reservations, courseMap: effectiveCourseMap }),
-    [placements, reservations, effectiveCourseMap]);
+    () => buildSemesterView({ placements: pvPlacements, reservations, courseMap: effectiveCourseMap }),
+    [pvPlacements, reservations, effectiveCourseMap]);
 
   /** The cards in a semester, in draw order. The only way to ask. */
   const semesterCards = useCallback(
