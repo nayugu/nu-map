@@ -20,7 +20,7 @@ import { fileURLToPath } from "node:url";
 import { specForNode, emptySpec } from "../../src/core/programEligibility.js";
 import { materialize } from "../../src/core/candidateSpec.js";
 import {
-  createCandidates, narrow, applyFilters,
+  createCandidates, narrow, applyFilters, answerGroups,
   courseSpec, courseIds, forcedRequirement, reasonFor,
   isUnbounded, isSpare, isImpossible, isSentinel,
   withoutSatisfiedRequirements, withoutPlacedCourses, withoutOptionsRuledOut,
@@ -282,6 +282,82 @@ test("a seed naming a course the catalog lacks contributes nothing", () => {
   const seed = { keys: new Set(["CS4300", "CS3500"]), ranges: [] };   // CS3500 was renumbered away
   const c = createCandidates({ requirements: [], seed });
   assert.deepEqual([...courseIds(c, ctx)], ["CS4300"], "a phantom option was offered");
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// Option GROUPS — the 36 cells design rule 2 exists for
+// ═══════════════════════════════════════════════════════════════════
+
+test("CORPUS FACT: 36 named cells have a multi-course option group", () => {
+  // "PSYC 3200 or PT 5410 and PT 5411" — PT 5410 alone does not answer it.
+  // Pinned so that if the parser ever flattens groups again, this fails here
+  // rather than in a student's plan.
+  let cells = 0, multi = 0;
+  const walk = function* (es) { for (const e of es ?? []) { yield e; yield* walk(e.children); } };
+  for (const root of ["src/data/majors/2026", "src/data/grad-majors/2026"]) {
+    const base = join(ROOT, root);
+    if (!existsSync(base)) continue;
+    for (const college of readdirSync(base)) {
+      let progs = [];
+      try { progs = readdirSync(join(base, college)); } catch { continue; }
+      for (const prog of progs) {
+        const f = join(base, college, prog, "plan.json");
+        if (!existsSync(f)) continue;
+        const grid = JSON.parse(readFileSync(f, "utf8"));
+        for (const plan of grid.plans ?? []) {
+          for (const y of plan.years ?? []) for (const t of y.terms ?? []) {
+            for (const e of walk(t.entries)) {
+              if (e.coop || e.vacation || e.heading || e.either) continue;
+              if (!(e.options?.length > 1)) continue;
+              cells += 1;
+              if (e.options.some(g => g.length > 1)) multi += 1;
+            }
+          }
+        }
+      }
+    }
+  }
+  assert.ok(cells > 1300, `only ${cells} named cells found — corpus missing`);
+  assert.equal(multi, 36, `${multi} cells have a compound option; the entry model may have flattened`);
+});
+
+test("a compound option is answered as a group, never course by course", () => {
+  const groups = [["PSYC3200"], ["PT5410", "PT5411"]];
+  const c = createCandidates({ requirements: [], groups });
+  assert.deepEqual(answerGroups(c, {}).length, 2, "both options should stand");
+
+  // Losing one half of a compound option kills the whole option.
+  const half = narrow(c, { courses: ["PT5410"], reason: "ruled out" });
+  assert.deepEqual(answerGroups(half, {}), [["PSYC3200"]], "the compound option survived losing a half");
+  assert.ok(!courseIds(half, { courseMap: { PSYC3200: {}, PT5410: {}, PT5411: {} } }).has("PT5411"),
+    "PT 5411 is still offered although its group is dead — it was never an answer alone");
+});
+
+test("ruling out enough courses to kill every GROUP is refused", () => {
+  // The count-based guard passed here: 2 of 3 courses removed looks safe, and
+  // leaves zero answerable options.
+  const groups = [["PSYC3200"], ["PT5410", "PT5411"]];
+  const map = { PSYC3200: {}, PT5410: {}, PT5411: {} };
+  const c = createCandidates({ requirements: [], groups });
+  const killed = new Set(["PSYC3200", "PT5410"]);
+  const after = applyFilters(c, [withoutOptionsRuledOut((id) => (killed.has(id) ? "X" : null))],
+                             { courseMap: map });
+  assert.ok(answerGroups(after, { courseMap: map }).length > 0,
+    "every answer was ruled out — the prereq graph is not entitled to say that");
+  assert.equal(after, c, "the removal should have been refused wholesale");
+});
+
+test("a group naming a course the catalog lacks is not offered", () => {
+  const groups = [["CS4300"], ["CS4100", "CS3500"]];   // CS3500 was renumbered away
+  const c = createCandidates({ requirements: [], groups });
+  assert.deepEqual(answerGroups(c, { courseMap: COURSE_MAP }), [["CS4300"]],
+    "an unanswerable group was offered");
+});
+
+test("single-course groups behave exactly like plain courses", () => {
+  const viaGroups = createCandidates({ requirements: [], groups: [["CS4300"], ["CS4100"]] });
+  const viaSeed = createCandidates({ requirements: [], seed: { keys: new Set(["CS4300", "CS4100"]), ranges: [] } });
+  assert.deepEqual([...courseIds(viaGroups, ctx)].sort(), [...courseIds(viaSeed, ctx)].sort());
 });
 
 // ═══════════════════════════════════════════════════════════════════

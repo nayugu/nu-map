@@ -49,6 +49,7 @@
 import { specIsEmpty } from "./programEligibility.js";
 import { unionAll, subtractIds, materialize, cloneSpec } from "./candidateSpec.js";
 import { GENERAL_ELECTIVE, CONCENTRATION } from "./requirementDemand.js";
+import { resolveRequirement } from "./reservations.js";
 
 export { GENERAL_ELECTIVE, CONCENTRATION };
 
@@ -68,17 +69,80 @@ export const isSentinel = (target) => typeof target !== "number";
 /**
  * Start from everything a card could be.
  *
+ * `groups` is the catalog's own shape for a named choice: a list of GROUPS,
+ * every member of a group required together. `PSYC 3200 or PT 5410 and PT 5411`
+ * is `[["PSYC3200"], ["PT5410","PT5411"]]`, and flattening that to three courses
+ * would offer PT 5410 on its own — which does not answer the cell. Design rule 2
+ * ("never collapse a choice") exists because an earlier entry model did exactly
+ * that, in 36 cells, and the doc classes it as *confidently wrong*.
+ *
+ * 97.4% of named cells have single-course groups only, so groups and courses
+ * coincide almost everywhere. They are still modelled as groups, because the
+ * cases where they differ are the ones that matter.
+ *
+ * The seed is DERIVED from the groups rather than accepted alongside them, so
+ * the two cannot be handed in already inconsistent.
+ *
  * @param {object} init
  * @param {Iterable<number|string>} [init.requirements]
- * @param {object} [init.seed]  EligibleSpec, for a cell that names its options
+ * @param {string[][]} [init.groups]  the catalog's named options
+ * @param {object} [init.seed]  an explicit EligibleSpec, when there are no groups
  */
-export function createCandidates({ requirements = [], seed = null } = {}) {
+export function createCandidates({ requirements = [], seed = null, groups = null } = {}) {
+  const cleanGroups = Array.isArray(groups)
+    ? groups.filter(g => Array.isArray(g) && g.length).map(g => [...g])
+    : null;
   return {
     requirements: new Set(requirements),
-    seed: seed ? cloneSpec(seed) : null,
+    groups: cleanGroups?.length ? cleanGroups : null,
+    seed: cleanGroups?.length
+      ? { keys: new Set(cleanGroups.flat()), ranges: [] }
+      : (seed ? cloneSpec(seed) : null),
     droppedRequirements: new Map(),
     droppedCourses: new Map(),
   };
+}
+
+/**
+ * Candidates for a reservation — the card the planner actually holds.
+ *
+ * Two sources, and neither is trusted blindly:
+ *
+ *   options       the catalog named the choice, so it becomes the groups
+ *   requirement   re-checked through `resolveRequirement`, which verifies the
+ *                 stored index still carries the stored title. Sections are
+ *                 re-scraped monthly; an index that has drifted is dropped
+ *                 rather than followed, so the card degrades to "we do not
+ *                 know" instead of pointing at a different requirement.
+ *
+ * `targets` lets a caller that has the plan grid supply the FULL candidate list
+ * for an ambiguous cell. Reservations only store a requirement when the binding
+ * was forced (`applySamplePlan`), so without it an ambiguous card arrives here
+ * knowing nothing — which reads as unbounded, and is the honest default.
+ */
+export function candidatesForReservation(reservation, { programData, targets = null } = {}) {
+  const groups = Array.isArray(reservation?.options) ? reservation.options : null;
+  let requirements;
+  if (Array.isArray(targets)) {
+    requirements = targets;
+  } else {
+    const resolved = resolveRequirement(reservation, programData);
+    requirements = resolved ? [resolved.index] : [];
+  }
+  return createCandidates({ requirements, groups });
+}
+
+/**
+ * The groups that can still answer this card.
+ *
+ * A group survives only if EVERY course in it is real and none has been ruled
+ * out — losing one half of `PT 5410 and PT 5411` kills the whole option, since
+ * the other half alone was never an answer.
+ */
+export function answerGroups(cands, { courseMap } = {}) {
+  if (!cands.groups) return null;
+  return cands.groups.filter(g =>
+    g.every(id => (!courseMap || courseMap[id]) && !cands.droppedCourses.has(id)));
 }
 
 /**
@@ -185,8 +249,15 @@ export function isSpare(cands) {
  * disagreement between two accessors that this module exists to remove, so the
  * unrepresentable case is made unrepresentable rather than approximated.
  */
-export function courseSpec(cands, { specOf } = {}) {
+export function courseSpec(cands, { specOf, courseMap } = {}) {
   if (isUnbounded(cands, { specOf })) return null;
+  // A grouped card's courses are the courses of the groups that SURVIVE. Taking
+  // the flat seed minus dropped ids would leave PT 5411 on offer after PT 5410
+  // was ruled out, even though their group is dead.
+  if (cands.groups) {
+    const live = answerGroups(cands, { courseMap });
+    return { keys: new Set(live.flat()), ranges: [] };
+  }
   const base = cands.seed
     ? cands.seed
     : unionAll([...cands.requirements].filter(t => !isSentinel(t)).map(t => specOf?.(t)).filter(Boolean));
@@ -209,7 +280,7 @@ export function courseIds(cands, { specOf, courseMap } = {}) {
     for (const id in courseMap) if (!cands.droppedCourses.has(id)) out.add(id);
     return out;
   }
-  return materialize(courseSpec(cands, { specOf }), courseMap);
+  return materialize(courseSpec(cands, { specOf, courseMap }), courseMap);
 }
 
 /**
@@ -304,8 +375,17 @@ export const withoutOptionsRuledOut = (forcedBy) => (cands, ctx) => {
   if (ids.size < 2) return null;      // nothing to rule out when there is one answer
   const gone = [];
   for (const id of ids) if (forcedBy(id)) gone.push(id);
-  // Removing every candidate would leave the card unanswerable, which is a
-  // statement the prereq graph is not entitled to make on its own.
-  if (!gone.length || gone.length >= ids.size) return null;
+  if (!gone.length) return null;
+
+  // Would this leave the card unanswerable? The prereq graph may narrow a
+  // choice; it is not entitled to say the card cannot be answered at all.
+  //
+  // Checked by SIMULATING the removal rather than by counting what is left.
+  // Counting courses is wrong the moment a group has two members: ruling out
+  // PSYC 3200 and PT 5410 leaves one course on offer and ZERO answerable
+  // groups, because PT 5411 alone was never an answer.
+  const after = narrow(cands, { courses: gone, reason: "" });
+  if (courseIds(after, ctx).size === 0) return null;
+
   return { courses: gone, reason: "ruled out by a course already in your plan" };
 };
