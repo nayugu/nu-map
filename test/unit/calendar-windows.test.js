@@ -103,12 +103,42 @@ test("and becomes current within a week of classes starting", () => {
   assert.deepEqual(late, [], "onset lag must stay under a week");
 });
 
-test("fall's onset is exact, because its rule is not an estimate", () => {
-  if (termWindows.types.fall.startRule !== "laborDayPlus2") return;
-  for (const [semId, type, , first] of OBSERVED) {
-    if (type !== "fall") continue;
-    assert.equal(calendar.getCurrentSemId(at(first)), semId,
-      `${semId}: fall must be current on day one — no margin needed`);
+test("a known first class day costs exactly one day, never more", () => {
+  // Where the date is known rather than estimated — a term Banner published,
+  // or Fall's Labor Day rule — the only margin is the single day that makes
+  // "in progress" mean a class has actually met. This is the path production
+  // runs on: the pipeline pins whatever Banner has scheduled each month, so
+  // the semester being detected is normally a published fact, not a fit.
+  for (const [semId, type, year, first] of OBSERVED) {
+    const known = calendar.getTermStart(type, year);
+    const isKnown = termWindows.pinned?.[semId] ||
+      (type === "fall" && termWindows.types.fall.startRule === "laborDayPlus2");
+    if (!isKnown) continue;
+    assert.equal(days(at(first), known), 1,
+      `${semId}: known start ${first} should be recognised exactly 1 day later, got ${iso(known)}`);
+    assert.equal(calendar.getCurrentSemId(shift(at(first), 1)), semId,
+      `${semId}: must be current the day after classes begin`);
+    assert.notEqual(calendar.getCurrentSemId(at(first)), semId,
+      `${semId}: must NOT be current on the morning of day one`);
+  }
+});
+
+test("pinned terms come from Banner, not from the fit", () => {
+  // The pins are what make a shifted calendar a non-event: a COVID-style
+  // delay appears in Banner's published dates immediately, where no fit of
+  // ordinary years could ever predict it. If pinning silently stopped
+  // working the windows would still look plausible, so assert it is live.
+  const pins = termWindows.pinned ?? {};
+  assert.ok(Object.keys(pins).length > 0,
+    "no terms pinned — derive-term-windows.js is no longer reading Banner's schedule");
+  for (const [semId, p] of Object.entries(pins)) {
+    assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(p.start), `${semId}: pinned start is not a date`);
+    assert.ok(/^\d{4}-\d{2}-\d{2}$/.test(p.end), `${semId}: pinned end is not a date`);
+    assert.ok(p.start < p.end, `${semId}: pinned term ends before it starts`);
+    const m = /^([a-zA-Z]+)(\d{4})$/.exec(semId);
+    const type = m[1] === "spr" ? "spring" : m[1];
+    assert.equal(iso(calendar.getTermStart(type, +m[2])), iso(shift(at(p.start), 1)),
+      `${semId}: the pinned date must win over the fitted window`);
   }
 });
 
@@ -134,7 +164,7 @@ test("a finished term lingers only until the next one begins", () => {
   // while session B has begun as late as Jul 6 in other years, and one
   // threshold has to sit past the latest of those. 8 days of real break plus
   // 8 days of that margin is the 16 observed.
-  const bar = { fall: 31, spring: 17, sumA: 17, sumB: 16 };
+  const bar = { fall: 32, spring: 17, sumA: 17, sumB: 16 };
   const slow = [];
   for (const [semId, type, , , fin] of OBSERVED) {
     let n = 0;
@@ -168,7 +198,7 @@ test("the term named during a break is the one that just ended", () => {
   assert.equal(calendar.getCurrentSemId(at("2025-12-15")), "fall2025");
   assert.equal(calendar.getCurrentSemId(at("2025-12-31")), "fall2025");
   assert.equal(calendar.getCurrentSemId(at("2026-01-06")), "fall2025", "spring had not started yet");
-  assert.equal(calendar.getCurrentSemId(at("2026-01-11")), "spr2026", "and hands over once it has");
+  assert.equal(calendar.getCurrentSemId(at("2026-01-12")), "spr2026", "and hands over once it has");
 });
 
 // ── Structural properties ────────────────────────────────────────
@@ -234,12 +264,14 @@ test("leap years do not shift a window", () => {
 });
 
 test("fall tracks Labor Day, not a fixed date", () => {
-  // The rule is the reason fall needs no margin at all; if termWindows.js ever
-  // drops it, this is the test that says so.
+  // The rule is why fall needs no statistical margin — it reproduces the
+  // measured first class day exactly, every year, so the only thing added is
+  // the one-day "a class has met" margin. If termWindows.js ever drops the
+  // rule, this is the test that says so.
   if (termWindows.types.fall.startRule !== "laborDayPlus2") return; // fell back to dates, fine
   for (const [semId, , year, first] of OBSERVED.filter(o => o[1] === "fall")) {
-    assert.equal(iso(calendar.getTermStart("fall", year)), first,
-      `${semId}: Labor Day rule should reproduce the measured first class day exactly`);
+    assert.equal(iso(calendar.getTermStart("fall", year)), iso(shift(at(first), 1)),
+      `${semId}: Labor Day rule + 1 should land the day after the measured first class`);
   }
 });
 
@@ -254,13 +286,28 @@ test("isTermPast waits past add/drop, and is false for future terms", () => {
   assert.equal(calendar.isTermPast("209910", new Date(2026, 7, 8)), false, "a term 70 years out is not past");
 });
 
-test("isTermPast is stricter than it used to be, never looser", () => {
-  // The old thresholds were Sep 15 / Jan 22 / May 12 / Jul 16. Loosening any of
-  // them would pull an unsettled term's enrolment into offering probability.
-  const old = { 202610: "2025-09-15", 202630: "2026-01-22", 202640: "2026-05-12", 202660: "2026-07-16" };
-  for (const [code, oldDate] of Object.entries(old)) {
-    assert.equal(calendar.isTermPast(code, at(oldDate)), false,
-      `${code}: became "past" no later than the old hand-picked ${oldDate}`);
+test("isTermPast always waits out add/drop, measured from the real first class", () => {
+  // The bar this used to hold — "no earlier than the old hand-picked Sep 15 /
+  // Jan 22 / May 12 / Jul 16" — turned out to be the wrong invariant once
+  // dates could be pinned. Summer 2 2026 really began Jun 29, six days before
+  // the old guess assumed, so settling genuinely lands earlier than Jul 16.
+  // Comparing against a guess punished being right.
+  //
+  // The real guarantee is about the term, not about the old constant: nothing
+  // counts as settled until well past the first class, so a term still inside
+  // add/drop can never contribute to offering probability.
+  const codeFor = { fall: "10", spring: "30", sumA: "40", sumB: "60" };
+  for (const [semId, type, year, first] of OBSERVED) {
+    const ayEnd = type === "fall" ? year + 1 : year;
+    const code = `${ayEnd}${codeFor[type]}`;
+    // Six, not seven: the binding case is Spring 2021, where the fitted
+    // threshold fired a week before the COVID-delayed first class and so
+    // compressed the settling window to exactly 7 days. Everywhere else it is
+    // the full 14. Worth knowing that a shifted calendar shortens this too.
+    assert.equal(calendar.isTermPast(code, shift(at(first), 6)), false,
+      `${semId} (${code}): settled within a week — add/drop is still open`);
+    assert.equal(calendar.isTermPast(code, shift(at(first), 21)), true,
+      `${semId} (${code}): should be settled three weeks in`);
   }
 });
 

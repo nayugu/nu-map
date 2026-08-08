@@ -78,6 +78,8 @@ const MIN_BUFFER_DAYS    = 1;   // MADN can be exactly 0 when a term type has
                                 // not moved; still leave a day of slack
 const MAX_BUFFER_DAYS    = 7;   // and cap it: one freak year must not drag us
                                 // back to the lag this is fixing
+const MAX_ONSET_LAG_DAYS = 7;   // no term may be recognised more than a week
+                                // after it began, in any year in the sample
 const MIN_GAP_DAYS       = 1;   // consecutive windows must not overlap
 
 // Banner term-code suffixes: 10 = Fall, 30 = Spring, 40 = Summer 1, 60 = Summer 2.
@@ -255,6 +257,10 @@ async function main() {
   const currentAYEnd = now.getMonth() + 1 >= 9 ? now.getFullYear() + 1 : now.getFullYear();
   const ayEnds = [];
   for (let ay = currentAYEnd - YEARS_BACK + 1; ay <= currentAYEnd; ay++) ayEnds.push(ay);
+  // …and one year past that, because Banner publishes roughly a term ahead.
+  // Any term it has already scheduled does not need estimating at all — see
+  // the pinning step below.
+  ayEnds.push(currentAYEnd + 1);
 
   console.log(`Deriving term windows from AY ${ayEnds[0]}–${ayEnds.at(-1)} ` +
               `(${YEARS_BACK} academic years, rolling).\n`);
@@ -263,8 +269,11 @@ async function main() {
     (await (await fetch(`${BASE}/classSearch/getTerms?searchTerm=&offset=1&max=200`)).json())
       .map(t => [t.code, t.description]));
 
-  // observed[type] = [{ year, start, end, n }]
+  // observed[type] = [{ year, start, end, n }]   — finished terms, used to fit
+  // pinned                = { "fall2026": {...} } — terms Banner has already
+  //                         scheduled, used verbatim instead of any estimate
   const observed = { fall: [], spring: [], sumA: [], sumB: [] };
+  const pinned = {};
   const termCache = new Map();
 
   for (const ayEnd of ayEnds) {
@@ -291,11 +300,22 @@ async function main() {
         console.log(`  ${type.padEnd(6)} ${year}  ${code}  only ${n} sections — skipped`);
         continue;
       }
-      // A term still in session has no end date to measure, and its sections
-      // are still being edited. Judge that on the data, not on the calendar
-      // we are in the middle of deriving.
+      // A term that has not finished cannot join the fit — its sections are
+      // still being edited, and judging that on the measured end date rather
+      // than on the calendar we are in the middle of deriving keeps the two
+      // from arguing.
+      //
+      // But it is far MORE useful than a fitted estimate: Banner has already
+      // scheduled it, so its start is a published fact rather than a guess
+      // off five years of history. Pin it. This is what closes the gap a
+      // fitted threshold cannot: an estimate fitted to ordinary years fires
+      // early in a year that shifts (Spring 2022 began 12 days late under
+      // COVID), whereas a shift shows up in Banner's own dates immediately.
+      // The fit stays as the fallback for terms past Banner's horizon.
       if (end >= today) {
-        console.log(`  ${type.padEnd(6)} ${year}  ${code}  runs until ${end} — not finished, skipped`);
+        const prefix = type === "spring" ? "spr" : type;
+        pinned[`${prefix}${year}`] = { type, year, start, end, n, code };
+        console.log(`  ${type.padEnd(6)} ${year}  ${code}  PINNED — Banner has it scheduled ${start} → ${end}  (n=${n})`);
         continue;
       }
       console.log(`  ${type.padEnd(6)} ${year}  ${code}  classes ${start} → finals end ${end}  (n=${n})`);
@@ -349,11 +369,26 @@ async function main() {
       record.startBuffer = 0;
       record.lengthScale = +L.scale.toFixed(2);
     } else {
-      const startDate = fromRef(2001, cfg.startRef, S.threshold);
+      // Cap the threshold at the earliest start ever observed plus
+      // MAX_ONSET_LAG_DAYS. The buffer alone does not bound the lag: it is
+      // measured from the MEDIAN, so a year that starts early sees the full
+      // buffer plus its own distance below the median. Summer 2's threshold
+      // sat 8 days past its 2026 start that way — over the budget, from a
+      // 5-day buffer.
+      // +1 for the same reason a known date gets one (see ONSET_MARGIN_DAYS in
+      // calendar.js): median + 2·MADN still lands exactly ON the first class in
+      // a year that starts above the median, and "in progress" should mean a
+      // class has actually met. The cap below keeps that day from costing.
+      const capped = Math.min(S.threshold + 1, S.min + MAX_ONSET_LAG_DAYS);
+      if (capped < S.threshold) {
+        console.log(`  cap ${type}: threshold pulled in ${S.threshold - capped}d — ` +
+                    `no term may be recognised more than ${MAX_ONSET_LAG_DAYS}d late`);
+      }
+      const startDate = fromRef(2001, cfg.startRef, capped);
       const endDate   = fromRef(2001, cfg.endRef,   E.threshold);
       record.start       = { month: startDate.getUTCMonth() + 1, day: startDate.getUTCDate() };
       record.end         = { month: endDate.getUTCMonth() + 1,   day: endDate.getUTCDate() };
-      record.startBuffer = S.buffer;
+      record.startBuffer = capped - Math.round(S.centre);
     }
     types[type] = record;
 
@@ -435,7 +470,14 @@ async function main() {
     yearsBack:   YEARS_BACK,
     sampledAY:   [ayEnds[0], ayEnds.at(-1)],
     types,
+    // Exact published dates, keyed by semId, for the terms Banner had already
+    // scheduled at generation time. Consulted BEFORE `types`, so within
+    // Banner's horizon nothing is estimated at all.
+    pinned: Object.fromEntries(Object.entries(pinned)
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([semId, p]) => [semId, { start: p.start, end: p.end }])),
   };
+  console.log(`\nPinned ${Object.keys(pinned).length} scheduled term(s): ${Object.keys(pinned).sort().join(", ") || "none"}`);
 
   if (!WRITE) {
     console.log("\n(dry run — pass --write to update termWindows.js)");

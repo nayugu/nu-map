@@ -39,15 +39,31 @@ Facts that follow from this:
   with **no** nupath/attribute class — find it by its label text
   (`findAttributeText`), never by a class selector. A class-based selector
   matched zero blocks and made the catalog contribute no NUPath at all.
-- **Term windows are derived, not hardcoded.** Which semester is "now" — and
-  therefore which courses count as completed — comes from
-  `src/adapters/northeastern/termWindows.js`, regenerated monthly by
-  `derive-term-windows.js` from Banner section meeting dates over a **rolling
-  5-year window**. Fall's start is an exact rule (the Wednesday after Labor
-  Day, 9/9 years) and needs no margin; the rest sit at median + 2·MADN — the
-  robust twin of mean + 2σ, because plain σ lets one COVID year (Spring 2022
-  began Jan 18) push the threshold later than the guess it replaced. Never
-  re-freeze these as constants: NU moved Spring to a Wednesday start in 2026.
+- **Term windows are read where possible, estimated only as a fallback.**
+  Which semester is "now" — and therefore which courses count as completed —
+  comes from `src/adapters/northeastern/termWindows.js`, regenerated monthly
+  by `derive-term-windows.js`. Three tiers, in order:
+  1. **`pinned`** — Banner publishes about a term ahead, so the semester the
+     planner actually cares about usually has a *published* start date. Used
+     verbatim + 1 day. This is what makes a shifted calendar a non-event; no
+     fit of ordinary years could ever have predicted Spring 2022's 12-day
+     COVID delay, but Banner knew it.
+  2. **Fall's Labor Day rule** — the Wednesday after Labor Day, exact in 9/9
+     measured years, so no statistical margin, just the same +1 day.
+  3. **The fitted fallback** — median + 2·MADN over a **rolling 5-year
+     window**, for terms past Banner's horizon. MADN (not σ) because one
+     COVID year pulls σ from 1.2d to 6.0d and would push the threshold later
+     than the hand-picked guess this replaced. Capped so no term is ever
+     recognised more than 7 days late.
+  Never re-freeze any of this as constants: NU moved Spring to a Wednesday
+  start in 2026, and only the rolling derivation noticed.
+  The measured guarantee, over 31 terms 2018–2026: recognition lands strictly
+  *after* the first class in **27/27 ordinary terms**, by **1 day** when the
+  date is known and ≤7 days (mean 2.9) when fitted. Anomalous years are
+  discounted by design, not by excuse — that is exactly what MADN buys, and
+  the only 3 misses are the COVID terms, which a pinned date would now catch
+  anyway. Don't re-tune the thresholds to cover an outlier year: pinning
+  Spring to its 2021 date would cost every ordinary year 12 days of lag.
   `isTermPast` is a *separate*, later threshold (start + 14d) about Banner
   enrolment settling after add/drop — do not re-merge the two.
 - **"Now" is the most recent term to have BEGUN**, never the one about to.

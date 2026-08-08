@@ -19,6 +19,20 @@ import termWindows from "./termWindows.js";
 // data settled" are different questions that shared one constant before.
 const SETTLE_DAYS = 14;
 
+// How long after the first class day before the planner calls a term current,
+// where that day is KNOWN rather than estimated — a published Banner date or
+// the Labor Day rule.
+//
+// One day, not zero. A threshold landing at midnight on the first day of
+// classes flips while that day is still ahead of the student: for the whole of
+// it the app would claim a term is in progress before a single class has met.
+// Waiting for the first day to finish makes "in progress" true in the plain
+// sense, and one day is small enough to spend for it.
+//
+// The fitted fallback in termWindows.js does not add this — its own margin
+// (median + 2·MADN, several days) already covers the same ground.
+const ONSET_MARGIN_DAYS = 1;
+
 const _dateAt = (year, month, day) => new Date(year, month - 1, day);
 
 /** Labor Day — the first Monday of September — for a calendar year. */
@@ -32,16 +46,53 @@ function _laborDay(year) {
 
 const _shift = (d, days) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + days);
 
+/** Parse a generated "YYYY-MM-DD" into a local Date at midnight. */
+function _parseISO(s) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s ?? "");
+  return m ? _dateAt(+m[1], +m[2], +m[3]) : null;
+}
+
 /**
- * First day of `semTypeId` in `year`, as the planner counts it: the measured
- * threshold, a few days past the true first class, never before it.
- * Returns null for a type the generated data has no window for.
+ * The published dates for one term, if the last pipeline run found Banner had
+ * already scheduled it.  Banner publishes about a term ahead, so the semester
+ * the planner actually cares about is usually in here — and a published date
+ * is a fact, where the fitted window is an estimate off five years of history.
+ *
+ * This is what covers the case no estimate can: a year whose calendar shifts.
+ * Spring 2022 began twelve days late under COVID, which no fit of ordinary
+ * years would predict, but Banner knew it all along.
+ */
+function _pinned(semTypeId, year) {
+  const prefix = semTypeId === "spring" ? "spr" : semTypeId;
+  return termWindows.pinned?.[`${prefix}${year}`] ?? null;
+}
+
+/**
+ * First day of `semTypeId` in `year`, as the planner counts it.
+ *
+ * A published date if we have one; otherwise the fitted threshold, which sits
+ * a few days past the typical first class so that it lands after the term has
+ * begun rather than before.  Null for a type the generated data cannot place.
  */
 function _termStart(semTypeId, year) {
+  const known = _firstClassDay(semTypeId, year);
+  if (known) return _shift(known, ONSET_MARGIN_DAYS);
   const w = termWindows.types?.[semTypeId];
-  if (!w) return null;
-  if (w.startRule === "laborDayPlus2") return _shift(_laborDay(year), 2);
-  return w.start ? _dateAt(year, w.start.month, w.start.day) : null;
+  // The fitted threshold already carries its own margin — see ONSET_MARGIN_DAYS.
+  return w?.start ? _dateAt(year, w.start.month, w.start.day) : null;
+}
+
+/**
+ * The first day of classes where it is KNOWN rather than estimated: a date
+ * Banner published, or the Labor Day rule that has reproduced every measured
+ * Fall exactly.  Null when we only have a fitted distribution to go on.
+ */
+function _firstClassDay(semTypeId, year) {
+  const pin = _pinned(semTypeId, year);
+  if (pin) return _parseISO(pin.start);
+  const w = termWindows.types?.[semTypeId];
+  if (w?.startRule === "laborDayPlus2") return _shift(_laborDay(year), 2);
+  return null;
 }
 
 /**
@@ -54,12 +105,19 @@ function _termStart(semTypeId, year) {
  * while students were still sitting them.
  */
 function _termEnd(semTypeId, year) {
+  const pin = _pinned(semTypeId, year);
+  if (pin) {
+    const d = _parseISO(pin.end);
+    if (d) return new Date(d.getFullYear(), d.getMonth(), d.getDate(), 23, 59, 59, 999);
+  }
   const w = termWindows.types?.[semTypeId];
   if (!w) return null;
   // A rule-anchored window carries a LENGTH rather than a date, so the end
-  // moves with the start in a year the rule places the term late.
+  // moves with the start in a year the rule places the term late. Measure it
+  // from the real first class day, not from the threshold — the onset margin
+  // is about when we ACKNOWLEDGE the term, and must not stretch its length.
   const day = w.lengthDays != null
-    ? (() => { const s = _termStart(semTypeId, year); return s && _shift(s, w.lengthDays); })()
+    ? (() => { const s = _firstClassDay(semTypeId, year); return s && _shift(s, w.lengthDays); })()
     : (w.end && _dateAt(year, w.end.month, w.end.day));
   return day ? new Date(day.getFullYear(), day.getMonth(), day.getDate(), 23, 59, 59, 999) : null;
 }
