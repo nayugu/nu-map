@@ -52,10 +52,19 @@ const _KEYS = {
   entSem: 'es', entYear: 'ey',
   gradSem: 'gs', gradYear: 'gy',
   placements: 'p', specialTermPl: 'sp',
+  // Elective slots laid out by a template. Without an entry here a shared plan
+  // arrives with its named courses and none of its slots — which for a later
+  // year is most of the plan, and would look like the sender's work was lost.
+  slots: 'sl',
   semOrders: 'so', shOverrides: 'sh',
   bonusSH: 'b', currentSemId: 'cs',
   offeredOverrides: 'oo', collapsedSubs: 'cl',
   major: 'mj', major2: 'mj2', conc: 'cn',
+  // conc2 was missing entirely: a second major's concentration survived a
+  // reload (it is in the plan slot) but was silently dropped from every share
+  // link and share code. 51 undergraduate programs REQUIRE a concentration,
+  // so a shared double major could arrive unsatisfiable.
+  conc2: 'cn2',
   minor1: 'm1', minor2: 'm2',
   placedOut: 'po', planName: 'pn',
   locale: 'lc', substitutions: 'su',

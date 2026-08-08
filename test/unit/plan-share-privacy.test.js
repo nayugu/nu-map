@@ -28,3 +28,30 @@ test("share › grades never survive into a share link", async () => {
   assert.deepEqual(decoded.placements, plan.placements);
   assert.deepEqual(decoded.placedOut, plan.placedOut);
 });
+
+test("share › a template's slots survive the round trip", async () => {
+  // Half of a sample plan's credit is a slot, and some programs place nothing
+  // BUT slots in their later years. Omitting them from the codec would deliver
+  // a shared plan whose final year is empty, which reads as the sender's work
+  // having been lost rather than as a missing feature.
+  const plan = {
+    placements: { CS2500: "fall2026" },
+    slots: {
+      "slot-fall2029-khoury-elective-0": {
+        id: "slot-fall2029-khoury-elective-0", semId: "fall2029",
+        label: "Khoury Elective", sh: 4, source: "requirement",
+      },
+    },
+  };
+  const back = await decodePlan(await encodePlan(plan));
+  assert.deepEqual(back.slots, plan.slots);
+});
+
+test("share › a second major's concentration survives the round trip", async () => {
+  // conc2 was absent from the codec: it survived a reload (it is written to
+  // the plan slot) but was dropped from every share link and share code. 51
+  // undergraduate programs REQUIRE a concentration, so a shared double major
+  // could arrive unsatisfiable with nothing to indicate why.
+  const back = await decodePlan(await encodePlan({ major2: "x", conc2: "Data Science" }));
+  assert.equal(back.conc2, "Data Science");
+});
