@@ -1817,9 +1817,18 @@ export function PlannerProvider({ children }) {
    * Callers that omit it (the temporary loader) still work; they just leave no
    * provenance, and the offer behaves as though none had been loaded.
    */
-  const applySamplePlanToPlan = (plan, programData = null, startYearIndex = 0, programKey = null) => {
+  const applySamplePlanToPlan = (plan, programData = null, startYearIndex = 0, programKey = null,
+                                { replace = false } = {}) => {
     const result = mapSamplePlan(plan, {
-      semesters: SEMESTERS, courseMap, placements, reservations, specialTermPl,
+      semesters: SEMESTERS, courseMap,
+      // REPLACE lays the plan out on a clean canvas rather than beside what is
+      // there. A sample plan assumes year 1 is your first year with nothing
+      // done, so merging it into an existing plan produces a lopsided canvas
+      // that is neither the student's nor the department's. Destructive, which
+      // is why the caller confirms and why pushUndo below is the way back.
+      placements:    replace ? {} : placements,
+      reservations:  replace ? {} : reservations,
+      specialTermPl: replace ? {} : specialTermPl,
       programData, startYearIndex,
       // The adapter states durations as objects ({id,label,duration,weight});
       // the mapper compares months, so pass the numbers.
