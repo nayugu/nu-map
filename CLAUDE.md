@@ -128,6 +128,42 @@ Facts that follow from this:
   `ideas-matthew.md`) — only edit your own, so they never conflict. The repo
   is public: keep notes whiteboard-safe.
 
+## Working method
+
+Every input here is scraped, the workflows push to main unattended, and a wrong
+number reaches a student planning their degree. Confident-and-wrong is the
+expensive failure, so the loop is:
+
+- **Measure before designing.** Argue from the corpus, not from intuition —
+  most good calls in this repo were made by a script that took two minutes.
+  Ideas that read well and died on contact: candidate-set intersection (empty
+  **86.7%** of the time), a first-run "load a sample plan" toggle (**62%** of
+  programs publish none), per-section pending marks (a median of **2 sections
+  out of 11**). A measurement that kills your idea has done you a favour.
+- **Attack your own work.** Tests that confirm are close to worthless here. The
+  ones that pay are hostile: malformed specs, stale ids, junk locale shapes,
+  hundreds of random gestures. Do not stop at first green — stop when you have
+  tried everything you can think of and it still holds.
+- **Verify, never assume.** `subjects` is an array at runtime and an object in
+  the scraper. `CS 3500` does not exist. Four core modules were imported by
+  nothing at all. Each was found by *checking*, and each would have shipped in
+  silence.
+- **Be hardest on your most confident claim.** "Two plans need 262 SH" was
+  rhetoric — a second major consumes the free electives, so the real gap is
+  three courses, not double. "Provenance proves replacing is safe" was false; it
+  proves the canvas *started* as a template. Re-derive the number you are most
+  sure of.
+- **Fix the cause, and check whether the guard is the bug.** A persistence
+  invariant stripped `//` comments *after* splitting on commas, so a comma
+  inside a comment invented a field and reported it lost on reload. A test that
+  punishes commas in comments teaches people to write worse comments.
+- **Conservative beats clever.** Ambiguity is cheap; false confidence is not.
+  Degrade to less information, never to wrong information — and do not ship what
+  the measurement says is not worth it.
+- **Say plainly when you were wrong.** Correct it in place, in the document or
+  the comment that carries the claim, so the next reader inherits the correction
+  rather than the mistake.
+
 ## Conventions
 
 - Conventional commits (`type: description`), no Co-Authored-By trailers.
