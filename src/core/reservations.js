@@ -63,6 +63,10 @@ let counter = 0;
  * @property {{index: number, title: string}} [requirement]
  *   which requirement this stands for. See `resolveRequirement` for why both
  *   halves are stored.
+ * @property {string} [origin]
+ *   where this card came from, if a published plan put it here. Provenance,
+ *   NOT identity: it survives the student dragging the card to another term,
+ *   so re-applying the same plan recognises it rather than adding a second.
  */
 
 /**
@@ -70,14 +74,34 @@ let counter = 0;
  * label, so nothing about it can drift when the catalog is re-scraped or when
  * two cards in one term happen to be worded the same.
  */
-export function createReservation({ semId, label, sh = null, requirement = null }) {
+export function createReservation({ semId, label, sh = null, requirement = null, origin = null }) {
   return {
     id: `${RESERVATION_PREFIX}${Date.now().toString(36)}${(counter++).toString(36)}`,
     semId,
     label: String(label ?? "").trim() || "Elective",
     ...(sh == null ? {} : { sh }),
     ...(requirement ? { requirement } : {}),
+    ...(origin ? { origin } : {}),
   };
+}
+
+/**
+ * Where a published plan's cell sits, as a key that survives being moved.
+ *
+ * Built from POSITION — plan, academic year, term type, and which of the
+ * identical cells in that term it is — never from the label. A label-derived
+ * key collides the moment a department writes "SOCL elective" and "SOCL
+ * Elective" in one term, which the previous design did, silently losing one of
+ * the two cards in eleven terms across the corpus.
+ */
+export const originKey = (planLabel, yearIndex, termType, ordinal) =>
+  `${planLabel}|${yearIndex}.${termType}.${ordinal}`;
+
+/** The provenance keys already present, so re-applying can skip them. */
+export function originsOf(reservations) {
+  const out = new Set();
+  for (const r of Object.values(reservations ?? {})) if (r?.origin) out.add(r.origin);
+  return out;
 }
 
 /** Move one to another semester. Identical to moving a course. */

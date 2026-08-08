@@ -10,7 +10,7 @@
 // student already made.
 // ═══════════════════════════════════════════════════════════════════
 
-import { createReservation } from "./reservations.js";
+import { createReservation, originKey, originsOf } from "./reservations.js";
 
 /** A cell the plan left open: no courses, and not a co-op, vacation or label. */
 const isOpen = (e) =>
@@ -69,6 +69,10 @@ export function applySamplePlan(plan, {
   const coopCells = [];
   const nextReservations = { ...reservations };
   const nextSpecial = { ...specialTermPl };
+  // Cards this plan already put in the student's plan. Re-applying must add
+  // nothing a second time — the same guarantee an already-placed course gets.
+  const seenOrigins = originsOf(reservations);
+  const planLabel = plan?.label ?? "";
   const placed = [], reserved = [], coops = [], notes = [];
   const held = new Set(Object.keys(placements).map(k => String(k).split("#")[0]));
   const sections = programData?.requirementSections ?? [];
@@ -80,6 +84,7 @@ export function applySamplePlan(plan, {
         if (term.entries?.length) notes.push({ kind: "outside-timeline", text: `${gridYear.label} ${term.term}` });
         continue;
       }
+      let ordinal = 0;
       const walk = (entries) => {
         for (const e of entries ?? []) {
           if (e.vacation || e.heading || e.either) { walk(e.children); continue; }
@@ -92,9 +97,14 @@ export function applySamplePlan(plan, {
               ? e.binding.targets[0] : null;
             const requirement = idx != null && sections[idx]
               ? { index: idx, title: sections[idx].title ?? "" } : null;
-            const r = createReservation({ semId: sem.id, label: e.text, sh: e.sh ?? null, requirement });
-            nextReservations[r.id] = r;
-            reserved.push(r);
+            const origin = originKey(planLabel, startYearIndex + i, term.type, ordinal++);
+            if (seenOrigins.has(origin)) {
+              notes.push({ kind: "already-reserved", origin });
+            } else {
+              const r = createReservation({ semId: sem.id, label: e.text, sh: e.sh ?? null, requirement, origin });
+              nextReservations[r.id] = r;
+              reserved.push(r);
+            }
             walk(e.children);
             continue;
           }
@@ -103,10 +113,15 @@ export function applySamplePlan(plan, {
           // A choice is the student's to make, so it becomes a reservation
           // that already knows its candidates.
           if (e.options.length > 1) {
-            const r = createReservation({ semId: sem.id, label: e.text, sh: e.sh ?? null });
-            r.options = e.options;
-            nextReservations[r.id] = r;
-            reserved.push(r);
+            const origin = originKey(planLabel, startYearIndex + i, term.type, ordinal++);
+            if (seenOrigins.has(origin)) {
+              notes.push({ kind: "already-reserved", origin });
+            } else {
+              const r = createReservation({ semId: sem.id, label: e.text, sh: e.sh ?? null, origin });
+              r.options = e.options;
+              nextReservations[r.id] = r;
+              reserved.push(r);
+            }
           } else {
             for (const code of e.options[0] ?? []) {
               if (held.has(code)) { notes.push({ kind: "already-placed", code }); continue; }

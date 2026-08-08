@@ -272,3 +272,73 @@ test("the FALL cycle merges across the academic-year boundary", async () => {
   assert.equal(r.coops[0].duration, 6);
   assert.deepEqual(r.coops[0].spans, ["sumB2027", "fall2027"]);
 });
+
+// ── Uniqueness, and re-applying a plan ─────────────────────────────
+
+test("two identically-worded cards are two distinct reservations", async () => {
+  const { applySamplePlan } = await import("../../src/core/applySamplePlan.js");
+  // Nothing on screen tells them apart, but internally they are separate
+  // objects: swapping them is a real operation on two distinct things, and
+  // filling one must never take the other with it.
+  const semesters = [{ id: "fall2026", semTypeId: "fall", type: "fall", weight: 1 }];
+  const cell = { options: [], text: "General Elective", sh: 4 };
+  const plan = { label: "P", years: [{ label: "Year 1", terms: [
+    { term: "Fall", type: "fall", entries: [cell, cell] },
+  ] }] };
+  const r = applySamplePlan(plan, { semesters, courseMap: {} });
+  const ids = Object.keys(r.reservations);
+  assert.equal(ids.length, 2);
+  assert.notEqual(ids[0], ids[1], "same label, different cards");
+  assert.notEqual(r.reservations[ids[0]].origin, r.reservations[ids[1]].origin,
+    "and different provenance, so re-applying can tell them apart");
+});
+
+test("applying the same plan twice adds nothing the second time", async () => {
+  const { applySamplePlan } = await import("../../src/core/applySamplePlan.js");
+  const semesters = [
+    { id: "fall2026", semTypeId: "fall",   type: "fall",   weight: 1 },
+    { id: "spr2027",  semTypeId: "spring", type: "spring", weight: 1 },
+  ];
+  const plan = { label: "Four Years, Two Co-ops", years: [{ label: "Year 1", terms: [
+    { term: "Fall",   type: "fall",   entries: [
+      { options: [["CS1200"]], text: "CS 1200", sh: 4 },
+      { options: [], text: "General Elective", sh: 4 },
+      { options: [], text: "General Elective", sh: 4 },
+    ] },
+    { term: "Spring", type: "spring", entries: [{ options: [], text: "Khoury Elective", sh: 4 }] },
+  ] }] };
+  const courseMap = { CS1200: { id: "CS1200", sh: 4 } };
+
+  const once = applySamplePlan(plan, { semesters, courseMap });
+  assert.equal(Object.keys(once.reservations).length, 3);
+
+  const twice = applySamplePlan(plan, {
+    semesters, courseMap,
+    placements: once.placements, reservations: once.reservations,
+  });
+  assert.equal(Object.keys(twice.reservations).length, 3, "no duplicates");
+  assert.equal(twice.reserved.length, 0, "nothing new was added");
+  assert.equal(twice.notes.filter(n => n.kind === "already-reserved").length, 3);
+  assert.deepEqual(twice.placements, once.placements, "and the course is not re-placed");
+});
+
+test("re-applying still recognises a card the student has moved", async () => {
+  const { applySamplePlan } = await import("../../src/core/applySamplePlan.js");
+  const { moveReservation } = await import("../../src/core/reservations.js");
+  // Provenance is where it CAME FROM, not where it is — so dragging a card to
+  // another term must not make the plan think it is missing.
+  const semesters = [
+    { id: "fall2026", semTypeId: "fall",   type: "fall",   weight: 1 },
+    { id: "spr2027",  semTypeId: "spring", type: "spring", weight: 1 },
+  ];
+  const plan = { label: "P", years: [{ label: "Year 1", terms: [
+    { term: "Fall", type: "fall", entries: [{ options: [], text: "Khoury Elective", sh: 4 }] },
+  ] }] };
+  const once = applySamplePlan(plan, { semesters, courseMap: {} });
+  const id = Object.keys(once.reservations)[0];
+  const moved = moveReservation(once.reservations, id, "spr2027");
+
+  const again = applySamplePlan(plan, { semesters, courseMap: {}, reservations: moved });
+  assert.equal(Object.keys(again.reservations).length, 1, "not re-added in its published term");
+  assert.equal(again.reservations[id].semId, "spr2027", "and left where the student put it");
+});
