@@ -1612,11 +1612,22 @@ export function PlannerProvider({ children }) {
   // choke point — see its comment), so the projection needs no grade filter
   // of its own. The DONE/earned total additionally excludes I via
   // yieldsCredit: an incomplete has earned nothing yet but stays projected.
+  // PLANNED credit — what this plan comes to if it is carried out. Reserved
+  // credit belongs here: a freshly loaded template is roughly half reservations,
+  // and excluding them would report a four-year degree as half a degree and
+  // read as broken. It is deliberately NOT in totalSHDone below, which is
+  // credit EARNED — nothing is earned for a course nobody has chosen.
+  const totalSHReserved = useMemo(
+    () => Object.values(reservations).reduce(
+      (s, r) => s + (inTimeline(r.semId, SEM_INDEX) ? (r.sh ?? 0) : 0), 0),
+    [reservations, SEM_INDEX]
+  );
+
   const totalSHPlaced = useMemo(
-    () => pvBonusSH + Object.entries(pvPlacements)
+    () => pvBonusSH + totalSHReserved + Object.entries(pvPlacements)
       .filter(([id, sid]) => inTimeline(sid, SEM_INDEX) && !pvPlacedOut.has(id) && !supersededTakes.has(id))
       .reduce((s, [id]) => s + (effectiveCourseMap[id]?.sh ?? 0), 0),
-    [pvBonusSH, pvPlacements, pvPlacedOut, effectiveCourseMap, SEM_INDEX, supersededTakes]
+    [pvBonusSH, totalSHReserved, pvPlacements, pvPlacedOut, effectiveCourseMap, SEM_INDEX, supersededTakes]
   );
 
   const totalSHDone = useMemo(
@@ -1974,7 +1985,23 @@ export function PlannerProvider({ children }) {
     // reservation id into the map the audit reads — the one thing the split
     // exists to prevent.
     if (isReservationId(dragId)) {
-      setReservations(prev => moveReservation(prev, dragId, targetSemId));
+      const fromSemId = reservations[dragId]?.semId;
+      if (fromSemId === targetSemId) {
+        // Same term: a reorder, computed over the GRID view so reservations and
+        // courses share ONE ordering rather than two interleaved lists.
+        setSemOrders(prev => {
+          const cur = prev[targetSemId]
+            ?? getOrderedCourses(targetSemId, gridPlacements, prev, gridCourseMap);
+          const fi = cur.indexOf(dragId), ti = cur.indexOf(targetId);
+          if (fi < 0 || ti < 0) return prev;
+          const next = [...cur];
+          next.splice(fi, 1);
+          next.splice(ti, 0, dragId);
+          return { ...prev, [targetSemId]: next };
+        });
+      } else {
+        setReservations(prev => moveReservation(prev, dragId, targetSemId));
+      }
       setDragInfo(null);
       return;
     }
@@ -3270,6 +3297,7 @@ export function PlannerProvider({ children }) {
     shOverrides,
     offeredOverrides,
     totalSHPlaced,
+    totalSHReserved,
     totalSHDone,
     prereqViolationCount: prereqViolations.size,
     coreqViolationCount:  coreqViolations.size,

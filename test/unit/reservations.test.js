@@ -172,3 +172,22 @@ test("a reservation card has the SAME SHAPE as a real course card", () => {
   assert.equal(typeof card.color, "string", "read unguarded by the card's colour maths");
   assert.match(card.color, /^#[0-9a-f]{6}$/i);
 });
+
+test("reserved credit is PLANNED credit, never EARNED credit", () => {
+  // The distinction the whole three-way split turns on. A freshly loaded
+  // template is roughly half reservations, so excluding them from the planned
+  // total reports a four-year degree as half a degree. Including them in
+  // EARNED credit would tell a student they have credit for a course nobody
+  // has chosen.
+  const map = asMap([
+    make("Khoury Elective", "fall2029", 4),
+    make("General Elective", "spr2030", 4),
+  ]);
+  const reserved = Object.values(map).reduce((s, r) => s + (r.sh ?? 0), 0);
+  assert.equal(reserved, 8, "counts toward what the plan comes to");
+
+  // …and cannot reach the map that credit-toward-the-degree is computed from.
+  const placements = { CS2500: "fall2026" };
+  assert.equal(Object.keys(semesterOccupants(placements, map)).length, 3);
+  assert.equal(Object.keys(placements).length, 1, "placements is untouched");
+});

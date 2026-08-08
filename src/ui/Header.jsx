@@ -195,7 +195,7 @@ function SettingsToggle({ on, onClick, tone = "accent", tip, label, aria }) {
 export default function Header() {
   const {
     courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
-    placements, courseMap, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
+    placements, courseMap, effectiveCourseMap, gridPlacements, gridCourseMap, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
     resetAll, setShowDisclaimer, setShowStats, setShowDonate,
     statsVisible, statsJustUnlocked, ackStatsUnlockFlash,
     showSettings, setShowSettings,
@@ -564,7 +564,10 @@ export default function Header() {
       placedOut, substitutions,
       isGrad: studentType === "graduate",
     };
-    exportReport(placements, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, specialTermPl, adapter);
+    // The combined view: a printed plan missing half of year 4 is not the
+    // student's plan. Export lays a semester out, so it reads what the grid
+    // reads and gets reservations with no cases of its own.
+    exportReport(gridPlacements ?? placements, gridCourseMap ?? effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, specialTermPl, adapter);
   };
 
   // EXPORT_PDF ui-command from the MCP integration — the PDF assembly
