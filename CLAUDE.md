@@ -163,6 +163,17 @@ expensive failure, so the loop is:
 - **Say plainly when you were wrong.** Correct it in place, in the document or
   the comment that carries the claim, so the next reader inherits the correction
   rather than the mistake.
+- **Edit code with the editing tools, never through the shell.** `sed`, `node -e`
+  rewrites and heredocs are not code editing — they skip the read-before-write
+  the editors enforce, they are invisible in review, and a bad regex silently
+  mangles a file nobody re-reads. Shell is for *running* things: tests, builds,
+  git, throwaway measurement scripts. It is not for changing source, and that
+  includes locale files.
+- **Re-anchor these rules as a session runs long.** Drift is the default, not
+  the exception — the shell creeps back in, tests get gentler, claims get
+  confident again. Re-read this section periodically and after any long stretch
+  of implementation. An explicit instruction from the user overrides any of it;
+  absent that, return to it rather than to whatever the last hour settled into.
 
 ## Conventions
 
