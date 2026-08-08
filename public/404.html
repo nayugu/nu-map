@@ -17,10 +17,16 @@
     ul{list-style:none;padding:0;margin:1em 0}
     li{margin:6px 0}
     .links{margin-top:1.6em;font-size:.9rem}
+    /* Site-wide home mark: the same affordance on every NU Map page. Centred
+       here because the whole card is, and it doubles as the way out. */
+    .home{display:inline-block;line-height:0;margin-bottom:20px}
+    .home img{width:36px;height:36px;object-fit:contain;opacity:.9;transition:opacity .15s ease}
+    .home:hover img{opacity:1}
   </style>
 </head>
 <body>
   <main>
+    <a class="home" href="/"><img src="/logo.png" alt="NU Map home" /></a>
     <h1>That page doesn't exist</h1>
     <p id="path"></p>
     <ul id="near"></ul>

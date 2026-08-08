@@ -23,9 +23,15 @@
     code { background: #f0ede8; padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
     .updated { font-size: 0.85rem; opacity: 0.6; }
     li { margin: 0.35em 0; }
+    /* Site-wide home mark: the same affordance on every NU Map page. */
+    .home { display: inline-block; line-height: 0; margin-bottom: 18px; }
+    .home img { width: 28px; height: 28px; object-fit: contain;
+      opacity: 0.9; transition: opacity 0.15s ease; }
+    .home:hover img { opacity: 1; }
   </style>
 </head>
 <body>
+  <a class="home" href="/"><img src="/logo.png" alt="NU Map home" /></a>
   <h1>NU Map Privacy Policy</h1>
   <p class="updated">Last updated: August 7, 2026</p>
 

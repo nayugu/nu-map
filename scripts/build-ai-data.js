@@ -639,6 +639,12 @@ const PAGE_CSS =
   // Hover darkens and slides an item out; the current page is semibold
   // medium grey and doesn't react to hover. Aux links stay faint.
   + "nav{position:fixed;left:0;top:0;bottom:0;width:190px;display:flex;flex-direction:column;font-size:.92rem}"
+  // The mark sits at the top of the rail, above the vertically centred
+  // sections: the site-wide home link, same affordance as every other NU Map
+  // page. Quiet by default like the rail's own labels, full strength on hover.
+  + "nav .home{display:block;padding:18px 14px 0;line-height:0}"
+  + "nav .home img{width:26px;height:26px;object-fit:contain;opacity:.85;transition:opacity .18s ease-out}"
+  + "nav .home:hover img{opacity:1}"
   + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;gap:7px;padding:18px 14px}"
   + "nav .sections a{display:block;padding:4px 14px;color:#94a3b8;"
   + "transition:transform .18s ease-out,color .18s ease-out}"
@@ -674,6 +680,7 @@ const PAGE_CSS =
   + "@media(max-width:760px){nav{position:static;width:auto;"
   + "display:flex;flex-direction:row;flex-wrap:wrap;gap:2px 14px;padding:12px 16px 0}"
   + "nav .sections{display:contents}nav .aux{display:contents}"
+  + "nav .home{padding:0;flex-basis:100%}nav .home img{width:24px;height:24px}"
   + "nav .sections a,nav .aux a{padding:3px 0;margin:0;font-size:.88rem}"
   + "nav .sections a:hover{transform:none}"
   + "main,main.wide{margin:0 auto}}"
@@ -723,7 +730,8 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
   // so canonicals and the sitemap must use the extensionless form.
   const url = isHub ? PAGE_ROOT : `${PAGE_ROOT}/${rel.replace(/\.html$/, "")}`;
   pageUrls.push(url);
-  const nav = `<div class="sections">` + NAV_SECTIONS.map(([id, label, href]) =>
+  const nav = `<a class="home" href="${ORIGIN}"><img src="${ORIGIN}/logo.png" alt="NU Map home" width="26" height="26" /></a>`
+    + `<div class="sections">` + NAV_SECTIONS.map(([id, label, href]) =>
     `<a href="${href}"${id === section ? ` class="here"` : ""}>${label}</a>`).join("")
     + `</div><div class="aux"><a href="${ORIGIN}">numap.app</a><a href="${ORIGIN}/story">the story</a><a href="${ORIGIN}/llms.txt">AI data guide</a>`
     + (jsonUrl ? `<a href="${jsonUrl}">JSON of this page</a>` : `<a href="${JSON_ROOT}/index.json">JSON API</a>`)

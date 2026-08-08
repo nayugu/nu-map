@@ -901,7 +901,13 @@ export default function Header() {
       }}>
         {/* Row 1: title + info — last-updated anchored right, never wraps */}
         <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "nowrap", minWidth: 0, overflow: "hidden" }}>
-          <img src={`${import.meta.env.BASE_URL}logo.png`} alt={institution.appName} style={{ height: 20, width: 20, objectFit: "contain", flexShrink: 0 }} />
+          {/* The mark is the site-wide home link — same affordance on every NU
+              Map page. Here that is a self-link, so it reloads the app; plans
+              live in storage, so nothing is lost. BASE_URL, not numap.app, or
+              dev and preview builds would jump to production. */}
+          <a href={import.meta.env.BASE_URL} title={institution.appName} style={{ display: "flex", flexShrink: 0 }}>
+            <img src={`${import.meta.env.BASE_URL}logo.png`} alt={institution.appName} style={{ height: 20, width: 20, objectFit: "contain", flexShrink: 0 }} />
+          </a>
           <span style={{ fontSize: 14, fontWeight: 800, letterSpacing: "-0.01em", flexShrink: 0 }}>{institution.appName}</span>
           <span style={{ fontSize: 10, color: "var(--text-6)", flexShrink: 0 }}>·</span>
           {!isPhone && (
