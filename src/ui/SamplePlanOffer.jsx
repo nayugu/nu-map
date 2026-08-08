@@ -27,7 +27,7 @@
 // year with nothing done, so adding it beside existing work leaves a canvas
 // that is neither the student's nor the department's.
 // ═══════════════════════════════════════════════════════════════════
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePlanner }         from "../context/PlannerContext.jsx";
 import { usePort }            from "../context/InstitutionContext.jsx";
 import { useLanguage }        from "../context/LanguageContext.jsx";
@@ -147,17 +147,9 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
 
       {/* Only when the cohort's year count leaves a real choice. */}
       {variants.length > 1 && (
-        <select
-          value={safeIdx}
-          onChange={e => setVariantIdx(Number(e.target.value))}
-          style={{
-            fontSize: isPhone ? 9 : 10, maxWidth: "100%", marginBottom: 6,
-            background: "var(--bg-2)", color: "var(--text-2)",
-            border: "1px solid var(--border-1)", borderRadius: 4, padding: "2px 4px",
-          }}
-        >
-          {variants.map((p, i) => <option key={i} value={i}>{p.label}</option>)}
-        </select>
+        <VariantPicker
+          variants={variants} value={safeIdx} onChange={setVariantIdx} isPhone={isPhone}
+        />
       )}
 
       <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
@@ -167,6 +159,92 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
           <button onClick={replace} style={linkBtn}>{t("grad.plan.replace")}</button>
         )}
       </div>
+    </div>
+  );
+}
+
+/**
+ * Which variant to lay out.
+ *
+ * A native <select> renders as the operating system's control, which on macOS
+ * is a different typeface, weight and corner radius from everything around it —
+ * one element that looks borrowed. This is the app's own popup instead: the
+ * same `.hdr-pop` the header menus use, so it inherits the viewport cap and
+ * scrolling they already solved.
+ *
+ * Not a segmented control, tempting as that is for the common case of two
+ * options: the labels are "Four Years, Two Co-ops in Spring/Summer First Half",
+ * and side-by-side pills would wrap into an unreadable block.
+ */
+function VariantPicker({ variants, value, onChange, isPhone }) {
+  const [open, setOpen] = useState(false);
+  const boxRef = useRef(null);
+
+  // Close on anything that means "I am done here" — a click elsewhere, or
+  // Escape. Bound only while open, so a closed picker costs no listeners.
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e) => { if (!boxRef.current?.contains(e.target)) setOpen(false); };
+    const onKey  = (e) => { if (e.key === "Escape") { e.stopPropagation(); setOpen(false); } };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => {
+      document.removeEventListener("mousedown", onDown);
+      document.removeEventListener("keydown", onKey);
+    };
+  }, [open]);
+
+  const fz = isPhone ? 9 : 10;
+  return (
+    <div ref={boxRef} style={{ position: "relative", marginBottom: 6 }}>
+      <button
+        type="button"
+        onClick={() => setOpen(v => !v)}
+        aria-haspopup="listbox"
+        aria-expanded={open}
+        style={{
+          display: "flex", alignItems: "center", gap: 6, width: "100%",
+          fontSize: fz, textAlign: "left", cursor: "pointer",
+          background: "var(--bg-2)", color: "var(--text-2)",
+          border: "1px solid var(--border-1)", borderRadius: 4, padding: "3px 6px",
+        }}
+      >
+        <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {variants[value]?.label ?? ""}
+        </span>
+        <span style={{ color: "var(--text-5)", fontSize: fz - 1 }}>{open ? "▴" : "▾"}</span>
+      </button>
+
+      {open && (
+        <div
+          className="hdr-pop"
+          role="listbox"
+          style={{
+            position: "absolute", top: "calc(100% + 4px)", left: 0, right: 0, zIndex: 100,
+            background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+            borderRadius: 6, padding: "4px 0", boxShadow: "var(--shadow-modal)",
+            display: "flex", flexDirection: "column",
+          }}
+        >
+          {variants.map((p, i) => (
+            <button
+              key={i}
+              type="button"
+              role="option"
+              aria-selected={i === value}
+              onClick={() => { onChange(i); setOpen(false); }}
+              style={{
+                textAlign: "left", fontSize: fz, cursor: "pointer", border: "none",
+                padding: "4px 8px", background: i === value ? "var(--card-bg-hov)" : "transparent",
+                color: i === value ? "var(--text-1)" : "var(--text-2)",
+                fontWeight: i === value ? 600 : 400,
+              }}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
