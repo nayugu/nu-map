@@ -244,8 +244,14 @@ function readCell(cell, hoursCell) {
   // "4", "4-5", "1.5". A range takes its low end: a plan should never claim
   // more credit than the student is certain to earn.
   const rawHours = hoursCell?.text?.replace(/\s+/g, " ").trim() ?? "";
-  const shMatch = /(\d+(?:\.\d+)?)/.exec(rawHours);
-  const sh = shMatch ? parseFloat(shMatch[1]) : null;
+  // "4", "4-5", "1.5". The LOW end is the credit a plan may claim — a student
+  // should never be told they will earn more than is certain. The high end is
+  // kept alongside it so the checksum can compare ranges rather than points:
+  // the catalog states its term totals as ranges too, and comparing low-to-low
+  // reports a mismatch whenever a department rounds its own sum differently.
+  const shNums = rawHours.match(/\d+(?:\.\d+)?/g) ?? [];
+  const sh = shNums.length ? parseFloat(shNums[0]) : null;
+  const shMax = shNums.length > 1 ? parseFloat(shNums[shNums.length - 1]) : null;
 
   const text = cell.text.replace(/ /g, " ").replace(/\s+/g, " ").trim();
   if (!text) return null;
@@ -256,7 +262,7 @@ function readCell(cell, hoursCell) {
     if (k && !codes.includes(k)) codes.push(k);
   }
 
-  const base = { text, ...(sh == null ? {} : { sh }) };
+  const base = { text, ...(sh == null ? {} : { sh }), ...(shMax == null ? {} : { shMax }) };
 
   if (!codes.length) {
     // Checked first: a heading may begin with any word at all, including
@@ -436,8 +442,13 @@ function parseGridTable(table) {
     if (cls.includes("plangridsum") || cls.includes("plangridtotal")) {
       // Per-term credit totals sit in the Hours column beside each term.
       columns.forEach((c, i) => {
-        const n = parseFloat(cells[c.cellIndex + 1]?.text.trim() ?? "");
-        if (Number.isFinite(n) && year?.terms[i]) year.terms[i].hours = n;
+        const raw = cells[c.cellIndex + 1]?.text.trim() ?? "";
+        const nums = raw.match(/\d+(?:\.\d+)?/g) ?? [];
+        const n = nums.length ? parseFloat(nums[0]) : NaN;
+        if (Number.isFinite(n) && year?.terms[i]) {
+          year.terms[i].hours = n;
+          if (nums.length > 1) year.terms[i].hoursMax = parseFloat(nums[nums.length - 1]);
+        }
       });
       continue;
     }
@@ -514,6 +525,12 @@ export function verifyPlanGrid(grid, label = "") {
   const out = { terms: 0, agree: 0, disagree: 0, unstated: 0, ambiguous: 0, worst: [] };
   const sum = (entries) => (entries ?? []).reduce(
     (n, e) => n + (e.sh ?? 0) + sum(e.children), 0);
+  // Both sides state ranges, so compare ranges. Public Health BA prints two
+  // "3-4" cells against a stated "15-16": the low ends sum to 14, so a
+  // point comparison calls our parse wrong when it is the department's own
+  // arithmetic that does not close.
+  const sumMax = (entries) => (entries ?? []).reduce(
+    (n, e) => n + (e.shMax ?? e.sh ?? 0) + sumMax(e.children), 0);
   const countAmbiguous = (entries) => (entries ?? []).reduce(
     (n, e) => n + (e.ambiguous ? 1 : 0) + countAmbiguous(e.children), 0);
 
@@ -524,8 +541,11 @@ export function verifyPlanGrid(grid, label = "") {
         out.terms += 1;
         out.ambiguous += countAmbiguous(term.entries);
         if (typeof term.hours !== "number") { out.unstated += 1; continue; }
-        const parsed = sum(term.entries);
-        if (Math.abs(parsed - term.hours) < 0.01) out.agree += 1;
+        const lo = sum(term.entries), hi = sumMax(term.entries);
+        const catLo = term.hours, catHi = term.hoursMax ?? term.hours;
+        // Overlapping ranges is agreement: our low end may sit below theirs
+        // when they rounded, but the two must describe the same term.
+        if (lo <= catHi + 0.01 && hi >= catLo - 0.01) out.agree += 1;
         else {
           out.disagree += 1;
           out.worst.push({ program: label, year: year.label, term: term.term,
