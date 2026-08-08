@@ -427,12 +427,12 @@ in one direction. This set is a work queue for the requirements scraper.
 
 | # | question | leaning |
 |---|---|---|
-| **S1** | §2 — resolved: reference + derived answered-ness, per the id-stability rule | settled |
+| **S1** | ~~§2 — reference + derived answered-ness~~ | **SUPERSEDED by §9.1** — reservations are stored, and answered-ness is explicit |
 | **E1** | is `optional` distinct from an `either`? | yes |
 | **B1** | wording as edge cost rather than edge filter? | yes |
 | **V1** | should binding over-subscription *block* a scrape write, or only report? | report first, block once a baseline exists |
 | **C1** | model college-wide requirements (CSSH foreign language), or leave them honestly unbound? | unbound now; §6 turns them into a queue |
-| **D1** | how legible must a reservation retiring itself be (§2)? | UI question, deferred |
+| **D1** | ~~how legible must a reservation retiring itself be (§2)?~~ | **MOOT under §9.1** — a reservation no longer retires itself; it is filled explicitly |
 | **D3** | plan applied, then the student changes major — do reservations vanish or warn? | warn, then vanish on confirm |
 | **D2** | widen the id-stability sample — few archived programs carry a planGrid | not blocking; the rule makes the number non-load-bearing |
 
@@ -534,14 +534,27 @@ wrong.
 
 For a named-options cell, certainty is not inferred from the flow solve at all:
 
-> section *i* is **certain** for a cell iff every one of its option groups would
-> satisfy section *i*.
+> section *i* is **certain** for a cell iff every one of its option groups
+> **counts toward** section *i*.
+
+**"Counts toward", not "satisfies"** — this wording was wrong in the first draft
+and the error is the kind that propagates. `courseEligible` says a course is
+named by, or in range for, a section. A section needing three courses is not
+answered by one. What is provable is *where the credit lands*, which is all the
+pending mark in §12 claims.
 
 `CS 4300 or 4100` against a `One of (0/2)` section containing exactly those two
-courses is certain by inspection — whichever the student picks, that section is
-answered. Measured across the corpus, **1,205 of 1,386** such cells have at
-least one certain section; the median certain-set size is **1** and the max is
-**2**, so it is not a vague narrowing but a single named requirement.
+courses is certain by inspection — whichever the student picks, the credit lands
+there. Measured across the corpus, **1,205 of 1,386** such cells have at least
+one certain section; the median certain-set size is **1** and the max is **2**,
+so it is not a vague narrowing but a single named requirement.
+
+**Certainty must be intersected with outstanding demand before it is shown.**
+A section already answered by the plan's own named courses still *admits* the
+option, so it still tests certain — and marking it pending would be wrong.
+Measured: **15 of 1,205 (1.2%)** have no certain section carrying any shortfall.
+Small, but it is a correctness bug rather than a coverage gap, so the mark is
+gated on `obligationsOf` rather than on eligibility alone.
 
 **This is a stronger claim than "forced."** Forced means *every maximum flow
 contains this edge* — it depends on the demand arithmetic, the general-elective
@@ -712,6 +725,32 @@ Two populations qualify, and they qualify at different strengths:
 §12 claimed before §9.3 was measured, and the larger half of the gain is the
 half that needs no arithmetic to justify it.
 
+### 12.0 Pending marks must be capacity-clamped — they are not today
+
+The two populations above mark sections **independently**, and neither is aware
+of the other or of the section's room. Measured over the corpus:
+
+| sections receiving ≥1 pending mark | 1,646 |
+|---|---|
+| **over-subscribed** (more pending than room) | **44 (2.7%)** |
+| worst case | Pharmacy PharmD, *Professional Electives*: **12 pending vs room 1** |
+
+Rendering twelve pending marks against a requirement needing one course is
+exactly the false confidence rule 4 forbids. Two cells can both *count toward* a
+section without both being *for* it.
+
+This makes decision **N2 mandatory rather than a refinement.** Named-option
+cells must enter the same flow as the unnamed ones, consuming the same capacity,
+so the two populations are reconciled by the solver instead of racing:
+
+> **A section's pending count is a flow result, never a sum of independent
+> claims.** Whatever cannot be seated within a section's room is not pending for
+> it, and belongs in the unassigned tally.
+
+That also disposes of the double-count without a clamp — a clamp would hide the
+surplus, whereas the flow *reassigns* it to whichever requirement can still take
+it.
+
 Whether the two strengths should render identically is open (**M3**). They are
 different claims: one survives any error in our demand model, the other does
 not. Leaning identical anyway — a student cannot act on the distinction, and two
@@ -874,6 +913,13 @@ still monotone (it can only narrow a cell's candidates, never re-point them, so
 §11 is unaffected), and it makes "wording may narrow, only arithmetic decides"
 true per cell rather than per program — which is what §4 meant.
 
+**A greedy pass is order-dependent, so the order must be pinned.** Two cells
+with equally strong hints competing for one seat: whichever is tried first
+wins. Left to object-iteration order, the same input can produce different
+`plan.json` on two runs — and these files are written to main by an unattended
+workflow and reviewed as a git diff, so churn is not cosmetic. Ties break by
+**plan order**, which is a total order present in the shipped data.
+
 ### 14.3 The hard tier contains a guess wearing a fact's clothing
 
 The 20 wrongly-bound exact matches are not the arithmetic overruling wording.
@@ -987,12 +1033,29 @@ case the reservation is not load-bearing and nothing may be eliminated:
 That is the same feasibility test §4 runs for flow edges, applied to a different
 graph, and it keeps the mechanism conservative by construction.
 
-**Honest scope: 53.6% is the ceiling, not the yield.** It counts cells where a
-distinguishing course *exists in the catalog*; it fires only when the student
-actually places one. The realised rate will be far lower and cannot be measured
-without real plans. It is still worth building, because the graph and the
-placements are both already loaded — the marginal cost is a lookup — and because
-when it fires it is a *proof*, not a preference.
+**Honest scope: 53.6% is a ceiling, and there is also a floor.** The two bound
+different assumptions about the rest of the plan, and quoting only the first was
+the flaw in this section's first draft:
+
+| | assumes | rate |
+|---|---|---|
+| **ceiling** — some course is satisfied by one option and not another | the emptiest plan: nothing else helps | **743 (53.6%)** |
+| **floor** — some course *cannot* be satisfied without that option | the fullest plan: everything else is already there | **494 (35.6%)** |
+
+The gap is the 1.5× of cases where the dependent has an OR escape.
+`ENCP 2000` accepts any of twelve first-year seminars, so placing it forces
+nothing about `ARTF 1000 or ARCH 1000` unless the reservation is the student's
+only source. `GSND 7996` names `GSND 7990` with no alternative, so placing it
+forces that option no matter what else is in the plan.
+
+**The floor is the number that matters**, because those 494 fire on placement
+alone with no further condition to check. Neither is a yield — both still
+require the student to place the dependent, which cannot be measured without
+real plans.
+
+Worth building either way: the graph and the placements are both already loaded,
+so the marginal cost is a lookup, and when it fires it is a *proof* rather than
+a preference.
 
 ### 15.3 Why this ordering matters
 
@@ -1030,10 +1093,10 @@ live formulation was the one worth having.
 | **M2** | is a pending marker a violation of the isolation boundary? | no — it answers a different question, and must never render as a check |
 | **M3** | render *provable* (§9.3) and *forced* pending markers differently? | no — a student cannot act on the distinction |
 | **N1** | should `bind-plans` bind named-options cells too (§9.3)? currently `isUnnamed` skips all 1,386 | yes — it is the highest-confidence population and we bind none of it |
-| **N2** | do named-options cells enter the flow solve as capacity, or only carry their certain sections? | capacity too — a cell that certainly answers section *i* consumes demand there, which should sharpen the unnamed cells competing for it |
+| **N2** | do named-options cells enter the flow solve as capacity? | **required, not optional** — §12.0 measures 44 sections over-subscribed without it, worst 12 pending against room 1 |
 | **W1** | fold plurals in `tokens()` (§14.1) | yes — 562 cells, one stemming step, the cheapest win in the pipeline |
 | **W2** | replace the global `useSoft` switch with an incremental strongest-first pass (§14.2) | yes — 23.8% of plans currently discard all wording |
-| **W3** | demote `subjectOf` from fact to weak restriction (§14.3) | yes — it is a guess composed with a fact, applied as a fact |
+| **W3** | demote `subjectOf` from fact to weak restriction (§14.3) | **measure first.** The edge deletion is doing real work — it is what keeps `MATH elective` out of the Khoury bucket — and demoting it could lose forced bindings. The ART/ARTF defect is proven; the cost of the fix is not |
 | **W4** | should exact title match ever be a hard edge? | **no** — wording gives intent, capacity is the flow's job |
 | **W5** | is `known.has(up)` salvageable, or is any leading-token subject read unsafe? | demoting it (W3) makes the question moot; revisit only if W3 loses cells |
 | **M4** | pending mark propagates to children? (§12.1) | **no** — boxes stay empty, nothing dims, numerator untouched |
@@ -1042,6 +1105,22 @@ live formulation was the one worth having.
 | **X2** | eliminate an option when a placed course depends on it (§15.2) | yes — but only when the dependent is unsatisfiable without the reservation |
 | **X3** | does §15.2 elimination feed back into the §4 flow solve, or stay a display-time narrowing? | feed back — it removes candidate courses, which can change which requirements remain possible |
 | **X4** | do §15 checks extend to unnamed reservations via their candidate set? | not yet — a 100-course candidate set makes the OR trivially true and the elimination never fire |
+| **X5** | repeat instances: `placements` keys can carry `#n`, so a bare course id may read as unplaced and take the fill path instead of the swap path (§10.1) | resolve the key the way `applySamplePlan` does (`split("#")[0]`) before testing |
+
+---
+
+## 17. Residual risk — claims not yet verified
+
+Recorded so they are not mistaken for measured facts.
+
+| claim | status |
+|---|---|
+| §15.1 36.6% / §15.2 floor 35.6% are *possibilities*, not yields | both need real student plans; unmeasurable now |
+| demoting `subjectOf` (W3) does not lose forced bindings | **unmeasured** — the one change here that could regress coverage |
+| §11 narrowing stays monotone once §15.2 elimination feeds back (X3) | argued, not proven. Eliminating options can only *grow* a cell's certain set, which claims more capacity, which shrinks others' candidates — shrinking is safe, but the composition with N2 has not been checked |
+| the 113 unbound cells are missing requirements, not §14.3 false facts | untested; the ART/ARTF defect deletes edges silently and could account for some |
+| positional `origin` keys survive a re-scrape well enough for de-duplication | §2's stability sample was 38–114 positions; still small |
+| §12.0's flow-reconciled pending count terminates cleanly when a section is `shared` | `shared` sections are deliberately cross-counted and are excluded from demand; their pending behaviour is undefined |
 
 ---
 
