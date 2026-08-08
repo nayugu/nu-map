@@ -22,7 +22,7 @@ import { satisfiedUnderEveryOption } from "../core/reservationPrereqs.js";
 import { dropOnCard as resolveDropOnCard, dropOnSemester, dropOnBank } from "../core/planDrop.js";
 import { buildSemesterView, cardIdsIn, cardsIn, loadIn } from "../core/semesterView.js";
 import { applySamplePlan as mapSamplePlan } from "../core/applySamplePlan.js";
-import { baseId, isInstanceId, takesUsed, resolveAddId, retakeUnlocked, buildTakesResolver } from "../core/repeatInstances.js";
+import { baseId, isInstanceId, takesUsed, resolveAddId, resolveDropId, retakeUnlocked, buildTakesResolver } from "../core/repeatInstances.js";
 import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
          effectiveGradeOfTakes } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
@@ -1925,11 +1925,7 @@ export function PlannerProvider({ children }) {
       // (NEU allows retaking any course "to earn a better grade"); with no
       // grades entered resolveAddId returns the base id and this is a move,
       // exactly as before.
-      let dropId = id;
-      if (dragInfo.fromSem == null && placements[id] != null) {
-        const course = courseMap[baseId(id)];
-        if (course) dropId = resolveAddId(course, placements, placedOut, grades).id;
-      }
+      const dropId = resolveDropId(dragInfo, { placements, courseMap, placedOut, grades });
       const fromSem = placements[dropId];
       if (fromSem === semId) { setDragInfo(null); return; }
       // Always move ALL coreq partners together with the dragged course
@@ -2108,7 +2104,12 @@ export function PlannerProvider({ children }) {
     setHoveredCardId(null); setHoveredSem(null); setHoveredZone(null);
     if (!dragInfo || dragInfo.type !== "course" || dragInfo.id === targetId) return;
     pushUndo();
-    const dragId  = dragInfo.id;
+    // The SAME resolution the semester drop does. A drag from outside the grid
+    // of a course already in the plan is an ADD — another take of a repeatable,
+    // or a retake once every take is graded — not a move. Dropping on a card
+    // used to skip this entirely, so the identical gesture added a take on a
+    // term's empty space and moved the existing take onto a card.
+    const dragId = resolveDropId(dragInfo, { placements, courseMap, placedOut, grades });
 
     // Reservations at either end of the gesture. The decision is a pure
     // function (src/core/planDrop.js) so each case can be enumerated in a test

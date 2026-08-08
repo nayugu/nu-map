@@ -15,6 +15,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { takeConsumesSlot } from "./gradeSystem.js";
+import { isReservationId } from "./reservations.js";
 
 /** "MUS1990#2" → "MUS1990"; plain ids pass through unchanged. */
 export function baseId(id) {
@@ -154,4 +155,37 @@ export function resolveAddId(course, placements, placedOut, grades) {
       return { id: cand, overLimit: used >= max };
     }
   }
+}
+
+/**
+ * Which id a DROP should act on.
+ *
+ * A drag that starts outside the grid — the bank, the requirements panel, the
+ * info panel — is an ADD. If the course is already in the plan, that means
+ * another take of a repeatable, or a retake of a course whose every take is
+ * graded. A drag that starts INSIDE the grid is a move, and keeps its id.
+ *
+ * This exists as one function because it was two. Dropping on a SEMESTER
+ * resolved a new instance; dropping on a CARD did not, so the same gesture
+ * added a take in one place and moved the existing take in the other. The rule
+ * has no reason to differ by what you happen to be hovering over, and two
+ * copies of it could only ever drift.
+ *
+ * Reservation ids pass through untouched: a card with no course has no takes.
+ *
+ * @param {{id: string, fromSem: string|null}} drag
+ * @param {object} ctx  { placements, courseMap, placedOut, grades }
+ * @returns {string} the id to place
+ */
+export function resolveDropId(drag, { placements, courseMap, placedOut, grades } = {}) {
+  const id = drag?.id;
+  if (!id || typeof id !== "string") return id;
+  if (isReservationId(id)) return id;
+  // Only a drag from outside the grid can add; `fromSem` is null for the bank
+  // and the panels, a semester id for a card already on the board.
+  if (drag.fromSem != null) return id;
+  if (placements?.[id] == null) return id;
+  const course = courseMap?.[baseId(id)];
+  if (!course) return id;
+  return resolveAddId(course, placements, placedOut, grades).id;
 }
