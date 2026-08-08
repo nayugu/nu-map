@@ -44,6 +44,21 @@ const calendar = {
   decodeTermCode(_term) { return null; },
   getTermCodeYear(_term) { return null; },
 
+  // No dates, so no opinion about which semester is "now". Callers treat null
+  // as "the user sets it manually", which is the honest answer here — better
+  // than guessing from month numbers and quietly marking a term complete.
+  //
+  // To implement: give each semester type a first and last day (see
+  // northeastern/calendar.js, which derives both from the registrar's own
+  // published section dates rather than hardcoding them), then return the
+  // term whose window contains `now` — and between terms, the term about to
+  // BEGIN. Returning the one that just ended leaves it looking in-progress
+  // for the length of the break.
+  getTermStart(_semTypeId, _year) { return null; },
+  getTermEnd(_semTypeId, _year)   { return null; },
+  getCurrentSemId(_now)           { return null; },
+  isTermPast(_code, _now)         { return false; },
+
   getSources() { return []; },
 };
 

@@ -66,6 +66,23 @@ jobs:
       - name: Derive offering summary
         run: node scripts/derive-offering-summary.js --write 2>&1 | tee /tmp/offering-log.txt
 
+      # ── Step 2b-ii: Re-derive when each term starts and ends ──────────────────
+      #   The planner decides which semester is "now" — and so which courses
+      #   count as completed — from these windows. They are measured from
+      #   Banner's own section meeting dates over a ROLLING 5-year window, and
+      #   that rolling part is the point: NU moved Spring to a Wednesday start
+      #   in 2026, and the four constants this replaced were hand-picked
+      #   "typical first day + 1 week" guesses that had drifted into 2–16 days
+      #   of lag at the start of a term and up to 42 at the end.
+      #
+      #   Non-fatal, and safe to skip: the script refuses to write at all
+      #   unless the sample looks like a calendar (≥3 usable years per term
+      #   type, spread under a week, windows ordered and disjoint), so a bad
+      #   Banner day leaves last month's windows in place rather than
+      #   corrupting them. ~20 requests.
+      - name: Re-derive term windows
+        run: node scripts/derive-term-windows.js --write 2>&1 | tee /tmp/term-windows-log.txt || echo "::warning::Term-window derivation skipped — windows unchanged from last run."
+
       # ── Step 2c: Refresh verified RateMyHusky course/professor links ──────────
       #   Matches instructor names to real reviewed professor pages (sitemap +
       #   a search-API recovery pass for reviewed profs the sitemap omits) and
@@ -132,6 +149,7 @@ jobs:
             public/northeastern/change-log.json \
             public/northeastern/course-equivalences.json \
             src/core/dataMeta.json \
+            src/adapters/northeastern/termWindows.js \
             public/data-meta.json
           git diff --cached --quiet || git commit -m "data: update courses (catalog + availability) [$DATE]
 

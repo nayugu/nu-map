@@ -7,7 +7,7 @@ updates course data. Two workflows are legacy and easy to mistake for the live p
 
 | Workflow | Cadence | Role |
 |---|---|---|
-| `update-courses.yml` | Monthly (1st, 06:00 UTC) | **The main pipeline.** Full catalog scrape of all ~130 subjects — titles, descriptions, credits, prereqs/coreqs — plus **NUPath from Tableau** (`fetch-nupath --tableau` → `merge-nupath`), Banner availability, **primary instructors** (`--prof`: one newest completed term per run, cached forever after — one getFacultyMeetingTimes call per section), offering summary, and manual patches. Pushes directly to main. |
+| `update-courses.yml` | Monthly (1st, 06:00 UTC) | **The main pipeline.** Full catalog scrape of all ~130 subjects — titles, descriptions, credits, prereqs/coreqs — plus **NUPath from Tableau** (`fetch-nupath --tableau` → `merge-nupath`), Banner availability, **primary instructors** (`--prof`: one newest completed term per run, cached forever after — one getFacultyMeetingTimes call per section), offering summary, **term windows** (`derive-term-windows`), and manual patches. Pushes directly to main. |
 | `update-majors.yml` | Bimonthly (odd months) | Undergrad program requirements. Scrape → `check-major-integrity` → `verify-majors --report --write` → ratchet → push. |
 | `update-grad-majors.yml` | Bimonthly (odd months) | Graduate program requirements, same four steps. |
 | `catalog-rotate.yml` | **LEGACY — manual only** | Superseded by the monthly full scrape above. Old design: one subject every 3 days via PR review; its schedule was disabled because GitHub Actions here cannot open PRs. Do not re-enable. |
@@ -39,6 +39,17 @@ Facts that follow from this:
   with **no** nupath/attribute class — find it by its label text
   (`findAttributeText`), never by a class selector. A class-based selector
   matched zero blocks and made the catalog contribute no NUPath at all.
+- **Term windows are derived, not hardcoded.** Which semester is "now" — and
+  therefore which courses count as completed — comes from
+  `src/adapters/northeastern/termWindows.js`, regenerated monthly by
+  `derive-term-windows.js` from Banner section meeting dates over a **rolling
+  5-year window**. Fall's start is an exact rule (the Wednesday after Labor
+  Day, 9/9 years) and needs no margin; the rest sit at median + 2·MADN — the
+  robust twin of mean + 2σ, because plain σ lets one COVID year (Spring 2022
+  began Jan 18) push the threshold later than the guess it replaced. Never
+  re-freeze these as constants: NU moved Spring to a Wednesday start in 2026.
+  `isTermPast` is a *separate*, later threshold (start + 14d) about Banner
+  enrolment settling after add/drop — do not re-merge the two.
 - The runtime file is `public/northeastern/catalog-courses.json` (browser app,
   Node MCP server, and Cloudflare worker all load it). `all-courses.json` is the
   scrape intermediate; `merge-nupath.js` backfills nuPath from it at build time.

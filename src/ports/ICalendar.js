@@ -99,6 +99,33 @@ export const ICalendar = "calendar";
  *            getTermCodeYear("202530") → 2025  (Spring 2025, AY 2024-25)
  *   Used by the offering history UI to label historical terms (e.g. "FA24").
  *
+ * @property {(now?: Date) => string|null} getCurrentSemId
+ *   The semester ID the planner should treat as "now" — what everything before
+ *   it counts as completed against.  Returns null if this calendar cannot say.
+ *
+ *   Two rules, and the second is the one that is easy to get wrong:
+ *     · while a term is in session, return that term;
+ *     · BETWEEN terms, return the one about to begin, not the one that just
+ *       ended.  A calendar that only knows start dates has no choice but to
+ *       return the last term that started, which leaves a finished semester
+ *       claiming to be in progress for the whole of the break — five and a
+ *       half weeks, in NU's case, and none of its courses counting as done.
+ *
+ * @property {(semTypeId: string, year: number) => Date|null} [getTermStart]
+ * @property {(semTypeId: string, year: number) => Date|null} [getTermEnd]
+ *   First and last day of one term type in one calendar year.  `getTermEnd`
+ *   returns the last INSTANT of the final day, so that a `now <= end`
+ *   comparison still holds while that day is being lived through.
+ *   Optional: a calendar that cannot place its terms on the actual calendar
+ *   omits both, and `getCurrentSemId` returns null.
+ *
+ * @property {(code: string, now?: Date) => boolean} [isTermPast]
+ *   Whether a raw term code's registration data has SETTLED — deliberately a
+ *   later threshold than "the term has begun".  Enrolment churns through
+ *   add/drop, and a future term's absence from the record means only that
+ *   registration has not opened.  Consumers read this before letting a term
+ *   contribute to offering probability.
+ *
  * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
  *   External data sources this adapter draws from.  See IAttributable.
  */

@@ -1,6 +1,68 @@
 // ═══════════════════════════════════════════════════════════════════
 // ADAPTER: northeastern/calendar  (implements ICalendar)
+//
+// Term windows — when a semester starts and when it is over — come from
+// termWindows.js, which scripts/derive-term-windows.js regenerates every
+// monthly run from Banner's own section meeting dates over a rolling
+// 5-year window.  They used to be four hand-picked "typical first day +
+// 1 week" constants, which cost 2–16 days of lag at the start of a term
+// and, because there were no END dates at all, up to 42 days at the
+// finish: a Fall that ended Dec 14 stayed "now" until Jan 22.
 // ═══════════════════════════════════════════════════════════════════
+
+import termWindows from "./termWindows.js";
+
+// Banner enrolment churns while a term is being added/dropped, so history
+// for a term that has only just begun is not yet worth reading. Add/drop
+// closes about a week in; this doubles that.  Distinct from the term
+// windows above on purpose — "has this term started" and "is this term's
+// data settled" are different questions that shared one constant before.
+const SETTLE_DAYS = 14;
+
+const _dateAt = (year, month, day) => new Date(year, month - 1, day);
+
+/** Labor Day — the first Monday of September — for a calendar year. */
+function _laborDay(year) {
+  for (let day = 1; day <= 7; day++) {
+    const d = _dateAt(year, 9, day);
+    if (d.getDay() === 1) return d;
+  }
+  return _dateAt(year, 9, 1); // unreachable: some day in 1–7 is a Monday
+}
+
+const _shift = (d, days) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + days);
+
+/**
+ * First day of `semTypeId` in `year`, as the planner counts it: the measured
+ * threshold, a few days past the true first class, never before it.
+ * Returns null for a type the generated data has no window for.
+ */
+function _termStart(semTypeId, year) {
+  const w = termWindows.types?.[semTypeId];
+  if (!w) return null;
+  if (w.startRule === "laborDayPlus2") return _shift(_laborDay(year), 2);
+  return w.start ? _dateAt(year, w.start.month, w.start.day) : null;
+}
+
+/**
+ * Last day of `semTypeId` in `year` — end of the exam period — returned as the
+ * final INSTANT of that day, not its midnight.
+ *
+ * The distinction is not pedantry: a window compared with `now <= end` against
+ * a midnight boundary is open for zero seconds on its own last day, so a term
+ * whose exams finish on Dec 14 stopped being current at 00:00 that morning,
+ * while students were still sitting them.
+ */
+function _termEnd(semTypeId, year) {
+  const w = termWindows.types?.[semTypeId];
+  if (!w) return null;
+  // A rule-anchored window carries a LENGTH rather than a date, so the end
+  // moves with the start in a year the rule places the term late.
+  const day = w.lengthDays != null
+    ? (() => { const s = _termStart(semTypeId, year); return s && _shift(s, w.lengthDays); })()
+    : (w.end && _dateAt(year, w.end.month, w.end.day));
+  return day ? new Date(day.getFullYear(), day.getMonth(), day.getDate(), 23, 59, 59, 999) : null;
+}
 
 const _semesterTypes = [
   {
@@ -12,7 +74,6 @@ const _semesterTypes = [
     optional:   false,
     theme:      "fall",
     months:       ["09", "10", "11", "12"],
-    safeStartDay: 15,  // NU fall typically starts Sep 3–8; +1 week buffer
   },
   {
     id:         "spring",
@@ -24,7 +85,6 @@ const _semesterTypes = [
     optional:   false,
     theme:      "spring",
     months:       ["01", "02", "03", "04", "05"],
-    safeStartDay: 22,  // NU spring typically starts Jan 12–15; +1 week buffer
   },
   {
     id:         "sumA",
@@ -37,7 +97,6 @@ const _semesterTypes = [
     optional:   true,
     theme:      "summer",
     months:       ["05", "06"],
-    safeStartDay: 12,  // NU summer 1 typically starts May 1–4; +1 week buffer
   },
   {
     id:         "sumB",
@@ -50,7 +109,6 @@ const _semesterTypes = [
     optional:   true,
     theme:      "summer",
     months:       ["07", "08"],
-    safeStartDay: 16,  // NU summer 2 typically starts Jul 7–9; +1 week buffer
   },
 ];
 
@@ -83,44 +141,53 @@ const calendar = {
     return suffix === "10" ? year - 1 : year;
   },
 
-  // Returns true only when the term's safe start day has already passed.
-  // Uses safeStartDay (+1 week buffer past typical first day of classes) so we
-  // never treat a term as past while it might still be registration/pre-class week.
-  // Future/upcoming terms have unreliable Banner data (registration not yet settled).
-  isTermPast(code) {
+  // First and last day of a term type in a given calendar year, as measured
+  // from Banner. Exposed so callers (and tests) can reason about the window
+  // without reaching into the generated data.
+  getTermStart(semTypeId, year) { return _termStart(semTypeId, year); },
+  getTermEnd(semTypeId, year)   { return _termEnd(semTypeId, year); },
+
+  // True once a term's Banner data has settled — its start plus SETTLE_DAYS,
+  // NOT the same threshold as "the term has begun". A term still inside its
+  // add/drop window has section counts and enrolments that move daily, and a
+  // future term has no meaningful data at all: term-history records `false`
+  // for a course simply because registration has not been published yet.
+  // Reading either as fact would skew offering probability.
+  isTermPast(code, now = new Date()) {
     const semTypeId = this.decodeTermCode(code);
     const yr = this.getTermCodeYear(code);
     if (!semTypeId || yr == null) return false;
-    const type = _semesterTypes.find(t => t.id === semTypeId);
-    if (!type) return false;
-    const firstMonths = { fall: 9, spring: 1, sumA: 5, sumB: 7 };
-    const firstMonth = firstMonths[semTypeId];
-    if (!firstMonth) return false;
-    const safeDay = type.safeStartDay ?? 1;
-    return new Date(yr, firstMonth - 1, safeDay) <= new Date();
+    const start = _termStart(semTypeId, yr);
+    return start ? _shift(start, SETTLE_DAYS) <= now : false;
   },
 
-  // Returns the semId (e.g. "spr2026", "fall2026") that contains today's date,
-  // using safeStartDay thresholds so the value only flips once a semester has
-  // definitely started. Returns null if the date predates all known thresholds.
+  // The semId (e.g. "spr2026", "fall2026") the planner should treat as NOW.
+  //
+  // In session, that is the term whose window contains today. Between terms it
+  // is the one about to BEGIN, not the one that just ended — that is the whole
+  // point of having end dates. Under the old start-only scheme "now" was
+  // whichever term had started most recently, so a Fall that finished on
+  // Dec 14 went on claiming to be in progress until Jan 22, and none of its
+  // courses counted as completed for 39 days.
+  //
+  // Windows are disjoint by construction — derive-term-windows.js refuses to
+  // write a set that overlaps — so at most one can contain a given date.
   getCurrentSemId(now = new Date()) {
     const year = now.getFullYear();
-    const firstMonths = { fall: 9, spring: 1, sumA: 5, sumB: 7 };
-    const candidates = [];
+    const windows = [];
     for (const t of _semesterTypes) {
-      const firstMonth = firstMonths[t.id];
-      if (!firstMonth) continue;
-      const safeDay = t.safeStartDay ?? 1;
       const prefix = t.idPrefix ?? t.id;
-      for (const yr of [year - 1, year]) {
-        candidates.push({
-          threshold: new Date(yr, firstMonth - 1, safeDay),
-          semId: `${prefix}${yr}`,
-        });
+      // year+1 so that late-December sees the January term as upcoming.
+      for (const yr of [year - 1, year, year + 1]) {
+        const start = _termStart(t.id, yr);
+        const end   = _termEnd(t.id, yr);
+        if (start && end) windows.push({ start, end, semId: `${prefix}${yr}` });
       }
     }
-    candidates.sort((a, b) => b.threshold - a.threshold);
-    return candidates.find(c => c.threshold <= now)?.semId ?? null;
+    if (!windows.length) return null;
+    windows.sort((a, b) => a.start - b.start);
+    return (windows.find(w => w.start <= now && now <= w.end)
+         ?? windows.find(w => w.start > now))?.semId ?? null;
   },
 
   getSources() { return []; },
