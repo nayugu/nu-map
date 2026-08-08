@@ -191,6 +191,7 @@ export const strings = {
   "verify.detail.markerLeak": "قاعدة «اختر N مما يلي» لم تُحلّ — تعامل مع ذلك القسم بحذر",
   "verify.detail.emptyProgram": "ربما تغيّرت بنية صفحة الدليل — اعتبر هذا البرنامج غير متاح",
   "grad.loading":           "جارٍ التحميل…",
+  "grad.reserved.note":     "تحجز خطتك {cards} بطاقة ({sh} SH) لم تختر مقرراتها بعد.",
   "grad.empty":             "ابحث عن تخصصك أعلاه\nللتحقق من متطلبات التخرج\nمقارنة بخطتك الحالية.",
   "grad.programSelection": "اختيار البرنامج",
   "grad.row.title":        "التخرج",

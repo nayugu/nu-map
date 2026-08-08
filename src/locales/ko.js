@@ -191,6 +191,7 @@ export const strings = {
   "verify.detail.markerLeak": "“다음 중 N개 선택” 규칙을 해석하지 못했습니다 — 해당 항목은 신뢰하기 어렵습니다",
   "verify.detail.emptyProgram": "카탈로그 페이지 구조가 바뀌었을 수 있습니다 — 이 프로그램은 이용 불가로 보세요",
   "grad.loading":           "불러오는 중…",
+  "grad.reserved.note":     "이 플랜에는 아직 과목을 정하지 않은 자리가 {cards}개({sh} SH) 있습니다.",
   "grad.empty":             "위에서 전공을 검색하여\n졸업 요건을 현재 계획과 비교하세요.",
   "grad.programSelection":  "프로그램 선택",
   "grad.row.title":         "졸업",

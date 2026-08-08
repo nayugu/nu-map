@@ -192,6 +192,7 @@ export const strings = {
   "verify.detail.markerLeak": "「次から N 科目選択」の規則を解決できませんでした — 該当セクションは信頼できません",
   "verify.detail.emptyProgram": "カタログページの構成が変わった可能性があります — 本プログラムは利用不可と見なしてください",
   "grad.loading":           "読み込み中…",
+  "grad.reserved.note":     "このプランには、まだ科目を決めていない枠が {cards} 件（{sh} SH）あります。",
   "grad.empty":             "上で専攻を検索して\n卒業要件を現在の計画と照合します。",
   "grad.programSelection": "プログラム選択",
   "grad.row.title":        "卒業",

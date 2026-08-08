@@ -192,6 +192,10 @@ export const strings = {
   "verify.detail.markerLeak": "A \"choose N of the following\" rule was left unresolved — treat that section as unreliable",
   "verify.detail.emptyProgram": "The catalog page may have changed shape — treat this program as unavailable",
   "grad.loading":           "Loading\u2026",
+  // Says only what it can prove. Sections below read placements and cannot see
+  // a reservation, so one the student has reserved two cards for still reads
+  // "0/2" \u2014 this stops that being read as "not planned".
+  "grad.reserved.note":     "Your plan reserves {cards} cards ({sh} SH) you haven\u2019t chosen yet.",
   "grad.empty":             "Search for your major above\nto check graduation requirements\nagainst your current plan.",
   "grad.programSelection": "Program Selection",
   "grad.row.title":        "Graduation",

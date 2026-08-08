@@ -272,6 +272,37 @@ export function occupantCards(courseMap, reservations) {
   return out;
 }
 
+/**
+ * How much of the plan is still undecided, as a plain count.
+ *
+ * The requirements panel reads `placements`, so a section shows `0/2` whether
+ * the student has ignored it or reserved both cards for it. An advisor reads
+ * the first meaning. This says the second, and it is deliberately the *dumbest*
+ * statement available: a count of cards and their credit hours.
+ *
+ * Everything more precise was measured and rejected. Marking the individual
+ * sections a card is bound to would cover 17.7% of cards — a median of 2
+ * sections out of 11 per plan — while 41.7% stay ambiguous and 39.4% are free
+ * electives that belong to no section at all. It would add a per-section visual
+ * state that can be wrong (34 sections in the corpus are claimed by more cards
+ * than they hold) to say less. A count covers 100% and cannot be wrong.
+ *
+ * Not a degree number and never presented as one: it counts what has NOT been
+ * decided, which is the opposite of progress.
+ *
+ * @returns {{cards: number, sh: number}}
+ */
+export function reservedTotals(reservations) {
+  let cards = 0, sh = 0;
+  for (const r of Object.values(reservations ?? {})) {
+    if (!r?.id) continue;
+    cards += 1;
+    const n = Number(r.sh);
+    if (Number.isFinite(n) && n > 0) sh += n;
+  }
+  return { cards, sh };
+}
+
 /** Credit hours reserved in one semester — term load only, never the degree. */
 export function semesterReservedSH(reservations, semId) {
   let n = 0;

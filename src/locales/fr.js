@@ -191,6 +191,7 @@ export const strings = {
   "verify.detail.markerLeak": "Une règle « choisir N parmi » n'a pas pu être résolue — considérez cette section peu fiable",
   "verify.detail.emptyProgram": "La page du catalogue a peut-être changé — considérez ce programme indisponible",
   "grad.loading":           "Chargement…",
+  "grad.reserved.note":     "Votre plan réserve {cards} cartes ({sh} SH) que vous n’avez pas encore choisies.",
   "grad.empty":             "Recherchez votre majeure ci-dessus\npour vérifier les exigences de diplôme\npar rapport à votre plan actuel.",
   "grad.programSelection": "Sélection du programme",
   "grad.row.title":        "Remise des diplômes",

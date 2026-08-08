@@ -24,6 +24,7 @@ import { cohortCatalogYear } from "../data/programPaths.js";
 import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
 import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, countsInGPA, dropVoidTakes, dropUnearnedTakes, COOP_GPA } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
+import { reservedTotals } from "../core/reservations.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
 import { useTranslatedText, scaleLatinRuns }    from "../context/TranslationContext.jsx";
@@ -1351,9 +1352,13 @@ export default function GradPanel({ wideCatalog = false }) {
     claudePreview,
     grades,
     planEntSem, planEntYear,
+    reservations,
   } = usePlanner();
 
   const isGrad = studentType === "graduate";
+
+  // What the plan has left undecided. See the note where this renders.
+  const reserved = useMemo(() => reservedTotals(reservations), [reservations]);
 
   // Claude proposal preview: outline the selector(s) the changeset touches
   // in orange, and give each an anchor the auto-focus scroll can target.
@@ -1872,6 +1877,27 @@ export default function GradPanel({ wideCatalog = false }) {
         {loadErr && (
           <div style={{ fontSize: 10, color: "var(--error-text)", background: "var(--error-bg)", border: "1px solid var(--error)", borderRadius: 4, padding: "6px 8px", marginBottom: 8 }}>
             Error: {loadErr}
+          </div>
+        )}
+
+        {/* ── What the plan has NOT decided ────────────────────────
+            Every section below reads `placements`, which by design cannot see
+            a reservation — so a requirement the student has reserved two cards
+            for still reads "0/2", and an advisor reads that as "not planned".
+            This says otherwise, and says only what it can prove: a count.
+
+            Deliberately not per-section. Marking the sections a card is bound
+            to was measured at 17.7% of cards — a median of 2 sections out of 11
+            — while 41.7% stay ambiguous and 39.4% are free electives belonging
+            to no section. It would add a state that can be wrong to say less.
+            A count covers every card and cannot be. ── */}
+        {!fetching && reserved.cards > 0 && (
+          <div style={{
+            fontSize: 10, color: "var(--text-4)", background: "var(--card-bg)",
+            border: "1px dashed var(--border)", borderRadius: 4,
+            padding: "6px 8px", marginBottom: 8,
+          }}>
+            {t("grad.reserved.note", { cards: reserved.cards, sh: reserved.sh })}
           </div>
         )}
 

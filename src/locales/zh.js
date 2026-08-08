@@ -191,6 +191,7 @@ export const strings = {
   "verify.detail.markerLeak": "一条“从以下选择 N 门”的规则未能解析 — 请谨慎对待该部分",
   "verify.detail.emptyProgram": "目录页面结构可能已变更 — 请将该专业视为暂不可用",
   "grad.loading":            "\u52a0\u8f7d\u4e2d\u2026",
+  "grad.reserved.note":      "\u4f60\u7684\u8ba1\u5212\u4e2d\u8fd8\u6709 {cards} \u4e2a\u5c1a\u672a\u9009\u5b9a\u8bfe\u7a0b\u7684\u540d\u989d\uff08{sh} SH\uff09\u3002",
   "grad.empty":              "\u5728\u4e0a\u65b9\u641c\u7d22\u4e13\u4e1a\n\u4ee5\u6a21\u62df\u6bd5\u4e1a\u8981\u6c42\n\u5bf9\u5e94\u4f60\u7684\u8bbe\u8bfe\u8ba1\u5212\u3002",
   "grad.programSelection": "专业选择",
   "grad.row.title":        "毕业",
