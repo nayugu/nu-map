@@ -14,44 +14,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1100"
-                  ],
                   "text": "CRIM 1100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1215"
-                  ],
                   "text": "MATH 1215",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1215"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INSC1000"
-                  ],
                   "text": "INSC 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INSC1000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -61,36 +66,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1110"
-                  ],
                   "text": "CRIM 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1100"
-                  ],
                   "text": "CS 1100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS1100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3400"
-                  ],
                   "text": "PSYC 3400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3450"
-                  ],
                   "text": "PSYC 3450",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3450"
+                    ]
+                  ]
                 }
               ]
             },
@@ -100,20 +109,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1120"
-                  ],
                   "text": "CRIM 1120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3402"
-                  ],
                   "text": "PSYC 3402",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3402"
+                    ]
+                  ]
                 }
               ]
             },
@@ -123,14 +134,30 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "NU Path EI",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -145,30 +172,51 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC2320"
-                  ],
                   "text": "PSYC 2320",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC2320"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3458"
-                  ],
                   "text": "PSYC 3458",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3458"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM Justice Thematic Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NU Path IC",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -178,32 +226,65 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NU Path DD",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CJ Survey Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PSYC Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -213,14 +294,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "PSYC Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -230,9 +323,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -247,9 +341,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -259,33 +354,45 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3040"
-                  ],
                   "text": "CRIM 3040",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM3040"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3600"
-                  ],
                   "text": "CRIM 3600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM3600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC4612"
-                  ],
                   "text": "PSYC 4612",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC4612"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -295,14 +402,30 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Adv. Writing",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      16
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NU Path ER",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -312,9 +435,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -329,9 +453,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -341,24 +466,55 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Psychology Seminar",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      14
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CJ System Wide Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

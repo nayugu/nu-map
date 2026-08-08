@@ -14,44 +14,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS1101"
-                  ],
                   "text": "AFCS 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS1113"
-                  ],
                   "text": "AFCS 1113",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS1113"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CLTR1000"
-                  ],
                   "text": "CLTR 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CLTR1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS4526"
-                  ],
                   "text": "AFCS 4526",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS4526"
+                    ]
+                  ]
                 }
               ]
             },
@@ -61,41 +66,53 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MSCR1220"
-                  ],
                   "text": "MSCR 1220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MSCR1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      6,
+                      9,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS2690"
-                  ],
                   "text": "AFCS 2690",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS2690"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS1270"
-                  ],
                   "text": "AFCS 1270",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS1270"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (For CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -105,14 +122,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      6,
+                      9,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -122,14 +153,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -144,34 +187,45 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MSCR1320",
-                    "MSCR1420"
-                  ],
                   "text": "MSCR 1320 or 1420",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MSCR1320"
+                    ],
+                    [
+                      "MSCR1420"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS2296"
-                  ],
                   "text": "AFCS 2296",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS2296"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS3424"
-                  ],
                   "text": "AFCS 3424",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS3424"
+                    ]
+                  ]
                 }
               ]
             },
@@ -181,44 +235,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MSCR2220"
-                  ],
                   "text": "MSCR 2220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MSCR2220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MSCR2505"
-                  ],
                   "text": "MSCR 2505",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MSCR2505"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MSCR3420"
-                  ],
                   "text": "MSCR 3420",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MSCR3420"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS3900"
-                  ],
                   "text": "AFCS 3900",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS3900"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESH2000"
-                  ],
                   "text": "EESH 2000 (For CSSH students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -228,20 +287,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS3664"
-                  ],
                   "text": "AFCS 3664",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS3664"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "COMM3655"
-                  ],
                   "text": "COMM 3655",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM3655"
+                    ]
+                  ]
                 }
               ]
             },
@@ -251,9 +312,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -268,9 +330,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -280,36 +343,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTD2380"
-                  ],
                   "text": "ARTD 2380",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTD2380"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS2619"
-                  ],
                   "text": "AFCS 2619",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS2619"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "COMM2655"
-                  ],
                   "text": "COMM 2655",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM2655"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MSCR2335"
-                  ],
                   "text": "MSCR 2335",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MSCR2335"
+                    ]
+                  ]
                 }
               ]
             },
@@ -319,14 +386,27 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "MSCR elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      9,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -336,9 +416,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -353,9 +434,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -365,30 +447,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "COMM4755"
-                  ],
                   "text": "COMM 4755",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM4755"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      6,
+                      9,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      6,
+                      9,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS4700"
-                  ],
                   "text": "AFCS 4700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS4700"
+                    ]
+                  ]
                 }
               ]
             }

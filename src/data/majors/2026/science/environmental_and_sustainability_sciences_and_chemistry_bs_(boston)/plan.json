@@ -14,42 +14,50 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1161",
-                    "CHEM1162",
-                    "CHEM1163"
-                  ],
                   "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM1161",
+                      "CHEM1162",
+                      "CHEM1163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENVR1000",
-                    "CHEM1000",
-                    "INSC1000"
-                  ],
                   "text": "ENVR 1000, CHEM 1000, or INSC 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENVR1000"
+                    ],
+                    [
+                      "CHEM1000"
+                    ],
+                    [
+                      "INSC1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR1200",
-                    "ENVR1201"
-                  ],
                   "text": "ENVR 1200 and ENVR 1201",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR1200",
+                      "ENVR1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR1400",
-                    "ENVR1401"
-                  ],
                   "text": "ENVR 1400 and ENVR 1401",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR1400",
+                      "ENVR1401"
+                    ]
+                  ]
                 }
               ]
             },
@@ -59,39 +67,43 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM2161",
-                    "CHEM2162",
-                    "CHEM2163"
-                  ],
                   "text": "CHEM 2161 and CHEM 2162 and CHEM 2163",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM2161",
+                      "CHEM2162",
+                      "CHEM2163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB2302",
-                    "EEMB2303"
-                  ],
                   "text": "EEMB 2302 and EEMB 2303",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EEMB2302",
+                      "EEMB2303"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR2515"
-                  ],
                   "text": "ENVR 2515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR2515"
+                    ]
+                  ]
                 }
               ]
             },
@@ -101,14 +113,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -118,8 +142,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -134,31 +159,45 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM2311",
-                    "CHEM2312"
-                  ],
                   "text": "CHEM 2311 and CHEM 2312",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM2311",
+                      "CHEM2312"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1241"
-                  ],
                   "text": "MATH 1241",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1241"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENVR elective; 1 of 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENVR skill; 1 of 2",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 }
               ]
             },
@@ -168,41 +207,56 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM2313",
-                    "CHEM2314"
-                  ],
                   "text": "CHEM 2313 and CHEM 2314",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM2313",
+                      "CHEM2314"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1151",
-                    "PHYS1152",
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1151",
+                      "PHYS1152",
+                      "PHYS1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENVR skill; 2 of 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENVR elective; 2 of 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 }
               ]
             },
@@ -212,22 +266,24 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM2321",
-                    "CHEM2322",
-                    "CHEM2323"
-                  ],
                   "text": "CHEM 2321 and CHEM 2322 and CHEM 2323",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM2321",
+                      "CHEM2322",
+                      "CHEM2323"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1242"
-                  ],
                   "text": "MATH 1242",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1242"
+                    ]
+                  ]
                 }
               ]
             },
@@ -237,9 +293,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -254,9 +311,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -266,31 +324,45 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM3401",
-                    "CHEM3402"
-                  ],
                   "text": "CHEM 3401 and CHEM 3402",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM3401",
+                      "CHEM3402"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3307"
-                  ],
                   "text": "ENGW 3307",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3307"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Advanced CHEM elective",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENVR elective; 3 of 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 }
               ]
             },
@@ -300,14 +372,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -317,9 +401,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -334,9 +419,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -346,24 +432,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective 5",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective 6",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Integrative course; 1 of 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Integrative course; 2 of 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

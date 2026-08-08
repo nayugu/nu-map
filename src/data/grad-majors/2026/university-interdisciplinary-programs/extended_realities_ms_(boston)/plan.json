@@ -14,21 +14,23 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EXRE5010",
-                    "EXRE5011"
-                  ],
                   "text": "EXRE 5010 and EXRE 5011",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EXRE5010",
+                      "EXRE5011"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EXRE5020"
-                  ],
                   "text": "EXRE 5020",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EXRE5020"
+                    ]
+                  ]
                 }
               ]
             },
@@ -38,21 +40,23 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EXRE5030"
-                  ],
                   "text": "EXRE 5030",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EXRE5030"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "GSND5110",
-                    "GSND5111"
-                  ],
                   "text": "GSND 5110 and GSND 5111",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "GSND5110",
+                      "GSND5111"
+                    ]
+                  ]
                 }
               ]
             }
@@ -67,25 +71,33 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EXRE6500"
-                  ],
                   "text": "EXRE 6500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EXRE6500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GSND5122"
-                  ],
                   "text": "GSND 5122",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GSND5122"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "XR and games elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -95,17 +107,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EXRE7500"
-                  ],
                   "text": "EXRE 7500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EXRE7500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "XR and games elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }

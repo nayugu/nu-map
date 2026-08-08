@@ -14,42 +14,52 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1000"
-                  ],
                   "text": "ARCH 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ARCH1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARCH1310",
-                    "ARCH1311"
-                  ],
                   "text": "ARCH 1310 and ARCH 1311",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH1310",
+                      "ARCH1311"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1241"
-                  ],
                   "text": "MATH 1241",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1241"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR2200"
-                  ],
                   "text": "ENVR 2200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR2200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -59,41 +69,51 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1110"
-                  ],
                   "text": "ARCH 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1120"
-                  ],
                   "text": "ARCH 1120",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -103,14 +123,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -120,8 +152,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -136,36 +169,40 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC2130"
-                  ],
                   "text": "LARC 2130",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "LARC2130"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC2430"
-                  ],
                   "text": "LARC 2430",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC2430"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC2330"
-                  ],
                   "text": "LARC 2330",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC2330"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC2230"
-                  ],
                   "text": "LARC 2230",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC2230"
+                    ]
+                  ]
                 }
               ]
             },
@@ -175,36 +212,40 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC2140"
-                  ],
                   "text": "LARC 2140",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "LARC2140"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC2240"
-                  ],
                   "text": "LARC 2240",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC2240"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC2440"
-                  ],
                   "text": "LARC 2440",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC2440"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC2340"
-                  ],
                   "text": "LARC 2340",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC2340"
+                    ]
+                  ]
                 }
               ]
             },
@@ -214,9 +255,15 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Optional Summer Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -226,9 +273,15 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Optional Summer Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -243,37 +296,41 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC3170"
-                  ],
                   "text": "LARC 3170",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "LARC3170"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3314"
-                  ],
                   "text": "ENGW 3314",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3314"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC5210"
-                  ],
                   "text": "LARC 5210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC5210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR3300",
-                    "ENVR3301"
-                  ],
                   "text": "ENVR 3300 and ENVR 3301",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR3300",
+                      "ENVR3301"
+                    ]
+                  ]
                 }
               ]
             },
@@ -283,9 +340,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -295,9 +353,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op 1",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -307,14 +366,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -329,33 +400,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC5110"
-                  ],
                   "text": "LARC 5110",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "LARC5110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC5220"
-                  ],
                   "text": "LARC 5220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC5220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC5310"
-                  ],
                   "text": "LARC 5310",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC5310"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -365,30 +445,44 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC5120"
-                  ],
                   "text": "LARC 5120",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "LARC5120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC5420"
-                  ],
                   "text": "LARC 5420",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC5420"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

@@ -14,38 +14,55 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SOCL1000"
-                  ],
                   "text": "SOCL 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "SOCL1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SOCL1101"
-                  ],
                   "text": "SOCL 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language BA course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL 1000+ level elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -55,28 +72,51 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "SOCL 1000+ level elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "SOCL2321",
-                    "INSH3101"
-                  ],
                   "text": "SOCL 2321 or INSH 3101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL2321"
+                    ],
+                    [
+                      "INSH3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language BA course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -86,14 +126,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -103,14 +155,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -125,39 +189,58 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "SOCL 1000+ level elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "SOCL2320",
-                    "INSH3102"
-                  ],
                   "text": "SOCL 2320 or INSH 3102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL2320"
+                    ],
+                    [
+                      "INSH3102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language BA course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ANTH1101"
-                  ],
                   "text": "ANTH 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ANTH1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESH2000"
-                  ],
                   "text": "EESH 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -167,9 +250,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -179,9 +263,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -191,14 +276,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -213,30 +310,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "SOCL 3000+ level elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SOCL3300"
-                  ],
                   "text": "SOCL 3300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL3300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Advanced methods requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -246,9 +359,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -258,9 +372,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -270,14 +385,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -292,24 +419,50 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL 3000+ level elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL 3000+ level elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -319,27 +472,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "SOCL 3000+ level elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SOCL4600"
-                  ],
                   "text": "SOCL 4600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL4600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

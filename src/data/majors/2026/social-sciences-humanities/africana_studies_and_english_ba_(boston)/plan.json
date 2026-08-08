@@ -14,44 +14,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CLTR1000"
-                  ],
                   "text": "CLTR 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CLTR1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGL1160"
-                  ],
                   "text": "ENGL 1160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGL1160"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS1101"
-                  ],
                   "text": "AFCS 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS1225"
-                  ],
                   "text": "AFCS 1225",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS1225"
+                    ]
+                  ]
                 }
               ]
             },
@@ -61,30 +66,58 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGL1400"
-                  ],
                   "text": "ENGL 1400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGL1400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS2619"
-                  ],
                   "text": "AFCS 2619",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS2619"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Integrative course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -94,14 +127,39 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "ENGL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -111,14 +169,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -133,30 +203,58 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Integrative Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Pre-1850 literature course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS1113"
-                  ],
                   "text": "AFCS 1113",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS1113"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS1261"
-                  ],
                   "text": "AFCS 1261",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS1261"
+                    ]
+                  ]
                 }
               ]
             },
@@ -166,30 +264,57 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "ENGL diversity course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS2355"
-                  ],
                   "text": "AFCS 2355",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS2355"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS4526"
-                  ],
                   "text": "AFCS 4526",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS4526"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Post-1850 literature course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -199,17 +324,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AFCS1270"
-                  ],
                   "text": "AFCS 1270",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AFCS1270"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -219,9 +351,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -236,9 +369,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -248,27 +382,53 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Advanced Writing in the Disciplines",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGL3710"
-                  ],
                   "text": "ENGL 3710",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGL3710"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -278,14 +438,32 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "ENGL writing course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -295,9 +473,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -312,9 +491,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -324,24 +504,67 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Capstone course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENGL theories and methods course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENGL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      11,
+                      12,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

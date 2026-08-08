@@ -14,39 +14,56 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "SOCL1000",
-                    "PHIL1000"
-                  ],
                   "text": "SOCL 1000 or PHIL 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "SOCL1000"
+                    ],
+                    [
+                      "PHIL1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHIL1110"
-                  ],
                   "text": "PHIL 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHIL1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SOCL1101"
-                  ],
                   "text": "SOCL 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHIL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -56,28 +73,49 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "SOCL2320",
-                    "INSH3102"
-                  ],
                   "text": "SOCL 2320 or INSH 3102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL2320"
+                    ],
+                    [
+                      "INSH3102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHIL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Lived religion elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 }
               ]
             },
@@ -87,14 +125,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -104,14 +154,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -126,24 +188,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Comparative religion elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHIL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -153,28 +239,49 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "SOCL2321",
-                    "INSH3101"
-                  ],
                   "text": "SOCL 2321 or INSH 3101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL2321"
+                    ],
+                    [
+                      "INSH3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHIL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHIL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -184,14 +291,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -201,9 +320,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -218,9 +338,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -230,27 +351,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SOCL3300"
-                  ],
                   "text": "SOCL 3300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL3300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Integrative course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL 5000 elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL 5000 elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -260,14 +400,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -277,9 +429,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -294,9 +447,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -306,24 +460,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "PHIL seminar",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL capstone",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Integrative course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SOCL 5000 elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }

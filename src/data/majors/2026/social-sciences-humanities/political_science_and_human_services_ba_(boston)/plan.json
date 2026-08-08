@@ -14,42 +14,54 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1155"
-                  ],
                   "text": "POLS 1155",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1155"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "HUSV1000",
-                    "POLS1000"
-                  ],
                   "text": "HUSV 1000 or POLS 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HUSV1000"
+                    ],
+                    [
+                      "POLS1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV1101"
-                  ],
                   "text": "HUSV 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HUSV elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -59,33 +71,43 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1150"
-                  ],
                   "text": "POLS 1150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1160"
-                  ],
                   "text": "POLS 1160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1160"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV2300"
-                  ],
                   "text": "HUSV 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign Language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -95,8 +117,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -106,8 +129,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -122,32 +146,57 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESH2000"
-                  ],
                   "text": "EESH 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS thought",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HS Diverse Populations Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Research Methods course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HUSV elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -157,9 +206,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -169,9 +219,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -181,14 +232,27 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS 2400 supporting course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -203,33 +267,43 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS2400"
-                  ],
                   "text": "POLS 2400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS2400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign Language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS3307"
-                  ],
                   "text": "POLS 3307",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS3307"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV3900"
-                  ],
                   "text": "HUSV 3900",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV3900"
+                    ]
+                  ]
                 }
               ]
             },
@@ -239,9 +313,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -251,9 +326,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -263,14 +339,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "POLS elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HUSV elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -285,19 +373,39 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Capstone and Elective Option A or Option B",
-                  "sh": 8
+                  "sh": 8,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -307,27 +415,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "POLS elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV3570"
-                  ],
                   "text": "HUSV 3570",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV3570"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -337,8 +464,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -348,8 +476,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -364,22 +493,35 @@
               "hours": 14,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV4994"
-                  ],
                   "text": "HUSV 4994",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "HUSV4994"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

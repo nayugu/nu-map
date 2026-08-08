@@ -14,22 +14,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Focus area courses (2)",
-                  "sh": 8
+                  "sh": 8,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Restricted elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 }
               ]
             },
@@ -39,19 +57,36 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Focus area courses (2)",
-                  "sh": 8
+                  "sh": 8,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Restricted elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             },
@@ -61,14 +96,21 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Focus area course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             },
@@ -78,14 +120,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Restricted elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             }
@@ -100,24 +152,51 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Focus area course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Restricted elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Minor course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             },
@@ -127,9 +206,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -139,9 +219,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -151,14 +232,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Writing-intensive course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 }
               ]
             }
@@ -173,27 +264,55 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Focus area course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Restricted elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Minor course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 }
               ]
             },
@@ -203,9 +322,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -215,9 +335,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -227,14 +348,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Writing-intensive course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             }
@@ -249,19 +380,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Focus area courses (2)",
-                  "sh": 8
+                  "sh": 8,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Restricted elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Minor course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 }
               ]
             },
@@ -271,19 +429,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Capstone",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Focus area courses (2)",
-                  "sh": 8
+                  "sh": 8,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Minor course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5
+                    ]
+                  }
                 }
               ]
             }

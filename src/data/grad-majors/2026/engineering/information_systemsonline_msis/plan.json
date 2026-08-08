@@ -14,28 +14,31 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO5100"
-                  ],
                   "text": "INFO 5100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO5100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO5101"
-                  ],
                   "text": "INFO 5101",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "INFO5101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DAMG6210"
-                  ],
                   "text": "DAMG 6210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DAMG6210"
+                    ]
+                  ]
                 }
               ]
             },
@@ -45,28 +48,31 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CSYE7400"
-                  ],
                   "text": "CSYE 7400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CSYE7400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CSYE6225"
-                  ],
                   "text": "CSYE 6225",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CSYE6225"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "TELE5600"
-                  ],
                   "text": "TELE 5600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "TELE5600"
+                    ]
+                  ]
                 }
               ]
             },
@@ -76,28 +82,31 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "TELE6300"
-                  ],
                   "text": "TELE 6300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "TELE6300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DAMG7350"
-                  ],
                   "text": "DAMG 7350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DAMG7350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DAMG7370"
-                  ],
                   "text": "DAMG 7370",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DAMG7370"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -120,28 +129,31 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO5100"
-                  ],
                   "text": "INFO 5100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO5100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO5101"
-                  ],
                   "text": "INFO 5101",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "INFO5101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO6205"
-                  ],
                   "text": "INFO 6205",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO6205"
+                    ]
+                  ]
                 }
               ]
             },
@@ -151,20 +163,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CSYE7400"
-                  ],
                   "text": "CSYE 7400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CSYE7400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DAMG6210"
-                  ],
                   "text": "DAMG 6210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DAMG6210"
+                    ]
+                  ]
                 }
               ]
             }
@@ -179,20 +193,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO6245"
-                  ],
                   "text": "INFO 6245",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO6245"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CSYE6255"
-                  ],
                   "text": "CSYE 6255",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CSYE6255"
+                    ]
+                  ]
                 }
               ]
             },
@@ -202,20 +218,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO6255"
-                  ],
                   "text": "INFO 6255",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO6255"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CSYE6225"
-                  ],
                   "text": "CSYE 6225",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CSYE6225"
+                    ]
+                  ]
                 }
               ]
             }
@@ -237,28 +255,31 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO5100"
-                  ],
                   "text": "INFO 5100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO5100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO5101"
-                  ],
                   "text": "INFO 5101",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "INFO5101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO7245"
-                  ],
                   "text": "INFO 7245",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO7245"
+                    ]
+                  ]
                 }
               ]
             },
@@ -268,20 +289,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CSYE7400"
-                  ],
                   "text": "CSYE 7400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CSYE7400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO6245"
-                  ],
                   "text": "INFO 6245",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO6245"
+                    ]
+                  ]
                 }
               ]
             },
@@ -291,20 +314,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CSYE7280"
-                  ],
                   "text": "CSYE 7280",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CSYE7280"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO7260"
-                  ],
                   "text": "INFO 7260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO7260"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -320,20 +345,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO6150"
-                  ],
                   "text": "INFO 6150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO6150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INFO6255"
-                  ],
                   "text": "INFO 6255",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INFO6255"
+                    ]
+                  ]
                 }
               ]
             }

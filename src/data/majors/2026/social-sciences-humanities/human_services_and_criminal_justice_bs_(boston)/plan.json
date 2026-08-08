@@ -14,44 +14,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1110"
-                  ],
                   "text": "CRIM 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV1000"
-                  ],
                   "text": "HUSV 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HUSV1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV1101"
-                  ],
                   "text": "HUSV 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1215"
-                  ],
                   "text": "MATH 1215",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1215"
+                    ]
+                  ]
                 }
               ]
             },
@@ -61,36 +66,57 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CRIM1300",
-                    "CRIM1400",
-                    "CRIM1500",
-                    "CRIM1700"
-                  ],
                   "text": "CRIM 1300, 1400, 1500, or 1700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1300"
+                    ],
+                    [
+                      "CRIM1400"
+                    ],
+                    [
+                      "CRIM1500"
+                    ],
+                    [
+                      "CRIM1700"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1100"
-                  ],
                   "text": "CS 1100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS1100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV2300"
-                  ],
                   "text": "HUSV 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HSVC elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      8
+                    ]
+                  }
                 }
               ]
             },
@@ -100,14 +126,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -117,14 +155,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -139,30 +189,50 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1120"
-                  ],
                   "text": "CRIM 1120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3600"
-                  ],
                   "text": "CRIM 3600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM3600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HSVC intermediate/advanced undergraduate elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      8
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -172,32 +242,69 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESH2000"
-                  ],
                   "text": "EESH 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CJ concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      8
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CJ concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      8
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -207,14 +314,32 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "CJ Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      8
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -224,9 +349,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -241,9 +367,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -253,38 +380,59 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3000"
-                  ],
                   "text": "CRIM 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CRIM3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3700"
-                  ],
                   "text": "CRIM 3700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM3700"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV3900"
-                  ],
                   "text": "HUSV 3900",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV3900"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HSVC organization course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      8
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -294,14 +442,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -311,9 +471,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -328,9 +489,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -340,38 +502,59 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM4000"
-                  ],
                   "text": "CRIM 4000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CRIM4000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM4949"
-                  ],
                   "text": "CRIM 4949",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM4949"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CJ system-wide elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      8
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

@@ -14,43 +14,53 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INSC1000"
-                  ],
                   "text": "INSC 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INSC1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR1400",
-                    "ENVR1401"
-                  ],
                   "text": "ENVR 1400 and ENVR 1401",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR1400",
+                      "ENVR1401"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR1500",
-                    "ENVR1501"
-                  ],
                   "text": "ENVR 1500 and ENVR 1501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR1500",
+                      "ENVR1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -60,35 +70,44 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB2302",
-                    "EEMB2303"
-                  ],
                   "text": "EEMB 2302 and EEMB 2303",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EEMB2302",
+                      "EEMB2303"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR1200",
-                    "ENVR1201"
-                  ],
                   "text": "ENVR 1200 and ENVR 1201",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR1200",
+                      "ENVR1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1241"
-                  ],
                   "text": "MATH 1241",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1241"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -98,8 +117,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -109,14 +129,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -131,39 +163,54 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR2515"
-                  ],
                   "text": "ENVR 2515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR2515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR3300",
-                    "ENVR3301"
-                  ],
                   "text": "ENVR 3300 and ENVR 3301",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR3300",
+                      "ENVR3301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS Concentration 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -173,9 +220,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -185,9 +233,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -197,14 +246,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Requirement 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -219,28 +280,47 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR2500",
-                    "ENVR2501"
-                  ],
                   "text": "ENVR 2500 and ENVR 2501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR2500",
+                      "ENVR2501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 5",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -250,9 +330,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -262,9 +343,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -274,17 +356,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3307"
-                  ],
                   "text": "ENGW 3307",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3307"
+                    ]
+                  ]
                 }
               ]
             }
@@ -299,24 +388,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 6",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 7",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS Concentration 8",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -326,30 +439,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR4000"
-                  ],
                   "text": "ENVR 4000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR4000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR4050"
-                  ],
                   "text": "ENVR 4050",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR4050"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS Concentration 9",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS Concentration 10",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -371,43 +498,53 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INSC1000"
-                  ],
                   "text": "INSC 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INSC1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR1400",
-                    "ENVR1401"
-                  ],
                   "text": "ENVR 1400 and ENVR 1401",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR1400",
+                      "ENVR1401"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR1500",
-                    "ENVR1501"
-                  ],
                   "text": "ENVR 1500 and ENVR 1501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR1500",
+                      "ENVR1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -417,35 +554,44 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB2302",
-                    "EEMB2303"
-                  ],
                   "text": "EEMB 2302 and EEMB 2303",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EEMB2302",
+                      "EEMB2303"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR1200",
-                    "ENVR1201"
-                  ],
                   "text": "ENVR 1200 and ENVR 1201",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR1200",
+                      "ENVR1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1241"
-                  ],
                   "text": "MATH 1241",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1241"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -455,8 +601,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -466,14 +613,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -488,39 +647,54 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR2515"
-                  ],
                   "text": "ENVR 2515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR2515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR3300",
-                    "ENVR3301"
-                  ],
                   "text": "ENVR 3300 and ENVR 3301",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR3300",
+                      "ENVR3301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS Concentration 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -530,28 +704,47 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR2500",
-                    "ENVR2501"
-                  ],
                   "text": "ENVR 2500 and ENVR 2501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR2500",
+                      "ENVR2501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 5",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -561,14 +754,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -578,9 +783,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -595,9 +801,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -607,24 +814,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 6",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 7",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS concentration 8",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -634,17 +865,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3307"
-                  ],
                   "text": "ENGW 3307",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3307"
+                    ]
+                  ]
                 }
               ]
             },
@@ -654,9 +892,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -671,9 +910,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -683,30 +923,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR4000"
-                  ],
                   "text": "ENVR 4000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR4000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR4050"
-                  ],
                   "text": "ENVR 4050",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR4050"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS Concentration 9",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ESS Concentration 10",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }

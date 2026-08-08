@@ -14,47 +14,54 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "COMM1101"
-                  ],
                   "text": "COMM 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1200",
-                    "COMM1000"
-                  ],
                   "text": "CS 1200 or COMM 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ],
+                    [
+                      "COMM1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -64,35 +71,46 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "COMM1112",
-                    "COMM2301"
-                  ],
                   "text": "COMM 1112 or 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM1112"
+                    ],
+                    [
+                      "COMM2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2100",
-                    "CS2101"
-                  ],
                   "text": "CS 2100 and CS 2101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2100",
+                      "CS2101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -102,18 +120,25 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS3100",
-                    "CS3101"
-                  ],
                   "text": "CS 3100 and CS 3101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS3100",
+                      "CS3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -128,39 +153,72 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1210",
-                    "EEAM2000"
-                  ],
                   "text": "CS 1210 or EEAM 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ],
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3000"
-                  ],
                   "text": "CS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Foundation Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 }
               ]
             },
@@ -170,9 +228,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -182,9 +241,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -194,14 +254,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -216,24 +288,80 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Cluster Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Writing Intensive Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 }
               ]
             },
@@ -243,9 +371,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -255,9 +384,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -267,19 +397,30 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3314",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3314, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3314"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -294,31 +435,63 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS4120"
-                  ],
                   "text": "CS 4120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS4530",
-                    "CS4535"
-                  ],
                   "text": "CS 4530 or 4535",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4530"
+                    ],
+                    [
+                      "CS4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Writing Intensive Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 }
               ]
             },
@@ -328,27 +501,62 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS4550"
-                  ],
                   "text": "CS 4550",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4550"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Computing and Social Issues",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -358,14 +566,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -387,47 +607,54 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "COMM1101"
-                  ],
                   "text": "COMM 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1200",
-                    "COMM1000"
-                  ],
                   "text": "CS 1200 or COMM 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ],
+                    [
+                      "COMM1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -437,35 +664,46 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "COMM1112",
-                    "COMM2301"
-                  ],
                   "text": "COMM 1112 or 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM1112"
+                    ],
+                    [
+                      "COMM2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2100",
-                    "CS2101"
-                  ],
                   "text": "CS 2100 and CS 2101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2100",
+                      "CS2101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "GeneralElective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -475,18 +713,25 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS3100",
-                    "CS3101"
-                  ],
                   "text": "CS 3100 and CS 3101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS3100",
+                      "CS3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -501,30 +746,60 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3000"
-                  ],
                   "text": "CS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Foundation Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 }
               ]
             },
@@ -534,33 +809,92 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1210",
-                    "EEAM2000"
-                  ],
                   "text": "CS 1210 or EEAM 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ],
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Cluster Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Writing Intensive Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 }
               ]
             },
@@ -570,14 +904,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -587,9 +933,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -604,9 +951,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -616,31 +964,63 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS4120"
-                  ],
                   "text": "CS 4120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS4530",
-                    "CS4535"
-                  ],
                   "text": "CS 4530 or 4535",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4530"
+                    ],
+                    [
+                      "CS4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Writing Intensive Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 }
               ]
             },
@@ -650,19 +1030,30 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3314",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3314, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3314"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -672,9 +1063,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -689,9 +1081,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -701,27 +1094,62 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS4550"
-                  ],
                   "text": "CS 4550",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4550"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication Studies Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Computing and Social Issues",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      10,
+                      12
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -731,14 +1159,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

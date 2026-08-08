@@ -14,47 +14,52 @@
               "hours": 20,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1200"
-                  ],
                   "text": "CS 1200",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1161",
-                    "PHYS1162"
-                  ],
                   "text": "PHYS 1161 and PHYS 1162",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1161",
+                      "PHYS1162"
+                    ]
+                  ]
                 }
               ]
             },
@@ -64,38 +69,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2100",
-                    "CS2101"
-                  ],
                   "text": "CS 2100 and CS 2101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2100",
+                      "CS2101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1165",
-                    "PHYS1166"
-                  ],
                   "text": "PHYS 1165 and PHYS 1166",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1165",
+                      "PHYS1166"
+                    ]
+                  ]
                 }
               ]
             },
@@ -105,20 +114,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3000"
-                  ],
                   "text": "CS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 }
               ]
             },
@@ -128,14 +139,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -150,35 +173,44 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS3100",
-                    "CS3101"
-                  ],
                   "text": "CS 3100 and CS 3101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS3100",
+                      "CS3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS2371",
-                    "PHYS2372"
-                  ],
                   "text": "PHYS 2371 and PHYS 2372",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS2371",
+                      "PHYS2372"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -188,41 +220,54 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1210"
-                  ],
                   "text": "CS 1210",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS2800"
-                  ],
                   "text": "CS 2800",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS2800"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS2303"
-                  ],
                   "text": "PHYS 2303",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS2303"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS3602"
-                  ],
                   "text": "PHYS 3602",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS3602"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Computing and Social Issues",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      8,
+                      11,
+                      13
+                    ]
+                  }
                 }
               ]
             },
@@ -232,14 +277,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -249,9 +306,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -266,9 +324,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -278,33 +337,42 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3800"
-                  ],
                   "text": "CS 3800",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3800"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH3081"
-                  ],
                   "text": "MATH 3081",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH3081"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS4305"
-                  ],
                   "text": "PHYS 4305",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS4305"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Physics Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      8
+                    ]
+                  }
                 }
               ]
             },
@@ -314,22 +382,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS3600"
-                  ],
                   "text": "PHYS 3600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS3600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3307",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3307, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3307"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 }
               ]
             },
@@ -339,9 +413,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -356,9 +431,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -368,31 +444,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS4530",
-                    "CS4535"
-                  ],
                   "text": "CS 4530 or 4535",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4530"
+                    ],
+                    [
+                      "CS4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS5318"
-                  ],
                   "text": "PHYS 5318",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS5318"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

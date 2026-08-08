@@ -14,36 +14,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1155"
-                  ],
                   "text": "POLS 1155",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1155"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1365"
-                  ],
                   "text": "MATH 1365",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1365"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -53,30 +57,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1150"
-                  ],
                   "text": "POLS 1150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS Political Thought Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -86,14 +104,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -103,8 +133,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -119,30 +150,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1160"
-                  ],
                   "text": "POLS 1160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1160"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -152,30 +197,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS2399"
-                  ],
                   "text": "POLS 2399",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS2399"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "MATH Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -185,9 +244,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -197,9 +257,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -214,33 +275,42 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS2400"
-                  ],
                   "text": "POLS 2400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS2400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS2390"
-                  ],
                   "text": "POLS 2390",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS2390"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2331"
-                  ],
                   "text": "MATH 2331",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2331"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "MATH Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -250,24 +320,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "POLS Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -277,14 +371,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -294,9 +400,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -311,9 +418,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -323,31 +431,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "POLS4701",
-                    "POLS4703"
-                  ],
                   "text": "POLS 4701 or 4703",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS4701"
+                    ],
+                    [
+                      "POLS4703"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH3081"
-                  ],
                   "text": "MATH 3081",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH3081"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

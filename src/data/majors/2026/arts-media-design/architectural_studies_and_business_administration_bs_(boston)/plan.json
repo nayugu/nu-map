@@ -14,45 +14,52 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ARCH1000",
-                    "BUSN1102"
-                  ],
                   "text": "ARCH 1000 or BUSN 1102",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ARCH1000"
+                    ],
+                    [
+                      "BUSN1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1110"
-                  ],
                   "text": "ARCH 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1120"
-                  ],
                   "text": "ARCH 1120",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -62,34 +69,50 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH2130"
-                  ],
                   "text": "ARCH 2130",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH2130"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ECON1115",
-                    "ECON1116"
-                  ],
                   "text": "ECON 1115 or 1116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ],
+                    [
+                      "ECON1116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MGSC2301"
-                  ],
                   "text": "MGSC 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MGSC2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -99,21 +122,23 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARCH1310",
-                    "ARCH1311"
-                  ],
                   "text": "ARCH 1310 and ARCH 1311",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH1310",
+                      "ARCH1311"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1231"
-                  ],
                   "text": "MATH 1231",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1231"
+                    ]
+                  ]
                 }
               ]
             }
@@ -128,30 +153,49 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH2140"
-                  ],
                   "text": "ARCH 2140",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH2140"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LARC2330"
-                  ],
                   "text": "LARC 2330",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LARC2330"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 }
               ]
             },
@@ -161,38 +205,72 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Architectural studies elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 6,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH5530"
-                  ],
                   "text": "ARCH 5530",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH5530"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "EEAM2000",
-                    "BUSN1103"
-                  ],
                   "text": "EEAM 2000 or BUSN 1103",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ],
+                    [
+                      "BUSN1103"
+                    ]
+                  ]
                 }
-              ]
+              ],
+              "hoursMax": 19
             },
             {
               "term": "Summer 1",
@@ -200,14 +278,36 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business elective 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -217,12 +317,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             }
@@ -237,12 +339,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -252,30 +356,63 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3314",
-                    "ENGW3304"
-                  ],
                   "text": "ENGW 3314 or 3304",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3314"
+                    ],
+                    [
+                      "ENGW3304"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Architectural studies elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 6,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 18
             },
             {
               "term": "Summer 1",
@@ -283,14 +420,31 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -300,12 +454,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             }
@@ -320,12 +476,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -335,31 +493,57 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ARCH4960",
-                    "STRT4501"
-                  ],
                   "text": "ARCH 4960 or STRT 4501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH4960"
+                    ],
+                    [
+                      "STRT4501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH5314"
-                  ],
                   "text": "ARCH 5314",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH5314"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Architectural studies elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }

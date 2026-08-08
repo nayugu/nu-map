@@ -14,52 +14,58 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CHEM1151"
-                  ],
                   "text": "CHEM 1151 (ND)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1153",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111 (WF)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -69,49 +75,60 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502 (ER)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1151"
-                  ],
                   "text": "PHYS 1151 (ND)",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PHYS1151"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1152"
-                  ],
                   "text": "PHYS 1152 (AD)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1152"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1153",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -121,14 +138,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -138,9 +167,15 @@
               "hours": 4,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -155,52 +190,58 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2140"
-                  ],
                   "text": "EECE 21401",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE2140"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2150"
-                  ],
                   "text": "EECE 2150 (AD)",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EECE2150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1155"
-                  ],
                   "text": "PHYS 1155 (ND)",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PHYS1155"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1156"
-                  ],
                   "text": "PHYS 1156 (AD)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1156"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1157"
-                  ],
                   "text": "PHYS 1157",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1157"
+                    ]
+                  ]
                 }
               ]
             },
@@ -210,38 +251,53 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2160"
-                  ],
                   "text": "EECE 2160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE2160"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 }
               ]
             },
@@ -251,14 +307,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -268,9 +336,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -285,9 +354,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -297,35 +367,55 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE3468"
-                  ],
                   "text": "EECE 3468",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE3468"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CE Fundamentals",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -335,26 +425,36 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE4791"
-                  ],
                   "text": "EECE 4791 (EI, CE, WI)2",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EECE4791"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302 or 3315 (WD)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -364,9 +464,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -381,9 +482,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -393,27 +495,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE4792"
-                  ],
                   "text": "EECE 4792 (EI, CE, WI)2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE4792"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -435,52 +556,58 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CHEM1151"
-                  ],
                   "text": "CHEM 1151 (ND)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1153",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111 (WF)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -490,49 +617,60 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502 (ER)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1151"
-                  ],
                   "text": "PHYS 1151 (ND)",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PHYS1151"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1152"
-                  ],
                   "text": "PHYS 1152 (AD)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1152"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1153",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -542,14 +680,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -559,9 +709,15 @@
               "hours": 4,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -576,60 +732,67 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2140"
-                  ],
                   "text": "EECE 21401",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE2140"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2150"
-                  ],
                   "text": "EECE 2150 (AD)",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EECE2150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1155"
-                  ],
                   "text": "PHYS 1155 (ND)",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PHYS1155"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1156"
-                  ],
                   "text": "PHYS 1156 (AD)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1156"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1157"
-                  ],
                   "text": "PHYS 1157",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1157"
+                    ]
+                  ]
                 }
               ]
             },
@@ -639,9 +802,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -651,9 +815,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -663,14 +828,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -685,38 +862,53 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2160"
-                  ],
                   "text": "EECE 2160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE2160"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 }
               ]
             },
@@ -726,9 +918,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -738,9 +931,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -750,26 +944,36 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE4791"
-                  ],
                   "text": "EECE 4791 (EI, CE, WI)2",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EECE4791"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302 or 3315 (WD)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -784,30 +988,44 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE3468"
-                  ],
                   "text": "EECE 3468",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE3468"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CE Fundamentals",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE4792"
-                  ],
                   "text": "EECE 47922",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE4792"
+                    ]
+                  ]
                 }
               ]
             },
@@ -817,24 +1035,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -856,52 +1098,58 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CHEM1151"
-                  ],
                   "text": "CHEM 1151 (ND)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1153",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111 (WF)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -911,49 +1159,60 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502 (ER)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1151"
-                  ],
                   "text": "PHYS 1151 (ND)",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PHYS1151"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1152"
-                  ],
                   "text": "PHYS 1152 (AD)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1152"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1153",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -963,8 +1222,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -974,8 +1234,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -990,52 +1251,58 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2140"
-                  ],
                   "text": "EECE 21401",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE2140"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2150"
-                  ],
                   "text": "EECE 2150 (AD)",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EECE2150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1155"
-                  ],
                   "text": "PHYS 1155 (ND)",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PHYS1155"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1156"
-                  ],
                   "text": "PHYS 1156 (AD)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1156"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1157"
-                  ],
                   "text": "PHYS 1157",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1157"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1045,38 +1312,53 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2160"
-                  ],
                   "text": "EECE 2160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE2160"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -1086,8 +1368,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -1097,9 +1380,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -1114,9 +1398,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1126,24 +1411,48 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "CE Fundamentals",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -1153,18 +1462,27 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302 or 3315 (WD)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -1174,9 +1492,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -1191,9 +1510,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1203,35 +1523,55 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE3468"
-                  ],
                   "text": "EECE 3468",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE3468"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -1241,17 +1581,24 @@
               "hours": 5,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE4791"
-                  ],
                   "text": "EECE 4791 (EI, WI, CE)2",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EECE4791"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -1261,9 +1608,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -1278,9 +1626,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1290,27 +1639,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE4792"
-                  ],
                   "text": "EECE 4792 (EI, WI, CE)2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE4792"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -1332,52 +1700,58 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CHEM1151"
-                  ],
                   "text": "CHEM 1151 (ND)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1153",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111 (WF)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1387,49 +1761,60 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502 (ER)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1151"
-                  ],
                   "text": "PHYS 1151 (ND)",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PHYS1151"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1152"
-                  ],
                   "text": "PHYS 1152 (AD)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1152"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1153",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -1439,8 +1824,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -1450,8 +1836,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -1466,60 +1853,67 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2140"
-                  ],
                   "text": "EECE 21401",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE2140"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2150"
-                  ],
                   "text": "EECE 2150 (AD)",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EECE2150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1155"
-                  ],
                   "text": "PHYS 1155 (ND)",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PHYS1155"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1156"
-                  ],
                   "text": "PHYS 1156 (AD)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1156"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1157"
-                  ],
                   "text": "PHYS 1157",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1157"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1529,9 +1923,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1541,9 +1936,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1553,8 +1949,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -1569,30 +1966,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE2160"
-                  ],
                   "text": "EECE 2160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE2160"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -1602,9 +2013,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1614,9 +2026,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1626,18 +2039,27 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302 or 3315 (WD)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -1652,32 +2074,57 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CE Fundamentals",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EE Fundamentals",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -1687,9 +2134,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1699,9 +2147,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1711,17 +2160,24 @@
               "hours": 5,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE4791"
-                  ],
                   "text": "EECE 4791 (EI, WI, CE)2",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EECE4791"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -1736,30 +2192,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE3468"
-                  ],
                   "text": "EECE 3468",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE3468"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EECE4792"
-                  ],
                   "text": "EECE 4792 (EI, WI, CE)2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EECE4792"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -1769,24 +2239,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Technical Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

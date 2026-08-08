@@ -14,25 +14,34 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM7000"
-                  ],
                   "text": "INAM 7000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INAM7000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM7001"
-                  ],
                   "text": "INAM 7001",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INAM7001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Discipline-specific coursework",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -42,22 +51,36 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM7900"
-                  ],
                   "text": "INAM 7900",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INAM7900"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Research methods elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Discipline-specific coursework",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -72,19 +95,40 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Discipline-specific coursework",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Discipline-specific coursework",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Discipline-specific coursework",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -94,22 +138,37 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Discipline-specific coursework",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Discipline-specific coursework",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM7901"
-                  ],
                   "text": "INAM 7901",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INAM7901"
+                    ]
+                  ]
                 }
               ]
             }
@@ -124,21 +183,36 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Qualifying exams",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Teaching requirement, TA",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM9990"
-                  ],
-                  "text": "INAM 9990"
+                  "text": "INAM 9990",
+                  "options": [
+                    [
+                      "INAM9990"
+                    ]
+                  ]
                 }
               ]
             },
@@ -148,16 +222,24 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Teaching requirement, TA",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM9991"
-                  ],
-                  "text": "INAM 9991"
+                  "text": "INAM 9991",
+                  "options": [
+                    [
+                      "INAM9991"
+                    ]
+                  ]
                 }
               ]
             }
@@ -172,17 +254,25 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Teaching requirement, teacher of record",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM9996"
-                  ],
                   "text": "INAM 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "INAM9996"
+                    ]
+                  ]
                 }
               ]
             },
@@ -192,17 +282,25 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Teaching requirement, teacher of record",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM9996"
-                  ],
                   "text": "INAM 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "INAM9996"
+                    ]
+                  ]
                 }
               ]
             }
@@ -217,12 +315,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM9996"
-                  ],
                   "text": "INAM 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "INAM9996"
+                    ]
+                  ]
                 }
               ]
             },
@@ -232,12 +331,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM9996"
-                  ],
                   "text": "INAM 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "INAM9996"
+                    ]
+                  ]
                 }
               ]
             }

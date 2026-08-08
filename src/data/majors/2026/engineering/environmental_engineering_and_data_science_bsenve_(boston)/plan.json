@@ -14,45 +14,50 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1151",
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1151 and CHEM 1153 (ND)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151",
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111 (WF)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -62,35 +67,44 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502 (ER)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1151",
-                    "PHYS1152",
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1151",
+                      "PHYS1152",
+                      "PHYS1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -100,22 +114,24 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE2221",
-                    "CIVE2222"
-                  ],
                   "text": "CIVE 2221 and CIVE 2222",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2221",
+                      "CIVE2222"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 }
               ]
             },
@@ -125,8 +141,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -141,34 +158,45 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE2334"
-                  ],
                   "text": "CIVE 2334",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2334"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE2300",
-                    "CIVE2301"
-                  ],
                   "text": "CIVE 2300 and CIVE 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2300",
+                      "CIVE2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Programming Pathway Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -178,41 +206,53 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE2331"
-                  ],
                   "text": "CIVE 2331",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2331"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE3430"
-                  ],
                   "text": "CIVE 3430",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE3430"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Programming Pathway Course",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -222,21 +262,23 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH3081"
-                  ],
                   "text": "MATH 3081",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH3081"
+                    ]
+                  ]
                 }
               ]
             },
@@ -246,9 +288,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -263,9 +306,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -275,36 +319,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3000"
-                  ],
                   "text": "DS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3302"
-                  ],
                   "text": "ENGW 3302",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE3435"
-                  ],
                   "text": "CIVE 3435",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE3435"
+                    ]
+                  ]
                 }
               ]
             },
@@ -314,8 +362,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -325,8 +374,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -341,39 +391,58 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE4534",
-                    "CIVE4535"
-                  ],
                   "text": "CIVE 4534 and CIVE 4535 (WI)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE4534",
+                      "CIVE4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4200"
-                  ],
                   "text": "DS 4200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Environmental Engineering Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Earth Science Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -383,33 +452,42 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE4765"
-                  ],
                   "text": "CIVE 4765 (EI, WI, CE)",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CIVE4765"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4300"
-                  ],
                   "text": "DS 4300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4400"
-                  ],
                   "text": "DS 4400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -431,45 +509,50 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1151",
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1151 and CHEM 1153",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151",
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -479,35 +562,44 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1151",
-                    "PHYS1152",
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1151",
+                      "PHYS1152",
+                      "PHYS1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -517,22 +609,24 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE2221",
-                    "CIVE2222"
-                  ],
                   "text": "CIVE 2221 and CIVE 2222",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2221",
+                      "CIVE2222"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 }
               ]
             },
@@ -542,8 +636,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -558,34 +653,45 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE2334"
-                  ],
                   "text": "CIVE 2334",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2334"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE2300",
-                    "CIVE2301"
-                  ],
                   "text": "CIVE 2300 and CIVE 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2300",
+                      "CIVE2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Programming Pathway Course",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -595,41 +701,53 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE2331"
-                  ],
                   "text": "CIVE 2331",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2331"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE3430"
-                  ],
                   "text": "CIVE 3430",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE3430"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Programming Pathway Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -639,21 +757,23 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH3081"
-                  ],
                   "text": "MATH 3081",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH3081"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 }
               ]
             },
@@ -663,8 +783,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -679,36 +800,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE3435"
-                  ],
                   "text": "CIVE 3435",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE3435"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3000"
-                  ],
                   "text": "DS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3302"
-                  ],
                   "text": "ENGW 3302",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ]
+                  ]
                 }
               ]
             },
@@ -718,9 +843,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -730,9 +856,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -742,8 +869,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -758,39 +886,58 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE4534",
-                    "CIVE4535"
-                  ],
                   "text": "CIVE 4534 and CIVE 4535",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE4534",
+                      "CIVE4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Environmental engineering elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4200"
-                  ],
                   "text": "DS 4200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Earth Science Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -800,33 +947,42 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE4765"
-                  ],
                   "text": "CIVE 4765",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CIVE4765"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4300"
-                  ],
                   "text": "DS 4300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4400"
-                  ],
                   "text": "DS 4400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -848,45 +1004,50 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1151",
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1151 and CHEM 1153 (ND)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151",
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111 (WF)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -896,35 +1057,44 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342 (FQ)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1151",
-                    "PHYS1152",
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1151 and PHYS 1152 and PHYS 1153 (ND)",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1151",
+                      "PHYS1152",
+                      "PHYS1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502 (ER)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -934,22 +1104,24 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE2221",
-                    "CIVE2222"
-                  ],
                   "text": "CIVE 2221 and CIVE 2222",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2221",
+                      "CIVE2222"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 }
               ]
             },
@@ -959,8 +1131,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -975,34 +1148,45 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE2334"
-                  ],
                   "text": "CIVE 2334",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2334"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE2300",
-                    "CIVE2301"
-                  ],
                   "text": "CIVE 2300 and CIVE 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2300",
+                      "CIVE2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Programming Pathway Course",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -1012,41 +1196,53 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE2331"
-                  ],
                   "text": "CIVE 2331",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2331"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE3430"
-                  ],
                   "text": "CIVE 3430",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE3430"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Programming Pathway Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -1056,21 +1252,23 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH3081"
-                  ],
                   "text": "MATH 3081",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH3081"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1080,9 +1278,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -1097,9 +1296,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1109,36 +1309,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE3435"
-                  ],
                   "text": "CIVE 3435",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE3435"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3000"
-                  ],
                   "text": "DS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3302"
-                  ],
                   "text": "ENGW 3302",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1148,8 +1352,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -1159,9 +1364,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -1176,9 +1382,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1188,39 +1395,58 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4200"
-                  ],
                   "text": "DS 4200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE4534",
-                    "CIVE4535"
-                  ],
                   "text": "CIVE 4534 and CIVE 4535",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE4534",
+                      "CIVE4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Environmental engineering elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Earth Science Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1230,8 +1456,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -1241,9 +1468,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -1258,9 +1486,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1270,33 +1499,42 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE4765"
-                  ],
                   "text": "CIVE 4765",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CIVE4765"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4300"
-                  ],
                   "text": "DS 4300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4400"
-                  ],
                   "text": "DS 4400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -1318,45 +1556,50 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1151",
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1151 and CHEM 1153",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151",
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1366,35 +1609,44 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1151",
-                    "PHYS1152",
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1151",
+                      "PHYS1152",
+                      "PHYS1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -1404,22 +1656,24 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE2221",
-                    "CIVE2222"
-                  ],
                   "text": "CIVE 2221 and CIVE 2222",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2221",
+                      "CIVE2222"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1429,8 +1683,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -1445,42 +1700,54 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE2334"
-                  ],
                   "text": "CIVE 2334",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2334"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE2300",
-                    "CIVE2301"
-                  ],
                   "text": "CIVE 2300 and CIVE 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2300",
+                      "CIVE2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Programming Pathway Course",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -1490,9 +1757,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1502,9 +1770,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1514,17 +1783,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -1539,34 +1815,45 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE2331"
-                  ],
                   "text": "CIVE 2331",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE2331"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE3430"
-                  ],
                   "text": "CIVE 3430",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE3430"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Programming Pathway Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -1576,9 +1863,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1588,9 +1876,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1600,8 +1889,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -1616,36 +1906,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE3435"
-                  ],
                   "text": "CIVE 3435",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE3435"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3000"
-                  ],
                   "text": "DS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH3081"
-                  ],
                   "text": "MATH 3081",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH3081"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1655,9 +1949,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1667,9 +1962,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1679,8 +1975,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -1695,42 +1992,54 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CIVE4534",
-                    "CIVE4535"
-                  ],
                   "text": "CIVE 4534 and CIVE 4535",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CIVE4534",
+                      "CIVE4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4200"
-                  ],
                   "text": "DS 4200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Environmental Engineering Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3302"
-                  ],
                   "text": "ENGW 3302",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1740,33 +2049,44 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CIVE4765"
-                  ],
                   "text": "CIVE 4765",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CIVE4765"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4300"
-                  ],
                   "text": "DS 4300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4400"
-                  ],
                   "text": "DS 4400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Earth science elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }

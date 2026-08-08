@@ -14,53 +14,67 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1001",
-                    "ARTG1002"
-                  ],
                   "text": "ARTG 1001 and ARTG 1002",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1001",
+                      "ARTG1002"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTF1220"
-                  ],
                   "text": "ARTF 1220 (with optional ARTF 1221)",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1200",
-                    "ARTF1000"
-                  ],
                   "text": "CS 1200 or ARTF 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ],
+                    [
+                      "ARTF1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -70,46 +84,51 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1290",
-                    "ARTG1291"
-                  ],
                   "text": "ARTG 1290 and ARTG 1291",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1290",
+                      "ARTG1291"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "DS2500",
-                    "DS2501"
-                  ],
                   "text": "DS 2500 and DS 2501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "DS2500",
+                      "DS2501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (for CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -119,22 +138,37 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON2350"
-                  ],
                   "text": "ECON 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -144,14 +178,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -166,42 +212,52 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1210"
-                  ],
                   "text": "CS 1210 (for Khoury students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3500"
-                  ],
                   "text": "DS 3500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1270",
-                    "ARTG1271"
-                  ],
                   "text": "ARTG 1270 and ARTG 1271",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1270",
+                      "ARTG1271"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design option 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -211,9 +267,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -223,9 +280,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -235,14 +293,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -257,27 +327,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3000"
-                  ],
                   "text": "DS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design option 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTG elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -287,9 +378,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -299,9 +391,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -311,19 +404,30 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3314",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3314, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3314"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -338,30 +442,49 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4200"
-                  ],
                   "text": "DS 4200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4300"
-                  ],
                   "text": "DS 4300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "A+D elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      9,
+                      10,
+                      12,
+                      14,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Computing and social issues",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      12
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -371,34 +494,50 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG4550"
-                  ],
                   "text": "ARTG 4550",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG4550"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ARTG5330",
-                    "ARTG5150"
-                  ],
                   "text": "ARTG 5330 or 5150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5330"
+                    ],
+                    [
+                      "ARTG5150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4400"
-                  ],
                   "text": "DS 4400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      9,
+                      10,
+                      12,
+                      14,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -420,53 +559,66 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1001",
-                    "ARTG1002"
-                  ],
                   "text": "ARTG 1001 and ARTG 1002",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1001",
+                      "ARTG1002"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTF1220"
-                  ],
                   "text": "ARTF 1220 (with optional ARTF 1221)",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1200",
-                    "ARTF1000"
-                  ],
                   "text": "CS 1200 or ARTF 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ],
+                    [
+                      "ARTF1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6
+                    ]
+                  }
                 }
               ]
             },
@@ -476,38 +628,42 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1290",
-                    "ARTG1291"
-                  ],
                   "text": "ARTG 1290 and ARTG 1291",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1290",
+                      "ARTG1291"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "DS2500",
-                    "DS2501"
-                  ],
                   "text": "DS 2500 and DS 2501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "DS2500",
+                      "DS2501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -517,22 +673,35 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON2350"
-                  ],
                   "text": "ECON 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6
+                    ]
+                  }
                 }
               ]
             },
@@ -542,14 +711,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -564,34 +745,43 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3500"
-                  ],
                   "text": "DS 3500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1270",
-                    "ARTG1271"
-                  ],
                   "text": "ARTG 1270 and ARTG 1271",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1270",
+                      "ARTG1271"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design option 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -601,35 +791,55 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1210"
-                  ],
                   "text": "CS 1210",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3000"
-                  ],
                   "text": "DS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTG elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      10
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTH elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Computing and social issues",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      12
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -639,14 +849,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -656,9 +878,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -673,9 +896,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -685,30 +909,45 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Design option 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4200"
-                  ],
                   "text": "DS 4200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4300"
-                  ],
                   "text": "DS 4300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "A+D elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      14
+                    ]
+                  }
                 }
               ]
             },
@@ -718,19 +957,30 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3314",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3314, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3314"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -740,9 +990,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -757,9 +1008,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -769,34 +1021,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG4550"
-                  ],
                   "text": "ARTG 4550",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG4550"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ARTG5330",
-                    "ARTG5150"
-                  ],
                   "text": "ARTG 5330 or 5150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5330"
+                    ],
+                    [
+                      "ARTG5150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4400"
-                  ],
                   "text": "DS 4400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      14
+                    ]
+                  }
                 }
               ]
             }

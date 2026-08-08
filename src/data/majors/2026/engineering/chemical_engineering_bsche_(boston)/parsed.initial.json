@@ -2,7 +2,7 @@
   "name": "Chemical Engineering, BSChE (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/3/2026",
+    "lastEdited": "8/7/2026",
     "branch": "main",
     "tablesPresent": 11,
     "tablesConsumed": 11,
@@ -56,7 +56,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-03",
+      "checkedAt": "2026-08-08",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/chemical/chemical-engineering-bsche/",
       "sourcesAvailable": [
         "requirement-tables",

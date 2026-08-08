@@ -14,46 +14,53 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "HSCI1000",
-                    "CRIM1000"
-                  ],
                   "text": "HSCI 1000 or CRIM 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI1000"
+                    ],
+                    [
+                      "CRIM1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH1260"
-                  ],
                   "text": "PHTH 1260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH1260"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL1111",
-                    "BIOL1112"
-                  ],
                   "text": "BIOL 1111 and BIOL 1112",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL1111",
+                      "BIOL1112"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1100"
-                  ],
                   "text": "CRIM 1100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1100"
+                    ]
+                  ]
                 }
               ]
             },
@@ -63,36 +70,48 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL1113",
-                    "BIOL1114"
-                  ],
                   "text": "BIOL 1113 and BIOL 1114",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL1113",
+                      "BIOL1114"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1161",
-                    "CHEM1162",
-                    "CHEM1163"
-                  ],
                   "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM1161",
+                      "CHEM1162",
+                      "CHEM1163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1241"
-                  ],
                   "text": "MATH 1241",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1241"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective/First-Year Writing NUpath course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -102,20 +121,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2350"
-                  ],
                   "text": "PHTH 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2300"
-                  ],
                   "text": "PHTH 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2300"
+                    ]
+                  ]
                 }
               ]
             },
@@ -125,14 +146,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -147,48 +180,59 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "HSCI2000",
-                    "EESH2000"
-                  ],
                   "text": "HSCI 2000 or EESH 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI2000"
+                    ],
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "PHTH2210",
-                    "CRIM3700",
-                    "INSH3102"
-                  ],
                   "text": "PHTH 2210, CRIM 3700, or INSH 3102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ],
+                    [
+                      "CRIM3700"
+                    ],
+                    [
+                      "INSH3102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1100",
-                    "CS1101"
-                  ],
                   "text": "CS 1100 and CS 1101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1100",
+                      "CS1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1110"
-                  ],
                   "text": "CRIM 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2515"
-                  ],
                   "text": "PHTH 2515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2515"
+                    ]
+                  ]
                 }
               ]
             },
@@ -198,9 +242,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -210,9 +255,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -222,14 +268,32 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Open elective/Advanced Writing in the Disciplines NUpath course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective/Ethical Reasoning NUpath course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -244,22 +308,38 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1120"
-                  ],
                   "text": "CRIM 1120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM electives",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open electives",
-                  "sh": 8
+                  "sh": 8,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -269,9 +349,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -281,9 +362,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -293,20 +375,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4120"
-                  ],
                   "text": "PHTH 4120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4540"
-                  ],
                   "text": "PHTH 4540",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4540"
+                    ]
+                  ]
                 }
               ]
             }
@@ -321,26 +405,39 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "PHTH4202",
-                    "CRIM3600"
-                  ],
                   "text": "PHTH 4202 or CRIM 3600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4202"
+                    ],
+                    [
+                      "CRIM3600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3040"
-                  ],
                   "text": "CRIM 3040",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM3040"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM electives",
-                  "sh": 8
+                  "sh": 8,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -350,16 +447,33 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Capstone course",
-                  "sh": 3
+                  "sh": 3,
+                  "shMax": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM electives",
-                  "sh": 12
+                  "sh": 12,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 16
             }
           ]
         }
@@ -379,43 +493,58 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "HSCI1000",
-                    "CRIM1000"
-                  ],
                   "text": "HSCI 1000 or CRIM 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI1000"
+                    ],
+                    [
+                      "CRIM1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH1260"
-                  ],
                   "text": "PHTH 1260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH1260"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL1111",
-                    "BIOL1112"
-                  ],
                   "text": "BIOL 1111 and BIOL 1112",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL1111",
+                      "BIOL1112"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "First-year writing course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1100"
-                  ],
                   "text": "CRIM 1100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1100"
+                    ]
+                  ]
                 }
               ]
             },
@@ -425,39 +554,43 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL1113",
-                    "BIOL1114"
-                  ],
                   "text": "BIOL 1113 and BIOL 1114",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL1113",
+                      "BIOL1114"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1161",
-                    "CHEM1162",
-                    "CHEM1163"
-                  ],
                   "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM1161",
+                      "CHEM1162",
+                      "CHEM1163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1241"
-                  ],
                   "text": "MATH 1241",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1241"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 }
               ]
             },
@@ -467,20 +600,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2350"
-                  ],
                   "text": "PHTH 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2300"
-                  ],
                   "text": "PHTH 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2300"
+                    ]
+                  ]
                 }
               ]
             },
@@ -490,14 +625,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -512,34 +659,43 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1110"
-                  ],
                   "text": "CRIM 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2515"
-                  ],
                   "text": "PHTH 2515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -549,41 +705,62 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "HSCI2000",
-                    "EESH2000"
-                  ],
                   "text": "HSCI 2000 or EESH 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI2000"
+                    ],
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "PHTH2210",
-                    "CRIM3700",
-                    "INSH3102"
-                  ],
                   "text": "PHTH 2210, CRIM 3700, or INSH 3102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ],
+                    [
+                      "CRIM3700"
+                    ],
+                    [
+                      "INSH3102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1120"
-                  ],
                   "text": "CRIM 1120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Criminal justice elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -593,14 +770,29 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Open elective/Ethical Reasoning NUpath course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -610,9 +802,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -627,9 +820,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -639,31 +833,53 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "CRIM elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3040"
-                  ],
                   "text": "CRIM 3040",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM3040"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "PHTH4202",
-                    "CRIM3600"
-                  ],
                   "text": "PHTH 4202 or CRIM 3600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4202"
+                    ],
+                    [
+                      "CRIM3600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Advanced Writing in the Disciplines NUpath course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -673,20 +889,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4120"
-                  ],
                   "text": "PHTH 4120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4540"
-                  ],
                   "text": "PHTH 4540",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4540"
+                    ]
+                  ]
                 }
               ]
             },
@@ -696,9 +914,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -713,9 +932,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -725,16 +945,33 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Capstone course",
-                  "sh": 3
+                  "sh": 3,
+                  "shMax": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM electives",
-                  "sh": 12
+                  "sh": 12,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      6,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 16
             }
           ]
         }

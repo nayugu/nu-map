@@ -14,48 +14,56 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1200"
-                  ],
                   "text": "CS 1200",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MUSC1001",
-                    "MUSC1002",
-                    "MUSC1003"
-                  ],
                   "text": "MUSC 1001 or 1002 and 1003",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1001"
+                    ],
+                    [
+                      "MUSC1002",
+                      "MUSC1003"
+                    ]
+                  ],
+                  "ambiguous": true
                 }
               ]
             },
@@ -65,45 +73,50 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2100",
-                    "CS2101"
-                  ],
                   "text": "CS 2100 and CS 2101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2100",
+                      "CS2101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC2350"
-                  ],
                   "text": "MUSC 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1119"
-                  ],
                   "text": "MUSC 11191",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1119"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST1220"
-                  ],
                   "text": "MUST 1220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (For CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -113,21 +126,23 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS3100",
-                    "CS3101"
-                  ],
                   "text": "CS 3100 and CS 3101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS3100",
+                      "CS3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1201"
-                  ],
                   "text": "MUSC 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1201"
+                    ]
+                  ]
                 }
               ]
             },
@@ -137,17 +152,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -162,44 +184,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1210"
-                  ],
                   "text": "CS 1210 (For Khoury students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3000"
-                  ],
                   "text": "CS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST2431"
-                  ],
                   "text": "MUST 2431",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST2431"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1202"
-                  ],
                   "text": "MUSC 1202",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1202"
+                    ]
+                  ]
                 }
               ]
             },
@@ -209,9 +236,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -221,9 +249,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -233,14 +262,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -255,32 +296,53 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MUSC2111",
-                    "MUSC3541",
-                    "MUSC3300"
-                  ],
                   "text": "MUSC 2111, 3541, or 3300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC2111"
+                    ],
+                    [
+                      "MUSC3541"
+                    ],
+                    [
+                      "MUSC3300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS2484"
-                  ],
                   "text": "CS 2484",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS2484"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Contemporary music requirement 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      7,
+                      9,
+                      10
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Music technology elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      9,
+                      10
+                    ]
+                  }
                 }
               ]
             },
@@ -290,9 +352,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -302,9 +365,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -314,19 +378,30 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3314",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3314, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3314"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -341,31 +416,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST2102"
-                  ],
                   "text": "MUST 2102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST2102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS4530",
-                    "CS4535"
-                  ],
                   "text": "CS 4530 or 4535",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4530"
+                    ],
+                    [
+                      "CS4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Computing and Social Issues",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      13
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -375,27 +466,52 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST4611"
-                  ],
                   "text": "MUST 46111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST4611"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Music industry elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      9,
+                      10
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Music technology elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      9,
+                      10
+                    ]
+                  }
                 }
               ]
             }
@@ -417,48 +533,56 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1200"
-                  ],
                   "text": "CS 1200",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MUSC1001",
-                    "MUSC1002",
-                    "MUSC1003"
-                  ],
                   "text": "MUSC 1001 or 1002 and 1003",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1001"
+                    ],
+                    [
+                      "MUSC1002",
+                      "MUSC1003"
+                    ]
+                  ],
+                  "ambiguous": true
                 }
               ]
             },
@@ -468,45 +592,50 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2100",
-                    "CS2101"
-                  ],
                   "text": "CS 2100 and CS 2101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2100",
+                      "CS2101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC2350"
-                  ],
                   "text": "MUSC 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST1220"
-                  ],
                   "text": "MUST 1220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1119"
-                  ],
                   "text": "MUSC 11191",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1119"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (For CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -516,21 +645,23 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS3100",
-                    "CS3101"
-                  ],
                   "text": "CS 3100 and CS 3101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS3100",
+                      "CS3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1201"
-                  ],
                   "text": "MUSC 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1201"
+                    ]
+                  ]
                 }
               ]
             },
@@ -540,17 +671,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -565,36 +703,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3000"
-                  ],
                   "text": "CS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST2431"
-                  ],
                   "text": "MUST 2431",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST2431"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1202"
-                  ],
                   "text": "MUSC 1202",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1202"
+                    ]
+                  ]
                 }
               ]
             },
@@ -604,40 +746,65 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1210"
-                  ],
                   "text": "CS 1210 (For Khoury students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MUSC2111",
-                    "MUSC3541",
-                    "MUSC3300"
-                  ],
                   "text": "MUSC 2111, 3541, or 3300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC2111"
+                    ],
+                    [
+                      "MUSC3541"
+                    ],
+                    [
+                      "MUSC3300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS2484"
-                  ],
                   "text": "CS 2484",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS2484"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Contemporary music requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      9,
+                      10
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Music technology elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      9,
+                      10
+                    ]
+                  }
                 }
               ]
             },
@@ -647,14 +814,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -664,9 +843,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -681,9 +861,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -693,31 +874,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST2102"
-                  ],
                   "text": "MUST 2102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST2102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS4530",
-                    "CS4535"
-                  ],
                   "text": "CS 4530 or 4535",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4530"
+                    ],
+                    [
+                      "CS4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Computing and Social Issues",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      13
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -727,19 +924,30 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3314",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3314, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3314"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -749,9 +957,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -766,9 +975,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -778,27 +988,52 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST4611"
-                  ],
                   "text": "MUST 46111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST4611"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Music industry elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      9,
+                      10
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Music technology elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      7,
+                      9,
+                      10
+                    ]
+                  }
                 }
               ]
             }

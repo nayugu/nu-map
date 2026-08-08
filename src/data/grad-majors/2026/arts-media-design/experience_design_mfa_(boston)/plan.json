@@ -14,36 +14,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG5600"
-                  ],
                   "text": "ARTG 5600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG5120"
-                  ],
                   "text": "ARTG 5120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG5620"
-                  ],
                   "text": "ARTG 5620",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5620"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG5640"
-                  ],
                   "text": "ARTG 5640",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5640"
+                    ]
+                  ]
                 }
               ]
             },
@@ -53,33 +57,36 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG5610"
-                  ],
                   "text": "ARTG 5610",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5610"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG6310"
-                  ],
                   "text": "ARTG 6310",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG6310"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG6600"
-                  ],
                   "text": "ARTG 6600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG6600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             },
@@ -89,8 +96,12 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op or vacation"
+                  "text": "Co-op or vacation",
+                  "either": [
+                    "coop",
+                    "vacation"
+                  ],
+                  "options": []
                 }
               ],
               "fullSummer": true
@@ -106,30 +117,32 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG6700"
-                  ],
                   "text": "ARTG 6700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG6700"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG7100"
-                  ],
                   "text": "ARTG 7100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG7100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             },
@@ -139,25 +152,27 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG7910"
-                  ],
                   "text": "ARTG 7910",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG7910"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG7990"
-                  ],
                   "text": "ARTG 7990",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG7990"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             }

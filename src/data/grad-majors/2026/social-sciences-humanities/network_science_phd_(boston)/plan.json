@@ -14,22 +14,41 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS5116"
-                  ],
                   "text": "PHYS 5116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS5116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4
+                    ]
+                  }
                 }
               ]
             },
@@ -39,25 +58,36 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS6116"
-                  ],
                   "text": "NETS 6116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NETS6116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS7334"
-                  ],
                   "text": "NETS 7334",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NETS7334"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "One elective course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4
+                    ]
+                  }
                 }
               ]
             }
@@ -72,17 +102,27 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS7332"
-                  ],
                   "text": "NETS 7332",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NETS7332"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "One elective course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4
+                    ]
+                  }
                 }
               ]
             },
@@ -92,17 +132,27 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS7335"
-                  ],
                   "text": "NETS 7335",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NETS7335"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "One elective course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4
+                    ]
+                  }
                 }
               ]
             }
@@ -117,12 +167,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS8986"
-                  ],
                   "text": "NETS 8986",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS8986"
+                    ]
+                  ]
                 }
               ]
             },
@@ -132,12 +183,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS8986"
-                  ],
                   "text": "NETS 8986",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS8986"
+                    ]
+                  ]
                 }
               ]
             }
@@ -152,12 +204,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS8986"
-                  ],
                   "text": "NETS 8986",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS8986"
+                    ]
+                  ]
                 }
               ]
             },
@@ -167,12 +220,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS9990"
-                  ],
                   "text": "NETS 9990",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS9990"
+                    ]
+                  ]
                 }
               ]
             }
@@ -187,12 +241,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS9991"
-                  ],
                   "text": "NETS 9991",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS9991"
+                    ]
+                  ]
                 }
               ]
             },
@@ -202,12 +257,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS9996"
-                  ],
                   "text": "NETS 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS9996"
+                    ]
+                  ]
                 }
               ]
             }
@@ -229,25 +285,36 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS5116"
-                  ],
                   "text": "PHYS 5116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS5116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS7332"
-                  ],
                   "text": "NETS 7332",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NETS7332"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "One elective course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      3,
+                      4
+                    ]
+                  }
                 }
               ]
             },
@@ -257,28 +324,31 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS6116"
-                  ],
                   "text": "NETS 6116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NETS6116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS7334"
-                  ],
                   "text": "NETS 7334",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NETS7334"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS7335"
-                  ],
                   "text": "NETS 7335",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NETS7335"
+                    ]
+                  ]
                 }
               ]
             }
@@ -293,14 +363,14 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             },
@@ -310,14 +380,14 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             }
@@ -332,12 +402,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS8986"
-                  ],
                   "text": "NETS 8986",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS8986"
+                    ]
+                  ]
                 }
               ]
             },
@@ -347,12 +418,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS8986"
-                  ],
                   "text": "NETS 8986",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS8986"
+                    ]
+                  ]
                 }
               ]
             }
@@ -367,12 +439,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS8986"
-                  ],
                   "text": "NETS 8986",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS8986"
+                    ]
+                  ]
                 }
               ]
             },
@@ -382,12 +455,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS9990"
-                  ],
                   "text": "NETS 9990",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS9990"
+                    ]
+                  ]
                 }
               ]
             }
@@ -402,12 +476,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS9991"
-                  ],
                   "text": "NETS 9991",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS9991"
+                    ]
+                  ]
                 }
               ]
             },
@@ -417,12 +492,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NETS9996"
-                  ],
                   "text": "NETS 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "NETS9996"
+                    ]
+                  ]
                 }
               ]
             }

@@ -14,45 +14,50 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL1111",
-                    "BIOL1112"
-                  ],
                   "text": "BIOL 1111 and BIOL 1112",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL1111",
+                      "BIOL1112"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HSCI1000"
-                  ],
                   "text": "HSCI 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1241"
-                  ],
                   "text": "MATH 1241",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1241"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 }
               ]
             },
@@ -62,34 +67,48 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL1113",
-                    "BIOL1114"
-                  ],
                   "text": "BIOL 1113 and BIOL 1114",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL1113",
+                      "BIOL1114"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH1260"
-                  ],
                   "text": "PHTH 1260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH1260"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      4,
+                      7,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -99,14 +118,27 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "ECON selective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -116,17 +148,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT2301"
-                  ],
                   "text": "ACCT 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -141,35 +180,44 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1161",
-                    "CHEM1162",
-                    "CHEM1163"
-                  ],
                   "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM1161",
+                      "CHEM1162",
+                      "CHEM1163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "FINA2201"
-                  ],
                   "text": "FINA 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "FINA2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTB1203"
-                  ],
                   "text": "INTB 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTB1203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -179,38 +227,54 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HSCI2000"
-                  ],
                   "text": "HSCI 20001",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MGMT3340"
-                  ],
                   "text": "MGMT 3340",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MGMT3340"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2210"
-                  ],
                   "text": "PHTH 2210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      11
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -220,14 +284,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -237,9 +313,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -254,9 +331,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -266,24 +344,58 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      4,
+                      7,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      4,
+                      7,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -293,17 +405,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3306"
-                  ],
                   "text": "ENGW 3306",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3306"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -313,9 +432,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -330,9 +450,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -342,26 +463,58 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      11
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Capstone course",
-                  "sh": 3
+                  "sh": 3,
+                  "shMax": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      4,
+                      7,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 16
             }
           ]
         }
@@ -381,47 +534,56 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL1111",
-                    "BIOL1112"
-                  ],
                   "text": "BIOL 1111 and BIOL 1112",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL1111",
+                      "BIOL1112"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "HSCI1000",
-                    "BUSN1102"
-                  ],
                   "text": "HSCI 1000 or BUSN 1102",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI1000"
+                    ],
+                    [
+                      "BUSN1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH1260"
-                  ],
                   "text": "PHTH 1260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH1260"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MATH1241",
-                    "MATH1231"
-                  ],
                   "text": "MATH 1241 or 1231",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1241"
+                    ],
+                    [
+                      "MATH1231"
+                    ]
+                  ]
                 }
               ]
             },
@@ -431,36 +593,51 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL1113",
-                    "BIOL1114"
-                  ],
                   "text": "BIOL 1113 and BIOL 1114",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL1113",
+                      "BIOL1114"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1161",
-                    "CHEM1162",
-                    "CHEM1163"
-                  ],
                   "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM1161",
+                      "CHEM1162",
+                      "CHEM1163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      4,
+                      5,
+                      8,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -470,8 +647,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -481,8 +659,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -497,30 +676,45 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTB1203"
-                  ],
                   "text": "INTB 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTB1203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ECON selective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -530,34 +724,43 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "FINA2201"
-                  ],
                   "text": "FINA 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "FINA2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "HSCI2000",
-                    "BUSN1103"
-                  ],
                   "text": "HSCI 2000 or BUSN 11031",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI2000",
+                      "BUSN1103"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2210"
-                  ],
                   "text": "PHTH 2210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 8
+                  "sh": 8,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -567,8 +770,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -578,9 +782,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -595,9 +800,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -607,27 +813,53 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT2301"
-                  ],
                   "text": "ACCT 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      11
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      4,
+                      5,
+                      8,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -637,8 +869,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -648,8 +881,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -664,31 +898,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3306",
-                    "ENGW3304"
-                  ],
                   "text": "ENGW 3306 or 3304",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3306"
+                    ],
+                    [
+                      "ENGW3304"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MGMT3340"
-                  ],
                   "text": "MGMT 3340",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MGMT3340"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      4,
+                      11
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -698,9 +949,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -710,9 +962,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -722,8 +975,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -738,19 +992,43 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      4,
+                      5,
+                      8,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PHTH core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Electives",
-                  "sh": 8
+                  "sh": 8,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -760,21 +1038,47 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Capstone course",
-                  "sh": 3
+                  "sh": 3,
+                  "shMax": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      4,
+                      5,
+                      8,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Electives",
-                  "sh": 8
+                  "sh": 8,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 16
             }
           ]
         }

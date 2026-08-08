@@ -14,50 +14,67 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ECON1000",
-                    "BUSN1102"
-                  ],
                   "text": "ECON 1000 or BUSN 1102",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ECON1000"
+                    ],
+                    [
+                      "BUSN1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1115"
-                  ],
                   "text": "ECON 1115",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MATH1231",
-                    "MATH1241",
-                    "MATH1245",
-                    "MATH1251",
-                    "MATH1340",
-                    "MATH1341"
-                  ],
                   "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1231"
+                    ],
+                    [
+                      "MATH1241"
+                    ],
+                    [
+                      "MATH1245"
+                    ],
+                    [
+                      "MATH1251"
+                    ],
+                    [
+                      "MATH1340"
+                    ],
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -67,37 +84,43 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1116"
-                  ],
                   "text": "ECON 1116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "FINA2201"
-                  ],
                   "text": "FINA 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "FINA2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTB1203"
-                  ],
                   "text": "INTB 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTB1203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MGSC2301",
-                    "ECON2350"
-                  ],
                   "text": "MGSC 2301 or ECON 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MGSC2301"
+                    ],
+                    [
+                      "ECON2350"
+                    ]
+                  ]
                 }
               ]
             },
@@ -107,17 +130,32 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON2315"
-                  ],
                   "text": "ECON 2315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON2315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath DD",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      6,
+                      8,
+                      9,
+                      10,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -127,17 +165,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MKTG2201"
-                  ],
                   "text": "MKTG 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MKTG2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -152,43 +197,60 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT2301"
-                  ],
                   "text": "ACCT 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "BUSN1103",
-                    "EESH2000"
-                  ],
                   "text": "BUSN 1103 or EESH 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "BUSN1103"
+                    ],
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1100",
-                    "MISM2510"
-                  ],
                   "text": "CS 1100 or MISM 2510",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS1100"
+                    ],
+                    [
+                      "MISM2510"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON2316"
-                  ],
                   "text": "ECON 2316",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON2316"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ECON elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -198,9 +260,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -210,9 +273,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -222,18 +286,27 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ORGB3201",
-                    "ORGB3203"
-                  ],
                   "text": "ORGB 3201 or 3203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ORGB3201"
+                    ],
+                    [
+                      "ORGB3203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -248,27 +321,65 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON2560"
-                  ],
                   "text": "ECON 2560",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON2560"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      6,
+                      8,
+                      9,
+                      10,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      6,
+                      8,
+                      9,
+                      10,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ECON elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -278,9 +389,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -290,9 +402,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -302,14 +415,34 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Advanced writing in the disciplines",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      6,
+                      8,
+                      9,
+                      10,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -324,27 +457,57 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "STRT4501"
-                  ],
                   "text": "STRT 4501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "STRT4501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      6,
+                      8,
+                      9,
+                      10,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ECON elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -354,24 +517,62 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      6,
+                      8,
+                      9,
+                      10,
+                      11,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ECON elective 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ECON elective 5",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      2,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

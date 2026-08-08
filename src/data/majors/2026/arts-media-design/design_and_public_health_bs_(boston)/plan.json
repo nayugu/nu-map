@@ -14,45 +14,62 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ARCH1000",
-                    "HSCI1000",
-                    "ARTF1000"
-                  ],
                   "text": "ARCH 1000, HSCI 1000, or ARTF 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ARCH1000"
+                    ],
+                    [
+                      "HSCI1000"
+                    ],
+                    [
+                      "ARTF1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH1260"
-                  ],
                   "text": "PHTH 1260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH1260"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1450"
-                  ],
                   "text": "ARCH 1450",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH1450"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "BIOL option course 1",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 18
             },
             {
               "term": "Spring",
@@ -60,52 +77,66 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1110"
-                  ],
                   "text": "ARCH 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTF1220"
-                  ],
                   "text": "ARTF 1220",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTF1250",
-                    "ARTF1251"
-                  ],
                   "text": "ARTF 1250 and ARTF 1251",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1250",
+                      "ARTF1251"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "BIOL option course 2",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (for CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
-              ]
+              ],
+              "hoursMax": 18
             },
             {
               "term": "Summer 1",
@@ -113,17 +144,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2300"
-                  ],
                   "text": "PHTH 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -138,36 +176,40 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2210"
-                  ],
                   "text": "PHTH 2210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1120"
-                  ],
                   "text": "ARCH 1120",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH2260"
-                  ],
                   "text": "ARCH 2260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH2260"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2350"
-                  ],
                   "text": "PHTH 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2350"
+                    ]
+                  ]
                 }
               ]
             },
@@ -177,41 +219,65 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HSCI2000"
-                  ],
                   "text": "HSCI 2000 (for Bouve students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2515"
-                  ],
                   "text": "PHTH 2515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1270",
-                    "ARTG1271"
-                  ],
                   "text": "ARTG 1270 and ARTG 1271",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1270",
+                      "ARTG1271"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 6,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 6,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 21
             },
             {
               "term": "Summer 1",
@@ -219,17 +285,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1310"
-                  ],
                   "text": "ARCH 1310",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH1310"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -244,12 +317,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -259,29 +334,57 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3306"
-                  ],
                   "text": "ENGW 3306 (or ENGW 3314)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3306"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Social science introductory course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 6,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration elective 4",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 6,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 20
             }
           ]
         },
@@ -294,32 +397,48 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4120"
-                  ],
                   "text": "PHTH 4120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4202"
-                  ],
                   "text": "PHTH 4202",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4202"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Social science upper-level course",
-                  "sh": 3
+                  "sh": 3,
+                  "shMax": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 16
             },
             {
               "term": "Spring",
@@ -327,27 +446,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4540"
-                  ],
                   "text": "PHTH 4540",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4540"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Capstone course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -369,46 +507,63 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ARCH1000",
-                    "HSCI1000",
-                    "ARTF1000"
-                  ],
                   "text": "ARCH 1000, HSCI 1000, or ARTF 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ARCH1000"
+                    ],
+                    [
+                      "HSCI1000"
+                    ],
+                    [
+                      "ARTF1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH1260"
-                  ],
                   "text": "PHTH 1260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH1260"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1001",
-                    "ARTG1002"
-                  ],
                   "text": "ARTG 1001 and ARTG 1002",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1001",
+                      "ARTG1002"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "BIOL option course 1",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 18
             },
             {
               "term": "Spring",
@@ -416,52 +571,66 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1110"
-                  ],
                   "text": "ARCH 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTF1220"
-                  ],
                   "text": "ARTF 1220",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTF1250",
-                    "ARTF1251"
-                  ],
                   "text": "ARTF 1250 and ARTF 1251",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1250",
+                      "ARTF1251"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "BIOL option course 2",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (for CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
-              ]
+              ],
+              "hoursMax": 18
             },
             {
               "term": "Summer 1",
@@ -469,21 +638,23 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2300"
-                  ],
                   "text": "PHTH 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1270",
-                    "ARTG1271"
-                  ],
                   "text": "ARTG 1270 and ARTG 1271",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1270",
+                      "ARTG1271"
+                    ]
+                  ]
                 }
               ]
             }
@@ -498,42 +669,56 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2210"
-                  ],
                   "text": "PHTH 2210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2350"
-                  ],
                   "text": "PHTH 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1290",
-                    "ARTG1291"
-                  ],
                   "text": "ARTG 1290 and ARTG 1291",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1290",
+                      "ARTG1291"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design option 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      6,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HSCI2000"
-                  ],
                   "text": "HSCI 2000 (for Bouve students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -543,17 +728,25 @@
               "hours": 4,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTH elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -563,12 +756,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -578,19 +773,39 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective 1",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective 2",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -605,28 +820,61 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3306",
-                    "ENGW3314"
-                  ],
                   "text": "ENGW 3306 or 3314",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3306"
+                    ],
+                    [
+                      "ENGW3314"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Social sciences introductory course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      6,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      6,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      6,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -636,17 +884,25 @@
               "hours": 4,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -656,12 +912,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -671,17 +929,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2515"
-                  ],
                   "text": "PHTH 2515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -696,32 +961,52 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4120"
-                  ],
                   "text": "PHTH 4120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4202"
-                  ],
                   "text": "PHTH 4202",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4202"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Social science upper-level course",
-                  "sh": 3
+                  "sh": 3,
+                  "shMax": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      6,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 16
             },
             {
               "term": "Spring",
@@ -729,27 +1014,50 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4540"
-                  ],
                   "text": "PHTH 4540",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4540"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Capstone course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design option 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      6,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

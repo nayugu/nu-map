@@ -14,51 +14,65 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "JRNL1000",
-                    "ARTF1000"
-                  ],
                   "text": "JRNL 1000 or ARTF 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "JRNL1000"
+                    ],
+                    [
+                      "ARTF1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL1150"
-                  ],
                   "text": "JRNL 1150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL1150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1001",
-                    "ARTG1002"
-                  ],
                   "text": "ARTG 1001 and ARTG 1002",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1001",
+                      "ARTG1002"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTF1220"
-                  ],
                   "text": "ARTF 1220 (with optional ARTF 1221)",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -68,40 +82,55 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "JRNL1101",
-                    "JRNL1102"
-                  ],
                   "text": "JRNL 1101 and JRNL 1102",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "JRNL1101",
+                      "JRNL1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1270",
-                    "ARTG1271"
-                  ],
                   "text": "ARTG 1270 and ARTG 1271",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1270",
+                      "ARTG1271"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "MATH elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -111,23 +140,38 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1290",
-                    "ARTG1291"
-                  ],
                   "text": "ARTG 1290 and ARTG 1291",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1290",
+                      "ARTG1291"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      5,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -137,14 +181,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -159,30 +215,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL2201"
-                  ],
                   "text": "JRNL 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL5311"
-                  ],
                   "text": "JRNL 5311",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL5311"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design option level 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTH elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -192,9 +262,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -204,9 +275,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -216,14 +288,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -238,27 +322,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL2301"
-                  ],
                   "text": "JRNL 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "JRNL elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design option level 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Art+design elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -268,9 +372,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -280,9 +385,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -292,14 +398,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -314,27 +432,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL3610"
-                  ],
                   "text": "JRNL 3610",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL3610"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "JRNL elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -344,31 +482,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "JRNL3550",
-                    "JRNL4650"
-                  ],
                   "text": "JRNL 3550 or 4650",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL3550"
+                    ],
+                    [
+                      "JRNL4650"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "JRNL elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG4550"
-                  ],
                   "text": "ARTG 4550",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG4550"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -390,51 +545,65 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "JRNL1000",
-                    "ARTF1000"
-                  ],
                   "text": "JRNL 1000 or ARTF 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "JRNL1000"
+                    ],
+                    [
+                      "ARTF1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL1150"
-                  ],
                   "text": "JRNL 1150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL1150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTF1220"
-                  ],
                   "text": "ARTF 1220 (with optional ARTF 1221)",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1001",
-                    "ARTG1002"
-                  ],
                   "text": "ARTG 1001 and ARTG 1002",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1001",
+                      "ARTG1002"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -444,40 +613,55 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "JRNL1101",
-                    "JRNL1102"
-                  ],
                   "text": "JRNL 1101 and JRNL 1102",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "JRNL1101",
+                      "JRNL1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1270",
-                    "ARTG1271"
-                  ],
                   "text": "ARTG 1270 and ARTG 1271",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1270",
+                      "ARTG1271"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "MATH elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -487,23 +671,38 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG1290",
-                    "ARTG1291"
-                  ],
                   "text": "ARTG 1290 and ARTG 1291",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG1290",
+                      "ARTG1291"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      5,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -513,8 +712,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -529,27 +729,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL2201"
-                  ],
                   "text": "JRNL 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design option level 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTH elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -559,9 +778,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -571,9 +791,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -583,8 +804,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -599,27 +821,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL2301"
-                  ],
                   "text": "JRNL 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "JRNL elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design option level 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Art+Design elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -629,9 +871,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -641,9 +884,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -653,17 +897,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3302"
-                  ],
                   "text": "ENGW 3302",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ]
+                  ]
                 }
               ]
             }
@@ -678,27 +929,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL3610"
-                  ],
                   "text": "JRNL 3610",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL3610"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "JRNL elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -708,9 +979,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -720,9 +992,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -732,8 +1005,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -748,31 +1022,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL5311"
-                  ],
                   "text": "JRNL 5311",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL5311"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "JRNL3550",
-                    "JRNL4650"
-                  ],
                   "text": "JRNL 3550 or 4650",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL3550"
+                    ],
+                    [
+                      "JRNL4650"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Design elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -782,31 +1072,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "JRNL3550",
-                    "JRNL4650"
-                  ],
                   "text": "JRNL 3550 or 4650",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL3550"
+                    ],
+                    [
+                      "JRNL4650"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "JRNL elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG4550"
-                  ],
                   "text": "ARTG 4550",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG4550"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

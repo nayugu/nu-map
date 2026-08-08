@@ -14,44 +14,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1100"
-                  ],
                   "text": "CRIM 1100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1100"
-                  ],
                   "text": "CS 1100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS1100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS1101"
-                  ],
                   "text": "CS 1101",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1150"
-                  ],
                   "text": "POLS 1150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1160"
-                  ],
                   "text": "POLS 1160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1160"
+                    ]
+                  ]
                 }
               ]
             },
@@ -61,27 +66,59 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1155"
-                  ],
                   "text": "POLS 1155",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1155"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      8,
+                      9,
+                      12,
+                      14,
+                      15,
+                      19
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7,
+                      10,
+                      11,
+                      13,
+                      14,
+                      16,
+                      19
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -91,14 +128,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -108,14 +157,39 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "CRIM Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      8,
+                      9,
+                      12,
+                      14,
+                      15,
+                      19
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7,
+                      10,
+                      11,
+                      13,
+                      14,
+                      16,
+                      19
+                    ]
+                  }
                 }
               ]
             }
@@ -130,30 +204,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1110"
-                  ],
                   "text": "CRIM 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1120"
-                  ],
                   "text": "CRIM 1120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -163,8 +251,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -174,8 +263,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -185,14 +275,39 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "CRIM Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      8,
+                      9,
+                      12,
+                      14,
+                      15,
+                      19
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7,
+                      10,
+                      11,
+                      13,
+                      14,
+                      16,
+                      19
+                    ]
+                  }
                 }
               ]
             }
@@ -207,30 +322,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3700"
-                  ],
                   "text": "CRIM 3700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM3700"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS2400"
-                  ],
                   "text": "POLS 2400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS2400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -240,8 +369,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -251,8 +381,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -262,14 +393,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -284,24 +427,61 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "CRIM Advanced Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      8,
+                      9,
+                      12,
+                      14,
+                      15,
+                      19
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS Advanced Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7,
+                      10,
+                      11,
+                      13,
+                      14,
+                      16,
+                      19
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Integrative Course 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      19
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -311,27 +491,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS4701"
-                  ],
                   "text": "POLS 4701",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS4701"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Integrative Course 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      12,
+                      13,
+                      19
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

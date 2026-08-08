@@ -14,33 +14,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH6100"
-                  ],
                   "text": "ARCH 6100",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH6100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH2240"
-                  ],
                   "text": "ARCH 2240",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH2240"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH5340"
-                  ],
                   "text": "ARCH 5340",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH5340"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (1/3)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -50,34 +59,43 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH6200"
-                  ],
                   "text": "ARCH 6200",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH6200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARCH2340",
-                    "ARCH2341"
-                  ],
                   "text": "ARCH 2340 and ARCH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH2340",
+                      "ARCH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH3450"
-                  ],
                   "text": "ARCH 3450 (or required elective)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH3450"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (2/3)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -87,8 +105,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -98,8 +117,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -114,34 +134,43 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH6115"
-                  ],
                   "text": "ARCH 6115",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH6115"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH5310"
-                  ],
                   "text": "ARCH 5310",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH5310"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARCH5210",
-                    "ARCH5211"
-                  ],
                   "text": "ARCH 5210 and ARCH 5211",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH5210",
+                      "ARCH5211"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (3/3)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -151,37 +180,41 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH5115"
-                  ],
                   "text": "ARCH 5115",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH5115"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH5430"
-                  ],
                   "text": "ARCH 5430",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH5430"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH5330"
-                  ],
                   "text": "ARCH 5330",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH5330"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARCH5230",
-                    "ARCH5231"
-                  ],
                   "text": "ARCH 5230 and ARCH 5231",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH5230",
+                      "ARCH5231"
+                    ]
+                  ]
                 }
               ]
             },
@@ -191,8 +224,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -202,8 +236,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -218,32 +253,41 @@
               "hours": 14,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH7120"
-                  ],
                   "text": "ARCH 7120",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH7120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH7220"
-                  ],
                   "text": "ARCH 7220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH7220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH7430"
-                  ],
                   "text": "ARCH 7430",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH7430"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
-                  "text": "Elective (optional)"
+                  "text": "Elective (optional)",
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -253,32 +297,41 @@
               "hours": 14,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH7140"
-                  ],
                   "text": "ARCH 7140",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH7140"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH6440"
-                  ],
                   "text": "ARCH 6440",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH6440"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH6340"
-                  ],
                   "text": "ARCH 6340",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH6340"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
-                  "text": "Elective (optional)"
+                  "text": "Elective (optional)",
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

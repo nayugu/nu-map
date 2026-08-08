@@ -14,54 +14,60 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTF1000"
-                  ],
                   "text": "ARTF 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ARTF1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTF1220"
-                  ],
                   "text": "ARTF 1220 (with optional ARTF 1221)",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTF1230",
-                    "ARTF1231"
-                  ],
                   "text": "ARTF 1230 and ARTF 1231",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1230",
+                      "ARTF1231"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTF1240",
-                    "ARTF1241"
-                  ],
                   "text": "ARTF 1240 and ARTF 1241",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1240",
+                      "ARTF1241"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME1110"
-                  ],
                   "text": "GAME 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -71,42 +77,52 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTD2370",
-                    "ARTD2371"
-                  ],
                   "text": "ARTD 2370 and ARTD 2371",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ARTD2370",
+                      "ARTD2371"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME2500"
-                  ],
                   "text": "GAME 2500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME2500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME2650"
-                  ],
                   "text": "GAME 2650",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME2650"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Game aesthetics and critical play elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -116,14 +132,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Art+design elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTH elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -133,14 +161,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Art+design elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -155,34 +195,43 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTG2262",
-                    "ARTG2263"
-                  ],
                   "text": "ARTG 2262 and ARTG 2263",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG2262",
+                      "ARTG2263"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME2950"
-                  ],
                   "text": "GAME 2950",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME2950"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME3300"
-                  ],
                   "text": "GAME 3300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME3300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Game aesthetics and critical play elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -192,9 +241,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -204,9 +254,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -216,14 +267,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -238,30 +301,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME3400"
-                  ],
                   "text": "GAME 3400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME3400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME3700"
-                  ],
                   "text": "GAME 3700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME3700"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Art+design elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Game design and development elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -271,9 +348,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -283,9 +361,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -295,14 +374,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -317,30 +408,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME2010"
-                  ],
                   "text": "GAME 2010",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME2010"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME3800"
-                  ],
                   "text": "GAME 3800",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME3800"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Game aesthetics and critical play elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Game design and development elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -350,30 +455,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME4600"
-                  ],
                   "text": "GAME 4600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME4600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME4700"
-                  ],
                   "text": "GAME 4700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME4700"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Game design and development elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

@@ -14,50 +14,66 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGL1400"
-                  ],
                   "text": "ENGL 1400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGL1400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "THTR1000",
-                    "ENGL1000"
-                  ],
                   "text": "THTR 1000 or ENGL 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "THTR1000"
+                    ],
+                    [
+                      "ENGL1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR1100"
-                  ],
                   "text": "THTR 1100",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "THTR1100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR1101"
-                  ],
                   "text": "THTR 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR1120"
-                  ],
                   "text": "THTR 1120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Pre-1850 requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      9,
+                      11,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -67,42 +83,56 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGL1160",
-                    "ENGL1410"
-                  ],
                   "text": "ENGL 1160 or 1410",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGL1160"
+                    ],
+                    [
+                      "ENGL1410"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR1131"
-                  ],
                   "text": "THTR 1131",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR1131"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR1270"
-                  ],
                   "text": "THTR 1270",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR1270"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENGL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      11,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (For CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -112,14 +142,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -129,8 +171,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -145,49 +188,62 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGL1600"
-                  ],
                   "text": "ENGL 1600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGL1600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESH2000"
-                  ],
                   "text": "EESH 2000 (For CSSH students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR2000"
-                  ],
                   "text": "THTR 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "THTR2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR2330"
-                  ],
                   "text": "THTR 2330",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR2330"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR3325"
-                  ],
                   "text": "THTR 3325",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR3325"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENGL post-1850 requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      11,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -197,9 +253,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -209,9 +266,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -221,8 +279,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -237,27 +296,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "ENGL Theories & Methods requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGL3710"
-                  ],
                   "text": "ENGL 3710",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGL3710"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "THTR Text, Community, & Social Context Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "THTR Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      9,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -267,27 +346,50 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM2000"
-                  ],
                   "text": "INAM 2000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INAM2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENGL diversity requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "THTR Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      9,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign Language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      9,
+                      11,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -297,14 +399,29 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Foreign Language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      9,
+                      11,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -314,8 +431,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -330,24 +448,50 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "ENGL writing requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENGL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      11,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -357,27 +501,51 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR4702"
-                  ],
                   "text": "THTR 4702",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR4702"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ENGL Capstone",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      11,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign Language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      6,
+                      9,
+                      11,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

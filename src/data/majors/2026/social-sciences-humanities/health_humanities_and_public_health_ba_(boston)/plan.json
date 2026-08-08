@@ -14,40 +14,57 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INSH1300"
-                  ],
                   "text": "INSH 1300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INSH1300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH1260"
-                  ],
                   "text": "PHTH 1260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH1260"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Introduction to college",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "BIOL course",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 18
             },
             {
               "term": "Spring",
@@ -55,29 +72,52 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "BIOL course",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core humanities course (1)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Introductory language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 17
             },
             {
               "term": "Summer 1",
@@ -85,20 +125,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2300"
-                  ],
                   "text": "PHTH 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2350"
-                  ],
                   "text": "PHTH 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2350"
+                    ]
+                  ]
                 }
               ]
             },
@@ -108,14 +150,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -130,35 +184,57 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESH2000"
-                  ],
                   "text": "EESH 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2210"
-                  ],
                   "text": "PHTH 2210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core humanities course (2)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PH Social science course (introductory)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elementary language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -168,9 +244,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -180,9 +257,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -192,20 +270,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2515"
-                  ],
                   "text": "PHTH 2515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2515"
+                    ]
+                  ]
                 }
               ]
             }
@@ -220,30 +300,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INSH2300"
-                  ],
                   "text": "INSH 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INSH2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core Health Humanities course (1)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Intermediate language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4202"
-                  ],
                   "text": "PHTH 4202",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4202"
+                    ]
+                  ]
                 }
               ]
             },
@@ -253,9 +349,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -265,9 +362,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -277,20 +375,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4540"
-                  ],
                   "text": "PHTH 4540",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4540"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4120"
-                  ],
                   "text": "PHTH 4120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4120"
+                    ]
+                  ]
                 }
               ]
             }
@@ -305,26 +405,54 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Capstone",
-                  "sh": 3
+                  "sh": 3,
+                  "shMax": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      10
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core digital health humanities elective (1)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core health humanities course (2)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 16
             },
             {
               "term": "Spring",
@@ -332,26 +460,54 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Core digital health humanities elective (2)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core health humanities course (3)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PH Social science course (upper-level)",
-                  "sh": 3
+                  "sh": 3,
+                  "shMax": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 16
             }
           ]
         }
@@ -371,43 +527,55 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HSCI1000"
-                  ],
                   "text": "HSCI 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INSH1300"
-                  ],
                   "text": "INSH 1300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INSH1300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH1260"
-                  ],
                   "text": "PHTH 1260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH1260"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "BIOL course",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 18
             },
             {
               "term": "Spring",
@@ -415,29 +583,51 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "BIOL course",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Introductory language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 17
             },
             {
               "term": "Summer 1",
@@ -445,20 +635,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2300"
-                  ],
                   "text": "PHTH 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2350"
-                  ],
                   "text": "PHTH 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2350"
+                    ]
+                  ]
                 }
               ]
             },
@@ -468,14 +660,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -490,24 +694,51 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Core humanities course (1)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core humanities elective (2)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PH Social Science Course (introductory)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elementary language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -517,38 +748,55 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HSCI2000"
-                  ],
                   "text": "HSCI 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HSCI2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2210"
-                  ],
                   "text": "PHTH 2210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core health humanities course (1)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Intermediate language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2515"
-                  ],
                   "text": "PHTH 2515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2515"
+                    ]
+                  ]
                 }
               ]
             },
@@ -558,17 +806,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4202"
-                  ],
                   "text": "PHTH 4202",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4202"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -578,9 +833,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -595,9 +851,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -607,30 +864,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INSH2300"
-                  ],
                   "text": "INSH 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INSH2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core digital health humanities course (1)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3306"
-                  ],
                   "text": "ENGW 3306",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3306"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core health humanities course (2)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 }
               ]
             },
@@ -640,20 +913,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4120"
-                  ],
                   "text": "PHTH 4120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH4540"
-                  ],
                   "text": "PHTH 4540",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH4540"
+                    ]
+                  ]
                 }
               ]
             },
@@ -663,9 +938,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -680,9 +956,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -692,26 +969,55 @@
               "hours": 14,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Core digital health humanities course (2)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Capstone",
-                  "sh": 3
+                  "sh": 3,
+                  "shMax": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      10
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Core health humanities course (3)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      2,
+                      3
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PH Social Science course (upper)",
-                  "sh": 3
+                  "sh": 3,
+                  "shMax": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      6
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 16
             }
           ]
         }

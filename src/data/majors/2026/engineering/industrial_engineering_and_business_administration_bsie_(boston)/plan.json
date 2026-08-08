@@ -14,45 +14,50 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1151",
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1151 and CHEM 1153",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151",
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -62,38 +67,42 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTB1203"
-                  ],
                   "text": "INTB 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTB1203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1151",
-                    "PHYS1152",
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1151",
+                      "PHYS1152",
+                      "PHYS1153"
+                    ]
+                  ]
                 }
               ]
             },
@@ -103,20 +112,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 }
               ]
             },
@@ -126,20 +137,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1115"
-                  ],
                   "text": "ECON 1115",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ]
+                  ]
                 }
               ]
             }
@@ -154,43 +167,60 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business bucket core",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE2310",
-                    "IE2311"
-                  ],
                   "text": "IE 2310 and IE 2311",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE2310",
+                      "IE2311"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "IE3412",
-                    "MATH3081"
-                  ],
                   "text": "IE 3412 or MATH 3081",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE3412"
+                    ],
+                    [
+                      "MATH3081"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4512"
-                  ],
                   "text": "IE 4512",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4512"
+                    ]
+                  ]
                 }
               ]
             },
@@ -200,9 +230,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -212,9 +243,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -224,22 +256,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3315",
-                    "ENGW3304"
-                  ],
                   "text": "ENGW 3302, 3315, or 3304",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3315"
+                    ],
+                    [
+                      "ENGW3304"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ORGB3201"
-                  ],
                   "text": "ORGB 3201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ORGB3201"
+                    ]
+                  ]
                 }
               ]
             }
@@ -254,33 +292,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4510"
-                  ],
                   "text": "IE 4510",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4510"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4515"
-                  ],
                   "text": "IE 4515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4516"
-                  ],
                   "text": "IE 4516",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4516"
+                    ]
+                  ]
                 }
               ]
             },
@@ -290,9 +342,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -302,9 +355,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -314,17 +368,29 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "STRT4501"
-                  ],
                   "text": "STRT 4501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "STRT4501"
+                    ]
+                  ]
                 }
               ]
             }
@@ -339,50 +405,66 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4520"
-                  ],
                   "text": "IE 4520",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4520"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE4522",
-                    "IE4523"
-                  ],
                   "text": "IE 4522 and IE 4523",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "IE4522",
+                      "IE4523"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4525"
-                  ],
                   "text": "IE 4525",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4525"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MEIE4701"
-                  ],
                   "text": "MEIE 4701",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "MEIE4701"
+                    ]
+                  ]
                 }
               ]
             },
@@ -392,31 +474,55 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "DD NUpath",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE4530",
-                    "IE4531"
-                  ],
                   "text": "IE 4530 and IE 4531",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "IE4530",
+                      "IE4531"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MEIE4702"
-                  ],
                   "text": "MEIE 4702",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "MEIE4702"
+                    ]
+                  ]
                 }
               ]
             }
@@ -438,45 +544,50 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1151",
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1151 and CHEM 1153",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151",
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -486,38 +597,42 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTB1203"
-                  ],
                   "text": "INTB 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTB1203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1151",
-                    "PHYS1152",
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1151",
+                      "PHYS1152",
+                      "PHYS1153"
+                    ]
+                  ]
                 }
               ]
             },
@@ -527,20 +642,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 }
               ]
             },
@@ -550,20 +667,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1115"
-                  ],
                   "text": "ECON 1115",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 }
               ]
             }
@@ -578,35 +697,51 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Bussiness bucket core",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE2310",
-                    "IE2311"
-                  ],
                   "text": "IE 2310 and IE 2311",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE2310",
+                      "IE2311"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "IE3412",
-                    "MATH3081"
-                  ],
                   "text": "IE 3412 or MATH 3081",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE3412"
+                    ],
+                    [
+                      "MATH3081"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4512"
-                  ],
                   "text": "IE 4512",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4512"
+                    ]
+                  ]
                 }
               ]
             },
@@ -616,41 +751,56 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4510"
-                  ],
                   "text": "IE 4510",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4510"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4515"
-                  ],
                   "text": "IE 4515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4516"
-                  ],
                   "text": "IE 4516",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4516"
+                    ]
+                  ]
                 }
               ]
             },
@@ -660,22 +810,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3315",
-                    "ENGW3304"
-                  ],
                   "text": "ENGW 3302, 3315, or 3304",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3315"
+                    ],
+                    [
+                      "ENGW3304"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ORGB3201"
-                  ],
                   "text": "ORGB 3201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ORGB3201"
+                    ]
+                  ]
                 }
               ]
             },
@@ -685,9 +841,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -702,9 +859,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -714,34 +872,48 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4520"
-                  ],
                   "text": "IE 4520",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4520"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE4522",
-                    "IE4523"
-                  ],
                   "text": "IE 4522 and IE 4523",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "IE4522",
+                      "IE4523"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4525"
-                  ],
                   "text": "IE 4525",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4525"
+                    ]
+                  ]
                 }
               ]
             },
@@ -751,25 +923,38 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MEIE4701"
-                  ],
                   "text": "MEIE 4701",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "MEIE4701"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "STRT4501"
-                  ],
                   "text": "STRT 4501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "STRT4501"
+                    ]
+                  ]
                 }
               ]
             },
@@ -779,9 +964,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -796,9 +982,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -808,39 +995,64 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "DD NUpath",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE4530",
-                    "IE4531"
-                  ],
                   "text": "IE 4530 and IE 4531",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "IE4530",
+                      "IE4531"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MEIE4702"
-                  ],
                   "text": "MEIE 4702",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "MEIE4702"
+                    ]
+                  ]
                 }
               ]
             }
@@ -862,45 +1074,50 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1151",
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1151 and CHEM 1153",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151",
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -910,38 +1127,42 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTB1203"
-                  ],
                   "text": "INTB 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTB1203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1151",
-                    "PHYS1152",
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1151",
+                      "PHYS1152",
+                      "PHYS1153"
+                    ]
+                  ]
                 }
               ]
             },
@@ -951,8 +1172,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -962,8 +1184,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -978,46 +1201,53 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ECON1115",
-                    "ECON1116"
-                  ],
                   "text": "ECON 1115 or 1116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ],
+                    [
+                      "ECON1116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE2310",
-                    "IE2311"
-                  ],
                   "text": "IE 2310 and IE 2311",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE2310",
+                      "IE2311"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1027,9 +1257,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1039,9 +1270,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1051,8 +1283,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -1067,34 +1300,51 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business bucket core",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "IE3412",
-                    "MATH3081"
-                  ],
                   "text": "IE 3412 or MATH 3081",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE3412"
+                    ],
+                    [
+                      "MATH3081"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4512"
-                  ],
                   "text": "IE 4512",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4512"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1104,9 +1354,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1116,9 +1367,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1128,22 +1380,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3315",
-                    "ENGW3304"
-                  ],
                   "text": "ENGW 3302, 3315, or 3304",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3315"
+                    ],
+                    [
+                      "ENGW3304"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ORGB3201"
-                  ],
                   "text": "ORGB 3201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ORGB3201"
+                    ]
+                  ]
                 }
               ]
             }
@@ -1158,41 +1416,57 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4510"
-                  ],
                   "text": "IE 4510",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4510"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4515"
-                  ],
                   "text": "IE 4515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4516"
-                  ],
                   "text": "IE 4516",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4516"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1202,9 +1476,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1214,9 +1489,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1226,17 +1502,30 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "STRT4501"
-                  ],
                   "text": "STRT 4501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "STRT4501"
+                    ]
+                  ]
                 }
               ]
             }
@@ -1251,42 +1540,58 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4520"
-                  ],
                   "text": "IE 4520",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4520"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE4522",
-                    "IE4523"
-                  ],
                   "text": "IE 4522 and IE 4523",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "IE4522",
+                      "IE4523"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4525"
-                  ],
                   "text": "IE 4525",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4525"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MEIE4701"
-                  ],
                   "text": "MEIE 4701",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "MEIE4701"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1296,31 +1601,57 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "DD NUpath",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE4530",
-                    "IE4531"
-                  ],
                   "text": "IE 4530 and IE 4531",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "IE4530",
+                      "IE4531"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MEIE4702"
-                  ],
                   "text": "MEIE 4702",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "MEIE4702"
+                    ]
+                  ]
                 }
               ]
             }
@@ -1342,45 +1673,50 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1151",
-                    "CHEM1153"
-                  ],
                   "text": "CHEM 1151 and CHEM 1153",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM1151",
+                      "CHEM1153"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1000"
-                  ],
                   "text": "GE 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GE1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1501"
-                  ],
                   "text": "GE 1501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1390,38 +1726,42 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GE1502"
-                  ],
                   "text": "GE 1502",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GE1502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTB1203"
-                  ],
                   "text": "INTB 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTB1203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1151",
-                    "PHYS1152",
-                    "PHYS1153"
-                  ],
                   "text": "PHYS 1151 and PHYS 1152 and PHYS 1153",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1151",
+                      "PHYS1152",
+                      "PHYS1153"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1431,8 +1771,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -1442,8 +1783,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -1458,38 +1800,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ECON1115",
-                    "ECON1116"
-                  ],
                   "text": "ECON 1115 or 1116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ],
+                    [
+                      "ECON1116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE2310",
-                    "IE2311"
-                  ],
                   "text": "IE 2310 and IE 2311",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE2310",
+                      "IE2311"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1499,42 +1847,60 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business bucket core",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP2000"
-                  ],
                   "text": "ENCP 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "IE3412",
-                    "MATH3081"
-                  ],
                   "text": "IE 3412 or MATH 3081",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE3412"
+                    ],
+                    [
+                      "MATH3081"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4512"
-                  ],
                   "text": "IE 4512",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4512"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1544,8 +1910,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -1555,9 +1922,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -1572,9 +1940,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1584,41 +1953,57 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENCP3000"
-                  ],
                   "text": "ENCP 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ENCP3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4510"
-                  ],
                   "text": "IE 4510",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4510"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4515"
-                  ],
                   "text": "IE 4515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4516"
-                  ],
                   "text": "IE 4516",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4516"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1628,22 +2013,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3315",
-                    "ENGW3304"
-                  ],
                   "text": "ENGW 3302, 3315, or 3304",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3315"
+                    ],
+                    [
+                      "ENGW3304"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ORGB3201"
-                  ],
                   "text": "ORGB 3201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ORGB3201"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1653,9 +2044,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -1670,9 +2062,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1682,34 +2075,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4520"
-                  ],
                   "text": "IE 4520",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4520"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE4522",
-                    "IE4523"
-                  ],
                   "text": "IE 4522 and IE 4523",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "IE4522",
+                      "IE4523"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "IE4525"
-                  ],
                   "text": "IE 4525",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "IE4525"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1719,25 +2127,39 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MEIE4701"
-                  ],
                   "text": "MEIE 4701",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "MEIE4701"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "STRT4501"
-                  ],
                   "text": "STRT 4501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "STRT4501"
+                    ]
+                  ]
                 }
               ]
             },
@@ -1747,9 +2169,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -1764,9 +2187,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -1776,31 +2200,57 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Business concentration elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "DD NUpath",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      10,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "IE4530",
-                    "IE4531"
-                  ],
                   "text": "IE 4530 and IE 4531",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "IE4530",
+                      "IE4531"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MEIE4702"
-                  ],
                   "text": "MEIE 4702",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "MEIE4702"
+                    ]
+                  ]
                 }
               ]
             }

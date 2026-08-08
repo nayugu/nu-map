@@ -14,47 +14,54 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1200",
-                    "BUSN1102"
-                  ],
                   "text": "CS 1200 or BUSN 1102",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ],
+                    [
+                      "BUSN1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -64,38 +71,44 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2100",
-                    "CS2101"
-                  ],
                   "text": "CS 2100 and CS 2101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2100",
+                      "CS2101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1115"
-                  ],
                   "text": "ECON 1115",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MATH1341",
-                    "MATH1231"
-                  ],
                   "text": "MATH 1341 or 1231",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ],
+                    [
+                      "MATH1231"
+                    ]
+                  ]
                 }
               ]
             },
@@ -105,20 +118,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MKTG2201"
-                  ],
                   "text": "MKTG 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MKTG2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1116"
-                  ],
                   "text": "ECON 1116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1116"
+                    ]
+                  ]
                 }
               ]
             },
@@ -128,17 +143,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MISM2301"
-                  ],
                   "text": "MISM 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MISM2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -153,34 +175,43 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT2301"
-                  ],
                   "text": "ACCT 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS3100",
-                    "CS3101"
-                  ],
                   "text": "CS 3100 and CS 3101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS3100",
+                      "CS3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "FINA2201"
-                  ],
                   "text": "FINA 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "FINA2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -190,39 +221,72 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1210",
-                    "BUSN1103"
-                  ],
                   "text": "CS 1210 or BUSN 1103",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ],
+                    [
+                      "BUSN1103"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3000"
-                  ],
                   "text": "CS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MGSC2301"
-                  ],
                   "text": "MGSC 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MGSC2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business Concentration",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Computing and Social Issues",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 }
               ]
             },
@@ -232,14 +296,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -249,9 +325,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -266,9 +343,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -278,24 +356,75 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "CS Required Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      "~concentration"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business Concentration",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business Concentration",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 }
               ]
             },
@@ -305,23 +434,31 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3304",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3304, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3304"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ORGB3201",
-                    "ORGB3203"
-                  ],
                   "text": "ORGB 3201 or 3203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ORGB3201"
+                    ],
+                    [
+                      "ORGB3203"
+                    ]
+                  ]
                 }
               ]
             },
@@ -331,9 +468,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -348,9 +486,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -360,31 +499,58 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS4530",
-                    "CS4535"
-                  ],
                   "text": "CS 4530 or 4535",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4530"
+                    ],
+                    [
+                      "CS4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "STRT4501"
-                  ],
                   "text": "STRT 4501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "STRT4501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CS Required Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      "~concentration"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business Concentration",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 }
               ]
             }
@@ -406,47 +572,54 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1200",
-                    "BUSN1102"
-                  ],
                   "text": "CS 1200 or BUSN 1102",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ],
+                    [
+                      "BUSN1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -456,38 +629,44 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2100",
-                    "CS2101"
-                  ],
                   "text": "CS 2100 and CS 2101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2100",
+                      "CS2101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MATH1341",
-                    "MATH1231"
-                  ],
                   "text": "MATH 1341 or 1231",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ],
+                    [
+                      "MATH1231"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1115"
-                  ],
                   "text": "ECON 1115",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ]
+                  ]
                 }
               ]
             },
@@ -497,21 +676,23 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS3100",
-                    "CS3101"
-                  ],
                   "text": "CS 3100 and CS 3101",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS3100",
+                      "CS3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1116"
-                  ],
                   "text": "ECON 1116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1116"
+                    ]
+                  ]
                 }
               ]
             },
@@ -521,14 +702,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -543,42 +736,54 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT2301"
-                  ],
                   "text": "ACCT 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1210",
-                    "BUSN1103"
-                  ],
                   "text": "CS 1210 or BUSN 1103",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ],
+                    [
+                      "BUSN1103"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3000"
-                  ],
                   "text": "CS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MKTG2201"
-                  ],
                   "text": "MKTG 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MKTG2201"
+                    ]
+                  ]
                 }
               ]
             },
@@ -588,9 +793,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -600,9 +806,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -612,17 +819,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MGSC2301"
-                  ],
                   "text": "MGSC 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MGSC2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -637,30 +851,55 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "FINA2201"
-                  ],
                   "text": "FINA 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "FINA2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MISM2301"
-                  ],
                   "text": "MISM 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MISM2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CS Required Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      "~concentration"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 }
               ]
             },
@@ -670,9 +909,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -682,9 +922,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -694,23 +935,31 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3304",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3304, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3304"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ORGB3201",
-                    "ORGB3203"
-                  ],
                   "text": "ORGB 3201 or 3203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ORGB3201"
+                    ],
+                    [
+                      "ORGB3203"
+                    ]
+                  ]
                 }
               ]
             }
@@ -725,28 +974,73 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS4530",
-                    "CS4535"
-                  ],
                   "text": "CS 4530 or 4535",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4530"
+                    ],
+                    [
+                      "CS4535"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business Concentration",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business Concentration",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business Concentration",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 }
               ]
             },
@@ -756,27 +1050,65 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "STRT4501"
-                  ],
                   "text": "STRT 4501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "STRT4501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CS Required Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      "~concentration"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Computing and Social Issues",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business Concentration",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      5,
+                      7,
+                      9,
+                      11,
+                      12,
+                      "~concentration"
+                    ]
+                  }
                 }
               ]
             }

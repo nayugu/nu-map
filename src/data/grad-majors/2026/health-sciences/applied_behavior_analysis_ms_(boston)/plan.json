@@ -14,20 +14,22 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6326"
-                  ],
                   "text": "CAEP 6326",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6326"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6329"
-                  ],
                   "text": "CAEP 6329",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6329"
+                    ]
+                  ]
                 }
               ]
             },
@@ -37,20 +39,22 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6327"
-                  ],
                   "text": "CAEP 6327",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6327"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6328"
-                  ],
                   "text": "CAEP 6328",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6328"
+                    ]
+                  ]
                 }
               ]
             },
@@ -60,20 +64,22 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6341"
-                  ],
                   "text": "CAEP 6341",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6342"
-                  ],
                   "text": "CAEP 6342",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6342"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -89,28 +95,31 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6343"
-                  ],
                   "text": "CAEP 6343",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6343"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP7412"
-                  ],
                   "text": "CAEP 7412",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CAEP7412"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP8412"
-                  ],
                   "text": "CAEP 8412",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "CAEP8412"
+                    ]
+                  ]
                 }
               ]
             },
@@ -120,28 +129,31 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6344"
-                  ],
                   "text": "CAEP 6344",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6344"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP7413"
-                  ],
                   "text": "CAEP 7413",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CAEP7413"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP8413"
-                  ],
                   "text": "CAEP 8413",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "CAEP8413"
+                    ]
+                  ]
                 }
               ]
             }
@@ -169,20 +181,22 @@
               "hours": null,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6326"
-                  ],
                   "text": "CAEP 6326",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6326"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6329"
-                  ],
                   "text": "CAEP 6329",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6329"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -198,20 +212,22 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6341"
-                  ],
                   "text": "CAEP 6341",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6342"
-                  ],
                   "text": "CAEP 6342",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6342"
+                    ]
+                  ]
                 }
               ]
             },
@@ -221,28 +237,31 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6343"
-                  ],
                   "text": "CAEP 6343",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6343"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP7412"
-                  ],
                   "text": "CAEP 7412",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CAEP7412"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP8412"
-                  ],
                   "text": "CAEP 8412",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "CAEP8412"
+                    ]
+                  ]
                 }
               ]
             },
@@ -252,28 +271,31 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP6344"
-                  ],
                   "text": "CAEP 6344",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "CAEP6344"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP7413"
-                  ],
                   "text": "CAEP 7413",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CAEP7413"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CAEP8413"
-                  ],
                   "text": "CAEP 8413",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "CAEP8413"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true

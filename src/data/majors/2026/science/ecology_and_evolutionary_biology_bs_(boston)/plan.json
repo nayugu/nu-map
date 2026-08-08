@@ -14,47 +14,54 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INSC1000"
-                  ],
                   "text": "INSC 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INSC1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB1101",
-                    "EEMB1102"
-                  ],
                   "text": "EEMB 1101 and EEMB 1102",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EEMB1101",
+                      "EEMB1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR1500",
-                    "ENVR1501"
-                  ],
                   "text": "ENVR 1500 and ENVR 1501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR1500",
+                      "ENVR1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MATH1241",
-                    "MATH1251"
-                  ],
                   "text": "MATH 1241 or 1251",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1241"
+                    ],
+                    [
+                      "MATH1251"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -64,37 +71,48 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB1105",
-                    "EEMB1106"
-                  ],
                   "text": "EEMB 1105 and EEMB 1106",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EEMB1105",
+                      "EEMB1106"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1161",
-                    "CHEM1162",
-                    "CHEM1163"
-                  ],
                   "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM1161",
+                      "CHEM1162",
+                      "CHEM1163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1145",
-                    "PHYS1146"
-                  ],
                   "text": "PHYS 1145 and PHYS 1146",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1145",
+                      "PHYS1146"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -104,8 +122,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -115,14 +134,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -137,43 +170,53 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2301",
-                    "BIOL2302"
-                  ],
                   "text": "BIOL 2301 and BIOL 2302",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2301",
+                      "BIOL2302"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CHEM2311"
-                  ],
                   "text": "CHEM 2311",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CHEM2311"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR2500",
-                    "ENVR2501"
-                  ],
                   "text": "ENVR 2500 and ENVR 2501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR2500",
+                      "ENVR2501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -183,9 +226,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -195,9 +239,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -207,14 +252,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -229,31 +288,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB2302",
-                    "EEMB2303"
-                  ],
                   "text": "EEMB 2302 and EEMB 2303",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EEMB2302",
+                      "EEMB2303"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB2400"
-                  ],
                   "text": "EEMB 2400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EEMB2400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EEB elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EEB elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -263,9 +340,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -275,9 +353,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -287,17 +366,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Elective 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3307"
-                  ],
                   "text": "ENGW 3307",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3307"
+                    ]
+                  ]
                 }
               ]
             }
@@ -312,27 +400,52 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB3460"
-                  ],
                   "text": "EEMB 3460",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EEMB3460"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EEB elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EEB elective 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUPath Elective 5",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -342,30 +455,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR4000"
-                  ],
                   "text": "ENVR 4000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR4000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR4997"
-                  ],
                   "text": "ENVR 4997",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR4997"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EEB elective 5",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EEB elective 6",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      11,
+                      13,
+                      15,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }

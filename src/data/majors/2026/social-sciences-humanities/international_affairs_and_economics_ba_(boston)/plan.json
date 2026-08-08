@@ -14,41 +14,56 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1115"
-                  ],
                   "text": "ECON 1115",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTL1000"
-                  ],
                   "text": "INTL 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INTL1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTL1101"
-                  ],
                   "text": "INTL 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTL1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      6,
+                      7,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -58,41 +73,55 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1116"
-                  ],
                   "text": "ECON 1116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST2211"
-                  ],
                   "text": "HIST 2211",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST2211"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MATH1231",
-                    "MATH1241",
-                    "MATH1245",
-                    "MATH1251",
-                    "MATH1340",
-                    "MATH1341"
-                  ],
                   "text": "MATH 1231, 1241, 1245, 1251, 1340, or 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1231"
+                    ],
+                    [
+                      "MATH1241"
+                    ],
+                    [
+                      "MATH1245"
+                    ],
+                    [
+                      "MATH1251"
+                    ],
+                    [
+                      "MATH1340"
+                    ],
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1160"
-                  ],
                   "text": "POLS 1160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1160"
+                    ]
+                  ]
                 }
               ]
             },
@@ -102,14 +131,31 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "ECON elective 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      6,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "INTL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -119,14 +165,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -141,32 +199,58 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1100",
-                    "INTL2718",
-                    "MISM2510"
-                  ],
                   "text": "CS 1100, INTL 2718, or MISM 2510",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS1100"
+                    ],
+                    [
+                      "INTL2718"
+                    ],
+                    [
+                      "MISM2510"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON2315"
-                  ],
                   "text": "ECON 2315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON2315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      6,
+                      7,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "INTL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -176,30 +260,52 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON2316"
-                  ],
                   "text": "ECON 2316",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON2316"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON2350"
-                  ],
                   "text": "ECON 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language core course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      6,
+                      7,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "INTL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -209,14 +315,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "ECON elective 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      6,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -226,9 +346,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -243,9 +364,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -255,33 +377,45 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON3520"
-                  ],
                   "text": "ECON 3520",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON3520"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTL3400"
-                  ],
                   "text": "INTL 3400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTL3400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "INTL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON3291"
-                  ],
                   "text": "ECON 3291",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON3291"
+                    ]
+                  ]
                 }
               ]
             },
@@ -291,14 +425,29 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "INTL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -308,9 +457,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -325,9 +475,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -337,32 +488,67 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ECON4692",
-                    "ECON4997"
-                  ],
                   "text": "ECON 4692 or 4997",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON4692"
+                    ],
+                    [
+                      "ECON4997"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ECON elective 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      6,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "INTL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "INTL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
-                  "text": "or INTL 4700"
+                  "text": "or INTL 4700",
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

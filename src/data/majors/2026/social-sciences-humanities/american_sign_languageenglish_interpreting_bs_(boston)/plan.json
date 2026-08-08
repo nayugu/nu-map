@@ -14,41 +14,51 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DEAF1500"
-                  ],
                   "text": "DEAF 1500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DEAF1500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AMSL1101"
-                  ],
                   "text": "AMSL 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AMSL1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP1000"
-                  ],
                   "text": "INTP 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INTP1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -58,33 +68,42 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AMSL1102"
-                  ],
                   "text": "AMSL 1102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AMSL1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1215"
-                  ],
                   "text": "MATH 1215",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1215"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LING1150"
-                  ],
                   "text": "LING 1150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LING1150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -94,8 +113,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -105,8 +125,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -121,33 +142,42 @@
               "hours": 14,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DEAF2500"
-                  ],
                   "text": "DEAF 2500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DEAF2500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AMSL2101"
-                  ],
                   "text": "AMSL 2101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AMSL2101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP3500"
-                  ],
                   "text": "INTP 3500",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INTP3500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -157,30 +187,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AMSL2102"
-                  ],
                   "text": "AMSL 2102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AMSL2102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DEAF2700"
-                  ],
                   "text": "DEAF 2700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DEAF2700"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -190,8 +234,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -201,8 +246,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -217,33 +263,42 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP3510"
-                  ],
                   "text": "INTP 3510",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTP3510"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AMSL3101"
-                  ],
                   "text": "AMSL 3101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AMSL3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -253,33 +308,42 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP3515"
-                  ],
                   "text": "INTP 3515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTP3515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP3550"
-                  ],
                   "text": "INTP 3550",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTP3550"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AMSL3102"
-                  ],
                   "text": "AMSL 3102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "AMSL3102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -289,8 +353,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -300,8 +365,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -316,41 +382,51 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP4650"
-                  ],
                   "text": "INTP 4650",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTP4650"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP4510"
-                  ],
                   "text": "INTP 4510",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTP4510"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP4651"
-                  ],
                   "text": "INTP 4651",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INTP4651"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP3970"
-                  ],
                   "text": "INTP 3970",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTP3970"
+                    ]
+                  ]
                 }
               ]
             },
@@ -360,33 +436,42 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP4515"
-                  ],
                   "text": "INTP 4515",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTP4515"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP4995"
-                  ],
                   "text": "INTP 4995",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTP4995"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTP4940"
-                  ],
                   "text": "INTP 4940",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTP4940"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

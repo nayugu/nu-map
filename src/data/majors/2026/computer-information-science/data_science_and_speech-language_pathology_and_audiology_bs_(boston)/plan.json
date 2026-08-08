@@ -14,45 +14,59 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1200",
-                    "SLPA1000"
-                  ],
                   "text": "CS 1200 or SLPA 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ],
+                    [
+                      "SLPA1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW1111",
-                    "ENGW1102"
-                  ],
                   "text": "ENGW 1111 or 1102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ],
+                    [
+                      "ENGW1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -62,38 +76,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "DS2500",
-                    "DS2501"
-                  ],
                   "text": "DS 2500 and DS 2501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "DS2500",
+                      "DS2501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1101"
-                  ],
                   "text": "SLPA 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1205"
-                  ],
                   "text": "SLPA 1205",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1205"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2217",
-                    "BIOL2218"
-                  ],
                   "text": "BIOL 2217 and BIOL 2218",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2217",
+                      "BIOL2218"
+                    ]
+                  ]
                 }
               ]
             },
@@ -103,12 +121,13 @@
               "hours": 4,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3000"
-                  ],
                   "text": "DS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -118,8 +137,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -134,45 +154,52 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3500"
-                  ],
                   "text": "DS 3500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1103"
-                  ],
                   "text": "SLPA 1103",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1103"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1203"
-                  ],
                   "text": "SLPA 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1210",
-                    "SLPA2000"
-                  ],
                   "text": "CS 1210 or SLPA 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ],
+                    [
+                      "SLPA2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -182,9 +209,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -194,9 +222,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -206,8 +235,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -222,31 +252,46 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2210"
-                  ],
                   "text": "PHTH 2210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1145",
-                    "PHYS1146"
-                  ],
                   "text": "PHYS 1145 and PHYS 1146",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1145",
+                      "PHYS1146"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      10,
+                      11
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -256,36 +301,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4200"
-                  ],
                   "text": "DS 4200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1200"
-                  ],
                   "text": "SLPA 1200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1102"
-                  ],
                   "text": "SLPA 1102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1102"
+                    ]
+                  ]
                 }
               ]
             },
@@ -295,22 +344,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHIL1145"
-                  ],
                   "text": "PHIL 1145",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHIL1145"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3306",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3306, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3306"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 }
               ]
             },
@@ -320,8 +375,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -336,33 +392,42 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA4500"
-                  ],
                   "text": "SLPA 4500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA4500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA5107"
-                  ],
                   "text": "SLPA 5107",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA5107"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS4120"
-                  ],
                   "text": "CS 4120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -372,36 +437,40 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4300"
-                  ],
                   "text": "DS 4300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4400"
-                  ],
                   "text": "DS 4400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA4651"
-                  ],
                   "text": "SLPA 4651",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA4651"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA6219"
-                  ],
                   "text": "SLPA 6219",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "SLPA6219"
+                    ]
+                  ]
                 }
               ]
             }
@@ -423,45 +492,59 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1200",
-                    "SLPA1000"
-                  ],
                   "text": "CS 1200 or SLPA 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1200"
+                    ],
+                    [
+                      "SLPA1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS1800",
-                    "CS1802"
-                  ],
                   "text": "CS 1800 and CS 1802",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS1800",
+                      "CS1802"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CS2000",
-                    "CS2001"
-                  ],
                   "text": "CS 2000 and CS 2001",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CS2000",
+                      "CS2001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW1111",
-                    "ENGW1102"
-                  ],
                   "text": "ENGW 1111 or 1102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ],
+                    [
+                      "ENGW1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -471,38 +554,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "DS2500",
-                    "DS2501"
-                  ],
                   "text": "DS 2500 and DS 2501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "DS2500",
+                      "DS2501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1101"
-                  ],
                   "text": "SLPA 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1205"
-                  ],
                   "text": "SLPA 1205",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1205"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2217",
-                    "BIOL2218"
-                  ],
                   "text": "BIOL 2217 and BIOL 2218",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2217",
+                      "BIOL2218"
+                    ]
+                  ]
                 }
               ]
             },
@@ -512,12 +599,13 @@
               "hours": 4,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3000"
-                  ],
                   "text": "DS 3000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -527,8 +615,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -543,36 +632,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS3500"
-                  ],
                   "text": "DS 3500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS3500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1103"
-                  ],
                   "text": "SLPA 1103",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1103"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1203"
-                  ],
                   "text": "SLPA 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1203"
+                    ]
+                  ]
                 }
               ]
             },
@@ -582,40 +675,58 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2210"
-                  ],
                   "text": "PHTH 2210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1145",
-                    "PHYS1146"
-                  ],
                   "text": "PHYS 1145 and PHYS 1146",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1145",
+                      "PHYS1146"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Khoury elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      10,
+                      11
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CS1210",
-                    "SLPA2000"
-                  ],
                   "text": "CS 1210 or SLPA 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CS1210"
+                    ],
+                    [
+                      "SLPA2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -625,8 +736,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -636,9 +748,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -653,9 +766,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -665,36 +779,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4200"
-                  ],
                   "text": "DS 4200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS3200"
-                  ],
                   "text": "CS 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1200"
-                  ],
                   "text": "SLPA 1200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1102"
-                  ],
                   "text": "SLPA 1102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1102"
+                    ]
+                  ]
                 }
               ]
             },
@@ -704,22 +822,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHIL1145"
-                  ],
                   "text": "PHIL 1145",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHIL1145"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3302",
-                    "ENGW3306",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3302, 3306, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3302"
+                    ],
+                    [
+                      "ENGW3306"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 }
               ]
             },
@@ -729,8 +853,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -745,33 +870,42 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA4500"
-                  ],
                   "text": "SLPA 4500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA4500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA5107"
-                  ],
                   "text": "SLPA 5107",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA5107"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS4120"
-                  ],
                   "text": "CS 4120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CS4120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -781,36 +915,40 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4300"
-                  ],
                   "text": "DS 4300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "DS4400"
-                  ],
                   "text": "DS 4400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "DS4400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA4651"
-                  ],
                   "text": "SLPA 4651",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA4651"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA6219"
-                  ],
                   "text": "SLPA 6219",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "SLPA6219"
+                    ]
+                  ]
                 }
               ]
             }

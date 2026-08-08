@@ -14,51 +14,62 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTF1000"
-                  ],
                   "text": "ARTF 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ARTF1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME2500"
-                  ],
                   "text": "GAME 2500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME2500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTF1240",
-                    "ARTF1241"
-                  ],
                   "text": "ARTF 1240 and ARTF 1241",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "ARTF1240",
+                      "ARTF1241"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTD1001",
-                    "ARTD1002"
-                  ],
                   "text": "ARTD 1001 and ARTD 1002",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTD1001",
+                      "ARTD1002"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -68,44 +79,66 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTD2370",
-                    "ARTD2371"
-                  ],
                   "text": "ARTD 2370 and ARTD 2371",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ARTD2370",
+                      "ARTD2371"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GAME1110"
-                  ],
                   "text": "GAME 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTF elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "GAME or A+D elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -115,14 +148,27 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "GAME or A+D elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      7,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -132,14 +178,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -154,38 +212,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTD3470"
-                  ],
                   "text": "ARTD 3470",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTD3470"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTD3473"
-                  ],
                   "text": "ARTD 3473",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTD3473"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARTH1001",
-                    "ARTH1002"
-                  ],
                   "text": "ARTH 1001 and ARTH 1002",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTH1001",
+                      "ARTH1002"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "GAME2355",
-                    "ARTD2100"
-                  ],
                   "text": "GAME 2355 or ARTD 2100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GAME2355"
+                    ],
+                    [
+                      "ARTD2100"
+                    ]
+                  ]
                 }
               ]
             },
@@ -195,9 +259,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -207,9 +272,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -219,14 +285,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -241,33 +319,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTD3472"
-                  ],
                   "text": "ARTD 3472",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTD3472"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTD4570"
-                  ],
                   "text": "ARTD 4570",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTD4570"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTH2212"
-                  ],
                   "text": "ARTH 2212",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTH2212"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Advanced writing in the disciplines",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      6,
+                      7,
+                      9,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -277,9 +370,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -289,9 +383,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -301,14 +396,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -323,27 +430,54 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTD4575"
-                  ],
                   "text": "ARTD 4575",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTD4575"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ARTH elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "GAME or A+D elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Intro to photo or video basics",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      4,
+                      5,
+                      6,
+                      7,
+                      9,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -353,27 +487,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTD4530"
-                  ],
                   "text": "ARTD 4530",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTD4530"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "GAME or A+D elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      5,
+                      7,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

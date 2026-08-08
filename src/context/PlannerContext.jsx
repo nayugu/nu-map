@@ -1966,6 +1966,43 @@ export function PlannerProvider({ children }) {
     if (!dragInfo || dragInfo.type !== "course" || dragInfo.id === targetId) return;
     pushUndo();
     const dragId  = dragInfo.id;
+
+    // ── A reservation at either end of the gesture ───────────────────
+    //
+    // Dragging one is an ordinary card move: its position lives in
+    // `reservations`, so routing it through setPlacements would put a
+    // reservation id into the map the audit reads — the one thing the split
+    // exists to prevent.
+    if (isReservationId(dragId)) {
+      setReservations(prev => moveReservation(prev, dragId, targetSemId));
+      setDragInfo(null);
+      return;
+    }
+
+    // Dropping a course ONTO one answers it. The card that was aimed at is the
+    // card that goes, and the course lands in its term — the two commit
+    // together so one undo restores both.
+    if (isReservationId(targetId)) {
+      const filled = fillReservation(reservations, targetId, dragId);
+      if (filled) {
+        setReservations(filled.reservations);
+        setPlacements(p => ({ ...p, [dragId]: filled.semId }));
+        setSemOrders(prev => {
+          // The course takes the reservation's position, so the term does not
+          // reshuffle at the moment the student fills something in.
+          const cur = prev[filled.semId]
+            ?? getOrderedCourses(filled.semId, gridPlacements, prev, gridCourseMap);
+          const at = cur.indexOf(targetId);
+          if (at < 0) return prev;
+          const next = cur.filter(id => id !== dragId && id !== targetId);
+          next.splice(at, 0, dragId);
+          return { ...prev, [filled.semId]: next };
+        });
+      }
+      setDragInfo(null);
+      return;
+    }
+
     const fromSem = placements[dragId];
     const targetSemType = SEMESTERS.find(s => s.id === targetSemId)?.type;
 

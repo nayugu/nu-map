@@ -14,32 +14,38 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "placeholder",
-                  "text": "Complete the following:"
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC5110"
-                  ],
-                  "text": "PSYC 5110",
-                  "sh": 3
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC5180"
-                  ],
-                  "text": "PSYC 5180",
-                  "sh": 3
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC8401"
-                  ],
-                  "text": "PSYC 8401",
-                  "sh": 3
+                  "text": "Complete the following:",
+                  "heading": true,
+                  "options": [],
+                  "children": [
+                    {
+                      "text": "PSYC 5110",
+                      "sh": 3,
+                      "options": [
+                        [
+                          "PSYC5110"
+                        ]
+                      ]
+                    },
+                    {
+                      "text": "PSYC 5180",
+                      "sh": 3,
+                      "options": [
+                        [
+                          "PSYC5180"
+                        ]
+                      ]
+                    },
+                    {
+                      "text": "PSYC 8401",
+                      "sh": 3,
+                      "options": [
+                        [
+                          "PSYC8401"
+                        ]
+                      ]
+                    }
+                  ]
                 }
               ]
             },
@@ -49,72 +55,89 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "placeholder",
-                  "text": "Complete the following:"
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC5170"
-                  ],
-                  "text": "PSYC 5170",
-                  "sh": 3
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC5181"
-                  ],
-                  "text": "PSYC 5181",
-                  "sh": 3
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC8401"
-                  ],
-                  "text": "PSYC 8401",
-                  "sh": 3
-                },
-                {
-                  "kind": "placeholder",
-                  "text": "Complete one of the following:",
-                  "sh": 3
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC5120"
-                  ],
-                  "text": "PSYC 5120"
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC5130"
-                  ],
-                  "text": "PSYC 5130"
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC5140"
-                  ],
-                  "text": "PSYC 5140"
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC5150"
-                  ],
-                  "text": "PSYC 5150"
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC5115"
-                  ],
-                  "text": "PSYC 5115"
+                  "text": "Complete the following:",
+                  "heading": true,
+                  "options": [],
+                  "children": [
+                    {
+                      "text": "PSYC 5170",
+                      "sh": 3,
+                      "options": [
+                        [
+                          "PSYC5170"
+                        ]
+                      ]
+                    },
+                    {
+                      "text": "PSYC 5181",
+                      "sh": 3,
+                      "options": [
+                        [
+                          "PSYC5181"
+                        ]
+                      ]
+                    },
+                    {
+                      "text": "PSYC 8401",
+                      "sh": 3,
+                      "options": [
+                        [
+                          "PSYC8401"
+                        ]
+                      ]
+                    },
+                    {
+                      "text": "Complete one of the following:",
+                      "sh": 3,
+                      "options": [],
+                      "binding": {
+                        "targets": [
+                          6
+                        ],
+                        "forced": true
+                      }
+                    },
+                    {
+                      "text": "PSYC 5120",
+                      "options": [
+                        [
+                          "PSYC5120"
+                        ]
+                      ]
+                    },
+                    {
+                      "text": "PSYC 5130",
+                      "options": [
+                        [
+                          "PSYC5130"
+                        ]
+                      ]
+                    },
+                    {
+                      "text": "PSYC 5140",
+                      "options": [
+                        [
+                          "PSYC5140"
+                        ]
+                      ]
+                    },
+                    {
+                      "text": "PSYC 5150",
+                      "options": [
+                        [
+                          "PSYC5150"
+                        ]
+                      ]
+                    },
+                    {
+                      "text": "PSYC 5115",
+                      "options": [
+                        [
+                          "PSYC5115"
+                        ]
+                      ]
+                    }
+                  ]
                 }
               ]
             },
@@ -124,25 +147,40 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC8401"
-                  ],
                   "text": "PSYC 8401",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PSYC8401"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 2
+                  "sh": 2,
+                  "shMax": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ],
-              "fullSummer": true
+              "fullSummer": true,
+              "hoursMax": 9
             }
           ]
         },
@@ -155,29 +193,40 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
-                  "text": "Complete the following:"
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC7990"
-                  ],
-                  "text": "PSYC 7990",
-                  "sh": 3
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC5301"
-                  ],
-                  "text": "PSYC 5301",
-                  "sh": 3
+                  "text": "Complete the following:",
+                  "heading": true,
+                  "options": [],
+                  "children": [
+                    {
+                      "text": "PSYC 7990",
+                      "sh": 3,
+                      "options": [
+                        [
+                          "PSYC7990"
+                        ]
+                      ]
+                    },
+                    {
+                      "text": "PSYC 5301",
+                      "sh": 3,
+                      "options": [
+                        [
+                          "PSYC5301"
+                        ]
+                      ]
+                    }
+                  ]
                 }
               ]
             },
@@ -187,21 +236,31 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
-                  "text": "Complete the following:"
-                },
-                {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC7990"
-                  ],
-                  "text": "PSYC 7990",
-                  "sh": 3
+                  "text": "Complete the following:",
+                  "heading": true,
+                  "options": [],
+                  "children": [
+                    {
+                      "text": "PSYC 7990",
+                      "sh": 3,
+                      "options": [
+                        [
+                          "PSYC7990"
+                        ]
+                      ]
+                    }
+                  ]
                 }
               ]
             },
@@ -211,25 +270,33 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC7302"
-                  ],
                   "text": "PSYC 7302",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PSYC7302"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC7996"
-                  ],
                   "text": "PSYC 7996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PSYC7996"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ],
               "fullSummer": true
@@ -245,12 +312,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC9990"
-                  ],
                   "text": "PSYC 9990",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PSYC9990"
+                    ]
+                  ]
                 }
               ]
             },
@@ -260,12 +328,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC9991"
-                  ],
                   "text": "PSYC 9991",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PSYC9991"
+                    ]
+                  ]
                 }
               ]
             },
@@ -275,12 +344,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC9996"
-                  ],
                   "text": "PSYC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PSYC9996"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -296,12 +366,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC9996"
-                  ],
                   "text": "PSYC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PSYC9996"
+                    ]
+                  ]
                 }
               ]
             },
@@ -311,12 +382,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC9996"
-                  ],
                   "text": "PSYC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PSYC9996"
+                    ]
+                  ]
                 }
               ]
             },
@@ -326,12 +398,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC9996"
-                  ],
                   "text": "PSYC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PSYC9996"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -347,12 +420,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC9996"
-                  ],
                   "text": "PSYC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PSYC9996"
+                    ]
+                  ]
                 }
               ]
             },
@@ -362,12 +436,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC9996"
-                  ],
                   "text": "PSYC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PSYC9996"
+                    ]
+                  ]
                 }
               ]
             },
@@ -377,12 +452,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC9996"
-                  ],
                   "text": "PSYC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PSYC9996"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true

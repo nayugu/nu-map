@@ -100,7 +100,9 @@ export default function SemRow({ sem }) {
   // Co-op terms are work terms: parked courses stay (recoverable) but don't
   // count toward this term's load. getSemStudySH returns 0 when a co-op occupies
   // the term (via the start/continuation maps).
-  const sh         = getSemStudySH(sem.id, placements, effectiveCourseMap, specialTermStartMap, specialTermContMap);
+  // Combined view: a reservation carries the credit the department printed, so
+  // a fourth year that is entirely electives reads as full rather than empty.
+  const sh         = getSemStudySH(sem.id, gridPlacements ?? placements, gridCourseMap ?? effectiveCourseMap, specialTermStartMap, specialTermContMap);
   // shVoided takes carry sh 0 (a failed grade earns nothing) but must stay
   // as full cards — vanishing into the low-credit subline would hide the
   // very course whose failure the user just recorded.

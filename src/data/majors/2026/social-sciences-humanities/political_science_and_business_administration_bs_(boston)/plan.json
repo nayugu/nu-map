@@ -14,45 +14,52 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1231"
-                  ],
                   "text": "MATH 1231",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1231"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "POLS1000",
-                    "BUSN1102"
-                  ],
                   "text": "POLS 1000 or BUSN 1102",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "POLS1000"
+                    ],
+                    [
+                      "BUSN1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1155"
-                  ],
                   "text": "POLS 1155",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1155"
+                    ]
+                  ]
                 }
               ]
             },
@@ -62,38 +69,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ECON1115",
-                    "ECON1116"
-                  ],
                   "text": "ECON 1115 or 1116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ],
+                    [
+                      "ECON1116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MGSC2301",
-                    "POLS2400"
-                  ],
                   "text": "MGSC 2301 or POLS 2400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MGSC2301"
+                    ],
+                    [
+                      "POLS2400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1150"
-                  ],
                   "text": "POLS 1150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1160"
-                  ],
                   "text": "POLS 1160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1160"
+                    ]
+                  ]
                 }
               ]
             },
@@ -103,14 +118,36 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "DD NUpath",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      8,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -120,14 +157,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -142,38 +191,72 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "BUSN1103",
-                    "EESH2000"
-                  ],
                   "text": "BUSN 1103 or EESH 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "BUSN1103"
+                    ],
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MKTG2201"
-                  ],
                   "text": "MKTG 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MKTG2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Computer Science Requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "shMax": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      11
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS thought",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      13,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      13,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "hoursMax": 18
             },
             {
               "term": "Spring",
@@ -181,9 +264,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -193,9 +277,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -205,20 +290,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT2301"
-                  ],
                   "text": "ACCT 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "FINA2201"
-                  ],
                   "text": "FINA 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "FINA2201"
+                    ]
+                  ]
                 }
               ]
             }
@@ -233,28 +320,69 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ORGB3201",
-                    "ORGB3203"
-                  ],
                   "text": "ORGB 3201 or 3203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ORGB3201"
+                    ],
+                    [
+                      "ORGB3203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      13,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "POLS elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      13,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration class 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      8,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -264,9 +392,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -276,9 +405,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -288,14 +418,41 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "POLS elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      13,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ND NUpath",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      8,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -310,29 +467,82 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3304",
-                    "ENGW3315",
-                    "ENGW3307"
-                  ],
                   "text": "ENGW 3304, 3315, or 3307",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3304"
+                    ],
+                    [
+                      "ENGW3315"
+                    ],
+                    [
+                      "ENGW3307"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration class 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      8,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration class 3",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      8,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "EI NUpath",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      8,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -342,28 +552,79 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "POLS4701",
-                    "STRT4501"
-                  ],
                   "text": "POLS 4701 or STRT 4501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS4701"
+                    ],
+                    [
+                      "STRT4501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration class 4",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      8,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "IC NUpath",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      8,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ER NUpath",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      4,
+                      8,
+                      10,
+                      11,
+                      12,
+                      13,
+                      14,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }

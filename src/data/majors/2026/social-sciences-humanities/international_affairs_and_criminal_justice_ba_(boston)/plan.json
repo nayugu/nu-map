@@ -14,42 +14,62 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1100"
-                  ],
                   "text": "CRIM 1100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "INTL1000",
-                    "CRIM1000"
-                  ],
                   "text": "INTL 1000 or CRIM 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INTL1000"
+                    ],
+                    [
+                      "CRIM1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTL1101"
-                  ],
                   "text": "INTL 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTL1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3,
+                      6,
+                      8,
+                      9,
+                      10,
+                      11,
+                      13,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -59,33 +79,65 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ANTH1101",
-                    "HIST2211",
-                    "HIST2311"
-                  ],
                   "text": "ANTH 1101, HIST 2211, or HIST 2311",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ANTH1101"
+                    ],
+                    [
+                      "HIST2211"
+                    ],
+                    [
+                      "HIST2311"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ECON1115",
-                    "ECON1116"
-                  ],
                   "text": "ECON 1115 or 1116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ],
+                    [
+                      "ECON1116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM thematic elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      8,
+                      9,
+                      10,
+                      13,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3,
+                      6,
+                      8,
+                      9,
+                      10,
+                      11,
+                      13,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -95,14 +147,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -112,14 +176,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Dialogue of Civilizations possible)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Dialogue of Civilizations possible)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -134,41 +210,59 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1110"
-                  ],
                   "text": "CRIM 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1120"
-                  ],
                   "text": "CRIM 1120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESH2000"
-                  ],
                   "text": "EESH 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1160"
-                  ],
                   "text": "POLS 1160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1160"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3,
+                      6,
+                      8,
+                      9,
+                      10,
+                      11,
+                      13,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -178,9 +272,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -190,9 +285,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -202,14 +298,35 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "CRIM elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      8,
+                      9,
+                      10,
+                      13,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "INTL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3,
+                      9,
+                      10,
+                      13,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -224,42 +341,62 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Foreign language course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3,
+                      6,
+                      8,
+                      9,
+                      10,
+                      11,
+                      13,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM1700"
-                  ],
                   "text": "CRIM 1700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM1700"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3000"
-                  ],
                   "text": "CRIM 3000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CRIM3000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "INTL2718",
-                    "CRIM3600"
-                  ],
                   "text": "INTL 2718 or CRIM 3600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTL2718"
+                    ],
+                    [
+                      "CRIM3600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTL3400"
-                  ],
                   "text": "INTL 3400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTL3400"
+                    ]
+                  ]
                 }
               ]
             },
@@ -269,9 +406,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -281,9 +419,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -293,14 +432,31 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "INTL elective (Dialogue of Civilizations possible)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3,
+                      9,
+                      10,
+                      13,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Dialogue of Civilizations possible)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -315,41 +471,55 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3030"
-                  ],
                   "text": "CRIM 3030",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM3030"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM3700"
-                  ],
                   "text": "CRIM 3700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CRIM3700"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CRIM4000"
-                  ],
                   "text": "CRIM 4000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CRIM4000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      8,
+                      9,
+                      10,
+                      13,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1155"
-                  ],
                   "text": "POLS 1155",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1155"
+                    ]
+                  ]
                 }
               ]
             },
@@ -359,28 +529,62 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "INTL4700",
-                    "CRIM4949"
-                  ],
                   "text": "INTL 4700 or CRIM 4949",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTL4700"
+                    ],
+                    [
+                      "CRIM4949"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      8,
+                      9,
+                      10,
+                      13,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "CRIM elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      8,
+                      9,
+                      10,
+                      13,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "INTL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      3,
+                      9,
+                      10,
+                      13,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }

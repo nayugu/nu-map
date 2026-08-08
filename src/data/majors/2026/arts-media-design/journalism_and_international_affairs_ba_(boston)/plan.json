@@ -14,42 +14,60 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTL1101"
-                  ],
                   "text": "INTL 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTL1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "JRNL1000",
-                    "INTL1000"
-                  ],
                   "text": "JRNL 1000 or INTL 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "JRNL1000"
+                    ],
+                    [
+                      "INTL1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL1150"
-                  ],
                   "text": "JRNL 1150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL1150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -59,45 +77,67 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ANTH1101",
-                    "HIST2211",
-                    "HIST2311",
-                    "POLS1155"
-                  ],
                   "text": "ANTH 1101, HIST 2211, HIST 2311, or POLS 1155",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ANTH1101"
+                    ],
+                    [
+                      "HIST2211"
+                    ],
+                    [
+                      "HIST2311"
+                    ],
+                    [
+                      "POLS1155"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "JRNL1101",
-                    "JRNL1102"
-                  ],
                   "text": "JRNL 1101 and JRNL 1102",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "JRNL1101",
+                      "JRNL1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS1160"
-                  ],
                   "text": "POLS 1160",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS1160"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (For CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -107,14 +147,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -124,14 +176,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Dialogue of Civilizations possible)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Dialogue of Civilizations possible)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -146,38 +210,62 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ECON1115"
-                  ],
                   "text": "ECON 1115",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JRNL2201"
-                  ],
                   "text": "JRNL 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESH2000"
-                  ],
                   "text": "EESH 2000 (For CSSH students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "JRNL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      7,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -187,8 +275,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -198,8 +287,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -209,14 +299,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Dialogue of Civilizations possible)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Dialogue of Civilizations possible)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -231,34 +333,45 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTL2718"
-                  ],
                   "text": "INTL 2718",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTL2718"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INTL3400"
-                  ],
                   "text": "INTL 3400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INTL3400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "JRNL3550",
-                    "JRNL4650"
-                  ],
                   "text": "JRNL 3550 or 4650",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JRNL3550"
+                    ],
+                    [
+                      "JRNL4650"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Visual storytelling requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -268,8 +381,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -279,8 +393,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -290,14 +405,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Dialogue of Civilizations possible)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Dialogue of Civilizations possible)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -312,24 +439,60 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Integrative requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "JRNL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      7,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "JRNL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      7,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Language",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -339,24 +502,51 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "JRNL elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2,
+                      5,
+                      7,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Integrative requirement",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

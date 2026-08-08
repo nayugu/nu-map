@@ -14,33 +14,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN6110"
-                  ],
                   "text": "SUEN 6110",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "SUEN6110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN6210"
-                  ],
                   "text": "SUEN 6210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SUEN6210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN6310"
-                  ],
                   "text": "SUEN 6310",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SUEN6310"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Required)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -50,33 +59,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN6120"
-                  ],
                   "text": "SUEN 6120",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "SUEN6120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN6220"
-                  ],
                   "text": "SUEN 6220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SUEN6220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LPSC7312"
-                  ],
                   "text": "LPSC 7312",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LPSC7312"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Required)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -86,8 +104,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -97,8 +116,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -113,40 +133,50 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN7130"
-                  ],
                   "text": "SUEN 7130",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "SUEN7130"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN7320"
-                  ],
                   "text": "SUEN 7320 (or)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SUEN7320"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN6340"
-                  ],
-                  "text": "SUEN 6340"
+                  "text": "SUEN 6340",
+                  "options": [
+                    [
+                      "SUEN6340"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN7230"
-                  ],
                   "text": "SUEN 7230",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SUEN7230"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Optional)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -156,33 +186,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN7140"
-                  ],
                   "text": "SUEN 7140 (or co-op)*",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "SUEN7140"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN7320"
-                  ],
                   "text": "SUEN 7320",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SUEN7320"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SUEN7240"
-                  ],
                   "text": "SUEN 7240",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SUEN7240"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective (Optional)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

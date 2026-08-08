@@ -14,38 +14,53 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1000"
-                  ],
                   "text": "ARCH 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "ARCH1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1310"
-                  ],
                   "text": "ARCH 1310",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH1310"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -55,38 +70,54 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1110"
-                  ],
                   "text": "ARCH 1110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH1110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH1120"
-                  ],
                   "text": "ARCH 1120",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Architecture History Elective (1 of 2)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      5,
+                      6
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -96,14 +127,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -113,8 +156,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -129,34 +173,44 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH2130"
-                  ],
                   "text": "ARCH 2130",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH2130"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH2260"
-                  ],
                   "text": "ARCH 2260",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH2260"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARCH2330",
-                    "ARCH2331"
-                  ],
                   "text": "ARCH 2330 and ARCH 2331",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH2330",
+                      "ARCH2331"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Architecture History Elective (2 of 2)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      5,
+                      6
+                    ]
+                  }
                 }
               ]
             },
@@ -166,34 +220,43 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH2140"
-                  ],
                   "text": "ARCH 2140",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "ARCH2140"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ARCH2340",
-                    "ARCH2341"
-                  ],
                   "text": "ARCH 2340 and ARCH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH2340",
+                      "ARCH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3314"
-                  ],
                   "text": "ENGW 3314",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3314"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -203,8 +266,15 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
-                  "text": "Optional Summer Co-op"
+                  "text": "Optional Summer Co-op",
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      5,
+                      6
+                    ]
+                  }
                 }
               ]
             },
@@ -214,8 +284,15 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
-                  "text": "Optional Summer Co-op"
+                  "text": "Optional Summer Co-op",
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      5,
+                      6
+                    ]
+                  }
                 }
               ]
             }
@@ -230,14 +307,28 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Semester in Segovia (or Boston)",
-                  "sh": 14.4
+                  "sh": 14.4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      5,
+                      6
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Language elective",
-                  "sh": 1.6
+                  "sh": 1.6,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1,
+                      5,
+                      6
+                    ]
+                  }
                 }
               ]
             },
@@ -247,9 +338,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -259,9 +351,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -271,8 +364,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -287,24 +381,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -314,27 +432,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARCH4960"
-                  ],
                   "text": "ARCH 4960",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARCH4960"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

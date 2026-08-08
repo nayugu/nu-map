@@ -14,53 +14,61 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "INSC1000",
-                    "THTR1000"
-                  ],
                   "text": "INSC 1000 or THTR 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INSC1000"
+                    ],
+                    [
+                      "THTR1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR1101"
-                  ],
                   "text": "THTR 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR1100"
-                  ],
                   "text": "THTR 1100",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "THTR1100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR1120"
-                  ],
                   "text": "THTR 1120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR1120"
+                    ]
+                  ]
                 }
               ]
             },
@@ -70,44 +78,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1213"
-                  ],
                   "text": "MATH 1213",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1213"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3466"
-                  ],
                   "text": "PSYC 3466",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3466"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR1270"
-                  ],
                   "text": "THTR 1270",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR1270"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR1131"
-                  ],
                   "text": "THTR 1131",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR1131"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (For CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -117,17 +130,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3400"
-                  ],
                   "text": "PSYC 3400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Nupath DD",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -137,14 +159,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -159,41 +193,51 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC2320"
-                  ],
                   "text": "PSYC 2320",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC2320"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3450"
-                  ],
                   "text": "PSYC 3450",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3450"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR2000"
-                  ],
                   "text": "THTR 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "THTR2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR3325"
-                  ],
                   "text": "THTR 3325",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR3325"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "THTR Texts, Community, & Social Context Course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -203,38 +247,56 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000 (For COS students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3404"
-                  ],
                   "text": "PSYC 3404",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3404"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3464"
-                  ],
                   "text": "PSYC 3464",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3464"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "THTR Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Nupath ER",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -244,14 +306,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "PSYC elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -261,8 +335,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -277,8 +352,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -288,33 +364,43 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM2000"
-                  ],
                   "text": "INAM 2000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INAM2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM3200"
-                  ],
                   "text": "INAM 3200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INAM3200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3452"
-                  ],
                   "text": "PSYC 3452",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3452"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "THTR Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      8,
+                      10,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -324,14 +410,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "PSYC lab",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      2
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PSYC elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -341,8 +439,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -357,8 +456,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -368,27 +468,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "THTR4702"
-                  ],
                   "text": "THTR 4702",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "THTR4702"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "PSYC seminar",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Open elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

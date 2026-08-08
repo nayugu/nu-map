@@ -14,42 +14,54 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "CLTR1000",
-                    "INSC1000"
-                  ],
                   "text": "CLTR 1000 or INSC 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "CLTR1000"
+                    ],
+                    [
+                      "INSC1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CLTR1120"
-                  ],
                   "text": "CLTR 1120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "CLTR1120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LING1150"
-                  ],
                   "text": "LING 1150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LING1150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SPNS2102"
-                  ],
                   "text": "SPNS 2102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SPNS2102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -59,30 +71,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LING2350"
-                  ],
                   "text": "LING 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LING2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SPNS3101"
-                  ],
                   "text": "SPNS 3101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SPNS3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "LING elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      10,
+                      11
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -92,14 +118,28 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "SPNS elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      5,
+                      11
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SPNS elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4,
+                      5,
+                      11
+                    ]
+                  }
                 }
               ]
             },
@@ -109,14 +149,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -131,30 +183,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LING3412"
-                  ],
                   "text": "LING 3412",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LING3412"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SPNS3102"
-                  ],
                   "text": "SPNS 3102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SPNS3102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "LING structure course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SPNS culture elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -164,37 +230,61 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "EESH2000",
-                    "EESC2000"
-                  ],
                   "text": "EESH 2000 or EESC 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESH2000"
+                    ],
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "SPNS3601",
-                    "SPNS3602"
-                  ],
                   "text": "SPNS 3601 or 3602",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SPNS3601"
+                    ],
+                    [
+                      "SPNS3602"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "LING structure course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "LING elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      10,
+                      11
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -204,14 +294,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -221,12 +323,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3948"
-                  ],
                   "text": "COOP 3948",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3948"
+                    ]
+                  ]
                 }
               ]
             }
@@ -241,12 +345,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3948"
-                  ],
                   "text": "COOP 3948",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3948"
+                    ]
+                  ]
                 }
               ]
             },
@@ -256,28 +362,49 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "SPNS3601",
-                    "SPNS3602"
-                  ],
                   "text": "SPNS 3601 or 3602",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SPNS3601"
+                    ],
+                    [
+                      "SPNS3602"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "LING structure course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      7
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -287,14 +414,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -304,12 +443,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3948"
-                  ],
                   "text": "COOP 3948",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3948"
+                    ]
+                  ]
                 }
               ]
             }
@@ -324,12 +465,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3948"
-                  ],
                   "text": "COOP 3948",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3948"
+                    ]
+                  ]
                 }
               ]
             },
@@ -339,30 +482,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LING4891"
-                  ],
                   "text": "LING 4891",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LING4891"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "LING4654"
-                  ],
                   "text": "LING 4654",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "LING4654"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "SPNS culture elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath or elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

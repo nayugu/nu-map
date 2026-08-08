@@ -14,42 +14,52 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INSC1000"
-                  ],
                   "text": "INSC 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INSC1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB1101",
-                    "EEMB1102"
-                  ],
                   "text": "EEMB 1101 and EEMB 1102",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EEMB1101",
+                      "EEMB1102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1251"
-                  ],
                   "text": "MATH 1251",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1251"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -59,37 +69,46 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB1105",
-                    "EEMB1106"
-                  ],
                   "text": "EEMB 1105 and EEMB 1106",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EEMB1105",
+                      "EEMB1106"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB2700",
-                    "EEMB2701"
-                  ],
                   "text": "EEMB 2700 and EEMB 2701",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EEMB2700",
+                      "EEMB2701"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1161",
-                    "CHEM1162",
-                    "CHEM1163"
-                  ],
                   "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "CHEM1161",
+                      "CHEM1162",
+                      "CHEM1163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -99,8 +118,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
-                  "text": "Electives (if needed)"
+                  "text": "Electives (if needed)",
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -110,8 +135,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
-                  "text": "Elective (if needed)"
+                  "text": "Elective (if needed)",
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -126,43 +157,53 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB2302",
-                    "EEMB2303"
-                  ],
                   "text": "EEMB 2302 and EEMB 2303",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "EEMB2302",
+                      "EEMB2303"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB2400"
-                  ],
                   "text": "EEMB 2400",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EEMB2400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR1500",
-                    "ENVR1501"
-                  ],
                   "text": "ENVR 1500 and ENVR 1501",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR1500",
+                      "ENVR1501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -172,9 +213,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -184,9 +226,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -196,19 +239,26 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1161",
-                    "PHYS1162",
-                    "PHYS1163"
-                  ],
                   "text": "PHYS 1161 and PHYS 1162 and PHYS 1163",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1161",
+                      "PHYS1162",
+                      "PHYS1163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -223,38 +273,42 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "ENVR2500",
-                    "ENVR2501",
-                    "ENVR2502"
-                  ],
                   "text": "ENVR 2500 and ENVR 2501 and ENVR 2502",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "ENVR2500",
+                      "ENVR2501",
+                      "ENVR2502"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR3410"
-                  ],
                   "text": "ENVR 3410",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR3410"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB3460"
-                  ],
                   "text": "EEMB 3460",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EEMB3460"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3307"
-                  ],
                   "text": "ENGW 3307",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3307"
+                    ]
+                  ]
                 }
               ]
             },
@@ -264,34 +318,43 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2301",
-                    "BIOL2302"
-                  ],
                   "text": "BIOL 2301 and BIOL 2302",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2301",
+                      "BIOL2302"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR4000"
-                  ],
                   "text": "ENVR 4000",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR4000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENVR4997"
-                  ],
                   "text": "ENVR 4997",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENVR4997"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -301,8 +364,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
-                  "text": "Electives (if needed)"
+                  "text": "Electives (if needed)",
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -312,8 +381,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "placeholder",
-                  "text": "Electives (if needed)"
+                  "text": "Electives (if needed)",
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -328,52 +403,58 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB5303"
-                  ],
                   "text": "EEMB 5303",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEMB5303"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB5510"
-                  ],
                   "text": "EEMB 5510",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EEMB5510"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB5522"
-                  ],
                   "text": "EEMB 5522",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EEMB5522"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB5542"
-                  ],
                   "text": "EEMB 5542",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "EEMB5542"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB5546"
-                  ],
                   "text": "EEMB 5546",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "EEMB5546"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB5589"
-                  ],
                   "text": "EEMB 5589",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "EEMB5589"
+                    ]
+                  ]
                 }
               ]
             },
@@ -383,64 +464,71 @@
               "hours": 20,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB5504",
-                    "EEMB5505"
-                  ],
                   "text": "EEMB 5504 and EEMB 5505",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "EEMB5504",
+                      "EEMB5505"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB5506",
-                    "EEMB5507"
-                  ],
                   "text": "EEMB 5506 and EEMB 5507",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "EEMB5506",
+                      "EEMB5507"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB5508"
-                  ],
                   "text": "EEMB 5508",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "EEMB5508"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB5518",
-                    "EEMB5519"
-                  ],
                   "text": "EEMB 5518 and EEMB 5519",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "EEMB5518",
+                      "EEMB5519"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB5520"
-                  ],
                   "text": "EEMB 5520",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "EEMB5520"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEMB5538"
-                  ],
                   "text": "EEMB 5538",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "EEMB5538"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "EEMB5540",
-                    "EEMB5541"
-                  ],
                   "text": "EEMB 5540 and EEMB 5541",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "EEMB5540",
+                      "EEMB5541"
+                    ]
+                  ]
                 }
               ]
             }

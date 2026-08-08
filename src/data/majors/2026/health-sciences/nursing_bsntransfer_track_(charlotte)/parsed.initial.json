@@ -2,7 +2,7 @@
   "name": "Nursing, BSN—Transfer Track (Charlotte)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/3/2026",
+    "lastEdited": "8/7/2026",
     "branch": "main",
     "tablesPresent": 3,
     "tablesConsumed": 3,
@@ -40,7 +40,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-03",
+      "checkedAt": "2026-08-08",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/nursing/nursing-bsn-transfer-track/",
       "sourcesAvailable": [
         "requirement-tables",

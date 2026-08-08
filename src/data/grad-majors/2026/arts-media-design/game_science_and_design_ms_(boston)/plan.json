@@ -14,28 +14,31 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GSND5110"
-                  ],
                   "text": "GSND 5110",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GSND5110"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GSND5111"
-                  ],
                   "text": "GSND 5111",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GSND5111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GSND5130"
-                  ],
                   "text": "GSND 5130",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GSND5130"
+                    ]
+                  ]
                 }
               ]
             },
@@ -45,14 +48,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -62,9 +77,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op (optional)",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ],
               "fullSummer": true
@@ -80,25 +96,33 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GSND5122"
-                  ],
                   "text": "GSND 5122",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "GSND5122"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "GSND7995"
-                  ],
                   "text": "GSND 7995",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GSND7995"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -108,18 +132,27 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "GSND7990",
-                    "GSND7995"
-                  ],
                   "text": "GSND 7990 or 7995",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "GSND7990"
+                    ],
+                    [
+                      "GSND7995"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

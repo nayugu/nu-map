@@ -14,45 +14,52 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ACCT1201"
-                  ],
                   "text": "ACCT 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ACCT1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "BUSN1102",
-                    "COMM1000"
-                  ],
                   "text": "BUSN 1102 or COMM 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "BUSN1102"
+                    ],
+                    [
+                      "COMM1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "COMM1101"
-                  ],
                   "text": "COMM 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1231"
-                  ],
                   "text": "MATH 1231",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1231"
+                    ]
+                  ]
                 }
               ]
             },
@@ -62,35 +69,49 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "COMM1112",
-                    "COMM1113",
-                    "COMM2301"
-                  ],
                   "text": "COMM 1112, 1113, or 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM1112"
+                    ],
+                    [
+                      "COMM1113"
+                    ],
+                    [
+                      "COMM2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MGSC2301"
-                  ],
                   "text": "MGSC 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MGSC2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MKTG2201"
-                  ],
                   "text": "MKTG 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MKTG2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication studies foundation course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9,
+                      10,
+                      13
+                    ]
+                  }
                 }
               ]
             },
@@ -100,14 +121,34 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Communication studies elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9,
+                      13
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      13,
+                      15,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -117,14 +158,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -139,40 +192,60 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "BUSN1103",
-                    "EEAM2000"
-                  ],
                   "text": "BUSN 1103 or EEAM 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "BUSN1103"
+                    ],
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "FINA2201"
-                  ],
                   "text": "FINA 2201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "FINA2201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ECON1115",
-                    "ECON1116"
-                  ],
                   "text": "ECON 1115 or 1116",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ECON1115"
+                    ],
+                    [
+                      "ECON1116"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business core option",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      6
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication studies cluster course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9,
+                      11,
+                      13
+                    ]
+                  }
                 }
               ]
             },
@@ -182,12 +255,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -197,12 +272,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -212,14 +289,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -234,27 +323,55 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MKTG4504"
-                  ],
                   "text": "MKTG 4504",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MKTG4504"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Business core option 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3,
+                      6
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication studies writing-intensive 1",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9,
+                      12,
+                      13
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      13,
+                      15,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -264,12 +381,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -279,12 +398,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -294,14 +415,34 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Communication studies elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9,
+                      13
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "NUpath course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      13,
+                      15,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -316,24 +457,65 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Communication studies writing-intensive 2",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9,
+                      12,
+                      13
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Communication studies elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      9,
+                      13
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      13,
+                      15,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      13,
+                      15,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 }
               ]
             },
@@ -343,34 +525,64 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "COMM3409",
-                    "ENGW3304",
-                    "ENGW3314",
-                    "ENGW3315"
-                  ],
                   "text": "COMM 3409, ENGW 3304, ENGW 3314, or ENGW 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM3409"
+                    ],
+                    [
+                      "ENGW3304"
+                    ],
+                    [
+                      "ENGW3314"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "COMM4608",
-                    "STRT4501"
-                  ],
                   "text": "COMM 4608 or STRT 4501",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "COMM4608"
+                    ],
+                    [
+                      "STRT4501"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Concentration course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      8,
+                      9,
+                      10,
+                      11,
+                      12,
+                      13,
+                      15,
+                      "~concentration",
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

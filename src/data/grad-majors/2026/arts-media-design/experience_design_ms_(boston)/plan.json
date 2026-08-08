@@ -14,33 +14,36 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG5120"
-                  ],
                   "text": "ARTG 5120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG5600"
-                  ],
                   "text": "ARTG 5600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG5620"
-                  ],
                   "text": "ARTG 5620",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5620"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             },
@@ -50,33 +53,36 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG5610"
-                  ],
                   "text": "ARTG 5610",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG5610"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG6310"
-                  ],
                   "text": "ARTG 6310",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG6310"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ARTG6600"
-                  ],
                   "text": "ARTG 6600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ARTG6600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ]
             }

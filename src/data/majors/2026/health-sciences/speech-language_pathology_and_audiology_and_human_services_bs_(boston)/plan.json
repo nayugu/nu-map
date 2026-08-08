@@ -14,47 +14,56 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2217",
-                    "BIOL2218"
-                  ],
                   "text": "BIOL 2217 and BIOL 2218",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2217",
+                      "BIOL2218"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV1101"
-                  ],
                   "text": "HUSV 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "SLPA1000",
-                    "HUSV1000"
-                  ],
                   "text": "SLPA 1000 or HUSV 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "SLPA1000"
+                    ],
+                    [
+                      "HUSV1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MATH1215",
-                    "MATH1241"
-                  ],
                   "text": "MATH 1215 or 1241",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1215"
+                    ],
+                    [
+                      "MATH1241"
+                    ]
+                  ]
                 }
               ]
             },
@@ -64,37 +73,41 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2219",
-                    "BIOL2220"
-                  ],
                   "text": "BIOL 2219 and BIOL 2220",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2219",
+                      "BIOL2220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV2300"
-                  ],
                   "text": "HUSV 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1101"
-                  ],
                   "text": "SLPA 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1205"
-                  ],
                   "text": "SLPA 1205",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1205"
+                    ]
+                  ]
                 }
               ]
             },
@@ -104,8 +117,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -115,8 +129,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -131,46 +146,53 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV2355"
-                  ],
                   "text": "HUSV 2355",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV2355"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1145",
-                    "PHYS1146"
-                  ],
                   "text": "PHYS 1145 and PHYS 1146",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1145",
+                      "PHYS1146"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1103"
-                  ],
                   "text": "SLPA 1103",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1103"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1203"
-                  ],
                   "text": "SLPA 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1203"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "SLPA2000",
-                    "EESH2000"
-                  ],
                   "text": "SLPA 2000 or EESH 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "SLPA2000"
+                    ],
+                    [
+                      "EESH2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -180,12 +202,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -195,12 +219,14 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "codes": [
-                    "COOP3945"
-                  ],
                   "text": "COOP 3945",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": [
+                    [
+                      "COOP3945"
+                    ]
+                  ]
                 }
               ]
             },
@@ -210,14 +236,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -232,38 +270,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3306",
-                    "ENGW3308",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3306, 3308, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3306"
+                    ],
+                    [
+                      "ENGW3308"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV3570"
-                  ],
                   "text": "HUSV 3570",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV3570"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2210"
-                  ],
                   "text": "PHTH 2210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2300"
-                  ],
                   "text": "PHTH 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2300"
+                    ]
+                  ]
                 }
               ]
             },
@@ -273,38 +319,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "HLTH5450",
-                    "HUSV2970",
-                    "INSH3101"
-                  ],
                   "text": "HLTH 5450, HUSV 2970, or INSH 3101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HLTH5450"
+                    ],
+                    [
+                      "HUSV2970"
+                    ],
+                    [
+                      "INSH3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV2340"
-                  ],
                   "text": "HUSV 2340",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV2340"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1200"
-                  ],
                   "text": "SLPA 1200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1102"
-                  ],
                   "text": "SLPA 1102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1102"
+                    ]
+                  ]
                 }
               ]
             },
@@ -314,8 +368,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -325,14 +380,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -347,30 +414,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "HUSV elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HUSV elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA4500"
-                  ],
                   "text": "SLPA 4500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA4500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA5107"
-                  ],
                   "text": "SLPA 5107",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA5107"
+                    ]
+                  ]
                 }
               ]
             },
@@ -380,33 +465,44 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV3900"
-                  ],
                   "text": "HUSV 3900",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV3900"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HUSV elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      3,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA4651"
-                  ],
                   "text": "SLPA 4651",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA4651"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA6219"
-                  ],
                   "text": "SLPA 6219",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "SLPA6219"
+                    ]
+                  ]
                 }
               ]
             }
@@ -428,47 +524,56 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2217",
-                    "BIOL2218"
-                  ],
                   "text": "BIOL 2217 and BIOL 2218",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2217",
+                      "BIOL2218"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV1101"
-                  ],
                   "text": "HUSV 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MATH1215",
-                    "MATH1241"
-                  ],
                   "text": "MATH 1215 or 1241",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1215"
+                    ],
+                    [
+                      "MATH1241"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "SLPA1000",
-                    "HUSV1000"
-                  ],
                   "text": "SLPA 1000 or HUSV 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "SLPA1000"
+                    ],
+                    [
+                      "HUSV1000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -478,37 +583,41 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2219",
-                    "BIOL2220"
-                  ],
                   "text": "BIOL 2219 and BIOL 2220",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2219",
+                      "BIOL2220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV2300"
-                  ],
                   "text": "HUSV 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1101"
-                  ],
                   "text": "SLPA 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1205"
-                  ],
                   "text": "SLPA 1205",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1205"
+                    ]
+                  ]
                 }
               ]
             }
@@ -523,37 +632,41 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV2355"
-                  ],
                   "text": "HUSV 2355",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV2355"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "PHYS1145",
-                    "PHYS1146"
-                  ],
                   "text": "PHYS 1145 and PHYS 1146",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "PHYS1145",
+                      "PHYS1146"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1103"
-                  ],
                   "text": "SLPA 1103",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1103"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1203"
-                  ],
                   "text": "SLPA 1203",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1203"
+                    ]
+                  ]
                 }
               ]
             },
@@ -563,27 +676,47 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HUSV elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1200"
-                  ],
                   "text": "SLPA 1200",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1200"
+                    ]
+                  ]
                 }
               ]
             }
@@ -598,38 +731,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "ENGW3306",
-                    "ENGW3308",
-                    "ENGW3315"
-                  ],
                   "text": "ENGW 3306, 3308, or 3315",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3306"
+                    ],
+                    [
+                      "ENGW3308"
+                    ],
+                    [
+                      "ENGW3315"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2210"
-                  ],
                   "text": "PHTH 2210",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2210"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHTH2300"
-                  ],
                   "text": "PHTH 2300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHTH2300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV3570"
-                  ],
                   "text": "HUSV 3570",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV3570"
+                    ]
+                  ]
                 }
               ]
             },
@@ -639,35 +780,49 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "HLTH5450",
-                    "HUSV2970",
-                    "INSH3101"
-                  ],
                   "text": "HLTH 5450, HUSV 2970, or INSH 3101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HLTH5450"
+                    ],
+                    [
+                      "HUSV2970"
+                    ],
+                    [
+                      "INSH3101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HUSV elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      2,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV2340"
-                  ],
                   "text": "HUSV 2340",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV2340"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA1102"
-                  ],
                   "text": "SLPA 1102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA1102"
+                    ]
+                  ]
                 }
               ]
             }
@@ -682,33 +837,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV4994"
-                  ],
                   "text": "HUSV 4994",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "HUSV4994"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA4500"
-                  ],
                   "text": "SLPA 4500",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA4500"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA5107"
-                  ],
                   "text": "SLPA 5107",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA5107"
+                    ]
+                  ]
                 }
               ]
             },
@@ -718,33 +882,42 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "General elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HUSV3900"
-                  ],
                   "text": "HUSV 3900",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HUSV3900"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA4651"
-                  ],
                   "text": "SLPA 4651",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SLPA4651"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SLPA6219"
-                  ],
                   "text": "SLPA 6219",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "SLPA6219"
+                    ]
+                  ]
                 }
               ]
             }

@@ -14,46 +14,62 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST1000"
-                  ],
                   "text": "HIST 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HIST1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST1200"
-                  ],
                   "text": "HIST 1200",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HIST1200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST1201"
-                  ],
                   "text": "HIST 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JPNS1101"
-                  ],
                   "text": "JPNS 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JPNS1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ASNS Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ASNS Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -63,36 +79,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ASNS1150"
-                  ],
                   "text": "ASNS 1150",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ASNS1150"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST1100"
-                  ],
                   "text": "HIST 1100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST1100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST1246"
-                  ],
                   "text": "HIST 1246",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST1246"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JPNS1102"
-                  ],
                   "text": "JPNS 1102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JPNS1102"
+                    ]
+                  ]
                 }
               ]
             },
@@ -102,14 +122,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -119,14 +151,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -141,44 +185,49 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST1215"
-                  ],
                   "text": "HIST 1215",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST1215"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST2301"
-                  ],
                   "text": "HIST 2301",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST2301"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST2302"
-                  ],
                   "text": "HIST 2302",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "HIST2302"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST2308"
-                  ],
                   "text": "HIST 2308",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST2308"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JPNS2101"
-                  ],
                   "text": "JPNS 2101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JPNS2101"
+                    ]
+                  ]
                 }
               ]
             },
@@ -188,36 +237,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST1252"
-                  ],
                   "text": "HIST 1252",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST1252"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST2351"
-                  ],
                   "text": "HIST 2351",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST2351"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST2360"
-                  ],
                   "text": "HIST 2360",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST2360"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JPNS2102"
-                  ],
                   "text": "JPNS 2102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JPNS2102"
+                    ]
+                  ]
                 }
               ]
             },
@@ -227,8 +280,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -238,8 +292,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -254,33 +309,42 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST3350"
-                  ],
                   "text": "HIST 3350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST3350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "JPNS1700"
-                  ],
                   "text": "JPNS 1700",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "JPNS1700"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHIL2395"
-                  ],
                   "text": "PHIL 2395",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHIL2395"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HIST Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -290,8 +354,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
-                  "text": "Co-op"
+                  "text": "Co-op",
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -301,9 +366,15 @@
               "hours": 4,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -313,9 +384,15 @@
               "hours": 4,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -330,27 +407,46 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HIST4701"
-                  ],
                   "text": "HIST 4701",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HIST4701"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "ASNS Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HIST Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "HIST Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -360,20 +456,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ANTH4350"
-                  ],
                   "text": "ANTH 4350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ANTH4350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "POLS3487"
-                  ],
                   "text": "POLS 3487",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "POLS3487"
+                    ]
+                  ]
                 }
               ]
             }

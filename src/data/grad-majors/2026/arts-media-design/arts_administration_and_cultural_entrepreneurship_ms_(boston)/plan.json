@@ -14,20 +14,22 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6000"
-                  ],
                   "text": "AACE 6000",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6200"
-                  ],
                   "text": "AACE 6200",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6200"
+                    ]
+                  ]
                 }
               ]
             },
@@ -37,20 +39,22 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6010"
-                  ],
                   "text": "AACE 6010",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6010"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6300"
-                  ],
                   "text": "AACE 6300",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6300"
+                    ]
+                  ]
                 }
               ]
             },
@@ -60,9 +64,9 @@
               "hours": 3,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Arts Administration Directed Elective",
-                  "sh": 3
+                  "sh": 3,
+                  "options": []
                 }
               ]
             }
@@ -77,20 +81,22 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6020"
-                  ],
                   "text": "AACE 6020",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6020"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6210"
-                  ],
                   "text": "AACE 6210",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6210"
+                    ]
+                  ]
                 }
               ]
             },
@@ -100,14 +106,26 @@
               "hours": 6,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Cultural Entrepreneurship Directed Elective",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Experiential Elective 1",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -117,9 +135,15 @@
               "hours": 3,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Experiential Elective 2",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -141,28 +165,31 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6000"
-                  ],
                   "text": "AACE 6000",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6200"
-                  ],
                   "text": "AACE 6200",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6200"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6210"
-                  ],
                   "text": "AACE 6210",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6210"
+                    ]
+                  ]
                 }
               ]
             },
@@ -172,28 +199,31 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6010"
-                  ],
                   "text": "AACE 6010",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6010"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6020"
-                  ],
                   "text": "AACE 6020",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6020"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "AACE6300"
-                  ],
                   "text": "AACE 6300",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "AACE6300"
+                    ]
+                  ]
                 }
               ]
             },
@@ -203,9 +233,9 @@
               "hours": 3,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Arts Administration Directed Elective",
-                  "sh": 3
+                  "sh": 3,
+                  "options": []
                 }
               ]
             }
@@ -220,19 +250,37 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Cultural entrepreneurship directed elective",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      3
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Experiential elective 1",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Experiential elective 2",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      4
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

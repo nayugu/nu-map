@@ -14,33 +14,36 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5300"
-                  ],
                   "text": "INAM 5300",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5305"
-                  ],
                   "text": "INAM 5305",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5305"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5310"
-                  ],
                   "text": "INAM 5310",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5310"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Electives",
-                  "sh": 6
+                  "sh": 6,
+                  "options": []
                 }
               ]
             },
@@ -50,33 +53,36 @@
               "hours": 12,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5400"
-                  ],
                   "text": "INAM 5400",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5405"
-                  ],
                   "text": "INAM 5405",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5405"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5410"
-                  ],
                   "text": "INAM 5410",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5410"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Electives",
-                  "sh": 6
+                  "sh": 6,
+                  "options": []
                 }
               ]
             },
@@ -86,36 +92,40 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5415"
-                  ],
                   "text": "INAM 5415",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5415"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5507"
-                  ],
                   "text": "INAM 5507",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INAM5507"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5508"
-                  ],
                   "text": "INAM 5508",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INAM5508"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM6900"
-                  ],
                   "text": "INAM 6900",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INAM6900"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -138,33 +148,36 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5300"
-                  ],
                   "text": "INAM 5300",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5305"
-                  ],
                   "text": "INAM 5305",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5305"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5310"
-                  ],
                   "text": "INAM 5310",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5310"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": []
                 }
               ]
             },
@@ -174,33 +187,36 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5400"
-                  ],
                   "text": "INAM 5400",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5400"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5405"
-                  ],
                   "text": "INAM 5405",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5405"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5410"
-                  ],
                   "text": "INAM 5410",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5410"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 2
+                  "sh": 2,
+                  "options": []
                 }
               ]
             },
@@ -210,33 +226,36 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5415"
-                  ],
                   "text": "INAM 5415",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "INAM5415"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5507"
-                  ],
                   "text": "INAM 5507",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INAM5507"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM5508"
-                  ],
                   "text": "INAM 5508",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "INAM5508"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 }
               ],
               "fullSummer": true
@@ -252,17 +271,18 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Electives",
-                  "sh": 4
+                  "sh": 4,
+                  "options": []
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "INAM6900"
-                  ],
                   "text": "INAM 6900",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "INAM6900"
+                    ]
+                  ]
                 }
               ]
             }

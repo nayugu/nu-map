@@ -14,36 +14,40 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6300"
-                  ],
                   "text": "PHSC 6300",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC5100"
-                  ],
                   "text": "PHSC 5100",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "PHSC5100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC5102"
-                  ],
                   "text": "PHSC 5102",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "PHSC5102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PMST6254"
-                  ],
                   "text": "PMST 6254",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PMST6254"
+                    ]
+                  ]
                 }
               ]
             },
@@ -53,44 +57,49 @@
               "hours": 10,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6300"
-                  ],
                   "text": "PHSC 6300",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC5212"
-                  ],
                   "text": "PHSC 5212",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "PHSC5212"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6214"
-                  ],
                   "text": "PHSC 6214",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "PHSC6214"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PMST6250"
-                  ],
                   "text": "PMST 6250",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "PMST6250"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PMST6252"
-                  ],
                   "text": "PMST 6252",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PMST6252"
+                    ]
+                  ]
                 }
               ]
             },
@@ -100,12 +109,13 @@
               "hours": 2,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC7020"
-                  ],
                   "text": "PHSC 70201",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "PHSC7020"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -121,20 +131,22 @@
               "hours": 2,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6300"
-                  ],
                   "text": "PHSC 6300",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC8940"
-                  ],
                   "text": "PHSC 8940",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC8940"
+                    ]
+                  ]
                 }
               ]
             },
@@ -144,20 +156,22 @@
               "hours": 1,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6300"
-                  ],
                   "text": "PHSC 6300",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC8986"
-                  ],
                   "text": "PHSC 8986",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC8986"
+                    ]
+                  ]
                 }
               ]
             },
@@ -167,12 +181,13 @@
               "hours": 2,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9681"
-                  ],
                   "text": "PHSC 96812",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "PHSC9681"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -188,20 +203,22 @@
               "hours": 1,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6300"
-                  ],
                   "text": "PHSC 6300",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9990"
-                  ],
                   "text": "PHSC 9990",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC9990"
+                    ]
+                  ]
                 }
               ]
             },
@@ -211,20 +228,22 @@
               "hours": 1,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6300"
-                  ],
                   "text": "PHSC 6300",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9991"
-                  ],
                   "text": "PHSC 9991",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC9991"
+                    ]
+                  ]
                 }
               ]
             },
@@ -234,12 +253,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9996"
-                  ],
                   "text": "PHSC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC9996"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -255,20 +275,22 @@
               "hours": 2,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6810"
-                  ],
                   "text": "PHSC 68103",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6810"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC5305"
-                  ],
                   "text": "PHSC 53054",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC5305"
+                    ]
+                  ]
                 }
               ]
             },
@@ -278,20 +300,22 @@
               "hours": 2,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9996"
-                  ],
                   "text": "PHSC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC9996"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6213"
-                  ],
                   "text": "PHSC 62134",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "PHSC6213"
+                    ]
+                  ]
                 }
               ]
             },
@@ -301,12 +325,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9996"
-                  ],
                   "text": "PHSC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC9996"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -329,20 +354,22 @@
               "hours": 2,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC8940"
-                  ],
                   "text": "PHSC 8940",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC8940"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6300"
-                  ],
                   "text": "PHSC 6300",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6300"
+                    ]
+                  ]
                 }
               ]
             },
@@ -352,21 +379,23 @@
               "hours": 1,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "PHSC8986",
-                    "PHSC9681"
-                  ],
                   "text": "PHSC 8986 or 96811",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC8986",
+                      "PHSC9681"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6300"
-                  ],
                   "text": "PHSC 6300",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6300"
+                    ]
+                  ]
                 }
               ]
             },
@@ -376,12 +405,13 @@
               "hours": 2,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9681"
-                  ],
                   "text": "PHSC 96811",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "PHSC9681"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -397,20 +427,22 @@
               "hours": 1,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6300"
-                  ],
                   "text": "PHSC 6300",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9990"
-                  ],
                   "text": "PHSC 9990",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC9990"
+                    ]
+                  ]
                 }
               ]
             },
@@ -420,20 +452,22 @@
               "hours": 1,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6300"
-                  ],
                   "text": "PHSC 6300",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9991"
-                  ],
                   "text": "PHSC 9991",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC9991"
+                    ]
+                  ]
                 }
               ]
             },
@@ -443,12 +477,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9996"
-                  ],
                   "text": "PHSC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC9996"
+                    ]
+                  ]
                 }
               ],
               "fullSummer": true
@@ -464,20 +499,22 @@
               "hours": 1,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6810"
-                  ],
                   "text": "PHSC 68102",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHSC6810"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9996"
-                  ],
                   "text": "PHSC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC9996"
+                    ]
+                  ]
                 }
               ]
             },
@@ -487,20 +524,22 @@
               "hours": 2,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC9996"
-                  ],
                   "text": "PHSC 9996",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHSC9996"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHSC6213"
-                  ],
                   "text": "PHSC 6213",
-                  "sh": 2
+                  "sh": 2,
+                  "options": [
+                    [
+                      "PHSC6213"
+                    ]
+                  ]
                 }
               ]
             }

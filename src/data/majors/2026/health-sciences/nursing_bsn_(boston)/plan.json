@@ -14,66 +14,91 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "NRSG1000",
-                    "HSCI1000"
-                  ],
                   "text": "NRSG 1000 or HSCI 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "NRSG1000"
+                    ],
+                    [
+                      "HSCI1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Select ONE of the following CHEM course sequences:",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1101",
-                    "CHEM1102",
-                    "CHEM1103"
-                  ],
-                  "text": "CHEM 1101 and CHEM 1102 and CHEM 1103"
+                  "text": "CHEM 1101 and CHEM 1102 and CHEM 1103",
+                  "options": [
+                    [
+                      "CHEM1101",
+                      "CHEM1102",
+                      "CHEM1103"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1161",
-                    "CHEM1162",
-                    "CHEM1163"
-                  ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "options": [
+                    [
+                      "CHEM1161",
+                      "CHEM1162",
+                      "CHEM1163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2217",
-                    "BIOL2218"
-                  ],
                   "text": "BIOL 2217 and BIOL 2218",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2217",
+                      "BIOL2218"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MATH1215",
-                    "MATH1241",
-                    "MATH1242",
-                    "MATH1251",
-                    "MATH1252",
-                    "MATH1341"
-                  ],
                   "text": "MATH 1215, 1241, 1242, 1251, 1252, or 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1215"
+                    ],
+                    [
+                      "MATH1241"
+                    ],
+                    [
+                      "MATH1242"
+                    ],
+                    [
+                      "MATH1251"
+                    ],
+                    [
+                      "MATH1252"
+                    ],
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HSCI1105"
-                  ],
                   "text": "HSCI 1105",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HSCI1105"
+                    ]
+                  ]
                 }
               ]
             },
@@ -83,38 +108,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101 (ND) (SI)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2219",
-                    "BIOL2220"
-                  ],
                   "text": "BIOL 2219 and BIOL 2220",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2219",
+                      "BIOL2220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2221",
-                    "BIOL2222"
-                  ],
                   "text": "BIOL 2221 and BIOL 2222",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2221",
+                      "BIOL2222"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -124,14 +153,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -141,8 +182,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -157,37 +199,41 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG2215"
-                  ],
                   "text": "NRSG 2215",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "NRSG2215"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG2222",
-                    "NRSG2221"
-                  ],
                   "text": "NRSG 2222 and NRSG 2221",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "NRSG2222",
+                      "NRSG2221"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG2350"
-                  ],
                   "text": "NRSG 2350",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "NRSG2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3404"
-                  ],
                   "text": "PSYC 3404",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3404"
+                    ]
+                  ]
                 }
               ]
             },
@@ -197,38 +243,42 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG2000"
-                  ],
                   "text": "NRSG 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "NRSG2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG3320",
-                    "NRSG3321"
-                  ],
                   "text": "NRSG 3320 and NRSG 3321",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "NRSG3320",
+                      "NRSG3321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG3333",
-                    "NRSG3334"
-                  ],
                   "text": "NRSG 3333 and NRSG 3334",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NRSG3333",
+                      "NRSG3334"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SOCL1101"
-                  ],
                   "text": "SOCL 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL1101"
+                    ]
+                  ]
                 }
               ]
             },
@@ -238,21 +288,23 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HLTH2100"
-                  ],
                   "text": "HLTH 2100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HLTH2100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG3400",
-                    "NRSG3401"
-                  ],
                   "text": "NRSG 3400 and NRSG 3401",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "NRSG3400",
+                      "NRSG3401"
+                    ]
+                  ]
                 }
               ]
             },
@@ -262,9 +314,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -279,9 +332,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -291,39 +345,43 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG3120"
-                  ],
                   "text": "NRSG 3120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NRSG3120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG3344",
-                    "NRSG3345"
-                  ],
                   "text": "NRSG 3344 and NRSG 3345",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "NRSG3344",
+                      "NRSG3345"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG3420",
-                    "NRSG3421"
-                  ],
                   "text": "NRSG 3420 and NRSG 3421",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "NRSG3420",
+                      "NRSG3421"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG4504",
-                    "NRSG4505"
-                  ],
                   "text": "NRSG 4504 and NRSG 4505",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "NRSG4504",
+                      "NRSG4505"
+                    ]
+                  ]
                 }
               ]
             },
@@ -333,17 +391,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3306"
-                  ],
                   "text": "ENGW 3306",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3306"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -353,9 +418,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             }
@@ -370,9 +436,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -382,38 +449,42 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG4604",
-                    "NRSG4605"
-                  ],
                   "text": "NRSG 4604 and NRSG 4605 (IC), (EX)",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "NRSG4604",
+                      "NRSG4605"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG4610"
-                  ],
                   "text": "NRSG 4610 (CE)(WI)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NRSG4610"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG4889",
-                    "NRSG4996"
-                  ],
                   "text": "NRSG 4889 and NRSG 4996",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "NRSG4889",
+                      "NRSG4996"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG5220"
-                  ],
                   "text": "NRSG 5220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NRSG5220"
+                    ]
+                  ]
                 }
               ]
             }
@@ -435,66 +506,91 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "NRSG1000",
-                    "HSCI1000"
-                  ],
                   "text": "NRSG 1000 or HSCI 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "NRSG1000"
+                    ],
+                    [
+                      "HSCI1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2217",
-                    "BIOL2218"
-                  ],
                   "text": "BIOL 2217 and BIOL 2218",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2217",
+                      "BIOL2218"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Select ONE of the following CHEM course sequences:",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0,
+                      1,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1101",
-                    "CHEM1102",
-                    "CHEM1103"
-                  ],
-                  "text": "CHEM 1101 and CHEM 1102 and CHEM 1103"
+                  "text": "CHEM 1101 and CHEM 1102 and CHEM 1103",
+                  "options": [
+                    [
+                      "CHEM1101",
+                      "CHEM1102",
+                      "CHEM1103"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "CHEM1161",
-                    "CHEM1162",
-                    "CHEM1163"
-                  ],
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163"
+                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
+                  "options": [
+                    [
+                      "CHEM1161",
+                      "CHEM1162",
+                      "CHEM1163"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HSCI1105"
-                  ],
                   "text": "HSCI 1105",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HSCI1105"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MATH1215",
-                    "MATH1241",
-                    "MATH1242",
-                    "MATH1251",
-                    "MATH1252",
-                    "MATH1341"
-                  ],
                   "text": "MATH 1215, 1241, 1242, 1251, 1252, or 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1215"
+                    ],
+                    [
+                      "MATH1241"
+                    ],
+                    [
+                      "MATH1242"
+                    ],
+                    [
+                      "MATH1251"
+                    ],
+                    [
+                      "MATH1252"
+                    ],
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 }
               ]
             },
@@ -504,38 +600,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC1101"
-                  ],
                   "text": "PSYC 1101 (ND) (SI)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC1101"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2219",
-                    "BIOL2220"
-                  ],
                   "text": "BIOL 2219 and BIOL 2220",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2219",
+                      "BIOL2220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "BIOL2221",
-                    "BIOL2222"
-                  ],
                   "text": "BIOL 2221 and BIOL 2222",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "BIOL2221",
+                      "BIOL2222"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 }
               ]
             },
@@ -545,14 +645,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -562,8 +674,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -578,45 +691,50 @@
               "hours": 19,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG2000"
-                  ],
                   "text": "NRSG 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "NRSG2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG2222",
-                    "NRSG2221"
-                  ],
                   "text": "NRSG 2222 and NRSG 2221",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "NRSG2222",
+                      "NRSG2221"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG2215"
-                  ],
                   "text": "NRSG 2215",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "NRSG2215"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG2350"
-                  ],
                   "text": "NRSG 2350",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "NRSG2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PSYC3404"
-                  ],
                   "text": "PSYC 3404",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PSYC3404"
+                    ]
+                  ]
                 }
               ]
             },
@@ -626,9 +744,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -638,9 +757,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -650,21 +770,23 @@
               "hours": 9,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG3400",
-                    "NRSG3401"
-                  ],
                   "text": "NRSG 3400 and NRSG 3401",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "NRSG3400",
+                      "NRSG3401"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "SOCL1101"
-                  ],
                   "text": "SOCL 1101",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "SOCL1101"
+                    ]
+                  ]
                 }
               ]
             }
@@ -679,38 +801,42 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "HLTH2100"
-                  ],
                   "text": "HLTH 2100",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "HLTH2100"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG3120"
-                  ],
                   "text": "NRSG 3120",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NRSG3120"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG3320",
-                    "NRSG3321"
-                  ],
                   "text": "NRSG 3320 and NRSG 3321",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "NRSG3320",
+                      "NRSG3321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG3333",
-                    "NRSG3334"
-                  ],
                   "text": "NRSG 3333 and NRSG 3334",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NRSG3333",
+                      "NRSG3334"
+                    ]
+                  ]
                 }
               ]
             },
@@ -720,9 +846,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -732,9 +859,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -744,17 +872,24 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3306"
-                  ],
                   "text": "ENGW 3306",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3306"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -769,39 +904,43 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG3344",
-                    "NRSG3345"
-                  ],
                   "text": "NRSG 3344 and NRSG 3345",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "NRSG3344",
+                      "NRSG3345"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG3320",
-                    "NRSG3321"
-                  ],
                   "text": "NRSG 3320 and NRSG 3321",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "NRSG3320",
+                      "NRSG3321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG4504",
-                    "NRSG4505"
-                  ],
                   "text": "NRSG 4504 and NRSG 4505",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "NRSG4504",
+                      "NRSG4505"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG5220"
-                  ],
                   "text": "NRSG 5220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NRSG5220"
+                    ]
+                  ]
                 }
               ]
             },
@@ -811,30 +950,33 @@
               "hours": 15,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "NRSG4610"
-                  ],
                   "text": "NRSG 4610 (CE) (WI)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "NRSG4610"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG4604",
-                    "NRSG4605"
-                  ],
                   "text": "NRSG 4604 and NRSG 4605",
-                  "sh": 5
+                  "sh": 5,
+                  "options": [
+                    [
+                      "NRSG4604",
+                      "NRSG4605"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "NRSG4889",
-                    "NRSG4996"
-                  ],
                   "text": "NRSG 4889 and NRSG 4996",
-                  "sh": 6
+                  "sh": 6,
+                  "options": [
+                    [
+                      "NRSG4889",
+                      "NRSG4996"
+                    ]
+                  ]
                 }
               ]
             }

@@ -14,72 +14,87 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Select one of the following:",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      8,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1001"
-                  ],
-                  "text": "MUSC 1001"
+                  "text": "MUSC 1001",
+                  "options": [
+                    [
+                      "MUSC1001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "MUSC1002",
-                    "MUSC1003"
-                  ],
-                  "text": "MUSC 1002 and MUSC 1003"
+                  "text": "MUSC 1002 and MUSC 1003",
+                  "options": [
+                    [
+                      "MUSC1002",
+                      "MUSC1003"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1000"
-                  ],
                   "text": "PHYS 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1161"
-                  ],
                   "text": "PHYS 1161",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS1161"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1162"
-                  ],
                   "text": "PHYS 1162",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1162"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1163"
-                  ],
                   "text": "PHYS 1163",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHYS1163"
+                    ]
+                  ]
                 }
               ]
             },
@@ -89,60 +104,67 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST1220"
-                  ],
                   "text": "MUST 1220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1165"
-                  ],
                   "text": "PHYS 1165",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS1165"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1166"
-                  ],
                   "text": "PHYS 1166",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1166"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1167"
-                  ],
                   "text": "PHYS 1167",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHYS1167"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1119"
-                  ],
                   "text": "MUSC 1119",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1119"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (For CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -152,8 +174,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -163,8 +186,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -179,41 +203,51 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1201"
-                  ],
                   "text": "MUSC 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS2303"
-                  ],
                   "text": "PHYS 2303",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS2303"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000 (For COS students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -223,36 +257,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1202"
-                  ],
                   "text": "MUSC 1202",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1202"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC2350"
-                  ],
                   "text": "MUSC 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS3602"
-                  ],
                   "text": "PHYS 3602",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS3602"
+                    ]
+                  ]
                 }
               ]
             },
@@ -262,8 +300,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -273,8 +312,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation on ODD years. See offering schedule for EVEN years."
+                  "text": "Vacation on ODD years. See offering schedule for EVEN years.",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -289,54 +329,64 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MUSC3541",
-                    "MUSC2111",
-                    "MUSC3300"
-                  ],
                   "text": "MUSC 3541, 2111, or 3300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC3541"
+                    ],
+                    [
+                      "MUSC2111"
+                    ],
+                    [
+                      "MUSC3300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST2102"
-                  ],
                   "text": "MUST 2102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST2102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST2431"
-                  ],
                   "text": "MUST 2431",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST2431"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS2371"
-                  ],
                   "text": "PHYS 2371",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PHYS2371"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS2372"
-                  ],
                   "text": "PHYS 2372",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS2372"
+                    ]
+                  ]
                 }
               ]
             },
@@ -346,9 +396,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -358,9 +409,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -370,20 +422,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS3600"
-                  ],
                   "text": "PHYS 3600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS3600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS4305"
-                  ],
                   "text": "PHYS 4305",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS4305"
+                    ]
+                  ]
                 }
               ]
             }
@@ -398,35 +452,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MUSC3541",
-                    "MUSC2111",
-                    "MUSC3300"
-                  ],
                   "text": "MUSC 3541, 2111, or 3300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC3541"
+                    ],
+                    [
+                      "MUSC2111"
+                    ],
+                    [
+                      "MUSC3300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST3973"
-                  ],
                   "text": "MUST 3973",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST3973"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS4115"
-                  ],
                   "text": "PHYS 4115",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS4115"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Music elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      8
+                    ]
+                  }
                 }
               ]
             },
@@ -436,9 +503,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -448,9 +516,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -460,8 +529,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -476,30 +546,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3307"
-                  ],
                   "text": "ENGW 3307",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3307"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST4610"
-                  ],
                   "text": "MUST 4610",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST4610"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -509,20 +593,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST4611"
-                  ],
                   "text": "MUST 4611",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST4611"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS5318"
-                  ],
                   "text": "PHYS 5318",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS5318"
+                    ]
+                  ]
                 }
               ]
             }
@@ -544,72 +630,87 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW1111"
-                  ],
                   "text": "ENGW 1111",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW1111"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1341"
-                  ],
                   "text": "MATH 1341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Select one of the following:",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      8,
+                      "~general"
+                    ]
+                  }
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1001"
-                  ],
-                  "text": "MUSC 1001"
+                  "text": "MUSC 1001",
+                  "options": [
+                    [
+                      "MUSC1001"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "courses",
-                  "codes": [
-                    "MUSC1002",
-                    "MUSC1003"
-                  ],
-                  "text": "MUSC 1002 and MUSC 1003"
+                  "text": "MUSC 1002 and MUSC 1003",
+                  "options": [
+                    [
+                      "MUSC1002",
+                      "MUSC1003"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1000"
-                  ],
                   "text": "PHYS 1000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1161"
-                  ],
                   "text": "PHYS 1161",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS1161"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1162"
-                  ],
                   "text": "PHYS 1162",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1162"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1163"
-                  ],
                   "text": "PHYS 1163",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHYS1163"
+                    ]
+                  ]
                 }
               ]
             },
@@ -619,60 +720,67 @@
               "hours": 18,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH1342"
-                  ],
                   "text": "MATH 1342",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH1342"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST1220"
-                  ],
                   "text": "MUST 1220",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST1220"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1165"
-                  ],
                   "text": "PHYS 1165",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS1165"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1166"
-                  ],
                   "text": "PHYS 1166",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS1166"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS1167"
-                  ],
                   "text": "PHYS 1167",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "PHYS1167"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1119"
-                  ],
                   "text": "MUSC 1119",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1119"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EEAM2000"
-                  ],
                   "text": "EEAM 2000 (For CAMD students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EEAM2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -682,8 +790,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -693,8 +802,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             }
@@ -709,52 +819,58 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2321"
-                  ],
                   "text": "MATH 2321",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2321"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1201"
-                  ],
                   "text": "MUSC 1201",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1201"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS2303"
-                  ],
                   "text": "PHYS 2303",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS2303"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS2371"
-                  ],
                   "text": "PHYS 2371",
-                  "sh": 3
+                  "sh": 3,
+                  "options": [
+                    [
+                      "PHYS2371"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS2372"
-                  ],
                   "text": "PHYS 23723",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "PHYS2372"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000 (For COS students)",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 }
               ]
             },
@@ -764,36 +880,40 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MATH2341"
-                  ],
                   "text": "MATH 2341",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MATH2341"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC1202"
-                  ],
                   "text": "MUSC 1202",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC1202"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUSC2350"
-                  ],
                   "text": "MUSC 2350",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC2350"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS3602"
-                  ],
                   "text": "PHYS 3602",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS3602"
+                    ]
+                  ]
                 }
               ]
             },
@@ -803,8 +923,9 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "vacation",
-                  "text": "Vacation"
+                  "text": "Vacation",
+                  "vacation": true,
+                  "options": []
                 }
               ]
             },
@@ -814,17 +935,25 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS3600"
-                  ],
                   "text": "PHYS 3600",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS3600"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective in ODD years, PHYS 4305 in EVEN years",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      8,
+                      "~general"
+                    ]
+                  }
                 }
               ]
             }
@@ -839,46 +968,55 @@
               "hours": 17,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "EESC2000"
-                  ],
                   "text": "EESC 2000",
-                  "sh": 1
+                  "sh": 1,
+                  "options": [
+                    [
+                      "EESC2000"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MUSC3541",
-                    "MUSC2111",
-                    "MUSC3300"
-                  ],
                   "text": "MUSC 3541, 2111, or 3300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC3541"
+                    ],
+                    [
+                      "MUSC2111"
+                    ],
+                    [
+                      "MUSC3300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST2102"
-                  ],
                   "text": "MUST 2102",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST2102"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST2431"
-                  ],
                   "text": "MUST 2431",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST2431"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS4115"
-                  ],
                   "text": "PHYS 4115",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS4115"
+                    ]
+                  ]
                 }
               ]
             },
@@ -888,9 +1026,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -900,9 +1039,10 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "coop",
                   "text": "Co-op",
-                  "sh": 0
+                  "sh": 0,
+                  "coop": true,
+                  "options": []
                 }
               ]
             },
@@ -912,20 +1052,22 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "ENGW3307"
-                  ],
                   "text": "ENGW 3307",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "ENGW3307"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS4305"
-                  ],
                   "text": "PHYS 4305 (in EVEN years, elective in ODD years)",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS4305"
+                    ]
+                  ]
                 }
               ]
             }
@@ -940,35 +1082,48 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "choice",
-                  "codes": [
-                    "MUSC3541",
-                    "MUSC2111",
-                    "MUSC3300"
-                  ],
                   "text": "MUSC 3541, 2111, or 3300",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUSC3541"
+                    ],
+                    [
+                      "MUSC2111"
+                    ],
+                    [
+                      "MUSC3300"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST3973"
-                  ],
                   "text": "MUST 3973",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST3973"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST4610"
-                  ],
                   "text": "MUST 4610",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST4610"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Music elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      6,
+                      8
+                    ]
+                  }
                 }
               ]
             },
@@ -978,30 +1133,44 @@
               "hours": 16,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "MUST4611"
-                  ],
                   "text": "MUST 4611",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "MUST4611"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "course",
-                  "codes": [
-                    "PHYS5318"
-                  ],
                   "text": "PHYS 5318",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [
+                    [
+                      "PHYS5318"
+                    ]
+                  ]
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Elective",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      "~general"
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }

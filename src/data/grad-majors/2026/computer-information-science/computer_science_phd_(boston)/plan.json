@@ -14,14 +14,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Area course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Readings",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -31,14 +43,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Area course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Readings",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -53,14 +77,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Area course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Readings",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -70,14 +106,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Area course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Readings",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -92,14 +140,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Area course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Readings",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             },
@@ -109,14 +169,26 @@
               "hours": 8,
               "entries": [
                 {
-                  "kind": "placeholder",
                   "text": "Area course",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      0
+                    ],
+                    "forced": true
+                  }
                 },
                 {
-                  "kind": "placeholder",
                   "text": "Readings",
-                  "sh": 4
+                  "sh": 4,
+                  "options": [],
+                  "binding": {
+                    "targets": [
+                      1
+                    ],
+                    "forced": true
+                  }
                 }
               ]
             }
@@ -131,12 +203,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS9990"
-                  ],
                   "text": "CS 9990",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "CS9990"
+                    ]
+                  ]
                 }
               ]
             },
@@ -146,12 +219,13 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS9991"
-                  ],
                   "text": "CS 9991",
-                  "sh": 0
+                  "sh": 0,
+                  "options": [
+                    [
+                      "CS9991"
+                    ]
+                  ]
                 }
               ]
             }
@@ -166,11 +240,12 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS9996"
-                  ],
-                  "text": "CS 9996"
+                  "text": "CS 9996",
+                  "options": [
+                    [
+                      "CS9996"
+                    ]
+                  ]
                 }
               ]
             },
@@ -180,11 +255,12 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS9996"
-                  ],
-                  "text": "CS 9996"
+                  "text": "CS 9996",
+                  "options": [
+                    [
+                      "CS9996"
+                    ]
+                  ]
                 }
               ]
             }
@@ -199,11 +275,12 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS9996"
-                  ],
-                  "text": "CS 9996"
+                  "text": "CS 9996",
+                  "options": [
+                    [
+                      "CS9996"
+                    ]
+                  ]
                 }
               ]
             },
@@ -213,11 +290,12 @@
               "hours": 0,
               "entries": [
                 {
-                  "kind": "course",
-                  "codes": [
-                    "CS9996"
-                  ],
-                  "text": "CS 9996"
+                  "text": "CS 9996",
+                  "options": [
+                    [
+                      "CS9996"
+                    ]
+                  ]
                 }
               ]
             }
