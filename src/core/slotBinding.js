@@ -311,6 +311,19 @@ function typicalSH(spec, courseMap, fallback) {
 
 const NO_HINTS = {};
 
+/**
+ * The evidence ladder, weakest first — the order narrowings are given back in
+ * when a requirement turns out to be over-claimed.
+ *
+ * `stated` and `range` are at the top because neither is inference: the
+ * catalog printed the course codes, or printed the rule. Giving those up would
+ * be discarding what the source said in favour of what we deduced, so nothing
+ * above `subject` is ever relaxed.
+ */
+const RUNG_STRENGTH = {
+  title: 0, subject: 1, free: 1, elimination: 2, range: 3, stated: 3,
+};
+
 // ═══════════════════════════════════════════════════════════════════
 // BINDING
 // ═══════════════════════════════════════════════════════════════════
@@ -354,6 +367,8 @@ export function bindSlots(slots, obligations, {
   const byKey = new Map(obligations.map(o => [o.key, o]));
   const domain = new Map();   // slot id → obligation keys
   const basis  = new Map();
+  const rungs  = new Map();   // slot id → successive domains, widest first
+  const stated = new Map();   // slot id → a rule the cell printed for itself
 
   for (const slot of open) {
     const label = slot.label ?? "";
@@ -363,6 +378,10 @@ export function bindSlots(slots, obligations, {
     // belongs.
     let d = obligations.map(o => o.key);
     let why = "elimination";
+    // Each rung of the ladder is kept, so a narrowing that turns out to
+    // over-claim can be stepped back one rung instead of all the way — see
+    // relieve().
+    const ladder = [d];
 
     if (slot.constraint === "exact") {
       // Whichever of the printed codes the student ends up taking, it answers
@@ -380,11 +399,17 @@ export function bindSlots(slots, obligations, {
     // so it is dropped for that slot and the slot stays ambiguous rather than
     // being bound somewhere the arithmetic says it cannot go.
     const narrow = (next, reason) => {
-      if (next.length && next.length < d.length) { d = next; why = reason; }
+      if (next.length && next.length < d.length) { d = next; why = reason; ladder.push(d); }
     };
 
     const range = hints.rangeOf?.(label);
     if (range) {
+      // Kept on the binding, not just used to narrow. A cell that prints its
+      // own rule can answer "what fits here" by itself, and must keep doing so
+      // even when the requirement it was matched to is the wrong one — which
+      // happens wherever a program's requirement parse is missing the section
+      // the cell was really for.
+      stated.set(slot.id, range);
       narrow(d.filter(k => specAdmitsRange(byKey.get(k)?.spec, range)), "range");
     } else if (hints.isFreeElective?.(label)) {
       narrow(d.filter(k => k === GENERAL_ELECTIVE_KEY), "free");
@@ -405,8 +430,10 @@ export function bindSlots(slots, obligations, {
     // only the open bucket, is bound to nothing informative.
     domain.set(slot.id, d);
     basis.set(slot.id, why);
+    rungs.set(slot.id, ladder);
   }
 
+  relieve(open, domain, basis, rungs, byKey, defaultUnitSH);
   saturate(open, domain, byKey, defaultUnitSH);
 
   const out = {};
@@ -416,9 +443,81 @@ export function bindSlots(slots, obligations, {
     // `basis` records the last thing that narrowed this slot's domain, so a
     // slot nothing narrowed reads "elimination" — which is the honest account
     // of a binding that exists only because everything else was ruled out.
-    out[slot.id] = { obligations: d, basis: basis.get(slot.id) };
+    out[slot.id] = {
+      obligations: d,
+      basis: basis.get(slot.id),
+      ...(stated.has(slot.id) ? { stated: stated.get(slot.id) } : {}),
+    };
   }
   return out;
+}
+
+/**
+ * Undo narrowings that claim more of a requirement than it has room for.
+ *
+ * Saturation is only half of capacity. It removes a requirement from OTHER
+ * slots' domains once it is full, but a slot already narrowed to a singleton
+ * is immune — so three slots can each sit confidently on one 4 SH Capstone and
+ * nothing objects. Mathematics and Philosophy does exactly this.
+ *
+ * The measurement that makes this worth fixing also corrected the diagnosis.
+ * Over-subscription was expected to mark programs with thin requirement data;
+ * it marks the opposite. Programs where it happens have slot credit and
+ * requirement demand almost equal (1.09×) while the untroubled ones carry 2.5×
+ * more slots than requirements, with the same number of sections either way.
+ * Slack is what hides the problem — everything spare drains into the general
+ * bucket and never contends. So this fires precisely on the BEST-specified
+ * programs, and getting it wrong there is getting it wrong where it counts.
+ *
+ * The remedy is the evidence ladder run backwards. A requirement claimed
+ * beyond its capacity means the narrowing that put those slots there was too
+ * strong, so every slot involved steps back one rung — to what it believed
+ * before its weakest evidence was applied — and the check runs again. Stepping
+ * ALL of them back rather than choosing among them is what keeps the result
+ * independent of order: picking a victim would need a reason, and any reason
+ * would be the wording we already refuse to let decide.
+ */
+function relieve(slots, domain, basis, rungs, byKey, defaultUnitSH) {
+  // Bounded by the total number of rungs, and every pass either steps
+  // something back or stops.
+  for (let pass = 0; pass < 8; pass++) {
+    let stepped = false;
+    for (const [key, ob] of byKey) {
+      const claimants = slots.filter(s => {
+        const d = domain.get(s.id);
+        return d.length === 1 && d[0] === key;
+      });
+      const load = claimants.reduce((n, s) => n + (s.sh ?? defaultUnitSH), 0);
+      if (load <= ob.shortfallSH) continue;
+
+      // Give up the WEAKEST evidence present and no more. Stepping every
+      // claimant back at once costs more than it should: where a requirement
+      // is contested by one slot that names it and two that merely overlap it
+      // numerically, all three lose and the one that was right is punished
+      // alongside the two that were not.
+      //
+      // The tier is a property of the slot's own evidence, not of the order it
+      // was visited in, so choosing this way stays order-independent — unlike
+      // picking a victim, which would need a reason, and the only reason
+      // available is the wording this module refuses to let decide.
+      const weakest = claimants.reduce(
+        (w, s) => Math.min(w, RUNG_STRENGTH[basis.get(s.id)] ?? 99), 99);
+      // Nothing relaxable left: an over-subscribed requirement is still a
+      // better answer than none, so it stands and the diagnostic survives.
+      if (weakest >= RUNG_STRENGTH.stated) continue;
+
+      for (const s of claimants) {
+        if ((RUNG_STRENGTH[basis.get(s.id)] ?? 99) !== weakest) continue;
+        const ladder = rungs.get(s.id);
+        if (!ladder || ladder.length < 2) continue;
+        ladder.pop();
+        domain.set(s.id, ladder[ladder.length - 1]);
+        if (ladder.length === 1) basis.set(s.id, "elimination");
+        stepped = true;
+      }
+    }
+    if (!stepped) return;
+  }
 }
 
 /**
@@ -516,7 +615,15 @@ export function specAdmitsRange(spec, { subject, start, end }) {
  * @returns {EligibleSpec|null} null when the slot is bound to nothing
  */
 export function suggestedSpec(binding, obligations) {
-  if (!binding?.obligations?.length) return null;
+  if (!binding) return null;
+  // A rule the catalog printed for this cell outranks the requirement we
+  // matched it to, because the first is a fact and the second is a deduction.
+  if (binding.stated) {
+    const out = emptySpec();
+    out.ranges.push({ ...binding.stated, exceptions: new Set() });
+    return out;
+  }
+  if (!binding.obligations?.length) return null;
   const byKey = new Map(obligations.map(o => [o.key, o]));
   const out = emptySpec();
   let any = false;

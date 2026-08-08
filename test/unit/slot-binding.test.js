@@ -261,6 +261,42 @@ test("suggestions · a general elective suggests nothing, which is not the same 
   assert.equal(isSuggested(courseMap.MATH3175, ge, obs), false, "but it recommends nothing in particular");
 });
 
+test("capacity · a requirement claimed beyond its size gives back the weakest evidence", () => {
+  // One 4 SH Capstone, contested by a slot that names it and one whose stated
+  // range merely overlaps it. The named one is the weaker evidence, so it is
+  // what steps back — and the printed rule is never given up.
+  const program = {
+    totalCreditsRequired: 8,
+    requirementSections: [
+      SECTION("Capstone", [OR(COURSE("MATH", 4025), COURSE("PHIL", 1145))], 1),
+      SECTION("Khoury Approved Electives", [XOM(4, RANGE("CS", 2500, 9999))], 1),
+    ],
+  };
+  const named = slot("Capstone in PHIL or MATH");
+  const ranged = slot("Course in the following range: MATH 3001 to MATH 4999");
+  const obs = obligationsOf(program, { placedSet: new Set(), courseMap });
+  const bound = bindSlots(asMap([named, ranged]), obs, { courseMap, hints });
+
+  assert.equal(bound[ranged.id].basis, "range", "a rule the catalog printed is not relaxable");
+  assert.notEqual(bound[named.id].basis, "title", "the weaker claim is the one given back");
+});
+
+test("suggestions · a cell that prints its own rule suggests from that rule", () => {
+  // Even when it was matched to the wrong requirement — which happens wherever
+  // a program's requirement parse is missing the section the cell was for.
+  const program = {
+    totalCreditsRequired: 4,
+    requirementSections: [SECTION("Capstone", [OR(COURSE("MATH", 4025))], 1)],
+  };
+  const ranged = slot("Course in the following range: MATH 3001 to MATH 4999");
+  const obs = obligationsOf(program, { placedSet: new Set(), courseMap });
+  const bound = bindSlots(asMap([ranged]), obs, { courseMap, hints });
+
+  const spec = suggestedSpec(bound[ranged.id], obs);
+  assert.ok(courseEligible(courseMap.MATH3175, spec), "inside the printed range");
+  assert.ok(!courseEligible(courseMap.PHIL1145, spec), "not the matched requirement's list");
+});
+
 // ── Hint readers ───────────────────────────────────────────────────
 
 test("hints · reads subject, free-elective and self-stated range wording", () => {
