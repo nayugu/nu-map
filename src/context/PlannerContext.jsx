@@ -1350,6 +1350,16 @@ export function PlannerProvider({ children }) {
       if (e.key === "Delete" || e.key === "Backspace") {
         const selId = selectedIdRef.current;
         const pl    = stateRef.current.placements;
+        // A slot deletes with the same key as a course, because to the student
+        // it is the same act — but it lives in `slots`, not `placements`.
+        if (selId && isSlotId(selId)) {
+          if (stateRef.current.slots?.[selId]) {
+            pushUndo();
+            setSlots(prev => removeSlotIn(prev, selId));
+            setSelectedId(null);
+          }
+          return;
+        }
         if (selId && pl[selId]) {
           pushUndo();
           const fromSem = pl[selId];
@@ -2075,6 +2085,61 @@ export function PlannerProvider({ children }) {
     if (!dragInfo || dragInfo.type !== "course" || dragInfo.id === targetId) return;
     pushUndo();
     const dragId  = dragInfo.id;
+
+    // ── Slots on either end of the gesture ──────────────────────────
+    // A slot reaches this handler as an ordinary card drag, so the gesture is
+    // identical for the student. What it MEANS differs at the two ends, and
+    // both are wrong if left to the course path below: a slot's position lives
+    // in `slots`, so moving it through setPlacements would write a slot id
+    // into real placements — the pollution the derived-view design exists to
+    // prevent — and a slot target is invisible to getOrderedCourses over the
+    // raw maps, so the reorder would silently do nothing.
+    if (isSlotId(dragId)) {
+      const fromSemId = slots[dragId]?.semId;
+      if (fromSemId === targetSemId) {
+        // Same term: pure reorder, computed over the GRID view so slots and
+        // courses share one ordering rather than two interleaved lists.
+        setSemOrders(prev => {
+          const cur = getOrderedCourses(targetSemId, gridPlacements, prev, gridCourseMap);
+          const fi = cur.indexOf(dragId), ti = cur.indexOf(targetId);
+          if (fi < 0 || ti < 0) return prev;
+          const next = [...cur]; next.splice(fi, 1); next.splice(ti, 0, dragId);
+          return { ...prev, [targetSemId]: next };
+        });
+      } else {
+        setSlots(prev => moveSlotIn(prev, dragId, targetSemId));
+      }
+      setDragInfo(null);
+      return;
+    }
+
+    // Dropping a COURSE onto a slot answers the reservation — the second fill
+    // gesture, for when the student already knows what they want and does not
+    // need the picker.
+    if (isSlotId(targetId)) {
+      const slot = slots[targetId];
+      // An `exact` slot names its courses, so something else is not that
+      // requirement. The course is still placed — the planner does not block
+      // you — but the reservation stays open rather than being marked answered
+      // by a course that does not answer it.
+      const answers = canFill(slot, dragId, substitutions);
+      setPlacements(p => ({ ...p, [dragId]: targetSemId }));
+      if (answers) setSlots(prev => fillSlotIn(prev, targetId, dragId));
+      // The course takes the slot's place in the order, so the term does not
+      // reshuffle under the student at the moment they filled something in.
+      setSemOrders(prev => {
+        const cur = getOrderedCourses(targetSemId, gridPlacements, prev, gridCourseMap);
+        const ti = cur.indexOf(targetId);
+        if (ti < 0) return prev;
+        const next = cur.filter(cid => cid !== dragId);
+        const at = next.indexOf(targetId);
+        next.splice(answers ? at : at + 1, answers ? 1 : 0, dragId);
+        return { ...prev, [targetSemId]: next };
+      });
+      setDragInfo(null);
+      return;
+    }
+
     const fromSem = placements[dragId];
     const targetSemType = SEMESTERS.find(s => s.id === targetSemId)?.type;
 
