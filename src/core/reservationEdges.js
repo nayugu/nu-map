@@ -37,6 +37,8 @@
 // of the corpus and are exactly the ones a student can see a connection in.
 // ═══════════════════════════════════════════════════════════════════
 
+import { cleanOptionGroups } from "./reservations.js";
+
 /** Edge types this synthesises. Both behave identically here. */
 const TYPES = ["prerequisite", "corequisite"];
 
@@ -61,20 +63,9 @@ function indexEdges(allEdges) {
   return { feeds, fedBy };
 }
 
-/**
- * The option groups that could still answer a reservation.
- *
- * A group is all-or-nothing: `PT 5410 and PT 5411` is one option, and a group
- * naming a course the catalog does not have can never be chosen — 13.2% of
- * prereq atoms name renumbered courses, so this is not hypothetical.
- */
-function liveGroups(reservation, courseMap) {
-  const groups = reservation?.options;
-  if (!Array.isArray(groups) || !groups.length) return null;
-  const live = groups.filter(g =>
-    Array.isArray(g) && g.length && g.every(id => courseMap?.[id]));
-  return live.length ? live : null;
-}
+/** The option groups that could still answer a reservation. */
+const liveGroups = (reservation, courseMap) =>
+  cleanOptionGroups(reservation?.options, courseMap);
 
 /**
  * Synthesise the edges a reservation should take part in.

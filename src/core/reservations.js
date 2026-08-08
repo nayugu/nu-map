@@ -104,6 +104,33 @@ export function originsOf(reservations) {
   return out;
 }
 
+/**
+ * The option groups of a card that names its courses, made safe to iterate.
+ *
+ * `options` is a list of GROUPS, every member of a group required together —
+ * `PSYC 3200 or PT 5410 and PT 5411` is `[["PSYC3200"],["PT5410","PT5411"]]`.
+ * It arrives from scraped data and from restored plans, so holes, empty groups
+ * and non-arrays are real inputs rather than hypotheticals.
+ *
+ * One implementation because there were four, and the fourth was missing its
+ * guard: `options: [null]` threw. Every consumer asks the identical question,
+ * so it is answered in exactly one place.
+ *
+ * @param {string[][]|null} groups
+ * @param {object|null} [courseMap]  when given, a group naming a course the
+ *   catalog does not have is dropped — it can never be chosen. 13.2% of prereq
+ *   atoms name renumbered courses, so this is not theoretical.
+ * @returns {string[][]|null} null when nothing usable is left
+ */
+export function cleanOptionGroups(groups, courseMap = null) {
+  if (!Array.isArray(groups)) return null;
+  const out = groups.filter(g =>
+    Array.isArray(g) && g.length
+    && g.every(id => typeof id === "string" && id
+      && (!courseMap || courseMap[id])));
+  return out.length ? out.map(g => [...g]) : null;
+}
+
 /** Move one to another semester. Identical to moving a course. */
 export function moveReservation(reservations, id, semId) {
   const r = reservations?.[id];

@@ -21,7 +21,7 @@ import { specForNode, emptySpec } from "../../src/core/programEligibility.js";
 import { materialize } from "../../src/core/candidateSpec.js";
 import {
   createCandidates, narrow, applyFilters, answerGroups,
-  courseSpec, courseIds, forcedRequirement, reasonFor,
+  courseSpec, courseIds, preferredCourseIds, forcedRequirement, reasonFor,
   isUnbounded, isSpare, isImpossible, isSentinel,
   withoutSatisfiedRequirements, withoutPlacedCourses, withoutOptionsRuledOut,
   GENERAL_ELECTIVE, CONCENTRATION,
@@ -358,6 +358,55 @@ test("single-course groups behave exactly like plain courses", () => {
   const viaGroups = createCandidates({ requirements: [], groups: [["CS4300"], ["CS4100"]] });
   const viaSeed = createCandidates({ requirements: [], seed: { keys: new Set(["CS4300", "CS4100"]), ranges: [] } });
   assert.deepEqual([...courseIds(viaGroups, ctx)].sort(), [...courseIds(viaSeed, ctx)].sort());
+});
+
+// ═══════════════════════════════════════════════════════════════════
+// preferredCourseIds — a ranking hint, never a restriction
+// ═══════════════════════════════════════════════════════════════════
+
+test("a card that allows anything still says what the plan meant", () => {
+  // Most ambiguous cards carry ~general among their candidates, so anything is
+  // allowed. Answering only "the whole catalog" throws away the rest of the
+  // list, which is what the department actually had in mind.
+  const c = createCandidates({ requirements: [GENERAL_ELECTIVE, REAL_SECTIONS[0]] });
+  assert.ok(isUnbounded(c, ctx), "fixture should be unbounded");
+  const pref = preferredCourseIds(c, ctx);
+  assert.ok(pref.size > 0, "no preference expressed");
+  assert.ok(pref.size < 7000, "the preference is just the catalog again");
+});
+
+test("preferred is always a subset of allowed", () => {
+  for (const cands of [
+    createCandidates({ requirements: [GENERAL_ELECTIVE, REAL_SECTIONS[0]] }),
+    createCandidates({ requirements: REAL_SECTIONS.slice(0, 3) }),
+    createCandidates({ requirements: [], groups: [["CS4300"], ["CS4100"]] }),
+  ]) {
+    const allowed = courseIds(cands, ctx);
+    for (const id of preferredCourseIds(cands, ctx)) {
+      assert.ok(allowed.has(id), `${id} is preferred but not allowed`);
+    }
+  }
+});
+
+test("a pure general-elective card expresses no preference", () => {
+  // Inventing one would be the false confidence rule 4 forbids.
+  const c = createCandidates({ requirements: [GENERAL_ELECTIVE] });
+  assert.equal(preferredCourseIds(c, ctx).size, 0);
+  const conc = createCandidates({ requirements: [CONCENTRATION] });
+  assert.equal(preferredCourseIds(conc, ctx).size, 0);
+});
+
+test("preference respects what has been ruled out", () => {
+  const c = createCandidates({ requirements: [GENERAL_ELECTIVE, REAL_SECTIONS[0]] });
+  const [victim] = [...preferredCourseIds(c, ctx)];
+  const after = narrow(c, { courses: [victim], reason: "x" });
+  assert.ok(!preferredCourseIds(after, ctx).has(victim),
+    "a ruled-out course is still being recommended");
+});
+
+test("for a named card, preference and allowance are the same thing", () => {
+  const c = createCandidates({ requirements: [], groups: [["CS4300"], ["CS4100"]] });
+  assert.deepEqual([...preferredCourseIds(c, ctx)].sort(), [...courseIds(c, ctx)].sort());
 });
 
 // ═══════════════════════════════════════════════════════════════════

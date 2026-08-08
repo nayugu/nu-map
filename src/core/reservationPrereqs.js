@@ -40,6 +40,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { evalPrereqTree } from "./prereqEval.js";
+import { cleanOptionGroups } from "./reservations.js";
 
 /** Course ids named anywhere in a prerequisite token list. */
 function atomsOf(tree) {
@@ -56,13 +57,8 @@ function atomsOf(tree) {
 }
 
 /** Option groups of a reservation that name only courses we actually have. */
-function liveGroups(reservation, courseMap) {
-  const groups = reservation?.options;
-  if (!Array.isArray(groups) || !groups.length) return null;
-  const live = groups.filter(g =>
-    Array.isArray(g) && g.length && g.every(id => !courseMap || courseMap[id]));
-  return live.length ? live : null;
-}
+const liveGroups = (reservation, courseMap) =>
+  cleanOptionGroups(reservation?.options, courseMap);
 
 /**
  * Would this course's prerequisite be satisfied whatever the undecided cards

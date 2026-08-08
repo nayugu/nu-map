@@ -49,7 +49,7 @@
 import { specIsEmpty } from "./programEligibility.js";
 import { unionAll, subtractIds, materialize, cloneSpec } from "./candidateSpec.js";
 import { GENERAL_ELECTIVE, CONCENTRATION } from "./requirementDemand.js";
-import { resolveRequirement } from "./reservations.js";
+import { resolveRequirement, cleanOptionGroups } from "./reservations.js";
 
 export { GENERAL_ELECTIVE, CONCENTRATION };
 
@@ -89,13 +89,14 @@ export const isSentinel = (target) => typeof target !== "number";
  * @param {object} [init.seed]  an explicit EligibleSpec, when there are no groups
  */
 export function createCandidates({ requirements = [], seed = null, groups = null } = {}) {
-  const cleanGroups = Array.isArray(groups)
-    ? groups.filter(g => Array.isArray(g) && g.length).map(g => [...g])
-    : null;
+  // Structural cleaning only — no course map. Whether a group names a course
+  // the catalog still has is asked later, by `answerGroups`, so the answer
+  // tracks today's catalog rather than the moment the card was built.
+  const cleanGroups = cleanOptionGroups(groups);
   return {
     requirements: new Set(requirements),
-    groups: cleanGroups?.length ? cleanGroups : null,
-    seed: cleanGroups?.length
+    groups: cleanGroups,
+    seed: cleanGroups
       ? { keys: new Set(cleanGroups.flat()), ranges: [] }
       : (seed ? cloneSpec(seed) : null),
     droppedRequirements: new Map(),
@@ -264,6 +265,38 @@ export function courseSpec(cands, { specOf, courseMap } = {}) {
   return cands.droppedCourses.size
     ? subtractIds(base, cands.droppedCourses.keys())
     : cloneSpec(base);
+}
+
+/**
+ * What the plan probably meant, for a card where anything is nonetheless
+ * allowed.
+ *
+ * Most ambiguous cards carry `~general` among their candidates, because a free
+ * elective can absorb almost anything. One sentinel makes the whole card
+ * unbounded — correctly: any course really does count. But answering "the whole
+ * catalog" and stopping there throws away the rest of the list, which is a
+ * median of 34 courses the department actually had in mind.
+ *
+ * So this is the union of the NON-sentinel candidates: a ranking hint, not a
+ * restriction. `courseIds` stays the authority on what is allowed, and a test
+ * pins `preferred ⊆ allowed` so the two can never say opposite things.
+ *
+ * Returns an empty set when every candidate is a sentinel — a plain "General
+ * Elective" card has no preference to express, and inventing one would be the
+ * false confidence rule 4 forbids.
+ */
+export function preferredCourseIds(cands, { specOf, courseMap } = {}) {
+  if (!courseMap) return new Set();
+  if (cands.groups) return courseIds(cands, { specOf, courseMap });
+  const specs = [...cands.requirements]
+    .filter(t => !isSentinel(t))
+    .map(t => specOf?.(t))
+    .filter(Boolean);
+  if (!specs.length) return new Set();
+  const spec = cands.droppedCourses.size
+    ? subtractIds(unionAll(specs), cands.droppedCourses.keys())
+    : unionAll(specs);
+  return materialize(spec, courseMap);
 }
 
 /**
