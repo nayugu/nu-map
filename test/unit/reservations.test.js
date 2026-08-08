@@ -153,6 +153,23 @@ test("a reservation with no requirement asks nothing of the program", () => {
   assert.equal(resolveRequirement(null, PROGRAM), null);
 });
 
+test("a reservation card shows the requirement it stands for, not 'No title'", () => {
+  // The card renders `title`, and a reservation had none — so the grid printed
+  // the "No title" placeholder, which means "we failed to scrape this course's
+  // title". A reservation has no title BY NATURE, so that is a false report
+  // about our own data.
+  const withReq = {
+    id: "~res:a", semId: "fall2026", label: "Khoury Elective", sh: 4,
+    requirement: { index: 3, title: "Khoury Approved Electives" },
+  };
+  const without = { id: "~res:b", semId: "fall2026", label: "General Elective", sh: 4 };
+  const cards = occupantCards({}, { "~res:a": withReq, "~res:b": without });
+
+  assert.equal(cards["~res:a"].title, "Khoury Approved Electives");
+  assert.equal(cards["~res:a"].code, "Khoury Elective", "the label still heads the card");
+  assert.equal(cards["~res:b"].title, "", "an unbound card must not invent a title");
+});
+
 test("a reservation card has the SAME SHAPE as a real course card", () => {
   // This is the invariant behind "it behaves like a course". Card rendering
   // reads several fields without guarding — `course.color.slice(1)` is the one

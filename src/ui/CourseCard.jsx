@@ -474,7 +474,14 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         fontSize: 10, color: "var(--text-3)", lineHeight: "calc(1.25 * var(--lh-scale, 1))",
         whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginBottom: 2,
       }}>
-        {title ? scaleLatinRuns(title) : <span style={{ color: "var(--text-5)", fontStyle: "italic" }}>{t("course.no.title")}</span>}
+        {title ? scaleLatinRuns(title)
+          /* "No title" means a course whose title we failed to scrape. A
+             reservation has no title BY NATURE — it is a decision, not a
+             course — so the placeholder is a false report about our data.
+             It shows its requirement when the plan named one, and nothing
+             when it did not. */
+          : course.isReservation ? null
+          : <span style={{ color: "var(--text-5)", fontStyle: "italic" }}>{t("course.no.title")}</span>}
       </div>
 
       {/* Badges */}

@@ -238,7 +238,15 @@ export function occupantCards(courseMap, reservations) {
       // What card headers render: the catalog's own wording is the only thing
       // telling a student what belongs here.
       code: r.label,
-      title: "",
+      // The requirement this card stands for, when the plan named one. A course
+      // shows its title here, so a card that knows it is a Khoury Approved
+      // Elective should say so rather than leave the line blank.
+      //
+      // The STORED title, not a re-resolved one: it is what the department's
+      // plan meant, it needs no program data to read, and a section renamed
+      // since is a cosmetic staleness rather than a wrong claim. Anything that
+      // ACTS on the requirement still goes through `resolveRequirement`.
+      title: r.requirement?.title ?? "",
       subject: "", number: "",
       sh: r.sh ?? 0,
       // Card rendering reads `color` unguarded (it derives an HSL glow from

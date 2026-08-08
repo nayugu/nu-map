@@ -215,6 +215,28 @@ test("a named card whose options no requirement admits still gets an answer", ()
     "bound to a section that admits none of its options");
 });
 
+test("hints built from an ARRAY of subject codes actually match", () => {
+  // The runtime holds `subjects` as an array of codes; the scrape reads an
+  // object and takes its keys. Passing the array through Object.keys yields
+  // "0","1","2"… and every subject-prefix hint silently stops matching —
+  // no error, just worse binding. Pinned because nothing else would notice.
+  const fromArray = createPlanHints(["CS", "MATH"], { specAdmitsSubject, specAdmitsRange });
+  assert.equal(fromArray.subjectOf("MATH elective"), "MATH");
+
+  const wrong = createPlanHints(Object.keys(["CS", "MATH"]), { specAdmitsSubject, specAdmitsRange });
+  assert.equal(wrong.subjectOf("MATH elective"), null,
+    "fixture assumption: index strings should not match a subject");
+
+  // And it changes the answer, which is the reason it matters.
+  const r = res("MATH elective");
+  const good = bindReservations({ [r.id]: r },
+    { programData: program(), courseMap, hints: fromArray }).get(r.id);
+  const bad = bindReservations({ [r.id]: r },
+    { programData: program(), courseMap, hints: wrong }).get(r.id);
+  assert.ok(!good.includes(0), "a MATH card should not reach the Khoury section");
+  assert.ok(bad.includes(0), "fixture assumption: broken hints let it through");
+});
+
 // ── Degenerate input ───────────────────────────────────────────────
 
 test("no program, no reservations, no hints: empty rather than thrown", () => {
