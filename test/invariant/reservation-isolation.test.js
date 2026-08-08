@@ -137,6 +137,31 @@ test("no UI file re-derives a semester's contents for itself", () => {
   assert.deepEqual(bad, [], "a UI file deriving term contents instead of asking for them");
 });
 
+test("undo captures and restores reservations", () => {
+  // The undo snapshot shape existed three times — pushUndo, and the
+  // counter-push inside each of doUndo and doRedo — and reservations were in
+  // none of them. Loading a plan and pressing undo removed its courses and
+  // left every reserved card behind; moving or deleting one could not be
+  // undone at all.
+  //
+  // Now one snapshotPlan / restoreSnapshot pair. This asserts both mention
+  // reservations, and that no fourth copy of the shape has appeared.
+  const src = readFileSync(join(ROOT, "src/context/PlannerContext.jsx"), "utf8");
+
+  const snap = /const snapshotPlan = \(\) => \(\{[\s\S]*?\}\);/.exec(src)?.[0];
+  assert.ok(snap, "snapshotPlan is gone — undo has been restructured");
+  assert.match(snap, /reservations:/, "the undo snapshot does not capture reservations");
+
+  const restore = /const restoreSnapshot = \(snap\) => \{[\s\S]*?\n  \};/.exec(src)?.[0];
+  assert.ok(restore, "restoreSnapshot is gone");
+  assert.match(restore, /setReservations\(/, "undo does not put reservations back");
+
+  // A hand-rolled snapshot is how the shape got out of step before.
+  const copies = src.split("\n").filter(l =>
+    /placements:\s*stateRef\.current\.placements/.test(l)).length;
+  assert.equal(copies, 1, "a second hand-built undo snapshot has appeared");
+});
+
 test("anything that CLEARS a plan clears reservations too", () => {
   // Reset cleared placements, special terms, orders, grades and the palette,
   // and left every reserved card behind — a term full of "Khoury Elective" in

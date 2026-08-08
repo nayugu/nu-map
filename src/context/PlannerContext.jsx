@@ -748,7 +748,9 @@ export function PlannerProvider({ children }) {
   // ── Effect: stale-closure ref sync ───────────────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    stateRef.current    = { placements, specialTermPl, semOrders, placedOut, grades: gradesRaw };
+    // `reservations` is here so snapshotPlan can reach it — undo reads state
+    // through this ref, so a field absent here is a field undo cannot restore.
+    stateRef.current    = { placements, reservations, specialTermPl, semOrders, placedOut, grades: gradesRaw };
     allEdgesRef.current = allEdges;
     onDropRef.current          = onDrop;
     onDropBankRef.current      = onDropBank;
@@ -1273,47 +1275,56 @@ export function PlannerProvider({ children }) {
   // Grades ride the undo snapshots: removing a graded course prunes its
   // grade (the cleanup effect), so an undo that restores the placement
   // must restore the grade with it — otherwise undo silently loses data.
+  /**
+   * Everything an edit can change, captured in one place.
+   *
+   * This shape existed three times — pushUndo, and the counter-push inside
+   * each of doUndo and doRedo — and `reservations` was added to none of them.
+   * So loading a plan and pressing undo removed its courses and left every
+   * reserved card behind, and moving or deleting a reservation could not be
+   * undone at all.
+   *
+   * One function, because a field added to two of three copies is the exact
+   * bug that produced that.
+   */
+  const snapshotPlan = () => ({
+    placements:    stateRef.current.placements,
+    reservations:  stateRef.current.reservations,
+    specialTermPl: stateRef.current.specialTermPl,
+    semOrders:     stateRef.current.semOrders,
+    grades:        stateRef.current.grades,
+  });
+
+  /** Apply a snapshot. The mirror of snapshotPlan, and the only reader of it. */
+  const restoreSnapshot = (snap) => {
+    setPlacements(snap.placements);
+    // A snapshot taken before this field existed has no key; treating that as
+    // "none" would delete cards an undo was never asked to touch.
+    if (snap.reservations) setReservations(snap.reservations);
+    setSpecialTermPl(snap.specialTermPl);
+    setSemOrders(snap.semOrders);
+    if (snap.grades) setGrades(snap.grades);
+  };
+
   const pushUndo = () => {
-    const snap = {
-      placements:    stateRef.current.placements,
-      specialTermPl: stateRef.current.specialTermPl,
-      semOrders:     stateRef.current.semOrders,
-      grades:        stateRef.current.grades,
-    };
-    undoStack.current = [...undoStack.current.slice(-49), snap];
+    undoStack.current = [...undoStack.current.slice(-49), snapshotPlan()];
     redoStack.current = [];
   };
 
   const doUndo = () => {
     if (!undoStack.current.length) return;
     const snap = undoStack.current[undoStack.current.length - 1];
-    redoStack.current = [...redoStack.current, {
-      placements:    stateRef.current.placements,
-      specialTermPl: stateRef.current.specialTermPl,
-      semOrders:     stateRef.current.semOrders,
-      grades:        stateRef.current.grades,
-    }];
+    redoStack.current = [...redoStack.current, snapshotPlan()];
     undoStack.current = undoStack.current.slice(0, -1);
-    setPlacements(snap.placements);
-    setSpecialTermPl(snap.specialTermPl);
-    setSemOrders(snap.semOrders);
-    if (snap.grades) setGrades(snap.grades);
+    restoreSnapshot(snap);
   };
 
   const doRedo = () => {
     if (!redoStack.current.length) return;
     const snap = redoStack.current[redoStack.current.length - 1];
-    undoStack.current = [...undoStack.current, {
-      placements:    stateRef.current.placements,
-      specialTermPl: stateRef.current.specialTermPl,
-      semOrders:     stateRef.current.semOrders,
-      grades:        stateRef.current.grades,
-    }];
+    undoStack.current = [...undoStack.current, snapshotPlan()];
     redoStack.current = redoStack.current.slice(0, -1);
-    setPlacements(snap.placements);
-    setSpecialTermPl(snap.specialTermPl);
-    setSemOrders(snap.semOrders);
-    if (snap.grades) setGrades(snap.grades);
+    restoreSnapshot(snap);
   };
 
   // ── Effect: keyboard shortcuts ────────────────────────────────
