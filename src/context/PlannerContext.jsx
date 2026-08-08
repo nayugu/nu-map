@@ -199,6 +199,11 @@ export function PlannerProvider({ children }) {
   const [currentSemId,     setCurrentSemId]     = useState(() => (_saved?.persist && _saved.currentSemId)     ? _saved.currentSemId     : _defSemId);
   const [persistEnabled,   setPersistEnabled]   = useState(() => _saved?.persist !== false);
   const [semOrders,        setSemOrders]        = useState(() => (_saved?.persist && _saved.semOrders)        ? _saved.semOrders        : {});
+  // Elective slots laid out by a template: real occupants of a semester that
+  // carry the catalog's credit hours but hold no course yet. Keyed by a stable
+  // id derived from the semester and the catalog's wording, so re-applying a
+  // template lands on the same slots (src/core/samplePlan.js).
+  const [slots,            setSlots]            = useState(() => (_saved?.persist && _saved.slots)            ? _saved.slots            : {});
   const [offeredOverrides, setOfferedOverrides] = useState(() => (_saved?.persist && _saved.offeredOverrides) ? _saved.offeredOverrides : {});
   const [collapsedSubs,    setCollapsedSubs]    = useState(() => (_saved?.persist && _saved.collapsedSubs)    ? _saved.collapsedSubs    : {});
   // Per-plan SH overrides for variable-credit courses (e.g. 1–4 SH → user picks 3).
@@ -691,8 +696,8 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
-  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
+    saveState(storagePrefix, persistEnabled, { placements, specialTermPl, slots, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
+  }, [persistEnabled, placements, specialTermPl, slots, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
 
   useEffect(() => {
     try { localStorage.setItem(key("graduated"), String(isGraduated)); } catch {}
@@ -711,13 +716,13 @@ export function PlannerProvider({ children }) {
     // wrote {"persist":true} to a junk key on every unload. The last-moment
     // safety net has never actually saved anything.
     const h = () => {
-      saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
+      saveState(storagePrefix, persistEnabled, { placements, specialTermPl, slots, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
       // The SLOT is what the app reloads from, so it needs the same net.
       saveCurrentPlanToSlot();
     };
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
-  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
+  }, [persistEnabled, placements, specialTermPl, slots, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
 
   // ── Effect: semester tracking (live) ─────────────────────────
   // Runs on mount and whenever the tracking mode, plan semesters, or clock changes.
@@ -741,7 +746,7 @@ export function PlannerProvider({ children }) {
   // ── Effect: stale-closure ref sync ───────────────────────────
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
-    stateRef.current    = { placements, specialTermPl, semOrders, placedOut, grades: gradesRaw };
+    stateRef.current    = { placements, specialTermPl, slots, semOrders, placedOut, grades: gradesRaw };
     allEdgesRef.current = allEdges;
     onDropRef.current          = onDrop;
     onDropBankRef.current      = onDropBank;
@@ -1270,6 +1275,7 @@ export function PlannerProvider({ children }) {
     const snap = {
       placements:    stateRef.current.placements,
       specialTermPl: stateRef.current.specialTermPl,
+      slots:         stateRef.current.slots,
       semOrders:     stateRef.current.semOrders,
       grades:        stateRef.current.grades,
     };
@@ -1283,12 +1289,16 @@ export function PlannerProvider({ children }) {
     redoStack.current = [...redoStack.current, {
       placements:    stateRef.current.placements,
       specialTermPl: stateRef.current.specialTermPl,
+      slots:         stateRef.current.slots,
       semOrders:     stateRef.current.semOrders,
       grades:        stateRef.current.grades,
     }];
     undoStack.current = undoStack.current.slice(0, -1);
     setPlacements(snap.placements);
     setSpecialTermPl(snap.specialTermPl);
+    // Undoing a template application has to take its slots back too, or the
+    // semesters keep the empty boxes after the courses have gone.
+    setSlots(snap.slots ?? {});
     setSemOrders(snap.semOrders);
     if (snap.grades) setGrades(snap.grades);
   };
@@ -1299,12 +1309,16 @@ export function PlannerProvider({ children }) {
     undoStack.current = [...undoStack.current, {
       placements:    stateRef.current.placements,
       specialTermPl: stateRef.current.specialTermPl,
+      slots:         stateRef.current.slots,
       semOrders:     stateRef.current.semOrders,
       grades:        stateRef.current.grades,
     }];
     redoStack.current = redoStack.current.slice(0, -1);
     setPlacements(snap.placements);
     setSpecialTermPl(snap.specialTermPl);
+    // Undoing a template application has to take its slots back too, or the
+    // semesters keep the empty boxes after the courses have gone.
+    setSlots(snap.slots ?? {});
     setSemOrders(snap.semOrders);
     if (snap.grades) setGrades(snap.grades);
   };
@@ -1951,6 +1965,7 @@ export function PlannerProvider({ children }) {
       courseMap,
       placements,
       specialTermPl,
+      slots,
       startYearIndex,
       coopTypeId: coopType?.id ?? "coop",
       coopDurations: (coopType?.durations ?? []).map(d => d.duration),
@@ -1959,10 +1974,14 @@ export function PlannerProvider({ children }) {
 
   const applySamplePlan = (plan, startYearIndex = 0) => {
     const result = previewSamplePlan(plan, startYearIndex);
-    if (!result.placed.length && !result.coops.length) return result;
+    // Slots count as work done. Half of a sample plan's credit is a slot, and
+    // some programs place nothing BUT slots in their later years, so a run
+    // that produced only slots is a successful application, not a no-op.
+    if (!result.placed.length && !result.coops.length && !result.newSlots.length) return result;
     pushUndo();
     setPlacements(result.placements);
     setSpecialTermPl(result.specialTermPl);
+    setSlots(result.slots);
     return result;
   };
 
@@ -1988,6 +2007,7 @@ export function PlannerProvider({ children }) {
       courseMap,
       placements: {},
       specialTermPl: {},
+      slots: {},
       startYearIndex,
       coopTypeId: coopType?.id ?? "coop",
       coopDurations: (coopType?.durations ?? []).map(d => d.duration),
@@ -1999,6 +2019,7 @@ export function PlannerProvider({ children }) {
       {
         placements: result.placements,
         specialTermPl: result.specialTermPl,
+        slots: result.slots,
         major, major2, conc, conc2, minor1, minor2,
       },
     );
@@ -2281,6 +2302,7 @@ export function PlannerProvider({ children }) {
   const resetPlanToDefaults = () => {
     setPlacements({});
     setSpecialTermPl({});
+    setSlots({});
     setSemOrders({});
     setOfferedOverrides({});
     setBonusSH(0);
@@ -2363,12 +2385,23 @@ export function PlannerProvider({ children }) {
   // An unrecognised stored value falls back to 'name' rather than being
   // trusted: this key predates 'manual', and a future mode removed in a later
   // version must not leave the library sorting by a rule that no longer exists.
-  const SORT_MODES = ["name", "recent", "manual"];
+  const SORT_MODES = ["manual", "name", "recent"];
   const [folderSort, setFolderSort] = useState(() => {
     try {
-      const v = localStorage.getItem(key("folder-sort"));
-      return SORT_MODES.includes(v) ? v : "name";
-    } catch { return "name"; }
+      // Custom is the default because it is the only mode where the library
+      // does what a file manager does: keep what you arranged. Name and recent
+      // re-sort under you, so dragging a plan somewhere has no meaning in them
+      // and the insertion line is deliberately not drawn — which made
+      // reordering look broken to anyone who never found the mode switch.
+      const v2 = localStorage.getItem(key("folder-sort-v2"));
+      if (SORT_MODES.includes(v2)) return v2;
+      // Migration. The old key was written on every mount, so a stored "name"
+      // cannot be told apart from never having chosen anything — it was the
+      // old default. A stored "recent" IS a real choice and is kept.
+      const v1 = localStorage.getItem(key("folder-sort"));
+      if (v1 && v1 !== "name" && SORT_MODES.includes(v1)) return v1;
+      return "manual";
+    } catch { return "manual"; }
   });
 
   useEffect(() => {
@@ -2378,7 +2411,7 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem(key("folder-open"), JSON.stringify([...openFolders])); } catch {}
   }, [openFolders]);
   useEffect(() => {
-    try { localStorage.setItem(key("folder-sort"), folderSort); } catch {}
+    try { localStorage.setItem(key("folder-sort-v2"), folderSort); } catch {}
   }, [folderSort]);
 
   // The derived tree — one per (plans, folders) so the header dropdown, the
@@ -2710,7 +2743,7 @@ export function PlannerProvider({ children }) {
     exported: new Date().toISOString(),
     entSem: planEntSem, entYear: planEntYear,
     gradSem: planGradSem, gradYear: planGradYear,
-    placements, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
+    placements, specialTermPl, slots, semOrders, shOverrides, bonusSH, currentSemId,
     offeredOverrides, collapsedSubs,
     major, major2, conc, conc2, minor1, minor2, studentType,
     placedOut: [...placedOut],
@@ -2756,6 +2789,7 @@ export function PlannerProvider({ children }) {
   const restorePlan = (d, { initial = false } = {}) => {
     setPlacements(d.placements ?? {});
     setSpecialTermPl(migrateSpecialTermPl(d));
+    setSlots(d.slots ?? {});
     setSemOrders(d.semOrders ?? {});
     setShOverrides(d.shOverrides ?? {});
     setOfferedOverrides(d.offeredOverrides ?? {});
@@ -2938,7 +2972,7 @@ export function PlannerProvider({ children }) {
     // saved to state-v2, never mirrored to the slot, and then overwritten
     // by the stale slot on the next reload — silent data loss that looks
     // like "it didn't save". That was live for grades and placedOut.
-  }, [placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, specialTermPl, slots, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
@@ -3688,6 +3722,7 @@ export function PlannerProvider({ children }) {
     canDropSem,
     doUndo, doRedo, pushUndo,
     previewSamplePlan, applySamplePlan, openSamplePlanAsNewPlan, summarizeSamplePlan,
+    slots, setSlots,
   };
 
   return <PlannerContext.Provider value={value}>{children}</PlannerContext.Provider>;
