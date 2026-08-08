@@ -149,8 +149,95 @@ const termTypeOf = (label) =>
   ?? [null, false];
 
 /**
- * Classify one grid cell.
+ * A row that LABELS other rows rather than reserving a place of its own.
+ *
+ * Fourteen plans nest their grid. Biomedical Sciences PhD prints "During the
+ * first year of courses, students must complete one course for each
+ * specialization:" and beneath it an unpriced heading per specialization with
+ * the courses under those. Read flat, every heading becomes a reservation the
+ * student is told to fill.
+ *
+ * Credit decides before wording: a priced row is NEVER a heading however it
+ * reads. Business Administration BSBA prints a term's hours ON the heading and
+ * leaves the courses beneath blank, so discarding priced headings loses 8 SH
+ * from a term — the one direction that must not happen. "Dialogue of
+ * Civilizations" is unpriced and perfectly real, so absence of credit alone
+ * proves nothing either; the wording test only sorts the rows carrying none.
+ */
+const HEADING_COLON = /:\s*$/;
+const CONNECTIVE    = /^(or|and|plus|then)$/i;
+const PROSE_MIN     = 60;
+
+const isHeadingRow = (text, sh) =>
+  sh == null && (CONNECTIVE.test(text) || HEADING_COLON.test(text) || text.length > PROSE_MIN);
+
+/** A code as it appears in prose: "CS 2100", or a bare number continuing a list. */
+const CODE_MENTION = /\b[A-Z]{2,6}\s*\d{3,4}[A-Z]?\b|\b\d{3,4}\b/g;
+
+/**
+ * Split a cell's codes into OPTION GROUPS, preserving the catalog's grouping.
+ *
+ * The student must take every code in one group, and may pick any single group.
+ * This is the whole reason the entry model changed: 36 cells mix the two
+ * connectives, and flattening them asserts something false —
+ *
+ *   "PSYC 3200 or PT 5410 and PT 5411"
+ *      means  PSYC 3200  OR  (PT 5410 AND PT 5411)
+ *      flat   three interchangeable alternatives, so PT 5410 alone "satisfies" it
+ *
+ * Codes come from links and are therefore trustworthy and in document order;
+ * the TEXT is only consulted for the connectives between them. So the text is
+ * split into segments, each segment's code MENTIONS are counted, and that many
+ * codes are drawn from the ordered list. Nothing depends on parsing a code out
+ * of prose, which is what makes this safe against "MATH 1365 or 1465" where the
+ * second mention carries no subject.
+ *
+ * A comma-separated list ending in ", or" separates on commas too, otherwise
+ * "MATH 1231, 1241, …, or 1341" would come out as one five-course group.
+ */
+function optionGroups(text, codes) {
+  if (codes.length <= 1) return codes.length ? [[codes[0]]] : [];
+
+  const hasOr  = /\bor\b/i.test(text);
+  const hasAnd = /\band\b/i.test(text);
+  if (!hasOr) return [codes];                       // "A and B" — one group, all required
+
+  // ", or" marks a comma-separated list of alternatives.
+  const commaList = /,\s*(?:or)\b/i.test(text);
+  const splitter  = commaList ? /,|\bor\b/i : /\bor\b/i;
+
+  const segments = text.split(splitter).map(t => t.trim()).filter(Boolean);
+  const groups = [];
+  let i = 0;
+  for (const seg of segments) {
+    const n = (seg.match(CODE_MENTION) ?? []).length;
+    if (!n) continue;
+    const take = codes.slice(i, i + n);
+    if (take.length) groups.push(take);
+    i += n;
+  }
+  // Any code the text could not account for joins the last group rather than
+  // being dropped — losing one is worse than over-grouping it.
+  if (i < codes.length) {
+    if (groups.length) groups[groups.length - 1].push(...codes.slice(i));
+    else groups.push(codes.slice(i));
+  }
+  return groups.length ? groups : [codes];
+
+  // Note: `hasAnd && hasOr` cells are flagged `ambiguous` by the caller. The
+  // grouping above is best-effort for them, and the verbatim text is kept so a
+  // reader can always see what the catalog actually said.
+}
+
+/**
+ * Read one grid cell into an entry.
+ *
+ * One node type. What varies is how precisely the catalog named the answer:
+ * `options` holds the groups it named, and an empty `options` is what used to
+ * be called a slot — the same node with the answer left unstated.
+ *
  * @param {object} cell node-html-parser element
+ * @param {object|null} hoursCell
  * @returns {object|null} entry, or null for an empty cell
  */
 function readCell(cell, hoursCell) {
@@ -159,9 +246,8 @@ function readCell(cell, hoursCell) {
   const rawHours = hoursCell?.text?.replace(/\s+/g, " ").trim() ?? "";
   const shMatch = /(\d+(?:\.\d+)?)/.exec(rawHours);
   const sh = shMatch ? parseFloat(shMatch[1]) : null;
-  const withSh = (entry) => (sh == null ? entry : { ...entry, sh });
 
-  const text = cell.text.replace(/ /g, " ").replace(/\s+/g, " ").trim();
+  const text = cell.text.replace(/ /g, " ").replace(/\s+/g, " ").trim();
   if (!text) return null;
 
   const codes = [];
@@ -170,21 +256,56 @@ function readCell(cell, hoursCell) {
     if (k && !codes.includes(k)) codes.push(k);
   }
 
+  const base = { text, ...(sh == null ? {} : { sh }) };
+
   if (!codes.length) {
-    if (VACATION.test(text)) return { kind: "vacation", text };
-    if (COOP.test(text)) return withSh({ kind: "coop", text });
-    return withSh({ kind: "placeholder", text });
+    // Checked first: a heading may begin with any word at all, including
+    // "Co-op" or "Vacation".
+    if (isHeadingRow(text, sh)) return { ...base, heading: true, options: [], children: [] };
+
+    // Both patterns are anchored and neither excludes the other, so
+    // first-match-wins silently dropped an option: "Co-op or vacation" became a
+    // forced co-op, "Vacation or optional co-op" a forced vacation. An either
+    // keeps the decision with the student, which is the governing rule.
+    const vac = VACATION.test(text);
+    const coop = COOP.test(text);
+    if (vac || coop) {
+      const alsoVac  = vac  || /\bvacations?\b/i.test(text);
+      const alsoCoop = coop || /\bco-?op\b/i.test(text);
+      if (alsoVac && alsoCoop) return { ...base, either: ["coop", "vacation"], options: [] };
+      return { ...base, [vac ? "vacation" : "coop"]: true, options: [] };
+    }
+    // Named nothing — a reservation whose answer the plan leaves open.
+    return { ...base, options: [] };
   }
-  // Every code being a co-op course means the cell IS a co-op, however it is
-  // worded. Requiring all of them keeps a cell that merely mentions one
-  // alongside real coursework from disappearing into a work term.
-  if (codes.every((c) => COOP_COURSE.test(c))) return withSh({ kind: "coop", codes, text });
-  if (codes.length === 1) return withSh({ kind: "course", codes, text });
-  // Two or more codes: the connector decides whether the student takes all of
-  // them or picks one. Default to "courses" (all) — assuming a choice where
-  // the catalog meant a pair would drop a required course, which is the
-  // direction that hurts.
-  return withSh({ kind: /\bor\b/i.test(text) ? "choice" : "courses", codes, text });
+
+  // Every code being a co-op course means the cell IS a co-op, however worded.
+  // Requiring all of them keeps a cell that merely mentions one alongside real
+  // coursework from disappearing into a work term.
+  if (codes.every((c) => COOP_COURSE.test(c))) return { ...base, coop: true, options: [codes] };
+
+  const groups = optionGroups(text, codes);
+  const ambiguous = /\bor\b/i.test(text) && /\band\b/i.test(text) && groups.length > 1;
+  return { ...base, options: groups, ...(ambiguous ? { ambiguous: true } : {}) };
+}
+
+/**
+ * Fold heading rows so the rows they label become their children.
+ *
+ * Scope is "until the next heading in the same term", which is all the grid
+ * gives us — nesting is expressed by layout, not markup. Entries before the
+ * first heading stay at top level.
+ */
+function nestHeadings(entries) {
+  if (!entries.some(e => e.heading)) return entries;
+  const out = [];
+  let open = null;
+  for (const e of entries) {
+    if (e.heading) { open = e; out.push(e); continue; }
+    if (open) open.children.push(e);
+    else out.push(e);
+  }
+  return out;
 }
 
 /**
@@ -342,6 +463,8 @@ function parseGridTable(table) {
   }
   if (year?.terms.length) years.push(year);
 
+  for (const y of years) for (const t of y.terms) t.entries = nestHeadings(t.entries);
+
   // A grid with no entries anywhere is a parse failure dressed as success.
   const any = years.some((y) => y.terms.some((t) => t.entries.length));
   return any ? years : null;
@@ -358,9 +481,58 @@ export function planGridCourseKeys(grid) {
   for (const p of grid?.plans ?? []) {
     for (const y of p.years) {
       for (const t of y.terms) {
-        for (const e of t.entries) for (const k of e.codes ?? []) out.add(k);
+        for (const e of t.entries) collectKeys(e, out);
       }
     }
   }
   return [...out].sort();
+}
+
+/** Every code an entry and its children name, across all option groups. */
+function collectKeys(entry, out) {
+  for (const group of entry?.options ?? []) for (const k of group) out.add(k);
+  for (const child of entry?.children ?? []) collectKeys(child, out);
+}
+
+/**
+ * Check a parsed grid against the catalog's own arithmetic.
+ *
+ * Every term prints its total beside it, which is the department stating what
+ * it believes the term adds up to — a free, per-row checksum on the whole
+ * parse. Across the shipped corpus it agrees on 9,485 of 9,492 terms (99.93%),
+ * and that figure is the regression test for any change to cell reading.
+ *
+ * It is worth having because nothing else guards this file: the requirement
+ * side has verify-majors, check-major-integrity and the scrape rails, while
+ * the plan side had only a count of how many plans came back — so a run
+ * producing hundreds of confidently wrong grids looked exactly like success.
+ *
+ * A heading contributes nothing of its own; its credit, where the catalog put
+ * it there, is the row's and its children are counted separately.
+ */
+export function verifyPlanGrid(grid, label = "") {
+  const out = { terms: 0, agree: 0, disagree: 0, unstated: 0, ambiguous: 0, worst: [] };
+  const sum = (entries) => (entries ?? []).reduce(
+    (n, e) => n + (e.sh ?? 0) + sum(e.children), 0);
+  const countAmbiguous = (entries) => (entries ?? []).reduce(
+    (n, e) => n + (e.ambiguous ? 1 : 0) + countAmbiguous(e.children), 0);
+
+  for (const plan of grid?.plans ?? []) {
+    for (const year of plan.years ?? []) {
+      for (const term of year.terms ?? []) {
+        if (!term.entries?.length) continue;
+        out.terms += 1;
+        out.ambiguous += countAmbiguous(term.entries);
+        if (typeof term.hours !== "number") { out.unstated += 1; continue; }
+        const parsed = sum(term.entries);
+        if (Math.abs(parsed - term.hours) < 0.01) out.agree += 1;
+        else {
+          out.disagree += 1;
+          out.worst.push({ program: label, year: year.label, term: term.term,
+                           stated: term.hours, parsed });
+        }
+      }
+    }
+  }
+  return out;
 }

@@ -21,7 +21,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { parse } from 'node-html-parser';
 
-import { extractPlanGrid, planGridCourseKeys } from '../../scripts/lib/plan-grid.js';
+import { extractPlanGrid, planGridCourseKeys, verifyPlanGrid } from '../../scripts/lib/plan-grid.js';
 import { extractPlanOfStudyCourses } from '../../scripts/lib/catalog-program-parser.js';
 
 const DIR  = join(dirname(fileURLToPath(import.meta.url)), '../fixtures/catalog');
@@ -34,8 +34,19 @@ const FIXTURES = readdirSync(DIR).filter(f => f.endsWith('.html')).map(f => f.re
 const termOf = (plan, yearLabel, termName) =>
   plan.years.find(y => y.label === yearLabel)?.terms.find(t => t.term === termName);
 
-const kinds = term => term.entries.map(e => e.kind);
-const codes = term => term.entries.map(e => (e.codes ?? []).join('+'));
+// The entry model is one node type; these name the SHAPES it takes, so the
+// assertions below keep reading as the diagnoses they were written as.
+const kindOf = (e) =>
+  e.heading ? 'heading'
+  : e.either ? 'either'
+  : e.vacation ? 'vacation'
+  : e.coop ? 'coop'
+  : !e.options.length ? 'placeholder'
+  : e.options.length > 1 ? 'choice'
+  : e.options[0].length > 1 ? 'courses'
+  : 'course';
+const kinds = term => term.entries.map(kindOf);
+const codes = term => term.entries.map(e => e.options.flat().join('+'));
 
 // ── 1. Several plans per program ─────────────────────────────────────────────
 
@@ -127,8 +138,8 @@ test('plan grid › the second half of "POLS 4701 or 4703" is a real course', ()
   // The visible text abbreviates the subject away. Reading text would yield one
   // course; reading the <a class="bubblelink code"> titles yields both.
   const y4 = grid('political-science-ba').plans[0].years.find(y => y.label === 'Year 4');
-  assert.deepEqual(y4.terms[1].entries[0].codes, ['POLS4701', 'POLS4703']);
-  assert.equal(y4.terms[1].entries[0].kind, 'choice');
+  assert.deepEqual(y4.terms[1].entries[0].options, [['POLS4701'], ['POLS4703']],
+    'two groups — a choice the student makes, not a pair they take');
 });
 
 test('plan grid › "and" is a pair to take, "or" is a choice to make', () => {
@@ -146,13 +157,13 @@ test('plan grid › co-ops and unnamed slots are kinds, not courses', () => {
   const spring = y1.terms.find(t => t.term === 'Spring');
   assert.deepEqual(kinds(spring), ['courses', 'course', 'placeholder', 'placeholder']);
   assert.equal(spring.entries[2].text, 'General Elective');
-  assert.equal(spring.entries[2].codes, undefined);
+  assert.deepEqual(spring.entries[2].options, [], 'named nothing — the answer is left open');
 
   const coop = termOf(grid('cs-bscs').plans[0], 'Year 2', 'Spring');
   assert.deepEqual(kinds(coop), ['coop']);
   // "Experiential Learning" is a co-op block too, under a different name.
   const y4 = grid('political-science-ba').plans[0].years.find(y => y.label === 'Year 4');
-  assert.equal(y4.terms[1].entries[2].kind, 'coop');
+  assert.equal(y4.terms[1].entries[2].coop, true);
 });
 
 // ── 5. Term identity ─────────────────────────────────────────────────────────
@@ -236,4 +247,123 @@ test('plan grid › courses named in prose are the witness\'s, not the grid\'s',
   const fromGrid = new Set(planGridCourseKeys(grid('physics-bs')));
   const prose = [...witness].filter(k => !fromGrid.has(k)).sort();
   assert.deepEqual(prose, ['PHYS4621', 'PHYS4623', 'PHYS4651', 'PHYS4652']);
+});
+
+// ── 5. Option groups keep the catalog's grouping ─────────────────────────────
+//
+// 36 cells mix `and` with `or`, and flattening them asserts something false:
+// "PSYC 3200 or PT 5410 and PT 5411" means PSYC 3200 OR (PT 5410 AND PT 5411),
+// so a flat three-way list tells a student that PT 5410 alone satisfies it.
+// Every text below is taken verbatim from the shipped corpus.
+// In a real cell the links ARE the visible text, with only connectives between
+// them — "MATH 1365 or 1465" shows the second code with its subject stripped.
+// So a cell is written as a template whose {} are links; `TITLE|shown` gives a
+// link whose title differs from what the catalog prints.
+const cellEntry = (template, links = [], sh = '') => {
+  let i = 0;
+  const body = template.replace(/\{\}/g, () => {
+    const [title, shown = title] = String(links[i++]).split('|');
+    return `<a class="bubblelink code" title="${title}">${shown}</a>`;
+  });
+  const html = '<div id="planofstudytextcontainer"><table class="sc_plangrid">'
+    + '<tr class="plangridterm"><th>Fall</th><th>Hours</th></tr>'
+    + `<tr><td class="codecol">${body}</td><td class="hourscol">${sh}</td></tr>`
+    + '</table></div>';
+  return extractPlanGrid(parse(html))?.plans[0].years[0].terms[0].entries[0];
+};
+
+test('a pair joined by "and" is one group; alternatives are separate groups', () => {
+  assert.deepEqual(cellEntry('{} and {}', ['CS 2100', 'CS 2101']).options,
+    [['CS2100', 'CS2101']], 'both required');
+  assert.deepEqual(cellEntry('{} or {}', ['CS 4530', 'CS 4535|4535']).options,
+    [['CS4530'], ['CS4535']], 'pick one');
+  // The second mention carries no subject — which is why grouping is read from
+  // the text while the codes come from the links.
+  assert.deepEqual(cellEntry('{} or {}', ['MATH 1365', 'MATH 1465|1465']).options,
+    [['MATH1365'], ['MATH1465']]);
+});
+
+test('a mixed and/or cell keeps its grouping and is flagged for review', () => {
+  const e = cellEntry('{} or {} and {}', ['PSYC 3200', 'PT 5410', 'PT 5411']);
+  assert.deepEqual(e.options, [['PSYC3200'], ['PT5410', 'PT5411']],
+    'PSYC 3200 alone, or BOTH PT courses — never PT 5410 by itself');
+  assert.equal(e.ambiguous, true, 'mixed connectives are best-effort, so they are reviewable');
+
+  assert.deepEqual(
+    cellEntry('{} or {} and {} and {}',
+      ['BIOL 1111', 'PHYS 1155', 'PHYS 1156', 'PHYS 1157']).options,
+    [['BIOL1111'], ['PHYS1155', 'PHYS1156', 'PHYS1157']]);
+});
+
+test('a comma list ending in ", or" separates on the commas too', () => {
+  // Otherwise this comes out as one five-course group plus a stray.
+  assert.deepEqual(
+    cellEntry('{}, {}, {}, {}, {}, or {}',
+      ['MATH 1231', 'MATH 1241|1241', 'MATH 1245|1245', 'MATH 1251|1251',
+       'MATH 1340|1340', 'MATH 1341|1341']).options,
+    [['MATH1231'], ['MATH1241'], ['MATH1245'], ['MATH1251'], ['MATH1340'], ['MATH1341']]);
+  assert.deepEqual(
+    cellEntry('{}, {}, or {}', ['ENGW 3302', 'ENGW 3307|3307', 'ENGW 3315|3315']).options,
+    [['ENGW3302'], ['ENGW3307'], ['ENGW3315']]);
+});
+
+test('no code is ever lost, whatever the connectives do', () => {
+  const texts = [
+    ['{}, and {}, {} and {}, or {}',
+      ['CS 1100', 'CS 1101', 'CS 2000', 'CS 2001', 'MISM 2510']],
+    ['{}, and {}, or {} and {}',
+      ['ENVR 1500', 'ENVR 1501', 'ENVR 3300', 'ENVR 3301']],
+    ['{} or {} and {}', ['CHEM 5620', 'CHEM 3331|3331', 'CHEM 3332|3332']],
+  ];
+  for (const [text, links] of texts) {
+    const e = cellEntry(text, links);
+    const flat = e.options.flat();
+    assert.equal(flat.length, links.length, `every code kept: ${text}`);
+    assert.equal(new Set(flat).size, links.length, 'and none duplicated');
+  }
+});
+
+// ── 6. A cell that names nothing is the same node with no answer ─────────────
+test('an unnamed reservation is an entry with empty options, not a special kind', () => {
+  const e = cellEntry('Khoury Elective', [], '4');
+  assert.deepEqual(e.options, []);
+  assert.equal(e.sh, 4);
+  assert.equal(e.text, 'Khoury Elective', 'the catalog wording is kept verbatim');
+});
+
+test('a heading labels the rows beneath it instead of reserving a place', () => {
+  const kind = (text, sh = '') => {
+    const e = cellEntry(text, [], sh);
+    return e.heading ? 'heading' : e.either ? 'either' : e.vacation ? 'vacation'
+         : e.coop ? 'coop' : 'entry';
+  };
+  assert.equal(kind('Complete the following:'), 'heading');
+  assert.equal(kind('Pharmaceutics &amp; Drug Delivery:'), 'heading');
+  assert.equal(kind('or'), 'heading');
+  // Credit decides before wording: BSBA prints a term's hours ON the heading
+  // and leaves the courses beneath blank, so a priced row is a reservation.
+  assert.equal(kind('During the first year of courses, students must complete one course '
+    + 'for each specialization:', 3), 'entry');
+  assert.equal(kind('Dialogue of Civilizations'), 'entry', 'unpriced but real');
+  assert.equal(kind('Vacation'), 'vacation');
+});
+
+test('a cell offering co-op OR vacation keeps the choice', () => {
+  // Both patterns are anchored and neither excludes the other, so whichever
+  // ran first used to silently decide: "Co-op or vacation" became a forced
+  // co-op, "Vacation or optional co-op #2" a forced vacation.
+  assert.deepEqual(cellEntry('Co-op or vacation', []).either, ['coop', 'vacation']);
+  assert.deepEqual(cellEntry('Vacation or optional co-op #2', []).either, ['coop', 'vacation']);
+  assert.equal(cellEntry('Vacation', []).vacation, true);
+  assert.equal(cellEntry('Co-op', []).coop, true);
+});
+
+// ── 7. The catalog checks our arithmetic ─────────────────────────────────────
+test('every term in every fixture sums to the total the catalog printed', () => {
+  const bad = [];
+  for (const name of FIXTURES) {
+    const g = grid(name);
+    if (g) bad.push(...verifyPlanGrid(g, name).worst);
+  }
+  assert.deepEqual(bad, [], 'terms whose parsed hours disagree with the catalog');
 });
