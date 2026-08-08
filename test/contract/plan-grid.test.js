@@ -21,7 +21,7 @@ import { join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 import { parse } from 'node-html-parser';
 
-import { extractPlanGrid, planGridCourseKeys } from '../../scripts/lib/plan-grid.js';
+import { extractPlanGrid, planGridCourseKeys, verifyPlanGrid } from '../../scripts/lib/plan-grid.js';
 import { extractPlanOfStudyCourses } from '../../scripts/lib/catalog-program-parser.js';
 
 const DIR  = join(dirname(fileURLToPath(import.meta.url)), '../fixtures/catalog');
@@ -236,4 +236,75 @@ test('plan grid › courses named in prose are the witness\'s, not the grid\'s',
   const fromGrid = new Set(planGridCourseKeys(grid('physics-bs')));
   const prose = [...witness].filter(k => !fromGrid.has(k)).sort();
   assert.deepEqual(prose, ['PHYS4621', 'PHYS4623', 'PHYS4651', 'PHYS4652']);
+});
+
+// ── 5. The catalog checks our arithmetic ─────────────────────────────────────
+//
+// Each term prints its own total beside it, which makes the grid self-checking:
+// if our entries sum to what the department said the term is worth, we read the
+// row correctly. This is the only content-level guard the plan side has — the
+// scrapers previously counted how many plans came back and nothing more, so a
+// template change that broke row parsing would have produced 385 confidently
+// wrong plans and looked exactly like success.
+test('every term in every fixture sums to the total the catalog printed', () => {
+  const bad = [];
+  for (const name of FIXTURES) {
+    const g = grid(name);
+    if (!g) continue;
+    const r = verifyPlanGrid(g, name);
+    bad.push(...r.worst);
+  }
+  assert.deepEqual(bad, [], 'terms whose parsed hours disagree with the catalog');
+});
+
+test('the checksum judges only what the catalog actually stated', () => {
+  // A term with entries but no printed total is not a failure — some grids
+  // omit the sum row. It must be reported apart from a real disagreement,
+  // or an omission would read as a parse error.
+  const g = { plans: [{ years: [{ label: 'Year 1', terms: [
+    { term: 'Fall',   hours: null, entries: [{ kind: 'placeholder', text: 'Elective', sh: 4 }] },
+    { term: 'Spring', hours: 8,    entries: [{ kind: 'placeholder', text: 'Elective', sh: 4 }] },
+    { term: 'Summer 1', hours: 4,  entries: [{ kind: 'placeholder', text: 'Elective', sh: 4 }] },
+  ] }] }] };
+  const r = verifyPlanGrid(g);
+  assert.equal(r.unstated, 1);
+  assert.equal(r.disagree, 1, 'Spring claims 8 against 4 parsed');
+  assert.equal(r.agree, 1);
+});
+
+// ── 6. Rows that label other rows are not reservations ───────────────────────
+//
+// Fourteen plans nest their grid. Biomedical Sciences PhD prints a sentence
+// ("…students must complete one course for each specialization:") and then an
+// unpriced heading per specialization with courses beneath. Read flat, each
+// heading becomes a slot the student is told to fill and the sentence becomes a
+// 3 SH reservation for a course that does not exist.
+test('a heading row does not become a slot', () => {
+  const kindOf = (text, sh) => {
+    const html = '<div id="planofstudytextcontainer"><table class="sc_plangrid">'
+      + '<tr class="plangridterm"><th>Fall</th><th>Hours</th></tr>'
+      + `<tr><td class="codecol">${text}</td><td class="hourscol">${sh ?? ''}</td></tr>`
+      + '</table></div>';
+    return extractPlanGrid(parse(html))?.plans[0].years[0].terms[0].entries[0]?.kind;
+  };
+
+  assert.equal(kindOf('Complete the following:', ''), 'heading');
+  assert.equal(kindOf('Pharmaceutics &amp; Drug Delivery:', ''), 'heading');
+  assert.equal(kindOf('or', ''), 'heading');
+  assert.equal(
+    kindOf('During the first year of courses, students must complete one course for each specialization:', 3),
+    'placeholder',
+    "priced rows are reservations however they are worded — BSBA puts a term's "
+    + 'credit on the heading and leaves the courses beneath it blank');
+
+  // Things that look unpriced but are genuine reservations.
+  assert.equal(kindOf('Dialogue of Civilizations', ''), 'placeholder');
+  // Not 'coop': the COOP pattern is anchored at the start of the cell, so a
+  // co-op announced mid-phrase is missed. That is a separate, pre-existing gap
+  // — recorded here rather than fixed, because the outcome is safe. It stays a
+  // reservation the student can see instead of being discarded as structure,
+  // which is the only property this test is about.
+  assert.equal(kindOf('Optional 4-month co-op', ''), 'placeholder');
+  assert.equal(kindOf('General Elective', 4), 'placeholder');
+  assert.equal(kindOf('Vacation', ''), 'vacation');
 });

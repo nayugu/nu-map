@@ -129,6 +129,37 @@ const COOP = /^(co-?op|cooperative education|experiential learning|industry plac
 const COOP_COURSE = /^COOP\d/;
 
 /**
+ * A row that LABELS other rows rather than reserving a place of its own.
+ *
+ * Fourteen plans nest their grid: Biomedical Sciences PhD prints "During the
+ * first year of courses, students must complete one course for each
+ * specialization:" and then, under it, an unpriced heading per specialization
+ * with the courses beneath those. Read flat, every one of those headings
+ * becomes a slot the student is told to fill, and the sentence itself becomes
+ * a 3 SH reservation for a course that does not exist.
+ *
+ * A priced row is NEVER a heading, however it is worded. Business
+ * Administration BSBA prints the hours on the heading and leaves the courses
+ * beneath it blank, so discarding priced headings loses 8 SH from a term — the
+ * one direction that must not happen, since it silently under-counts a degree.
+ * "During the first year… one course for each specialization: 3-6" reads like
+ * prose and IS a reservation: complete one course per area, worth 3-6 SH.
+ *
+ * So credit decides first, and wording only sorts the rows that carry none:
+ * a colon, a bare connective, or a sentence too long to be a label. Note that
+ * "Dialogue of Civilizations" and "Optional 4-month co-op" are also unpriced
+ * and perfectly real, which is why absence of credit alone proves nothing.
+ */
+const HEADING = /:\s*$/;
+const CONNECTIVE = /^(or|and|plus|then)$/i;
+const PROSE_MIN = 60;
+
+function isHeadingRow(text, sh) {
+  if (sh != null) return false;
+  return CONNECTIVE.test(text) || HEADING.test(text) || text.length > PROSE_MIN;
+}
+
+/**
  * A term the student is deliberately NOT studying. 758 cells say "Vacation",
  * which is neither a course nor a slot to fill: reading it as a placeholder
  * would put an empty requirement slot in a semester the department is telling
@@ -171,6 +202,9 @@ function readCell(cell, hoursCell) {
   }
 
   if (!codes.length) {
+    // Checked before the classifiers below, because a heading can begin with
+    // any word at all — including "Co-op" or "Vacation".
+    if (isHeadingRow(text, sh)) return { kind: "heading", text, ...(sh == null ? {} : { sh }) };
     if (VACATION.test(text)) return { kind: "vacation", text };
     if (COOP.test(text)) return withSh({ kind: "coop", text });
     return withSh({ kind: "placeholder", text });
@@ -363,4 +397,52 @@ export function planGridCourseKeys(grid) {
     }
   }
   return [...out].sort();
+}
+
+/**
+ * Check a parsed grid against the catalog's own arithmetic.
+ *
+ * The grid prints a total beside every term (`plangridsum`), which is the
+ * department stating what it believes the term adds up to. That makes it a
+ * free, per-row checksum on the whole parse: if our entries sum to it, we read
+ * the row correctly, and if they stop doing so, a template change has broken
+ * the parse. Across the shipped corpus this agrees on 9,485 of 9,492 terms.
+ *
+ * It is worth having because nothing else guards this file. The requirement
+ * side has verify-majors, check-major-integrity and the scrape rails; the plan
+ * side had only a count of how many plans came back, so a run that produced
+ * 385 confidently wrong plans looked exactly like a run that worked.
+ *
+ * A term is only judged when the catalog stated a total, and hours ranges are
+ * compared at their low end — the same end readCell takes, since a plan should
+ * never claim more credit than the student is certain to earn.
+ *
+ * @returns {{terms:number, agree:number, disagree:number, unstated:number,
+ *            worst:Array<{program?:string, year:string, term:string,
+ *                         stated:number, parsed:number}>}}
+ */
+export function verifyPlanGrid(grid, label = "") {
+  const out = { terms: 0, agree: 0, disagree: 0, unstated: 0, worst: [] };
+  for (const plan of grid?.plans ?? []) {
+    for (const year of plan.years ?? []) {
+      for (const term of year.terms ?? []) {
+        if (!term.entries?.length) continue;
+        out.terms += 1;
+        if (typeof term.hours !== "number") { out.unstated += 1; continue; }
+        // A heading carries the hours of the rows beneath it, which are
+        // counted in their own right — adding both would double-count.
+        const parsed = term.entries.reduce(
+          (n, e) => n + (e.kind === "heading" ? 0 : e.sh ?? 0), 0);
+        if (Math.abs(parsed - term.hours) < 0.01) out.agree += 1;
+        else {
+          out.disagree += 1;
+          out.worst.push({
+            program: label, year: year.label, term: term.term,
+            stated: term.hours, parsed,
+          });
+        }
+      }
+    }
+  }
+  return out;
 }

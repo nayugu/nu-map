@@ -31,7 +31,7 @@ import { markSharedSections }       from './lib/major-integrity.js';
 import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
 import { checkScrapeRails, checkPlanRail } from './lib/scrape-rails.js';
-import { extractPlanGrid }           from './lib/plan-grid.js';
+import { extractPlanGrid, verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
 import { parseEditionArg, editionBasePath, assertEdition,
          isFatalScrapeError }        from './lib/catalog-edition.js';
 import { parseRequirements, parseTotalCredits, findLeakedMarkers,
@@ -230,6 +230,24 @@ function writeArchiveManifest(programs, colleges) {
     sections: programs.reduce((n, p) => n + (p.requirementSections?.length ?? 0), 0),
     concentrations: programs.reduce((n, p) => n + (p.concentrations?.concentrationOptions?.length ?? 0), 0),
     plans: programs.filter(p => p.planGrid).length,
+    // The catalog states each term's total beside it, so the grid checks
+    // itself. Counting plans only ever proved they arrived, not that they
+    // were read — a run producing confidently wrong grids looked identical
+    // to a run that worked.
+    planTermsAgree: programs.reduce((n, p) =>
+      n + (p.planGrid ? verifyPlanGrid(p.planGrid).agree : 0), 0),
+    planTermsDisagree: programs.reduce((n, p) =>
+      n + (p.planGrid ? verifyPlanGrid(p.planGrid).disagree : 0), 0),
+    // The two readings of one pane must name the same courses. The flattened
+    // witness feeds verification and the grid feeds the planner, and they are
+    // parsed separately on purpose — so nothing but this notices when one of
+    // them starts seeing courses the other cannot.
+    planGridWitnessGap: programs.reduce((n, p) => {
+      if (!p.planGrid) return n;
+      const witness = new Set(p.metadata?.planOfStudyCourses ?? []);
+      if (!witness.size) return n;
+      return n + planGridCourseKeys(p.planGrid).filter(k => !witness.has(k)).length;
+    }, 0),
     scrapedAt: new Date().toISOString().slice(0, 10),
   };
   // Newest first, so the file reads the way the editions are used.
