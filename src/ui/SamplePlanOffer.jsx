@@ -97,16 +97,6 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
     );
   }
 
-  // ⚠ TEMPORARY — TESTING ONLY. "Why can't I see it?" has five possible
-  // answers and the component's job is to be silent about all of them, so in
-  // dev it says which one fired. DELETE THIS BLOCK.
-  if (import.meta.env?.DEV && (!offer.offer || !chosen)) {
-    // eslint-disable-next-line no-console
-    console.debug("[SamplePlanOffer] hidden —",
-      offer.offer ? "variants still loading" : offer.reason,
-      { path, major2, hasSamplePlan, canvasEmpty, appliedTemplate, variants: variants.length });
-  }
-
   if (!offer.offer || !chosen) return null;
 
   const layOut = () => {
