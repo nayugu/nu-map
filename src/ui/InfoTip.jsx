@@ -24,9 +24,11 @@ const EDGE = 8;    // min clearance from any viewport edge
 // tips whose text has no typical length (a subject name runs from "Physics" to
 // "Arts Administration and Cultural Entrepreneurship"). It still wraps rather
 // than running off the screen: max-content up to AUTO_MAX, then normal wrapping.
-const AUTO_MAX = 340;
+// Held in step with the type it carries — at 14.5px the old 340 wrapped names
+// that had fitted on one line before.
+const AUTO_MAX = 400;
 
-function TipCard({ title, rect, width, placement, children }) {
+function TipCard({ title, rect, width, padding, placement, children }) {
   const ref = useRef(null);
   const [placed, setPlaced] = useState(null);
   const auto = width === "auto";
@@ -61,7 +63,7 @@ function TipCard({ title, rect, width, placement, children }) {
       top:  placed ? placed.top  : Math.round(rect.top - GAP),
       zIndex: 9001,
       ...(auto ? { width: "max-content", maxWidth: AUTO_MAX } : { width }),
-      padding: "13px 15px",
+      padding,
       background: "var(--bg-surface)", border: "1px solid var(--border-card)",
       borderRadius: 9, boxShadow: "var(--shadow-modal)",
       pointerEvents: "none",   // inert: it must never steal the pointer from the control
@@ -88,6 +90,8 @@ function TipCard({ title, rect, width, placement, children }) {
  * @param {string} [props.title]           optional uppercase heading
  * @param {number|"auto"} [props.width=232] card width; "auto" sizes to content
  *                                         (up to AUTO_MAX, then wraps)
+ * @param {string} [props.padding]         card padding, for tips whose type is
+ *                                         larger than the default body text
  * @param {string} [props.display="block"] wrapper display (use "inline-flex"
  *                                         inside a flex row so flow is kept)
  * @param {object} [props.style]           extra wrapper styles (e.g. flex: 1
@@ -97,7 +101,7 @@ function TipCard({ title, rect, width, placement, children }) {
  *                                         (right on clip), for edge-pinned panels
  * @param {React.ReactNode} props.children the control to hover over
  */
-export default function HoverTip({ tip, title, width = 232, display = "block", placement = "top", style, children }) {
+export default function HoverTip({ tip, title, width = 232, padding = "13px 15px", display = "block", placement = "top", style, children }) {
   const { isMobile } = usePlanner();
   const [open, setOpen] = useState(null);   // control rect while shown
 
@@ -110,7 +114,7 @@ export default function HoverTip({ tip, title, width = 232, display = "block", p
       style={{ display, ...style }}
     >
       {children}
-      {open && <TipCard title={title} rect={open} width={width} placement={placement}>{tip}</TipCard>}
+      {open && <TipCard title={title} rect={open} width={width} padding={padding} placement={placement}>{tip}</TipCard>}
     </span>
   );
 }

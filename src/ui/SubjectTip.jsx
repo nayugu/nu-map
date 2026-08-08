@@ -20,23 +20,27 @@ import HoverTip from "./InfoTip.jsx";
 export default function SubjectTip({ subject, color, name, placement = "top", display = "inline-flex", style, children }) {
   const tip = name
     ? (
-      <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+      <span style={{ display: "flex", alignItems: "center", gap: 10 }}>
         {/* Centred against the name, not pinned to its first line: a name long
             enough to wrap is exactly when the card is tallest, and a pill stuck
             at the top then reads as a heading over the text rather than a label
             beside it. */}
         <span style={{
-          fontSize: 9.5, background: color, color: "var(--badge-bg)",
-          borderRadius: 3, padding: "2px 7px", fontWeight: 800,
+          fontSize: 11.5, background: color, color: "var(--badge-bg)",
+          borderRadius: 4, padding: "3px 9px", fontWeight: 800,
           letterSpacing: "0.04em", flexShrink: 0,
         }}>{subject}</span>
-        <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-1)" }}>{name}</span>
+        <span style={{ fontSize: 14.5, fontWeight: 600, color: "var(--text-1)" }}>{name}</span>
       </span>
     )
     : null;
 
+  // Roomier than the default tip chrome to match the larger type. This card is
+  // the answer to a deliberate question — "what is ABRC?" — rather than an
+  // aside, so it is sized to be read at a glance instead of squinted at.
   return (
-    <HoverTip tip={tip} width="auto" placement={placement} display={display} style={style}>
+    <HoverTip tip={tip} width="auto" padding="15px 18px"
+              placement={placement} display={display} style={style}>
       {children}
     </HoverTip>
   );
