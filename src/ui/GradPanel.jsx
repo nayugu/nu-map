@@ -1409,6 +1409,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const [major2Gone,    setMajor2Gone]    = useState(false);
   const major2Name = useTranslatedText(major2Data?.name ?? null);
   const [showMajor2,    setShowMajor2]    = useState(() => major2Path !== "");
+  // Kept alongside the disabled switch-type prompt below; nothing sets it now.
   const [showSwitchPrompt, setShowSwitchPrompt] = useState(false);
   const [showNP,        setShowNP]        = useState(() => {
     try { const v = localStorage.getItem(`${pfx}-grad-show-np`); return v === null ? true : v !== "false"; } catch { return true; }
@@ -1660,24 +1661,46 @@ export default function GradPanel({ wideCatalog = false }) {
           <div
             style={{ display: "flex", alignItems: "center", gap: 8, userSelect: "none", marginBottom: showProgram ? 4 : 0 }}
           >
-            {/* Heading reads as "Undergrad Program Selection". On desktop the type
-                word is tappable to surface the switch-plan prompt; on phone it stays
-                a plain bold label — too cramped, and the prompt overflows. */}
+            {/* Heading reads as "Undergraduate Program Selection".
+
+                The type word USED to be its own click target on desktop,
+                opening a "make a plan of the other type" prompt. Disabled: the
+                row already collapses on click, so a second target inside it
+                did something different with no affordance saying so — a bold
+                word is not a button, and two behaviours in one line reads as
+                the panel misbehaving. The prompt below is commented out with
+                it.
+
+                Nothing is lost. The New Plan modal has its own
+                undergrad/graduate toggle, which is the discoverable route to
+                the same thing.
+
+                Also now localised: it was hardcoded English, so a Japanese
+                planner read "Undergrad プログラム選択". `header.plan.group.*`
+                already carries both words in all 8 locales and means exactly
+                this — the type a plan belongs to. */}
             <span
               onClick={() => setShowProgram(v => !v)}
               style={{ fontWeight: 400, color: "var(--text-5)", fontSize: isPhone ? 9 : 11, cursor: "pointer", flex: 1 }}
             >
-              <span
-                onClick={isPhone ? undefined : (e) => { e.stopPropagation(); setShowSwitchPrompt(v => !v); }}
-                style={{ fontWeight: 700, cursor: isPhone ? "inherit" : "pointer" }}
-              >{isGrad ? "Graduate" : "Undergrad"}</span>
+              <span style={{ fontWeight: 700 }}>
+                {t(isGrad ? "header.plan.group.graduate" : "header.plan.group.undergrad")}
+              </span>
               {" "}{t("grad.programSelection")}
             </span>
             <span onClick={() => setShowProgram(v => !v)} style={{ fontSize: 9, color: "var(--text-5)", lineHeight: 1, cursor: "pointer", padding: "2px 0" }}>{showProgram ? "▼" : "▶"}</span>
           </div>
 
-          {/* Switch type prompt — desktop only (trigger is disabled on phone) */}
-          {showSwitchPrompt && !isPhone && (
+          {/* ⚠ DISABLED — its only trigger was the bold type word above, which
+              was removed for being an invisible second click target inside a
+              row that already collapses. Kept rather than deleted because the
+              EXPLANATION is still worth something: a student on a graduate plan
+              who searches for an undergraduate major finds nothing and is told
+              nowhere why. That gap is now unaddressed, and this is the shape of
+              the answer if it is picked up again — it just needs a trigger that
+              looks like one. Creating the plan itself already works from the
+              New Plan modal's own type toggle. */}
+          {false && showSwitchPrompt && !isPhone && (
             <div style={{
               marginBottom: 8, padding: "8px 10px", borderRadius: 6,
               background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
