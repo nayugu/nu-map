@@ -76,16 +76,74 @@ const tokens = (s) =>
     .filter(w => w && !STOPWORDS.has(w)));
 
 /**
+ * NUpath codes a cell asks for, e.g. "General elective (NUpath DD)".
+ *
+ * Roughly 150 cells name one, and they are a constraint of a different KIND to
+ * everything else here: an attribute the course must carry, not a set of
+ * courses. "General elective (IC, DD)" is a free elective plus two attributes,
+ * so it layers on top of a binding rather than replacing one.
+ *
+ * The reason this is not a bare two-letter search: **CE collides**. Ninety-odd
+ * cells read "EE or CE fundamentals", "CE Fundamentals", "EE/CE Fundamental" —
+ * Computer and Civil Engineering, not NUpath's Capstone code. A naive match is
+ * wrong on about four in five of its CE hits.
+ *
+ * So codes are read in only two situations, both of which say "these are
+ * attributes" out loud:
+ *   1. the cell names NUpath, in which case codes anywhere in it count;
+ *   2. a parenthetical made ENTIRELY of codes — "(EI, WI, CE)", "(SI)". The
+ *      all-of-it test is what keeps "Elective (Dialogue of Civilizations
+ *      possible)" from being read as anything at all.
+ *
+ * "COMM WI course" is deliberately missed. A bare code with no parenthetical
+ * and no mention of NUpath is not distinguishable from a subject or an
+ * abbreviation, and a false attribute silently narrows a picker to nothing.
+ */
+const NAMES_NUPATH = /nu\s*path/i;
+const PARENTHETICAL = /\(([^)]*)\)/g;
+
+function readAttributes(label, codes) {
+  const text = String(label ?? "");
+  const found = [];
+  const take = (s) => {
+    for (const w of s.toUpperCase().match(/\b[A-Z]{2}\b/g) ?? []) {
+      if (codes.has(w) && !found.includes(w)) found.push(w);
+    }
+  };
+
+  if (NAMES_NUPATH.test(text)) {
+    take(text);
+    return found;
+  }
+  for (const [, inner] of text.matchAll(PARENTHETICAL)) {
+    const parts = inner.split(",").map(p => p.trim()).filter(Boolean);
+    // Every part must be a code, or this parenthetical is prose.
+    if (parts.length && parts.every(p => codes.has(p.toUpperCase()))) take(inner);
+  }
+  return found;
+}
+
+/**
  * Build the hint set.
  *
- * @param {Iterable<string>} subjects  the catalog's real subject codes
+ * @param {Iterable<string>} subjects    the catalog's real subject codes
+ * @param {Iterable<string>} attributes  the institution's attribute codes (NUpath)
  * @returns {import('../../core/slotBinding.js').SlotHints}
  */
-export function createSlotHints(subjects = []) {
+export function createSlotHints(subjects = [], attributes = []) {
   const known = new Set([...subjects].map(s => String(s).toUpperCase()));
+  const attrCodes = new Set([...attributes].map(a => String(a).toUpperCase()));
 
   return {
-    isFreeElective: (label) => FREE_ELECTIVE.test(String(label ?? "").trim()),
+    isFreeElective: (label) => {
+      const t = String(label ?? "").trim();
+      // "General elective (NUpath DD)" is still a free elective — the codes
+      // constrain which one, not whether the requirement is open.
+      return FREE_ELECTIVE.test(t)
+        || FREE_ELECTIVE.test(t.replace(PARENTHETICAL, "").replace(/\s+/g, " ").trim());
+    },
+
+    attributesOf: (label) => readAttributes(label, attrCodes),
 
     subjectOf: (label) => {
       const m = LEADING_TOKEN.exec(String(label ?? "").trim());

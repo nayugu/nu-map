@@ -86,6 +86,7 @@
 import { specForNode, specIsEmpty, courseEligible, emptySpec } from "./programEligibility.js";
 import { allocateSections } from "./gradRequirements.js";
 import { unfilledSlots } from "./slotModel.js";
+import { hasAttributes } from "./courseAttributes.js";
 
 /**
  * Credit value assumed for one course when a requirement counts courses rather
@@ -304,6 +305,12 @@ function typicalSH(spec, courseMap, fallback) {
  * @property {(label: string) => {subject: string, start: number, end: number}|null} [rangeOf]
  *   Some cells state their own constraint outright — "Course in the following
  *   range: MATH 3001 to MATH 4999". That is not inference at all.
+ * @property {(label: string) => string[]} [attributesOf]
+ *   Attributes the course must carry — NUpath at Northeastern. A constraint of
+ *   a different KIND: not a set of courses, so it never enters a domain or an
+ *   obligation. It layers on top of whatever the slot binds to, including the
+ *   open bucket, since "General elective (NUpath DD)" is a free elective that
+ *   still has to carry DD.
  * @property {(label: string, title: string) => boolean} [titleMatches]
  *   The weakest rung, and the first dropped: "Khoury Elective" ~ "Khoury
  *   Approved Electives".
@@ -369,6 +376,7 @@ export function bindSlots(slots, obligations, {
   const basis  = new Map();
   const rungs  = new Map();   // slot id → successive domains, widest first
   const stated = new Map();   // slot id → a rule the cell printed for itself
+  const attrs  = new Map();   // slot id → attributes the course must carry
 
   for (const slot of open) {
     const label = slot.label ?? "";
@@ -401,6 +409,12 @@ export function bindSlots(slots, obligations, {
     const narrow = (next, reason) => {
       if (next.length && next.length < d.length) { d = next; why = reason; ladder.push(d); }
     };
+
+    // Read before anything else and kept regardless of what the slot binds
+    // to: an attribute constrains WHICH course fills the slot, never which
+    // requirement it answers, so no narrowing can invalidate it.
+    const attributes = hints.attributesOf?.(label);
+    if (attributes?.length) attrs.set(slot.id, attributes);
 
     const range = hints.rangeOf?.(label);
     if (range) {
@@ -447,6 +461,7 @@ export function bindSlots(slots, obligations, {
       obligations: d,
       basis: basis.get(slot.id),
       ...(stated.has(slot.id) ? { stated: stated.get(slot.id) } : {}),
+      ...(attrs.has(slot.id) ? { attributes: attrs.get(slot.id) } : {}),
     };
   }
   return out;
@@ -646,8 +661,12 @@ export function suggestedSpec(binding, obligations) {
  * we would have offered.
  */
 export function isSuggested(course, binding, obligations) {
+  // An attribute the cell asked for is a hard filter on the course, whatever
+  // the slot binds to — and it can stand alone: "General elective (NUpath DD)"
+  // suggests nothing by course set and everything carrying DD.
+  if (!hasAttributes(course, binding?.attributes)) return false;
   const spec = suggestedSpec(binding, obligations);
-  if (!spec || specIsEmpty(spec)) return false;
+  if (!spec || specIsEmpty(spec)) return !!binding?.attributes?.length;
   return courseEligible(course, spec);
 }
 

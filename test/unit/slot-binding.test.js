@@ -18,6 +18,7 @@ import {
 } from "../../src/core/slotBinding.js";
 import { createSlotHints } from "../../src/adapters/northeastern/slotHints.js";
 import { courseEligible } from "../../src/core/programEligibility.js";
+import { hasAttributes } from "../../src/core/courseAttributes.js";
 
 // ── Fixtures, cut to the real shape of CS and Math ─────────────────
 
@@ -55,7 +56,8 @@ const courseMap = Object.fromEntries(
 );
 
 const SUBJECTS = ["CS", "CY", "DS", "MATH", "MKTG", "AFCS", "HIST", "PHIL", "SOCL", "ENGW"];
-const hints = createSlotHints(SUBJECTS);
+const NUPATH = ["ND","EI","IC","FQ","SI","AD","DD","ER","WF","WD","WI","EX","CE"];
+const hints = createSlotHints(SUBJECTS, NUPATH);
 
 let seq = 0;
 const slot = (label, sh = 4) => ({
@@ -325,6 +327,53 @@ test("hints · title matching ignores the words every requirement shares", () =>
   assert.ok(!hints.titleMatches("Computing and social issues", "Supporting Course"));
   assert.ok(!hints.titleMatches("Concentration course", "Supporting Course"),
     "sharing only the word 'course' is not a match");
+});
+
+// ── Attributes (NUpath) ────────────────────────────────────────────
+
+test("attributes · a cell naming NUpath codes carries them, whatever it binds to", () => {
+  const s = slot("General elective (NUpath DD)");
+  const obs = obligationsOf(PROGRAM, { placedSet: PLACED, courseMap });
+  const bound = bindSlots(asMap([s]), obs, { courseMap, hints });
+
+  assert.deepEqual(bound[s.id].attributes, ["DD"]);
+  assert.deepEqual(bound[s.id].obligations, [GENERAL_ELECTIVE_KEY],
+    "the codes say WHICH course, not which requirement — it is still a free elective");
+});
+
+test("attributes · CE is not read as NUpath when it means Computer Engineering", () => {
+  // ~90 cells read "EE or CE fundamentals" / "CE Fundamentals". A bare
+  // two-letter search is wrong on about four in five of its CE hits.
+  assert.deepEqual(hints.attributesOf("EE or CE fundamentals"), []);
+  assert.deepEqual(hints.attributesOf("CE Fundamentals"), []);
+  assert.deepEqual(hints.attributesOf("EE/CE Fundamental"), []);
+  // …but it IS read when the cell says so.
+  assert.deepEqual(hints.attributesOf("Senior design elective (EI, WI, CE)"), ["EI", "WI", "CE"]);
+});
+
+test("attributes · a parenthetical of prose yields nothing", () => {
+  assert.deepEqual(hints.attributesOf("Elective (Dialogue of Civilizations possible)"), []);
+  assert.deepEqual(hints.attributesOf("General Elective"), []);
+  assert.deepEqual(hints.attributesOf("Science elective (SI)"), ["SI"]);
+  assert.deepEqual(hints.attributesOf("NUpath ER"), ["ER"]);
+  assert.deepEqual(hints.attributesOf("DD NUpath"), ["DD"]);
+});
+
+test("attributes · suggestion filters on the attribute even with no course set", () => {
+  const s = slot("General elective (NUpath DD)");
+  const obs = obligationsOf(PROGRAM, { placedSet: PLACED, courseMap });
+  const b = bindSlots(asMap([s]), obs, { courseMap, hints })[s.id];
+
+  assert.ok(isSuggested({ ...courseMap.PHIL1145, attributes: ["DD", "SI"] }, b, obs));
+  assert.ok(!isSuggested({ ...courseMap.PHIL1145, attributes: ["SI"] }, b, obs));
+  assert.ok(!isSuggested({ ...courseMap.PHIL1145, attributes: [] }, b, obs));
+});
+
+test("attributes · every requested attribute must be present, not just one", () => {
+  assert.ok(hasAttributes({ attributes: ["IC", "DD"] }, ["IC", "DD"]));
+  assert.ok(!hasAttributes({ attributes: ["IC"] }, ["IC", "DD"]));
+  assert.ok(hasAttributes({ attributes: [] }, []), "asking for nothing matches everything");
+  assert.ok(!hasAttributes(null, ["DD"]));
 });
 
 test("specs · subject admission is checked against courses, not titles", () => {

@@ -7,6 +7,7 @@ import { usePlanner }  from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { subjectColor } from "../core/courseModel.js";
 import { takesUsed } from "../core/repeatInstances.js";
+import { hasAttributes } from "../core/courseAttributes.js";
 import { alternativesFor, programIndexSet, programAllowedSwaps, readyToApply,
          unmetSetRequirement }
   from "../core/equivalenceIndex.js";
@@ -300,7 +301,7 @@ export default function BankPanel() {
         : c.terms?.includes(term)
     )) return false;
     if (fLevel.length && !fLevel.includes(courseLevel(c))) return false;
-    if (fNupath.length && !fNupath.every(a => c.attributes?.includes(a))) return false;
+    if (!hasAttributes(c, fNupath)) return false;
     if (fProfs.length && !fProfs.some(name => taughtBy(c, name))) return false;
     if (wantReq || wantElec) {
       // Dynamic: categorize exactly as the Graduation panel would if the course
