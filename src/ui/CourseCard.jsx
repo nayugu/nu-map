@@ -96,7 +96,88 @@ function GradeChip({ pid, grade, setGrade, t, pop, setPop, compact = false }) {
  * @param {boolean} inSem   - true when rendered inside the timeline
  * @param {string|null} semId - semester id (null when in bank)
  */
+
+// ── Slot body ──────────────────────────────────────────────────────
+//
+// One unusual constraint drives this: it has to read as "not a course" while
+// NOT reading as "a problem". 51% of the credit in an undergraduate sample
+// plan is a slot, 32% of study terms hold nothing else, and the share climbs
+// to 70% by fourth year — so a warning colour or an "incomplete" badge would
+// paint the back half of every degree red for being exactly what the
+// department published.
+//
+// It also has to be QUIETER than a course card, not louder. At half the cards
+// on screen, a slot that shouts turns a semester into competing demands.
+// Dashed border, muted fill, the catalog's own wording, the credit value in
+// the corner a course puts it, and nothing else at rest.
+//
+// The dashes are neutral on purpose: dashed ORANGE already means "Claude is
+// proposing this", and a catalog suggestion that IS part of your plan must not
+// look like an assistant suggestion that is not yet.
+function SlotBody({ course }) {
+  const {
+    isPhone, onDragStart, dragInfo, removeSlot,
+    selectedId, setSelectedId, setShowPanel,
+  } = usePlanner();
+  const { t } = useLanguage();
+  const slot = course.slot;
+  const selected = selectedId === course.id;
+
+  return (
+    <div
+      className="slot-card"
+      title={slot.label}
+      draggable
+      onDragStart={e => onDragStart(e, course.id, "course", slot.semId)}
+      onClick={() => { setSelectedId(course.id); setShowPanel(true); }}
+      style={{
+        position: "relative",
+        minHeight: isPhone ? 0 : 70,
+        display: "flex", flexDirection: "column", justifyContent: "space-between",
+        padding: isPhone ? "4px 6px" : "6px 8px",
+        borderRadius: 6,
+        // 1.5px rather than 2: at this density a 2px dash reads as a border
+        // demanding attention rather than as an absence of content.
+        border: `1.5px dashed ${selected ? "var(--active)" : "var(--border-slot)"}`,
+        background: selected ? "var(--active-bg)" : "transparent",
+        color: "var(--text-3)",
+        opacity: dragInfo?.id === course.id ? 0.4 : 1,
+        cursor: "grab", overflow: "hidden",
+      }}
+    >
+      <div style={{
+        fontSize: isPhone ? 9 : 10.5, lineHeight: 1.25, fontWeight: 500, fontStyle: "italic",
+        display: "-webkit-box", WebkitLineClamp: 3, WebkitBoxOrient: "vertical", overflow: "hidden",
+      }}>
+        {slot.label}
+      </div>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 4 }}>
+        <span style={{ fontSize: isPhone ? 8 : 9, color: "var(--text-5)" }}>
+          {slot.sh != null ? `${slot.sh} SH` : ""}
+        </span>
+        <button
+          onClick={e => { e.stopPropagation(); removeSlot(course.id); }}
+          aria-label={t("slot.remove")} title={t("slot.remove")}
+          style={{
+            border: "none", background: "transparent", cursor: "pointer",
+            color: "var(--text-5)", fontSize: isPhone ? 10 : 11, lineHeight: 1,
+            padding: "1px 2px", fontFamily: "inherit",
+          }}
+        >×</button>
+      </div>
+    </div>
+  );
+}
+
 export default function CourseCard({ course, inSem, semId, noSubject = false }) {
+  // A SLOT reaches this component through the derived grid map: the
+  // department reserved a card position without naming a course. It is
+  // deliberately rendered here rather than in a sibling component, because
+  // everything AROUND the card — ordering, drag, occupancy, term load, both
+  // semester renderers — must treat it identically to a course, and the only
+  // real difference is what the card itself says.
+  if (course?.isSlot) return <SlotBody course={course} />;
+
   const {
     selectedId, setSelectedId, setShowPanel,
     connectedIds, prereqViolations, coreqViolations,

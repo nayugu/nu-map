@@ -21,6 +21,10 @@ import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
          effectiveGradeOfTakes } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { mapSamplePlan, summarizeSamplePlan } from "../core/samplePlan.js";
+import {
+  isSlotId, withSlots, withSlotCards, moveSlot as moveSlotIn,
+  removeSlot as removeSlotIn, reopenOrphanedSlots, semesterSlotSH,
+} from "../core/slotModel.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
@@ -831,6 +835,21 @@ export function PlannerProvider({ children }) {
     () => applySubstitutions(pvPlacements, pvSubstitutions),
     [pvPlacements, pvSubstitutions]
   );
+
+  // gridPlacements / gridCourseMap: what the SEMESTER GRID draws — real
+  // placements plus a position and a card for every unfilled slot. Exactly the
+  // shape of effectivePlacements above, and for the same reason: store the
+  // minimal state, derive the enriched view, and let each consumer read the
+  // one that answers its question.
+  //
+  // The grid reads these, so ordering, drag, occupancy, empty-slot maths and
+  // term load work unchanged in BOTH semester renderers. Everything about the
+  // DEGREE — requirement satisfaction, graduation credit, prereq chains,
+  // grades, the audit, MCP — keeps reading the raw maps and cannot see a slot
+  // at all, so crediting a course nobody has chosen is impossible rather than
+  // merely guarded against.
+  const gridPlacements = useMemo(() => withSlots(placements, slots), [placements, slots]);
+  const gridCourseMap  = useMemo(() => withSlotCards(courseMap, slots), [courseMap, slots]);
 
   // takesOf: base course id → every take of it in the plan, with semester
   // index and entered grade — the resolver evalPrereqTree uses for grade-
@@ -1758,12 +1777,13 @@ export function PlannerProvider({ children }) {
         return next;
       });
     }
-    if (type === "slot") {
-      // A slot moves like a course: the student is rearranging their own plan,
-      // and a slot is part of it. Its id stays put — the id encodes where the
-      // template ORIGINALLY put it, which is what keeps re-applying the same
-      // template idempotent even after the student has moved things around.
-      setSlots(prev => (prev[id] ? { ...prev, [id]: { ...prev[id], semId } } : prev));
+    // A slot drags as an ordinary card — it comes through CourseCard from the
+    // derived grid map — so it arrives here as type "course" and is told apart
+    // by its id. Its position lives in `slots`, not `placements`, so that is
+    // what moves. The id itself never changes: it encodes where the TEMPLATE
+    // put the slot, which is what keeps re-applying idempotent afterwards.
+    if (isSlotId(id)) {
+      setSlots(prev => moveSlotIn(prev, id, semId));
       setDragInfo(null);
       return;
     }
@@ -1992,11 +2012,7 @@ export function PlannerProvider({ children }) {
   const removeSlot = (id) => {
     if (!slots[id]) return;
     pushUndo();
-    setSlots((prev) => {
-      const next = { ...prev };
-      delete next[id];
-      return next;
-    });
+    setSlots((prev) => removeSlotIn(prev, id));
   };
 
   const applySamplePlan = (plan, startYearIndex = 0) => {
@@ -3296,6 +3312,13 @@ export function PlannerProvider({ children }) {
     });
   }, [stickyCourses]); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // A course removed from the plan takes its answer with it, and the
+  // department still says something belongs there — so the reservation comes
+  // back rather than leaving a hole where the template had put guidance.
+  useEffect(() => {
+    setSlots(prev => reopenOrphanedSlots(prev, placements));
+  }, [placements]);
+
   // ── Offered overrides setter ─────────────────────────────────
   // offeredOverrides shape: { courseId: { semTypeId: true | false } }
   // Absent key = auto (probability-based). Cycle: auto → true → false → auto.
@@ -3749,7 +3772,7 @@ export function PlannerProvider({ children }) {
     canDropSem,
     doUndo, doRedo, pushUndo,
     previewSamplePlan, applySamplePlan, openSamplePlanAsNewPlan, summarizeSamplePlan,
-    slots, setSlots, removeSlot,
+    slots, setSlots, removeSlot, gridPlacements, gridCourseMap, semesterSlotSH,
   };
 
   return <PlannerContext.Provider value={value}>{children}</PlannerContext.Provider>;

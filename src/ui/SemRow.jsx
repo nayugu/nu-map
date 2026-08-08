@@ -5,8 +5,7 @@ import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useState, useEffect } from "react";
 import { TYPE_BG } from "../core/constants.js";
-import { hexRgb, getSemStudySH, getSemSlotSH, getOrderedCourses } from "../core/planModel.js";
-import SlotCard from "./SlotCard.jsx";
+import { hexRgb, getSemStudySH, getOrderedCourses } from "../core/planModel.js";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
@@ -46,7 +45,8 @@ import CompanyLogo from "./CompanyLogo.jsx";
 
 export default function SemRow({ sem }) {
   const {
-    placements, semOrders, courseMap, effectiveCourseMap, slots,
+    placements, semOrders, courseMap, effectiveCourseMap,
+    gridPlacements, gridCourseMap, semesterSlotSH, slots,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -92,18 +92,20 @@ export default function SemRow({ sem }) {
     .filter(([, d]) => d?.semId && d.typeId === typeId)
     .sort(([, a], [, b]) => (SEM_INDEX[a.semId] ?? 99) - (SEM_INDEX[b.semId] ?? 99))
     .findIndex(([eid]) => eid === id) + 1;
-  const courseIds  = getOrderedCourses(sem.id, placements, semOrders, courseMap);
-  const crs        = courseIds.map(id => effectiveCourseMap[id] ?? courseMap[id]).filter(Boolean);
+  // The grid views: real placements plus unfilled slots, and a card for each.
+  // Slots therefore order, drag and occupy positions exactly like courses,
+  // with no separate render path — which is what makes this work identically
+  // in SummerRow, where a bolted-on slot list had no place to attach.
+  const courseIds  = getOrderedCourses(sem.id, gridPlacements, semOrders, gridCourseMap);
+  const crs        = courseIds.map(id => effectiveCourseMap[id] ?? gridCourseMap[id]).filter(Boolean);
   // Co-op terms are work terms: parked courses stay (recoverable) but don't
   // count toward this term's load. getSemStudySH returns 0 when a co-op occupies
   // the term (via the start/continuation maps).
   const sh         = getSemStudySH(sem.id, placements, effectiveCourseMap, specialTermStartMap, specialTermContMap);
-  // Slots the template laid out here. They occupy the term and carry the
-  // catalog's credit value, so the header reads the load the department
-  // printed — a plan whose fourth year is all electives should not look empty.
-  // They never reach graduation progress; see getSemSlotSH.
-  const semSlots   = Object.values(slots ?? {}).filter(s2 => s2.semId === sem.id);
-  const slotSH     = getSemSlotSH(sem.id, slots, specialTermStartMap, specialTermContMap);
+  // Credit still waiting on a choice. Shown beside the settled figure rather
+  // than folded into it, so the header does not claim more is decided than is.
+  const slotSH     = (specialTermStartMap[sem.id] || specialTermContMap[sem.id])
+    ? 0 : semesterSlotSH(slots, sem.id);
   // shVoided takes carry sh 0 (a failed grade earns nothing) but must stay
   // as full cards — vanishing into the low-credit subline would hide the
   // very course whose failure the user just recorded.
@@ -114,25 +116,19 @@ export default function SemRow({ sem }) {
   // Undergrad: fixed slots always visible (4 for fall/spring, 2 for summer).
   // Grad: 2 slots at rest for fall/spring (default load), expand up to 4 while dragging.
   //        1 slot at rest for summer, expand up to 2 while dragging.
-  // Slots occupy a position in the grid, exactly like a course. Counting only
-  // courses appended them PAST the term's fixed positions and then drew a full
-  // set of empty drop targets underneath, so a fall semester showed four
-  // occupied boxes and four more empty ones — the plan looked like it had
-  // grown holes rather than been filled in.
-  const mainOccupied = main4.length + semSlots.length;
   const mainSlots = (sem.type === "fall" || sem.type === "spring")
     ? (isGrad
-        ? (isDragging ? Math.min(4, Math.max(2, mainOccupied < 4 ? mainOccupied + 1 : 4)) : Math.max(2, mainOccupied))
+        ? (isDragging ? Math.min(4, Math.max(2, main4.length < 4 ? main4.length + 1 : 4)) : Math.max(2, main4.length))
         : 4)
     : sem.type === "summer"
       ? (isGrad
-          ? (isDragging ? Math.min(2, Math.max(1, mainOccupied < 2 ? mainOccupied + 1 : 2)) : Math.max(1, mainOccupied))
+          ? (isDragging ? Math.min(2, Math.max(1, main4.length < 2 ? main4.length + 1 : 2)) : Math.max(1, main4.length))
           : 2)
       : null;
-  const emptySlots = Math.max(0, (mainSlots ?? 0) - mainOccupied);
+  const emptySlots = Math.max(0, (mainSlots ?? 0) - main4.length);
   // Phone wraps the slots into a 2-wide grid (so 4 fall/spring slots become a
   // 2×2 block); desktop keeps every slot on a single row.
-  const slotCount = Math.max(1, mainSlots || mainOccupied || 1);
+  const slotCount = Math.max(1, mainSlots || main4.length || 1);
   const gridCols  = isPhone ? Math.min(2, slotCount) : slotCount;
 
   // Collapsible other credits
@@ -503,7 +499,6 @@ export default function SemRow({ sem }) {
               }}
             >
               {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
-              {semSlots.map(s2 => <SlotCard key={s2.id} slot={s2} isPhone={isPhone} />)}
               {/* Claude preview: chips marking where moved courses came FROM */}
               {claudePreview && Object.entries(claudePreview.moved ?? {})
                 .filter(([, m]) => m.from === sem.id)
@@ -523,7 +518,7 @@ export default function SemRow({ sem }) {
             </div>
 
             {/* Override zone — only visible when all main slots full + dragging a ≥3 SH course */}
-            {mainOccupied >= mainSlots && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 3 && (
+            {main4.length >= mainSlots && dragInfo?.type === "course" && (courseMap[dragInfo.id]?.sh ?? 0) >= 3 && (
               <div
                 onDragOver={e => {
                   if (!dragInfo || dragInfo.type !== "course") return;

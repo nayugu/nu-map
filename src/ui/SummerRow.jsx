@@ -19,6 +19,7 @@ import CompanyLogo from "./CompanyLogo.jsx";
 export default function SummerRow({ semA, semB }) {
   const {
     placements, semOrders, effectiveCourseMap,
+    gridPlacements, gridCourseMap, semesterSlotSH, slots,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -53,6 +54,13 @@ export default function SummerRow({ semA, semB }) {
   // Per-half: a co-op occupying Summer A/B excludes that half's courses from the
   // combined load (they stay in the plan, recoverable) — see getSemStudySH.
   const combinedSH     = sems.reduce((sum, s) => sum + getSemStudySH(s.id, placements, effectiveCourseMap, specialTermStartMap, specialTermContMap), 0);
+  // Credit still waiting on a choice, across both halves of the summer.
+  const combinedSlotSH = sems.reduce((sum, s) =>
+    sum + ((specialTermStartMap[s.id] || specialTermContMap[s.id]) ? 0 : semesterSlotSH(slots, s.id)), 0);
+  // "4 + 8" while choices are outstanding: folding them into one figure would
+  // claim more is settled than is.
+  const shText = combinedSlotSH > 0 && combinedSH > 0
+    ? `${combinedSH} + ${combinedSlotSH}` : `${combinedSH + combinedSlotSH}`;
   const tb         = TYPE_BG.summer;
   const rowBg      = tb.bg;
   const rowBorder  = combinedActive ? "1px solid var(--active-now-border)" : `1px solid ${tb.border}`;
@@ -164,8 +172,11 @@ export default function SummerRow({ semA, semB }) {
     }
 
     // ── Normal course session ─────────────────────────────────────
-    const courseIds  = getOrderedCourses(sem.id, placements, semOrders, effectiveCourseMap);
-    const crs        = courseIds.map(id => effectiveCourseMap[id]).filter(Boolean);
+    // Grid views, exactly as SemRow uses them — slots order, drag and occupy
+    // positions here with no summer-specific code, which is the whole reason
+    // they are a derived view rather than a second list to render.
+    const courseIds  = getOrderedCourses(sem.id, gridPlacements, semOrders, gridCourseMap);
+    const crs        = courseIds.map(id => effectiveCourseMap[id] ?? gridCourseMap[id]).filter(Boolean);
     // shVoided: failed takes keep their card despite sh 0 — see SemRow.
     const main4      = crs.filter(c => c.sh >= 3 || c.shVoided);
     const others     = crs.filter(c => c.sh <= 2 && !c.shVoided);
@@ -300,7 +311,7 @@ export default function SummerRow({ semA, semB }) {
               engine-translated "Summer" is as ambiguous as the "Fall"→落下 bug. */}
           <span style={{ fontSize: 7, fontWeight: 700, color: "var(--text-2)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}>{scaleLatinRuns(t("sem.summer.abbr"), { tight: true })}</span>
           <span style={{ fontSize: 7, fontWeight: 500, color: "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))" }}>{year}</span>
-          {combinedSH > 0 && <span style={{ fontSize: 7, fontWeight: 700, color: "var(--success)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}>{combinedSH} SH</span>}
+          {(combinedSH + combinedSlotSH) > 0 && <span style={{ fontSize: 7, fontWeight: 700, color: "var(--success)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}>{shText} SH</span>}
         </div>
       ) : (
         <div onClick={onNowClick} style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: isLive ? "not-allowed" : "pointer" }}>
@@ -315,7 +326,7 @@ export default function SummerRow({ semA, semB }) {
             )}
           </div>
           <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}><TText>May – Aug</TText></div>
-          {combinedSH > 0 && <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: "var(--success)" }}>{combinedSH} SH</span>}
+          {(combinedSH + combinedSlotSH) > 0 && <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: "var(--success)" }}>{shText} SH</span>}
         </div>
       )}
 

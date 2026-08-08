@@ -381,7 +381,7 @@ test("slots › a choice becomes a slot that keeps its shortlist", () => {
     { ...choice("MATH1365", "MATH1465"), sh: 4 },
   ]))));
   const [s] = slotsIn(r, "fall2026");
-  assert.equal(s.source, "choice");
+  assert.equal(s.constraint, "exact");
   assert.deepEqual(s.candidates, ["MATH1365", "MATH1465"]);
   assert.equal(r.placements.MATH1365, undefined);
   assert.equal(r.placements.MATH1465, undefined);
@@ -396,8 +396,11 @@ test("slots › a named requirement and a free elective are told apart", () => {
     { kind: "placeholder", text: "Elective", sh: 4 },
     { kind: "placeholder", text: "Khoury Elective", sh: 4 },
   ]))));
-  assert.deepEqual(slotsIn(r, "fall2026").map(s => s.source),
-    ["requirement", "free", "free", "requirement"]);
+  // Strictness follows the confidence of the source: a named requirement is
+  // something we INFER (and so must not enforce), a general elective states no
+  // constraint at all.
+  assert.deepEqual(slotsIn(r, "fall2026").map(s => s.constraint),
+    ["inferred", "open", "open", "inferred"]);
 });
 
 test("slots › two identical slots in one term stay two", () => {

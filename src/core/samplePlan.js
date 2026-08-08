@@ -53,6 +53,8 @@
 // half is two, so Spring + Summer 1 is the six-month co-op it actually is.
 // ═══════════════════════════════════════════════════════════════════
 
+import { slotId } from "./slotModel.js";
+
 /**
  * Months in a full-weight term. NU's semester weights are 1.0 for fall/spring
  * (four months) and 0.5 for each summer half (two), and its co-ops are sold in
@@ -97,28 +99,33 @@ function semesterFor(years, yearIndex, termType) {
 const coopId = (semId, typeId) => `${typeId}-plan-${semId}`;
 
 /**
- * A stable id for a slot. Derived from the semester, the wording and how many
- * identical slots already sit in that semester — so "General Elective" twice
- * in one term stays two slots, and re-applying the template lands on the same
- * two rather than adding more.
+ * Wording that names no requirement to resolve against — roughly a quarter of
+ * all slots. English and Northeastern-shaped, so it is a parameter rather than
+ * a constant: an institution whose catalog says "free choice" should not have
+ * to match NU's phrasing to get an open slot.
  */
-function slotId(semId, label, ordinal) {
-  const slug = String(label).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
-  return `slot-${semId}-${slug}-${ordinal}`;
-}
+const DEFAULT_FREE_ELECTIVE = /^(general |open |upper[\s-]*division |free )?electives?$/i;
 
-/** Which kind of slot an entry becomes, and what its candidates are. */
-function slotFor(entry, semId, ordinal) {
+/**
+ * Which constraint an entry becomes.
+ *
+ * Strictness follows the CONFIDENCE OF THE SOURCE (see core/slotModel.js):
+ * the catalog printing "CS 4530 or 4535" is knowledge, our matching a slot to
+ * a requirement section is a guess, and a guess must not close a door.
+ */
+function slotFor(entry, semId, ordinal, isFreeElective) {
   const label = entry.text?.replace(/\s+/g, " ").trim() || "Elective";
-  const base = { id: slotId(semId, label, ordinal), semId, label, sh: entry.sh ?? null };
-  if (entry.kind === "choice") return { ...base, source: "choice", candidates: entry.codes ?? [] };
-  // "Elective", "General Elective", "Open elective" and friends name no
-  // requirement to resolve against — roughly a quarter of all slots — so they
-  // are marked free rather than left looking like a lookup that failed.
-  if (/^(general |open |upper[\s-]*division |free )?electives?$/i.test(label)) {
-    return { ...base, source: "free" };
+  const base = {
+    id: slotId(semId, label, ordinal),
+    semId, label,
+    sh: entry.sh ?? null,
+    filledBy: null,
+  };
+  if (entry.kind === "choice") {
+    return { ...base, constraint: "exact", candidates: entry.codes ?? [] };
   }
-  return { ...base, source: "requirement" };
+  if (isFreeElective(label)) return { ...base, constraint: "open" };
+  return { ...base, constraint: "inferred" };
 }
 
 /**
@@ -149,6 +156,7 @@ export function mapSamplePlan(plan, {
   coopTypeId = "coop",
   coopDurations = [4, 6],
   monthsPerUnitWeight = MONTHS_PER_UNIT_WEIGHT,
+  isFreeElective = (label) => DEFAULT_FREE_ELECTIVE.test(label),
 } = {}) {
   const years = academicYears(semesters);
   const nextPlacements = { ...placements };
@@ -202,7 +210,7 @@ export function mapSamplePlan(plan, {
           const label = entry.text?.replace(/\s+/g, " ").trim() || "Elective";
           const seen = slotOrdinal.get(`${sem.id}:${label}`) ?? 0;
           slotOrdinal.set(`${sem.id}:${label}`, seen + 1);
-          const slot = slotFor(entry, sem.id, seen);
+          const slot = slotFor(entry, sem.id, seen, isFreeElective);
           // Re-applying must not stack a second copy on top of the first.
           if (!existingSlots.has(slot.id)) slots.push(slot);
           continue;
@@ -287,13 +295,13 @@ function baseId(pid) {
  */
 export function summarizeSamplePlan(result) {
   const by = kind => result.notes.filter(n => n.kind === kind);
-  const slotsBy = (source) => (result.newSlots ?? []).filter(s => s.source === source).length;
+  const slotsBy = (c) => (result.newSlots ?? []).filter(s => s.constraint === c).length;
   return {
     placed:        result.placed.length,
     coops:         result.coops.length,
     slots:         (result.newSlots ?? []).length,
-    choices:       slotsBy("choice"),
-    placeholders:  slotsBy("requirement") + slotsBy("free"),
+    choices:       slotsBy("exact"),
+    placeholders:  slotsBy("inferred") + slotsBy("open"),
     alreadyPlaced: by("already-placed").length,
     unknown:       by("unknown-course").length,
     outsideRange:  by("outside-timeline").length,
