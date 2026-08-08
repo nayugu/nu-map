@@ -114,7 +114,11 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   // appear on hover showing "–" (the view is empty), so a click could
   // silently overwrite a real grade with no way to see what you did —
   // editing blind over data you deliberately hid.
-  const canEditGrades = !privateGrades;
+  // A reservation has no course, so there is nothing to grade. The chip is
+  // also gated on the semester being completed, which is why it only appeared
+  // on some of them. Gating here covers both places it renders — and both
+  // places it would need remembering.
+  const canEditGrades = !privateGrades && !course.isReservation;
 
   // A GPA gate stated in the course description (3 courses corpus-wide,
   // e.g. BNSC 4971 "Requires a 3.500 GPA"). Flags only when the entered
