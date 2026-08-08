@@ -369,7 +369,7 @@ export const strings = {
   "onboard.sampleplan.label":     "Start from your department's sample plan",
   "onboard.sampleplan.counts":    "adds {courses} courses and {placeholders} placeholders you'll choose later",
   "onboard.sampleplan.loading":   "checking what it includes…",
-  "onboard.sampleplan.which":     "Which co-op cycle?",
+  "onboard.sampleplan.which":     "Which schedule?",
   "onboard.back":                 "Back",
   "onboard.next":                 "Next",
   "onboard.skip":                 "Skip",

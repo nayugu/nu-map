@@ -359,7 +359,7 @@ export const strings = {
   "onboard.sampleplan.label":     "ابدأ من الخطة الدراسية النموذجية لقسمك",
   "onboard.sampleplan.counts":    "يضيف {courses} مقرراً و{placeholders} خانة ستختارها لاحقاً",
   "onboard.sampleplan.loading":   "جارٍ التحقق مما تتضمنه…",
-  "onboard.sampleplan.which":     "أي دورة تدريب تعاوني؟",
+  "onboard.sampleplan.which":     "أي جدول؟",
   "onboard.back":                 "رجوع",
   "onboard.next":                 "التالي",
   "onboard.skip":                 "تخطٍّ",

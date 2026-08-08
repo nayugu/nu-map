@@ -299,7 +299,7 @@ export const strings = {
   "onboard.sampleplan.label":     "\u4ece\u6240\u5728\u9662\u7cfb\u7684\u793a\u4f8b\u8ba1\u5212\u5f00\u59cb",
   "onboard.sampleplan.counts":    "\u5c06\u6dfb\u52a0 {courses} \u95e8\u8bfe\u7a0b\u548c {placeholders} \u4e2a\u7a0d\u540e\u9009\u62e9\u7684\u540d\u989d",
   "onboard.sampleplan.loading":   "\u6b63\u5728\u786e\u8ba4\u5305\u542b\u7684\u5185\u5bb9\u2026",
-  "onboard.sampleplan.which":     "\u54ea\u4e2a co-op \u5468\u671f\uff1f",
+  "onboard.sampleplan.which":     "\u9009\u62e9\u54ea\u79cd\u65e5\u7a0b\uff1f",
   "onboard.back":                 "\u4e0a\u4e00\u6b65",
   "onboard.next":                 "\u4e0b\u4e00\u6b65",
   "onboard.skip":                 "\u8df3\u8fc7",

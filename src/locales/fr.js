@@ -360,7 +360,7 @@ export const strings = {
   "onboard.sampleplan.label":     "Partir du plan d’études type de votre département",
   "onboard.sampleplan.counts":    "ajoute {courses} cours et {placeholders} emplacements que vous choisirez plus tard",
   "onboard.sampleplan.loading":   "vérification du contenu…",
-  "onboard.sampleplan.which":     "Quel cycle de co-op ?",
+  "onboard.sampleplan.which":     "Quel calendrier ?",
   "onboard.back":                 "Retour",
   "onboard.next":                 "Suivant",
   "onboard.skip":                 "Ignorer",

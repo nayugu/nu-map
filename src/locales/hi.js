@@ -360,7 +360,7 @@ export const strings = {
   "onboard.sampleplan.label":     "अपने विभाग की नमूना योजना से शुरू करें",
   "onboard.sampleplan.counts":    "{courses} पाठ्यक्रम और {placeholders} स्थान जोड़ता है जिन्हें आप बाद में चुनेंगे",
   "onboard.sampleplan.loading":   "देखा जा रहा है कि इसमें क्या शामिल है…",
-  "onboard.sampleplan.which":     "कौन-सा को-ऑप चक्र?",
+  "onboard.sampleplan.which":     "कौन-सा शेड्यूल?",
   "onboard.back":                 "पीछे",
   "onboard.next":                 "आगे",
   "onboard.skip":                 "छोड़ें",

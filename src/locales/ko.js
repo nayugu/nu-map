@@ -360,7 +360,7 @@ export const strings = {
   "onboard.sampleplan.label":     "학과의 샘플 플랜으로 시작하기",
   "onboard.sampleplan.counts":    "과목 {courses}개와 나중에 고를 자리 {placeholders}개를 추가합니다",
   "onboard.sampleplan.loading":   "포함 내용을 확인하는 중…",
-  "onboard.sampleplan.which":     "어느 코업 주기인가요?",
+  "onboard.sampleplan.which":     "어느 일정으로 할까요?",
   "onboard.back":                 "뒤로",
   "onboard.next":                 "다음",
   "onboard.skip":                 "건너뛰기",

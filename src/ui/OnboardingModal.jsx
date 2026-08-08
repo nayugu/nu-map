@@ -105,7 +105,11 @@ export default function OnboardingModal() {
     () => variantsFor(samplePlans ?? [], { years: Math.round(durationYrs) }),
     [samplePlans, durationYrs]);
 
-  const chosenVariant = offeredVariants[variantIdx] ?? offeredVariants[0] ?? null;
+  // Clamped: changing the cohort can shrink the list under a selection made
+  // against the old one, and an out-of-range index would leave every radio
+  // unchecked while silently loading the first variant.
+  const safeIdx = Math.min(Math.max(variantIdx, 0), Math.max(offeredVariants.length - 1, 0));
+  const chosenVariant = offeredVariants[safeIdx] ?? null;
 
   // What loading it would actually do, counted by doing it against this
   // student's own timeline — so the numbers on the box are the ones they get.
@@ -138,19 +142,24 @@ export default function OnboardingModal() {
     setGradSem("spring");
   };
 
-  const setup  = () => ({
+  /**
+   * @param {boolean} withSamplePlan  false for SKIP. Skipping means "do not set
+   *   this up", so it must not also drop 40 cards onto the canvas — and Escape
+   *   routes here too, which would make a stray keypress load a plan.
+   */
+  const setup  = (withSamplePlan = true) => ({
     studentType, entSem, entYear, gradSem, gradYear, major, major2, minor1, minor2, conc: "",
     // Handed to finishOnboarding rather than applied here: the cohort this plan
     // has to be laid out against is set by that same call, so applying from the
     // modal would use the PREVIOUS timeline.
-    ...(samplePlanOffer.offer && useSamplePlan && chosenVariant
+    ...(withSamplePlan && samplePlanOffer.offer && useSamplePlan && chosenVariant
       ? { samplePlan: chosenVariant, samplePlanKey: major }
       : {}),
   });
   // Skip or finish both commit the setup; finishOnboarding then opens the tour.
-  const skip   = () => finishOnboarding(setup());
+  const skip   = () => finishOnboarding(setup(false));
   skipRef.current = skip;
-  const finish = () => finishOnboarding(setup());
+  const finish = () => finishOnboarding(setup(true));
   const advance = () => { if (!cohortValid) return; if (step < STEPS - 1) setStep(step + 1); else finish(); };
 
   // ── shared styling (matches the feature tour) ─────────────────
@@ -363,8 +372,11 @@ export default function OnboardingModal() {
                 </label>
 
                 {/* The ONE question the data leaves open. Year count is
-                    resolved from the cohort, so what remains is the co-op
-                    cycle — a fact about the student, not about plans. */}
+                    resolved from the cohort, so what survives is almost always
+                    the co-op cycle — but not always: ~17 programs publish
+                    variants that differ by a last-name division or by nothing
+                    at all. The heading therefore names no axis; the option
+                    labels already say what they are. */}
                 {useSamplePlan && offeredVariants.length > 1 && (
                   <div style={{ marginTop: 10, paddingLeft: 27 }}>
                     <div style={{ fontSize: 13, color: "var(--text-4)", marginBottom: 5 }}>
@@ -375,7 +387,7 @@ export default function OnboardingModal() {
                         <input
                           type="radio"
                           name="sampleplan-variant"
-                          checked={variantIdx === i}
+                          checked={safeIdx === i}
                           onChange={() => setVariantIdx(i)}
                           style={{ cursor: "pointer", accentColor: "var(--link-1)" }}
                         />

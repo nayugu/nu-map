@@ -361,7 +361,7 @@ export const strings = {
   "onboard.sampleplan.label":     "学科のサンプルプランから始める",
   "onboard.sampleplan.counts":    "科目 {courses} 件と、あとで選ぶ枠 {placeholders} 件を追加します",
   "onboard.sampleplan.loading":   "内容を確認しています…",
-  "onboard.sampleplan.which":     "どちらのコープサイクルですか？",
+  "onboard.sampleplan.which":     "どのスケジュールにしますか？",
   "onboard.back":                 "戻る",
   "onboard.next":                 "次へ",
   "onboard.skip":                 "スキップ",
