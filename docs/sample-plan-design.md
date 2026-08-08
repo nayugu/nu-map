@@ -165,8 +165,10 @@ Lessons, not code:
 - Consume demand from the graduation audit's own allocator rather than a second
   implementation, so a slot binds to exactly what the audit reports as unmet.
 - The catalog's own arithmetic as a verification gate.
-- Storing reservations outside `placements` and deriving a view — arrived at
-  deliberately this time; see [§2](#2-the-structural-question).
+- Reservations never enter `placements`, so nothing that totals credit toward
+  the degree can see one. That safety property is the reason the previous
+  design existed and it survives unchanged — now for free, since reservations
+  are derived rather than stored at all.
 
 ---
 
@@ -283,6 +285,13 @@ Delete a course and its reservation returns, with no bookkeeping. No stored
 mapping means no id-stability exposure on the one thing that would have been
 corrupting. The audit consumes `placements`; entries are not placements; there
 is no cycle.
+
+**Which reservation retires must be deterministic.** Two `Khoury Elective`
+entries and one newly-placed Khoury course is ambiguous, and resolving it
+differently between renders would make the plan visibly churn. Rule: retire the
+**earliest unanswered entry bound to that requirement, in plan order** — a total
+order that exists in the shipped data, so every client agrees without storing
+anything.
 
 **Accepted consequence:** placing a course for one reason can retire a
 reservation created for another — put any Khoury-eligible course anywhere and
@@ -422,6 +431,7 @@ in one direction. This set is a work queue for the requirements scraper.
 | **V1** | should binding over-subscription *block* a scrape write, or only report? | report first, block once a baseline exists |
 | **C1** | model college-wide requirements (CSSH foreign language), or leave them honestly unbound? | unbound now; §6 turns them into a queue |
 | **D1** | how legible must a reservation retiring itself be (§2)? | UI question, deferred |
+| **D3** | plan applied, then the student changes major — do reservations vanish or warn? | warn, then vanish on confirm |
 | **D2** | widen the id-stability sample — few archived programs carry a planGrid | not blocking; the rule makes the number non-load-bearing |
 
 ---
