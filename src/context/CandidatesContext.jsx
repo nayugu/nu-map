@@ -31,7 +31,9 @@ import { bindReservations, outstandingObligations } from "../core/runtimeBinding
 import {
   candidatesForReservation, courseIds, preferredCourseIds, applyFilters,
   withoutSatisfiedRequirements, forcedRequirement, isUnbounded, isSpare,
+  CONCENTRATION,
 } from "../core/candidates.js";
+import { resolveConcentration } from "../core/concentrationResolve.js";
 import { specForNode }        from "../core/programEligibility.js";
 import { specAdmitsSubject, specAdmitsRange } from "../core/requirementBinding.js";
 import { createPlanHints }    from "../adapters/northeastern/planHints.js";
@@ -48,7 +50,7 @@ const CandidatesContext = createContext({
 export const useCandidates = () => useContext(CandidatesContext);
 
 export function CandidatesProvider({ children }) {
-  const { reservations, placements, courseMap, subjects, major, studentType } = usePlanner();
+  const { reservations, placements, courseMap, subjects, major, conc, studentType } = usePlanner();
   const majorRequirements = usePort(IMajorRequirements);
   const isGrad = studentType === "graduate";
 
@@ -102,7 +104,17 @@ export function CandidatesProvider({ children }) {
 
   const value = useMemo(() => {
     const sections = programData?.requirementSections ?? [];
-    const specOf = (t) => (typeof t === "number" ? specForNode(sections[t]) : null);
+    // `~concentration` names nothing in general — which concentration is the
+    // student's choice. Once they have chosen, it names that section's courses,
+    // so a card reserving concentration credit stops offering the whole catalog.
+    // `~general` has no resolution by nature and stays open.
+    const concSection = conc && programData?.concentrations
+      ? resolveConcentration(programData, conc) : null;
+    const specOf = (t) => {
+      if (typeof t === "number") return specForNode(sections[t]);
+      if (t === CONCENTRATION && concSection) return specForNode(concSection);
+      return null;
+    };
     const ctx = { specOf, courseMap };
 
     // A requirement the plan has already met cannot be what a card is for.
@@ -138,7 +150,7 @@ export function CandidatesProvider({ children }) {
       isUnboundedFor: (id) => { const c = get(id); return c ? isUnbounded(c, ctx) : true; },
       isSpareFor: (id) => { const c = get(id); return c ? isSpare(c) : false; },
     };
-  }, [reservations, targets, programData, courseMap, obligations]);
+  }, [reservations, targets, programData, courseMap, obligations, conc]);
 
   return <CandidatesContext.Provider value={value}>{children}</CandidatesContext.Provider>;
 }

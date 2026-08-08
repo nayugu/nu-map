@@ -115,6 +115,31 @@ test("a concentration sentinel is unbounded until it is resolved", () => {
   assert.ok(isUnbounded(c, ctx), "an unresolved concentration must not read as impossible");
 });
 
+test("a RESOLVED concentration stops offering the whole catalog", () => {
+  // Which concentration is the student's choice, so the sentinel names nothing
+  // in general. Once chosen it names that section's courses, and a card
+  // reserving concentration credit should narrow to them. Enumerability is
+  // asked of `specOf`, not of whether the target looks like a sentinel.
+  const c = createCandidates({ requirements: [CONCENTRATION] });
+  const resolved = {
+    specOf: (t) => (t === CONCENTRATION ? specForNode(PROGRAM.sections[REAL_SECTIONS[0]])
+                                        : (typeof t === "number" ? specForNode(PROGRAM.sections[t]) : null)),
+    courseMap: COURSE_MAP,
+  };
+  assert.ok(!isUnbounded(c, resolved), "a resolved concentration still read as unbounded");
+  const ids = courseIds(c, resolved);
+  assert.ok(ids.size > 0 && ids.size < 7000, `expected a narrowed set, got ${ids.size}`);
+  assert.ok(preferredCourseIds(c, resolved).size > 0, "a resolved concentration expresses no preference");
+});
+
+test("~general never resolves, however hard a caller tries", () => {
+  // It admits everything by nature. A specOf that returned a spec for it would
+  // be claiming a free elective is restricted, which is the opposite of true.
+  const c = createCandidates({ requirements: [GENERAL_ELECTIVE] });
+  assert.ok(isUnbounded(c, ctx));
+  assert.equal(preferredCourseIds(c, ctx).size, 0);
+});
+
 test("CORPUS FACT: no requirement section is open-ended", () => {
   // Measured: 0 of 4,234 sections across 532 programs have an empty spec. Every
   // real section names courses, and open-endedness reaches us only through the

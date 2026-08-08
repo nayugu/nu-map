@@ -217,9 +217,14 @@ export function isUnbounded(cands, { specOf } = {}) {
   // degree, which rule 4 forbids. `isSpare` is the different case where every
   // candidate was RULED OUT.
   if (!cands.requirements.size && !cands.droppedRequirements.size) return true;
+  // A target is enumerable exactly when `specOf` can name its courses. Asking
+  // that rather than asking whether the target is a sentinel lets a caller
+  // RESOLVE one: `~concentration` names nothing in general, but once the
+  // student has chosen a concentration it names that section's courses, and a
+  // card reserving concentration credit should stop offering the whole catalog.
+  // `~general` resolves to nothing by nature and stays unbounded, correctly.
   for (const t of cands.requirements) {
-    if (isSentinel(t)) return true;
-    if (specIsEmpty(specOf?.(t))) return true;   // an open-ended section
+    if (specIsEmpty(specOf?.(t))) return true;
   }
   return false;
 }
@@ -261,7 +266,7 @@ export function courseSpec(cands, { specOf, courseMap } = {}) {
   }
   const base = cands.seed
     ? cands.seed
-    : unionAll([...cands.requirements].filter(t => !isSentinel(t)).map(t => specOf?.(t)).filter(Boolean));
+    : unionAll([...cands.requirements].map(t => specOf?.(t)).filter(Boolean));
   return cands.droppedCourses.size
     ? subtractIds(base, cands.droppedCourses.keys())
     : cloneSpec(base);
@@ -289,9 +294,8 @@ export function preferredCourseIds(cands, { specOf, courseMap } = {}) {
   if (!courseMap) return new Set();
   if (cands.groups) return courseIds(cands, { specOf, courseMap });
   const specs = [...cands.requirements]
-    .filter(t => !isSentinel(t))
     .map(t => specOf?.(t))
-    .filter(Boolean);
+    .filter(s => s && !specIsEmpty(s));
   if (!specs.length) return new Set();
   const spec = cands.droppedCourses.size
     ? subtractIds(unionAll(specs), cands.droppedCourses.keys())
