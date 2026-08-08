@@ -274,3 +274,35 @@ test("ordering is computed over the combined view everywhere, without exception"
   }
   assert.deepEqual(offenders, [], "ordering computed without the combined view");
 });
+
+test("synthesised reservation edges never reach coreq partner lookup", () => {
+  // `reservationEdges` invents edges whose endpoint is a reservation id, so a
+  // synthesised CORequisite would put that id into `coreqPartners` — a list of
+  // cards the drag handler then moves through `setPlacements`. That is the
+  // isolation boundary broken from a direction the drag tests cannot see,
+  // because it depends on which ARRAY a call site reads.
+  //
+  // So the two arrays stay separate: `allEdges` is courses only and feeds
+  // coreq lookup; `lineEdges` adds the synthesised ones and feeds drawing.
+  const src = readFileSync(join(ROOT, "src/context/PlannerContext.jsx"), "utf8");
+
+  // 1. allEdges must still be built from courses alone.
+  const decl = src.split("\n").find(l => l.includes("const allEdges"));
+  assert.ok(decl, "allEdges declaration not found — this guard needs updating");
+  assert.ok(decl.includes("extractEdges"), "allEdges is no longer the raw course edges");
+  assert.ok(!decl.includes("reservationEdges"),
+    "synthesised reservation edges were merged into allEdges, which feeds coreq lookup");
+
+  // 2. Every coreq partner lookup must read allEdges, never lineEdges.
+  const offenders = [];
+  const lines = src.split("\n");
+  lines.forEach((line, i) => {
+    if (!line.includes("corequisite")) return;
+    if (line.trim().startsWith("//")) return;
+    // Look back a few lines for which array is being filtered.
+    const window = lines.slice(Math.max(0, i - 4), i + 1).join("\n");
+    if (window.includes("lineEdges")) offenders.push(`line ${i + 1}: ${line.trim()}`);
+  });
+  assert.deepEqual(offenders, [],
+    "a corequisite lookup reads lineEdges, so a reservation id can become a coreq partner");
+});

@@ -17,6 +17,7 @@ import { evalPrereqTree } from "../core/prereqEval.js";
 import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
+import { reservationEdges } from "../core/reservationEdges.js";
 import { dropOnCard as resolveDropOnCard, dropOnSemester, dropOnBank } from "../core/planDrop.js";
 import { buildSemesterView, cardIdsIn, cardsIn, loadIn } from "../core/semesterView.js";
 import { applySamplePlan as mapSamplePlan } from "../core/applySamplePlan.js";
@@ -855,6 +856,23 @@ export function PlannerProvider({ children }) {
   // through an unplaced course would bridge two courses that aren't actually
   // adjacent on the board. Shared by the highlight (connectedIds) and the SVG
   // lines effect; edges are the same objects as allEdges so identity holds.
+  // Edges a reservation borrows from the courses it could become, so a card
+  // reading "IE 3412 or MATH 3081" connects to an IE 4516 that requires either.
+  // Only what holds under EVERY option, and only for cards that name their
+  // options — see src/core/reservationEdges.js.
+  //
+  // Deliberately NOT merged into `allEdges`. That array also drives coreq
+  // partner lookup for drags (six call sites), and a synthesised corequisite
+  // would put a reservation id into `coreqPartners`, which is a list of courses
+  // to move. Lines are the only consumer that should see these.
+  const reservationLineEdges = useMemo(
+    () => reservationEdges(reservations, allEdges, { courseMap: effectiveCourseMap }),
+    [reservations, allEdges, effectiveCourseMap]);
+
+  const lineEdges = useMemo(
+    () => (reservationLineEdges.length ? [...allEdges, ...reservationLineEdges] : allEdges),
+    [allEdges, reservationLineEdges]);
+
   const connectionEdges = useMemo(() => {
     if (!selectedId) return [];
     // Edges are keyed by BASE course ids; repeat instances ("BASE#n") have
@@ -866,7 +884,13 @@ export function PlannerProvider({ children }) {
       if (sid === "incoming") continue;
       takeOf[baseId(pid)] ??= pid;
     }
-    const placedEdges = allEdges.filter(e => takeOf[e.from] && takeOf[e.to]);
+    // A reservation is on the board too. It is not in `placements` — that map
+    // answers "what counts toward the degree" and must never see one — so it is
+    // added here, where the question is only "is there a card to draw to".
+    for (const r of Object.values(reservations)) {
+      if (r?.semId && r.semId !== "incoming") takeOf[r.id] ??= r.id;
+    }
+    const placedEdges = lineEdges.filter(e => takeOf[e.from] && takeOf[e.to]);
     const selBase = baseId(selectedId);
     const edges = getConnectionsToDepth(selBase, placedEdges, prereqDepth, unlockDepth);
     // Re-anchor endpoints onto concrete cards — the take the user actually
@@ -875,13 +899,14 @@ export function PlannerProvider({ children }) {
     // effect de-dups against it).
     const anchor = (id) =>
       id === selBase ? selectedId
+      : isReservationId(id) ? id            // a reservation has no takes to resolve
       : (placements[id] && placements[id] !== "incoming") ? id
       : takeOf[id];
     return edges.map(e => {
       const f = anchor(e.from), t = anchor(e.to);
       return f === e.from && t === e.to ? e : { ...e, from: f, to: t };
     });
-  }, [selectedId, allEdges, placements, prereqDepth, unlockDepth]);
+  }, [selectedId, lineEdges, reservations, placements, prereqDepth, unlockDepth]);
 
   // ── Effect: SVG lines ─────────────────────────────────────────
   useEffect(() => {
@@ -1535,12 +1560,12 @@ export function PlannerProvider({ children }) {
     // Plus the 1-degree neighbourhood over ALL edges, so a direct prereq/coreq
     // sitting unplaced in the Course Bank still lights up (and isn't dimmed).
     // Bounded to one hop for unplaced courses — no catalog-wide expansion.
-    for (const r of allEdges) {
+    for (const r of lineEdges) {
       if (r.from === selectedId && !(r.to   in m)) m[r.to]   = r.type;
       if (r.to   === selectedId && !(r.from in m)) m[r.from] = r.type;
     }
     return m;
-  }, [selectedId, connectionEdges, allEdges]);
+  }, [selectedId, connectionEdges, lineEdges]);
 
   // Trace a course's full prerequisite tree on the grid: select it and force
   // both depths to Max so the whole chain lights up regardless of the current
