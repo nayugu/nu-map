@@ -95,6 +95,33 @@ export function collectEligibleSpec(programData) {
   return { required, elective };
 }
 
+/**
+ * The courses that can answer ONE requirement node, as a single spec.
+ *
+ * collectEligibleSpec answers "can this course count anywhere in the program",
+ * a whole-program question that deliberately flattens away which section a
+ * course belongs to. Binding a plan cell asks the opposite — "what belongs in
+ * THIS reservation" — and needs the per-section answer.
+ *
+ * The required/elective split is unioned rather than kept, because from a
+ * cell's point of view that distinction does not exist: a section naming
+ * CS 3000 outright and one offering a choice of eight both answer "what may go
+ * here" with a set of courses.
+ *
+ * @param {Object|null} node  any requirement node, or a SECTION
+ * @returns {EligibleSpec}
+ */
+export function specForNode(node) {
+  const spec = emptySpec();
+  walkNode(node, spec, spec, false);
+  return spec;
+}
+
+/** True when a spec names nothing at all — an open-ended "any course" slot. */
+export function specIsEmpty(spec) {
+  return !spec || (!spec.keys.size && !spec.ranges.length);
+}
+
 /** Union several split specs into one `{required, elective}`. */
 export function mergeSplitSpecs(...splits) {
   const required = emptySpec();
