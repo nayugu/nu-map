@@ -217,6 +217,9 @@ export function PlannerProvider({ children }) {
   // It proves the canvas STARTED as a sample plan. It does not prove the
   // student has left it alone, so replacing is still destructive.
   const [appliedTemplate,  setAppliedTemplate]  = useState(() => (_saved?.persist && _saved.appliedTemplate) ? _saved.appliedTemplate : null);
+  // A sample plan chosen during first-run setup, waiting for the cohort that
+  // setup also chose. Never persisted — it exists for one render.
+  const [pendingSamplePlan, setPendingSamplePlan] = useState(null);
   const [semOrders,        setSemOrders]        = useState(() => (_saved?.persist && _saved.semOrders)        ? _saved.semOrders        : {});
   const [offeredOverrides, setOfferedOverrides] = useState(() => (_saved?.persist && _saved.offeredOverrides) ? _saved.offeredOverrides : {});
   const [collapsedSubs,    setCollapsedSubs]    = useState(() => (_saved?.persist && _saved.collapsedSubs)    ? _saved.collapsedSubs    : {});
@@ -486,6 +489,11 @@ export function PlannerProvider({ children }) {
     // not here, so a reload mid-setup re-shows it rather than stranding the user.
     // Append ?onboarding to the URL to force it during development.
     try {
+      // ⚠ TEMPORARY — TESTING ONLY. Forces first-run setup on every reload so
+      // the sample-plan step can be exercised. DELETE THIS LINE to restore the
+      // real behaviour (shown once, then never again).
+      if (import.meta.env?.DEV) return true;
+
       if (new URLSearchParams(window.location.search).has("onboarding")) return true;
       return !localStorage.getItem(key("seen-cohort-setup"));
     } catch { return false; }
@@ -1830,6 +1838,17 @@ export function PlannerProvider({ children }) {
     if (programKey) setAppliedTemplate({ programKey, planLabel: plan?.label ?? "" });
     return result;
   };
+
+  // Apply a sample plan chosen during first-run setup, once the cohort chosen
+  // in that same step has actually landed. finishOnboarding cannot do it
+  // inline: its own setPlanEntSem/setPlanGradYear calls have not flushed, so
+  // SEMESTERS there is still the timeline the app booted with, and a four-year
+  // plan would be filed against the wrong years.
+  useEffect(() => {
+    if (!pendingSamplePlan) return;
+    applySamplePlanToPlan(pendingSamplePlan.plan, null, 0, pendingSamplePlan.programKey);
+    setPendingSamplePlan(null);
+  }, [pendingSamplePlan, SEMESTERS]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const [statsUnlocked, setStatsUnlocked] = useState(() => {
     try { return localStorage.getItem(key("stats-unlocked")) === "true"; } catch { return false; }
@@ -3301,6 +3320,7 @@ export function PlannerProvider({ children }) {
       studentType: st = "undergrad",
       entSem, entYear, gradSem, gradYear,
       major: mj = "", major2: mj2 = "", conc: cc = "", conc2: cc2 = "", minor1: mn1 = "", minor2: mn2 = "",
+      samplePlan = null, samplePlanKey = null,
     } = setup;
 
     // Apply to the live current plan; the auto-save effect persists it.
@@ -3311,6 +3331,13 @@ export function PlannerProvider({ children }) {
     if (gradYear){ setPlanGradYear(gradYear); try { localStorage.setItem(key("grad-year"),gradYear);} catch {} }
     setMajor(mj); setMajor2(mj2); setConc(cc); setConc2(cc2); setMinor1(mn1); setMinor2(mn2);
     setPlans(prev => prev.map(p => p.id === activePlanId ? { ...p, studentType: st } : p));
+
+    // The sample plan is laid out against the cohort set just above, and those
+    // setters have not flushed yet — SEMESTERS is still the OLD timeline at
+    // this point. So it is queued, and an effect applies it once the new
+    // timeline exists. Applying here would file a four-year plan against
+    // whatever dates the app happened to boot with.
+    if (samplePlan) setPendingSamplePlan({ plan: samplePlan, programKey: samplePlanKey });
 
     try { localStorage.setItem(key("seen-cohort-setup"), "1"); } catch {}
     setShowCohortSetup(false);

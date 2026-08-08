@@ -20,6 +20,7 @@ import { SearchCombo }        from "./GradPanel.jsx";
 import YearStepper            from "./YearStepper.jsx";
 import { NUM_YEARS }          from "../core/constants.js";
 import { cohortCatalogYear } from "../data/programPaths.js";
+import { sampleplanOffer, variantsFor, describeTemplate } from "../core/planTemplate.js";
 
 const MAX_GRAD_YEAR = 2040;
 const GRAD_YEARS    = 2;
@@ -31,6 +32,7 @@ export default function OnboardingModal() {
     studentType: savedStudentType,
     major: savedMajor, major2: savedMajor2, minor1: savedMinor1, minor2: savedMinor2,
     showCohortSetup, finishOnboarding,
+    SEMESTERS, courseMap,
   } = usePlanner();
   const institution       = usePort(IInstitution);
   const majorRequirements = usePort(IMajorRequirements);
@@ -60,6 +62,58 @@ export default function OnboardingModal() {
   );
   const minorGroups = useMemo(() => majorRequirements.getMinorOptionGroups(cohortCatalogYear(entSem, entYear)), [majorRequirements, entSem, entYear]);
 
+  // Cohort arithmetic. Computed ABOVE the hooks that read it and above the
+  // early return: a hook referencing a `const` declared further down throws
+  // "Cannot access before initialization" on every render, which took the whole
+  // modal out. Pure derivations of state, so there is nothing to gain by
+  // deferring them.
+  const entOrd  = semOrd(entSem,  entYear);
+  const gradOrd = semOrd(gradSem, gradYear);
+  const cohortValid = gradOrd > entOrd;
+  const durationYrs = ((gradYear * 2 + (gradSem === "fall" ? 1 : 0)) -
+                       (entYear  * 2 + (entSem  === "fall" ? 1 : 0)) + 1) / 2;
+
+  // ── The department's sample plan ────────────────────────────────
+  const [samplePlans,   setSamplePlans]   = useState(null);   // variants, or null
+  const [useSamplePlan, setUseSamplePlan] = useState(true);   // default on: see below
+  const [variantIdx,    setVariantIdx]    = useState(0);
+
+  // Question 1 of the rule — is there anything to offer? Synchronous, so the
+  // box never flickers in for a program that publishes nothing.
+  const hasSamplePlan = !!major && !!majorRequirements.hasSamplePlan?.(major, isGrad);
+
+  useEffect(() => {
+    setSamplePlans(null); setVariantIdx(0);
+    if (!hasSamplePlan) return;
+    let live = true;
+    majorRequirements.loadSamplePlans(major, isGrad)
+      .then(g => { if (live) setSamplePlans(g?.plans ?? null); })
+      .catch(() => { if (live) setSamplePlans(null); });
+    return () => { live = false; };
+  }, [major, isGrad, hasSamplePlan, majorRequirements]);
+
+  // The offer rule, shared with every other surface that asks. The canvas is
+  // empty by definition during first-run setup, so the verb is always "load".
+  const samplePlanOffer = useMemo(() => sampleplanOffer({
+    major, major2, hasSamplePlan, appliedTemplate: null, canvasEmpty: true,
+  }), [major, major2, hasSamplePlan]);
+
+  // Year count comes from the cohort the student just set, and a variant's
+  // length is COUNTED from its own shape — never parsed out of "Four Years",
+  // which would tie this to English.
+  const offeredVariants = useMemo(
+    () => variantsFor(samplePlans ?? [], { years: Math.round(durationYrs) }),
+    [samplePlans, durationYrs]);
+
+  const chosenVariant = offeredVariants[variantIdx] ?? offeredVariants[0] ?? null;
+
+  // What loading it would actually do, counted by doing it against this
+  // student's own timeline — so the numbers on the box are the ones they get.
+  const samplePlanCounts = useMemo(() => {
+    if (!chosenVariant) return null;
+    return describeTemplate(chosenVariant, { semesters: SEMESTERS, courseMap });
+  }, [chosenVariant, SEMESTERS, courseMap]);
+
   const dialogRef = useRef(null);
   const skipRef   = useRef(() => {});
   // Subscribe once per open (not per keystroke); the listener calls the latest
@@ -74,12 +128,6 @@ export default function OnboardingModal() {
 
   if (!showCohortSetup) return null;
 
-  const entOrd  = semOrd(entSem,  entYear);
-  const gradOrd = semOrd(gradSem, gradYear);
-  const cohortValid = gradOrd > entOrd;
-  const durationYrs = ((gradYear * 2 + (gradSem === "fall" ? 1 : 0)) -
-                       (entYear  * 2 + (entSem  === "fall" ? 1 : 0)) + 1) / 2;
-
   const switchStudentType = (type) => {
     setStudentType(type);
     // Grad programs live in a different data tree — a major picked as undergrad
@@ -90,7 +138,15 @@ export default function OnboardingModal() {
     setGradSem("spring");
   };
 
-  const setup  = () => ({ studentType, entSem, entYear, gradSem, gradYear, major, major2, minor1, minor2, conc: "" });
+  const setup  = () => ({
+    studentType, entSem, entYear, gradSem, gradYear, major, major2, minor1, minor2, conc: "",
+    // Handed to finishOnboarding rather than applied here: the cohort this plan
+    // has to be laid out against is set by that same call, so applying from the
+    // modal would use the PREVIOUS timeline.
+    ...(samplePlanOffer.offer && useSamplePlan && chosenVariant
+      ? { samplePlan: chosenVariant, samplePlanKey: major }
+      : {}),
+  });
   // Skip or finish both commit the setup; finishOnboarding then opens the tour.
   const skip   = () => finishOnboarding(setup());
   skipRef.current = skip;
@@ -262,6 +318,72 @@ export default function OnboardingModal() {
                   <SearchCombo value={minor1} onChange={setMinor1} groups={minorGroups} placeholder={t("grad.minor.search")} size={16} />
                 </div>
                 <SearchCombo value={minor2} onChange={setMinor2} groups={minorGroups} placeholder={t("grad.minor.search")} size={16} />
+              </div>
+            )}
+
+            {/* ── Start from the department's sample plan ──────────
+                Shown only when the chosen program publishes one — 632 of
+                1,017 do not, and a box that promises nothing for six users
+                in ten is worse than no box.
+
+                Hidden entirely for a true DOUBLE major: a sample plan
+                schedules the whole degree (median 131 SH of 128), leaving
+                ~28 SH of free electives where a second major needs 40-60.
+                Loading one would hand the student four full years to
+                dismantle. Combined majors ("X and Y") are a single program
+                and are unaffected. ── */}
+            {samplePlanOffer.offer && (
+              <div style={{
+                marginTop: 14, padding: "12px 14px", borderRadius: 9,
+                border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
+              }}>
+                <label style={{ display: "flex", gap: 10, cursor: "pointer", alignItems: "flex-start" }}>
+                  <input
+                    type="checkbox"
+                    checked={useSamplePlan}
+                    onChange={e => setUseSamplePlan(e.target.checked)}
+                    style={{ marginTop: 3, width: 17, height: 17, cursor: "pointer", accentColor: "var(--link-1)" }}
+                  />
+                  <span>
+                    <span style={{ fontSize: 16, fontWeight: 600, color: "var(--text-1)" }}>
+                      {t("onboard.sampleplan.label")}
+                    </span>
+                    {/* Says what actually arrives. Half of a sample plan names
+                        no course, so "load the plan" sets the wrong
+                        expectation and the student meets a wall of blanks. */}
+                    <span style={{ display: "block", fontSize: 14, color: "var(--text-4)", marginTop: 3 }}>
+                      {samplePlanCounts
+                        ? t("onboard.sampleplan.counts", {
+                            courses: samplePlanCounts.courses,
+                            placeholders: samplePlanCounts.placeholders,
+                          })
+                        : t("onboard.sampleplan.loading")}
+                    </span>
+                  </span>
+                </label>
+
+                {/* The ONE question the data leaves open. Year count is
+                    resolved from the cohort, so what remains is the co-op
+                    cycle — a fact about the student, not about plans. */}
+                {useSamplePlan && offeredVariants.length > 1 && (
+                  <div style={{ marginTop: 10, paddingLeft: 27 }}>
+                    <div style={{ fontSize: 13, color: "var(--text-4)", marginBottom: 5 }}>
+                      {t("onboard.sampleplan.which")}
+                    </div>
+                    {offeredVariants.map((p, i) => (
+                      <label key={i} style={{ display: "flex", gap: 8, alignItems: "center", cursor: "pointer", marginBottom: 3 }}>
+                        <input
+                          type="radio"
+                          name="sampleplan-variant"
+                          checked={variantIdx === i}
+                          onChange={() => setVariantIdx(i)}
+                          style={{ cursor: "pointer", accentColor: "var(--link-1)" }}
+                        />
+                        <span style={{ fontSize: 14, color: "var(--text-2)" }}>{p.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                )}
               </div>
             )}
 

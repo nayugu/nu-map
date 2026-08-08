@@ -363,6 +363,13 @@ export const strings = {
   "onboard.program.major2.add":   "+ Add a second major",
   "onboard.program.minors":       "MINORS",
   "onboard.program.skip":         "No major yet? Skip this. You can set it anytime from the requirements panel.",
+  // "Sample plan" is the catalog's own term for these ("Sample Plan of Study").
+  // The counts matter: half of one names no course, so a label promising just
+  // "a plan" leaves the student facing a wall of blanks they did not expect.
+  "onboard.sampleplan.label":     "Start from your department's sample plan",
+  "onboard.sampleplan.counts":    "adds {courses} courses and {placeholders} placeholders you'll choose later",
+  "onboard.sampleplan.loading":   "checking what it includes…",
+  "onboard.sampleplan.which":     "Which co-op cycle?",
   "onboard.back":                 "Back",
   "onboard.next":                 "Next",
   "onboard.skip":                 "Skip",
