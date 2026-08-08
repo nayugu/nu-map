@@ -53,7 +53,7 @@
 // half is two, so Spring + Summer 1 is the six-month co-op it actually is.
 // ═══════════════════════════════════════════════════════════════════
 
-import { slotId } from "./slotModel.js";
+import { slotId, slotSlug } from "./slotModel.js";
 
 /**
  * Months in a full-weight term. NU's semester weights are 1.0 for fall/spring
@@ -208,8 +208,12 @@ export function mapSamplePlan(plan, {
           // carries the catalog's credit hours; it just has no course in it
           // yet, and choosing one is the student's to do.
           const label = entry.text?.replace(/\s+/g, " ").trim() || "Elective";
-          const seen = slotOrdinal.get(`${sem.id}:${label}`) ?? 0;
-          slotOrdinal.set(`${sem.id}:${label}`, seen + 1);
+          // Counted over the SLUG, not the label: two labels differing only in
+          // case are one id, so counting per-label gave both ordinal 0 and the
+          // second silently replaced the first.
+          const okey = `${sem.id}:${slotSlug(label)}`;
+          const seen = slotOrdinal.get(okey) ?? 0;
+          slotOrdinal.set(okey, seen + 1);
           const slot = slotFor(entry, sem.id, seen, isFreeElective);
           // Re-applying must not stack a second copy on top of the first.
           if (!existingSlots.has(slot.id)) slots.push(slot);

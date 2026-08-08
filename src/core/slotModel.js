@@ -69,9 +69,24 @@ export const isSlotId = (id) => typeof id === "string" && id.startsWith(SLOT_PRE
  * than duplicated. `semId` on the record is the live position.
  */
 export function slotId(originSemId, label, ordinal) {
-  const slug = String(label).toLowerCase()
+  return `${SLOT_PREFIX}${originSemId}:${slotSlug(label)}:${ordinal}`;
+}
+
+/**
+ * The identity a label reduces to inside an id.
+ *
+ * Exported because the ORDINAL must be counted over this same form. Counting
+ * over the raw label instead silently loses slots: the catalog writes "CRIM
+ * elective" and "CRIM Elective" in one term, which are two labels and one
+ * slug, so both took ordinal 0, produced the same id, and the second
+ * overwrote the first. Eleven terms across the corpus lose a reservation that
+ * way — "SOCL elective"/"SOCL Elective", "Business Elective"/"Business
+ * elective", "Open Elective"/"Open elective" — and the loss is invisible,
+ * because a slot that never existed leaves no gap to notice.
+ */
+export function slotSlug(label) {
+  return String(label).toLowerCase()
     .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40);
-  return `${SLOT_PREFIX}${originSemId}:${slug}:${ordinal}`;
 }
 
 /** Slots with no course chosen yet — the only ones the grid draws as slots. */

@@ -440,3 +440,15 @@ test("slots › the inputs are still never mutated", () => {
   apply(plan(year("Year 1", term("fall", "Fall", [{ kind: "placeholder", text: "Elective", sh: 4 }]))), { slots });
   assert.deepEqual(slots, {});
 });
+
+test("two labels differing only in case are two slots, not one", () => {
+  // The catalog writes "CRIM elective" and "CRIM Elective" in one term. The id
+  // folds case, so counting the ordinal per-label gave both 0, produced one id
+  // twice, and silently dropped a reservation the department published.
+  const p = plan(year("Year 1", term("fall", "Fall", [
+    filler("SOCL elective"), filler("SOCL Elective"),
+  ])));
+  const r = mapSamplePlan(p, { semesters: SEMESTERS, courseMap });
+  assert.equal(r.newSlots.length, 2);
+  assert.equal(new Set(r.newSlots.map(s => s.id)).size, 2, "distinct ids");
+});
