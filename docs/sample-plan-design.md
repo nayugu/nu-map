@@ -1483,6 +1483,113 @@ once. Found by a test, not by reading.
 
 ---
 
+## 20. Loading a plan — the official UI
+
+**Status: design only.** Measured first, because three of the obvious placements
+are ruled out by the data rather than by taste.
+
+### 20.1 What the data forbids
+
+| | |
+|---|---|
+| programs with requirements | **1,017** |
+| …that ship a plan | **385 (37.9%)** |
+| …that ship **none** | **632 (62.1%)** |
+
+**This kills the welcome-screen toggle.** A checkbox on a first-run screen is
+offered before the major is known, so for six users in ten it would promise
+something that cannot happen and then silently do nothing. Rule 1 — never
+invent — applies to affordances, not just to entries.
+
+So the offer must appear **after** the program is chosen, wherever that is. In
+onboarding it already is: `OnboardingModal` is two steps, and step 2 is
+*program*. The offer belongs there, not on a screen before it.
+
+### 20.2 There is no plan picker, because there is barely a choice
+
+| variants per program | programs | |
+|---|---|---|
+| **1** | **203** | **52.7% — nothing to ask** |
+| 2 | 127 | 33.0% |
+| 3–8 | 55 | 14.3% |
+
+And what varies is almost never arbitrary. Across the 182 multi-variant
+programs:
+
+| axis | programs |
+|---|---|
+| co-op cycle only | 81 |
+| year count only | 33 |
+| both | 51 |
+| neither (unusable labels) | ~17 |
+
+**The app already knows the year count.** Onboarding collects entry and
+graduation terms, and the plan's own shape gives the other half:
+
+> `plan.years.length` agrees with the English label's year count in **597 of
+> 597** cases, with **zero** disagreements.
+
+So the year axis is resolved by counting year blocks — no English parsed, no
+locale exposure, consistent with everything else in this document. Filtering by
+it collapses the "year count only" programs to a single variant and the "both"
+programs to two.
+
+What is left is **one binary question: which co-op cycle** — spring/summer, or
+summer/fall. That is a fact about the student, not about plans, and it is the
+same two cycles §applySamplePlan already models.
+
+> **Conclusion: no popup, no plan list.** Zero questions for the majority, one
+> radio pair for the rest.
+
+### 20.3 The labels are not always showable
+
+A picker that prints `plan.label` would print this:
+
+```
+media_arts_bfa          "Four Years, Two Co-ops in Spring/Summer First-Half"
+                        "… First-Half (2)"   "… (3)"   "… (4)"
+architecture_bs         "LAST NAME BEGINS WITH A–L"
+                        "Last Name Begins with A–L"      ← same thing, twice
+"Plan 1"                (26 plans)
+```
+
+~17 programs have variants that differ by nothing a student could act on. These
+get the fallback — a plain list — and are the only case that needs one. Do not
+design the main flow around them.
+
+### 20.4 Where it goes
+
+| surface | behaviour |
+|---|---|
+| **Onboarding step 2**, after a major is chosen | a checkbox, shown **only if that program ships a plan**. Default **on** — the user is explicitly in setup, and a visible box they can untick is consent. Applies on *Finish*. |
+| **Changing major later, planner empty** | an inline, dismissible offer (the existing `StaleNotice` pattern). Not automatic. |
+| **Changing major later, planner NOT empty** | **nothing.** Apply is additive and idempotent, but dropping ~40 cards beside someone's existing work is a large uninvited action. It stays available from the requirements panel. |
+
+**Never silently.** The one thing worse than not offering is filling a planner
+without being asked.
+
+### 20.5 The checkbox has to be honest about what arrives
+
+Half of what lands names no course. A box reading *"load the suggested plan"*
+sets the wrong expectation, and the student meets a planner full of blanks.
+
+It should state both numbers, which `applySamplePlan` already returns
+(`placed`, `reserved`) and which can be counted without applying:
+
+> ☑ **Start from the department's suggested plan**
+> *adds 26 courses and 22 placeholders you'll choose later*
+
+### 20.6 Open
+
+| # | question | leaning |
+|---|---|---|
+| **U1** | default the checkbox on or off? | **on** in onboarding, never on a later change |
+| **U2** | a transfer student, or one entering mid-year — `startYearIndex` exists but onboarding does not ask | do not auto-apply when the cohort implies fewer years than the plan has |
+| **U3** | student picks a 4-year plan but their cohort spans 5 | offer only variants matching their year count; fall back to all if none match |
+| **U4** | where does the co-op cycle question live once asked — plan-local, or a real planner setting? | it is a fact about the student; worth promoting later, out of scope now |
+
+---
+
 ## 19. Residual risk — claims not yet verified
 
 Recorded so they are not mistaken for measured facts.
