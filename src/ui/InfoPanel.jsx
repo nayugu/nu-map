@@ -63,6 +63,22 @@ export default function InfoPanel() {
     return () => window.removeEventListener("keydown", handler, true);
   }, [showPanel, selectedId, setSelectedId]);
 
+  // The RAW course map, deliberately — not the combined view that includes
+  // reservations. A reservation selected here therefore yields no panel at all,
+  // and that is the correct behaviour rather than a gap:
+  //
+  // This panel is a course DESCRIPTION surface. A reservation has no course, so
+  // its title and description are empty by nature — rendering the panel's
+  // chrome around them would frame that emptiness as "this card's description",
+  // which is a claim about a course that does not exist yet. A blank panel
+  // reads worse than no panel.
+  //
+  // Closing an already-open panel follows from the same rule: the selection has
+  // moved to something with no description, and leaving the previous course's
+  // panel up would describe a card the student is no longer looking at.
+  //
+  // What a reservation needs instead is its own surface (the picker), not this
+  // one wearing a course's frame.
   const selCourse = selectedId ? courseMap[selectedId] : null;
   const selEdges  = selectedId ? getConnections(selectedId, allEdges) : [];
 
