@@ -30,6 +30,17 @@ export function academicYears(semesters) {
 }
 
 /**
+ * Months in a full-weight term. NU's semester weights are 1.0 for fall/spring
+ * (four months) and 0.5 for each summer half (two), and its co-ops are sold in
+ * exactly those units. A parameter so an institution with a different calendar
+ * is not forced through NU's arithmetic.
+ */
+const MONTHS_PER_UNIT_WEIGHT = 4;
+
+/** A stable id for a co-op the plan created, so re-applying does not duplicate. */
+const coopId = (semId, typeId) => `${typeId}-plan-${semId}`;
+
+/**
  * @param {object} plan        one entry from plan.json `plans[]`
  * @param {object} ctx
  * @param {object[]} ctx.semesters
@@ -43,11 +54,17 @@ export function academicYears(semesters) {
 export function applySamplePlan(plan, {
   semesters = [], courseMap = {}, placements = {}, reservations = {},
   programData = null, startYearIndex = 0,
+  specialTermPl = {}, coopTypeId = "coop", coopDurations = [4, 6],
+  monthsPerUnitWeight = MONTHS_PER_UNIT_WEIGHT,
 } = {}) {
   const years = academicYears(semesters);
   const nextPlacements = { ...placements };
+  // Co-op cells are collected first and merged afterwards: a run cannot be
+  // recognised one cell at a time.
+  const coopCells = [];
   const nextReservations = { ...reservations };
-  const placed = [], reserved = [], notes = [];
+  const nextSpecial = { ...specialTermPl };
+  const placed = [], reserved = [], coops = [], notes = [];
   const held = new Set(Object.keys(placements).map(k => String(k).split("#")[0]));
   const sections = programData?.requirementSections ?? [];
 
@@ -61,7 +78,7 @@ export function applySamplePlan(plan, {
       const walk = (entries) => {
         for (const e of entries ?? []) {
           if (e.vacation || e.heading || e.either) { walk(e.children); continue; }
-          if (e.coop) { notes.push({ kind: "coop", semId: sem.id }); walk(e.children); continue; }
+          if (e.coop) { coopCells.push(sem); walk(e.children); continue; }
 
           if (isOpen(e)) {
             // Which requirement it stands for, named so a re-scrape that
@@ -101,5 +118,49 @@ export function applySamplePlan(plan, {
     }
   });
 
-  return { placements: nextPlacements, reservations: nextReservations, placed, reserved, notes };
+  // ── Co-ops are runs, not cells ───────────────────────────────────
+  //
+  // The catalog writes a six-month co-op as TWO cells — Spring "Co-op" and
+  // Summer 1 "Co-op" — because its grid has one column per term. Reading them
+  // as two co-ops would give a student twice as many as their program
+  // requires. So consecutive co-op terms merge into one block, and its length
+  // comes from the terms it spans: a full term is four months, a summer half
+  // is two, so Spring + Summer 1 is the six-month co-op it actually is.
+  const order = new Map((semesters ?? []).map((s, i) => [s.id, i]));
+  coopCells.sort((a, b) => order.get(a.id) - order.get(b.id));
+
+  let run = [];
+  const flush = () => {
+    if (!run.length) return;
+    const start  = run[0];
+    const weight = run.reduce((n, s) => n + (s.weight ?? 1), 0);
+    const months = weight * monthsPerUnitWeight;
+    // Snap to what the institution actually offers: a grid can describe a
+    // length nobody can register for.
+    const duration = [...coopDurations].sort(
+      (a, b) => Math.abs(a - months) - Math.abs(b - months) || a - b)[0] ?? months;
+
+    // An existing co-op anywhere in the run means the student already planned
+    // this stretch; leave every part of it alone. Applying a plan must not
+    // overwrite a decision already made.
+    const occupied = run.some(s =>
+      Object.values(specialTermPl).some(d => d?.semId === s.id));
+    if (occupied) {
+      notes.push({ kind: "coop-kept", semId: start.id });
+    } else {
+      const id = coopId(start.id, coopTypeId);
+      nextSpecial[id] = { typeId: coopTypeId, semId: start.id, duration };
+      coops.push({ id, semId: start.id, duration, spans: run.map(s => s.id) });
+    }
+    run = [];
+  };
+  for (const sem of coopCells) {
+    const prev = run[run.length - 1];
+    if (prev && order.get(sem.id) !== order.get(prev.id) + 1) flush();
+    run.push(sem);
+  }
+  flush();
+
+  return { placements: nextPlacements, reservations: nextReservations,
+           specialTermPl: nextSpecial, placed, reserved, coops, notes };
 }

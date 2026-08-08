@@ -191,3 +191,60 @@ test("reserved credit is PLANNED credit, never EARNED credit", () => {
   assert.equal(Object.keys(semesterOccupants(placements, map)).length, 3);
   assert.equal(Object.keys(placements).length, 1, "placements is untouched");
 });
+
+// ── Co-ops are runs, not cells ─────────────────────────────────────
+
+test("a six-month co-op written as two cells becomes ONE block", async () => {
+  const { applySamplePlan } = await import("../../src/core/applySamplePlan.js");
+  // The catalog's grid has one column per term, so it writes a six-month co-op
+  // as Spring "Co-op" + Summer 1 "Co-op". Reading them as two would give a
+  // student twice the co-ops their program requires.
+  const semesters = [
+    { id: "fall2026", semTypeId: "fall",   type: "fall",   weight: 1 },
+    { id: "spr2027",  semTypeId: "spring", type: "spring", weight: 1 },
+    { id: "sumA2027", semTypeId: "sumA",   type: "summer", weight: 0.5 },
+    { id: "sumB2027", semTypeId: "sumB",   type: "summer", weight: 0.5 },
+  ];
+  const coop = { coop: true, options: [], text: "Co-op" };
+  const plan = { years: [{ label: "Year 1", terms: [
+    { term: "Spring",   type: "spring", entries: [coop] },
+    { term: "Summer 1", type: "sumA",   entries: [coop] },
+  ] }] };
+
+  const r = applySamplePlan(plan, { semesters, courseMap: {} });
+  assert.equal(r.coops.length, 1, "one co-op, not two");
+  assert.equal(r.coops[0].semId, "spr2027", "it starts where the run starts");
+  assert.equal(r.coops[0].duration, 6, "spring (4mo) + summer half (2mo) = six months");
+  assert.deepEqual(r.coops[0].spans, ["spr2027", "sumA2027"]);
+});
+
+test("co-ops separated by a study term stay separate", async () => {
+  const { applySamplePlan } = await import("../../src/core/applySamplePlan.js");
+  const semesters = [
+    { id: "spr2027",  semTypeId: "spring", type: "spring", weight: 1 },
+    { id: "sumA2027", semTypeId: "sumA",   type: "summer", weight: 0.5 },
+    { id: "sumB2027", semTypeId: "sumB",   type: "summer", weight: 0.5 },
+  ];
+  const coop = { coop: true, options: [], text: "Co-op" };
+  const plan = { years: [{ label: "Year 1", terms: [
+    { term: "Spring",   type: "spring", entries: [coop] },
+    { term: "Summer 1", type: "sumA",   entries: [{ options: [["CS2500"]], text: "CS 2500", sh: 4 }] },
+    { term: "Summer 2", type: "sumB",   entries: [coop] },
+  ] }] };
+  const r = applySamplePlan(plan, { semesters, courseMap: { CS2500: { id: "CS2500", sh: 4 } } });
+  assert.equal(r.coops.length, 2, "a study term between them breaks the run");
+  assert.equal(r.coops[0].duration, 4, "a lone full term snaps to the four-month co-op");
+});
+
+test("a co-op the student already planned is never replaced", async () => {
+  const { applySamplePlan } = await import("../../src/core/applySamplePlan.js");
+  const semesters = [{ id: "spr2027", semTypeId: "spring", type: "spring", weight: 1 }];
+  const plan = { years: [{ label: "Year 1", terms: [
+    { term: "Spring", type: "spring", entries: [{ coop: true, options: [], text: "Co-op" }] },
+  ] }] };
+  const existing = { mine: { typeId: "coop", semId: "spr2027", duration: 4, company: "Acme" } };
+  const r = applySamplePlan(plan, { semesters, courseMap: {}, specialTermPl: existing });
+  assert.equal(r.coops.length, 0, "nothing added over it");
+  assert.deepEqual(r.specialTermPl, existing, "the student's own co-op is untouched");
+  assert.ok(r.notes.some(n => n.kind === "coop-kept"));
+});

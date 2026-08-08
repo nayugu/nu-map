@@ -1686,12 +1686,14 @@ export function PlannerProvider({ children }) {
    */
   const applySamplePlanToPlan = (plan, programData = null, startYearIndex = 0) => {
     const result = mapSamplePlan(plan, {
-      semesters: SEMESTERS, courseMap, placements, reservations,
+      semesters: SEMESTERS, courseMap, placements, reservations, specialTermPl,
       programData, startYearIndex,
+      coopDurations: specialTerms?.getTypes?.().find(t => t.id === "coop")?.durations ?? [4, 6],
     });
     pushUndo();
     setPlacements(result.placements);
     setReservations(result.reservations);
+    setSpecialTermPl(result.specialTermPl);
     return result;
   };
 
