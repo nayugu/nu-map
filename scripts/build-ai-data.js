@@ -642,12 +642,11 @@ const PAGE_CSS =
   // The mark sits at the top of the rail, above the vertically centred
   // sections: the site-wide home link, same affordance as every other NU Map
   // page. Quiet by default like the rail's own labels, full strength on hover.
-  // It is centred on the first label rather than flush to the viewport edge —
-  // 28px is where every label's text starts (nav padding 14 + link padding
-  // 14), and the further 18px centres the 26px mark on "Overview" (~62px wide
-  // at .92rem). Hard against the corner it read as stuck there; centred, it
-  // gets the same breathing room the labels have.
-  + "nav .home{display:block;padding:30px 14px 0 46px;line-height:0}"
+  // Its left edge sits on the labels' left edge — 28px in (nav padding 14 +
+  // link padding 14) — rather than flush to the viewport corner, where it read
+  // as stuck there. Sharing an edge with the rail's text is a real alignment;
+  // centring it on "Overview" instead pushed it too far right.
+  + "nav .home{display:block;padding:30px 14px 0 28px;line-height:0}"
   + "nav .home img{width:26px;height:26px;object-fit:contain;opacity:.85;transition:opacity .18s ease-out}"
   + "nav .home:hover img{opacity:1}"
   + "nav .sections{flex:1;display:flex;flex-direction:column;justify-content:center;gap:7px;padding:18px 14px}"
