@@ -20,9 +20,16 @@ import { usePlanner } from "../context/PlannerContext.jsx";
 const GAP  = 10;   // clearance between the control and the card
 const EDGE = 8;    // min clearance from any viewport edge
 
+// width="auto" sizes the card to its content instead of a fixed column — for
+// tips whose text has no typical length (a subject name runs from "Physics" to
+// "Arts Administration and Cultural Entrepreneurship"). It still wraps rather
+// than running off the screen: max-content up to AUTO_MAX, then normal wrapping.
+const AUTO_MAX = 340;
+
 function TipCard({ title, rect, width, placement, children }) {
   const ref = useRef(null);
   const [placed, setPlaced] = useState(null);
+  const auto = width === "auto";
 
   useLayoutEffect(() => {
     const el = ref.current;
@@ -50,9 +57,11 @@ function TipCard({ title, rect, width, placement, children }) {
   return createPortal(
     <div ref={ref} style={{
       position: "fixed",
-      left: placed ? placed.left : Math.round(rect.left + rect.width / 2 - width / 2),
+      left: placed ? placed.left : Math.round(auto ? rect.left : rect.left + rect.width / 2 - width / 2),
       top:  placed ? placed.top  : Math.round(rect.top - GAP),
-      zIndex: 9001, width, padding: "13px 15px",
+      zIndex: 9001,
+      ...(auto ? { width: "max-content", maxWidth: AUTO_MAX } : { width }),
+      padding: "13px 15px",
       background: "var(--bg-surface)", border: "1px solid var(--border-card)",
       borderRadius: 9, boxShadow: "var(--shadow-modal)",
       pointerEvents: "none",   // inert: it must never steal the pointer from the control
@@ -77,7 +86,8 @@ function TipCard({ title, rect, width, placement, children }) {
  * @param {object} props
  * @param {React.ReactNode} props.tip      what the card says (string or JSX)
  * @param {string} [props.title]           optional uppercase heading
- * @param {number} [props.width=232]       card width
+ * @param {number|"auto"} [props.width=232] card width; "auto" sizes to content
+ *                                         (up to AUTO_MAX, then wraps)
  * @param {string} [props.display="block"] wrapper display (use "inline-flex"
  *                                         inside a flex row so flow is kept)
  * @param {object} [props.style]           extra wrapper styles (e.g. flex: 1

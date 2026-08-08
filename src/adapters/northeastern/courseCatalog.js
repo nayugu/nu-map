@@ -36,10 +36,17 @@ import { normalizeCourse, mergeHistoryAndOffering } from "./courseNorm.js";
 let ratemyhuskyProfs = {};
 let ratemyhuskyCourses = new Set();
 
+// Subject code → full display name ("ABRC" → "Study Abroad - CPS Specialty"),
+// populated by fetchAll() and read by subjectName() below. A pill and a bank
+// section header only have room for the code, so this is what their hover
+// cards reveal. Optional asset: absent file just means no card appears.
+let subjectDisplayNames = {};
+
 const LOCAL_URL    = `${import.meta.env.BASE_URL}northeastern/catalog-courses.json`;
 const HISTORY_URL  = `${import.meta.env.BASE_URL}northeastern/term-history.json`;
 const OFFERING_URL = `${import.meta.env.BASE_URL}northeastern/offering-summary.json`;
 const COLLEGES_URL = `${import.meta.env.BASE_URL}northeastern/subject-colleges.json`;
+const SUBJECTS_URL = `${import.meta.env.BASE_URL}northeastern/subjects.json`;
 // Verified RateMyHusky professor slugs (instructor name → page slug), built
 // monthly by scripts/scrape-ratemyhusky.js from RateMyHusky's sitemap. Only a
 // link directory — no ratings content — used to point instructor links at a
@@ -76,6 +83,7 @@ export default {
     const historyPromise  = tryFetch(HISTORY_URL);
     const offeringPromise = tryFetch(OFFERING_URL);
     const rmhPromise      = tryFetch(RATEMYHUSKY_URL);
+    const subjectsPromise = tryFetch(SUBJECTS_URL);
 
     // Catalog is required — fetch it first so we can gate the supplemental download.
     let catalogJson;
@@ -94,13 +102,19 @@ export default {
       ? Promise.resolve(null)
       : tryFetch(ALL_COURSES_URL);
 
-    const [allCoursesResult, collegesResult, historyResult, offeringResult, rmhResult] = await Promise.allSettled([
+    const [allCoursesResult, collegesResult, historyResult, offeringResult, rmhResult, subjectsResult] = await Promise.allSettled([
       suppPromise,
       collegesPromise,
       historyPromise,
       offeringPromise,
       rmhPromise,
+      subjectsPromise,
     ]);
+
+    // Subject display names — optional, like the RateMyHusky map above: a failed
+    // or absent fetch leaves it empty and the hover cards simply never appear.
+    subjectDisplayNames = (subjectsResult.status === "fulfilled" && subjectsResult.value && typeof subjectsResult.value === "object")
+      ? subjectsResult.value : {};
 
     // Cache the verified RateMyHusky slug map for the URL builders below.
     // Optional asset — a failed/absent fetch just leaves the map empty and
@@ -168,6 +182,16 @@ export default {
   profRatingsUrl(name) {
     const slug = ratemyhuskyProfs[name];
     return slug ? `${RATEMYHUSKY_BASE}/professors/${slug}` : null;
+  },
+
+  /**
+   * Full display name for a subject code, or null when the catalog publishes
+   * none (and until fetchAll has run). Codes in the app are already uppercase,
+   * but normalising here means a caller passing "cs" still resolves.
+   */
+  subjectName(subject) {
+    if (!subject) return null;
+    return subjectDisplayNames[String(subject).toUpperCase()] ?? null;
   },
 
   getSources() {

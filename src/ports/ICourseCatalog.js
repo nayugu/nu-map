@@ -166,6 +166,13 @@ export const ICourseCatalog = "courseCatalog";
  *   should return a resource that always resolves (e.g. a browse page) when no
  *   exact match exists, so the link never dead-ends.
  *
+ * @property {(subject: string) => string|null} [subjectName]
+ *   Optional. The full display name for a subject code ("ABRC" → "Study Abroad -
+ *   CPS Specialty"), or null when the institution publishes no name for it. The
+ *   code is all the UI has room for in a pill or a bank section header, so this
+ *   is what the hover card reveals. Synchronous: implementations should resolve
+ *   from data already loaded by fetchAll, and return null until it has.
+ *
  * @property {() => import('./IAttributable.js').SourceInfo[]} getSources
  *   External data sources this adapter draws from.  See IAttributable.
  */

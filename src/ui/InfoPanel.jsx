@@ -3,6 +3,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import HoverCard from "./HoverCard.jsx";
+import SubjectTip from "./SubjectTip.jsx";
 import { createPortal } from "react-dom";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { usePort }                  from "../context/InstitutionContext.jsx";
@@ -219,9 +220,14 @@ function CourseInfo({ selCourse, navTo }) {
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5, flexWrap: "wrap" }}>
-        <span style={{ fontSize: 10, background: selCourse.color, color: "var(--badge-bg)", borderRadius: 3, padding: "2px 8px", fontWeight: 800, letterSpacing: "0.04em" }}>
-          {selCourse.isCps ? `${selCourse.subject} · CPS` : selCourse.subject}
-        </span>
+        {/* The pill has room for the code only, so hovering it names the subject
+            in full — the same card chrome as the availability popovers. */}
+        <SubjectTip subject={selCourse.subject} color={selCourse.color}
+                    name={courseCatalog?.subjectName?.(selCourse.subject) ?? null}>
+          <span style={{ fontSize: 10, background: selCourse.color, color: "var(--badge-bg)", borderRadius: 3, padding: "2px 8px", fontWeight: 800, letterSpacing: "0.04em" }}>
+            {selCourse.isCps ? `${selCourse.subject} · CPS` : selCourse.subject}
+          </span>
+        </SubjectTip>
         <span
           draggable
           data-drag-id={selCourse.id}

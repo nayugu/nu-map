@@ -21,6 +21,7 @@ import { useRelevance }   from "../context/RelevanceContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import CourseCard  from "./CourseCard.jsx";
+import SubjectTip  from "./SubjectTip.jsx";
 import GradPanel   from "./GradPanel.jsx";
 
 // One row in the substitution-search dropdown.  Extracted so each row
@@ -690,8 +691,14 @@ export default function BankPanel() {
           {/* Subject colour key */}
           {showSubjectKeys && (
               <div style={{ borderTop: "1px solid var(--border-1)", padding: "6px 8px 8px", display: "flex", flexWrap: "wrap", gap: 4, maxHeight: 160, overflowY: "auto" }}>
+              {/* Plain title= here rather than the hover card: each chip is a sized
+                  grid cell, and HoverTip passes its children straight through on
+                  mobile, so a wrapper carrying the width would take the width with
+                  it. The card lives on the section headers, which can keep their
+                  own layout either way. */}
               {subjects.map(sub => (
-                <div key={sub} style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 9, color: "var(--text-3)", width: "calc(50% - 2px)" }}>
+                <div key={sub} title={courseCatalog?.subjectName?.(sub) ?? undefined}
+                     style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 9, color: "var(--text-3)", width: "calc(50% - 2px)" }}>
                   <div style={{ width: 8, height: 8, borderRadius: 2, background: subjectColor(sub), flexShrink: 0 }} />
                   <span style={{ color: subjectColor(sub), fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{sub}</span>
                 </div>
@@ -1309,7 +1316,16 @@ export default function BankPanel() {
                   style={{ display: "flex", alignItems: "center", gap: 5, padding: "6px 8px", cursor: "pointer", userSelect: "none" }}
                 >
                   <span style={{ width: 9, height: 9, borderRadius: 2, background: col, flexShrink: 0 }} />
-                  <span style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: col, flex: 1 }}>{sub}</span>
+                  {/* The header shows the code only, so hovering it names the subject in
+                      full. Placed to the SIDE: the bank is pinned to a screen edge, and a
+                      card above the row would sit over the rows it belongs to. flex:1 is
+                      on the label ITSELF as well as the wrapper — HoverTip renders its
+                      children bare on mobile, and the count and arrow have to stay pushed
+                      to the right either way. */}
+                  <SubjectTip subject={sub} color={col} name={courseCatalog?.subjectName?.(sub) ?? null}
+                              placement="side" style={{ flex: 1, minWidth: 0 }}>
+                    <span style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: col, flex: 1, minWidth: 0 }}>{sub}</span>
+                  </SubjectTip>
                   <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-4)", background: "var(--bg-surface)", borderRadius: 99, padding: "1px 6px" }}>{crs.length}</span>
                   <span style={{ fontSize: isPhone ? 7 : 9, color: "var(--text-4)" }}>{isCol ? "▶" : "▼"}</span>
                 </div>
