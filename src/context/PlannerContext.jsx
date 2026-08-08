@@ -9,7 +9,7 @@
 //   • Calls data/* adapters for I/O
 //   • Exposes a typed surface of state + actions to the UI layer
 // ═══════════════════════════════════════════════════════════════════
-import { createContext, useContext, useState, useRef, useEffect, useMemo } from "react";
+import { createContext, useContext, useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges } from "../core/courseModel.js";
@@ -18,6 +18,7 @@ import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
 import { dropOnCard as resolveDropOnCard, dropOnSemester, dropOnBank } from "../core/planDrop.js";
+import { buildSemesterView, cardIdsIn, cardsIn, loadIn } from "../core/semesterView.js";
 import { applySamplePlan as mapSamplePlan } from "../core/applySamplePlan.js";
 import { baseId, isInstanceId, takesUsed, resolveAddId, retakeUnlocked, buildTakesResolver } from "../core/repeatInstances.js";
 import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
@@ -1681,10 +1682,29 @@ export function PlannerProvider({ children }) {
   }, [placements, specialTermPl, placedOut, effectiveCourseMap, SEM_INDEX]);
 
   // ── The grid's combined view ─────────────────────────────────────
-  const gridPlacements = useMemo(
-    () => semesterOccupants(placements, reservations), [placements, reservations]);
-  const gridCourseMap = useMemo(
-    () => occupantCards(effectiveCourseMap, reservations), [effectiveCourseMap, reservations]);
+  // ONE answer to "what is in this semester". Twelve call sites used to derive
+  // it themselves and each had to choose correctly between the raw maps and a
+  // combined one; three shipped bugs came from that choice, not from its
+  // difficulty. See src/core/semesterView.js.
+  const semView = useMemo(
+    () => buildSemesterView({ placements, reservations, courseMap: effectiveCourseMap }),
+    [placements, reservations, effectiveCourseMap]);
+
+  /** The cards in a semester, in draw order. The only way to ask. */
+  const semesterCards = useCallback(
+    (semId) => cardsIn(semId, semView, semOrders), [semView, semOrders]);
+  /** Their ids, for consumers that key by id. */
+  const semesterCardIds = useCallback(
+    (semId) => cardIdsIn(semId, semView, semOrders), [semView, semOrders]);
+  /** A semester's study load, reservations included — term load, never degree credit. */
+  const semesterLoad = useCallback(
+    (semId) => loadIn(semId, semView, specialTermStartMap, specialTermContMap),
+    [semView, specialTermStartMap, specialTermContMap]);
+
+  // Kept for the drop resolver, which needs the raw pair to compute against a
+  // hypothetical order inside a state updater.
+  const gridPlacements = semView.occupants;
+  const gridCourseMap  = semView.cards;
 
   /**
    * Lay out a department's published plan.
@@ -3577,7 +3597,7 @@ export function PlannerProvider({ children }) {
     // needs no cases for reservations. Everything that totals credit toward the
     // DEGREE keeps reading `placements`, which cannot contain one.
     reservations, setReservations,
-    gridPlacements, gridCourseMap,
+    semesterCards, semesterCardIds, semesterLoad, semView,
     applySamplePlanToPlan,
     // Load state
     loading, loadErr, loadPct,

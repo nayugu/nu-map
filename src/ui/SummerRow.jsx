@@ -19,7 +19,7 @@ import CompanyLogo from "./CompanyLogo.jsx";
 export default function SummerRow({ semA, semB }) {
   const {
     placements, semOrders, effectiveCourseMap,
-    gridPlacements, gridCourseMap,
+    semesterCards, semesterLoad,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -56,7 +56,7 @@ export default function SummerRow({ semA, semB }) {
   // The combined view, like SemRow. Summers render through a DIFFERENT
   // component than fall/spring, which is how the previous attempt taught one
   // and had reservations silently vanish from the other.
-  const combinedSH     = sems.reduce((sum, s) => sum + getSemStudySH(s.id, gridPlacements ?? placements, gridCourseMap ?? effectiveCourseMap, specialTermStartMap, specialTermContMap), 0);
+  const combinedSH     = sems.reduce((sum, s) => sum + semesterLoad(s.id), 0);
   const tb         = TYPE_BG.summer;
   const rowBg      = tb.bg;
   const rowBorder  = combinedActive ? "1px solid var(--active-now-border)" : `1px solid ${tb.border}`;
@@ -168,8 +168,8 @@ export default function SummerRow({ semA, semB }) {
     }
 
     // ── Normal course session ─────────────────────────────────────
-    const courseIds  = getOrderedCourses(sem.id, gridPlacements ?? placements, semOrders, gridCourseMap ?? effectiveCourseMap);
-    const crs        = courseIds.map(id => (gridCourseMap ?? effectiveCourseMap)[id]).filter(Boolean);
+    const crs        = semesterCards(sem.id);
+    const courseIds  = crs.map(c => c.id);
     // shVoided: failed takes keep their card despite sh 0 — see SemRow.
     const main4      = crs.filter(c => c.sh >= 3 || c.shVoided);
     const others     = crs.filter(c => c.sh <= 2 && !c.shVoided);

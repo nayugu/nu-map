@@ -762,6 +762,7 @@ export default function StatsPanel() {
     showStats, setShowStats, setSelectedId, setShowPanel,
     placements, courseMap, effectiveCourseMap, SEMESTERS, SEM_INDEX,
     specialTermPl, specialTermStartMap, specialTermContMap, totalSHPlaced, bonusSH,
+    semesterLoad,
     major, studentType, isPhone, grades, privateCoop,
   } = usePlanner();
 
@@ -906,7 +907,7 @@ export default function StatsPanel() {
     const rows = buckets.map(b => {
       // Co-op-occupied terms read as work terms — their parked courses don't
       // count toward the plotted load (they stay in the plan, recoverable).
-      const sh = b.semIds.reduce((s, id) => s + getSemStudySH(id, placements, cmap, specialTermStartMap, specialTermContMap), 0);
+      const sh = b.semIds.reduce((s, id) => s + semesterLoad(id), 0);
       const slots = b.semIds.map(id => {
         const inst = instOf(id);
         return { semId: id, occupied: !!inst, instId: inst || null, work: inst ? specialTermPl[inst] : null };

@@ -195,7 +195,7 @@ function SettingsToggle({ on, onClick, tone = "accent", tip, label, aria }) {
 export default function Header() {
   const {
     courses, totalSHDone, totalSHPlaced, persistEnabled, setPersistEnabled,
-    placements, courseMap, effectiveCourseMap, gridPlacements, gridCourseMap, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
+    placements, courseMap, effectiveCourseMap, semesterCardIds, semView, currentSemId, SEMESTERS, SEM_INDEX, SEM_NEXT,
     resetAll, setShowDisclaimer, setShowStats, setShowDonate,
     statsVisible, statsJustUnlocked, ackStatsUnlockFlash,
     showSettings, setShowSettings,
@@ -567,7 +567,10 @@ export default function Header() {
     // The combined view: a printed plan missing half of year 4 is not the
     // student's plan. Export lays a semester out, so it reads what the grid
     // reads and gets reservations with no cases of its own.
-    exportReport(gridPlacements ?? placements, gridCourseMap ?? effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, specialTermPl, adapter);
+    // The combined view, explicitly. A printed plan missing half of year 4 is
+    // not the student's plan, and export lays semesters out — so it takes the
+    // same maps the grid draws from, named so there is no choice to get wrong.
+    exportReport(semView.occupants, semView.cards, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, specialTermPl, adapter);
   };
 
   // EXPORT_PDF ui-command from the MCP integration — the PDF assembly
@@ -644,7 +647,7 @@ export default function Header() {
       const semId = sem.id;
       // Combined view, like every other ordering call: this walks a semester's
       // occupants, and a reservation is one.
-      const idsInSem = getOrderedCourses(semId, gridPlacements ?? placements, semOrders, gridCourseMap ?? courseMap);
+      const idsInSem = semesterCardIds(semId);
       const hasStart = !!specialTermStartMap[semId];
       const hasCont  = !!specialTermContMap[semId];
 

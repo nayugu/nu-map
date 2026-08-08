@@ -46,7 +46,7 @@ import CompanyLogo from "./CompanyLogo.jsx";
 export default function SemRow({ sem }) {
   const {
     placements, semOrders, courseMap, effectiveCourseMap,
-    gridPlacements, gridCourseMap,
+    semesterCards, semesterLoad,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -95,14 +95,14 @@ export default function SemRow({ sem }) {
   // The combined view: placements plus reservations. A reservation occupies a
   // position in the term exactly like a course, so ordering, drag and load all
   // work on it with no cases here.
-  const courseIds  = getOrderedCourses(sem.id, gridPlacements ?? placements, semOrders, gridCourseMap ?? courseMap);
-  const crs        = courseIds.map(id => (gridCourseMap ?? effectiveCourseMap)[id] ?? courseMap[id]).filter(Boolean);
+  const crs        = semesterCards(sem.id);
+  const courseIds  = crs.map(c => c.id);
   // Co-op terms are work terms: parked courses stay (recoverable) but don't
   // count toward this term's load. getSemStudySH returns 0 when a co-op occupies
   // the term (via the start/continuation maps).
   // Combined view: a reservation carries the credit the department printed, so
   // a fourth year that is entirely electives reads as full rather than empty.
-  const sh         = getSemStudySH(sem.id, gridPlacements ?? placements, gridCourseMap ?? effectiveCourseMap, specialTermStartMap, specialTermContMap);
+  const sh         = semesterLoad(sem.id);
   // shVoided takes carry sh 0 (a failed grade earns nothing) but must stay
   // as full cards — vanishing into the low-credit subline would hide the
   // very course whose failure the user just recorded.

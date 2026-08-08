@@ -118,6 +118,25 @@ test("a reservation id can never be mistaken for a course id", () => {
   }
 });
 
+test("no UI file re-derives a semester's contents for itself", () => {
+  // The rule that replaces the old one. Three bugs came from twelve call sites
+  // each choosing between the raw maps and a combined view, and the wrong
+  // answer looking right. There is now one way to ask — semesterCards /
+  // semesterCardIds / semesterLoad — and this fails if a file goes back to
+  // deriving it, which is the only way the choice can return.
+  const OFFENDERS = /getOrderedCourses\(|getSemStudySH\(|gridPlacements\s*\?\?|gridCourseMap\s*\?\?/;
+  const files = ["src/ui/SemRow.jsx", "src/ui/SummerRow.jsx", "src/ui/Header.jsx",
+                 "src/ui/StatsPanel.jsx"];
+  const bad = [];
+  for (const rel of files) {
+    for (const line of readFileSync(join(ROOT, rel), "utf8").split("\n")) {
+      if (line.trim().startsWith("//") || line.includes("import")) continue;
+      if (OFFENDERS.test(line)) bad.push(`${rel}: ${line.trim()}`);
+    }
+  }
+  assert.deepEqual(bad, [], "a UI file deriving term contents instead of asking for them");
+});
+
 test("ordering is computed over the combined view everywhere, without exception", () => {
   // Ordering is a LAYOUT question, so every call must see reservations. Six of
   // the nine call sites did not, which meant any course drop into a term
