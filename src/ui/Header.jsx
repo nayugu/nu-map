@@ -564,13 +564,12 @@ export default function Header() {
       placedOut, substitutions,
       isGrad: studentType === "graduate",
     };
-    // The combined view: a printed plan missing half of year 4 is not the
-    // student's plan. Export lays a semester out, so it reads what the grid
-    // reads and gets reservations with no cases of its own.
-    // The combined view, explicitly. A printed plan missing half of year 4 is
-    // not the student's plan, and export lays semesters out — so it takes the
-    // same maps the grid draws from, named so there is no choice to get wrong.
-    exportReport(semView.occupants, semView.cards, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, specialTermPl, adapter);
+    // Two inputs, deliberately. The DEGREE maps come first — the requirement
+    // audit, credit totals and NUPath grid are computed from them and must
+    // never see a reservation. `semView` is the LAYOUT input, so the printed
+    // plan shows the reserved cells too; a plan missing half of year 4 on
+    // paper is not the student's plan.
+    exportReport(placements, effectiveCourseMap, currentSemId, SEMESTERS, SEM_INDEX, gradInfo, specialTermPl, adapter, semView);
   };
 
   // EXPORT_PDF ui-command from the MCP integration — the PDF assembly

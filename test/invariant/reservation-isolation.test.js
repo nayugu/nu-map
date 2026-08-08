@@ -137,6 +137,24 @@ test("no UI file re-derives a semester's contents for itself", () => {
   assert.deepEqual(bad, [], "a UI file deriving term contents instead of asking for them");
 });
 
+test("the printed report gets layout and degree maps SEPARATELY", () => {
+  // exportReport computes the requirement audit, credit totals and the NUPath
+  // grid from `placements`/`courseMap`, and lays out semesters from `view`.
+  // Passing the combined view for both — which is what I did first — puts
+  // reservation ids into buildPlacedKeySet and their credit into the general
+  // elective calculation, crediting a printed plan for courses nobody chose.
+  const header = readFileSync(join(ROOT, "src/ui/Header.jsx"), "utf8");
+  const call = /exportReport\([^;]*\);/.exec(header)?.[0];
+  assert.ok(call, "exportReport is no longer called from Header");
+  assert.ok(!/exportReport\(\s*semView\./.test(call),
+    "the combined view is being passed as the DEGREE input");
+  assert.match(call, /semView\s*\)/, "the combined view is not being passed for layout at all");
+
+  const model = readFileSync(join(ROOT, "src/core/planModel.js"), "utf8");
+  assert.match(model, /const layoutPlacements = view\?\.occupants \?\? placements;/,
+    "exportReport no longer separates its two inputs");
+});
+
 test("undo captures and restores reservations", () => {
   // The undo snapshot shape existed three times — pushUndo, and the
   // counter-push inside each of doUndo and doRedo — and reservations were in

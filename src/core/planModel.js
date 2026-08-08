@@ -278,7 +278,24 @@ function sectionHtml(sec, doneKeys) {
  * gradInfo: { majorPath, concLabel, minor1Path, minor2Path,
  *             npCovered (Set<string>), doneKeys (Set<string>), totalSHRequired }
  */
-export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}, specialTermPl = {}, adapter = {}) {
+/**
+ * The printed plan.
+ *
+ * `placements` and `courseMap` are the DEGREE inputs — the requirement audit,
+ * credit totals and NUPath grid are computed from them, so they must contain
+ * courses only. `view` is the LAYOUT input: what to draw in each semester,
+ * which includes reservations.
+ *
+ * They are separate parameters rather than one because passing the combined
+ * view for both is an easy mistake with an invisible consequence — a reserved
+ * card is not a course, and letting one reach buildPlacedKeySet or the general
+ * elective calculation would credit a printed plan for a course nobody has
+ * chosen. `view` defaults to the degree maps, so a caller that does not know
+ * about reservations still prints a correct, if reservation-free, report.
+ */
+export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}, specialTermPl = {}, adapter = {}, view = null) {
+  const layoutPlacements = view?.occupants ?? placements;
+  const layoutCards      = view?.cards     ?? courseMap;
   const { attributeSystem, specialTerms, creditSystem, institution = {}, majorRequirements } = adapter;
   const gridCodes    = attributeSystem?.getGridCodes()   ?? [];
   const attrName     = attributeSystem?.getSystemName()  ?? "";
@@ -339,7 +356,9 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   let doneSH = 0, plannedSH = 0;
   const semRows = [];
   dynSems.forEach(sem => {
-    const ids = Object.keys(placements).filter(id => placements[id] === sem.id && courseMap[id]);
+    // Layout: reservations occupy a term and must be printed. A plan missing
+    // half of year 4 on paper is not the student's plan.
+    const ids = Object.keys(layoutPlacements).filter(id => layoutPlacements[id] === sem.id && layoutCards[id]);
     const hasStart = !!termStartMap[sem.id];
     const hasCont  = !!termContMap[sem.id];
     if (ids.length === 0 && !hasStart && !hasCont) return;
@@ -450,7 +469,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
 
     // Normal course semester
     const rows = ids.map(id => {
-      const c = courseMap[id];
+      const c = layoutCards[id];
       if (!c) return "";
       const pill     = `<span class="pill" style="background:${c.color}">${c.subject ?? c.id}</span>`;
       const nuBadges = (c.attributes ?? []).map(np => `<span class="np-badge">${np}</span>`).join("");
