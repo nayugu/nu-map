@@ -152,3 +152,23 @@ test("a reservation with no requirement asks nothing of the program", () => {
   assert.equal(resolveRequirement(make("General Elective", "fall2026"), PROGRAM), null);
   assert.equal(resolveRequirement(null, PROGRAM), null);
 });
+
+test("a reservation card has the SAME SHAPE as a real course card", () => {
+  // This is the invariant behind "it behaves like a course". Card rendering
+  // reads several fields without guarding — `course.color.slice(1)` is the one
+  // that threw and produced an error page the first time a plan was loaded —
+  // so a card missing any field is a crash waiting for whichever consumer
+  // touches it next.
+  const REAL_COURSE_KEYS = [
+    "id", "subject", "number", "code", "title", "desc", "sh", "shMin", "shMax",
+    "repeatable", "repeatMax", "repeatMaxSH", "scheduleType", "termHistory",
+    "birthTermCode", "terms", "isCps", "nuPath", "attributes", "prereqs",
+    "coreqs", "sections", "color",
+  ];
+  const r = make("Khoury Elective", "fall2026", 4);
+  const card = occupantCards({}, asMap([r]))[r.id];
+  const missing = REAL_COURSE_KEYS.filter(k => !(k in card));
+  assert.deepEqual(missing, [], "fields a real course has and a reservation does not");
+  assert.equal(typeof card.color, "string", "read unguarded by the card's colour maths");
+  assert.match(card.color, /^#[0-9a-f]{6}$/i);
+});

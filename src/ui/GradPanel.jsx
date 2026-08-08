@@ -11,6 +11,7 @@ import { useState, useMemo, useEffect, useContext, createContext, useRef } from 
 import { createPortal } from "react-dom";
 import VerificationPopover from "./VerificationPopover.jsx";
 import { usePlanner }         from "../context/PlannerContext.jsx";
+import TempPlanLoader        from "./TempPlanLoader.jsx";  // ⚠ TEMPORARY — testing only
 import { usePort }             from "../context/InstitutionContext.jsx";
 import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
@@ -1875,6 +1876,8 @@ export default function GradPanel({ wideCatalog = false }) {
         )}
 
         {/* ── Major 1 framed card ──────────────────────────────── */}
+        {/* ⚠ TEMPORARY — testing only. Delete this line and TempPlanLoader.jsx. */}
+        {major && !fetching && <TempPlanLoader path={selPath} isGrad={isGrad} programData={major} />}
         {major && !fetching && <MajorCard
           label={showMajor2 ? t("grad.major1.label") : t("grad.major.label")}
           name={majorName}

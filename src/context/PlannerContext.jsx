@@ -16,6 +16,8 @@ import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
+import { semesterOccupants, occupantCards, moveReservation, removeReservation, fillReservation, isReservationId } from "../core/reservations.js";
+import { applySamplePlan as mapSamplePlan } from "../core/applySamplePlan.js";
 import { baseId, isInstanceId, takesUsed, resolveAddId, retakeUnlocked, buildTakesResolver } from "../core/repeatInstances.js";
 import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
          effectiveGradeOfTakes } from "../core/gradeSystem.js";
@@ -197,6 +199,10 @@ export function PlannerProvider({ children }) {
   const _defSemId   = `${_defSemType?.idPrefix ?? _defSemType?.id ?? "fall"}${defaultStartYear}`;
   const [currentSemId,     setCurrentSemId]     = useState(() => (_saved?.persist && _saved.currentSemId)     ? _saved.currentSemId     : _defSemId);
   const [persistEnabled,   setPersistEnabled]   = useState(() => _saved?.persist !== false);
+  // Cards in a semester that have no course yet. Their own map, never in
+  // `placements` — see src/core/reservations.js on why the audit must not be
+  // able to see one.
+  const [reservations,     setReservations]     = useState(() => (_saved?.persist && _saved.reservations) ? _saved.reservations : {});
   const [semOrders,        setSemOrders]        = useState(() => (_saved?.persist && _saved.semOrders)        ? _saved.semOrders        : {});
   const [offeredOverrides, setOfferedOverrides] = useState(() => (_saved?.persist && _saved.offeredOverrides) ? _saved.offeredOverrides : {});
   const [collapsedSubs,    setCollapsedSubs]    = useState(() => (_saved?.persist && _saved.collapsedSubs)    ? _saved.collapsedSubs    : {});
@@ -1653,6 +1659,30 @@ export function PlannerProvider({ children }) {
     }
     return { courses: placed.length, terms: terms.size };
   }, [placements, specialTermPl, placedOut, effectiveCourseMap, SEM_INDEX]);
+
+  // ── The grid's combined view ─────────────────────────────────────
+  const gridPlacements = useMemo(
+    () => semesterOccupants(placements, reservations), [placements, reservations]);
+  const gridCourseMap = useMemo(
+    () => occupantCards(effectiveCourseMap, reservations), [effectiveCourseMap, reservations]);
+
+  /**
+   * Lay out a department's published plan.
+   *
+   * Strictly additive: a course already placed stays where it is, and nothing
+   * is removed. Goes through pushUndo like any other edit, so a student who
+   * does not like the result gets it back in one step.
+   */
+  const applySamplePlanToPlan = (plan, programData = null, startYearIndex = 0) => {
+    const result = mapSamplePlan(plan, {
+      semesters: SEMESTERS, courseMap, placements, reservations,
+      programData, startYearIndex,
+    });
+    pushUndo();
+    setPlacements(result.placements);
+    setReservations(result.reservations);
+    return result;
+  };
 
   const [statsUnlocked, setStatsUnlocked] = useState(() => {
     try { return localStorage.getItem(key("stats-unlocked")) === "true"; } catch { return false; }
@@ -3460,6 +3490,13 @@ export function PlannerProvider({ children }) {
   const value = {
     // Data
     courses, courseMap, effectiveCourseMap, allEdges, subjects,
+    // The grid's view: real placements plus a position for every reservation,
+    // and a card for each. Everything that LAYS OUT a semester reads these and
+    // needs no cases for reservations. Everything that totals credit toward the
+    // DEGREE keeps reading `placements`, which cannot contain one.
+    reservations, setReservations,
+    gridPlacements, gridCourseMap,
+    applySamplePlanToPlan,
     // Load state
     loading, loadErr, loadPct,
     // Planner state

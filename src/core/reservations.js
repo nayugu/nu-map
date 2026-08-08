@@ -175,6 +175,21 @@ export function occupantCards(courseMap, reservations) {
       title: "",
       subject: "", number: "",
       sh: r.sh ?? 0,
+      // Card rendering reads `color` unguarded (it derives an HSL glow from
+      // it), so a reservation needs one. Neutral on purpose: a subject colour
+      // would claim a department the student has not chosen.
+      color: "#94a3b8",
+      // The full course shape, not a subset. Card rendering reads several of
+      // these without guarding — `color.slice()` was the one that threw — and
+      // a card missing a field is a crash waiting for whichever consumer
+      // touches it next. Matching the shape exactly means every existing
+      // consumer works on a reservation with no cases for it, which is the
+      // whole point of it being an ordinary card.
+      desc: "",
+      shMin: null, shMax: null,
+      repeatable: false, repeatMax: null, repeatMaxSH: null,
+      scheduleType: "", termHistory: {}, birthTermCode: null,
+      terms: [], isCps: false,
       nuPath: [], attributes: [],
       prereqs: null, coreqs: null,
       sections: [],

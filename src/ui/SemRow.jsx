@@ -46,6 +46,7 @@ import CompanyLogo from "./CompanyLogo.jsx";
 export default function SemRow({ sem }) {
   const {
     placements, semOrders, courseMap, effectiveCourseMap,
+    gridPlacements, gridCourseMap,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -91,8 +92,11 @@ export default function SemRow({ sem }) {
     .filter(([, d]) => d?.semId && d.typeId === typeId)
     .sort(([, a], [, b]) => (SEM_INDEX[a.semId] ?? 99) - (SEM_INDEX[b.semId] ?? 99))
     .findIndex(([eid]) => eid === id) + 1;
-  const courseIds  = getOrderedCourses(sem.id, placements, semOrders, courseMap);
-  const crs        = courseIds.map(id => effectiveCourseMap[id] ?? courseMap[id]).filter(Boolean);
+  // The combined view: placements plus reservations. A reservation occupies a
+  // position in the term exactly like a course, so ordering, drag and load all
+  // work on it with no cases here.
+  const courseIds  = getOrderedCourses(sem.id, gridPlacements ?? placements, semOrders, gridCourseMap ?? courseMap);
+  const crs        = courseIds.map(id => (gridCourseMap ?? effectiveCourseMap)[id] ?? courseMap[id]).filter(Boolean);
   // Co-op terms are work terms: parked courses stay (recoverable) but don't
   // count toward this term's load. getSemStudySH returns 0 when a co-op occupies
   // the term (via the start/continuation maps).
