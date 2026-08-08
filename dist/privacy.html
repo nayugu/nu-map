@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/logo.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy - NU Map</title>
+  <style>
+    :root { color-scheme: light dark; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      max-width: 720px; margin: 0 auto; padding: 48px 24px 96px;
+      line-height: 1.65; color: #1f2328; background: #fdfcfa;
+    }
+    @media (prefers-color-scheme: dark) {
+      body { color: #d5d9de; background: #14161a; }
+      a { color: #7aa5f7; }
+      h1, h2 { color: #eceff2; }
+      code { background: #23272e; }
+    }
+    h1 { font-size: 1.6rem; margin-bottom: 0.2em; }
+    h2 { font-size: 1.1rem; margin-top: 2.2em; }
+    code { background: #f0ede8; padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+    .updated { font-size: 0.85rem; opacity: 0.6; }
+    li { margin: 0.35em 0; }
+  </style>
+</head>
+<body>
+  <h1>NU Map Privacy Policy</h1>
+  <p class="updated">Last updated: August 7, 2026</p>
+
+  <p>
+    NU Map (<a href="https://numap.app">numap.app</a>) is an unofficial, open-source degree
+    planner for Northeastern University. It is built around a simple principle:
+    <strong>your plan lives in your browser, not on our servers.</strong>
+  </p>
+
+  <h2>The planner itself</h2>
+  <ul>
+    <li><strong>No accounts.</strong> There is nothing to sign up for and no login.</li>
+    <li><strong>Local storage only.</strong> Your degree plans, settings, and preferences are
+        stored in your browser's local storage on your device. We cannot see them.</li>
+    <li><strong>Grades are optional.</strong> NU Map works completely without them — nothing
+        asks for a grade and nothing is withheld if you never enter one. You can add them if you
+        want the planner to check the few requirements that name a minimum grade, or to see a
+        GPA. They stay in your browser like everything else, and they are excluded from share
+        links, share codes, and anything sent to Claude.</li>
+    <li><strong>Public course data.</strong> The course catalog, offering history, and degree
+        requirements shown in the app are public information collected from Northeastern's
+        public course catalog and registrar systems. They contain no personal data.</li>
+    <li><strong>Sharing is explicit.</strong> Plan share links encode your plan into the link
+        itself; they exist only when you create one and are never stored by us. A share
+        <em>code</em> works differently: your plan is briefly held on our relay server so
+        another browser can collect it once. It is <strong>encrypted in your browser before it
+        is sent</strong>, using a key derived from the share code itself — and the code is
+        never sent to the server, so we cannot read what we are holding. It is deleted the
+        moment it is collected, when you cancel it, or after ten minutes, whichever comes
+        first. Grades are excluded from both kinds of sharing.</li>
+  </ul>
+
+  <h2>The optional Claude AI integration</h2>
+  <p>
+    NU Map can optionally connect to Claude (Anthropic's AI assistant) so it can help you plan.
+    This is <strong>off by default</strong> and only activates after you explicitly approve the
+    connection inside NU Map — either by entering a pairing code, or by approving the request
+    that appears when you connect from Claude. If you never link Claude, nothing in this
+    section applies to you and no connection to our server is ever made.
+  </p>
+  <ul>
+    <li><strong>You choose the scope.</strong> When approving, you can pick
+        <strong>catalog only</strong>: Claude can search public course and program data but
+        your plan is never shared. Full access can be granted, paused, or reduced later in
+        settings at any time.</li>
+    <li><strong>What is shared:</strong> if you grant plan access, your active plan (course
+        placements, work-experience entries, selected programs, and related plan settings) is
+        synced to the NU Map connector server (<code>mcp.numap.app</code>) so Claude can answer
+        questions about it. It contains no name, email, or account identifier — NU Map has no
+        accounts. Nothing else on your device is accessed.</li>
+    <li><strong>Where it lives:</strong> the server runs on Cloudflare's infrastructure. Your
+        plan snapshot is held per-session so that only conversations you have linked can read
+        it, and is used for no other purpose.</li>
+    <li><strong>Changes need your approval:</strong> by default Claude can only <em>propose</em>
+        plan changes, which you review and approve inside NU Map. Direct application of changes
+        is a separate opt-in you control in settings.</li>
+    <li><strong>Pause and delete:</strong> the settings toggle pauses all plan access instantly.
+        <strong>Disconnect</strong> severs the link, deletes your plan snapshot from the server,
+        and revokes the credentials held by connected Claude clients, so previously linked
+        conversations lose access immediately.</li>
+    <li><strong>Your conversations with Claude</strong> happen on Anthropic's platform and are
+        governed by <a href="https://www.anthropic.com/legal/privacy">Anthropic's privacy
+        policy</a>. NU Map never sees your conversations — only the specific tool requests
+        Claude makes on your behalf.</li>
+  </ul>
+
+  <h2>Course translation</h2>
+  <p>
+    NU Map's interface is translated into eight languages, and those translations ship with the
+    app — using them sends nothing anywhere. Course <em>titles and descriptions</em> come from
+    Northeastern's catalog in English only, so translating those requires a translation service.
+    When course translation is on, NU Map first tries your browser's built-in translator, which
+    runs on your device. If your browser has none, the title and description of the course you
+    are viewing are sent to an external translation service (Google Translate, or MyMemory where
+    Google is unavailable). Only that public catalog text is sent — never your plan, your grades,
+    or anything you have entered. Results are cached in your browser so each course is translated
+    at most once. You can turn course translation off in settings, which stops all such requests.
+  </p>
+
+  <h2>What we don't do</h2>
+  <ul>
+    <li>We do not sell your data, and we do not share personal data with third parties. The one
+        outbound case is public catalog text sent for course translation, described above.</li>
+    <li>We do not use advertising or tracking networks.</li>
+    <li>We do not store plan data server-side except as described above for the
+        opt-in Claude integration, for as long as the link exists.</li>
+  </ul>
+
+  <h2>Retention</h2>
+  <p>
+    Plan data in your browser stays until you clear it. On the connector server, your plan
+    snapshot is retained only while your Claude link exists and is deleted when you disconnect.
+    Server logs are Cloudflare's standard operational logs.
+  </p>
+
+  <h2>Open source</h2>
+  <p>
+    All of the above is verifiable: NU Map and its connector server are open source at
+    <a href="https://github.com/nayugu/nu-map">github.com/nayugu/nu-map</a>.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions or requests: open an issue at
+    <a href="https://github.com/nayugu/nu-map/issues">github.com/nayugu/nu-map/issues</a>
+    or use the feedback link in the app.
+  </p>
+
+  <p><a href="/">← Back to NU Map</a></p>
+</body>
+</html>
