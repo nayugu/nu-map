@@ -489,6 +489,10 @@ export function PlannerProvider({ children }) {
     // not here, so a reload mid-setup re-shows it rather than stranding the user.
     // Append ?onboarding to the URL to force it during development.
     try {
+      // ⚠ TEMPORARY — TESTING ONLY. Forces first-run setup on every reload in
+      // dev so the sample-plan step can be exercised. DELETE THIS LINE.
+      if (import.meta.env?.DEV) return true;
+
       if (new URLSearchParams(window.location.search).has("onboarding")) return true;
       return !localStorage.getItem(key("seen-cohort-setup"));
     } catch { return false; }
