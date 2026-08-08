@@ -92,6 +92,28 @@ const WRITE   = process.argv.includes('--write');
 const DRY_RUN = process.argv.includes('--dry-run');
 const URL_ARG = (() => { const i = process.argv.indexOf('--url'); return i >= 0 ? process.argv[i + 1] : null; })();
 
+/**
+ * Reject anything unrecognised instead of ignoring it.
+ *
+ * A bare URL used to be accepted silently and then discarded, so
+ * `node scripts/scrape-majors.js <url>` fetched the sitemap and walked all 658
+ * program pages while looking like a single-page run. For a script that hits a
+ * university's catalog that is a footgun worth removing: an argument nobody
+ * reads is a request nobody meant to make.
+ */
+(() => {
+  const known = new Set(['--write', '--dry-run', '--url']);
+  const argv = process.argv.slice(2);
+  const unknown = argv.filter((a, i) => a.startsWith('-')
+    ? !known.has(a)
+    : argv[i - 1] !== '--url');
+  if (unknown.length) {
+    console.error(`Unrecognised argument: ${unknown.join(' ')}`);
+    console.error('Usage: [--url <program-url>] [--dry-run] [--write]');
+    process.exit(2);
+  }
+})();
+
 // ── Utilities ─────────────────────────────────────────────────────────────────
 
 // Every request goes through politeFetch, which owns the rate limit globally —

@@ -367,3 +367,86 @@ test('every term in every fixture sums to the total the catalog printed', () => 
   }
   assert.deepEqual(bad, [], 'terms whose parsed hours disagree with the catalog');
 });
+
+// ── 8. An independent reading of the same HTML ───────────────────────────────
+//
+// Every other check here trusts extractPlanGrid to say what a cell contained.
+// The checksum is stronger — the totals come from the department, not from us —
+// but it verifies ARITHMETIC, so a parse could assign rows to the wrong terms
+// and still add up if the errors cancelled.
+//
+// This walks the table a second time, deliberately naively, and compares
+// content cell by cell. It is not a better parser: it exists to disagree.
+// Reading the live catalog by other means DID disagree once, putting Computer
+// Science BSCS's EECE 2310/2311 in Year 2 Fall and CS 3000/3650 in Summer 2 —
+// the reverse of the truth. The raw HTML settled it our way, and the cause was
+// the `colspan="2"` empty cells this file walks left-to-right precisely to
+// survive.
+function naiveTerms(html) {
+  const table = /<table class="sc_plangrid"[\s\S]*?<\/table>/.exec(html)?.[0];
+  if (!table) return null;
+  const out = [];            // [{ year, term, cells: [text] }]
+  let columns = [];
+  let year = '';
+  for (const row of table.match(/<tr[\s\S]*?<\/tr>/g) ?? []) {
+    // Tags become a SPACE, not nothing: "<a>ARTH 1001</a>and <a>ARTH 1002</a>"
+    // otherwise reads as "ARTH 1001and ARTH 1002".
+    const strip = (s) => s.replace(/<[^>]+>/g, ' ').replace(/&#160;|&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+    // A cell arrives as the remainder of its own opening tag, so everything up
+    // to the first '>' is attributes rather than content.
+    const body = (c) => c.slice(c.indexOf('>') + 1).split('</td>')[0];
+    if (/plangridyear/.test(row)) { year = strip(row); continue; }
+    if (/plangridterm/.test(row)) {
+      columns = (row.match(/<t[hd][\s\S]*?<\/t[hd]>/g) ?? [])
+        .map(strip).filter(t => t && !/^hours$/i.test(t));
+      for (const term of columns) out.push({ year, term, cells: [] });
+      continue;
+    }
+    if (/plangridsum|plangridtotal/.test(row)) continue;
+    if (!columns.length) continue;
+    // Walk left to right: a codecol opens a term, anything else is one empty
+    // term. Indexing instead is the bug this shape exists to defend against.
+    const cells = row.split('<td').slice(1);
+    let term = 0;
+    for (let i = 0; i < cells.length && term < columns.length; term++) {
+      const isCode = /^[^>]*class="[^"]*codecol/.test(cells[i]);
+      if (isCode) {
+        const text = strip(body(cells[i]));
+        const slot = out.find(o => o.year === year && o.term === columns[term]);
+        if (text && slot) slot.cells.push(text);
+        i += /^[^>]*class="[^"]*hourscol/.test(cells[i + 1] ?? '') ? 2 : 1;
+      } else i += 1;
+    }
+  }
+  return out;
+}
+
+test('a second, naive reading of the HTML agrees cell for cell', () => {
+  const mismatches = [];
+  for (const name of FIXTURES) {
+    const html = readFileSync(join(DIR, `${name}.html`), 'utf8');
+    const naive = naiveTerms(html);
+    const parsed = grid(name);
+    if (!naive || !parsed) continue;
+    const plan = parsed.plans[0];            // naiveTerms reads the first table
+    for (const y of plan.years) {
+      for (const t of y.terms) {
+        const mine = t.entries.map(e => e.text);
+        const theirs = naive.find(o => o.year === y.label && o.term === t.term)?.cells ?? [];
+        // Compare as multisets of visible text: the naive reader knows nothing
+        // about headings, groups or co-ops, only what the cell said.
+        // Turning every tag into a space leaves one before punctuation
+        // ("ENGW 1111 , ECON 1116"), which is an artefact of reading naively
+        // rather than a difference in what the cell said.
+        const norm = (a) => [...a]
+          .map(s => s.replace(/\s+/g, ' ').replace(/\s+([,;:.])/g, '$1').trim())
+          .sort();
+        if (JSON.stringify(norm(mine)) !== JSON.stringify(norm(theirs))) {
+          mismatches.push({ fixture: name, year: y.label, term: t.term, mine, theirs });
+        }
+      }
+    }
+  }
+  assert.deepEqual(mismatches, [], 'cells our parser and a naive walk disagree about');
+});
