@@ -45,10 +45,15 @@ test("a course dropped on a reservation reorders, exactly as onto a course", () 
   // one costume. Answering a reservation is a separate act with its own
   // affordance — fillReservation() is what that calls.
   const { state, ctx, r1 } = setup();
+  // CS2510 sits in Spring; Fall holds [CS2500, r1]. Dropping it on either card
+  // in Fall must produce the same SHAPE of result: a swap into Fall at the
+  // target's position, with the target sent back to Spring.
   const onReservation = dropOnCard(state, { dragId: "CS2510", targetId: r1.id, targetSemId: FALL }, ctx);
   const onCourse      = dropOnCard(state, { dragId: "CS2510", targetId: "CS2500", targetSemId: FALL }, ctx);
-  assert.equal(onReservation, onCourse,
-    "both defer to the caller's ordinary course path — same gesture, same meaning");
+  assert.equal(onReservation.placements.CS2510, FALL);
+  assert.equal(onCourse.placements.CS2510, FALL);
+  assert.equal(onReservation.reservations[r1.id].semId, SPR, "the reservation swapped back");
+  assert.equal(onCourse.placements.CS2500, SPR, "the course swapped back — same rule");
 });
 
 test("filling is still available, just not as a drag", () => {
@@ -113,10 +118,14 @@ test("meaningless gestures change nothing rather than half-acting", () => {
   const { state, ctx, r1 } = setup();
   assert.equal(dropOnCard(state, { dragId: r1.id, targetId: r1.id, targetSemId: FALL }, ctx), null,
     "onto itself");
-  assert.equal(dropOnCard(state, { dragId: "CS2500", targetId: "CS2510", targetSemId: SPR }, ctx), null,
-    "course onto course is the caller's existing path");
-  assert.equal(dropOnCard(state, { dragId: "CS2500", targetId: "~res:gone", targetSemId: FALL }, ctx), null,
-    "onto a reservation that no longer exists");
+  assert.equal(dropOnCard(state, { dragId: "~res:gone", targetId: "CS2500", targetSemId: FALL }, ctx), null,
+    "dragging a card that does not exist");
+  // A card dropped on a target that no longer exists lands at the END of the
+  // term rather than doing nothing. Silently ignoring a drag reads as the app
+  // being broken; putting it somewhere sensible reads as a rule.
+  const stale = dropOnCard(state, { dragId: "CS2500", targetId: "~res:gone", targetSemId: FALL }, ctx);
+  assert.ok(stale, "resolved rather than ignored");
+  assert.equal(stale.semOrders[FALL].at(-1), "CS2500");
 });
 
 // ── The two cases that silently did nothing ────────────────────────
@@ -178,7 +187,7 @@ test("a reservation dropped on a course in ANOTHER term lands at that position",
   };
   const next = dropOnCard(state, { dragId: r.id, targetId: "CS2510", targetSemId: SPR }, c);
   assert.equal(next.reservations[r.id].semId, SPR, "it moved");
-  assert.deepEqual(next.semOrders[SPR], [r.id, "CS2510", "CS3000"],
-    "and landed on the card it was dropped on, not at the end");
-  assert.ok(!(next.semOrders[FALL] ?? []).includes(r.id), "and left the term it came from");
+  assert.equal(next.placements.CS2510, FALL, "and the course it landed on swapped back");
+  assert.deepEqual(next.semOrders[SPR], [r.id, "CS3000"],
+    "it took the target's position, not the end of the term");
 });

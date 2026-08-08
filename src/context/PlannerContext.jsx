@@ -2017,7 +2017,11 @@ export function PlannerProvider({ children }) {
     // function (src/core/planDrop.js) so each case can be enumerated in a test
     // — this logic lived inline as setX calls, where three separate bugs
     // shipped because nothing could exercise it.
-    if (isReservationId(dragId)) {
+    // Either end being a reservation goes through the shared resolver, because
+    // the course path below writes positions into `placements` and a
+    // reservation does not live there. The resolver implements the SAME rules —
+    // reorder in-term, swap across terms — so the two cannot diverge.
+    if (isReservationId(dragId) || isReservationId(targetId)) {
       const coreqPartners = [...new Set(
         allEdges
           .filter(e2 => e2.type === "corequisite" && (e2.from === dragId || e2.to === dragId))

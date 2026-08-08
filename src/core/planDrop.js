@@ -25,70 +25,100 @@ import { getOrderedCourses } from "./planModel.js";
  * @param {object} ctx      { gridPlacements, gridCourseMap, coreqPartners }
  * @returns {object|null} next state, or null when the gesture means nothing
  */
+/**
+ * Where a card lives, whichever map that is.
+ *
+ * This is the whole trick. A course's position is a value in `placements`, a
+ * reservation's is a field on its record in `reservations` — but a DROP does
+ * not care which. Expressing "put this card in this term" once means every
+ * combination below is the same code, so course-course and
+ * reservation-reservation cannot drift apart the way they did when each had
+ * its own branch.
+ */
+function place(state, id, semId) {
+  if (isReservationId(id)) {
+    return { ...state, reservations: moveReservation(state.reservations, id, semId) };
+  }
+  return { ...state, placements: { ...state.placements, [id]: semId } };
+}
+
+/** Which term a card is in, whichever map holds it. */
+export function semOf(state, id) {
+  return isReservationId(id) ? state.reservations[id]?.semId : state.placements[id];
+}
+
+/** Does this card exist at all? */
+const exists = (state, id) =>
+  isReservationId(id) ? !!state.reservations[id] : !!state.placements[id];
+
+/**
+ * Drop a card onto another card.
+ *
+ * One behaviour for all four combinations of course and reservation, because
+ * they are the same gesture on the same kind of object:
+ *
+ *   same term       reorder — the dragged card takes the target's position
+ *   different term  SWAP    — they exchange terms AND positions
+ *
+ * The swap is what the planner has always done for course-onto-course, and
+ * matching it is the entire point: a reservation that merely MOVED while a
+ * course would have swapped is a reservation that does not behave like a card.
+ *
+ * @param {object} state    { placements, reservations, semOrders }
+ * @param {object} gesture  { dragId, targetId, targetSemId }
+ * @param {object} ctx      { gridPlacements, gridCourseMap, coreqPartners }
+ * @returns {object|null} next state, or null when the gesture means nothing
+ */
 export function dropOnCard(state, { dragId, targetId, targetSemId }, ctx = {}) {
-  const { placements, reservations, semOrders } = state;
+  const { semOrders } = state;
   if (!dragId || dragId === targetId) return null;
+  if (!exists(state, dragId)) return null;
 
-  const { gridPlacements = placements, gridCourseMap = {}, coreqPartners = [] } = ctx;
+  const { gridPlacements = state.placements, gridCourseMap = {}, coreqPartners = [] } = ctx;
 
-  // ALWAYS through getOrderedCourses, never the stored array directly. A stored
-  // order can predate the cards now in the term — it is written by any drop,
-  // including ones that happened before a plan was loaded — so reading it raw
-  // yields a list missing the very ids being moved, indexOf returns -1, and the
-  // gesture silently does nothing. getOrderedCourses reconciles it against what
-  // is actually in the semester and appends anything the stored order missed.
-  const orderOf = (semId, orders) =>
-    getOrderedCourses(semId, gridPlacements, orders, gridCourseMap);
+  // ALWAYS through getOrderedCourses, never a stored array directly. A stored
+  // order is written by any drop and can predate the cards now in the term, so
+  // reading it raw yields a list missing the ids being moved — indexOf returns
+  // -1 and the gesture silently does nothing.
+  const orderIn = (semId, grid) => getOrderedCourses(semId, grid, semOrders, gridCourseMap);
 
-  // ── A reservation is what is being dragged ──────────────────────
-  if (isReservationId(dragId)) {
-    if (!reservations[dragId]) return null;
-    const from = reservations[dragId].semId;
+  const from = semOf(state, dragId);
+  const moving = [dragId, ...coreqPartners.filter(c => c !== dragId && !isReservationId(c))];
 
-    // Same term: a reorder over the combined order, so reservations and courses
-    // share ONE sequence rather than two interleaved ones.
-    if (from === targetSemId) {
-      const cur = orderOf(targetSemId, semOrders);
-      const fi = cur.indexOf(dragId), ti = cur.indexOf(targetId);
-      if (fi < 0) return null;
-      const next = [...cur];
-      next.splice(fi, 1);
-      // A target that is not in the order (or no target at all) means the end
-      // of the term rather than nothing happening.
-      const at = ti < 0 ? next.length : next.indexOf(targetId);
-      next.splice(at < 0 ? next.length : at, 0, dragId);
-      return { ...state, semOrders: { ...semOrders, [targetSemId]: next } };
-    }
-
-    // Another term: move it AND place it where it was dropped. Moving without
-    // touching the order left it at the end of the target term, which reads as
-    // the drag having gone somewhere else.
-    const nextReservations = moveReservation(reservations, dragId, targetSemId);
-    const nextGrid = { ...gridPlacements, [dragId]: targetSemId };
-    const fromOrder = orderOf(from, semOrders).filter(id => id !== dragId);
-    const toOrder = getOrderedCourses(targetSemId, nextGrid, semOrders, gridCourseMap)
-      .filter(id => id !== dragId);
-    const ti = toOrder.indexOf(targetId);
-    toOrder.splice(ti < 0 ? toOrder.length : ti, 0, dragId);
-
-    return {
-      ...state,
-      reservations: nextReservations,
-      semOrders: { ...semOrders, [from]: fromOrder, [targetSemId]: toOrder },
-    };
+  // ── Same term: a reorder ────────────────────────────────────────
+  if (from === targetSemId) {
+    const cur = orderIn(targetSemId, gridPlacements);
+    const rest = cur.filter(id => !moving.includes(id));
+    const ti = rest.indexOf(targetId);
+    // An unknown target means the end of the term, never "do nothing" — a
+    // silently ignored drag reads as the app being broken rather than a rule
+    // being applied.
+    const at = ti < 0 ? rest.length : ti;
+    return { ...state, semOrders: { ...semOrders, [targetSemId]: [
+      ...rest.slice(0, at), ...moving, ...rest.slice(at),
+    ] } };
   }
 
-  // ── A course dropped ONTO a reservation ─────────────────────────
-  //
-  // Nothing special: it moves to that position, exactly as it would onto
-  // another course. Dragging means the same thing wherever it lands, which is
-  // the point of a reservation being an ordinary card — a gesture that
-  // sometimes reorders and sometimes consumes the target would be two gestures
-  // wearing one costume.
-  //
-  // Answering a reservation is a separate act with its own affordance;
-  // fillReservation() in reservations.js is what it calls.
-  return null;   // course onto anything — the caller's existing path
+  // ── Different terms: a swap ─────────────────────────────────────
+  const fromOrder = orderIn(from, gridPlacements);
+  const toOrder   = orderIn(targetSemId, gridPlacements);
+  const fi = fromOrder.indexOf(dragId);
+  const ti = toOrder.indexOf(targetId);
+
+  let next = state;
+  for (const id of moving) next = place(next, id, targetSemId);
+  // The target comes back the other way, but only if it is a real card. A drop
+  // on a term's empty space has no target to exchange with.
+  const swapping = targetId && exists(state, targetId);
+  if (swapping) next = place(next, targetId, from);
+
+  const nf = fromOrder.filter(id => !moving.includes(id) && id !== targetId);
+  if (swapping) nf.splice(Math.min(Math.max(fi, 0), nf.length), 0, targetId);
+
+  const nt = toOrder.filter(id => !moving.includes(id) && id !== targetId);
+  nt.splice(Math.min(ti < 0 ? nt.length : ti, nt.length), 0, ...moving);
+
+  return { ...next, semOrders: { ...semOrders, [from]: nf, [targetSemId]: nt } };
 }
 
 /**
