@@ -55,9 +55,9 @@ body:
       label: Which pricing band do you land in?
       description: >-
         Schools: your most recent IPEDS 12-Month Enrollment (E12) unduplicated
-        headcount, all levels — or the national equivalent — times $1. If only one
+        headcount, all levels — or the national equivalent — times $2. If only one
         college or department wants it, say which and how many students are in it
-        instead: that's $2 per student in the named unit, capped at what the
+        instead: that's $4 per student in the named unit, capped at what the
         whole-institution figure would have been. Companies and individuals: gross
         revenue over the trailing twelve months for the product containing NU Map,
         aggregated across your affiliates. Under $10k is the free Nil Band — this
@@ -82,6 +82,11 @@ body:
         - label: >-
             I understand a commercial license conveys no rights in Northeastern
             University's course data, and no support, SLA, or warranty.
+          required: true
+        - label: >-
+            I understand there is no promised release cadence — NU Map is
+            maintained by two students, there may be no new version in a given
+            year, and keeping my own fork working is my responsibility.
           required: true
         - label: >-
             I understand the "NU Map" name and logo are not licensed, and a fork

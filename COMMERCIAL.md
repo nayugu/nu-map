@@ -16,10 +16,10 @@ A commercial license is required only in order to use NU Map within a
 closed-source product or service. All other use, including commercial use with
 source disclosure, is already permitted at no cost under the AGPL.
 
-Institutions pay one US dollar per enrolled student per year, counted from their
+Institutions pay two US dollars per enrolled student per year, counted from their
 public IPEDS filing. There is no upper band and nothing to negotiate: the fee is
 one multiplication at any size. An institution that wants only one college or
-department can license just that, at two dollars per student in it, and never
+department can license just that, at four dollars per student in it, and never
 pays more than the institution-wide figure would have been. Companies and
 individuals pay according to the revenue of
 the product incorporating NU Map, measured over the **trailing twelve months**,
@@ -28,7 +28,9 @@ needed for that tier, just a one-time self-certification. A company that supplie
 institutions pays at least fifty cents per student it reaches, so that routing
 through a vendor does not cost the authors their fee. Licenses run for a year and
 do not expire retroactively: on non-renewal you keep the version you had, in
-perpetuity, so long as you stay within the size band you paid for.
+perpetuity, so long as you stay within the size band you paid for. We promise no
+release schedule and may publish nothing at all in a given year; what comes after
+your license lapses needs a current one.
 
 Licenses are personal to the licensee. They cannot be sold on, lent, or carried
 through an acquisition without the Licensor's consent.
@@ -99,8 +101,8 @@ aggregated.
 
 ## 3. Consideration — Institutional Licensees
 
-3.1. The annual fee for an Institutional Licensee is **one United States dollar
-(US$1.00) per Enrolled Student**, subject to the bands at §3.4.
+3.1. The annual fee for an Institutional Licensee is **two United States dollars
+(US$2.00) per Enrolled Student**, subject to the minimum at §3.4.
 
 3.2. The IPEDS measure at §2.5 is adopted in preference to a figure supplied by
 the licensee because it is public, independently verifiable, and republished
@@ -119,30 +121,27 @@ simplification in favour of a single flat figure requiring no audit of
 deployment. A licensee wishing to license a single department or college, whether
 on a pilot basis or permanently, may do so under §3.9.
 
-3.4. The fee is determined by reference to the following bands:
+3.4. The annual fee is **the greater of US$2,000 and the rate at §3.1 applied to
+the licensee's Enrolled Students**. There are no bands.
 
-| Enrolled Students | Annual fee |
-|---|---|
-| Fewer than 2,000 | US$2,000, as a minimum fee |
-| 2,000 or more | US$1.00 × Enrolled Students |
-
-&nbsp;&nbsp;&nbsp;&nbsp;(a) **There is no upper band.** The rate at §3.1 applies
+&nbsp;&nbsp;&nbsp;&nbsp;(a) **There is no upper limit.** The rate at §3.1 applies
 at every size, and the fee for an institution of any size is a single
 multiplication requiring no quotation, no negotiation, and no contact with the
 Licensor to compute. A prospective licensee can therefore determine what it will
 pay from a public figure before it makes an inquiry.
 
-&nbsp;&nbsp;&nbsp;&nbsp;(b) The two bands are continuous: an institution
-reporting 1,999 Enrolled Students and one reporting 2,000 are each assessed
-US$2,000. Growth in an institution's size accordingly never reduces its fee.
+&nbsp;&nbsp;&nbsp;&nbsp;(b) The minimum binds below 1,000 Enrolled Students and
+the rate governs above it. The fee is accordingly continuous and non-decreasing
+in Enrolled Students throughout, and growth in an institution's size never
+reduces its fee.
 
 3.5. By way of illustration, an institution reporting 31,000 Enrolled Students is
-assessed **US$31,000 per annum**; an institution reporting 145,000 is assessed
-**US$145,000**; an institution reporting 1,400 is assessed the minimum fee of
-**US$2,000**.
+assessed **US$62,000 per annum**; an institution reporting 145,000 is assessed
+**US$290,000**; an institution reporting 500 is assessed the minimum fee of
+**US$2,000**, the rate alone producing US$1,000.
 
 3.6. Each institution reporting separately to IPEDS is assessed separately, each
-at the rate in §3.4. A system, multi-campus body, or consortium may instead seek
+under §3.4. A system, multi-campus body, or consortium may instead seek
 a single consolidated license covering named constituent institutions, which is
 individually quoted; absent such a license, §3.4 applies to each constituent
 institution on its own IPEDS figure.
@@ -168,9 +167,9 @@ Student"** means one student enrolled in a Scoped Unit, counted on the same basi
 as §2.5 and certified in writing by an officer of the institution as at each
 Assessment Date.
 
-&nbsp;&nbsp;&nbsp;&nbsp;(b) The annual fee is **two United States dollars
-(US$2.00) per Scoped Student**, subject to a minimum of US$2,000, being the
-minimum fee at §3.4, and to limb (c).
+&nbsp;&nbsp;&nbsp;&nbsp;(b) The annual fee is **four United States dollars
+(US$4.00) per Scoped Student**, being twice the rate at §3.1, subject to a
+minimum of US$2,000 as at §3.4 and to limb (c).
 
 &nbsp;&nbsp;&nbsp;&nbsp;(c) **The scoped fee is capped at the institution-wide
 fee.** Where the figure produced by limb (b) equals or exceeds the fee that would
@@ -190,8 +189,8 @@ institution at a fraction of its size.
 
 &nbsp;&nbsp;&nbsp;&nbsp;(e) By way of illustration, an institution reporting
 41,000 Enrolled Students, licensing for a single college of 9,000, is assessed
-**US$18,000 per annum** in place of US$41,000. The same institution licensing for
-colleges totalling 24,000 students is assessed **US$41,000**, its scoped figure
+**US$36,000 per annum** in place of US$82,000. The same institution licensing for
+colleges totalling 24,000 students is assessed **US$82,000**, its scoped figure
 having reached the cap.
 
 &nbsp;&nbsp;&nbsp;&nbsp;(f) The license extends to the Scoped Units only. §3.7
@@ -213,10 +212,10 @@ bands:
 | Product Revenue | Annual fee |
 |---|---|
 | Less than US$10,000 | **Nil** (the "Nil Band") |
-| US$10,000 to US$100,000 | US$250 |
-| Above US$100,000 to US$1,000,000 | US$1,500 |
-| Above US$1,000,000 to US$10,000,000 | US$6,000 |
-| Above US$10,000,000 | By negotiation |
+| US$10,000 to US$100,000 | US$500 |
+| Above US$100,000 to US$1,000,000 | US$5,000 |
+| Above US$1,000,000 to US$10,000,000 | US$25,000 |
+| Above US$10,000,000 | By negotiation, and in no case less than US$25,000 |
 
 4.2. **Aggregation.** Product Revenue is computed across the licensee **and its
 Affiliates**, and across **all** Licensed Products, taken together. The
@@ -281,16 +280,15 @@ irrespective of its usage.
 
 4.9. **Suppliers to institutions — per-student floor.** Where the licensee is a
 Supplier, the annual fee is **the greater of** (i) the fee determined under §4.1,
-and (ii) **fifty United States cents (US$0.50) per Served Student**.
+and (ii) **one United States dollar (US$1.00) per Served Student**.
 
-&nbsp;&nbsp;&nbsp;&nbsp;(a) **Small Suppliers.** Where the aggregate number of
-Served Students is fewer than 2,000, limb (ii) above is **US$1,000**. That figure
-is half the minimum fee at §3.4, and is the same figure limb (ii) produces at
-2,000 Served Students, so that the floor is continuous at that boundary. It
-mirrors the institutional minimum because an institution below 2,000 Enrolled
-Students licensing directly pays that minimum, and the Licensor's consideration
-should not fall away altogether merely because the same institution is reached
-through a Supplier.
+&nbsp;&nbsp;&nbsp;&nbsp;(a) **Minimum.** Limb (ii) above is subject to a minimum
+of **US$1,000**, being half the minimum fee at §3.4 and binding below 1,000
+Served Students, exactly as that minimum binds below 1,000 Enrolled Students. It
+mirrors the institutional minimum because an institution below that size
+licensing directly pays US$2,000, and the Licensor's consideration should not
+fall away altogether merely because the same institution is reached through a
+Supplier.
 
 &nbsp;&nbsp;&nbsp;&nbsp;(b) **Trials.** Notwithstanding limb (a), this §4.9 does
 not apply where the Supplier provides the Licensed Product to a single institution
@@ -315,8 +313,9 @@ financial records is unaffected.
 &nbsp;&nbsp;&nbsp;&nbsp;(f) The rate at limb (ii) above is set at half the direct
 institutional rate under §3.1, and the minimum at limb (a) at half the minimum
 fee under §3.4, in recognition of the distribution, integration, and support
-functions a Supplier discharges. Its purpose is to ensure that the
-Licensor's consideration does not depend materially upon whether an institution
+functions a Supplier discharges. A Supplier's floor is accordingly half the
+institutional figure at every number of students, minimum included. Its purpose
+is to ensure that the Licensor's consideration does not depend materially upon whether an institution
 licenses the Work directly or acquires it through a Supplier, while preserving a
 margin in favour of the Supplier's channel.
 
@@ -398,6 +397,61 @@ surface of conventional form, in place of a surface of the prominence otherwise
 required. Complete removal of the attribution notice is not conferred by this
 document and is available only by separate written agreement.
 
+6.5. **What §6.3 is, and what it is not.** §6.3 confers access to such versions
+of the Work as the Licensor in fact makes available during the term. It is not an
+undertaking that any version will be made available.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(a) **No obligation to release.** The Licensor may
+release nothing at all during a term. No release schedule, cadence, roadmap,
+minimum standard of maintenance, deprecation period, or guarantee of
+backward compatibility arises under this document, and none may be inferred from
+the Licensor's past practice, from the frequency of its previous releases, or
+from any public statement of intention. The Licensor may at any time change the
+Work's design, interfaces, data formats, or scope, narrow what the Work attempts
+to do, or discontinue the Work entirely, in each case without notice and without
+liability. **A fee paid under this document is not consideration for future
+development,** and no part of it is refundable on the ground that a period passed
+without a release. Payment buys the relief at §6.1 in respect of the Covered
+Version, and nothing else.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(b) **Upstream change is not a defect.** The Work draws
+its data from sources controlled by Northeastern University and other third
+parties, whose structure, availability, addressing, and terms of access change
+without notice and wholly outside the Licensor's control. The Licensor does not
+undertake that the Work will continue to function against those sources, and a
+version that has ceased to do so is not for that reason defective, incomplete, or
+in breach of this document. §9.2 applies to the data itself.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(c) **A licensee's own version is its own
+responsibility.** Where the licensee modifies the Work, configures it, adapts it
+to another institution, or maintains a fork of it, the Licensor is under no
+obligation to support those changes, to accept them, to preserve any interface
+they depend upon, or to remain compatible with them. The burden of reconciling a
+licensee's version with any later version of the Work falls on the licensee, and
+the difficulty or impossibility of doing so is not a ground for relief under this
+document.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(d) **Later versions require a current license.** A
+licensee whose license has expired, lapsed, or been terminated retains the
+Covered Version under §5.2 and nothing beyond it. A version released after that
+date may be taken under this document only under a license current as at that
+version's release, or upon renewal of a lapsed license under §5.2(b), in each
+case at the then-applicable rate.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(e) Limb (d) is so notwithstanding that the same later
+version is published under Option A. A person taking a later version under Option
+A takes it subject to `LICENSING.md` §3.2(b) and §3.2(c) in full, and the relief
+conferred by this document in respect of an earlier version does not extend to
+it. The AGPL route to a later version remains open at all times and at no charge;
+what may not be done is to combine a lapsed licensee's relief from disclosure
+with code obtained after the lapse.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(f) This §6.5 exists because the Work is maintained by
+two students in the course of their studies, whose capacity to develop it will
+vary and may at some point cease. §5.2 is the counterpart of this section: the
+Licensor's discretion as to future versions is the licensee's risk only as to
+what it has not yet received, and never as to what it has already shipped.
+
 ## 7. Assignment, change of control, and anti-circumvention
 
 7.1. **A license under this document is personal to the licensee and is not
@@ -449,7 +503,8 @@ a grant of rights and is not a contract for services. No obligation of
 maintenance, support, availability, response time, or fitness for purpose arises.
 The Work is maintained by two students in the course of their studies. Any
 requirement for assured support must be the subject of a separate written
-agreement.
+agreement. §6.5 states the same conclusion as it applies to future versions, and
+should be read with this paragraph.
 
 9.2. **No rights in Northeastern University's data.** For the avoidance of doubt,
 and consistently with `LICENSING.md` §6.2, this document conveys rights in the
