@@ -696,8 +696,8 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
-  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
+    saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
+  }, [persistEnabled, placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
 
   useEffect(() => {
     try { localStorage.setItem(key("graduated"), String(isGraduated)); } catch {}
@@ -716,13 +716,13 @@ export function PlannerProvider({ children }) {
     // wrote {"persist":true} to a junk key on every unload. The last-moment
     // safety net has never actually saved anything.
     const h = () => {
-      saveState(storagePrefix, persistEnabled, { placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
+      saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
       // The SLOT is what the app reloads from, so it needs the same net.
       saveCurrentPlanToSlot();
     };
     window.addEventListener("beforeunload", h);
     return () => window.removeEventListener("beforeunload", h);
-  }, [persistEnabled, placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
+  }, [persistEnabled, placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
 
   // ── Effect: semester tracking (live) ─────────────────────────
   // Runs on mount and whenever the tracking mode, plan semesters, or clock changes.
@@ -2729,7 +2729,12 @@ export function PlannerProvider({ children }) {
     exported: new Date().toISOString(),
     entSem: planEntSem, entYear: planEntYear,
     gradSem: planGradSem, gradYear: planGradYear,
-    placements, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
+    // Reservations travel with the plan everywhere placements do — a plan slot,
+    // a share link, an exported file. Omitting them was the same defect the
+    // substitutions note below describes: the state exists, the capture does
+    // not write it, and a reload silently returns a plan missing half of its
+    // later years.
+    placements, reservations, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
     offeredOverrides, collapsedSubs,
     major, major2, conc, conc2, minor1, minor2, studentType,
     placedOut: [...placedOut],
@@ -2774,6 +2779,7 @@ export function PlannerProvider({ children }) {
 
   const restorePlan = (d, { initial = false } = {}) => {
     setPlacements(d.placements ?? {});
+    setReservations(d.reservations ?? {});
     setSpecialTermPl(migrateSpecialTermPl(d));
     setSemOrders(d.semOrders ?? {});
     setShOverrides(d.shOverrides ?? {});
@@ -2957,7 +2963,7 @@ export function PlannerProvider({ children }) {
     // saved to state-v2, never mirrored to the slot, and then overwritten
     // by the stale slot on the next reload — silent data loss that looks
     // like "it didn't save". That was live for grades and placedOut.
-  }, [placements, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {

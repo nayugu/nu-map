@@ -62,17 +62,12 @@ const _KEYS = {
   // a shared double major could arrive unsatisfiable.
   conc2: 'cn2',
   minor1: 'm1', minor2: 'm2',
-  // The department's plan a student loaded, as a REFERENCE — which is the
-  // whole point: the entries are re-derived from shipped data, so this is
-  // 150-400 bytes where materializing them would be 3.4 KB (max 6.3) of a
-  // share link. Without it a shared plan arrives with its named courses and
-  // none of its reservations, which for a later year is most of the plan and
-  // reads as the sender's work having been lost.
-  appliedPlan: 'ap',
-  // Moves and deletions only — the divergences from what the catalog
-  // published. See src/core/planInstance.js on why nothing consequential is
-  // keyed by a position.
-  planEdits: 'pe',
+  // Cards in a semester with no course chosen yet. Without an entry here a
+  // shared plan arrives with its named courses and none of its reservations,
+  // which for a later year is most of the plan and reads as the sender's work
+  // having been lost. Roughly 800 bytes for a whole four-year plan, because
+  // only the reservations need carrying — the named courses are placements.
+  reservations: 'rv',
   placedOut: 'po', planName: 'pn',
   locale: 'lc', substitutions: 'su',
   studentType: 'st',
