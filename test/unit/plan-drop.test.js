@@ -7,7 +7,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { dropOnCard, dropOnSemester, dropOnBank } from "../../src/core/planDrop.js";
-import { createReservation, isReservationId } from "../../src/core/reservations.js";
+import { createReservation, isReservationId, fillReservation } from "../../src/core/reservations.js";
 import { semesterOccupants, occupantCards } from "../../src/core/reservations.js";
 
 const FALL = "fall2026", SPR = "spr2027", SUMA = "sumA2027", SUMB = "sumB2027";
@@ -39,37 +39,24 @@ function assertIsolated(next, what) {
 
 // ── Course onto a reservation ──────────────────────────────────────
 
-test("a course dropped on a reservation replaces it, in that term", () => {
+test("a course dropped on a reservation reorders, exactly as onto a course", () => {
+  // Dragging means the same thing wherever it lands. A gesture that sometimes
+  // reorders and sometimes consumes its target would be two gestures wearing
+  // one costume. Answering a reservation is a separate act with its own
+  // affordance — fillReservation() is what that calls.
   const { state, ctx, r1 } = setup();
-  const next = dropOnCard(state, { dragId: "CS2510", targetId: r1.id, targetSemId: FALL }, ctx);
-  assert.ok(!next.reservations[r1.id], "the card is gone");
-  assert.equal(next.placements.CS2510, FALL, "and the course is there instead");
-  assertIsolated(next, "fill");
+  const onReservation = dropOnCard(state, { dragId: "CS2510", targetId: r1.id, targetSemId: FALL }, ctx);
+  const onCourse      = dropOnCard(state, { dragId: "CS2510", targetId: "CS2500", targetSemId: FALL }, ctx);
+  assert.equal(onReservation, onCourse,
+    "both defer to the caller's ordinary course path — same gesture, same meaning");
 });
 
-test("the course takes the card's exact position in the term", () => {
-  const { state, ctx, r1 } = setup();
-  // Fall holds [CS2500, r1]; dropping CS2510 on r1 must land it where r1 was.
-  const next = dropOnCard(state, { dragId: "CS2510", targetId: r1.id, targetSemId: FALL }, ctx);
-  assert.deepEqual(next.semOrders[FALL], ["CS2500", "CS2510"]);
-});
-
-test("coreq partners travel with the course, as on any other drop", () => {
-  // Leaving them behind would split a pair the catalog requires together.
-  const { state, ctx, r1 } = setup();
-  const next = dropOnCard(state, { dragId: "CS2100", targetId: r1.id, targetSemId: FALL },
-    { ...ctx, coreqPartners: ["CS2101"] });
-  assert.equal(next.placements.CS2100, FALL);
-  assert.equal(next.placements.CS2101, FALL, "the partner came along");
-  assert.ok(next.semOrders[FALL].includes("CS2101"));
-});
-
-test("filling with a course from ANOTHER term moves it, leaving nothing behind", () => {
-  const { state, ctx, r2 } = setup();
-  const next = dropOnCard(state, { dragId: "CS2500", targetId: r2.id, targetSemId: SUMA }, ctx);
-  assert.equal(next.placements.CS2500, SUMA, "moved out of Fall");
-  assert.ok(!next.reservations[r2.id]);
-  assert.ok(!next.semOrders[SUMA].includes(r2.id), "the card is not left in the order");
+test("filling is still available, just not as a drag", () => {
+  const { state, r1 } = setup();
+  const filled = fillReservation(state.reservations, r1.id, "CS2510");
+  assert.ok(!filled.reservations[r1.id], "the card goes");
+  assert.equal(filled.courseId, "CS2510");
+  assert.equal(filled.semId, FALL, "and the course belongs in its term");
 });
 
 // ── A reservation being dragged ────────────────────────────────────

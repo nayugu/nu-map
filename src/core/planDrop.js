@@ -50,36 +50,17 @@ export function dropOnCard(state, { dragId, targetId, targetSemId }, ctx = {}) {
     return { ...state, semOrders: { ...semOrders, [targetSemId]: next } };
   }
 
-  // ── A course dropped ONTO a reservation answers it ──────────────
-  if (isReservationId(targetId)) {
-    const target = reservations[targetId];
-    if (!target) return null;
-    const semId = target.semId;
-
-    // Coreq partners travel with the course, exactly as they do on any other
-    // drop. Leaving them behind would split a pair the catalog requires
-    // together — CS 2100 without CS 2101.
-    const moving = [dragId, ...coreqPartners.filter(c => c !== dragId)];
-    const nextPlacements = { ...placements };
-    for (const id of moving) nextPlacements[id] = semId;
-
-    // The course takes the card's position, so the term does not reshuffle at
-    // the moment of filling.
-    const cur = orderOf(semId, semOrders);
-    const at = cur.indexOf(targetId);
-    const rest = cur.filter(id => id !== targetId && !moving.includes(id));
-    const nextOrder = at < 0
-      ? [...rest, ...moving]
-      : [...rest.slice(0, at), ...moving, ...rest.slice(at)];
-
-    return {
-      placements: nextPlacements,
-      reservations: removeReservation(reservations, targetId),
-      semOrders: { ...semOrders, [semId]: nextOrder },
-    };
-  }
-
-  return null;   // course onto course — the caller's existing path
+  // ── A course dropped ONTO a reservation ─────────────────────────
+  //
+  // Nothing special: it moves to that position, exactly as it would onto
+  // another course. Dragging means the same thing wherever it lands, which is
+  // the point of a reservation being an ordinary card — a gesture that
+  // sometimes reorders and sometimes consumes the target would be two gestures
+  // wearing one costume.
+  //
+  // Answering a reservation is a separate act with its own affordance;
+  // fillReservation() in reservations.js is what it calls.
+  return null;   // course onto anything — the caller's existing path
 }
 
 /**

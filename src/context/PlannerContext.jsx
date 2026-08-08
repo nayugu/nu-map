@@ -2017,7 +2017,7 @@ export function PlannerProvider({ children }) {
     // function (src/core/planDrop.js) so each case can be enumerated in a test
     // — this logic lived inline as setX calls, where three separate bugs
     // shipped because nothing could exercise it.
-    if (isReservationId(dragId) || isReservationId(targetId)) {
+    if (isReservationId(dragId)) {
       const coreqPartners = [...new Set(
         allEdges
           .filter(e2 => e2.type === "corequisite" && (e2.from === dragId || e2.to === dragId))
