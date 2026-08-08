@@ -42,6 +42,7 @@ function StackedSemLabel({ sem }) {
 }
 import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
+import { FadeInput } from "./FadeText.jsx";
 
 export default function SemRow({ sem }) {
   const {
@@ -369,7 +370,7 @@ export default function SemRow({ sem }) {
                       placeholder={t("sem.work.company.placeholder")}
                       onChange={v => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], company: v?.name ?? "", companyDomain: v?.domain ?? "" } }))}
                     />
-                    <input
+                    <FadeInput
                       value={termStartData.subline ?? ""}
                       onChange={e => setSpecialTermPl(p => ({ ...p, [termStartId]: { ...p[termStartId], subline: e.target.value } }))}
                       onMouseDown={e => e.stopPropagation()}

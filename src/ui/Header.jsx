@@ -2,7 +2,7 @@
 // HEADER  — sticky timeline header: title, SH counters, controls,
 //           relationship legend, co-op/grad conflict warning
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { useState, useEffect, useMemo, useRef } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
@@ -22,6 +22,7 @@ import NewPlanModal   from "./NewPlanModal.jsx";
 import PlanTree, { PlanIcon } from "./PlanTree.jsx";
 import { flattenTree, buildSearchIndex, matchIds } from "../core/planFolders.js";
 import HoverTip       from "./InfoTip.jsx";
+import FadeText       from "./FadeText.jsx";
 
 // Measured header-row width (logical px) below which the labeled buttons fold
 // to icon-only. Above it, labeled buttons wrap into two stacked groups
@@ -1063,7 +1064,7 @@ export default function Header() {
               return (
                 <>
                   {!isPhone && <span style={{ flexShrink: 0, marginRight: 4 }}>/</span>}
-                  <PlanNameFade text={planName} rtl={hdrRtl} />
+                  <FadeText text={planName} rtl={hdrRtl} />
                   <span style={{ flexShrink: 0, marginLeft: isPhone ? 3 : 4 }}>▾</span>
                 </>
               );
@@ -2078,47 +2079,6 @@ function LanguagePicker({ locale, locales, setLocale }) {
         </div>
       )}
     </div>
-  );
-}
-
-/** Phone plan name that fades out PER CHARACTER when clipped: the last three
-    visible characters step down in opacity (whole glyphs — no gradient slicing
-    through a stroke, matching the instructor-list opacity language), and
-    everything past them is fully invisible, so no glyph ever touches the
-    button border. Names that fit render untouched. All characters stay in the
-    DOM (only opacity changes), so the measurement is stable across passes. */
-function PlanNameFade({ text, rtl }) {
-  const ref = useRef(null);
-  const [fadeFrom, setFadeFrom] = useState(-1);   // index of first faded char; -1 = fits
-  const STEPS = [0.6, 0.32, 0.12];                 // opacity of the last 3 visible chars
-
-  useLayoutEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    let next = -1;
-    if (el.scrollWidth > el.clientWidth + 1) {
-      // Last character that fits entirely, with 2px clearance from the edge.
-      const box = el.getBoundingClientRect();
-      let lastFit = -1;
-      for (let i = 0; i < el.children.length; i++) {
-        const r = el.children[i].getBoundingClientRect();
-        const fits = rtl ? r.left >= box.left + 2 : r.right <= box.right - 2;
-        if (fits) lastFit = i; else break;
-      }
-      next = Math.max(0, lastFit - (STEPS.length - 1));
-    }
-    if (next !== fadeFrom) setFadeFrom(next);
-  });
-
-  return (
-    <span ref={ref} style={{ overflow: "hidden", whiteSpace: "nowrap", minWidth: 0 }}>
-      {[...text].map((ch, i) => {
-        const step = fadeFrom === -1 ? -1 : i - fadeFrom;
-        return (
-          <span key={i} style={step >= 0 ? { opacity: STEPS[step] ?? 0 } : undefined}>{ch}</span>
-        );
-      })}
-    </span>
   );
 }
 

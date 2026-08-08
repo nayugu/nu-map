@@ -5,6 +5,7 @@
 // ═══════════════════════════════════════════════════════════════════
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { FadeInput } from "./FadeText.jsx";
 
 const faviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
 
@@ -103,7 +104,7 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
 
   return (
     <div ref={wrapRef} style={{ position: "relative", flex: 1, minWidth: 0 }}>
-      <input
+      <FadeInput
         value={query}
         onChange={handleChange}
         onFocus={() => { if (results.length) { openAt(); setOpen(true); } }}
