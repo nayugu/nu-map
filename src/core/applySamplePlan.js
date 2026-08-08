@@ -54,7 +54,12 @@ const coopId = (semId, typeId) => `${typeId}-plan-${semId}`;
 export function applySamplePlan(plan, {
   semesters = [], courseMap = {}, placements = {}, reservations = {},
   programData = null, startYearIndex = 0,
-  specialTermPl = {}, coopTypeId = "coop", coopDurations = [4, 6],
+  // Northeastern's co-op is SIX months and comes in two cycles: one overlapping
+  // spring (spring + summer 1) and one overlapping fall (summer 2 + fall).
+  // Measured across the corpus, those two shapes are ~1,235 of ~1,875 runs and
+  // single-term co-ops are 4. The default reflects that; an institution
+  // offering others passes them in.
+  specialTermPl = {}, coopTypeId = "coop", coopDurations = [6],
   monthsPerUnitWeight = MONTHS_PER_UNIT_WEIGHT,
 } = {}) {
   const years = academicYears(semesters);

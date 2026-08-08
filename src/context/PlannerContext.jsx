@@ -1688,7 +1688,10 @@ export function PlannerProvider({ children }) {
     const result = mapSamplePlan(plan, {
       semesters: SEMESTERS, courseMap, placements, reservations, specialTermPl,
       programData, startYearIndex,
-      coopDurations: specialTerms?.getTypes?.().find(t => t.id === "coop")?.durations ?? [4, 6],
+      // The adapter states durations as objects ({id,label,duration,weight});
+      // the mapper compares months, so pass the numbers.
+      coopDurations: (specialTerms?.getTypes?.() ?? [])
+        .find(t => t.id === "coop")?.durations?.map(d => d.duration) ?? [6],
     });
     pushUndo();
     setPlacements(result.placements);

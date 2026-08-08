@@ -233,7 +233,7 @@ test("co-ops separated by a study term stay separate", async () => {
   ] }] };
   const r = applySamplePlan(plan, { semesters, courseMap: { CS2500: { id: "CS2500", sh: 4 } } });
   assert.equal(r.coops.length, 2, "a study term between them breaks the run");
-  assert.equal(r.coops[0].duration, 4, "a lone full term snaps to the four-month co-op");
+  assert.equal(r.coops[0].duration, 6, "Northeastern co-ops are six months; a lone cell still snaps to one");
 });
 
 test("a co-op the student already planned is never replaced", async () => {
@@ -247,4 +247,28 @@ test("a co-op the student already planned is never replaced", async () => {
   assert.equal(r.coops.length, 0, "nothing added over it");
   assert.deepEqual(r.specialTermPl, existing, "the student's own co-op is untouched");
   assert.ok(r.notes.some(n => n.kind === "coop-kept"));
+});
+
+test("the FALL cycle merges across the academic-year boundary", async () => {
+  const { applySamplePlan } = await import("../../src/core/applySamplePlan.js");
+  // Northeastern's two cycles are spring (spring + summer 1) and fall
+  // (summer 2 + fall). The fall one straddles two academic YEARS, so merging
+  // per-year would split it into two co-ops and double a student's count.
+  const semesters = [
+    { id: "fall2026", semTypeId: "fall",   type: "fall",   weight: 1 },
+    { id: "spr2027",  semTypeId: "spring", type: "spring", weight: 1 },
+    { id: "sumA2027", semTypeId: "sumA",   type: "summer", weight: 0.5 },
+    { id: "sumB2027", semTypeId: "sumB",   type: "summer", weight: 0.5 },
+    { id: "fall2027", semTypeId: "fall",   type: "fall",   weight: 1 },
+  ];
+  const coop = { coop: true, options: [], text: "Co-op" };
+  const plan = { years: [
+    { label: "Year 1", terms: [{ term: "Summer 2", type: "sumB", entries: [coop] }] },
+    { label: "Year 2", terms: [{ term: "Fall",     type: "fall", entries: [coop] }] },
+  ] };
+  const r = applySamplePlan(plan, { semesters, courseMap: {} });
+  assert.equal(r.coops.length, 1, "one fall-cycle co-op, not two");
+  assert.equal(r.coops[0].semId, "sumB2027");
+  assert.equal(r.coops[0].duration, 6);
+  assert.deepEqual(r.coops[0].spans, ["sumB2027", "fall2027"]);
 });
