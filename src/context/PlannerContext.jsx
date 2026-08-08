@@ -16,7 +16,8 @@ import { extractEdges } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
-import { semesterOccupants, occupantCards, moveReservation, removeReservation, fillReservation, isReservationId } from "../core/reservations.js";
+import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
+import { dropOnCard as resolveDropOnCard, dropOnSemester, dropOnBank } from "../core/planDrop.js";
 import { applySamplePlan as mapSamplePlan } from "../core/applySamplePlan.js";
 import { baseId, isInstanceId, takesUsed, resolveAddId, retakeUnlocked, buildTakesResolver } from "../core/repeatInstances.js";
 import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
@@ -1793,11 +1794,8 @@ export function PlannerProvider({ children }) {
     // `reservations`. Falling through to the course path below would write a
     // reservation id into `placements` — the pollution the whole split exists
     // to prevent, and what made cards vanish or behave oddly after a drag.
-    if (isReservationId(id)) {
-      setReservations(prev => moveReservation(prev, id, semId));
-      setDragInfo(null);
-      return;
-    }
+    const resMove = dropOnSemester({ placements, reservations, semOrders }, { dragId: id, semId });
+    if (resMove) { setReservations(resMove.reservations); setDragInfo(null); return; }
 
     // If the course was placed out, remove it from placedOut
     if (placedOut.has(id)) {
@@ -1881,11 +1879,8 @@ export function PlannerProvider({ children }) {
     // Dragging a reservation to the bank removes it from the plan. There is no
     // bank entry to return it to — it was never a course — so this is a delete,
     // which is what the gesture means for a card with nothing behind it.
-    if (isReservationId(id)) {
-      setReservations(prev => removeReservation(prev, id));
-      setDragInfo(null);
-      return;
-    }
+    const resDel = dropOnBank({ placements, reservations, semOrders }, { dragId: id });
+    if (resDel) { setReservations(resDel.reservations); setDragInfo(null); return; }
 
     // If the course was placed out, remove it from placedOut
     if (placedOut.has(id)) {
@@ -2018,53 +2013,25 @@ export function PlannerProvider({ children }) {
     pushUndo();
     const dragId  = dragInfo.id;
 
-    // ── A reservation at either end of the gesture ───────────────────
-    //
-    // Dragging one is an ordinary card move: its position lives in
-    // `reservations`, so routing it through setPlacements would put a
-    // reservation id into the map the audit reads — the one thing the split
-    // exists to prevent.
-    if (isReservationId(dragId)) {
-      const fromSemId = reservations[dragId]?.semId;
-      if (fromSemId === targetSemId) {
-        // Same term: a reorder, computed over the GRID view so reservations and
-        // courses share ONE ordering rather than two interleaved lists.
-        setSemOrders(prev => {
-          const cur = prev[targetSemId]
-            ?? getOrderedCourses(targetSemId, gridPlacements, prev, gridCourseMap);
-          const fi = cur.indexOf(dragId), ti = cur.indexOf(targetId);
-          if (fi < 0 || ti < 0) return prev;
-          const next = [...cur];
-          next.splice(fi, 1);
-          next.splice(ti, 0, dragId);
-          return { ...prev, [targetSemId]: next };
-        });
-      } else {
-        setReservations(prev => moveReservation(prev, dragId, targetSemId));
-      }
-      setDragInfo(null);
-      return;
-    }
-
-    // Dropping a course ONTO one answers it. The card that was aimed at is the
-    // card that goes, and the course lands in its term — the two commit
-    // together so one undo restores both.
-    if (isReservationId(targetId)) {
-      const filled = fillReservation(reservations, targetId, dragId);
-      if (filled) {
-        setReservations(filled.reservations);
-        setPlacements(p => ({ ...p, [dragId]: filled.semId }));
-        setSemOrders(prev => {
-          // The course takes the reservation's position, so the term does not
-          // reshuffle at the moment the student fills something in.
-          const cur = prev[filled.semId]
-            ?? getOrderedCourses(filled.semId, gridPlacements, prev, gridCourseMap);
-          const at = cur.indexOf(targetId);
-          if (at < 0) return prev;
-          const next = cur.filter(id => id !== dragId && id !== targetId);
-          next.splice(at, 0, dragId);
-          return { ...prev, [filled.semId]: next };
-        });
+    // Reservations at either end of the gesture. The decision is a pure
+    // function (src/core/planDrop.js) so each case can be enumerated in a test
+    // — this logic lived inline as setX calls, where three separate bugs
+    // shipped because nothing could exercise it.
+    if (isReservationId(dragId) || isReservationId(targetId)) {
+      const coreqPartners = [...new Set(
+        allEdges
+          .filter(e2 => e2.type === "corequisite" && (e2.from === dragId || e2.to === dragId))
+          .map(e2 => (e2.from === dragId ? e2.to : e2.from))
+      )];
+      const next = resolveDropOnCard(
+        { placements, reservations, semOrders },
+        { dragId, targetId, targetSemId },
+        { gridPlacements, gridCourseMap, coreqPartners },
+      );
+      if (next) {
+        setPlacements(next.placements);
+        setReservations(next.reservations);
+        setSemOrders(next.semOrders);
       }
       setDragInfo(null);
       return;
