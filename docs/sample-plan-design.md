@@ -3,7 +3,9 @@
 Loading a department's published Sample Plan of Study into a student's planner,
 and making the ~51% of it that names no course into something they can act on.
 
-**Status: design only. No implementation.** This supersedes two earlier attempts
+**Status: §§1–4 implemented on `feat/sample-plan-redesign`; §§9–14 are design
+only.** One shipped decision deliberately diverges from §2 — see §9.1. This
+supersedes two earlier attempts
 (`feat/elective-slots`, `feat/plan-slot-binding`), which are kept as reference
 branches and are not merged. Everything asserted below is measured against the
 shipped corpus; the numbers are in [Evidence](#evidence), and every design
@@ -451,6 +453,284 @@ Each step is independently shippable and independently verifiable.
 
 Steps 1–3 are data-only and cannot affect the running app. The feature becomes
 visible at step 4.
+
+---
+
+## 9. What shipped, and what it measures
+
+Steps 1–4 of §8 are implemented. The numbers below are measured against the
+shipped corpus as of 2026-08-08 and are the constraints §§10–13 have to satisfy.
+
+### 9.1 One deliberate divergence from §2
+
+§2 settled on *reference + derived answered-ness*: no stored reservations, a
+card retiring itself as soon as the audit says its requirement is met. What
+shipped instead is a **stored `reservations` map** (`src/core/reservations.js`)
+with explicit fill.
+
+The reason is a requirement that arrived after §2 was written: a reservation
+must **look and act exactly like a normal course card in the planner**. That
+forces three things a derived card cannot give:
+
+- **Its own position.** A card dragged to an arbitrary term needs its term and
+  its index stored. A derived card needs a divergence record for the same
+  information, so the storage is not actually saved — only renamed.
+- **Its own identity across a gesture.** Drag, drop, reorder and undo all key on
+  a stable id. §2's positional ids are 39–96% stable across editions, which §2
+  itself rules out for anything consequential.
+- **Not vanishing when the student touches something else.** §2 accepts that
+  placing any Khoury-eligible course anywhere retires a `Khoury Elective` card.
+  That is *correct about the degree* and *wrong about the card*: normal courses
+  do not disappear because you placed a different course. The isolation boundary
+  is what keeps the degree answer honest; the card does not have to.
+
+What survives from §2 unchanged, and is load-bearing: **reservations never enter
+`placements`**, so nothing totalling credit toward the degree can see one.
+
+De-duplication on re-apply is handled by `origin` (§2 predicted a reference
+would make this free; a stored map has to pay for it). `originKey` is built from
+*position* — plan, year, term type, ordinal — never from the label, which is
+what caused the 11-term case-folding loss in the previous attempt.
+
+### 9.2 The binding census
+
+9,599 cells name no course. Where they bind:
+
+| | cells | share |
+|---|---|---|
+| forced → a real requirement section | **1,333** | 13.9% |
+| forced → `~general` | 4,261 | 44.4% |
+| forced → `~concentration` | 10 | 0.1% |
+| ambiguous (2–13 candidates) | **3,882** | 40.4% |
+| unbound | 113 | 1.2% |
+
+The headline number is **13.9%**, not 58.4%. "Forced to `~general`" is a real
+result — it means *anything counts* — but it names no requirement and needs no
+picker beyond ordinary course search.
+
+Two facts that decide §10:
+
+| | |
+|---|---|
+| candidate courses for a forced-to-section cell | median **11**, max 564 |
+| such cells with ≤12 candidates | **797 of 1,333** |
+
+A median of 11 is a picker you can simply *render*. No search, no ranking, no
+progressive disclosure — a list.
+
+---
+
+## 10. Answering a reservation
+
+Two halves: the gesture that answers one, and what it offers.
+
+### 10.1 The gesture
+
+**Currently broken, not merely missing.** Dragging a course from the bank, the
+requirements panel or the info panel onto a reservation does *nothing* —
+`dropOnCard` calls `exists(state, dragId)`, which is false for a course that has
+no placement, and returns `null`. Verified directly against
+`src/core/planDrop.js`. That is the failure mode the file's own comment already
+rejects: *"a silently ignored drag reads as the app being broken rather than a
+rule being applied."*
+
+> **The rule: a card dropped on a reservation SWAPS with it if it already has a
+> seat, and ANSWERS it if it does not.**
+
+This completes the swap decision rather than contradicting it. A swap needs both
+ends to have somewhere to go. A bank course has no seat to give back, and a
+reservation has no home in the bank — dropping one there deletes it
+(`dropOnBank`). The symmetric gesture is undefined at that end, so fill is the
+only total reading.
+
+**The discriminator is `!placements[dragId]` — a fact about state — not which
+panel raised the drag.** `fromSem` is `null` from `BankPanel`, `GradPanel` and
+`InfoPanel`, so panel-of-origin *looks* usable. It is not: `GradPanel` renders
+`draggable={!!course}` on every course node including ones already placed and
+already checked off, so a drag from there can carry a card that does have a
+seat. The placement check is also the predicate that currently returns `null`,
+so it costs nothing to reuse.
+
+**It belongs inside `dropOnCard`.** A parallel copy of a drop rule in
+`PlannerContext` is exactly what made the forward drag a no-op, and the invariant
+suite reads source to guard against a second copy appearing.
+
+Three sub-decisions (see §14):
+
+- **Position** — the course takes the reservation's index in the term. That is
+  the point of the gesture; landing at the end would make it a different one.
+- **Credit mismatch** — a 4 SH reservation answered by a 3 SH course changes the
+  term load. That should be *visible*, never blocking: a planner warns.
+- **Coreq partners** — the dragged course's partners need seats too. The
+  existing `moving` logic carries them; which term they land in is a choice.
+
+### 10.2 What the picker offers
+
+**The load-bearing insight: filling is not a commitment to a requirement.** The
+reservation is deleted and a real course is placed; `allocateSections` then
+assigns that course optimally across the whole degree. The binding never had to
+be right — a "wrong" suggestion simply allocates elsewhere.
+
+So the only outcome that can hurt a student is picking a course that counts
+toward **nothing outstanding**, and that is a test against the *union* of open
+requirements, not an intersection.
+
+**Conservatism therefore belongs in the label, not the filter.** Four tiers,
+every one of them a true statement:
+
+| tier | claim | membership |
+|---|---|---|
+| 1 | counts *here* | in ∩ of the candidate requirements' specs |
+| 2 | counts toward *this card* | in ∪ of them |
+| 3 | counts *elsewhere* in your degree | eligible for some other outstanding requirement |
+| 4 | counts as a general elective only | neither |
+
+Tier 1 is strong but rare — see §13. The list stays fully searchable regardless,
+because 44.4% of cells are `~general` where every course in the catalog is a
+valid answer.
+
+**Rank by term reachability, not by wording.** A reservation sits *in a
+semester* — information ordinary course search does not have. Evaluating each
+candidate's prereqs against the term the card occupies turns *"Khoury Elective —
+100 candidates"* into *"the 22 you could actually take by Fall 2028."*
+`prereqEval.js` already computes this for placed courses. §13 explains why this
+is the right use of prereq data and the intersection is not.
+
+---
+
+## 11. Runtime narrowing must be monotone
+
+§3 rejected *binding as a runtime query*, and the argument is sound: satisfy
+Khoury by hand and a live re-solve re-points the `Khoury Elective` card at
+general electives. It still means Khoury.
+
+But that argument covers **re-pointing**, and there is a second operation it does
+not cover:
+
+| operation | example | verdict |
+|---|---|---|
+| **narrowing** | a cell ambiguous among {A,B,C}; the student's placements make B and C impossible → forced to A | information-gaining; the card's meaning never changed, we only learned which of its existing readings it was |
+| **re-pointing** | a cell forced to A; A gets satisfied by hand → rebinds to `~general` | the §3 failure mode |
+
+> **Rule: a runtime solve may only intersect with the build-time candidate set.
+> It may never introduce a target the scrape-time solve did not already allow.**
+
+Under that rule the build-time binding stays authoritative about *meaning* and
+the runtime solve only removes possibilities — so §3 holds and the 3,882
+ambiguous cells still sharpen as the student works, which is exactly when a
+picker needs to be sharp.
+
+If every build-time candidate becomes impossible, the card does **not** rebind.
+It reads *"your plan already covers this"* — which is §2's retire-the-earliest
+behaviour surfaced as information instead of as a disappearance.
+
+Cost is not a factor: `bindCells` is pure, and the graphs are ~40 nodes for
+~375 max-flow solves — single-digit milliseconds, one memo.
+
+**Consequence to handle:** a reservation's stored `requirement` field and a live
+solve can disagree. The stored field is **provenance** (what the published plan
+claimed) and keeps serving `origin` and de-duplication; the live solve owns the
+picker. `resolveRequirement` already degrades to "keep the label, stop
+suggesting" rather than to a wrong answer.
+
+---
+
+## 12. Reserved demand in the requirements panel
+
+Worth showing, under one hard rule: **it must never read as met.**
+
+The isolation boundary is about the *answer* — "have you satisfied this?" must
+stay no, and `placements` is what guarantees it. "Have you *planned* for this?"
+is a different question with an honest answer, and the panel already gives a
+student the vocabulary to tell the two apart.
+
+But it is only honest where the binding is **forced**. A marker on an ambiguous
+section would be a guess 40.4% of the time.
+
+| where | shown |
+|---|---|
+| the 1,333 forced-to-section cells | a pending marker on that section — grey, visually distinct from a check |
+| the 3,882 ambiguous cells | a footer tally: *"6 reserved cells not tied to a specific requirement"* |
+| the 4,261 `~general` cells | counted against the general-elective allowance |
+
+A sharper version is available if forced-only proves too coarse. The flow
+already yields a per-requirement **range**: min is the flow lost when that
+requirement is deleted from the graph, max is what it can absorb. *"2–5
+reserved"* is exact rather than conservative, and the catalog prints ranges
+itself (`3-4` SH), so students already read them. Held in reserve — start
+coarse.
+
+---
+
+## 13. Rejected, with the measurement that rejected them
+
+Both of these are reasonable ideas. Both were measured before being dropped.
+
+### Shared prereq chains — 3.1%
+
+The proposal: if the courses that could answer a cell all require the same
+course, draw that prereq even before the student chooses.
+
+A prereq is *certain* only if every candidate provably needs it — set every
+other course available; if the expression still fails, that atom is mandatory.
+Measured across the corpus:
+
+| | cells | with a certain prereq |
+|---|---|---|
+| either-cells (`CS 4300 or 4100`) | 1,386 | **45** (3.2%) |
+| forced-to-section reservations | 1,333 | **41** (3.1%) |
+
+And that is the *generous* measurement — only reservations with ≤40 candidates
+were tested, where a shared floor is most likely. Elective pools exist precisely
+to offer alternatives at different levels, so they almost never share one.
+
+**Kept from the idea:** the same data, applied *per candidate against the card's
+term* instead of intersected across candidates — 3% applicability becomes 100%.
+That is §10.2's ranking.
+
+### The requirement containment lattice — 10.1%
+
+The proposal: exploit the fact that a narrow requirement's courses are often all
+inside a broader one (every CS elective also counts toward Khoury electives), so
+an ambiguous cell can offer the narrowest set and be safe under every reading.
+
+The structure is real. It is also rare:
+
+| ambiguous cells | 3,882 |
+|---|---|
+| intersection of candidate specs **empty** | **3,366 (86.7%)** |
+| intersection median / union median | **0** / 34 |
+| candidates **nested** (smallest ⊆ all others) | **393 (10.1%)** |
+
+**Cost was never the objection.** `EligibleSpec` is a compressed set closed
+under the operations needed — union is concatenation, intersection is
+`keys∩keys` plus keys-tested-against-ranges plus interval overlap per subject,
+and membership is already O(1). Nothing enumerates the catalog at runtime. The
+lattice itself is program-static, so the one awkward operation (subset with
+range exceptions) can be expanded exactly, offline, in `bind-plans` — the whole
+corpus expands in under a minute.
+
+It is dropped because a 10% payoff does not justify shipping a poset per
+program, and because §10.2 shows the intersection is the wrong gate anyway.
+
+---
+
+## 14. Decisions required (runtime half)
+
+§7 covers the build-time half. These are new.
+
+| # | question | leaning |
+|---|---|---|
+| **G1** | fill-on-drop discriminated by `!placements[dragId]` rather than drag origin | yes — `GradPanel` drags placed courses with `fromSem: null` |
+| **G2** | does the filling course take the reservation's index, or the end of the term? | its index |
+| **G3** | credit mismatch on fill — warn, or silently re-total? | warn; a planner never blocks |
+| **G4** | where do coreq partners of a filling course land? | same term; open |
+| **P1** | picker tiers labelled (§10.2) rather than filtered | yes |
+| **P2** | rank candidates by prereq reachability from the card's term | yes |
+| **R1** | runtime narrowing, restricted to intersection with the build-time set | yes — §11 |
+| **R2** | when every candidate becomes impossible: rebind, or say "already covered"? | say it; never rebind |
+| **M1** | requirements panel: forced-only pending marker, or the exact min–max range? | forced-only first |
+| **M2** | is a pending marker a violation of the isolation boundary? | no — it answers a different question, and must never render as a check |
 
 ---
 
