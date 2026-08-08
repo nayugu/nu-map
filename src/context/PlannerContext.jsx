@@ -342,8 +342,15 @@ export function PlannerProvider({ children }) {
   }, [stickyCourses]);
 
   // ── UI: Other credits collapse setting ──
+  //
+  // Defaults OFF, so a course a student adds is VISIBLE where they put it.
+  // Collapsing is the tidier view once you know the layout, but for someone
+  // meeting the planner for the first time a card that vanishes into a folded
+  // row reads as the app having lost it — and "did that work?" is the worst
+  // question a first action can raise. Anyone who prefers the compact view
+  // turns it on once and the choice persists.
   const [collapseOtherCredits, setCollapseOtherCredits] = useState(() => {
-    try { const v = localStorage.getItem(key("collapse-other-credits")); return v === null ? true : v !== "false"; } catch { return true; }
+    try { const v = localStorage.getItem(key("collapse-other-credits")); return v === null ? false : v !== "false"; } catch { return false; }
   });
   const updateCollapseOtherCredits = (val) => {
     setCollapseOtherCredits(val);
