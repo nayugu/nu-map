@@ -518,6 +518,46 @@ Two facts that decide §10:
 A median of 11 is a picker you can simply *render*. No search, no ranking, no
 progressive disclosure — a list.
 
+### 9.3 A second population, currently bound zero times
+
+The census above counts only cells with `options: []`. There is a second kind of
+undecided cell — one that **names its options** — and it behaves in the exact
+opposite way:
+
+| cell kind | count | certainty about the requirement |
+|---|---|---|
+| unnamed (`options: []`) | 9,599 | 13.9% name a requirement; candidate ∩ empty **86.7%** |
+| **named options** (`CS 4300 or 4100`) | **1,386** | **86.9% have a PROVABLE requirement** |
+
+Near-perfect mirror images, and generalising from the first to the second is
+wrong.
+
+For a named-options cell, certainty is not inferred from the flow solve at all:
+
+> section *i* is **certain** for a cell iff every one of its option groups would
+> satisfy section *i*.
+
+`CS 4300 or 4100` against a `One of (0/2)` section containing exactly those two
+courses is certain by inspection — whichever the student picks, that section is
+answered. Measured across the corpus, **1,205 of 1,386** such cells have at
+least one certain section; the median certain-set size is **1** and the max is
+**2**, so it is not a vague narrowing but a single named requirement.
+
+**This is a stronger claim than "forced."** Forced means *every maximum flow
+contains this edge* — it depends on the demand arithmetic, the general-elective
+derivation, and the shortfall model all being right. Certain means *every
+outcome lands in this set* — pure membership, no flow, no demand model. It
+cannot be wrong unless the eligibility spec is.
+
+**And `bind-plans` computes it for none of them.** `isUnnamed` excludes any cell
+with options, so all 1,386 ship with `binding` absent, become reservations
+carrying `r.options` and no `requirement`, and therefore contribute nothing to
+the requirements panel. This is a pipeline gap, not a UI one.
+
+Cost is negligible and does *not* need the poset rejected in §13: it is
+`|groups| × |sections|` membership tests per cell, using specs the audit already
+builds.
+
 ---
 
 ## 10. Answering a reservation
@@ -585,9 +625,21 @@ every one of them a true statement:
 | 3 | counts *elsewhere* in your degree | eligible for some other outstanding requirement |
 | 4 | counts as a general elective only | neither |
 
-Tier 1 is strong but rare — see §13. The list stays fully searchable regardless,
-because 44.4% of cells are `~general` where every course in the catalog is a
-valid answer.
+**How often tier 1 fires depends entirely on which population the cell is in**,
+and this is the correction §9.3 forces:
+
+| cell kind | tier 1 |
+|---|---|
+| named options (`CS 4300 or 4100`) | the **normal** case — 86.9%, and the option list *is* the picker |
+| unnamed (`Khoury Elective`) | **rare** — the candidate intersection is empty 86.7% of the time |
+
+For a named-options cell the picker is finished before it starts: two or three
+courses, given by the catalog, with a provable requirement behind them. No
+ranking, no search, no tiers. The four-tier structure exists for the unnamed
+population, which is where the uncertainty actually lives.
+
+The list stays fully searchable regardless, because 44.4% of cells are
+`~general` where every course in the catalog is a valid answer.
 
 **Rank by term reachability, not by wording.** A reservation sits *in a
 semester* — information ordinary course search does not have. Evaluating each
@@ -644,14 +696,26 @@ stay no, and `placements` is what guarantees it. "Have you *planned* for this?"
 is a different question with an honest answer, and the panel already gives a
 student the vocabulary to tell the two apart.
 
-But it is only honest where the binding is **forced**. A marker on an ambiguous
-section would be a guess 40.4% of the time.
+But it is only honest where the requirement is **not a guess**. A marker on an
+ambiguous section would be wrong 40.4% of the time.
 
-| where | shown |
-|---|---|
-| the 1,333 forced-to-section cells | a pending marker on that section — grey, visually distinct from a check |
-| the 3,882 ambiguous cells | a footer tally: *"6 reserved cells not tied to a specific requirement"* |
-| the 4,261 `~general` cells | counted against the general-elective allowance |
+Two populations qualify, and they qualify at different strengths:
+
+| where | cells | shown |
+|---|---|---|
+| named-options cells with a certain section (§9.3) | **1,205** | a pending marker — **provable**, by set membership |
+| unnamed cells forced to a section | **1,333** | a pending marker — forced by the flow solve |
+| unnamed cells, ambiguous | 3,882 | a footer tally: *"6 reserved cells not tied to a specific requirement"* |
+| unnamed cells → `~general` | 4,261 | counted against the general-elective allowance |
+
+**2,538 cells can honestly mark a requirement, not 1,333** — nearly twice what
+§12 claimed before §9.3 was measured, and the larger half of the gain is the
+half that needs no arithmetic to justify it.
+
+Whether the two strengths should render identically is open (**M3**). They are
+different claims: one survives any error in our demand model, the other does
+not. Leaning identical anyway — a student cannot act on the distinction, and two
+shades of pending is a worse panel.
 
 A sharper version is available if forced-only proves too coarse. The flow
 already yields a per-requirement **range**: min is the flow lost when that
@@ -688,13 +752,20 @@ to offer alternatives at different levels, so they almost never share one.
 term* instead of intersected across candidates — 3% applicability becomes 100%.
 That is §10.2's ranking.
 
-### The requirement containment lattice — 10.1%
+### The requirement containment lattice — 10.1% **for unnamed cells only**
 
 The proposal: exploit the fact that a narrow requirement's courses are often all
 inside a broader one (every CS elective also counts toward Khoury electives), so
 an ambiguous cell can offer the narrowest set and be safe under every reading.
 
-The structure is real. It is also rare:
+**Scope this rejection carefully.** It applies to cells with `options: []`,
+where the candidate requirements come from the flow solve. The same
+intersect-and-see-what-survives idea applied to cells that *name* their options
+succeeds 86.9% of the time (§9.3) — the operation is similar, the population is
+not, and the first draft of this section wrongly generalised from one to the
+other.
+
+For unnamed cells the structure is real but rare:
 
 | ambiguous cells | 3,882 |
 |---|---|
@@ -731,6 +802,9 @@ program, and because §10.2 shows the intersection is the wrong gate anyway.
 | **R2** | when every candidate becomes impossible: rebind, or say "already covered"? | say it; never rebind |
 | **M1** | requirements panel: forced-only pending marker, or the exact min–max range? | forced-only first |
 | **M2** | is a pending marker a violation of the isolation boundary? | no — it answers a different question, and must never render as a check |
+| **M3** | render *provable* (§9.3) and *forced* pending markers differently? | no — a student cannot act on the distinction |
+| **N1** | should `bind-plans` bind named-options cells too (§9.3)? currently `isUnnamed` skips all 1,386 | yes — it is the highest-confidence population and we bind none of it |
+| **N2** | do named-options cells enter the flow solve as capacity, or only carry their certain sections? | capacity too — a cell that certainly answers section *i* consumes demand there, which should sharpen the unnamed cells competing for it |
 
 ---
 
