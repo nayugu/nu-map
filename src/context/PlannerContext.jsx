@@ -28,6 +28,7 @@ import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
+import { tabTitle, FIRST_PLAN_NAME } from "../core/tabTitle.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
          siblingsInOrder } from "../core/planFolders.js";
@@ -2534,7 +2535,14 @@ export function PlannerProvider({ children }) {
       const raw = localStorage.getItem(key("plan-index"));
       if (raw) return JSON.parse(raw);
     } catch {}
-    return [{ id: "default", name: "Plan 1" }];
+    return [{ id: "default", name: FIRST_PLAN_NAME }];
+  });
+  // Whether the plan index EXISTED before this session — read once, in a lazy
+  // initializer, because the persist effect below writes the key on mount and
+  // would make every visitor look like a returning one a tick later. Used only
+  // by the tab title (see below).
+  const [hadStoredPlans] = useState(() => {
+    try { return !!localStorage.getItem(key("plan-index")); } catch { return false; }
   });
   const [activePlanId, setActivePlanId] = useState(() => {
     try { return localStorage.getItem(key("active-plan")) || "default"; } catch { return "default"; }
@@ -2882,19 +2890,14 @@ export function PlannerProvider({ children }) {
     return { ok: true, ...scope };
   };
 
-  // Browser tab title = "✎ <active plan> · <app>". The site-wide tab scheme
-  // carries three signals: a LEADING PENCIL marks the user's own working
-  // document (visible even on a heavily truncated tab — tabs truncate from
-  // the right), the SEPARATOR echoes ownership (· = yours, - = a site page),
-  // and the SUFFIX encodes scope (bare "NU Map" for standalone pages;
-  // "NU Map Data" / "NU Map Docs" / "NU Map Dev" for multi-tab sections).
-  // A plan named "Privacy Policy" is therefore never confusable with the
-  // privacy page. The static <title> in index.html stays SEO/disclaimer-
-  // focused for crawlers; this only overrides it at runtime for real users.
+  // Browser tab title = "✎ <active plan> · <app>", but only once the tab is
+  // actually the user's document — a crawler renders the app with empty
+  // storage and must keep index.html's SEO title. Both the scheme and the
+  // reason the override is conditional live in core/tabTitle.js.
   useEffect(() => {
-    const name = plans.find(p => p.id === activePlanId)?.name;
-    document.title = name ? `✎ ${name} · ${institution.appName}` : institution.appName;
-  }, [plans, activePlanId, institution.appName]);
+    const next = tabTitle({ plans, activePlanId, placements, hadStoredPlans, appName: institution.appName });
+    if (next) document.title = next;
+  }, [plans, activePlanId, placements, hadStoredPlans, institution.appName]);
 
   // Keep each plan index entry's studentType up to date so the plan switcher can
   // group plans by undergraduate / graduate. The active plan is synced from live
