@@ -374,11 +374,19 @@ export default function SemRow({ sem }) {
             display: "flex", alignItems: "center", gap: 8,
           }}>
             <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>
-                <TText>{termContType?.label ?? "Work"}</TText> <TText>Continues</TText>
+              {/* 13, one step under the 14 a START card carries: the term that
+                  begins here is the object, and the one merely running through
+                  is its shadow. Word comes from sem.cont.label, hand-written in
+                  every locale — it used to be the bare English "Continues" fed
+                  to the translation engine, which is the one thing the
+                  localisation rule forbids. */}
+              <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em", textTransform: "uppercase" }}>
+                <TText>{termContType?.label ?? "Work"}</TText> {t("sem.cont.label")}
               </div>
+              {/* No "· drag to move": only the START card is draggable, so the
+                  hint pointed at something this card cannot do. */}
               <div style={{ fontSize: isPhone ? 5 : 10, color: "var(--text-4)", marginTop: 2 }}>
-                {termContData?.duration}-month block · drag to move
+                {termContData?.duration}-month block
               </div>
             </div>
             {showContLogo && <CompanyLogo key={termContData?.companyDomain || ""} domain={termContData?.companyDomain} size={isPhone ? 20 : 40} />}

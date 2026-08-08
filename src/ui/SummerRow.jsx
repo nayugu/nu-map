@@ -125,7 +125,11 @@ export default function SummerRow({ semA, semB }) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 7 }}>
-              <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termStartData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termStartData.typeId === "coop" ? "uppercase" : "none", whiteSpace: "nowrap", flexShrink: 0 }}>
+              {/* 14 — the same size a fall/spring START card uses, and now one
+                  step ABOVE the continuation. The two were the wrong way round:
+                  the term merely passing through a semester was set larger than
+                  the term that begins in one. */}
+              <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termStartData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termStartData.typeId === "coop" ? "uppercase" : "none", whiteSpace: "nowrap", flexShrink: 0 }}>
                 <TText>{displayLabel}</TText> {termNum(termStartData.typeId, termStartId)}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 8 : 17 }}>
@@ -167,8 +171,11 @@ export default function SummerRow({ semA, semB }) {
             display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8,
           }}>
             <div>
-              <div style={{ fontSize: isPhone ? 6 : 11, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termContData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termContData.typeId === "coop" ? "uppercase" : "none" }}><TText>{termContType?.label}</TText> {t("sem.cont.abbr")}</div>
-              <div style={{ fontSize: isPhone ? 5 : 9, color: "var(--text-4)", marginTop: 2 }}>{termContData.duration}-month block</div>
+              {/* Reads exactly as the fall/spring continuation does — same word
+                  from sem.cont.label, same 13, same subline — so a co-op that
+                  runs from summer into fall says one thing in both halves. */}
+              <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termContData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termContData.typeId === "coop" ? "uppercase" : "none" }}><TText>{termContType?.label}</TText> {t("sem.cont.label")}</div>
+              <div style={{ fontSize: isPhone ? 5 : 10, color: "var(--text-4)", marginTop: 2 }}>{termContData.duration}-month block</div>
             </div>
             {showContLogo && <CompanyLogo key={termContData.companyDomain || ""} domain={termContData.companyDomain} size={isPhone ? 17 : 34} />}
           </div>
