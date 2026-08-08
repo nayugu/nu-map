@@ -32,6 +32,8 @@
     "data:majors": "node scripts/scrape-majors.js",
     "data:majors:write": "node scripts/scrape-majors.js --write",
     "data:majors:dry": "node scripts/scrape-majors.js --dry-run",
+    "data:bind-plans": "node scripts/bind-plans.js",
+    "data:bind-plans:write": "node scripts/bind-plans.js --write",
     "data:grad-majors": "node scripts/scrape-grad-majors.js",
     "data:grad-majors:write": "node scripts/scrape-grad-majors.js --write",
     "data:grad-majors:dry": "node scripts/scrape-grad-majors.js --dry-run",
