@@ -32,7 +32,7 @@ import { markSharedSections }       from './lib/major-integrity.js';
 import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
 import { checkScrapeRails, checkPlanRail } from './lib/scrape-rails.js';
-import { extractPlanGrid }           from './lib/plan-grid.js';
+import { extractPlanGrid, verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
 import { parseEditionArg, editionBasePath, assertEdition,
          isFatalScrapeError }        from './lib/catalog-edition.js';
 import { parseRequirements, parseTotalCredits, findLeakedMarkers,
@@ -231,6 +231,12 @@ function writeArchiveManifest(programs, colleges) {
     sections: programs.reduce((n, p) => n + (p.requirementSections?.length ?? 0), 0),
     concentrations: programs.reduce((n, p) => n + (p.concentrations?.concentrationOptions?.length ?? 0), 0),
     plans: programs.filter(p => p.planGrid).length,
+    // Counting plans only ever proved they arrived, never that they were read.
+    // The catalog states each term's total beside it, so the grid checks its
+    // own arithmetic — the plan side's first content-level guard, matching what
+    // verify-majors and the scrape rails already give the requirement side.
+    // Baseline is 9,485 of 9,492 terms; a drop means row parsing has broken.
+    ...planGates(programs),
     scrapedAt: new Date().toISOString().slice(0, 10),
   };
   // Newest first, so the file reads the way the editions are used.
@@ -238,6 +244,38 @@ function writeArchiveManifest(programs, colleges) {
     Object.entries(manifest.editions).sort((a, b) => Number(b[0]) - Number(a[0])));
   mkdirSync(dirname(ARCHIVE_MANIFEST), { recursive: true });
   writeFileSync(ARCHIVE_MANIFEST, JSON.stringify(manifest, null, 2) + '\n');
+}
+
+/**
+ * Plan-grid health for one run, as counters the rails can act on.
+ *
+ * `planGridWitnessGap` wires up a check that was written and never called:
+ * planGridCourseKeys' own docstring said it cross-checked the structured parse
+ * against the flattened plan-of-study witness, and it had zero callers — so the
+ * file read as guarded when it was not. The two readings of one pane are parsed
+ * separately on purpose, and nothing but this notices when they diverge.
+ *
+ * `planCellsAmbiguous` counts cells mixing `and` with `or`, whose grouping is
+ * best-effort. It is information, not a failure: the goal is that it never
+ * grows silently.
+ */
+function planGates(programs) {
+  let agree = 0, disagree = 0, unstated = 0, ambiguous = 0, gap = 0;
+  for (const p of programs) {
+    if (!p.planGrid) continue;
+    const r = verifyPlanGrid(p.planGrid);
+    agree += r.agree; disagree += r.disagree;
+    unstated += r.unstated; ambiguous += r.ambiguous;
+    const witness = new Set(p.metadata?.planOfStudyCourses ?? []);
+    if (witness.size) gap += planGridCourseKeys(p.planGrid).filter(k => !witness.has(k)).length;
+  }
+  return {
+    planTermsAgree: agree,
+    planTermsDisagree: disagree,
+    planTermsUnstated: unstated,
+    planCellsAmbiguous: ambiguous,
+    planGridWitnessGap: gap,
+  };
 }
 
 /** Every committed sample plan in one edition — what the plan rail counts. */
