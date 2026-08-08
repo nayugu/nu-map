@@ -717,6 +717,40 @@ different claims: one survives any error in our demand model, the other does
 not. Leaning identical anyway — a student cannot act on the distinction, and two
 shades of pending is a worse panel.
 
+### 12.1 A pending mark must not propagate downward
+
+Satisfaction in the panel today propagates: `dimmed={r.sat && !c.sat}`
+(`GradPanel.jsx` 372, 375, 399) fades the alternatives a student did *not* take
+once a parent is satisfied, and 788 does the same for pool members once the
+count is met. That is right for real satisfaction — the decision is made, the
+roads not taken should recede.
+
+It is wrong for pending, and the reason is that "satisfied" currently bundles
+two claims that a reservation splits apart:
+
+| claim | real satisfaction | a reservation |
+|---|---|---|
+| the section's demand is spoken for | yes | **yes** |
+| *which child* answers it is decided | yes | **no** |
+
+A `CS 4300 or 4100` card provably answers its `One of (0/2)` section (§9.3) —
+and the entire remaining content of that card is that the student still has to
+choose. Dimming CS 4100 because CS 4300 might be picked would use a proof about
+the *section* to make a claim about a *child* that no evidence supports.
+
+> **Rule: a pending mark applies to the section and stops there. Child boxes
+> stay empty, at full strength, and the satisfied-count numerator is never
+> touched.**
+
+So `One of (0/2)` stays `0/2` with a pending mark beside it — never `1/2`, never
+`0/2` with one child faded. The numerator belongs to the audit, which reads
+`placements` and cannot see a reservation at all; that is the isolation boundary
+doing its job rather than a rule anyone has to remember.
+
+This is also why the marker should be visually its own thing rather than a
+lighter checkmark. A grey check says *the same thing, less certainly*. What we
+mean is *a different thing*: something is coming, and nothing here is decided.
+
 A sharper version is available if forced-only proves too coarse. The flow
 already yields a per-requirement **range**: min is the flow lost when that
 requirement is deleted from the graph, max is what it can absorb. *"2–5
@@ -730,7 +764,12 @@ coarse.
 
 Both of these are reasonable ideas. Both were measured before being dropped.
 
-### Shared prereq chains — 3.1%
+### Shared prereq chains, as a STATIC edge — 3.1%
+
+**Scope, corrected.** What follows rejects drawing a prereq edge from a
+*corpus-level* intersection. It does not reject using prereqs on these cards at
+all — §15 measures two live uses that are worth an order of magnitude more, and
+the first draft of this section wrongly read as a rejection of both.
 
 The proposal: if the courses that could answer a cell all require the same
 course, draw that prereq even before the student chooses.
@@ -891,7 +930,89 @@ a patch for one subject code.
 
 ---
 
-## 15. Decisions required (runtime half)
+## 15. Prereq chains for reservations that name their courses
+
+§13 rejected a static shared-prereq edge at 3.1%. That number answered *"can we
+draw an edge from the corpus alone?"* — and it is the wrong question twice over.
+Both better questions are about the **student's plan**, which is where the
+information actually is, and both are cheap on named-option cells because the
+option list is two or three courses.
+
+| | of 1,386 named-option cells |
+|---|---|
+| **parents** — every option carries prereqs, so an OR-check is a real constraint | **507 (36.6%)** |
+| some options carry prereqs (OR trivially satisfiable) | 292 (21.1%) |
+| no option carries prereqs (nothing to check) | 587 (42.4%) |
+| **children** — some course exists that tells the options apart | **743 (53.6%)** |
+| distinguishing courses per such cell | median **2**, max 185 |
+
+### 15.1 Parents — the card is prereq-checkable, exactly like a course
+
+For 36.6% of these cells, *every* option has prereqs, so the disjunction
+
+```
+prereqs(option₁) ∨ prereqs(option₂) ∨ …
+```
+
+is a genuine constraint that can be evaluated against what the student placed
+earlier. When it is false, the card is in a term where **nothing it could
+become is takeable yet** — a true, actionable statement, and one that needs no
+choice to have been made.
+
+That is 12× the 3.1% figure because it is a different predicate. §13 asked
+whether one course is required under *every* branch; this asks whether *any*
+branch is open. `prereqEval.js` already computes the second for placed courses.
+
+The remaining 42.4% have no prereqs on any option and are correctly silent.
+
+### 15.2 Children — a later course can force the choice
+
+This is the mechanism neither of us had costed, and it is the larger half.
+
+If the student places a course whose prereqs are satisfied by option A and not
+by option B, then picking B breaks their own plan. So B can be eliminated — and
+not as a preference. **Elimination through the prereq graph is a third narrowing
+mechanism, independent of the arithmetic in §4 and the wording in §14.**
+
+`ECON 1115 or 1116` has **15** downstream courses that tell its options apart.
+`GSND 7990 or 7995` has one, `GSND 7996`, and that one is enough.
+
+**The rule has to check the rest of the plan, not just the dependent.** A
+dependent's prereqs might already be met by some other placed course, in which
+case the reservation is not load-bearing and nothing may be eliminated:
+
+> Eliminate option B only if some placed course's prereqs are unsatisfiable
+> **without** the reservation, and option B does not satisfy them.
+
+That is the same feasibility test §4 runs for flow edges, applied to a different
+graph, and it keeps the mechanism conservative by construction.
+
+**Honest scope: 53.6% is the ceiling, not the yield.** It counts cells where a
+distinguishing course *exists in the catalog*; it fires only when the student
+actually places one. The realised rate will be far lower and cannot be measured
+without real plans. It is still worth building, because the graph and the
+placements are both already loaded — the marginal cost is a lookup — and because
+when it fires it is a *proof*, not a preference.
+
+### 15.3 Why this ordering matters
+
+§13 stands and §15 is not a reversal of it. The distinction worth keeping:
+
+| | asks | answer lives in |
+|---|---|---|
+| §13 static edge | is one course required under every branch? | the catalog — **3.1%** |
+| §15.1 parents | is any branch open from here? | catalog **×** the plan — **36.6%** |
+| §15.2 children | does the plan already exclude a branch? | catalog **×** the plan — **53.6%** |
+
+The pattern generalises past prereqs: **a question answered against the corpus
+alone will almost always look barren, and the same question answered against the
+student's plan is where the information is.** The intersection idea in §13 and
+the containment lattice both failed for exactly this reason, and both times the
+live formulation was the one worth having.
+
+---
+
+## 16. Decisions required (runtime half)
 
 §7 covers the build-time half. These are new.
 
@@ -915,6 +1036,12 @@ a patch for one subject code.
 | **W3** | demote `subjectOf` from fact to weak restriction (§14.3) | yes — it is a guess composed with a fact, applied as a fact |
 | **W4** | should exact title match ever be a hard edge? | **no** — wording gives intent, capacity is the flow's job |
 | **W5** | is `known.has(up)` salvageable, or is any leading-token subject read unsafe? | demoting it (W3) makes the question moot; revisit only if W3 loses cells |
+| **M4** | pending mark propagates to children? (§12.1) | **no** — boxes stay empty, nothing dims, numerator untouched |
+| **M5** | grey check, or a mark of its own? | its own — a grey check says "the same thing, less certainly"; we mean "a different thing" |
+| **X1** | prereq-check named-option reservations by OR over their options (§15.1) | yes — 36.6% carry a real constraint, and `prereqEval.js` already does it |
+| **X2** | eliminate an option when a placed course depends on it (§15.2) | yes — but only when the dependent is unsatisfiable without the reservation |
+| **X3** | does §15.2 elimination feed back into the §4 flow solve, or stay a display-time narrowing? | feed back — it removes candidate courses, which can change which requirements remain possible |
+| **X4** | do §15 checks extend to unnamed reservations via their candidate set? | not yet — a 100-course candidate set makes the OR trivially true and the elimination never fire |
 
 ---
 
