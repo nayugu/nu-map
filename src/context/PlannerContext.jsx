@@ -1972,6 +1972,23 @@ export function PlannerProvider({ children }) {
     });
   };
 
+  /**
+   * Drop a slot the template laid out.
+   *
+   * Undoable like any other edit, because a slot is part of the plan rather
+   * than a suggestion hovering over it — removing one is the same kind of act
+   * as removing a course, and should cost the same to reverse.
+   */
+  const removeSlot = (id) => {
+    if (!slots[id]) return;
+    pushUndo();
+    setSlots((prev) => {
+      const next = { ...prev };
+      delete next[id];
+      return next;
+    });
+  };
+
   const applySamplePlan = (plan, startYearIndex = 0) => {
     const result = previewSamplePlan(plan, startYearIndex);
     // Slots count as work done. Half of a sample plan's credit is a slot, and
@@ -3722,7 +3739,7 @@ export function PlannerProvider({ children }) {
     canDropSem,
     doUndo, doRedo, pushUndo,
     previewSamplePlan, applySamplePlan, openSamplePlanAsNewPlan, summarizeSamplePlan,
-    slots, setSlots,
+    slots, setSlots, removeSlot,
   };
 
   return <PlannerContext.Provider value={value}>{children}</PlannerContext.Provider>;

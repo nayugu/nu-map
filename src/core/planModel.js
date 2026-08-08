@@ -74,6 +74,28 @@ export function getSemStudySH(semId, placements, courseMap, startMap = {}, contM
 }
 
 /**
+ * Credit hours of the elective SLOTS parked in a semester.
+ *
+ * Kept separate from getSemStudySH on purpose, and the separation is the whole
+ * point: a slot counts toward what the TERM looks like, so a freshly loaded
+ * template shows the 16 SH its department printed rather than the 4 it happens
+ * to name — but it must never count toward graduation or requirement
+ * satisfaction, because no course has been chosen and claiming otherwise would
+ * make the audit lie. Callers therefore have to ask for it deliberately.
+ *
+ * A work term takes none of it, same as courses: a co-op semester is not a
+ * study load however much is parked in it.
+ */
+export function getSemSlotSH(semId, slots, startMap = {}, contMap = {}) {
+  if (startMap[semId] || contMap[semId]) return 0;
+  let n = 0;
+  for (const slot of Object.values(slots ?? {})) {
+    if (slot?.semId === semId) n += slot.sh ?? 0;
+  }
+  return n;
+}
+
+/**
  * Return the course IDs in a semester in display order.
  * Respects semOrders overrides; de-duplicates; appends any unordered extras.
  */

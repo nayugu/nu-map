@@ -89,6 +89,7 @@ export const strings = {
   "bank.filter.empty":            "आपके फ़िल्टर से कोई कोर्स मेल नहीं खाता।",
 
   // ── Semester row ───────────────────────────────────────────────
+  "slot.remove":            "यह स्थान हटाएँ",
   "sem.slot.add":           "+ जोड़ें",
   "sem.slot.drop":          "जोड़ने के लिए ड्रॉप करें",
   "sem.other.label.open":   "▼ अन्य क्रेडिट्स",

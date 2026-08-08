@@ -90,6 +90,7 @@ export const strings = {
   "bank.filter.empty":            "フィルターに一致するコースがありません。",
 
   // ── Semester row ───────────────────────────────────────────────
+  "slot.remove":            "この枠を削除",
   "sem.slot.add":           "+ 追加",
   "sem.slot.drop":          "ドロップして追加",
   "sem.other.label.open":   "▼ その他の単位",

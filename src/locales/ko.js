@@ -89,6 +89,7 @@ export const strings = {
   "bank.filter.empty":            "필터와 일치하는 코스가 없습니다.",
 
   // ── Semester row ───────────────────────────────────────────────
+  "slot.remove":            "이 칸 삭제",
   "sem.slot.add":           "+ 추가",
   "sem.slot.drop":          "드롭하여 추가",
   "sem.other.label.open":   "▼ 기타 학점",

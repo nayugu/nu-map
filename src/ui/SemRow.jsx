@@ -5,7 +5,8 @@ import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { useState, useEffect } from "react";
 import { TYPE_BG } from "../core/constants.js";
-import { hexRgb, getSemStudySH, getOrderedCourses } from "../core/planModel.js";
+import { hexRgb, getSemStudySH, getSemSlotSH, getOrderedCourses } from "../core/planModel.js";
+import SlotCard from "./SlotCard.jsx";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
@@ -45,7 +46,7 @@ import CompanyLogo from "./CompanyLogo.jsx";
 
 export default function SemRow({ sem }) {
   const {
-    placements, semOrders, courseMap, effectiveCourseMap,
+    placements, semOrders, courseMap, effectiveCourseMap, slots,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -97,6 +98,12 @@ export default function SemRow({ sem }) {
   // count toward this term's load. getSemStudySH returns 0 when a co-op occupies
   // the term (via the start/continuation maps).
   const sh         = getSemStudySH(sem.id, placements, effectiveCourseMap, specialTermStartMap, specialTermContMap);
+  // Slots the template laid out here. They occupy the term and carry the
+  // catalog's credit value, so the header reads the load the department
+  // printed — a plan whose fourth year is all electives should not look empty.
+  // They never reach graduation progress; see getSemSlotSH.
+  const semSlots   = Object.values(slots ?? {}).filter(s2 => s2.semId === sem.id);
+  const slotSH     = getSemSlotSH(sem.id, slots, specialTermStartMap, specialTermContMap);
   // shVoided takes carry sh 0 (a failed grade earns nothing) but must stay
   // as full cards — vanishing into the low-credit subline would hide the
   // very course whose failure the user just recorded.
@@ -165,15 +172,27 @@ export default function SemRow({ sem }) {
   const isRegularSem = sem.type === "fall" || sem.type === "spring";
   const shMin = isRegularSem ? creditSystem.getFullTimeMin(studentType) : 0;
   const shMax = creditSystem.getSemesterMax(studentType);
-  const shColor = sh > shMax ? "var(--error)" : (sh > 0 && sh < shMin && isRegularSem) ? "var(--warn-bright)" : "var(--success)";
-  const shEl = sh > 0 ? (
+  // The term's LOAD is courses plus the slots the template put here. Judging
+  // over/underload on the named courses alone would flag a fourth year that is
+  // entirely electives as dangerously light when it is exactly full — and the
+  // over-limit warning would miss a term that really is overloaded once the
+  // student fills its slots in.
+  const shPlanned = sh + slotSH;
+  const shColor = shPlanned > shMax ? "var(--error)"
+    : (shPlanned > 0 && shPlanned < shMin && isRegularSem) ? "var(--warn-bright)"
+    : "var(--success)";
+  // Written "4 + 12 SH" while slots are outstanding, so the two halves stay
+  // legible: what is chosen, and what is still a decision. A single total
+  // would quietly claim more is settled than is.
+  const shText = slotSH > 0 && sh > 0 ? `${sh} + ${slotSH} SH` : `${shPlanned} SH`;
+  const shEl = shPlanned > 0 ? (
     <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: shColor }}>
-      {sh} SH{sh > shMax ? " ⚠" : ""}
+      {shText}{shPlanned > shMax ? " ⚠" : ""}
     </span>
   ) : null;
-  const shElPhone = sh > 0 ? (
+  const shElPhone = shPlanned > 0 ? (
     <span style={{ fontSize: 7, fontWeight: 700, color: shColor, lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}>
-      {sh} SH{sh > shMax ? " ⚠" : ""}
+      {shText}{shPlanned > shMax ? " ⚠" : ""}
     </span>
   ) : null;
 
@@ -478,6 +497,7 @@ export default function SemRow({ sem }) {
               }}
             >
               {main4.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
+              {semSlots.map(s2 => <SlotCard key={s2.id} slot={s2} isPhone={isPhone} />)}
               {/* Claude preview: chips marking where moved courses came FROM */}
               {claudePreview && Object.entries(claudePreview.moved ?? {})
                 .filter(([, m]) => m.from === sem.id)

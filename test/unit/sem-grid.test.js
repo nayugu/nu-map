@@ -9,6 +9,7 @@
 // pinned below.
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { getSemSlotSH } from "../../src/core/planModel.js";
 import { generateSemesters, deriveSemMaps, buildCohortSemesters } from "../../src/core/semGrid.js";
 import { resolveTermByDuration, computeGrantedAttrs, termSpans } from "../../src/core/specialTermUtils.js";
 
@@ -94,4 +95,44 @@ test("computeGrantedAttrs › unions grants of placed terms, ignores unplaced/un
 
 test("computeGrantedAttrs › no placed terms › empty set", () => {
   assert.equal(computeGrantedAttrs({}, []).size, 0);
+});
+
+// ── Slot credit hours ────────────────────────────────────────────────────────
+//
+// The distinction the whole slot design rests on: a slot counts toward what a
+// TERM looks like, and never toward graduation. 51% of an undergraduate sample
+// plan's credit is a slot, so a term that ignored them would read at half the
+// load its department printed — and a plan that counted them toward the degree
+// would tell a student they are most of the way through a degree they have not
+// chosen a single course for.
+
+test("slot SH › a slot contributes to its term", () => {
+  const slots = {
+    a: { id: "a", semId: "fall2026", sh: 4 },
+    b: { id: "b", semId: "fall2026", sh: 4 },
+    c: { id: "c", semId: "spr2027", sh: 4 },
+  };
+  assert.equal(getSemSlotSH("fall2026", slots), 8);
+  assert.equal(getSemSlotSH("spr2027", slots), 4);
+  assert.equal(getSemSlotSH("sumA2027", slots), 0);
+});
+
+test("slot SH › a work term takes none of it", () => {
+  // A co-op semester is not a study load however much is parked in it — the
+  // same rule courses already follow through getSemStudySH.
+  const slots = { a: { id: "a", semId: "spr2027", sh: 4 } };
+  assert.equal(getSemSlotSH("spr2027", slots, { spr2027: "coop-1" }), 0);
+  assert.equal(getSemSlotSH("spr2027", slots, {}, { spr2027: "coop-1" }), 0);
+});
+
+test("slot SH › a slot with no stated hours contributes nothing", () => {
+  // 0.9% of grid cells have no hours column — they are prose notes rather than
+  // slots, and must not be counted as free credit.
+  assert.equal(getSemSlotSH("fall2026", { a: { id: "a", semId: "fall2026" } }), 0);
+});
+
+test("slot SH › empty and missing inputs are safe", () => {
+  assert.equal(getSemSlotSH("fall2026", {}), 0);
+  assert.equal(getSemSlotSH("fall2026", null), 0);
+  assert.equal(getSemSlotSH("fall2026", undefined), 0);
 });

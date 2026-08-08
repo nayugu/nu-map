@@ -89,6 +89,7 @@ export const strings = {
   "bank.filter.empty":            "Aucun cours ne correspond à vos filtres.",
 
   // ── Semester row ───────────────────────────────────────────────
+  "slot.remove":            "Retirer cette case",
   "sem.slot.add":           "+ ajouter",
   "sem.slot.drop":          "déposer pour ajouter",
   "sem.other.label.open":   "▼ autres crédits",
