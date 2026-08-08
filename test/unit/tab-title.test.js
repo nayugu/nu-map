@@ -61,3 +61,15 @@ test("tab title › the default name the app ships matches the one it tests for"
   assert.ok(ctx.includes("name: FIRST_PLAN_NAME"),
     "PlannerContext should seed the first plan from FIRST_PLAN_NAME, not a literal");
 });
+
+test("tab title \u203a corrupt stored state yields no title, never a crash", () => {
+  // plan-index comes from localStorage; the literal "null" parses to null, and
+  // a default parameter does not catch that. A broken tab title must never be
+  // the thing that takes the app down.
+  for (const bad of [undefined, {}, { plans: null }, { plans: "nope" }, { plans: [null] },
+                     { plans: [{}], activePlanId: "x" }, { placements: null }]) {
+    assert.doesNotThrow(() => tabTitle(bad), `tabTitle(${JSON.stringify(bad)})`);
+    assert.doesNotThrow(() => ownsDocument(bad), `ownsDocument(${JSON.stringify(bad)})`);
+  }
+  assert.equal(tabTitle({ plans: null, appName: APP }), null);
+});

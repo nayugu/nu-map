@@ -23,20 +23,25 @@
 export const FIRST_PLAN_NAME = "Plan 1";
 
 /** Is this tab the visitor's own document rather than a cold first render? */
-export function ownsDocument({ plans = [], activePlanId, placements = {}, hadStoredPlans = false } = {}) {
+export function ownsDocument({ plans, activePlanId, placements, hadStoredPlans = false } = {}) {
+  // Defaults only fire on undefined, and these come from storage: a plan index
+  // of the literal "null" parses to null and would throw here. The title is
+  // never worth a crash, so anything unusable is read as "no plans yet".
+  const list = Array.isArray(plans) ? plans : [];
+  const placed = placements && typeof placements === "object" ? placements : {};
   // A missing active plan is not a renamed one: there is no name to show, so
   // it must not count as ownership the way an unnamed lookup miss otherwise
   // would (`undefined !== "Plan 1"`).
-  const active = plans.find(p => p.id === activePlanId);
+  const active = list.find(p => p?.id === activePlanId);
   return hadStoredPlans
-    || plans.length > 1
+    || list.length > 1
     || (!!active && active.name !== FIRST_PLAN_NAME)
-    || Object.keys(placements).length > 0;
+    || Object.keys(placed).length > 0;
 }
 
 /** The tab title, or null to leave the document's static title alone. */
-export function tabTitle({ plans = [], activePlanId, placements, hadStoredPlans, appName } = {}) {
+export function tabTitle({ plans, activePlanId, placements, hadStoredPlans, appName } = {}) {
   if (!ownsDocument({ plans, activePlanId, placements, hadStoredPlans })) return null;
-  const name = plans.find(p => p.id === activePlanId)?.name;
+  const name = (Array.isArray(plans) ? plans : []).find(p => p?.id === activePlanId)?.name;
   return name ? `✎ ${name} · ${appName}` : appName;
 }
