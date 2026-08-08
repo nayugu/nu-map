@@ -1160,7 +1160,9 @@ live formulation was the one worth having.
 | **X2** | eliminate an option when a placed course depends on it (§15.2) | yes — but only when the dependent is unsatisfiable without the reservation |
 | **X3** | does §15.2 elimination feed back into the §4 flow solve, or stay a display-time narrowing? | feed back — it removes candidate courses, which can change which requirements remain possible |
 | **X4** | do §15 checks extend to unnamed reservations via their candidate set? | not yet — a 100-course candidate set makes the OR trivially true and the elimination never fire |
-| **X5** | repeat instances: `placements` keys can carry `#n`, so a bare course id may read as unplaced and take the fill path instead of the swap path (§10.1) | resolve the key the way `applySamplePlan` does (`split("#")[0]`) before testing |
+| **X5** | ~~resolve `#n` repeat keys before testing for a seat~~ | **WITHDRAWN — §18.1.** The first take uses the plain id, so `placements[dragId]` already asks the right question; `baseId` would answer a different one and reintroduce the swap-against-`undefined` bug |
+| **X10** | bank drag of a placed repeatable adds a take onto a semester but MOVES onto a card (§18.8) | report, do not change silently — long-standing and unrelated to this feature |
+| **X11** | close the 75.3% unbounded gap (§18.7) by looking ambiguous targets up from `plan.json` via `origin`, rather than storing them | yes — no change to what a reservation stores, so no I/O surface moves |
 | **X6** | prereq lines to a reservation — union over options, or only shared prereqs? (§15.4) | union — a line already means "feeds", not "requires", and the both-ends-placed filter keeps it quiet |
 | **X7** | prereq badge on a reservation — when? | only when **every** option is blocked; one open option means no warning |
 | **X8** | is a blocked option removed from the picker, or greyed with a reason? | greyed — removal claims the plan will not change |
@@ -1275,7 +1277,136 @@ describes should be one object, two sets, and a list of filters.
 
 ---
 
-## 18. Residual risk — claims not yet verified
+## 18. What implementation found
+
+§17 was written before any of it was built. Building it corrected five claims
+and turned up two defects the design had no reason to predict.
+
+### 18.1 X5 was wrong, and implementing it would have caused a bug
+
+X5 proposed resolving `placements` keys through `baseId` (`split("#")[0]`)
+before testing whether a dragged card has a seat. That is backwards.
+
+The **first** take of a repeatable course uses the plain id; only later takes get
+`#2`, `#3`. So `placements[dragId]` is already exactly the right question — "does
+*this card* have a seat" — and `baseId` would answer a different one. A student
+holding only `MUS1990#2` (first take removed) dragging `MUS1990` from the bank
+would be treated as already placed, take the swap path, and swap against
+`undefined`. **X5 is withdrawn**; the naive predicate was correct.
+
+### 18.2 The drag defect had a second half, on ordinary courses
+
+§10.1 recorded that dropping a bank course onto a *reservation* silently did
+nothing. Reading the course path to fix it showed the same drag onto a *course*
+is worse:
+
+```js
+setPlacements(p => ({ ...p, [dragId]: targetSemId, [targetId]: fromSem }))
+```
+
+`fromSem` is `placements[dragId]`, which is `undefined` for a card with no seat —
+so the course that was dropped **on** gets un-placed. Both halves are one rule
+("a swap needs two seats; this gesture has one"), and both are fixed by it.
+
+### 18.3 13.2% of prereq atoms name a course we do not have
+
+960 of 7,269 prereq atoms across 220 distinct ids. NEU renumbered CS 2500/2510/
+3500; the course list moved and the prereq *text* still cites the old numbers.
+`ENGL 1111` and `ENGL 1102` account for 380 references between them.
+
+Impact is far smaller than the headline, and bounded:
+
+| catalog courses with prereqs | 2,581 |
+|---|---|
+| **permanently blocked** (no satisfiable path) | **33 (1.3%)** |
+| still satisfiable but a path was lost | **0** |
+
+Zero is the reassuring number: an unresolvable atom never quietly removes an
+alternative a student could have used — it is always either in an OR beside a
+real course, or in one of the 33 dead ends. Those 33 are a **pre-existing false
+violation on ordinary courses**, unrelated to reservations, and belong to the
+catalog scrape rather than to this feature.
+
+### 18.4 No requirement section is open-ended
+
+**0 of 4,234 sections across 532 programs** have an empty spec. Unboundedness
+reaches the runtime only through the `~general` sentinel, never through a section
+that names nothing. The empty-spec branch is kept as defence — reading "names no
+course" as "no course fits" would put a false warning on a card answerable by
+anything — but it is not load-bearing, and the corpus count is asserted so a
+scraper change surfaces there.
+
+### 18.5 Three states, not two
+
+§17.1 said "courses is empty" answers the prereq warning. Building it showed
+that collapses three different things, and conflating any two produces a false
+warning or false silence:
+
+| state | meaning | shows |
+|---|---|---|
+| **unbounded** | anything counts (`~general`), **or we never knew** (the 113 unbound cells) | search |
+| **spare** | every candidate was ruled out — the plan already covers it | §11's "already covered" |
+| **impossible** | every course that could answer it is ruled out | the warning |
+
+The second row is the one the design missed. An unbound cell is missing data,
+not proof that nothing fits, so it must read as *anything might* — and it must
+stay distinguishable from a card whose candidates were genuinely eliminated,
+which §11 requires not to rebind.
+
+### 18.6 Candidates are groups, not courses
+
+§17.1's "two sets" is right for requirements and slightly wrong for courses: the
+answer unit of a named cell is an option **group**. 36 cells have a compound
+group (`PSYC 3200 or PT 5410 and PT 5411`), and a flat course set offers PT 5410
+alone — which does not answer the cell, and is the defect rule 2 exists for.
+
+Two consequences that only appeared once it was running:
+
+- surviving courses must derive from surviving **groups**, or losing one half of
+  a compound option leaves the other half on offer;
+- the "never rule out every option" guard cannot count courses. Ruling out
+  `PSYC 3200` and `PT 5410` leaves one course and **zero** answerable groups.
+  The guard now simulates the removal and asks the real derivation.
+
+### 18.7 Where the wiring actually stands
+
+Every reservation in every shipped plan, built through the real path:
+
+| | cards | |
+|---|---|---|
+| built | **10,979** | |
+| unbounded → search | 8,264 | 75.3% |
+| bounded | 2,715 | 24.7% (median **3** candidates) |
+| grouped (named options) | 1,386 | 12.6% |
+| forced to one requirement | 1,329 | 12.1% |
+| **impossible** | **0** | **0.0%** |
+
+Zero impossible is the property that mattered: no card anywhere claims nothing
+can answer it.
+
+The 75.3% is the honest current ceiling, and it is a **storage** limit, not a
+solver one — `applySamplePlan` records a requirement only when the binding was
+forced, so every ambiguous and every `~general` cell arrives knowing nothing.
+The `targets` parameter on `candidatesForReservation` is the seam that closes
+it, and §2's rejected reference-not-copy idea is viable here: `origin` already
+identifies the cell in `plan.json`, so the full candidate list can be looked up
+at runtime with no change to what a reservation stores.
+
+### 18.8 An inconsistency found but not changed
+
+Dragging an already-placed **repeatable** course from the bank:
+
+| onto a semester | adds another take (`resolveAddId`) |
+|---|---|
+| onto a card | moves the existing take |
+
+`onDropOnCard` never calls `resolveAddId`. Reported rather than fixed — it is
+long-standing, unrelated to this feature, and changing it silently would alter
+behaviour nobody asked about. Decision **X10**.
+
+---
+
+## 19. Residual risk — claims not yet verified
 
 Recorded so they are not mistaken for measured facts.
 
@@ -1285,6 +1416,8 @@ Recorded so they are not mistaken for measured facts.
 | demoting `subjectOf` (W3) does not lose forced bindings | **unmeasured** — the one change here that could regress coverage |
 | §11 narrowing stays monotone once §15.2 elimination feeds back (X3) | argued, not proven. Eliminating options can only *grow* a cell's certain set, which claims more capacity, which shrinks others' candidates — shrinking is safe, but the composition with N2 has not been checked |
 | the 113 unbound cells are missing requirements, not §14.3 false facts | untested; the ART/ARTF defect deletes edges silently and could account for some |
+| the 33 permanently-blocked courses (§18.3) are a catalog-scrape problem, not ours | measured, but not yet raised against the scraper — they are a live false violation on ordinary courses |
+| §18.7's `origin`-based lookup of ambiguous targets (X11) survives id drift | §2 measured positional stability at 39–96%; a drifted `origin` would attach the wrong candidate list, so this needs the same degrade-to-nothing guard `resolveRequirement` uses |
 | positional `origin` keys survive a re-scrape well enough for de-duplication | §2's stability sample was 38–114 positions; still small |
 | §12.0's flow-reconciled pending count terminates cleanly when a section is `shared` | `shared` sections are deliberately cross-counted and are excluded from demand; their pending behaviour is undefined |
 
