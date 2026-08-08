@@ -786,7 +786,112 @@ program, and because §10.2 shows the intersection is the wrong gate anyway.
 
 ---
 
-## 14. Decisions required (runtime half)
+## 14. Wording evidence is ordered, not binary
+
+§4 splits evidence in two — *checkable facts* delete edges, *wording* is applied
+only when free. Measurement says that split is right in spirit and too coarse in
+practice, in three separate ways. Exact title matching is the case that exposes
+all three.
+
+### 14.1 The population is smaller than it feels, and one character triples it
+
+| | cells | of 9,599 |
+|---|---|---|
+| text **exactly** matches a section title (normalised) | **287** | 3.0% |
+| matches only if plurals are folded (`Elective` / `Electives`) | **562** | 5.9% |
+| | **849** | **8.8%** |
+
+Exact matching alone is a 3% feature. **The near-miss population is twice the
+exact one and is lost to a trailing `s`** — `tokens()` already lowercases and
+strips punctuation but does not stem, so `Science Elective` and `Science
+Electives` are different strings. Folding plurals is the cheapest single
+improvement available anywhere in the binding pipeline.
+
+Of the 287 exact matches: 153 are already forced correctly, 106 are ambiguous
+but include the right section, 1 is genuinely ambiguous (two sections share a
+title), 7 are unbound — and **20 are bound to something else entirely**.
+
+### 14.2 Good evidence dies with bad, because the switch is global
+
+`bindCells` decides whether to honour wording **once per program**:
+
+```js
+const useSoft = hasSoft.some(Boolean) && maxFlow(N, build(softOrHard), SRC, SNK) === flowHard;
+```
+
+One cell whose preference breaks feasibility discards every other cell's
+preference in that plan, including an exact title match.
+
+| plan variants with any wording evidence | 501 |
+|---|---|
+| wording changed the outcome | 382 |
+| **wording discarded wholesale** | **119 (23.8%)** |
+
+> **Rule: apply soft evidence incrementally, strongest first, keeping each
+> restriction that preserves the maximum flow — never as one global switch.**
+
+That is a maximal-feasible-subset pass rather than an all-or-nothing one. It is
+still monotone (it can only narrow a cell's candidates, never re-point them, so
+§11 is unaffected), and it makes "wording may narrow, only arithmetic decides"
+true per cell rather than per program — which is what §4 meant.
+
+### 14.3 The hard tier contains a guess wearing a fact's clothing
+
+The 20 wrongly-bound exact matches are not the arithmetic overruling wording.
+They are a **false fact**, and this is the most serious finding here, because
+the hard tier deletes edges unconditionally and nothing downstream can appeal.
+
+Media Arts BFA, cell `Art and design fundamentals elective`:
+
+```
+subjectOf("Art and design fundamentals elective") = ART   ← "ART" is a real
+                                                            subject: "Art - CPS"
+section courses: ARTF1240, ARTF1241                       ← ARTF, not ART
+specAdmitsSubject(spec, "ART") = false
+admits(cell, section)          = false                    ← edge deleted
+```
+
+The guard `known.has(up)` exists precisely to stop this and cannot: Northeastern
+publishes a subject literally called `ART`, alongside ARTD/ARTE/ARTF/ARTG/ARTH/
+ARTS. The leading word of an English phrase collided with it, and five cells in
+one program were forced to `~general` against a section they name exactly.
+
+The diagnosis generalises past this one collision:
+
+> `admits` composes **a guess** ("the label's leading token is a subject code")
+> with **a fact** ("this section admits no course in that subject"). A
+> conjunction is only as hard as its weakest term, so the result is a guess —
+> and it was being applied with the authority of a fact.
+
+`specAdmitsSubject` is genuinely checkable. `subjectOf` is not. Only the stated
+range (`MATH 3001–4999`) and the free-elective test are facts about the cell,
+because there the catalog printed the constraint rather than us inferring it.
+
+So the tiers should be:
+
+| strength | evidence | effect |
+|---|---|---|
+| fact | cell states a range; cell is a bare "elective" | deletes edges |
+| strong | exact title match (plural-insensitive) | restriction, applied first |
+| weak | leading token is a known subject code | restriction, applied after |
+| weakest | token overlap | restriction, applied last |
+
+**Exact match must stay a restriction, never a hard edge.** Three
+`Science Elective` cells against a section needing one course means two of them
+are for something else — wording gives intent, never capacity. Capacity is
+already modelled (`room = max(1, round(shortfallSH / unitSH))`), and a section
+needing exactly one thing is `room = 1`. With the edge intact and the
+restriction applied, the flow forces it on its own; no new rule is needed for
+the case that prompted this section.
+
+**Ordering also repairs ART/ARTF without special-casing it.** A cell that names
+a section exactly is not a subject-prefixed elective, so strong evidence
+suppresses weak evidence on the same cell — which is a general rule rather than
+a patch for one subject code.
+
+---
+
+## 15. Decisions required (runtime half)
 
 §7 covers the build-time half. These are new.
 
@@ -805,6 +910,11 @@ program, and because §10.2 shows the intersection is the wrong gate anyway.
 | **M3** | render *provable* (§9.3) and *forced* pending markers differently? | no — a student cannot act on the distinction |
 | **N1** | should `bind-plans` bind named-options cells too (§9.3)? currently `isUnnamed` skips all 1,386 | yes — it is the highest-confidence population and we bind none of it |
 | **N2** | do named-options cells enter the flow solve as capacity, or only carry their certain sections? | capacity too — a cell that certainly answers section *i* consumes demand there, which should sharpen the unnamed cells competing for it |
+| **W1** | fold plurals in `tokens()` (§14.1) | yes — 562 cells, one stemming step, the cheapest win in the pipeline |
+| **W2** | replace the global `useSoft` switch with an incremental strongest-first pass (§14.2) | yes — 23.8% of plans currently discard all wording |
+| **W3** | demote `subjectOf` from fact to weak restriction (§14.3) | yes — it is a guess composed with a fact, applied as a fact |
+| **W4** | should exact title match ever be a hard edge? | **no** — wording gives intent, capacity is the flow's job |
+| **W5** | is `known.has(up)` salvageable, or is any leading-token subject read unsafe? | demoting it (W3) makes the question moot; revisit only if W3 loses cells |
 
 ---
 
