@@ -18,6 +18,7 @@ import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
 import { reservationEdges } from "../core/reservationEdges.js";
+import { satisfiedUnderEveryOption } from "../core/reservationPrereqs.js";
 import { dropOnCard as resolveDropOnCard, dropOnSemester, dropOnBank } from "../core/planDrop.js";
 import { buildSemesterView, cardIdsIn, cardsIn, loadIn } from "../core/semesterView.js";
 import { applySamplePlan as mapSamplePlan } from "../core/applySamplePlan.js";
@@ -873,6 +874,21 @@ export function PlannerProvider({ children }) {
     () => (reservationLineEdges.length ? [...allEdges, ...reservationLineEdges] : allEdges),
     [allEdges, reservationLineEdges]);
 
+  // WHERE A CARD SITS, reservations included.
+  //
+  // `placements` answers a different question — "what counts toward the degree"
+  // — and by design can never hold a reservation. Drawing a line is a question
+  // about position, so it must ask this instead, or every synthesised edge is
+  // discarded at the gate for having an endpoint that is not a placement.
+  //
+  // `semesterOccupants` is the shared derivation (the same one the grid and
+  // ordering use); building a third combined map by hand here is exactly the
+  // duplication the isolation invariants exist to prevent. It returns
+  // `placements` unchanged when there are no reservations, so this is free for
+  // a plan without any.
+  const cardSemOf = useMemo(
+    () => semesterOccupants(placements, reservations), [placements, reservations]);
+
   const connectionEdges = useMemo(() => {
     if (!selectedId) return [];
     // Edges are keyed by BASE course ids; repeat instances ("BASE#n") have
@@ -928,20 +944,23 @@ export function PlannerProvider({ children }) {
       // ── Selection-driven lines ───────────────────────────────────
       if (selectedId) {
         connectionEdges.forEach(rel => {
-          if (!placements[rel.from] || !placements[rel.to]) return;
+          // Position questions, so they read the combined view — an endpoint
+          // may be a reservation, which is never in `placements`.
+          const fromSem = cardSemOf[rel.from], toSem = cardSemOf[rel.to];
+          if (!fromSem || !toSem) return;
           // Disable prereq/error lines for courses in 'incoming' semester
-          if (placements[rel.from] === "incoming" || placements[rel.to] === "incoming") return;
+          if (fromSem === "incoming" || toSem === "incoming") return;
           const fp = getCenter(rel.from);
           const tp = getCenter(rel.to);
           if (!fp || !tp) return;
           let type = rel.type;
           if (rel.type === "prerequisite") {
-            const fromIdx = SEM_INDEX[placements[rel.from]] ?? -1;
-            const toIdx   = SEM_INDEX[placements[rel.to]]   ?? -1;
+            const fromIdx = SEM_INDEX[fromSem] ?? -1;
+            const toIdx   = SEM_INDEX[toSem]   ?? -1;
             // concurrent prereq: same-semester is valid, only flag if strictly after
             if (fromIdx > toIdx || (fromIdx === toIdx && !rel.concurrent)) type = "prerequisite-order";
           }
-          if (rel.type === "corequisite" && placements[rel.from] !== placements[rel.to]) {
+          if (rel.type === "corequisite" && fromSem !== toSem) {
             type = "corequisite-viol";
           }
           newLines.push({ ...rel, type, fp, tp });
@@ -1045,7 +1064,7 @@ export function PlannerProvider({ children }) {
       setLines(newLines);
     });
     return () => cancelAnimationFrame(raf);
-  }, [selectedId, connectionEdges, showViolLines, placements, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX, pvPlacedOut, takesOf, grades, prereqConditions]);
+  }, [selectedId, connectionEdges, showViolLines, placements, cardSemOf, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX, pvPlacedOut, takesOf, grades, prereqConditions]);
 
   // ── MCP action applier ───────────────────────────────────────────
   // Applies a batch of IPlannerAction actions dispatched by Claude via APPLY events.
@@ -1508,7 +1527,21 @@ export function PlannerProvider({ children }) {
       if (!c.prereqs?.length) return;
       const ti = SEM_INDEX[pvPlacements[c.id]];
       const result = evalPrereqTree(c.prereqs, effectivePlacements, SEM_INDEX, ti, pvPlacedOut, null, prereqConditions);
-      if (result !== "satisfied") { v.set(c.id, result); return; }
+      if (result !== "satisfied") {
+        // An undecided card may already guarantee this. A plan placing
+        // "IE 3412 or MATH 3081" before IE 4516 — whose prerequisite is exactly
+        // that choice — satisfies it whichever way the student decides, so
+        // warning about it is false. Cleared ONLY when every option satisfies
+        // the prerequisite tree, which is a stronger test than the edge rule in
+        // reservationEdges.js: both options appear in "A AND B" while neither
+        // satisfies it.
+        const guaranteed = satisfiedUnderEveryOption(c, ti, {
+          reservations, placements: effectivePlacements, semIndex: SEM_INDEX,
+          placedOut: pvPlacedOut, courseMap, conditions: prereqConditions,
+        });
+        if (guaranteed !== true) v.set(c.id, result);
+        return;
+      }
       // Grade layer: placement says satisfied, but an ENTERED grade may veto
       // (an F/U/I/W attempt, or a letter under the ref's minGrade). Only the
       // comparison of the two results can say "blocked by grade" — the
@@ -1520,7 +1553,7 @@ export function PlannerProvider({ children }) {
       }
     });
     return v;
-  }, [courses, pvPlacements, effectivePlacements, pvPlacedOut, SEM_INDEX, takesOf, prereqConditions]);
+  }, [courses, pvPlacements, effectivePlacements, pvPlacedOut, SEM_INDEX, takesOf, prereqConditions, reservations, courseMap]);
 
   const coreqViolations = useMemo(() => {
     const v = new Map();
