@@ -153,10 +153,25 @@ export function resolveRequirement(reservation, programData) {
   const sections = programData?.requirementSections;
   if (!want || !sections?.length) return null;
 
-  const at = sections[want.index];
-  if (at && at.title === want.title) return { index: want.index, section: at };
+  // An EMPTY title carries no identity, so it cannot be matched on. Scraped
+  // sections with no title exist, and letting a blank match a blank hands the
+  // card an arbitrary untitled section's courses — wrong information, where the
+  // rule is to degrade to none.
+  // Compared normalised on BOTH sides. Trimming only the stored half would make
+  // a scrape that gained a trailing space look like a renamed requirement.
+  const norm = (s) => (typeof s === "string" ? s.trim() : "");
+  const title = norm(want.title);
+  if (!title) return null;
 
-  const found = sections.findIndex(s => s.title === want.title);
+  // The index is only a hint, but it must come back as a NUMBER. A stored "0"
+  // resolves fine here and then fails `typeof target === "number"` downstream,
+  // where a non-number means "a sentinel that admits any course" — so a
+  // correctly bound card would silently start offering the whole catalog.
+  const idx = Number(want.index);
+  const at = Number.isInteger(idx) ? sections[idx] : undefined;
+  if (at && norm(at.title) === title) return { index: idx, section: at };
+
+  const found = sections.findIndex(s => norm(s.title) === title);
   return found >= 0 ? { index: found, section: sections[found] } : null;
 }
 
