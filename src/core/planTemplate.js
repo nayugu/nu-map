@@ -114,27 +114,53 @@ export function variantsFor(plans, { years = null } = {}) {
  * needs confirming, and relies on undo. Claiming otherwise would be exactly the
  * false confidence rule 4 forbids.
  *
+ * ── Absent and inert are different things ──────────────────────────
+ *
+ * A control that is sometimes present and sometimes not is harder to learn than
+ * one that is always present in two states — and hiding it once the plan is
+ * loaded throws away something worth saying. `appliedTemplate` knows exactly
+ * which plan built this canvas, and a student otherwise has no way to see that,
+ * nor any route back to switch variant.
+ *
+ * So "already loaded" is a STATE, not a suppression:
+ *
+ *   hidden     nothing to say — no program, none published, or a double major
+ *   load       nothing on the canvas; lay it out
+ *   loaded     this canvas came from this plan; show which, collapsed
+ *   occupied   the canvas holds something else; new plan, or replace
+ *
+ * Only `hidden` means render nothing, and it is reserved for cases where the
+ * component could say nothing true.
+ *
  * @param {object} ctx
  * @param {string} ctx.major                 the selected program key
  * @param {string} [ctx.major2]              a second, separate major
  * @param {boolean} ctx.hasSamplePlan        does that program publish one
  * @param {{programKey?: string}} [ctx.appliedTemplate]
  * @param {boolean} ctx.canvasEmpty          from isPlanEmpty()
- * @returns {{offer: boolean, reason: string, verbs: string[]}}
+ * @returns {{show: boolean, state: string, reason: string, verbs: string[]}}
  */
 export function sampleplanOffer({
   major, major2 = "", hasSamplePlan = false, appliedTemplate = null, canvasEmpty = false,
 } = {}) {
-  const no = (reason) => ({ offer: false, reason, verbs: [] });
+  const hide = (reason) => ({ show: false, state: "hidden", reason, verbs: [] });
 
-  if (!major) return no("no-program");
-  if (major2) return no("double-major");
-  if (!hasSamplePlan) return no("no-sample-plan");
-  if (appliedTemplate?.programKey === major) return no("already-applied");
+  if (!major) return hide("no-program");
+  // Suppressed rather than explained: a sample plan schedules a whole degree,
+  // and 28 SH of free electives cannot absorb a second major's 40–60.
+  if (major2) return hide("double-major");
+  if (!hasSamplePlan) return hide("no-sample-plan");
+
+  if (appliedTemplate?.programKey === major) {
+    // Not an offer — a statement about where this canvas came from. The verbs
+    // are still available behind the collapsed row, because "I want the other
+    // co-op cycle" has no other route.
+    return { show: true, state: "loaded", reason: "already-applied", verbs: ["replace", "new"] };
+  }
 
   return canvasEmpty
-    ? { offer: true, reason: "empty-canvas", verbs: ["load"] }
-    : { offer: true, reason: "occupied-canvas", verbs: ["replace", "new"] };
+    ? { show: true, state: "load",     reason: "empty-canvas",    verbs: ["load"] }
+    : { show: true, state: "occupied", reason: "occupied-canvas", verbs: ["new", "replace"] };
 }
 
 /**

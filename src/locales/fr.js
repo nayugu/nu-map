@@ -133,6 +133,7 @@ export const strings = {
   "grad.plan.did.replaced":    "Plan remplacé par le plan type.",
   "grad.plan.did.opened":      "Ouvert comme nouveau plan.",
   "grad.plan.undo":            "Annuler",
+  "grad.plan.state.loaded":     "chargé",
   "grad.gpa.title":               "Exigences de GPA",
   "grad.gpa.met":                 "atteint avec les notes saisies",
   "grad.gpa.current":             "{gpa} à ce jour ({n} notés)",

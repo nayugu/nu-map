@@ -133,6 +133,7 @@ export const strings = {
   "grad.plan.did.replaced":    "已用示例计划替换。",
   "grad.plan.did.opened":      "已作为新计划打开。",
   "grad.plan.undo":            "撤销",
+  "grad.plan.state.loaded":     "已应用",
   "grad.gpa.title":               "GPA 要求",
   "grad.gpa.met":                 "按已输入的成绩已达标",
   "grad.gpa.current":             "当前 {gpa}（已评分 {n} 门）",

@@ -133,6 +133,7 @@ export const strings = {
   "grad.plan.did.replaced":    "योजना नमूना योजना से बदल दी गई।",
   "grad.plan.did.opened":      "नई योजना के रूप में खोली गई।",
   "grad.plan.undo":            "पूर्ववत करें",
+  "grad.plan.state.loaded":     "लागू",
   "grad.gpa.title":               "GPA आवश्यकताएँ",
   "grad.gpa.met":                 "दर्ज किए गए ग्रेड से पूरा हुआ",
   "grad.gpa.current":             "अब तक {gpa} ({n} ग्रेडेड)",

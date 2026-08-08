@@ -37,6 +37,9 @@ import {
   sampleplanOffer, variantsFor, describeTemplate, isPlanEmpty,
 } from "../core/planTemplate.js";
 
+/** Namespaced like the other grad-panel collapse flags. */
+const COLLAPSE_KEY = "numap-grad-expand-sampleplan";
+
 export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) {
   const majorRequirements = usePort(IMajorRequirements);
   const { t } = useLanguage();
@@ -49,6 +52,19 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   const [plans,      setPlans]      = useState(null);
   const [variantIdx, setVariantIdx] = useState(0);
   const [justDid,    setJustDid]    = useState(null);   // "loaded" | "replaced" | "opened"
+
+  // Collapse is remembered ACROSS sessions but chosen BY STATE the first time.
+  // An explicit preference outranks the state default, the same rule the other
+  // credits toggle follows — someone who folded this away meant it.
+  const [openPref, setOpenPref] = useState(() => {
+    try { const v = localStorage.getItem(COLLAPSE_KEY); return v === null ? null : v === "true"; }
+    catch { return null; }
+  });
+  const setOpen = (next) => {
+    const val = typeof next === "function" ? next(openResolved) : next;
+    setOpenPref(val);
+    try { localStorage.setItem(COLLAPSE_KEY, String(val)); } catch {}
+  };
 
   // Question 1 of the rule, answered synchronously so nothing flickers in for a
   // program that publishes nothing.
@@ -84,20 +100,7 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
     semesters: SEMESTERS, courseMap, placements, reservations, specialTermPl, programData,
   }) : null), [chosen, SEMESTERS, courseMap, placements, reservations, specialTermPl, programData]);
 
-  // The offer disappears once taken (appliedTemplate now matches), so the undo
-  // affordance has to survive that. Shown instead of the offer, never with it.
-  if (justDid) {
-    return (
-      <Row isPhone={isPhone}>
-        <span style={{ color: "var(--text-3)" }}>{t(`grad.plan.did.${justDid}`)}</span>
-        <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn}>
-          {t("grad.plan.undo")}
-        </button>
-      </Row>
-    );
-  }
-
-  if (!offer.offer || !chosen) return null;
+  if (!offer.show) return null;
 
   const layOut = () => {
     applySamplePlanToPlan(chosen, programData, 0, path);
@@ -124,41 +127,85 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
     setJustDid("opened");
   };
 
+  const loaded = offer.state === "loaded";
+  // Collapsed once the plan IS the canvas — there is nothing to decide, so the
+  // row becomes a statement. Expanded whenever an action is available, because
+  // a collapsed offer is one nobody finds.
+  const openResolved = openPref ?? !loaded;
+  const open = openResolved;
   const primary = offer.verbs[0] === "load" ? layOut : openAsNew;
   const primaryLabel = offer.verbs[0] === "load" ? t("grad.plan.load") : t("grad.plan.newplan");
+  const fz = isPhone ? 9 : 10;
 
   return (
     <div style={{
       margin: "8px 0 10px", padding: isPhone ? "7px 8px" : "9px 10px", borderRadius: 6,
       border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
     }}>
-      <div style={{
-        fontSize: isPhone ? 8 : 9, fontWeight: 700, letterSpacing: "0.06em",
-        color: "var(--text-4)", marginBottom: 4,
-      }}>{t("grad.plan.label")}</div>
-
-      {/* What arrives, before deciding. */}
-      <div style={{ fontSize: isPhone ? 9 : 10, color: "var(--text-3)", marginBottom: 6 }}>
-        {counts
-          ? t("onboard.sampleplan.counts", {
-              courses: counts.courses, placeholders: counts.placeholders })
-          : "…"}
-      </div>
-
-      {/* Only when the cohort's year count leaves a real choice. */}
-      {variants.length > 1 && (
-        <VariantPicker
-          variants={variants} value={safeIdx} onChange={setVariantIdx} isPhone={isPhone}
-        />
-      )}
-
-      <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-        <button onClick={primary} style={primaryBtn(isPhone)}>{primaryLabel}</button>
-        {/* Destructive, so never the default and always confirmed. */}
-        {offer.verbs.includes("replace") && (
-          <button onClick={replace} style={linkBtn}>{t("grad.plan.replace")}</button>
+      {/* Header doubles as the collapse control, so the section is always in
+          the same place whatever state it is in. */}
+      <div
+        onClick={() => setOpen(v => !v)}
+        style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer", userSelect: "none" }}
+      >
+        <span style={{
+          fontSize: isPhone ? 8 : 9, fontWeight: 700, letterSpacing: "0.06em", color: "var(--text-4)",
+        }}>{t("grad.plan.label")}</span>
+        {/* Collapsed, the row still says something worth knowing: WHICH plan
+            this canvas came from. Nothing else in the app surfaces that. */}
+        {!open && loaded && appliedTemplate?.planLabel && (
+          <span style={{
+            flex: 1, fontSize: fz, color: "var(--text-3)", minWidth: 0,
+            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+          }}>{appliedTemplate.planLabel}</span>
         )}
+        <span style={{ flex: !open && loaded ? "0 0 auto" : 1 }} />
+        {loaded && (
+          <span style={{ fontSize: fz - 1, color: "var(--success)" }}>{t("grad.plan.state.loaded")}</span>
+        )}
+        <span style={{ fontSize: fz - 1, color: "var(--text-5)" }}>{open ? "▾" : "▸"}</span>
       </div>
+
+      {open && (
+        <div style={{ marginTop: 6 }}>
+          {/* What arrives, before deciding. */}
+          {!!chosen && (
+            <div style={{ fontSize: fz, color: "var(--text-3)", marginBottom: 6 }}>
+              {counts
+                ? t("onboard.sampleplan.counts", {
+                    courses: counts.courses, placeholders: counts.placeholders })
+                : "…"}
+            </div>
+          )}
+
+          {/* Only when the cohort's year count leaves a real choice. */}
+          {variants.length > 1 && (
+            <VariantPicker
+              variants={variants} value={safeIdx} onChange={setVariantIdx} isPhone={isPhone}
+            />
+          )}
+
+          {chosen ? (
+            <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
+              {/* Once loaded, laying out again is not the point — switching
+                  variant or branching a comparison is. */}
+              {!loaded && <button onClick={primary} style={primaryBtn(isPhone)}>{primaryLabel}</button>}
+              {loaded && <button onClick={openAsNew} style={primaryBtn(isPhone)}>{t("grad.plan.newplan")}</button>}
+              {/* Destructive, so never the default and always confirmed. */}
+              {offer.verbs.includes("replace") && (
+                <button onClick={replace} style={linkBtn}>{t("grad.plan.replace")}</button>
+              )}
+              {justDid && (
+                <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn}>
+                  {t("grad.plan.undo")}
+                </button>
+              )}
+            </div>
+          ) : (
+            <div style={{ fontSize: fz, color: "var(--text-5)" }}>{t("onboard.sampleplan.loading")}</div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

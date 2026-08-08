@@ -134,6 +134,7 @@ export const strings = {
   "grad.plan.did.replaced":    "サンプルプランに置き換えました。",
   "grad.plan.did.opened":      "新しいプランとして開きました。",
   "grad.plan.undo":            "元に戻す",
+  "grad.plan.state.loaded":     "適用済み",
   "grad.gpa.title":               "GPA要件",
   "grad.gpa.met":                 "入力済みの成績で達成",
   "grad.gpa.current":             "現在 {gpa}（{n}科目入力済み）",

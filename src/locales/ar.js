@@ -133,6 +133,7 @@ export const strings = {
   "grad.plan.did.replaced":    "تم استبدال الخطة بالخطة النموذجية.",
   "grad.plan.did.opened":      "تم فتحها كخطة جديدة.",
   "grad.plan.undo":            "تراجع",
+  "grad.plan.state.loaded":     "مُطبَّقة",
   "grad.gpa.title":               "متطلبات المعدل التراكمي",
   "grad.gpa.met":                 "تحقق بالدرجات المُدخلة",
   "grad.gpa.current":             "{gpa} حتى الآن ({n} مُقيَّمة)",

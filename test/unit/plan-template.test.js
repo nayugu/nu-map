@@ -133,41 +133,48 @@ const OFFERABLE = { major: "cs", hasSamplePlan: true, canvasEmpty: true };
 
 test("an empty canvas with a plan available offers Load", () => {
   const got = sampleplanOffer(OFFERABLE);
-  assert.equal(got.offer, true);
+  assert.equal(got.show, true);
+  assert.equal(got.state, "load");
   assert.deepEqual(got.verbs, ["load"]);
 });
 
-test("an occupied canvas offers Replace or New, never a bare Load", () => {
+test("an occupied canvas leads with the SAFE verb, never a bare Load", () => {
   const got = sampleplanOffer({ ...OFFERABLE, canvasEmpty: false });
-  assert.equal(got.offer, true);
-  assert.deepEqual(got.verbs, ["replace", "new"]);
+  assert.equal(got.state, "occupied");
+  assert.equal(got.verbs[0], "new", "the destructive verb led");
+  assert.ok(got.verbs.includes("replace"));
   assert.ok(!got.verbs.includes("load"), "would have overwritten a canvas without saying so");
 });
 
-test("THE STALE-MAJOR TRAP: changing major brings the offer back", () => {
-  // The case "offer when empty" cannot handle. Load CS's plan, then switch to
-  // Biology: the canvas is no longer empty, so an emptiness rule stays silent
-  // forever and the student keeps the wrong major's plan.
+test("ALREADY LOADED is a state, not a disappearance", () => {
+  // Hiding the control once the plan is loaded makes it blink in and out, and
+  // throws away the one thing worth saying: which plan this canvas came from.
+  // A student otherwise has no way to see that and no route back to switch
+  // variant.
   const applied = { programKey: "cs", planLabel: "Four Years, Two Co-ops" };
+  const got = sampleplanOffer({ ...OFFERABLE, canvasEmpty: false, appliedTemplate: applied });
+  assert.equal(got.show, true, "the control vanished once its plan was loaded");
+  assert.equal(got.state, "loaded");
+  assert.equal(got.reason, "already-applied");
+  assert.ok(got.verbs.length, "no way back to switch variant");
+});
 
-  const sameMajor = sampleplanOffer({ ...OFFERABLE, canvasEmpty: false, appliedTemplate: applied });
-  assert.equal(sameMajor.offer, false, "re-offered a plan that is already the basis");
-  assert.equal(sameMajor.reason, "already-applied");
-
+test("THE STALE-MAJOR TRAP: changing major returns it to an actionable state", () => {
+  const applied = { programKey: "cs", planLabel: "Four Years, Two Co-ops" };
   const afterSwitch = sampleplanOffer({
     ...OFFERABLE, major: "biology", canvasEmpty: false, appliedTemplate: applied,
   });
-  assert.equal(afterSwitch.offer, true, "the stale plan was left with no way back");
-  assert.deepEqual(afterSwitch.verbs, ["replace", "new"]);
+  assert.equal(afterSwitch.state, "occupied", "the stale plan was left with no way out");
+  assert.ok(afterSwitch.verbs.includes("replace"));
 });
 
-test("a true double major is suppressed entirely", () => {
+test("a true double major is hidden entirely", () => {
   // 28 SH of free electives cannot absorb a second major's 40-60, and no
-  // department publishes a plan for one. Loading half a degree onto a full
-  // canvas is worse than starting empty.
+  // department publishes a plan for one. Suppressed rather than explained.
   for (const canvasEmpty of [true, false]) {
     const got = sampleplanOffer({ ...OFFERABLE, major2: "biology", canvasEmpty });
-    assert.equal(got.offer, false, `offered for a double major (empty=${canvasEmpty})`);
+    assert.equal(got.show, false, `shown for a double major (empty=${canvasEmpty})`);
+    assert.equal(got.state, "hidden");
     assert.equal(got.reason, "double-major");
     assert.deepEqual(got.verbs, []);
   }
@@ -178,36 +185,52 @@ test("a COMBINED major is one program and is unaffected", () => {
   // single program with a single plan and major2 is empty, so the double-major
   // suppression must not touch them.
   const got = sampleplanOffer({ ...OFFERABLE, major: "computer_science_and_mathematics_bs" });
-  assert.equal(got.offer, true, "suppressed a combined major, which is the main audience");
+  assert.equal(got.show, true, "hid a combined major, which is the main audience");
 });
 
-test("no program, or a program with no plan, offers nothing", () => {
+test("only cases with nothing true to say are hidden", () => {
+  // 632 of 1,017 programs publish no plan — a permanently present "none
+  // available" row would be chrome that never does anything.
   assert.equal(sampleplanOffer({ ...OFFERABLE, major: "" }).reason, "no-program");
   assert.equal(sampleplanOffer({ ...OFFERABLE, hasSamplePlan: false }).reason, "no-sample-plan");
-  // 632 of 1,017 programs publish none — this is the common case, not an edge.
-  assert.equal(sampleplanOffer({ ...OFFERABLE, hasSamplePlan: false }).offer, false);
+  assert.equal(sampleplanOffer({ ...OFFERABLE, hasSamplePlan: false }).show, false);
 });
 
-test("suppression order is stable — a double major with no plan reports one reason", () => {
-  // Reasons feed a UI and a log; two inputs disagreeing about which fired would
-  // make the offer's absence unexplainable.
+test("hidden order is stable — a double major with no plan reports one reason", () => {
   const got = sampleplanOffer({ major: "cs", major2: "bio", hasSamplePlan: false, canvasEmpty: true });
-  assert.equal(got.offer, false);
+  assert.equal(got.show, false);
   assert.equal(got.reason, "double-major", "reason order changed");
 });
 
-test("degenerate input never offers", () => {
+test("degenerate input is hidden, never a broken state", () => {
   for (const bad of [undefined, {}, { major: null }, { major: "cs" }]) {
     const got = sampleplanOffer(bad);
-    assert.equal(got.offer, false, JSON.stringify(bad));
+    assert.equal(got.show, false, JSON.stringify(bad));
+    assert.equal(got.state, "hidden");
     assert.deepEqual(got.verbs, []);
   }
 });
 
-test("an appliedTemplate for a DIFFERENT program never suppresses", () => {
+test("an appliedTemplate for a DIFFERENT program is not 'loaded'", () => {
   for (const applied of [null, undefined, {}, { programKey: "" }, { programKey: "other" }]) {
-    assert.equal(sampleplanOffer({ ...OFFERABLE, appliedTemplate: applied }).offer, true,
-      `suppressed by ${JSON.stringify(applied)}`);
+    const got = sampleplanOffer({ ...OFFERABLE, appliedTemplate: applied });
+    assert.equal(got.show, true, `hidden by ${JSON.stringify(applied)}`);
+    assert.notEqual(got.state, "loaded", `read as loaded from ${JSON.stringify(applied)}`);
+  }
+});
+
+test("every state is one of the four, and only 'hidden' renders nothing", () => {
+  const inputs = [
+    {}, OFFERABLE,
+    { ...OFFERABLE, canvasEmpty: false },
+    { ...OFFERABLE, appliedTemplate: { programKey: "cs" }, canvasEmpty: false },
+    { ...OFFERABLE, major2: "bio" },
+    { ...OFFERABLE, hasSamplePlan: false },
+  ];
+  for (const i of inputs) {
+    const got = sampleplanOffer(i);
+    assert.ok(["hidden", "load", "loaded", "occupied"].includes(got.state), `unknown state ${got.state}`);
+    assert.equal(got.show, got.state !== "hidden", `show disagrees with state ${got.state}`);
   }
 });
 

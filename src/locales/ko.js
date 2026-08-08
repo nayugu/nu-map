@@ -133,6 +133,7 @@ export const strings = {
   "grad.plan.did.replaced":    "샘플 플랜으로 바꿨습니다.",
   "grad.plan.did.opened":      "새 플랜으로 열었습니다.",
   "grad.plan.undo":            "실행 취소",
+  "grad.plan.state.loaded":     "적용됨",
   "grad.gpa.title":               "GPA 요건",
   "grad.gpa.met":                 "입력한 성적으로 충족됨",
   "grad.gpa.current":             "현재 {gpa} ({n}과목 입력)",
