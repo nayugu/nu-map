@@ -1168,7 +1168,114 @@ live formulation was the one worth having.
 
 ---
 
-## 17. Residual risk — claims not yet verified
+## 17. Consolidation — one object, two sets, N filters
+
+§§9–15 grew by accretion. Each question added a mechanism, and nobody factored
+out what the mechanisms share. They share almost everything.
+
+### 17.1 Every rule in this document is the same shape
+
+| § | mechanism | what it actually does |
+|---|---|---|
+| 4 | flow arithmetic | removes candidate **requirements** |
+| 14 | wording | removes candidate **requirements** |
+| 9.3 | certainty | removes candidate **requirements** |
+| 11 | runtime narrowing | removes candidate **requirements** |
+| 15.1 | prereqs | removes candidate **courses** |
+| 15.2 | dependents | removes candidate **courses** |
+| 10.2 | picker tiers | *ranks* candidate courses |
+
+There are exactly **two sets per card**, and they are linked — the courses are
+the union of what the candidate requirements admit. Every mechanism is a
+monotone filter over one of them. Nothing here is a special case; the document
+just never said so.
+
+```jsonc
+Card       { options?: [[courseId]], sh, semId }
+Candidates { requirements: Set<sectionIdx|sentinel>, courses: EligibleSpec }
+narrow     (candidates, plan) => candidates      // may only REMOVE
+```
+
+Everything the UI needs is then a read of that one structure:
+
+| question | answer |
+|---|---|
+| which requirement is this for? | `requirements.size === 1` |
+| pending mark in the panel? | same test |
+| what can fill it? | `courses` |
+| prereq warning? | `courses` is empty |
+| prereq lines? | edges into `courses` |
+
+### 17.2 Named and unnamed cells are one population
+
+§9.3 treats `CS 4300 or 4100` as a separate kind with its own certainty
+computation, its own binding question (N1), its own capacity question (N2). It
+is not a separate kind:
+
+> **`options` is simply a course candidate set the catalog pre-seeded.**
+
+An unnamed cell starts with *everything its candidate requirements admit*; a
+named cell starts with *two courses*. Same object, different starting width, one
+code path.
+
+**This is where simplification buys robustness rather than only tidiness.** The
+44 over-subscribed sections in §12.0 — worst case twelve pending marks against a
+requirement needing one course — exist *because* the two populations were
+solved separately and neither knew the other's claims. One population means one
+flow, and that bug becomes **structurally impossible** rather than clamped.
+
+### 17.3 What this deletes
+
+| removed | why |
+|---|---|
+| **N1**, **N2** | dissolve — named cells are cells; they bind and consume capacity because everything does |
+| **§12.0's clamp** | unnecessary; one flow cannot over-subscribe |
+| **M3** (provable vs forced marks) | both are `requirements.size === 1` |
+| **X4** | dissolves — one path already covers both |
+| **§10.2's four tiers** | tiers 1–2 collapse into `courses`; tiers 3–4 are "not in `courses`", i.e. ordinary search. **One list plus search** |
+| **§15.4's union-vs-intersection question** | lines are edges into `courses`, which is the same object |
+
+Five of the 29 open decisions disappear, and one measured defect stops being
+possible.
+
+### 17.4 What does *not* simplify, and should not be forced to
+
+Being honest about the floor:
+
+- **§14.3's false fact** (`ART` vs `ARTF`). A real defect at any architecture.
+  Ordering evidence by strength is the actual domain, not accidental complexity.
+- **§12.1** — a pending mark must not propagate to children. A genuine UI rule
+  with no structural equivalent.
+- **The flow solve.** It is an exact answer to an exactly-posed question; the
+  alternative is the relaxation ladder this design already replaced once.
+- **§10.1 fill-on-drop.** Already one sentence.
+
+### 17.5 The cost, stated plainly
+
+1. **Candidates become live state**, re-narrowed when the plan changes. That is
+   a memo, but it is a memo the whole UI now depends on.
+2. **Monotonicity stops being advice and becomes load-bearing.** §11's rule —
+   narrowing may only intersect — has to hold for *every* filter, or a card can
+   silently regain a candidate. That is one invariant test rather than a rule
+   remembered per mechanism, which is the trade being made.
+3. **Debuggability**: "which filter removed this candidate?" needs an answer, so
+   each removal records its reason. That cost is already paid — the picker has
+   to print exactly that (`blocked: needs CS 3100`), so provenance is a
+   requirement, not overhead.
+
+### 17.6 Verdict
+
+The consolidation is worth doing **before** implementation, not after. It
+removes five decisions, deletes one measured class of bug, and makes the
+narrowing rules additive — a new one is a function, not a new surface. It does
+not simplify the domain, and §17.4 is the irreducible part.
+
+The document stays long because the *evidence* is long. The *system* it
+describes should be one object, two sets, and a list of filters.
+
+---
+
+## 18. Residual risk — claims not yet verified
 
 Recorded so they are not mistaken for measured facts.
 
