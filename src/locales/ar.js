@@ -267,6 +267,7 @@ export const strings = {
   "info.offered.pop.avgDesc":     "متوسط المقاعد الشاغرة لكل شعبة",
   "info.offered.pop.online":      "عبر الإنترنت",
   "info.offered.pop.other":       "أخرى",
+  "info.offered.pop.basis":       "نسبة من إجمالي المسجّلين في جميع الفصول المسجَّلة.",
   "info.drag.title":              "اسحب لوضعه",
 
   // ── Header ─────────────────────────────────────────────────────

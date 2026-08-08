@@ -668,7 +668,22 @@ const ROW_H   = 18; // px height of a gauge row (year labelled in the header abo
 // Shading is scaled relative to the busiest day through a steep (gamma) curve, so the dominant
 // day(s) clearly dominate and secondary days recede rather than all lighting up like a daily
 // course. The real percentage stays in the tooltip. Day letters are localised.
-function WeekdayStrip({ dow, color }) {
+//
+// INK, NEVER HUE. The availability gauges sit directly above this strip and teach a
+// traffic-light scale (coral = competitive, mint = room), so painting these boxes in the
+// course's SUBJECT colour meant a red or green subject read as "full on Fridays" —
+// two unrelated meanings in one palette, a few pixels apart. The override control next
+// to the gauges already refuses that palette for exactly this reason. Frequency is a
+// quantity, not a status, so it is carried by the opacity of the primary ink alone.
+const DAY_INK_MAX = 0.85;   // opacity of the busiest day; gentler than a solid fill
+// Past this fill the box is dark enough that ink-on-ink loses contrast, so the letter
+// knocks out to the panel surface instead. Both themes cross over near the same point:
+// the fill is --text-2 (dark on light, light on dark) over --bg-surface either way.
+const DAY_KNOCKOUT = 0.6;
+const dayInk = frac => 0.10 + (DAY_INK_MAX - 0.10) * Math.pow(frac, 2.2);
+const dayLetter = op => (op >= DAY_KNOCKOUT ? "var(--bg-surface)" : "var(--text-1)");
+
+function WeekdayStrip({ dow }) {
   const { t } = useLanguage();
   const labels = (t("info.offered.weekdays") || "M,T,W,Th,F").split(",");
   const peak = Math.max(1, ...(dow ?? []));           // busiest day → full emphasis
@@ -678,7 +693,7 @@ function WeekdayStrip({ dow, color }) {
         const pct  = dow?.[i] ?? 0;                      // real value, shown in tooltip
         const on   = pct > 0;
         const frac = pct / peak;                         // 0..1 relative to the busiest day
-        const op   = on ? 0.12 + 0.85 * Math.pow(frac, 2.2) : 0;   // steep: peaks dominate, rest recede
+        const op   = on ? dayInk(frac) : 0;              // steep: peaks dominate, rest recede
         return (
           <span key={i} title={`${label}: ${pct}%`}
             style={{
@@ -687,11 +702,11 @@ function WeekdayStrip({ dow, color }) {
               display: "flex", alignItems: "center", justifyContent: "center",
               border: `1px solid ${on ? "transparent" : "var(--border-1)"}`,
             }}>
-            {on && <span style={{ position: "absolute", inset: 0, background: color || "var(--text-3)", opacity: op }} />}
+            {on && <span style={{ position: "absolute", inset: 0, background: "var(--text-2)", opacity: op }} />}
             <span style={{
               position: "relative",
               fontSize: 10, fontWeight: frac >= 0.6 ? 800 : 600,
-              color: on ? "var(--text-1)" : "var(--text-5)",
+              color: on ? dayLetter(op) : "var(--text-5)",
               opacity: on ? 1 : 0.5,
             }}>
               {label}
@@ -1101,14 +1116,14 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
                 style={{ width: "fit-content", cursor: pat ? "help" : "default" }}
                 onMouseEnter={pat ? e => setSchedHover(e.currentTarget.getBoundingClientRect()) : undefined}
                 onMouseLeave={pat ? () => setSchedHover(null) : undefined}>
-                <WeekdayStrip dow={dow} color={selCourse.color} />
+                <WeekdayStrip dow={dow} />
               </div>
             : <span style={{ fontSize: 10, color: "var(--text-3)", fontStyle: "italic" }}>{t("info.offered.async")}</span>}
         </div>
       )}
 
       {schedHover && pat && (
-        <SchedulePopover pat={pat} color={selCourse.color} rect={schedHover} />
+        <SchedulePopover pat={pat} rect={schedHover} />
       )}
 
       {hoverCell && (
@@ -1248,7 +1263,7 @@ function OfferingPopover({ cell, gradient, markerPos, color }) {
 // One row's mini day strip: a cell per relevant weekday with the pattern's days filled in the
 // subject colour (mirrors the WeekdayStrip look), deciphering the Banner codes (R=Thu, S=Sat,
 // U=Sun) into visible, localised day letters. `days`/`labels` are parallel arrays.
-function PatternStrip({ pattern, days, labels, color }) {
+function PatternStrip({ pattern, days, labels }) {
   return (
     <span style={{ display: "flex", gap: 3, flexShrink: 0 }}>
       {days.map((d, i) => {
@@ -1260,8 +1275,10 @@ function PatternStrip({ pattern, days, labels, color }) {
             display: "flex", alignItems: "center", justifyContent: "center",
             border: `1px solid ${on ? "transparent" : "var(--border-1)"}`,
           }}>
-            {on && <span style={{ position: "absolute", inset: 0, background: color || "var(--text-3)", opacity: 0.85 }} />}
-            <span style={{ position: "relative", fontSize: 9.5, fontWeight: on ? 800 : 500, color: on ? "var(--text-1)" : "var(--text-5)" }}>{labels[i]}</span>
+            {/* A pattern day is binary — on or off — so it is drawn at the strip's
+                busiest-day weight, in the same ink and with the same knockout rule. */}
+            {on && <span style={{ position: "absolute", inset: 0, background: "var(--text-2)", opacity: DAY_INK_MAX }} />}
+            <span style={{ position: "relative", fontSize: 9.5, fontWeight: on ? 800 : 500, color: on ? dayLetter(DAY_INK_MAX) : "var(--text-5)" }}>{labels[i]}</span>
           </span>
         );
       })}
@@ -1272,7 +1289,7 @@ function PatternStrip({ pattern, days, labels, color }) {
 // Hover chart for the meeting-pattern breakdown (desktop only). Anchored to the weekday strip,
 // portaled to document.body (escapes the app's transform:scale). Horizontal bars, most common on
 // top; day-patterns get a mini strip, async/other a text label. Laid out LTR as a chart.
-function SchedulePopover({ pat, color, rect }) {
+function SchedulePopover({ pat, rect }) {
   const { t } = useLanguage();
   // Weekday columns M–F always; add Saturday/Sunday columns only when this course actually has
   // weekend sections, so the rare weekend patterns (S/U) render visibly instead of as raw codes.
@@ -1331,20 +1348,27 @@ function SchedulePopover({ pat, color, rect }) {
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <span style={{ width: LABEL_W, flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 {isStrip
-                  ? <PatternStrip pattern={pattern} days={days} labels={labels} color={color} />
+                  ? <PatternStrip pattern={pattern} days={days} labels={labels} />
                   : isAsync
-                    ? <bdi style={{ fontSize: 11, fontWeight: 700, color: color || "var(--text-3)" }}>{t("info.offered.pop.online")}</bdi>
+                    ? <bdi style={{ fontSize: 11, fontWeight: 700, color: "var(--text-2)" }}>{t("info.offered.pop.online")}</bdi>
                     : <bdi style={{ fontSize: 10.5, color: "var(--text-4)", fontStyle: "italic" }}>
                         {isOther ? t("info.offered.pop.other") : pattern}
                       </bdi>}
               </span>
               <div style={{ flex: 1, height: 9, borderRadius: 5, background: "var(--bg-surface-2)", overflow: "hidden" }}>
-                <div style={{ width: `${Math.max(2, pct)}%`, height: "100%", borderRadius: 5, background: isOther ? "var(--text-5)" : (color || "var(--text-3)"), opacity: isOther ? 0.55 : 0.85 }} />
+                <div style={{ width: `${Math.max(2, pct)}%`, height: "100%", borderRadius: 5, background: isOther ? "var(--text-5)" : "var(--text-2)", opacity: isOther ? 0.55 : DAY_INK_MAX }} />
               </div>
               <span style={{ minWidth: 30, textAlign: "right", fontSize: 11, color: "var(--text-3)", fontVariantNumeric: "tabular-nums" }}>{pct}%</span>
             </div>
           );
         })}
+      </div>
+      {/* What the percentages are OF — the one thing the bars cannot say. They are
+          shares of ENROLMENT (a 400-seat MWF lecture outweighs a 20-seat TF section),
+          pooled over every term on record rather than a recent window, which is why
+          "62%" is not the same as "62% of sections". */}
+      <div style={{ fontSize: 8.5, color: "var(--text-5)", fontStyle: "italic", marginTop: 13, lineHeight: "calc(1.4 * var(--lh-scale, 1))" }}>
+        <bdi>{t("info.offered.pop.basis")}</bdi>
       </div>
     </div>,
     document.body

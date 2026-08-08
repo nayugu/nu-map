@@ -268,6 +268,7 @@ export const strings = {
   "info.offered.pop.avgDesc":     "moy. de places libres par section",
   "info.offered.pop.online":      "en ligne",
   "info.offered.pop.other":       "autres",
+  "info.offered.pop.basis":       "Part des inscriptions, tous les semestres enregistrés.",
   "info.drag.title":              "glisser pour placer",
 
   // ── Header ─────────────────────────────────────────────────────

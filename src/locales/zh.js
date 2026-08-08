@@ -493,6 +493,7 @@ export const strings = {
   "info.offered.pop.avgDesc":     "\u6bcf\u73ed\u5e73\u5747\u7a7a\u4f4d",
   "info.offered.pop.online":      "\u5728\u7ebf",
   "info.offered.pop.other":       "\u5176\u4ed6",
+  "info.offered.pop.basis":       "所有已记录学期的选课人数占比。",
   "info.drag.title":              "\u62d6\u62fd\u653e\u7f6e",
   "info.catalog.link":            "\u8bfe\u7a0b\u76ee\u5f55 \u2197",
   "info.ratemyhusky.link":        "RateMyHusky ↗",

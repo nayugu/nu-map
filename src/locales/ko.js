@@ -268,6 +268,7 @@ export const strings = {
   "info.offered.pop.avgDesc":     "분반당 평균 여석",
   "info.offered.pop.online":      "온라인",
   "info.offered.pop.other":       "기타",
+  "info.offered.pop.basis":       "기록된 모든 학기의 수강 인원 기준 비율입니다.",
   "info.drag.title":              "드래그하여 배치",
 
   // ── Header ─────────────────────────────────────────────────────

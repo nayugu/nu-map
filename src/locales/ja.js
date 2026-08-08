@@ -269,6 +269,7 @@ export const strings = {
   "info.offered.pop.avgDesc":     "1クラスあたりの平均空き席",
   "info.offered.pop.online":      "オンライン",
   "info.offered.pop.other":       "その他",
+  "info.offered.pop.basis":       "記録されている全学期の履修者数に占める割合。",
   "info.drag.title":              "ドラッグして配置",
 
   // ── Header ─────────────────────────────────────────────────────

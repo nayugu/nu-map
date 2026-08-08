@@ -272,6 +272,7 @@ export const strings = {
   "info.offered.pop.avgDesc":     "avg. open seats per section",
   "info.offered.pop.online":      "online",
   "info.offered.pop.other":       "other",
+  "info.offered.pop.basis":       "Share of enrolment, all recorded terms.",
   "info.drag.title":              "drag to place",
 
   // ── Header ─────────────────────────────────────────────────────

@@ -268,6 +268,7 @@ export const strings = {
   "info.offered.pop.avgDesc":     "प्रति सेक्शन औसत खाली सीटें",
   "info.offered.pop.online":      "ऑनलाइन",
   "info.offered.pop.other":       "अन्य",
+  "info.offered.pop.basis":       "सभी दर्ज सत्रों में नामांकन का अनुपात।",
   "info.drag.title":              "स्थान के लिए ड्रैग करें",
 
   // ── Header ─────────────────────────────────────────────────────
