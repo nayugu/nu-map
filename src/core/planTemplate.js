@@ -1,0 +1,158 @@
+// ═══════════════════════════════════════════════════════════════════
+// PLAN TEMPLATE  (pure — no React, no I/O)
+//
+// Deciding whether a department's published plan can be loaded, and which of
+// its variants to offer.
+//
+// ── Why "empty" is the whole question ──────────────────────────────
+//
+// A published plan assumes year 1 is your first year and that nothing is done
+// yet. It is not student-context-aware; there is no version of it for someone
+// three semesters in. Applied over existing work it destroys nothing and
+// produces nonsense — courses already placed are skipped, the rest land at PLAN
+// positions rather than relative to what the student has done.
+//
+// So the canvas decides the outcome, not a preference:
+//
+//   empty      apply into it
+//   not empty  seed a NEW plan; never overwrite
+//
+// ── And "empty" is not "no placements" ─────────────────────────────
+//
+// A canvas holding only co-op blocks, or only reservations from a previous
+// load, is not empty — and treating it as one would apply a plan on top of a
+// plan. Every store that can hold a decision counts.
+// ═══════════════════════════════════════════════════════════════════
+
+import { applySamplePlan } from "./applySamplePlan.js";
+
+/**
+ * Is there nothing on this canvas to disturb?
+ *
+ * Deliberately conservative: anything it cannot see counts as occupied only if
+ * it is one of these stores, so a new store added later must be added here too.
+ * Getting this wrong in the safe direction costs a student one extra click;
+ * getting it wrong the other way applies a plan on top of their work.
+ *
+ * `semOrders` and `grades` are excluded on purpose. Ordering is cosmetic, and a
+ * grade cannot exist without the placement it belongs to.
+ */
+export function isPlanEmpty({
+  placements, reservations, specialTermPl, placedOut,
+} = {}) {
+  const empty = (o) => !o || Object.keys(o).length === 0;
+  const emptySet = (s) => !s || (typeof s.size === "number" ? s.size === 0 : Object.keys(s).length === 0);
+  return empty(placements) && empty(reservations) && empty(specialTermPl) && emptySet(placedOut);
+}
+
+/**
+ * How many academic years a variant covers.
+ *
+ * COUNTED, never read from the label. The label's English year count agrees
+ * with this in 597 of 597 corpus cases, so counting is free of the parsing —
+ * and of the eight locales the app ships in.
+ */
+export const templateYears = (plan) => (plan?.years?.length ?? 0);
+
+/**
+ * Which variants to offer a student whose degree spans `years`.
+ *
+ * 52.7% of programs publish exactly one, so most of the time this returns it
+ * unchanged. Of the rest, filtering by length resolves the year axis entirely —
+ * leaving at most the co-op cycle to ask about.
+ *
+ * **Falls back to everything when nothing matches.** 272 programs publish only
+ * a four-year plan, and others only a five-, three- or two-year one; a student
+ * whose cohort spans a different number of years should be offered what exists
+ * rather than told there is nothing. Offering a plan that does not fit their
+ * timeline is a warning, not a reason to hide it — a planner warns, never
+ * blocks.
+ */
+export function variantsFor(plans, { years = null } = {}) {
+  const list = Array.isArray(plans) ? plans.filter(Boolean) : [];
+  if (list.length <= 1 || !years) return list;
+  const fits = list.filter(p => templateYears(p) === years);
+  return fits.length ? fits : list;
+}
+
+/**
+ * Should we offer to load a sample plan, and with which verb?
+ *
+ * Four independent questions, kept independent — collapsing them is what broke
+ * the first two versions of this design:
+ *
+ *   1. is there anything to offer?     the program must publish a sample plan
+ *   2. can it possibly fit?            not for a true double major
+ *   3. is it already the basis?        do not re-offer what is already loaded
+ *   4. what would it cost?             empty canvas → Load; otherwise Replace/New
+ *
+ * ── Why (3) exists ─────────────────────────────────────────────────
+ *
+ * "Offer when the canvas is empty" seems sufficient and is not. Load a plan,
+ * then change major: the canvas is no longer empty, so the offer never returns —
+ * and the student is left holding the OLD major's plan with no way back. Asking
+ * "does the canvas already reflect THIS major's plan" catches that; asking "is
+ * it empty" cannot.
+ *
+ * ── Why (2) is a hard suppression ──────────────────────────────────
+ *
+ * A sample plan schedules a median 131 SH against a 128 SH degree — the whole
+ * canvas. Of that, 28 SH is free electives, which is what a second major would
+ * have to consume; a second major needs 40–60. So it does not fit, and no
+ * department publishes a plan for a true double major anyway (Northeastern's
+ * answer to "two subjects" is the combined major, which is a single program
+ * with its own plan and is unaffected by this rule).
+ *
+ * Loading one anyway is worse than starting empty: it hands the student four
+ * full years to dismantle, and looks complete while covering half their degree.
+ * It stays reachable from the plan library as a REFERENCE in its own slot.
+ *
+ * ── Replace is never described as safe ─────────────────────────────
+ *
+ * `appliedTemplate` proves the canvas STARTED as a sample plan. It says nothing
+ * about how much the student has changed since, so replace is destructive,
+ * needs confirming, and relies on undo. Claiming otherwise would be exactly the
+ * false confidence rule 4 forbids.
+ *
+ * @param {object} ctx
+ * @param {string} ctx.major                 the selected program key
+ * @param {string} [ctx.major2]              a second, separate major
+ * @param {boolean} ctx.hasSamplePlan        does that program publish one
+ * @param {{programKey?: string}} [ctx.appliedTemplate]
+ * @param {boolean} ctx.canvasEmpty          from isPlanEmpty()
+ * @returns {{offer: boolean, reason: string, verbs: string[]}}
+ */
+export function sampleplanOffer({
+  major, major2 = "", hasSamplePlan = false, appliedTemplate = null, canvasEmpty = false,
+} = {}) {
+  const no = (reason) => ({ offer: false, reason, verbs: [] });
+
+  if (!major) return no("no-program");
+  if (major2) return no("double-major");
+  if (!hasSamplePlan) return no("no-sample-plan");
+  if (appliedTemplate?.programKey === major) return no("already-applied");
+
+  return canvasEmpty
+    ? { offer: true, reason: "empty-canvas", verbs: ["load"] }
+    : { offer: true, reason: "occupied-canvas", verbs: ["replace", "new"] };
+}
+
+/**
+ * What loading this variant would actually do, counted by DOING it.
+ *
+ * The checkbox has to say that half of what arrives names no course, or the
+ * student meets a planner full of blanks and reads it as broken. These numbers
+ * come from `applySamplePlan` itself rather than a second walk of the grid, so
+ * they cannot describe something other than what happens.
+ *
+ * @returns {{courses: number, placeholders: number, coops: number}}
+ */
+export function describeTemplate(plan, ctx = {}) {
+  if (!plan) return { courses: 0, placeholders: 0, coops: 0 };
+  const r = applySamplePlan(plan, ctx);
+  return {
+    courses: r.placed.length,
+    placeholders: r.reserved.length,
+    coops: r.coops.length,
+  };
+}

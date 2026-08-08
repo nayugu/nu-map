@@ -51,13 +51,20 @@ function blockAfter(marker) {
 // Fields captureCurrentPlan writes. Shorthand (`placements,`) and explicit
 // (`grades: gradesRaw,`) both count; `version`/`exported` are metadata.
 function capturedFields() {
-  const body = blockAfter("const captureCurrentPlan = ");
+  // Comments come out FIRST, before any splitting. Stripping them per-fragment
+  // afterwards cannot work: a comma inside a comment splits the line, and every
+  // fragment after the comma has lost the `//` that marked it as prose. A note
+  // reading "— and, worse, forget that…" invented a field called `worse`, and
+  // the guard then reported it as lost on reload. Anything that makes a comment
+  // fail this test teaches the next person to write worse comments.
+  const body = blockAfter("const captureCurrentPlan = ")
+    .split("\n").map(l => l.replace(/\/\/.*$/, "")).join("\n");
   const out = new Set();
   // Split on commas, not lines. A line-anchored match saw only the FIRST name
   // on `placements, specialTermPl, semOrders, shOverrides, bonusSH,` and the
   // guard silently checked a fraction of the fields for as long as it existed.
   for (const raw of body.split(/[,\n]/)) {
-    const t = raw.replace(/\/\/.*$/, "").trim();
+    const t = raw.trim();
     if (!t || t === "{" || t === "}" || t === "});") continue;
     const m = /^([a-zA-Z_$][\w$]*)\s*(?::|$)/.exec(t);
     if (m) out.add(m[1]);

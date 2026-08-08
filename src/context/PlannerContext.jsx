@@ -207,6 +207,16 @@ export function PlannerProvider({ children }) {
   // `placements` — see src/core/reservations.js on why the audit must not be
   // able to see one.
   const [reservations,     setReservations]     = useState(() => (_saved?.persist && _saved.reservations) ? _saved.reservations : {});
+  // Which sample plan this canvas was built from, if any: {programKey, planLabel}.
+  //
+  // Provenance, and the reason the offer to load one can come BACK. "Offer when
+  // the canvas is empty" looks sufficient and is not — load a plan, change
+  // major, and the canvas is no longer empty, so an emptiness rule goes silent
+  // forever and the student keeps the old major's plan with no way out.
+  //
+  // It proves the canvas STARTED as a sample plan. It does not prove the
+  // student has left it alone, so replacing is still destructive.
+  const [appliedTemplate,  setAppliedTemplate]  = useState(() => (_saved?.persist && _saved.appliedTemplate) ? _saved.appliedTemplate : null);
   const [semOrders,        setSemOrders]        = useState(() => (_saved?.persist && _saved.semOrders)        ? _saved.semOrders        : {});
   const [offeredOverrides, setOfferedOverrides] = useState(() => (_saved?.persist && _saved.offeredOverrides) ? _saved.offeredOverrides : {});
   const [collapsedSubs,    setCollapsedSubs]    = useState(() => (_saved?.persist && _saved.collapsedSubs)    ? _saved.collapsedSubs    : {});
@@ -700,7 +710,7 @@ export function PlannerProvider({ children }) {
 
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
+    saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, appliedTemplate, planId: activePlanId });
   }, [persistEnabled, placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
 
   useEffect(() => {
@@ -720,7 +730,7 @@ export function PlannerProvider({ children }) {
     // wrote {"persist":true} to a junk key on every unload. The last-moment
     // safety net has never actually saved anything.
     const h = () => {
-      saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, planId: activePlanId });
+      saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, appliedTemplate, planId: activePlanId });
       // The SLOT is what the app reloads from, so it needs the same net.
       saveCurrentPlanToSlot();
     };
@@ -752,7 +762,7 @@ export function PlannerProvider({ children }) {
   useEffect(() => {
     // `reservations` is here so snapshotPlan can reach it — undo reads state
     // through this ref, so a field absent here is a field undo cannot restore.
-    stateRef.current    = { placements, reservations, specialTermPl, semOrders, placedOut, grades: gradesRaw };
+    stateRef.current    = { placements, reservations, specialTermPl, semOrders, placedOut, grades: gradesRaw, appliedTemplate };
     allEdgesRef.current = allEdges;
     onDropRef.current          = onDrop;
     onDropBankRef.current      = onDropBank;
@@ -1337,6 +1347,9 @@ export function PlannerProvider({ children }) {
     specialTermPl: stateRef.current.specialTermPl,
     semOrders:     stateRef.current.semOrders,
     grades:        stateRef.current.grades,
+    // Undoing the load of a sample plan must also forget that it was loaded,
+    // or the offer stays suppressed for a plan that is no longer there.
+    appliedTemplate: stateRef.current.appliedTemplate ?? null,
   });
 
   /** Apply a snapshot. The mirror of snapshotPlan, and the only reader of it. */
@@ -1348,6 +1361,9 @@ export function PlannerProvider({ children }) {
     setSpecialTermPl(snap.specialTermPl);
     setSemOrders(snap.semOrders);
     if (snap.grades) setGrades(snap.grades);
+    // Undefined means a snapshot from before this field existed — leave
+    // provenance alone rather than clearing something the undo never touched.
+    if (snap.appliedTemplate !== undefined) setAppliedTemplate(snap.appliedTemplate);
   };
 
   const pushUndo = () => {
@@ -1790,7 +1806,15 @@ export function PlannerProvider({ children }) {
    * is removed. Goes through pushUndo like any other edit, so a student who
    * does not like the result gets it back in one step.
    */
-  const applySamplePlanToPlan = (plan, programData = null, startYearIndex = 0) => {
+  /**
+   * Load a department's sample plan onto this canvas.
+   *
+   * `programKey` records WHICH program's plan this is, so the offer to load one
+   * can come back when the student changes major — see `appliedTemplate`.
+   * Callers that omit it (the temporary loader) still work; they just leave no
+   * provenance, and the offer behaves as though none had been loaded.
+   */
+  const applySamplePlanToPlan = (plan, programData = null, startYearIndex = 0, programKey = null) => {
     const result = mapSamplePlan(plan, {
       semesters: SEMESTERS, courseMap, placements, reservations, specialTermPl,
       programData, startYearIndex,
@@ -1803,6 +1827,7 @@ export function PlannerProvider({ children }) {
     setPlacements(result.placements);
     setReservations(result.reservations);
     setSpecialTermPl(result.specialTermPl);
+    if (programKey) setAppliedTemplate({ programKey, planLabel: plan?.label ?? "" });
     return result;
   };
 
@@ -2419,6 +2444,10 @@ export function PlannerProvider({ children }) {
     // plan with no courses and no major, which reads as the reset having
     // failed rather than as anything deliberate.
     setReservations({});
+    // A reset canvas came from nothing. Keeping the provenance would suppress
+    // the offer to load a sample plan that is no longer there — the exact
+    // failure the field exists to prevent, pointed the other way.
+    setAppliedTemplate(null);
     setSpecialTermPl({});
     setSemOrders({});
     setOfferedOverrides({});
@@ -2866,6 +2895,11 @@ export function PlannerProvider({ children }) {
     // Present in plan slots (localStorage) only. Share links go through
     // planShare's _KEYS allowlist, which deliberately omits grades.
     grades: gradesRaw,
+    // Which sample plan this canvas came from. It travels with the plan for the
+    // same reason reservations do: without it, switching slots and back makes
+    // the app re-offer a plan that is already loaded — and, worse, forget that
+    // a canvas belongs to a major the student has since changed.
+    appliedTemplate,
   });
 
   // Restore a plan data object into all state
@@ -2906,6 +2940,12 @@ export function PlannerProvider({ children }) {
     // student had just loaded but which had not yet been autosaved.
     if (d.reservations && typeof d.reservations === "object") setReservations(d.reservations);
     else if (!initial) setReservations({});
+    // Same ABSENT ≠ EMPTY rule. A slot written before this field existed has no
+    // key; clearing provenance there would re-offer a plan already loaded. But
+    // switching to a slot that genuinely has none must clear it, or the new
+    // canvas inherits the previous plan's origin.
+    if (d.appliedTemplate !== undefined) setAppliedTemplate(d.appliedTemplate);
+    else if (!initial) setAppliedTemplate(null);
     setSpecialTermPl(migrateSpecialTermPl(d));
     setSemOrders(d.semOrders ?? {});
     setShOverrides(d.shOverrides ?? {});
@@ -3089,7 +3129,7 @@ export function PlannerProvider({ children }) {
     // saved to state-v2, never mirrored to the slot, and then overwritten
     // by the stale slot on the next reload — silent data loss that looks
     // like "it didn't save". That was live for grades and placedOut.
-  }, [placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, reservations, appliedTemplate, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
@@ -3129,6 +3169,9 @@ export function PlannerProvider({ children }) {
     // plan or importing a backup arrived with the named courses and none of the
     // reserved cards — which for a later year is most of the plan.
     setReservations(d.reservations ?? {});
+    // Provenance travels through this door too. An imported or shared plan that
+    // was built from a sample plan should not be offered that same plan again.
+    setAppliedTemplate(d.appliedTemplate ?? null);
     setSpecialTermPl(migrateSpecialTermPl(d));
     setSemOrders(d.semOrders ?? {});
     setShOverrides(prev => d.shOverrides ?? prev);
@@ -3703,6 +3746,7 @@ export function PlannerProvider({ children }) {
     // needs no cases for reservations. Everything that totals credit toward the
     // DEGREE keeps reading `placements`, which cannot contain one.
     reservations, setReservations,
+    appliedTemplate, setAppliedTemplate,
     semesterCards, semesterCardIds, semesterLoad, semView,
     applySamplePlanToPlan,
     // Load state
