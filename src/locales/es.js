@@ -127,6 +127,7 @@ export const strings = {
   "grad.plan.cycle.spring":  "Ciclo de primavera",
   "grad.plan.cycle.fall":    "Ciclo de otoño",
   "grad.plan.replace":         "Reemplazar mi plan",
+  "grad.plan.replace.warn":    "Esto descarta {n} cursos que colocaste tú.",
   "grad.plan.replace.confirm": "¿Reemplazar todo este plan por el plan de ejemplo? Puedes deshacerlo.",
   "grad.plan.newplan.name":    "{name} (plan de ejemplo)",
   "grad.plan.did.loaded":      "Plan de ejemplo aplicado.",

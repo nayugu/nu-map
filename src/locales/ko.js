@@ -127,6 +127,7 @@ export const strings = {
   "grad.plan.cycle.spring":  "봄 사이클",
   "grad.plan.cycle.fall":    "가을 사이클",
   "grad.plan.replace":         "내 플랜 바꾸기",
+  "grad.plan.replace.warn":    "직접 배치한 과목 {n}개가 사라집니다.",
   "grad.plan.replace.confirm": "이 플랜의 모든 내용을 샘플 플랜으로 바꿀까요? 되돌릴 수 있습니다.",
   "grad.plan.newplan.name":    "{name} (샘플 플랜)",
   "grad.plan.did.loaded":      "샘플 플랜을 배치했습니다.",

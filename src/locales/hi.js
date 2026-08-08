@@ -127,6 +127,7 @@ export const strings = {
   "grad.plan.cycle.spring":  "स्प्रिंग साइकिल",
   "grad.plan.cycle.fall":    "फ़ॉल साइकिल",
   "grad.plan.replace":         "मेरी योजना बदलें",
+  "grad.plan.replace.warn":    "इससे आपके स्वयं रखे गए {n} पाठ्यक्रम हट जाएंगे।",
   "grad.plan.replace.confirm": "इस योजना की सारी सामग्री नमूना योजना से बदलें? आप इसे पूर्ववत कर सकते हैं।",
   "grad.plan.newplan.name":    "{name} (नमूना योजना)",
   "grad.plan.did.loaded":      "नमूना योजना लगा दी गई।",

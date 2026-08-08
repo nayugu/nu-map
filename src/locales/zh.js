@@ -127,6 +127,7 @@ export const strings = {
   "grad.plan.cycle.spring":  "春季周期",
   "grad.plan.cycle.fall":    "秋季周期",
   "grad.plan.replace":         "替换我的计划",
+  "grad.plan.replace.warn":    "这会丢弃你自己安排的 {n} 门课程。",
   "grad.plan.replace.confirm": "用示例计划替换此计划的全部内容？可以撤销。",
   "grad.plan.newplan.name":    "{name}（示例计划）",
   "grad.plan.did.loaded":      "已排入示例计划。",

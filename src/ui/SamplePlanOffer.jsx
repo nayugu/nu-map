@@ -94,11 +94,24 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   const safeIdx  = Math.min(Math.max(variantIdx, 0), Math.max(variants.length - 1, 0));
   const chosen   = variants[safeIdx] ?? null;
 
-  // Counted against THIS canvas, so "adds N" is what this student would get —
-  // a course they already placed is not counted again.
-  const counts = useMemo(() => (chosen ? describeTemplate(chosen, {
-    semesters: SEMESTERS, courseMap, placements, reservations, specialTermPl, programData,
-  }) : null), [chosen, SEMESTERS, courseMap, placements, reservations, specialTermPl, programData]);
+  // Counted against the canvas the OFFERED VERB will actually use.
+  //
+  // This was wrong and read as harmless. On an occupied canvas the verbs are
+  // "open as new plan" and "replace", and both lay the plan out on a CLEAN
+  // canvas — so counting against the current one produced "adds 2 courses and
+  // 16 placeholders" for a student with sixteen courses already chosen. It
+  // described an action that was not on offer, and made replacing sound like a
+  // small addition when it would discard every one of those choices.
+  const ontoEmpty = offer.state !== "load";
+  const counts = useMemo(() => (chosen ? describeTemplate(chosen, ontoEmpty
+    ? { semesters: SEMESTERS, courseMap, programData }
+    : { semesters: SEMESTERS, courseMap, placements, reservations, specialTermPl, programData }
+  ) : null), [chosen, ontoEmpty, SEMESTERS, courseMap, placements, reservations, specialTermPl, programData]);
+
+  // What replacing would throw away. The count that matters is the student's
+  // own work, so reservations are excluded — a placeholder is the plan's, not
+  // theirs, and counting it would inflate the warning.
+  const losing = useMemo(() => Object.keys(placements ?? {}).length, [placements]);
 
   if (!offer.show) return null;
 
@@ -108,7 +121,12 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   };
 
   const replace = () => {
-    if (!window.confirm(t("grad.plan.replace.confirm"))) return;
+    // The count goes in the confirm too. "Replace everything?" is easy to wave
+    // through; "discard 16 courses you placed" is the fact being agreed to.
+    const msg = losing > 0
+      ? `${t("grad.plan.replace.warn", { n: losing })}\n\n${t("grad.plan.replace.confirm")}`
+      : t("grad.plan.replace.confirm");
+    if (!window.confirm(msg)) return;
     applySamplePlanToPlan(chosen, programData, 0, path, { replace: true });
     setJustDid("replaced");
   };
@@ -178,6 +196,12 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
             </div>
           )}
 
+          {/* The cost of REPLACING is deliberately not shown here.
+              A warning box above the button row cannot say which button it is
+              about, so beside "open as new plan" — which loses nothing — it
+              made the safe action look dangerous too. It belongs where it can
+              only mean one thing: the red button, and the confirm behind it. */}
+
           {/* Only when the cohort's year count leaves a real choice. */}
           {variants.length > 1 && (
             <VariantPicker
@@ -191,9 +215,12 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
                   variant or branching a comparison is. */}
               {!loaded && <button onClick={primary} style={primaryBtn(isPhone)}>{primaryLabel}</button>}
               {loaded && <button onClick={openAsNew} style={primaryBtn(isPhone)}>{t("grad.plan.newplan")}</button>}
-              {/* Destructive, so never the default and always confirmed. */}
+              {/* Destructive, so never the default, always confirmed, and
+                  coloured like what it does. It read as an ordinary link
+                  beside the safe action — the same weight as "open as new
+                  plan", which loses nothing. */}
               {offer.verbs.includes("replace") && (
-                <button onClick={replace} style={linkBtn}>{t("grad.plan.replace")}</button>
+                <button onClick={replace} style={dangerBtn}>{t("grad.plan.replace")}</button>
               )}
               {justDid && (
                 <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn}>
@@ -317,4 +344,10 @@ const primaryBtn = (isPhone) => ({
 const linkBtn = {
   fontSize: 10, background: "transparent", border: "none", color: "var(--link-1)",
   cursor: "pointer", padding: 0,
+};
+/** Replacing discards the student's own work, so it is coloured like it. */
+const dangerBtn = {
+  fontSize: 10, fontWeight: 600, background: "transparent",
+  border: "1px solid var(--error)", borderRadius: 5, padding: "3px 8px",
+  color: "var(--error-text)", cursor: "pointer",
 };

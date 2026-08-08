@@ -127,6 +127,7 @@ export const strings = {
   "grad.plan.cycle.spring":  "دورة الربيع",
   "grad.plan.cycle.fall":    "دورة الخريف",
   "grad.plan.replace":         "استبدال خطتي",
+  "grad.plan.replace.warn":    "سيؤدي هذا إلى حذف {n} مقرراً وضعتها بنفسك.",
   "grad.plan.replace.confirm": "هل تريد استبدال كل ما في هذه الخطة بالخطة النموذجية؟ يمكنك التراجع.",
   "grad.plan.newplan.name":    "{name} (خطة نموذجية)",
   "grad.plan.did.loaded":      "تم إدراج الخطة النموذجية.",

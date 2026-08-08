@@ -128,6 +128,9 @@ export const strings = {
   "grad.plan.cycle.spring":  "Spring cycle",
   "grad.plan.cycle.fall":    "Fall cycle",
   "grad.plan.replace":         "Replace my plan",
+  // Says what is LOST, not what arrives. Without it a destructive action reads
+  // as a small addition — "adds 2 courses" beside sixteen the student chose.
+  "grad.plan.replace.warn":    "This discards {n} courses you placed yourself.",
   "grad.plan.replace.confirm": "Replace everything in this plan with the sample plan? You can undo this.",
   "grad.plan.newplan.name":    "{name} (sample plan)",
   "grad.plan.did.loaded":      "Sample plan laid out.",

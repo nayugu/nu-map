@@ -128,6 +128,7 @@ export const strings = {
   "grad.plan.cycle.spring":  "春サイクル",
   "grad.plan.cycle.fall":    "秋サイクル",
   "grad.plan.replace":         "プランを置き換える",
+  "grad.plan.replace.warn":    "自分で配置した科目 {n} 件が失われます。",
   "grad.plan.replace.confirm": "このプランの内容をすべてサンプルプランに置き換えますか？元に戻せます。",
   "grad.plan.newplan.name":    "{name}（サンプルプラン）",
   "grad.plan.did.loaded":      "サンプルプランを配置しました。",
