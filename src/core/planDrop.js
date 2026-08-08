@@ -88,12 +88,27 @@ export function dropOnCard(state, { dragId, targetId, targetSemId }, ctx = {}) {
   // ── Same term: a reorder ────────────────────────────────────────
   if (from === targetSemId) {
     const cur = orderIn(targetSemId, gridPlacements);
+    const fi = cur.indexOf(dragId);
+    const ti = cur.indexOf(targetId);
     const rest = cur.filter(id => !moving.includes(id));
-    const ti = rest.indexOf(targetId);
+
     // An unknown target means the end of the term, never "do nothing" — a
     // silently ignored drag reads as the app being broken rather than a rule
     // being applied.
-    const at = ti < 0 ? rest.length : ti;
+    if (ti < 0) {
+      return { ...state, semOrders: { ...semOrders, [targetSemId]: [...rest, ...moving] } };
+    }
+
+    // WHICH SIDE of the target to land on depends on the direction of travel.
+    // Dragging BACKWARD (from after the target) lands before it; dragging
+    // FORWARD lands after it. Always inserting before is why a forward drag did
+    // nothing at all: removing the card first shifts everything left by one, so
+    // "before the target" is exactly where it started. Backward drags worked,
+    // which made it look like a per-semester quirk rather than one rule with a
+    // missing case.
+    let at = rest.indexOf(targetId);
+    if (fi >= 0 && fi < ti) at += 1;
+
     return { ...state, semOrders: { ...semOrders, [targetSemId]: [
       ...rest.slice(0, at), ...moving, ...rest.slice(at),
     ] } };

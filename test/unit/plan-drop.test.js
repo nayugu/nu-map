@@ -191,3 +191,52 @@ test("a reservation dropped on a course in ANOTHER term lands at that position",
   assert.deepEqual(next.semOrders[SPR], [r.id, "CS3000"],
     "it took the target's position, not the end of the term");
 });
+
+// ── Reordering works in BOTH directions ────────────────────────────
+
+test("a forward drag moves the card past its target, not back where it was", () => {
+  // Inserting before the target after removing the dragged card is a no-op for
+  // forward drags: the removal shifts everything left by one, so "before the
+  // target" is exactly the position it came from. Backward drags worked, which
+  // made this look like a per-semester quirk instead of one missing case.
+  const cmap = Object.fromEntries(["A", "B", "C"].map(id => [id, { id, sh: 4 }]));
+  const state = {
+    placements: { A: FALL, B: FALL, C: FALL },
+    reservations: {},
+    semOrders: { [FALL]: ["A", "B", "C"] },
+  };
+  const c = { gridPlacements: state.placements, gridCourseMap: cmap };
+
+  const fwd = dropOnCard(state, { dragId: "A", targetId: "B", targetSemId: FALL }, c);
+  assert.deepEqual(fwd.semOrders[FALL], ["B", "A", "C"], "A lands after B");
+
+  const far = dropOnCard(state, { dragId: "A", targetId: "C", targetSemId: FALL }, c);
+  assert.deepEqual(far.semOrders[FALL], ["B", "C", "A"], "A lands after C");
+
+  const back = dropOnCard(state, { dragId: "C", targetId: "A", targetSemId: FALL }, c);
+  assert.deepEqual(back.semOrders[FALL], ["C", "A", "B"], "C lands before A");
+
+  const near = dropOnCard(state, { dragId: "C", targetId: "B", targetSemId: FALL }, c);
+  assert.deepEqual(near.semOrders[FALL], ["A", "C", "B"], "C lands before B");
+});
+
+test("reordering a reservation obeys the same rule in both directions", () => {
+  const r = createReservation({ semId: FALL, label: "Khoury Elective", sh: 4 });
+  const cmap = Object.fromEntries(["A", "B"].map(id => [id, { id, sh: 4 }]));
+  const state = {
+    placements: { A: FALL, B: FALL },
+    reservations: { [r.id]: r },
+    semOrders: { [FALL]: [r.id, "A", "B"] },
+  };
+  const c = {
+    gridPlacements: semesterOccupants(state.placements, state.reservations),
+    gridCourseMap: occupantCards(cmap, state.reservations),
+  };
+  const fwd = dropOnCard(state, { dragId: r.id, targetId: "B", targetSemId: FALL }, c);
+  assert.deepEqual(fwd.semOrders[FALL], ["A", "B", r.id], "forward");
+
+  const back = dropOnCard(
+    { ...state, semOrders: { [FALL]: ["A", "B", r.id] } },
+    { dragId: r.id, targetId: "A", targetSemId: FALL }, c);
+  assert.deepEqual(back.semOrders[FALL], [r.id, "A", "B"], "backward");
+});
