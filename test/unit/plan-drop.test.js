@@ -118,3 +118,67 @@ test("meaningless gestures change nothing rather than half-acting", () => {
   assert.equal(dropOnCard(state, { dragId: "CS2500", targetId: "~res:gone", targetSemId: FALL }, ctx), null,
     "onto a reservation that no longer exists");
 });
+
+// ── The two cases that silently did nothing ────────────────────────
+
+test("one reservation swaps with another in the same term", () => {
+  const { ctx } = setup();
+  const a = createReservation({ semId: FALL, label: "Khoury Elective", sh: 4 });
+  const b = createReservation({ semId: FALL, label: "General Elective", sh: 4 });
+  const state = {
+    placements: { CS2500: FALL },
+    reservations: { [a.id]: a, [b.id]: b },
+    semOrders: {},
+  };
+  const c = {
+    gridPlacements: semesterOccupants(state.placements, state.reservations),
+    gridCourseMap: occupantCards({ CS2500: { id: "CS2500", sh: 4 } }, state.reservations),
+  };
+  const next = dropOnCard(state, { dragId: b.id, targetId: a.id, targetSemId: FALL }, c);
+  assert.ok(next, "the gesture did something");
+  assert.ok(next.semOrders[FALL].indexOf(b.id) < next.semOrders[FALL].indexOf(a.id),
+    "the dragged card took the target's place");
+});
+
+test("a STALE stored order does not make a drag silently do nothing", () => {
+  // The stored order is written by any drop, so it can predate the cards now in
+  // the term. Reading it raw gave a list missing the ids being moved, indexOf
+  // returned -1, and the gesture bailed — which is what "you can't swap between
+  // reservations" was.
+  const a = createReservation({ semId: FALL, label: "Khoury Elective", sh: 4 });
+  const b = createReservation({ semId: FALL, label: "General Elective", sh: 4 });
+  const state = {
+    placements: { CS2500: FALL },
+    reservations: { [a.id]: a, [b.id]: b },
+    semOrders: { [FALL]: ["CS2500"] },      // written before either card existed
+  };
+  const c = {
+    gridPlacements: semesterOccupants(state.placements, state.reservations),
+    gridCourseMap: occupantCards({ CS2500: { id: "CS2500", sh: 4 } }, state.reservations),
+  };
+  const next = dropOnCard(state, { dragId: b.id, targetId: a.id, targetSemId: FALL }, c);
+  assert.ok(next, "still resolves against a stale order");
+  assert.ok(next.semOrders[FALL].includes(a.id) && next.semOrders[FALL].includes(b.id),
+    "and the order now contains every card actually in the term");
+});
+
+test("a reservation dropped on a course in ANOTHER term lands at that position", () => {
+  // Moving without touching the order left it at the end of the target term,
+  // which reads as the drag having gone somewhere else entirely.
+  const r = createReservation({ semId: FALL, label: "Khoury Elective", sh: 4 });
+  const state = {
+    placements: { CS2510: SPR, CS3000: SPR },
+    reservations: { [r.id]: r },
+    semOrders: { [SPR]: ["CS2510", "CS3000"] },
+  };
+  const cmap = { CS2510: { id: "CS2510", sh: 4 }, CS3000: { id: "CS3000", sh: 4 } };
+  const c = {
+    gridPlacements: semesterOccupants(state.placements, state.reservations),
+    gridCourseMap: occupantCards(cmap, state.reservations),
+  };
+  const next = dropOnCard(state, { dragId: r.id, targetId: "CS2510", targetSemId: SPR }, c);
+  assert.equal(next.reservations[r.id].semId, SPR, "it moved");
+  assert.deepEqual(next.semOrders[SPR], [r.id, "CS2510", "CS3000"],
+    "and landed on the card it was dropped on, not at the end");
+  assert.ok(!(next.semOrders[FALL] ?? []).includes(r.id), "and left the term it came from");
+});
