@@ -19,11 +19,11 @@
     </div>
 
     <h1>Major Requirements <span class="badge blue">scrape-majors.js</span></h1>
-    <p class="lead">Scrapes undergraduate degree requirements from <code>catalog.northeastern.edu</code> and writes <code>parsed.initial.json</code> files in the Major2 schema. This is nu-map's own scraper — a ground-up replacement for the stale <code>external/graduatenu</code> submodule data (since removed) that was missing writing requirements for ~45% of combined/joint programs.</p>
+    <p class="lead">Scrapes undergraduate degree requirements from <code>catalog.northeastern.edu</code> and writes <code>requirements.json</code> files in the Major2 schema. This is nu-map's own scraper — a ground-up replacement for the stale <code>external/graduatenu</code> submodule data (since removed) that was missing writing requirements for ~45% of combined/joint programs.</p>
 
     <div class="node-box">
       <div class="nb-group"><div class="nb-label">Script</div><div class="nb-value"><code>scripts/scrape-majors.js</code></div></div>
-      <div class="nb-group"><div class="nb-label">Output</div><div class="nb-value"><code>src/data/majors/{year}/{college}/{slug}/parsed.initial.json</code></div></div>
+      <div class="nb-group"><div class="nb-label">Output</div><div class="nb-value"><code>data/northeastern/programs/undergraduate/{year}/{college}/{slug}/requirements.json</code></div></div>
       <div class="nb-group"><div class="nb-label">Rate limit</div><div class="nb-value">600 ms between requests (override: <code>MAJORS_DELAY_MS=300</code>)</div></div>
       <div class="nb-group"><div class="nb-label">Duration</div><div class="nb-value">~45 minutes for all programs. Run <code>--dry-run</code> (first 5 programs) for a sanity check.</div></div>
     </div>
@@ -39,21 +39,21 @@
     </ul>
 
     <h2>Output path structure</h2>
-    <pre><code>src/data/majors/
+    <pre><code>data/northeastern/programs/undergraduate/
   2026/
     khoury/
       computer_science_bscs_(boston)/
-        parsed.initial.json
+        requirements.json
       computer_science_and_mathematics_bscs/
-        parsed.initial.json
+        requirements.json
     engineering/
       electrical_engineering_bsee/
-        parsed.initial.json
+        requirements.json
     ...</code></pre>
     <p>The path slug is derived from the program title: lowercased, commas removed, spaces replaced with underscores. The year tag defaults to the current calendar year but can be overridden with <code>--year 2025</code>.</p>
 
     <h2>When to run</h2>
-    <p>The scraped files in <code>src/data/majors/</code> are the sole source of requirement data — the old <code>external/graduatenu</code> submodule (~1,400 major files scraped by the GraduateNU team) has been removed. Run the Major Requirements adapter when:</p>
+    <p>The scraped files in <code>data/northeastern/programs/undergraduate/</code> are the sole source of requirement data — the old <code>external/graduatenu</code> submodule (~1,400 major files scraped by the GraduateNU team) has been removed. Run the Major Requirements adapter when:</p>
     <ul>
       <li>A new catalog year is published (Jan or May)</li>
       <li>A program's requirements have changed and the scraped data is stale</li>

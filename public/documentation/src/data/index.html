@@ -31,12 +31,12 @@
       <a class="child-card" href="./majorLoader/">
         <div class="cc-type">module</div>
         <div class="cc-name">majorLoader.js</div>
-        <div class="cc-desc">Lazy-loads Major2 requirement JSONs on demand from a Vite glob over the scraped data (src/data/majors/).</div>
+        <div class="cc-desc">Lazy-loads Major2 requirement JSONs on demand from a Vite glob over the scraped data (data/northeastern/programs/undergraduate/).</div>
       </a>
       <a class="child-card" href="./majorLoader/">
         <div class="cc-type">module</div>
         <div class="cc-name">minorLoader.js</div>
-        <div class="cc-desc">Mirror of majorLoader.js for minors — scraped folders ending in <code>_minor</code> inside src/data/majors/.</div>
+        <div class="cc-desc">Mirror of majorLoader.js for minors — scraped folders ending in <code>_minor</code> inside data/northeastern/programs/undergraduate/.</div>
       </a>
       <a class="child-card" href="./persistence/">
         <div class="cc-type">module</div>
@@ -46,11 +46,11 @@
     </div>
 
     <h2>majorLoader.js</h2>
-    <p>Major requirement JSONs come from our own scraper output (<code>scripts/scrape-majors.js</code> → <code>src/data/majors/</code>):</p>
+    <p>Major requirement JSONs come from our own scraper output (<code>scripts/scrape-majors.js</code> → <code>data/northeastern/programs/undergraduate/</code>):</p>
 
     <pre><code><span class="cmt">// Vite requires static string literals at the call site</span>
 const _moduleMap = import.meta.glob(
-  './majors/**/parsed.initial.json',
+  '../../data/northeastern/programs/undergraduate/**/requirements.json',
   { eager: false }
 );</code></pre>
 
@@ -69,7 +69,7 @@ const _moduleMap = import.meta.glob(
     <p><strong>History:</strong> requirement data originally came from an <code>external/graduatenu</code> git submodule (1,400+ major files scraped by the GraduateNU team). Our own scraper fully replaced it and the submodule was removed; saved plans holding old submodule paths are migrated by <code>canonicalizeMajorPath()</code>.</p>
 
     <h2>minorLoader.js</h2>
-    <p>Identical architecture to majorLoader — scraped minors live alongside majors in <code>src/data/majors/</code>, in folders ending with <code>_minor</code>. Exports <code>getMinorOptions()</code>, <code>getMinorOptionGroups()</code>, <code>loadMinor()</code>, <code>canonicalizeMinorPath()</code>.</p>
+    <p>Identical architecture to majorLoader — scraped minors live alongside majors in <code>data/northeastern/programs/undergraduate/</code>, in folders ending with <code>_minor</code>. Exports <code>getMinorOptions()</code>, <code>getMinorOptionGroups()</code>, <code>loadMinor()</code>, <code>canonicalizeMinorPath()</code>.</p>
 
     <h2>persistence.js</h2>
     <p>All plan state lives in one localStorage key, namespaced by <code>institution.storagePrefix</code>. The key format is <code>{prefix}-state-v2</code> — the <code>-v2</code> suffix is a schema version that allows breaking state changes to be handled cleanly (old keys are simply ignored).</p>
@@ -96,7 +96,7 @@ sequenceDiagram
     participant ML as majorLoader.js
     participant LS as localStorage
     participant FS as public/northeastern/ (static)
-    participant SCR as src/data/majors/ (Vite stubs)
+    participant SCR as data/northeastern/programs/undergraduate/ (Vite stubs)
 
     PC->>PS: loadSaved(storagePrefix)
     PS->>LS: read {prefix}-state-v2
@@ -110,7 +110,7 @@ sequenceDiagram
 
     Note over PC: User selects major in GradPanel
     PC->>ML: loadMajor(path)
-    ML->>SCR: lazy-import parsed.initial.json
+    ML->>SCR: lazy-import requirements.json
     ML-->>PC: Major2 requirement tree
 
     Note over PC: Any state mutation

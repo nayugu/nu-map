@@ -73,7 +73,7 @@ graph TB
     UI -->|"usePlanner()\nusePort()\nuseLanguage()"| CTX
     PC -->|"pure fn calls"| CORE
     PC -->|"I/O (ports as params)"| DATA
-    DATA -->|"Vite glob"| MJ[("src/data/majors/")]
+    DATA -->|"Vite glob"| MJ[("data/northeastern/programs/undergraduate/")]
     DATA -->|"read/write"| LS[("localStorage")]
     ADAPT -->|"courseCatalog.fetchAll()"| FS[("public/northeastern/\ncatalog-courses.json\nterm-history.json")]
 
@@ -142,7 +142,7 @@ graph TB
       <tbody>
         <tr><td><code>public/northeastern/catalog-courses.json</code></td><td>JSON array — scraped catalog data</td><td>App startup via <code>courseCatalog.fetchAll()</code></td></tr>
         <tr><td><code>public/northeastern/term-history.json</code></td><td>JSON — Banner term availability per course per semester</td><td>Merged into courses by <code>courseCatalog.fetchAll()</code></td></tr>
-        <tr><td><code>src/data/majors/</code></td><td>Major2 JSON — scraped from NU catalog</td><td>On major selection (Vite lazy import)</td></tr>
+        <tr><td><code>data/northeastern/programs/undergraduate/</code></td><td>Major2 JSON — scraped from NU catalog</td><td>On major selection (Vite lazy import)</td></tr>
         <tr><td><code>localStorage</code></td><td>JSON strings</td><td>App startup + every state mutation</td></tr>
       </tbody>
     </table></div>
