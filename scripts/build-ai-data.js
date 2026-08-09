@@ -695,6 +695,14 @@ const PAGE_CSS =
   + "th{text-align:left;background:#f8fafc}th,td{padding:6px 10px;border-bottom:1px solid #e2e8f0;vertical-align:top}"
   + ".chips{margin:.4em 0}.chips span{display:inline-block;background:#f1f5f9;border-radius:999px;padding:2px 12px;margin:2px 4px 2px 0;font-size:.85rem;color:#334155}"
   + ".muted{color:#64748b;font-size:.88rem}"
+  // The disclaimer's link inherits the paragraph's colour instead of taking the
+  // site red. It exists to give 13,000 internal links some anchor text; a red
+  // word mid-sentence would pull the eye to a link nobody needs to click, and
+  // the sentence reads as a disclaimer, not a signpost. It still underlines on
+  // hover, so it stays discoverable rather than hidden — the link is real and
+  // goes where it says, which is the line between restraint and cloaking.
+  + ".muted a{color:inherit;text-decoration:none}"
+  + ".muted a:hover{text-decoration:underline}"
   + "th.dim,td.dim{color:#94a3b8}"
   // Dashed underline = "suggestion, not a rule". Wavy would read as an
   // error and solid as a link, and both are wrong: these are provisional.
@@ -743,9 +751,19 @@ const writePage = ({ rel, section, title, heading, description, jsonUrl, body, w
   // The disclaimer is its own bottom section on every page: a hairline bar
   // (the footer's border-top), the disclaimer, the freshness stamp centered
   // on its own line, then the collapsed AI note directly beneath.
-  const disclaimerText = `NU Map is an independent, student-built planner — not affiliated
-with, endorsed by, or officially connected to Northeastern University. Data comes
-from the public catalog on a schedule; confirm with the official catalog and an
+  // "course planner for Northeastern" is the link, not a separate call to
+  // action. Every one of these pages already linked to the app through the
+  // header logo, which is an image and therefore carries no anchor text — so
+  // 13,000 internal links described their destination to a search engine as
+  // nothing at all. Anchor text is a description of the target written by a
+  // page other than the target, which is why it counts for more than a title
+  // tag; this phrase happens to be both the honest description and what
+  // someone actually types into a search box. It adds one word of visible
+  // copy and no new sentence.
+  const anchor = `<a href="${ORIGIN}">course planner for Northeastern</a>`;
+  const disclaimerText = `NU Map is an independent, student-built ${anchor} — not
+affiliated with, endorsed by, or officially connected to Northeastern University. Data
+comes from the public catalog on a schedule; confirm with the official catalog and an
 advisor.`;
   const stamp = `Data updated ${escapeHtml(meta.lastUpdated)} · page generated ${generatedAt.slice(0, 10)}.`;
   const aiInner = `<p>Full guide: <a href="${ORIGIN}/llms.txt">https://numap.app/llms.txt</a>. These
