@@ -10,7 +10,8 @@ import assert from "node:assert/strict";
 import { buildTree, MAX_DEPTH } from "../../src/core/planFolders.js";
 import {
   buildLibraryFile, parseLibraryFile, mergeLibrary, fileFolderDepth,
-  LIBRARY_FILE_KIND, LIBRARY_FILE_VERSION,
+  libraryToArchive, archiveToLibrary,
+  LIBRARY_FILE_KIND, LIBRARY_FILE_VERSION, LIBRARY_INDEX_PATH,
 } from "../../src/core/planLibraryFile.js";
 
 const F = (id, name, parentId = null) => ({ id, name, parentId });
@@ -257,6 +258,135 @@ test("merge › a tree that still fits is nested normally", () => {
   assert.equal(m.atRoot, false);
   const built = buildTree({ folders: [m.folder, ...m.folders], plans: m.plans });
   assert.equal(built.depthOf.get(m.folders[MAX_DEPTH - 2].id), MAX_DEPTH - 1);
+});
+
+// ── The archive flavour ───────────────────────────────────────────────
+
+/** libraryToArchive → the {path, text} shape archiveToLibrary consumes. */
+const toEntries = (doc) =>
+  libraryToArchive(doc).map(e => ({ path: e.path, text: JSON.stringify(e.json) }));
+
+test("archive › folders become directories, plans become .json files", () => {
+  const doc = buildLibraryFile(buildTree(fixture()), null, snapshotOf);
+  const paths = libraryToArchive(doc).map(e => e.path).sort();
+  assert.ok(paths.includes(LIBRARY_INDEX_PATH));
+  assert.ok(paths.includes("Advisees/Fall 2026/Current.json"), paths.join("\n"));
+  assert.ok(paths.includes("Templates/Blank UG.json"));
+  assert.ok(paths.includes("Scratch.json"), "a root plan sits at the archive root");
+});
+
+test("archive › SPACES in names survive into the path", () => {
+  // The sanitiser strips illegal characters and control codes; a space is
+  // neither, and folding it would rename every advisee on the way out.
+  const doc = buildLibraryFile(buildTree(fixture()), null, snapshotOf);
+  const paths = libraryToArchive(doc).map(e => e.path);
+  assert.ok(paths.some(p => p.includes("Fall 2026")), "folder space kept");
+  assert.ok(paths.some(p => p.includes("Blank UG.json")), "plan space kept");
+});
+
+test("archive › a name that cannot be a filename is sanitised, not dropped", () => {
+  const state = {
+    folders: [F("f", "CS/DS")],
+    plans: [P("p", 'a:b*c?d"e<f>g|h', "f"), P("q", "   ")],
+  };
+  const doc = buildLibraryFile(buildTree(state), null, snapshotOf);
+  const paths = libraryToArchive(doc).map(e => e.path);
+  assert.ok(paths.every(p => !/[:*?"<>|]/.test(p.replace(/\.json$/, ""))), paths.join("\n"));
+  assert.ok(paths.some(p => p.startsWith("CS_DS/")), "the folder's slash is folded, not nested");
+  assert.ok(paths.some(p => /untitled/.test(p)), "a blank name still gets a file");
+});
+
+test("archive › sibling plans sharing a name get distinct files", () => {
+  // Only FOLDER names are deduplicated in the app, so this is reachable.
+  const state = { folders: [], plans: [P("a", "Current"), P("b", "Current"), P("c", "current")] };
+  const doc = buildLibraryFile(buildTree(state), null, snapshotOf);
+  const paths = libraryToArchive(doc).filter(e => e.path !== LIBRARY_INDEX_PATH).map(e => e.path);
+  assert.equal(new Set(paths.map(p => p.toLowerCase())).size, 3, paths.join("\n"));
+});
+
+test("archive › every entry is a single-plan file the ordinary Load can open", () => {
+  const doc = buildLibraryFile(buildTree(fixture()), null, snapshotOf);
+  for (const e of libraryToArchive(doc)) {
+    if (e.path === LIBRARY_INDEX_PATH) continue;
+    // importPlanJSON checks exactly these two things.
+    assert.equal(e.json.version, 1, e.path);
+    assert.ok(typeof e.json.planName === "string" && e.json.planName, e.path);
+  }
+});
+
+test("archive › round trip restores EXACT names, defeating the lossy paths", () => {
+  // The index is what makes this exact: "CS/DS" cannot be a directory name,
+  // but it is still what the folder is called.
+  const state = {
+    folders: [F("f", "CS/DS")],
+    plans: [P("a", "Current", "f", { student: "José Ramírez" }), P("b", "Current", "f")],
+  };
+  const doc = buildLibraryFile(buildTree(state), null, snapshotOf);
+  const back = archiveToLibrary(toEntries(doc));
+  assert.ok(back.ok);
+  assert.deepEqual(back.folders.map(f => f.name), ["CS/DS"]);
+  assert.deepEqual(back.plans.map(p => p.name).sort(), ["Current", "Current"]);
+  assert.equal(back.plans.find(p => p.student)?.student, "José Ramírez");
+});
+
+test("archive › an EMPTY folder survives, having no file to imply it", () => {
+  const state = { folders: [F("empty", "Spring 2027"), F("t", "Templates")], plans: [P("p", "X", "t")] };
+  const doc = buildLibraryFile(buildTree(state), null, snapshotOf);
+  const back = archiveToLibrary(toEntries(doc));
+  assert.ok(back.ok);
+  assert.ok(back.folders.some(f => f.name === "Spring 2027"), "the empty folder is carried by the index");
+});
+
+test("archive › with NO index, structure is read from the directories", () => {
+  // A hand-assembled zip, or one an advisor rebuilt in Finder.
+  const entries = [
+    { path: "Advisees/Fall 2026/Jane.json", text: JSON.stringify({ version: 1, placements: {} }) },
+    { path: "Advisees/Sam.json",            text: JSON.stringify({ version: 1, placements: {} }) },
+    { path: "Loose.json",                   text: JSON.stringify({ version: 1, placements: {} }) },
+  ];
+  const back = archiveToLibrary(entries);
+  assert.ok(back.ok);
+  const byName = n => back.folders.find(f => f.name === n);
+  assert.ok(byName("Advisees") && byName("Fall 2026"));
+  assert.equal(byName("Fall 2026").parentId, byName("Advisees").id);
+  const jane = back.plans.find(p => p.name === "Jane");
+  assert.equal(jane.parentId, byName("Fall 2026").id);
+  assert.equal(back.plans.find(p => p.name === "Loose").parentId, null);
+});
+
+test("archive › planName inside the file beats the filename when both exist", () => {
+  const back = archiveToLibrary([
+    { path: "Renamed On Disk.json", text: JSON.stringify({ version: 1, planName: "True Name" }) },
+  ]);
+  assert.ok(back.ok);
+  assert.equal(back.plans[0].name, "True Name");
+});
+
+test("archive › a plan the index names but the zip no longer holds is dropped", () => {
+  // Unzip, delete a plan, re-zip: a perfectly reasonable thing to do.
+  const doc = buildLibraryFile(buildTree(fixture()), null, snapshotOf);
+  const entries = toEntries(doc).filter(e => !e.path.endsWith("Current.json"));
+  const back = archiveToLibrary(entries);
+  assert.ok(back.ok);
+  assert.ok(!back.plans.some(p => p.name === "Current"));
+  assert.ok(back.plans.some(p => p.name === "Baseline"), "the rest still import");
+});
+
+test("archive › non-JSON and stray files are ignored, not imported", () => {
+  const back = archiveToLibrary([
+    { path: "Advisees/Jane.json", text: JSON.stringify({ version: 1 }) },
+    { path: "notes.txt",          text: "just some notes" },
+    { path: "__MACOSX/._Jane.json", text: " binary junk" },
+    { path: "readme.json",        text: "{ not valid json" },
+  ]);
+  assert.ok(back.ok);
+  assert.equal(back.plans.length, 1);
+  assert.equal(back.plans[0].name, "Jane");
+});
+
+test("archive › an archive with no plans at all is refused", () => {
+  assert.equal(archiveToLibrary([]).reason, "empty");
+  assert.equal(archiveToLibrary([{ path: "a.txt", text: "x" }]).reason, "empty");
 });
 
 // ── Full round trip ───────────────────────────────────────────────────

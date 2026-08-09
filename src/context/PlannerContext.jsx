@@ -32,7 +32,9 @@ import { tabTitle, FIRST_PLAN_NAME } from "../core/tabTitle.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
          siblingsInOrder } from "../core/planFolders.js";
-import { buildLibraryFile, parseLibraryFile, mergeLibrary } from "../core/planLibraryFile.js";
+import { buildLibraryFile, parseLibraryFile, mergeLibrary,
+         libraryToArchive, archiveToLibrary } from "../core/planLibraryFile.js";
+import { writeZip, readZip } from "../core/zipFile.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
@@ -3274,44 +3276,114 @@ export function PlannerProvider({ children }) {
   };
 
   /**
-   * Read a library file and merge it in under one dated folder.
+   * The same export as an ARCHIVE: one ordinary single-plan file per plan,
+   * folders as directories. For browsing the library outside the app and for
+   * pulling one plan out to hand to the student it belongs to — each entry
+   * opens with the ordinary Load.
    *
-   * Slots are written BEFORE the index records exist, so there is no moment
-   * where a plan is listed but its data is not yet on disk — the activePlanId
-   * effect would read that gap as "new plan, reset to defaults".
-   *
-   * @returns {Promise<{ok: true, plans: number, folders: number, atRoot: boolean}
-   *                  |{ok: false, reason: string}>}
+   * @param {string[]|null} ids
    */
-  const importLibraryJSON = (file, folderName) => new Promise((resolve) => {
-    const reader = new FileReader();
-    reader.onerror = () => resolve({ ok: false, reason: "read" });
-    reader.onload = () => {
-      const parsed = parseLibraryFile(reader.result);
-      if (!parsed.ok) { resolve({ ok: false, reason: parsed.reason }); return; }
+  const exportLibraryZip = (ids = null) => {
+    saveCurrentPlanToSlot();
+    const doc = buildLibraryFile(planTree, ids, planSnapshot, { redact: libraryRedact });
+    const enc = new TextEncoder();
+    const bytes = writeZip(libraryToArchive(doc).map(e => ({
+      path: e.path, data: enc.encode(JSON.stringify(e.json, null, 2)),
+    })));
+    const blob = new Blob([bytes], { type: "application/zip" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const label = ids == null ? "Library" : `${doc.plans.length} plans`;
+    a.download = `${label} - ${institution.shortName ?? institution.name} Map - ${dateStr}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    return { plans: doc.plans.length, folders: doc.folders.length };
+  };
+
+  /** Read one dropped file into an incoming {folders, plans}, whatever it is. */
+  const readOneImport = async (file) => {
+    const isZip = /\.zip$/i.test(file.name) || file.type === "application/zip";
+    if (isZip) {
+      let entries;
       try {
-        saveCurrentPlanToSlot();
-        // Same collision guard createFolder uses: Date.now() alone repeats
-        // within a tick, and an import mints hundreds of ids in one.
-        let n = 0;
-        const newId = () => `imp_${Date.now().toString(36)}${(n++).toString(36)}${Math.random().toString(36).slice(2, 6)}`;
-        const m = mergeLibrary(parsed, newId, folderName);
-        for (const s of m.slots) {
-          localStorage.setItem(key(`plan-data-${s.id}`), JSON.stringify(s.data));
-        }
-        pushFolderHistory();          // one ⌘Z removes the whole import
-        setFolders(prev => [...prev, ...(m.folder ? [m.folder] : []), ...m.folders]);
-        setPlans(prev => [...prev, ...m.plans]);
-        if (m.folder) setFolderOpen(m.folder.id, true);
-        resolve({ ok: true, plans: m.plans.length, folders: m.folders.length, atRoot: m.atRoot });
-      } catch (err) {
-        // A quota-exceeded write is the realistic failure: the library lives
-        // in localStorage and an import is the largest write the app makes.
-        resolve({ ok: false, reason: /quota/i.test(String(err)) ? "quota" : "write" });
+        entries = await readZip(new Uint8Array(await file.arrayBuffer()));
+      } catch (e) {
+        return { ok: false, reason: /unsafe/.test(String(e)) ? "unsafe" : "notzip" };
       }
-    };
-    reader.readAsText(file);
-  });
+      const dec = new TextDecoder();
+      return archiveToLibrary(entries.map(e => ({ path: e.path, text: dec.decode(e.data) })));
+    }
+    const text = await file.text();
+    const asLibrary = parseLibraryFile(text);
+    if (asLibrary.ok) return asLibrary;
+    // Not a library document — a plain single-plan file is the other thing a
+    // user can reasonably hand us, and selecting a pile of them is exactly how
+    // an unzipped export arrives back.
+    if (asLibrary.reason === "kind") {
+      try {
+        const d = JSON.parse(text);
+        if (d && typeof d === "object" && d.version === 1) {
+          const { planName, ...rest } = d;
+          return { ok: true, folders: [], plans: [{
+            id: "single", name: planName || file.name.replace(/\.json$/i, "") || "Plan",
+            parentId: null, studentType: d.studentType === "graduate" ? "graduate" : "undergrad",
+            data: rest,
+          }] };
+        }
+      } catch { /* falls through to the reason below */ }
+    }
+    return { ok: false, reason: asLibrary.reason };
+  };
+
+  /**
+   * Import any mix of files — a .zip, library documents, loose single-plan
+   * files — as ONE merge under one dated folder.
+   *
+   * Merging them together rather than one import per file is what keeps the
+   * undo honest: selecting forty plans is a single act to the user, so it is a
+   * single ⌘Z.
+   *
+   * @returns {Promise<{ok: true, plans, folders, atRoot, failed}|{ok: false, reason}>}
+   */
+  const importLibraryFiles = async (files, folderName) => {
+    const list = [...(files ?? [])];
+    if (!list.length) return { ok: false, reason: "read" };
+
+    const folders = [];
+    const plans = [];
+    let failed = 0;
+    let lastReason = "read";
+    for (let i = 0; i < list.length; i++) {
+      const got = await readOneImport(list[i]);
+      if (!got.ok) { failed++; lastReason = got.reason; continue; }
+      // Each file owns its own id space; namespace them so two files that
+      // both call a folder "f1" cannot collide when merged together.
+      const ns = (id) => `${i}:${id}`;
+      for (const f of got.folders) folders.push({ ...f, id: ns(f.id), parentId: f.parentId == null ? null : ns(f.parentId) });
+      for (const p of got.plans)   plans.push({ ...p, id: ns(p.id), parentId: p.parentId == null ? null : ns(p.parentId) });
+    }
+    if (!plans.length) return { ok: false, reason: lastReason };
+
+    try {
+      saveCurrentPlanToSlot();
+      let n = 0;
+      const newId = () => `imp_${Date.now().toString(36)}${(n++).toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+      const m = mergeLibrary({ folders, plans }, newId, folderName);
+      for (const s of m.slots) {
+        localStorage.setItem(key(`plan-data-${s.id}`), JSON.stringify(s.data));
+      }
+      pushFolderHistory();
+      setFolders(prev => [...prev, ...(m.folder ? [m.folder] : []), ...m.folders]);
+      setPlans(prev => [...prev, ...m.plans]);
+      if (m.folder) setFolderOpen(m.folder.id, true);
+      return { ok: true, plans: m.plans.length, folders: m.folders.length, atRoot: m.atRoot, failed };
+    } catch (err) {
+      return { ok: false, reason: /quota/i.test(String(err)) ? "quota" : "write" };
+    }
+  };
 
   const applyPlanData = (d) => {
     pushUndo();
@@ -4037,7 +4109,7 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
-    exportLibraryJSON, importLibraryJSON,
+    exportLibraryJSON, exportLibraryZip, importLibraryFiles,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan, setPlanStudent,
     // Folders — structure, view state, and the mutations that respect both.

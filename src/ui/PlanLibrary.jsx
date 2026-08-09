@@ -91,7 +91,7 @@ export default function PlanLibrary() {
     plans, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort, reorderNodes, orderedSiblings,
     activePlanId, switchPlan, renamePlan, setPlanStudent,
-    exportLibraryJSON, importLibraryJSON,
+    exportLibraryJSON, exportLibraryZip, importLibraryFiles,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
     pushFolderHistory, undoFolders, redoFolders, folderCanUndo, folderCanRedo,
@@ -109,6 +109,7 @@ export default function PlanLibrary() {
   const [menu, setMenu]             = useState(null);   // { x, y, row }
   const [moveMenu, setMoveMenu]     = useState(null);   // footer "Move to…"
   const [sortMenu, setSortMenu]     = useState(null);   // "Sort by" dropdown
+  const [exportMenu, setExportMenu] = useState(null);   // { x, y, ids }
   const [assigning, setAssigning]   = useState(null);   // { ids, value } assign student
   const [pending, setPending]       = useState(null);   // delete confirmation
   const [notice, setNotice]         = useState("");
@@ -208,7 +209,7 @@ export default function PlanLibrary() {
       return;
     }
     setQuery(""); setSelectedIds(new Set()); setFocusId(null); setEditingId(null);
-    setMenu(null); setMoveMenu(null); setSortMenu(null); setAssigning(null);
+    setMenu(null); setMoveMenu(null); setSortMenu(null); setExportMenu(null); setAssigning(null);
     setPending(null); setNotice(""); setSelectMode(false);
     clearDrag();
     anchorIdx.current = -1;
@@ -341,26 +342,38 @@ export default function PlanLibrary() {
   };
 
   /**
-   * Export the selection, or the whole library when nothing is selected.
-   * Folders come out with everything inside them — the selection's closure,
-   * the same set a delete would take.
+   * Export the selection, or the whole library when `ids` is null. Folders
+   * come out with everything inside them — the selection's closure, the same
+   * set a delete would take.
+   *
+   * Two shapes, because they answer different questions. The document is
+   * EXACT: it round-trips names a file system cannot spell. The archive is
+   * BROWSABLE: folders become directories and every entry opens with the
+   * ordinary Load, at the cost of names being bent into filenames.
    */
-  const doExport = (ids) => {
-    const res = exportLibraryJSON(ids);
+  const doExport = (ids, asZip) => {
+    const res = asZip ? exportLibraryZip(ids) : exportLibraryJSON(ids);
     setNotice(t("folders.io.exported", { n: res.plans }));
+    setExportMenu(null);
   };
 
-  const doImport = async (file) => {
-    if (!file) return;
-    const res = await importLibraryJSON(file, t("folders.io.importedFolder", {
+  const exportMenuItems = (ids) => [
+    { key: "zip",  label: t("folders.io.asZip"),  onSelect: () => doExport(ids, true) },
+    { key: "json", label: t("folders.io.asJson"), onSelect: () => doExport(ids, false) },
+  ];
+
+  const doImport = async (files) => {
+    if (!files?.length) return;
+    const res = await importLibraryFiles(files, t("folders.io.importedFolder", {
       date: new Date().toISOString().slice(0, 10),
     }));
     if (!res.ok) { setNotice(t(`folders.io.err.${res.reason}`)); return; }
-    setNotice(res.atRoot
-      // Said plainly rather than silently: the structure was kept, but it
-      // could not be nested, so it is NOT under one removable folder.
+    // A partial import is reported rather than passed off as a clean one: with
+    // forty files selected, two unreadable ones would otherwise vanish.
+    const base = res.atRoot
       ? t("folders.io.importedRoot", { n: res.plans })
-      : t("folders.io.imported", { n: res.plans }));
+      : t("folders.io.imported", { n: res.plans });
+    setNotice(res.failed ? `${base} ${t("folders.io.someFailed", { n: res.failed })}` : base);
   };
 
   const requestDelete = (ids) => {
@@ -480,7 +493,7 @@ export default function PlanLibrary() {
       if (assigning) return;              // ditto the assign-student field
       // A context menu owns Escape while it is open, or dismissing the menu
       // would close the whole panel out from under it.
-      if (menu || moveMenu || sortMenu) return;
+      if (menu || moveMenu || sortMenu || exportMenu) return;
       if (pending) {
         if (e.key === "Escape") { e.preventDefault(); setPending(null); }
         if (e.key === "Enter")  { e.preventDefault(); confirmDelete(); }
@@ -552,7 +565,7 @@ export default function PlanLibrary() {
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showPlanLibrary, editingId, pending, menu, moveMenu, sortMenu, assigning, query, rows, focusId,
+  }, [showPlanLibrary, editingId, pending, menu, moveMenu, sortMenu, exportMenu, assigning, query, rows, focusId,
       selectedIds, openFolders, folderCanUndo, folderCanRedo]);
 
   // ── Drag and drop ───────────────────────────────────────────────
@@ -691,7 +704,8 @@ export default function PlanLibrary() {
       { divider: true },
       // A folder exports everything inside it; a plan exports itself. Both go
       // through the same closure, so the menu needs no separate wording.
-      { key: "export", label: t("folders.io.export"), onSelect: () => doExport(ids) },
+      { key: "export", label: t("folders.io.export"),
+        submenu: exportMenuItems(ids).map(i => ({ ...i, depth: 0 })) },
       {
         key: "move", label: t("folders.menu.moveTo"),
         emptyLabel: t("folders.menu.noFolders"),
@@ -785,7 +799,7 @@ export default function PlanLibrary() {
       onClick={() => {
         // Portalled menus propagate through the REACT tree, so a click meant to
         // dismiss a menu would otherwise close the whole panel behind it.
-        if (menu || moveMenu || sortMenu) { setMenu(null); setMoveMenu(null); setSortMenu(null); return; }
+        if (menu || moveMenu || sortMenu || exportMenu) { setMenu(null); setMoveMenu(null); setSortMenu(null); setExportMenu(null); return; }
         close();
       }}
       style={{
@@ -866,24 +880,34 @@ export default function PlanLibrary() {
           {/* Import / export the whole library. Icon-only next to the others,
               because the verbs that matter here are on the SELECTION footer —
               these two are the "everything" case. */}
+          {/* `multiple` is the point: an unzipped export comes back as a pile
+              of single-plan files, and selecting them all should be one act. */}
           <input
             ref={fileRef}
             type="file"
-            accept="application/json,.json"
+            multiple
+            accept="application/json,.json,application/zip,.zip"
             style={{ display: "none" }}
             onChange={e => {
-              const f = e.target.files?.[0];
+              const files = [...(e.target.files ?? [])];
               // Cleared so choosing the SAME file twice fires change again.
               e.target.value = "";
-              doImport(f);
+              doImport(files);
             }}
           />
           <button onClick={() => fileRef.current?.click()} style={iconBtn}
             title={t("folders.io.import")} aria-label={t("folders.io.import")}>
             <span aria-hidden="true">↓</span>
           </button>
-          <button onClick={() => doExport(null)} style={iconBtn}
+          <button
+            onClick={e => {
+              e.stopPropagation();
+              const r = e.currentTarget.getBoundingClientRect();
+              setExportMenu({ x: Math.max(6, r.right - 190), y: r.bottom + 4, ids: null });
+            }}
+            style={iconBtn}
             disabled={plans.length === 0}
+            aria-haspopup="menu"
             title={t("folders.io.exportAll")} aria-label={t("folders.io.exportAll")}>
             <span aria-hidden="true">↑</span>
           </button>
@@ -1028,9 +1052,13 @@ export default function PlanLibrary() {
                   {t("folders.assign.short")}
                 </button>
               )}
-              <button onClick={() => doExport([...selectedIds])} style={iconBtn}>
-                {t("folders.io.export")}
-              </button>
+              <button
+                onClick={e => {
+                  e.stopPropagation();
+                  const r = e.currentTarget.getBoundingClientRect();
+                  setExportMenu({ x: r.left, y: r.bottom + 4, ids: [...selectedIds] });
+                }}
+                style={iconBtn}>{t("folders.io.export")}</button>
               <button onClick={e => { e.stopPropagation(); const r = e.currentTarget.getBoundingClientRect(); setMoveMenu({ x: r.left, y: r.bottom + 4 }); }}
                 style={iconBtn}>{t("folders.moveTo")}</button>
               <button onClick={() => requestDelete([...selectedIds])}
@@ -1061,6 +1089,10 @@ export default function PlanLibrary() {
       )}
       {sortMenu && (
         <ContextMenu x={sortMenu.x} y={sortMenu.y} items={sortMenuItems()} onClose={() => setSortMenu(null)} />
+      )}
+      {exportMenu && (
+        <ContextMenu x={exportMenu.x} y={exportMenu.y} items={exportMenuItems(exportMenu.ids)}
+          onClose={() => setExportMenu(null)} />
       )}
 
       {/* ── Assign student ──
