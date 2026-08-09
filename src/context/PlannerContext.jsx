@@ -32,6 +32,7 @@ import { tabTitle, FIRST_PLAN_NAME } from "../core/tabTitle.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
          siblingsInOrder } from "../core/planFolders.js";
+import { buildLibraryFile, parseLibraryFile, mergeLibrary } from "../core/planLibraryFile.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
@@ -3232,6 +3233,86 @@ export function PlannerProvider({ children }) {
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   };
 
+  // ── Library (multi-plan) export / import ─────────────────────
+  //
+  // The single-plan door above and this one make the SAME privacy promises:
+  // both run the snapshot through the same two toggles. A bulk file is the
+  // heavier artifact — many advisees' names and grades in one place — so it
+  // being quietly more permissive than the single export is exactly the
+  // failure to avoid.
+  const libraryRedact = (d) => {
+    const out = { ...d };
+    if (privateGrades) delete out.grades;
+    if (privateCoop) out.specialTermPl = redactCoopDetails(out.specialTermPl);
+    return out;
+  };
+
+  /** The saved snapshot for a plan; live capture for the one being edited. */
+  const planSnapshot = (id) => {
+    if (id === activePlanId) return captureCurrentPlan();
+    try {
+      const raw = localStorage.getItem(key(`plan-data-${id}`));
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  };
+
+  /** @param {string[]|null} ids selected nodes, or null for the whole library */
+  const exportLibraryJSON = (ids = null) => {
+    saveCurrentPlanToSlot();
+    const doc = buildLibraryFile(planTree, ids, planSnapshot, { redact: libraryRedact });
+    const blob = new Blob([JSON.stringify(doc, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const label = ids == null ? "Library" : `${doc.plans.length} plans`;
+    a.download = `${label} - ${institution.shortName ?? institution.name} Map - ${dateStr}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    return { plans: doc.plans.length, folders: doc.folders.length };
+  };
+
+  /**
+   * Read a library file and merge it in under one dated folder.
+   *
+   * Slots are written BEFORE the index records exist, so there is no moment
+   * where a plan is listed but its data is not yet on disk — the activePlanId
+   * effect would read that gap as "new plan, reset to defaults".
+   *
+   * @returns {Promise<{ok: true, plans: number, folders: number, atRoot: boolean}
+   *                  |{ok: false, reason: string}>}
+   */
+  const importLibraryJSON = (file, folderName) => new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onerror = () => resolve({ ok: false, reason: "read" });
+    reader.onload = () => {
+      const parsed = parseLibraryFile(reader.result);
+      if (!parsed.ok) { resolve({ ok: false, reason: parsed.reason }); return; }
+      try {
+        saveCurrentPlanToSlot();
+        // Same collision guard createFolder uses: Date.now() alone repeats
+        // within a tick, and an import mints hundreds of ids in one.
+        let n = 0;
+        const newId = () => `imp_${Date.now().toString(36)}${(n++).toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+        const m = mergeLibrary(parsed, newId, folderName);
+        for (const s of m.slots) {
+          localStorage.setItem(key(`plan-data-${s.id}`), JSON.stringify(s.data));
+        }
+        pushFolderHistory();          // one ⌘Z removes the whole import
+        setFolders(prev => [...prev, ...(m.folder ? [m.folder] : []), ...m.folders]);
+        setPlans(prev => [...prev, ...m.plans]);
+        if (m.folder) setFolderOpen(m.folder.id, true);
+        resolve({ ok: true, plans: m.plans.length, folders: m.folders.length, atRoot: m.atRoot });
+      } catch (err) {
+        // A quota-exceeded write is the realistic failure: the library lives
+        // in localStorage and an import is the largest write the app makes.
+        resolve({ ok: false, reason: /quota/i.test(String(err)) ? "quota" : "write" });
+      }
+    };
+    reader.readAsText(file);
+  });
+
   const applyPlanData = (d) => {
     pushUndo();
     setPlacements(d.placements ?? {});
@@ -3956,6 +4037,7 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
+    exportLibraryJSON, importLibraryJSON,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan, setPlanStudent,
     // Folders — structure, view state, and the mutations that respect both.

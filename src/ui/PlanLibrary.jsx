@@ -91,6 +91,7 @@ export default function PlanLibrary() {
     plans, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort, reorderNodes, orderedSiblings,
     activePlanId, switchPlan, renamePlan, setPlanStudent,
+    exportLibraryJSON, importLibraryJSON,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
     pushFolderHistory, undoFolders, redoFolders, folderCanUndo, folderCanRedo,
@@ -122,6 +123,7 @@ export default function PlanLibrary() {
 
   const cardRef     = useRef(null);
   const searchRef   = useRef(null);
+  const fileRef     = useRef(null);
   const anchorIdx   = useRef(-1);
   const typeAhead   = useRef({ str: "", at: 0 });
   const spring      = useRef({ id: null, timer: null });
@@ -336,6 +338,29 @@ export default function PlanLibrary() {
     pushFolderHistory();          // one ⌘Z undoes the whole batch
     for (const id of assigning.ids) setPlanStudent(id, value);
     setAssigning(null);
+  };
+
+  /**
+   * Export the selection, or the whole library when nothing is selected.
+   * Folders come out with everything inside them — the selection's closure,
+   * the same set a delete would take.
+   */
+  const doExport = (ids) => {
+    const res = exportLibraryJSON(ids);
+    setNotice(t("folders.io.exported", { n: res.plans }));
+  };
+
+  const doImport = async (file) => {
+    if (!file) return;
+    const res = await importLibraryJSON(file, t("folders.io.importedFolder", {
+      date: new Date().toISOString().slice(0, 10),
+    }));
+    if (!res.ok) { setNotice(t(`folders.io.err.${res.reason}`)); return; }
+    setNotice(res.atRoot
+      // Said plainly rather than silently: the structure was kept, but it
+      // could not be nested, so it is NOT under one removable folder.
+      ? t("folders.io.importedRoot", { n: res.plans })
+      : t("folders.io.imported", { n: res.plans }));
   };
 
   const requestDelete = (ids) => {
@@ -664,6 +689,9 @@ export default function PlanLibrary() {
       { key: "newPlan", label: t("folders.menu.newPlanHere"),
         onSelect: () => newPlanIn(parentFor(row)) },
       { divider: true },
+      // A folder exports everything inside it; a plan exports itself. Both go
+      // through the same closure, so the menu needs no separate wording.
+      { key: "export", label: t("folders.io.export"), onSelect: () => doExport(ids) },
       {
         key: "move", label: t("folders.menu.moveTo"),
         emptyLabel: t("folders.menu.noFolders"),
@@ -835,6 +863,30 @@ export default function PlanLibrary() {
             title={`${t("folders.redo")} (⇧⌘Z)`} aria-label={t("folders.redo")}>
             <TurnIcon size={13} redo />
           </button>
+          {/* Import / export the whole library. Icon-only next to the others,
+              because the verbs that matter here are on the SELECTION footer —
+              these two are the "everything" case. */}
+          <input
+            ref={fileRef}
+            type="file"
+            accept="application/json,.json"
+            style={{ display: "none" }}
+            onChange={e => {
+              const f = e.target.files?.[0];
+              // Cleared so choosing the SAME file twice fires change again.
+              e.target.value = "";
+              doImport(f);
+            }}
+          />
+          <button onClick={() => fileRef.current?.click()} style={iconBtn}
+            title={t("folders.io.import")} aria-label={t("folders.io.import")}>
+            <span aria-hidden="true">↓</span>
+          </button>
+          <button onClick={() => doExport(null)} style={iconBtn}
+            disabled={plans.length === 0}
+            title={t("folders.io.exportAll")} aria-label={t("folders.io.exportAll")}>
+            <span aria-hidden="true">↑</span>
+          </button>
           <button onClick={() => newFolder(null)} style={iconBtn} title={t("folders.newFolder")}>
             <FolderIcon size={13} />
             <span aria-hidden="true" style={{ fontWeight: 700 }}>+</span>
@@ -976,6 +1028,9 @@ export default function PlanLibrary() {
                   {t("folders.assign.short")}
                 </button>
               )}
+              <button onClick={() => doExport([...selectedIds])} style={iconBtn}>
+                {t("folders.io.export")}
+              </button>
               <button onClick={e => { e.stopPropagation(); const r = e.currentTarget.getBoundingClientRect(); setMoveMenu({ x: r.left, y: r.bottom + 4 }); }}
                 style={iconBtn}>{t("folders.moveTo")}</button>
               <button onClick={() => requestDelete([...selectedIds])}
