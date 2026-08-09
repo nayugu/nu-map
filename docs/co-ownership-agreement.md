@@ -71,8 +71,7 @@ left. Reimbursement comes out of revenue, so in a year with none there is nothin
 to reimburse. Neither of us should be funding the other's share out of pocket.
 Either of us can spend on it; a new recurring cost gets mentioned to the other
 before it starts. The split itself is untouched.
-*Proposed by Nathan Gu, 8 August 2026. Not in force until Matthew commits to
-this file.*
+*Agreed by both authors in person, 8 August 2026.*
 
 **A4 — a commercial licence needs both of us.** §4's first sentence — "Either of
 us can sign a commercial licence alone, and tells the other after" — is replaced:
@@ -86,8 +85,7 @@ That was an even trade while we were both on this daily. It is a poor one as soo
 as either of us is out of context, because the person least likely to spot a bad
 term is the one who has been away. The fourteen days exist so that the same rule
 cannot turn absence into a veto.
-*Proposed by Nathan Gu, 8 August 2026. Not in force until Matthew commits to
-this file.*
+*Agreed by both authors in person, 8 August 2026.*
 
 *Not written by a lawyer. Change the split in §3 or the signing rule in §4 by
 editing this file and both committing to it.*
