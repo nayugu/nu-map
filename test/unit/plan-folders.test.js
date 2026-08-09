@@ -420,6 +420,54 @@ test("search › the extra slotLabel text is searchable", () => {
   assert.deepEqual([...matchIds(index, "bscs")], ["jane"]);
 });
 
+test("search › the associated student is searchable even when the plan name isn't", () => {
+  // The plan is named for the SCENARIO ("With co-op"); the advisee's name lives
+  // only in the `student` field. Typing the student's name must still find it.
+  const state = { folders: [], plans: [P("p1", "With co-op", null, { student: "Jane Doe" })] };
+  const index = buildSearchIndex(buildTree(state));
+  assert.deepEqual([...matchIds(index, "jane")], ["p1"]);
+  assert.deepEqual([...matchIds(index, "doe")], ["p1"]);
+});
+
+test("search › a student's name finds every plan filed to them, across folders", () => {
+  // The advisor's core case: several scenario plans for one advisee, scattered
+  // by term, none named after the student.
+  const state = {
+    folders: [F("adv", "Advisees"), F("fall", "Fall 2026", "adv"), F("spr", "Spring 2027", "adv")],
+    plans: [
+      P("a", "Current", "fall", { student: "Jane Doe" }),
+      P("b", "With minor", "spr", { student: "Jane Doe" }),
+      P("c", "Baseline", "fall", { student: "Sam Ito" }),
+    ],
+  };
+  const hits = matchIds(buildSearchIndex(buildTree(state)), "jane");
+  assert.deepEqual([...hits].sort(), ["a", "b"]);
+});
+
+test("search › student ANDs with the program label, and folds diacritics", () => {
+  const state = { folders: [], plans: [
+    P("p1", "Draft", null, { student: "José Ramírez" }),
+    P("p2", "Draft", null, { student: "Jane Doe" }),
+  ] };
+  const index = buildSearchIndex(buildTree(state), {
+    slotLabel: id => (id === "p1" ? "Computer Science, BSCS" : "Physics, BS"),
+  });
+  assert.equal(matchIds(index, "jose").size, 1, "diacritics fold on the student too");
+  assert.deepEqual([...matchIds(index, "ramirez bscs")], ["p1"], "student AND program");
+  assert.equal(matchIds(index, "jose physics").size, 0, "the AND must actually constrain");
+});
+
+test("search › a plan with no student is unaffected, and folders carry none", () => {
+  // A folder named "Jane" and a studentless plan must not gain phantom matches.
+  const state = {
+    folders: [F("jane", "Jane")],
+    plans: [P("p1", "Scratch")],
+  };
+  const index = buildSearchIndex(buildTree(state));
+  // "jane" still finds the FOLDER (by its name), never the studentless plan.
+  assert.deepEqual([...matchIds(index, "jane")], ["jane"]);
+});
+
 test("search › an empty query is null, meaning no filter at all", () => {
   const tree = buildTree(fixture());
   const index = buildSearchIndex(tree);

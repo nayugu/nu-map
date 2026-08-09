@@ -372,6 +372,11 @@ export function buildSearchIndex(tree, { slotLabel = null } = {}) {
     const parentId = tree.parentOf.get(id) ?? null;
     const path = folderPath(tree, parentId, { sep: " " });
     const extra = !isFolder && slotLabel ? slotLabel(id) : "";
+    // The advisee a plan belongs to is index-only (see setPlanStudent), so it
+    // is on the record here and needs no slot read. Searchable so an advisor
+    // can type a student's name and find every plan filed to them, wherever
+    // those plans live in the folder tree.
+    const student = !isFolder ? (rec.student ?? "") : "";
     const ancestors = [];
     for (let a = parentId; a != null; a = tree.parentOf.get(a) ?? null) {
       const anc = tree.byId.get(a);
@@ -380,7 +385,7 @@ export function buildSearchIndex(tree, { slotLabel = null } = {}) {
     }
     index.set(id, {
       kind: isFolder ? "folder" : "plan",
-      hay: normalizeSearchText(`${rec.name ?? ""} ${extra} ${path}`),
+      hay: normalizeSearchText(`${rec.name ?? ""} ${extra} ${student} ${path}`),
       // Path matching needs the segments kept apart; `hay` has them mashed
       // together and cannot tell "Fall/Jane" from "Jane/Fall".
       ancestors,

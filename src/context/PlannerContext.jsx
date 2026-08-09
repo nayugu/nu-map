@@ -3170,6 +3170,23 @@ export function PlannerProvider({ children }) {
     setPlans(prev => prev.map(p => p.id === id ? { ...p, name } : p));
   };
 
+  // Associate a plan with a student (the advisee it belongs to), or clear the
+  // association. Index-only, exactly like `parentId` and `name`: it identifies
+  // and files the plan in the library, it is NOT part of the plan's academic
+  // snapshot, and it must never leave the browser — a share link encodes
+  // plan-data via the registry and never the index, so an advisee's name cannot
+  // ride along by construction. An empty value drops the field entirely, so an
+  // unassigned plan is a record with no `student` key (the same "absent, not
+  // empty" shape `parentId` uses for "at root").
+  const setPlanStudent = (id, student) => {
+    const clean = (student ?? "").trim();
+    setPlans(prev => prev.map(p => {
+      if (p.id !== id) return p;
+      if (!clean) { const { student: _drop, ...rest } = p; return rest; }
+      return { ...p, student: clean };
+    }));
+  };
+
   // Auto-save active plan periodically (on every persistence save)
   useEffect(() => {
     if (isFirstRender.current) {
@@ -3940,7 +3957,7 @@ export function PlannerProvider({ children }) {
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
-    plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
+    plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan, setPlanStudent,
     // Folders — structure, view state, and the mutations that respect both.
     folders, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort,
