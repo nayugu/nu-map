@@ -32,11 +32,20 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write        # the failure alert opens/closes an issue
 
 jobs:
   update:
     name: Fetch & commit course data
     runs-on: ubuntu-latest
+
+    # A hung job is worse than a failed one: it holds the nu-map-data
+    # concurrency group (cancel-in-progress is false), so the majors jobs queue
+    # behind it and nothing reports anything. GitHub's default would let that
+    # run for six hours. The catalog scrape plus a --prof availability pass can
+    # legitimately overrun two hours, so this is generous — it exists to turn a
+    # hang into a failure that alerts, not to bound normal work.
+    timeout-minutes: 300
 
     steps:
       - name: Checkout repository
@@ -164,6 +173,53 @@ jobs:
       - name: No changes detected
         if: steps.changes.outputs.changed == 'false'
         run: echo "✅  Course data is already up-to-date — nothing to commit."
+
+      # ── Tell someone ──────────────────────────────────────────────────────────
+      #   This job pushes to main with nobody watching. Without these two steps a
+      #   failure is a red tick on a page no one opens, and the site keeps serving
+      #   last month's catalog looking perfectly healthy.
+      - name: Report failure
+        if: failure()
+        uses: ./.github/actions/pipeline-alert
+        with:
+          pipeline: Course data
+          key: courses
+          state: failed
+          logs: |
+            /tmp/catalog-log.txt
+            /tmp/availability-log.txt
+            /tmp/nupath-log.txt
+            /tmp/nupath-merge-log.txt
+            /tmp/patches-log.txt
+            /tmp/equivalences-log.txt
+          data-paths: |
+            public/northeastern/catalog-courses.json
+            public/northeastern/term-history.json
+          check-first: |
+            - **Catalog scrape** — `catalog.northeastern.edu` markup. The
+              `Attribute(s):` line is a plain `<p class="courseblockextra">` with no
+              nupath class; it must be found by its label text, never a class
+              selector. A class-based selector once matched zero blocks and made the
+              catalog contribute no NUPath at all, silently.
+            - **Availability scrape** — Banner term codes. NEU retired the 40/60
+              summer codes; a single `…50` code now carries both sessions and is
+              split back by `partOfTerm`. A new term code shape breaks this first.
+            - **NUpath** — Tableau is authoritative and non-fatal, so this step
+              *cannot* be the failure. If it warned, NUpath silently kept last
+              month's values; check how many runs in a row that has happened.
+            - `fetch-nupath` refuses to write if a run would clear more than 5% of
+              courses. A refusal here is the guard working, not a bug — find what
+              changed upstream before overriding anything.
+
+      - name: Report recovery
+        if: success()
+        uses: ./.github/actions/pipeline-alert
+        with:
+          pipeline: Course data
+          key: courses
+          state: recovered
+          data-paths: |
+            public/northeastern/catalog-courses.json
 
       # ── Write run summary ─────────────────────────────────────────────────────
       - name: Summary

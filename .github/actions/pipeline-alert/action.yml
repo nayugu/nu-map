@@ -1,0 +1,203 @@
+name: Pipeline alert
+description: >-
+  Open, update, or close a GitHub issue when an unattended data pipeline fails.
+  The issue body is written to be the runbook for that failure — what broke,
+  what the rails said, when the data last moved, and what to look at first — so
+  a maintainer who did not build the pipeline can act on it without a separate
+  document to keep in sync.
+
+inputs:
+  pipeline:
+    description: Human name of the pipeline, e.g. "Course data".
+    required: true
+  key:
+    description: >-
+      Stable slug used to find this pipeline's existing issue. Must not change,
+      or a new issue is opened alongside the old one instead of updating it.
+    required: true
+  state:
+    description: '"failed" or "recovered".'
+    required: true
+  logs:
+    description: Newline-separated log paths to tail into the issue body.
+    required: false
+    default: ""
+  data-paths:
+    description: >-
+      Newline-separated files this pipeline is meant to update. Used to report
+      when the data last actually moved, which is the number that says whether
+      this is a blip or a long-running outage.
+    required: false
+    default: ""
+  check-first:
+    description: Markdown. Pipeline-specific first things to check.
+    required: false
+    default: ""
+
+runs:
+  using: composite
+  steps:
+    - name: Report pipeline status
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const { readFileSync, existsSync } = require('fs');
+
+          const pipeline   = ${{ toJSON(inputs.pipeline) }};
+          const key        = ${{ toJSON(inputs.key) }};
+          const state      = ${{ toJSON(inputs.state) }};
+          const logInput   = ${{ toJSON(inputs.logs) }};
+          const dataInput  = ${{ toJSON(inputs['data-paths']) }};
+          const checkFirst = ${{ toJSON(inputs['check-first']) }};
+
+          const MARKER = `<!-- pipeline-alert:${key} -->`;
+          const LABEL  = 'pipeline-failure';
+          const { owner, repo } = context.repo;
+          const runUrl = `${context.serverUrl}/${owner}/${repo}/actions/runs/${context.runId}`;
+
+          const lines = (s) => s.split('\n').map(x => x.trim()).filter(Boolean);
+
+          // Anything in here is best-effort. An alert that fails the run it is
+          // reporting on would turn one problem into two.
+          const safe = (fn, fallback) => { try { return fn(); } catch { return fallback; } };
+
+          // ── Which step actually failed ────────────────────────────────────
+          // The workflow tees each step to its own log, but only the API knows
+          // which one exited non-zero — and that is the first thing a reader
+          // wants. Without it they are left diffing seven logs by eye.
+          const failedSteps = await safe(async () => {
+            const { data } = await github.rest.actions.listJobsForWorkflowRun({
+              owner, repo, run_id: context.runId, per_page: 100,
+            });
+            return data.jobs
+              .flatMap(j => (j.steps || []).map(s => ({ job: j.name, ...s })))
+              .filter(s => s.conclusion === 'failure')
+              .map(s => `\`${s.name}\``);
+          }, []) || [];
+
+          // ── When did the data last actually move? ─────────────────────────
+          // A run can fail for a month before anyone notices. This turns
+          // "something broke" into "students have been seeing April's data".
+          //
+          // Asked over the API, not `git log`: actions/checkout defaults to
+          // depth 1, so a shallow clone has no history to search and the local
+          // command would return nothing while looking like it worked.
+          const lastMoved = await safe(async () => {
+            const paths = lines(dataInput);
+            if (!paths.length) return null;
+            const dates = [];
+            for (const path of paths) {
+              const { data } = await github.rest.repos.listCommits({
+                owner, repo, path, per_page: 1,
+              });
+              const iso = data?.[0]?.commit?.committer?.date;
+              if (iso) dates.push(iso);
+            }
+            if (!dates.length) return null;
+            const iso = dates.sort().at(-1);
+            const days = Math.floor((Date.now() - Date.parse(iso)) / 86400000);
+            return { iso: iso.slice(0, 10), days };
+          }, null);
+
+          // ── Recovery: close the open issue rather than leave it to rot ────
+          // An alert channel nobody trusts is worse than none. If failures pile
+          // up as stale open issues, the next real one is ignored.
+          const existing = await safe(async () => {
+            const { data } = await github.rest.issues.listForRepo({
+              owner, repo, state: 'open', labels: LABEL, per_page: 100,
+            });
+            return data.find(i => (i.body || '').includes(MARKER)) || null;
+          }, null);
+
+          if (state === 'recovered') {
+            if (existing) {
+              await github.rest.issues.createComment({
+                owner, repo, issue_number: existing.number,
+                body: `✅ **${pipeline} succeeded** on a later run — closing.\n\n` +
+                      `Run: ${runUrl}` +
+                      (lastMoved ? `\nData last changed: ${lastMoved.iso}` : ''),
+              });
+              await github.rest.issues.update({
+                owner, repo, issue_number: existing.number, state: 'closed',
+              });
+            }
+            return;
+          }
+
+          // ── Failure body ─────────────────────────────────────────────────
+          const tail = (p, n = 40) => {
+            if (!existsSync(p)) return null;
+            const t = readFileSync(p, 'utf8').trim().split('\n').slice(-n).join('\n');
+            return t || null;
+          };
+
+          const logSections = lines(logInput).map(p => {
+            const t = tail(p);
+            return t ? `<details><summary><code>${p}</code></summary>\n\n\`\`\`\n${t}\n\`\`\`\n</details>` : null;
+          }).filter(Boolean);
+
+          const body = [
+            MARKER,
+            `## ${pipeline} failed`,
+            '',
+            `**Run:** ${runUrl}`,
+            failedSteps.length ? `**Failed step:** ${failedSteps.join(', ')}` : '',
+            lastMoved
+              ? `**Data last changed:** ${lastMoved.iso} — ${lastMoved.days} day(s) ago.` +
+                (lastMoved.days > 45
+                  ? ' ⚠️ That is longer than one cycle, so this is not a one-off; students are being served stale data.'
+                  : '')
+              : '',
+            '',
+            '### What this means',
+            '',
+            'This pipeline commits straight to `main` unattended. It has stopped,',
+            'so the site keeps serving whatever it last wrote — it will look',
+            'healthy while going quietly out of date. Nothing self-heals.',
+            '',
+            checkFirst ? `### Check first\n\n${checkFirst}` : '',
+            '',
+            '### General triage',
+            '',
+            '1. Open the run above and read the failed step. The scrapers buffer a whole',
+            '   run and refuse to write when the result looks like upstream breakage, so a',
+            '   failure usually means the source changed shape rather than that the code broke.',
+            '2. Compare against the live source by hand. Northeastern changes markup, term',
+            '   codes and endpoints without notice, and that is the usual cause.',
+            '3. Re-run the workflow once. Some failures are transient upstream timeouts.',
+            '4. If a bad-but-plausible dataset was committed, revert that data commit on',
+            '   `main` and let the deploy re-run — do not hand-edit the JSON, the next',
+            '   scheduled scrape would overwrite it.',
+            '',
+            logSections.length ? `### Logs\n\n${logSections.join('\n\n')}` : '',
+            '',
+            '---',
+            '',
+            '*Opened automatically. It closes itself when a later run succeeds, so an open',
+            'issue here always means the pipeline is still broken right now.*',
+          ].filter(l => l !== '').join('\n');
+
+          const title = `🔴 ${pipeline} pipeline is failing`;
+
+          await safe(async () => {
+            await github.rest.issues.getLabel({ owner, repo, name: LABEL });
+          }, await safe(async () => {
+            await github.rest.issues.createLabel({
+              owner, repo, name: LABEL, color: 'b60205',
+              description: 'An unattended data pipeline is failing',
+            });
+          }, null));
+
+          if (existing) {
+            await github.rest.issues.update({
+              owner, repo, issue_number: existing.number, body,
+            });
+            await github.rest.issues.createComment({
+              owner, repo, issue_number: existing.number,
+              body: `Still failing as of ${new Date().toISOString().slice(0, 10)} — ${runUrl}`,
+            });
+          } else {
+            await github.rest.issues.create({
+              owner, repo, title, body, labels: [LABEL],
+            });
+          }
