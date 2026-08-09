@@ -17,8 +17,9 @@ Nathan's share is larger because he pays for the domains and infrastructure and
 carries the ongoing upkeep. Either of us can propose a different number any time;
 it changes if we both agree.
 
-**4.** Either of us can sign a commercial licence alone, and tells the other
-after. Neither of us grants an exclusive licence, assigns our copyright, or moves
+**4.** A commercial licence is signed only if we both agree in writing. If one of
+us does not answer a written request within fourteen days, the other may sign
+alone. Neither of us grants an exclusive licence, assigns our copyright, or moves
 NU Map off AGPL-3.0 without the other agreeing.
 
 **5.** Massachusetts law. This is between us and gives no rights to any licensee.
@@ -28,6 +29,11 @@ NU Map off AGPL-3.0 without the other agreeing.
 **Nathan Gu** Nathan Gu  Date July 31, 2026
 
 **Matthew Gu** Matthew Gu  Date July 31, 2026
+
+*§4 above was restated on 8 August 2026 to incorporate A4, so it can be read on
+its own. The signatures are to the text as signed on 31 July 2026. Every other
+section still carries its original wording — read the amendments below alongside
+them, since §3 in particular has been changed three times.*
 
 ### Amendments
 
@@ -73,11 +79,12 @@ Either of us can spend on it; a new recurring cost gets mentioned to the other
 before it starts. The split itself is untouched.
 *Agreed by both authors in person, 8 August 2026.*
 
-**A4 — a commercial licence needs both of us.** §4's first sentence — "Either of
-us can sign a commercial licence alone, and tells the other after" — is replaced:
-**a commercial licence is signed only if we both agree in writing; if one of us
-does not answer a written request within fourteen days, the other may sign
-alone.** The rest of §4 is unchanged. The reason is `COMMERCIAL.md` §5.2: a
+**A4 — a commercial licence needs both of us.** §4's first sentence, as signed,
+read "Either of us can sign a commercial licence alone, and tells the other
+after." It now requires both of us to agree in writing, with a fourteen-day
+timeout so that absence cannot become a veto; **§4 above carries the current
+wording** and this entry only records what it replaced. The rest of §4 is
+unchanged. The reason is `COMMERCIAL.md` §5.2: a
 licence survives non-renewal as to the version it covers, in perpetuity, and
 §5.3 only ever re-bands it upward — so one signature binds us both to a
 particular licensee at a particular band, permanently, with no way to unwind it.
