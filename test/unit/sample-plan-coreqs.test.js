@@ -109,7 +109,7 @@ test("REAL: loading a shipped plan leaves no corequisite unplaced", () => {
     .map(r => `${r.subject}${parseInt(r.number, 10)}`);
 
   let plans = 0, gaps = 0, added = 0;
-  const base = join(ROOT, "data/northeastern/programs/majors/2026");
+  const base = join(ROOT, "data/northeastern/programs/undergraduate/2026");
   for (const college of readdirSync(base)) {
     let progs = [];
     try { progs = readdirSync(join(base, college)); } catch { continue; }

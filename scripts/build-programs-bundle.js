@@ -2,7 +2,7 @@
 /**
  * build-programs-bundle.js
  *
- * Serializes both program trees (data/northeastern/programs/majors + data/northeastern/programs/grad-majors)
+ * Serializes both program trees (data/northeastern/programs/undergraduate + data/northeastern/programs/graduate)
  * into a single JSON asset the hosted MCP Worker can fetch:
  *
  *   public/northeastern/programs-bundle.json

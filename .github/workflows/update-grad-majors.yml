@@ -5,7 +5,7 @@ name: Update Graduate Major Requirements
 # to the repo.
 #
 # Scrapes catalog.northeastern.edu graduate degree requirement pages and writes
-# parsed.initial.json files to data/northeastern/programs/grad-majors/{year}/{college}/{slug}/.
+# requirements.json files to data/northeastern/programs/graduate/{year}/{college}/{slug}/.
 #
 # Pushes directly to main — no PR. Same pattern as update-majors.yml.
 
@@ -108,7 +108,7 @@ jobs:
           DATE=$(date -u '+%Y-%m')
           ADDED=$(grep -oP 'OK\s+' /tmp/grad-majors-log.txt | wc -l | tr -d ' ')
 
-          git add data/northeastern/programs/grad-majors/
+          git add data/northeastern/programs/graduate/
           # The verification verdict lives in each program file, and the report
           # and baseline are the human/machine record of this run's fidelity.
           git add docs/verification-report.md scripts/major-verify-baseline.json

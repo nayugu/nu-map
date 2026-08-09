@@ -3,14 +3,14 @@
  * scrape-majors.js
  *
  * Scrapes undergraduate degree requirements from catalog.northeastern.edu
- * and outputs parsed.initial.json files in the Major2 schema used by
+ * and outputs requirements.json files in the Major2 schema used by
  * the graduation requirement panel.
  *
  * This is a ground-up replacement for the stale external/graduatenu data.
  * ~45% of combined/joint major programs were missing writing requirements
  * and other sections because the old graduatenu scraper was removed in 2023.
  *
- * Output: data/northeastern/programs/majors/{year}/{college}/{slug}/parsed.initial.json
+ * Output: data/northeastern/programs/undergraduate/{year}/{college}/{slug}/requirements.json
  *
  * Usage:
  *   node scripts/scrape-majors.js               # preview (no writes)
@@ -41,16 +41,16 @@ import { parseRequirements, parseTotalCredits, findLeakedMarkers,
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
-const OUT_ROOT    = join(ROOT, 'data/northeastern/programs/majors');
+const OUT_ROOT    = join(ROOT, 'data/northeastern/programs/undergraduate');
 const CHANGE_LOG  = join(ROOT, 'public/northeastern/change-log.json');
 const CHANGE_LOG_MAX = 600;
-const ARCHIVE_ROOT = join(ROOT, 'data/northeastern/programs/archive/majors');
+const ARCHIVE_ROOT = join(ROOT, 'data/northeastern/programs/archive/undergraduate');
 // One index across every archived edition, written by BOTH scrapers under
 // their own key. It is what tells a reader (and later the loader) which
 // editions exist without opening ~12 MB of bundles to find out, and it is
 // the at-a-glance health check across a dozen unattended backfill runs.
 const ARCHIVE_MANIFEST = join(ROOT, 'data/northeastern/programs/archive/manifest.json');
-const TREE = 'majors';
+const TREE = 'undergraduate';
 const CATALOG   = 'https://catalog.northeastern.edu';
 // A past edition is the same catalog nested under /archive/{label}/, with its
 // own sitemap and the same markup. See scripts/lib/catalog-edition.js.
@@ -168,12 +168,12 @@ async function fetchProgramUrls() {
 // ── Output path ───────────────────────────────────────────────────────────────
 
 function outPath(college, slug) {
-  return join(OUT_ROOT, String(YEAR), college, slug, 'parsed.initial.json');
+  return join(OUT_ROOT, String(YEAR), college, slug, 'requirements.json');
 }
 
 /**
  * The department's Sample Plan of Study, as a SIBLING file rather than a key
- * inside parsed.initial.json.
+ * inside requirements.json.
  *
  * Two reasons, both about not making everyone pay for one feature. The grid is
  * 3-18 KB against a ~14 KB program file, so inlining it would roughly double
@@ -197,7 +197,7 @@ function planPath(college, slug) {
  * Two constraints decide this, and they point the same way. Cloudflare Pages
  * caps a deployment at 20,000 files and dist/ already holds ~15.4k, so seven
  * archive editions at ~1,000 programs each would blow the cap outright. And
- * the live tree is addressed by `import.meta.glob('./majors/**\/parsed.initial.json')`
+ * the live tree is addressed by `import.meta.glob('../../data/northeastern/programs/undergraduate/**\/requirements.json')`
  * — dropping archive programs into it would triple the program picker and
  * break the cohort dedupe, which is a UI regression for every student in
  * exchange for a feature only past cohorts need.
@@ -439,7 +439,7 @@ function listCommittedPrograms(year = YEAR) {
     for (const e of readdirSync(dir)) {
       const p = join(dir, e);
       if (statSync(p).isDirectory()) walk(p);
-      else if (e === 'parsed.initial.json') out.push(p);
+      else if (e === 'requirements.json') out.push(p);
     }
   };
   walk(join(OUT_ROOT, String(year)));

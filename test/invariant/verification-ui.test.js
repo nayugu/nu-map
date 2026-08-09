@@ -23,13 +23,13 @@ function programs(dir, out = []) {
   for (const e of readdirSync(dir)) {
     const p = join(dir, e);
     if (statSync(p).isDirectory()) programs(p, out);
-    else if (e === 'parsed.initial.json') out.push(p);
+    else if (e === 'requirements.json') out.push(p);
   }
   return out;
 }
 
 const ROOT = join(import.meta.dirname, '../..');
-const all = [...programs(join(ROOT, 'data/northeastern/programs/majors')), ...programs(join(ROOT, 'data/northeastern/programs/grad-majors'))]
+const all = [...programs(join(ROOT, 'data/northeastern/programs/undergraduate')), ...programs(join(ROOT, 'data/northeastern/programs/graduate'))]
   .map(f => ({ f, json: JSON.parse(readFileSync(f, 'utf8')) }))
   .filter(p => p.json.metadata?.verification);
 

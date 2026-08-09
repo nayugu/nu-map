@@ -14,8 +14,8 @@
  *
  *   public/northeastern/catalog-courses.json   titles, credits, descriptions,
  *                                             nuPath, parsed prereq trees
- *   data/northeastern/programs/majors/**\/parsed.initial.json     OR / XOM requirement nodes
- *   data/northeastern/programs/grad-majors/**\/parsed.initial.json
+ *   data/northeastern/programs/undergraduate/**\/requirements.json     OR / XOM requirement nodes
+ *   data/northeastern/programs/graduate/**\/requirements.json
  *
  * ## Usage
  *
@@ -43,7 +43,7 @@ import {
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const COURSES = join(ROOT, "public/northeastern/catalog-courses.json");
 const OUT = join(ROOT, "public/northeastern/course-equivalences.json");
-const PROGRAM_ROOTS = ["data/northeastern/programs/majors", "data/northeastern/programs/grad-majors"];
+const PROGRAM_ROOTS = ["data/northeastern/programs/undergraduate", "data/northeastern/programs/graduate"];
 
 /** Refuse to write if any of these trip. */
 const RAILS = {
@@ -70,7 +70,7 @@ function programFiles() {
       for (const e of readdirSync(d)) {
         const p = join(d, e);
         if (statSync(p).isDirectory()) walk(p);
-        else if (e === "parsed.initial.json") out.push(p);
+        else if (e === "requirements.json") out.push(p);
       }
     })(abs);
   }

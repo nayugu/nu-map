@@ -26,8 +26,8 @@ function loadPlans() {
       else if (e === "plan.json") out.push([p.slice(ROOT.length + 1), JSON.parse(readFileSync(p, "utf8"))]);
     }
   };
-  walk(join(ROOT, "data/northeastern/programs/majors"));
-  walk(join(ROOT, "data/northeastern/programs/grad-majors"));
+  walk(join(ROOT, "data/northeastern/programs/undergraduate"));
+  walk(join(ROOT, "data/northeastern/programs/graduate"));
   return out;
 }
 

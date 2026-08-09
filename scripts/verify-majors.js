@@ -28,7 +28,7 @@ import { impossibleSectionTitles } from './lib/major-integrity.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
-const TREES     = [join(ROOT, 'data/northeastern/programs/majors'), join(ROOT, 'data/northeastern/programs/grad-majors')];
+const TREES     = [join(ROOT, 'data/northeastern/programs/undergraduate'), join(ROOT, 'data/northeastern/programs/graduate')];
 // catalog-courses.json, NOT all-courses.json. The finding this feeds says a
 // requirement "can't be ticked off in the planner", so it must be checked
 // against the file the planner actually loads (per CLAUDE.md: the browser app,
@@ -53,7 +53,7 @@ function walkJson(dir, out = []) {
   for (const e of readdirSync(dir)) {
     const p = join(dir, e);
     if (statSync(p).isDirectory()) walkJson(p, out);
-    else if (e === 'parsed.initial.json') out.push(p);
+    else if (e === 'requirements.json') out.push(p);
   }
   return out;
 }
@@ -80,7 +80,7 @@ export function verifyAll() {
 
   for (const tree of TREES) {
     for (const file of walkJson(tree)) {
-      const id = relative(join(ROOT, 'data/northeastern/programs'), file).replace(/\/parsed\.initial\.json$/, '');
+      const id = relative(join(ROOT, 'data/northeastern/programs'), file).replace(/\/requirements\.json$/, '');
       if (ONE && !id.includes(ONE)) continue;
       let program;
       try { program = JSON.parse(readFileSync(file, 'utf8')); } catch { continue; }

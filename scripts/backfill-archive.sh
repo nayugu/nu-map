@@ -68,9 +68,9 @@ done
 echo
 echo "Done. Manifest:"
 node -e "
-const m = require('./src/data/archive/manifest.json');
+const m = require('./data/northeastern/programs/archive/manifest.json');
 for (const [year, e] of Object.entries(m.editions)) {
   const f = t => e[t] ? \`\${String(e[t].programs).padStart(4)} programs, \${String(e[t].plans).padStart(3)} plans\` : '            (none)';
-  console.log(\`  \${year}  \${e.label}   ug: \${f('majors')}   grad: \${f('grad-majors')}\`);
+  console.log(\`  \${year}  \${e.label}   ug: \${f('undergraduate')}   grad: \${f('graduate')}\`);
 }
 "

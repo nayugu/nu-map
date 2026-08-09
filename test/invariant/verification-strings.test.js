@@ -20,11 +20,11 @@ function walk(dir, out = []) {
   for (const e of readdirSync(dir)) {
     const p = join(dir, e);
     if (statSync(p).isDirectory()) walk(p, out);
-    else if (e === 'parsed.initial.json') out.push(p);
+    else if (e === 'requirements.json') out.push(p);
   }
   return out;
 }
-const programs = [...walk(join(ROOT, 'data/northeastern/programs/majors')), ...walk(join(ROOT, 'data/northeastern/programs/grad-majors'))]
+const programs = [...walk(join(ROOT, 'data/northeastern/programs/undergraduate')), ...walk(join(ROOT, 'data/northeastern/programs/graduate'))]
   .map(f => JSON.parse(readFileSync(f, 'utf8')))
   .filter(p => p.metadata?.verification);
 

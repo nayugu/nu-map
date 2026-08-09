@@ -326,7 +326,7 @@ no longer a query.
 
 Earlier drafts avoided requirement pointers because `title#ordinal` is fragile
 across re-scrapes and collides on dual majors. **That concern dissolves once
-binding is generated at scrape time**: `plan.json` and `parsed.initial.json` are
+binding is generated at scrape time**: `plan.json` and `requirements.json` are
 produced in the same run and shipped together, so a binding always references
 the requirement list it was computed against. It cannot outlive it.
 

@@ -21,11 +21,11 @@ function walk(dir, out = []) {
   for (const e of readdirSync(dir)) {
     const p = join(dir, e);
     if (statSync(p).isDirectory()) walk(p, out);
-    else if (e === 'parsed.initial.json') out.push(p);
+    else if (e === 'requirements.json') out.push(p);
   }
   return out;
 }
-const files = [...walk(join(ROOT, 'data/northeastern/programs/majors')), ...walk(join(ROOT, 'data/northeastern/programs/grad-majors'))];
+const files = [...walk(join(ROOT, 'data/northeastern/programs/undergraduate')), ...walk(join(ROOT, 'data/northeastern/programs/graduate'))];
 
 test('bundle › contains every program in src/data, and no extras', () => {
   const onDisk = files.length;
@@ -56,7 +56,7 @@ test('bundle › every program matches its source file', () => {
     const src = JSON.parse(readFileSync(f, 'utf8'));
     const parts = f.split('/');
     const [year, college, folder] = parts.slice(-4, -1);
-    const id = f.includes('/grad-majors/') ? `grad/${year}/${college}/${folder}`
+    const id = f.includes('/graduate/') ? `grad/${year}/${college}/${folder}`
                                            : `${year}/${college}/${folder}`;
     const b = byId.get(id);
     if (!b) { drift.push(`${id}: absent from bundle`); continue; }

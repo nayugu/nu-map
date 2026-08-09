@@ -80,7 +80,7 @@ export const LEVELS = ['verified', 'partial', 'review', 'unverified'];
 export function programKind(id, program) {
   if (/_minor$/.test(id)) return 'minor';
   if (/certificate/i.test(id) || /certificate/i.test(program?.name ?? '')) return 'certificate';
-  if (id.startsWith('grad-majors/')) return 'grad';
+  if (id.startsWith('graduate/')) return 'grad';
   return 'major';
 }
 
@@ -181,7 +181,7 @@ function matchedByRange(key, ranges) {
  * Run every applicable check against one program.
  *
  * @param {object}  args
- * @param {object}  args.program     parsed.initial.json contents
+ * @param {object}  args.program     requirements.json contents
  * @param {string}  args.id          stable program id, e.g. "majors/2026/…/slug"
  * @param {Set<string>} [args.courseIndex]  known course keys from catalog-courses.json —
  *   the file the planner actually loads, so an "unknown course" finding means the

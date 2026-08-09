@@ -50,7 +50,7 @@ export function parseEditionArg(argv) {
   if (end !== start + 1 || start < 2000 || start > 2100) {
     throw new Error(`--edition ${label} is not a plausible consecutive academic year`);
   }
-  // The end year, matching parseCatalogEdition and the data/northeastern/programs/majors/{year}/
+  // The end year, matching parseCatalogEdition and the data/northeastern/programs/undergraduate/{year}/
   // convention: the 2022-2023 edition is stored as 2023.
   return { label, year: end };
 }

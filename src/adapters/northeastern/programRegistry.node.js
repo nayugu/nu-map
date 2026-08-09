@@ -2,8 +2,8 @@
 // ADAPTER: northeastern/programRegistry.node  (Node.js, fs-based)
 //
 // The Node counterpart of majorLoader/minorLoader: scans BOTH program
-// trees (data/northeastern/programs/majors = undergrad,
-// data/northeastern/programs/grad-majors = graduate)
+// trees (data/northeastern/programs/undergraduate = undergrad,
+// data/northeastern/programs/graduate = graduate)
 // and exposes the same option shape the app builds, plus the parsed
 // requirement JSON. Stale saved paths resolve through the same tiered
 // logic (programPaths.resolveInMap) the browser uses.
@@ -17,8 +17,8 @@ import { parseMajorPathParts, resolveInMap } from "../../data/programPaths.js";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 
 const TREES = [
-  { dir: join(ROOT, "data/northeastern/programs/majors"),      level: "undergrad" },
-  { dir: join(ROOT, "data/northeastern/programs/grad-majors"), level: "grad" },
+  { dir: join(ROOT, "data/northeastern/programs/undergraduate"),      level: "undergrad" },
+  { dir: join(ROOT, "data/northeastern/programs/graduate"), level: "grad" },
 ];
 
 function scanTree(dir, level, programs, programData) {
@@ -32,7 +32,7 @@ function scanTree(dir, level, programs, programData) {
 
     if (stat.isDirectory()) {
       scanTree(full, level, programs, programData);
-    } else if (entry === "parsed.initial.json") {
+    } else if (entry === "requirements.json") {
       const parts = parseMajorPathParts(full);
       if (!parts || !parts.college || !parts.folder) continue;
       const { year, college, folder } = parts;
@@ -118,7 +118,7 @@ export function loadPrograms() {
   const listed = programs.filter(p => p.year === newestOf.get(p.id.replace(/(^|\/)\d{4}\//, "$1")));
 
   // Registry keyed by compact id for stale-path resolution. Incoming ids may
-  // be full Vite module paths ("./majors/2026/khoury/…/parsed.initial.json")
+  // be full Vite module paths (".../programs/undergraduate/2026/khoury/…/requirements.json")
   // or compact "2026/college/folder" — parseMajorPathParts handles both.
   const registry = Object.fromEntries([...programData.keys()].map(k => [k, true]));
 

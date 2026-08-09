@@ -10,7 +10,7 @@
  * without re-fetching 658 pages.
  *
  * Order matters — run it AFTER both program scrapes, because it reads the
- * `parsed.initial.json` they write.
+ * `requirements.json` they write.
  *
  *   node scripts/bind-plans.js              # report only
  *   node scripts/bind-plans.js --write      # write bindings into plan.json
@@ -69,8 +69,8 @@ function main() {
   const hints = createPlanHints(subjects, { specAdmitsSubject, specAdmitsRange });
 
   const files = [
-    ...globSync(join(ROOT, "data/northeastern/programs/majors/*/*/*/plan.json")),
-    ...globSync(join(ROOT, "data/northeastern/programs/grad-majors/*/*/*/plan.json")),
+    ...globSync(join(ROOT, "data/northeastern/programs/undergraduate/*/*/*/plan.json")),
+    ...globSync(join(ROOT, "data/northeastern/programs/graduate/*/*/*/plan.json")),
   ].sort();
 
   let programs = 0, cells = 0, forced = 0, ambiguous = 0, unbound = 0, legacy = 0;
@@ -78,7 +78,7 @@ function main() {
   const writes = [];
 
   for (const file of files) {
-    const reqFile = join(dirname(file), "parsed.initial.json");
+    const reqFile = join(dirname(file), "requirements.json");
     if (!existsSync(reqFile)) continue;
     const program = JSON.parse(readFileSync(reqFile, "utf8"));
     const grid = JSON.parse(readFileSync(file, "utf8"));
@@ -111,7 +111,7 @@ function main() {
         if (isForced) forced += 1; else ambiguous += 1;
         // The target is a SECTION INDEX into the same program's
         // requirementSections, or a sentinel. It cannot dangle: this file and
-        // parsed.initial.json are produced together and ship together.
+        // requirements.json are produced together and ship together.
         entry.binding = { targets, ...(isForced ? { forced: true } : {}) };
         touched = true;
       });

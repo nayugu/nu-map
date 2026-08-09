@@ -44,7 +44,7 @@ const SEMESTERS = [
 /** Every program shipping both a plan and parsed requirements. */
 function corpus(limit = Infinity) {
   const out = [];
-  for (const root of ["data/northeastern/programs/majors/2026", "data/northeastern/programs/grad-majors/2026"]) {
+  for (const root of ["data/northeastern/programs/undergraduate/2026", "data/northeastern/programs/graduate/2026"]) {
     const base = join(ROOT, root);
     if (!existsSync(base)) continue;
     for (const college of readdirSync(base)) {
@@ -52,7 +52,7 @@ function corpus(limit = Infinity) {
       try { progs = readdirSync(join(base, college)); } catch { continue; }
       for (const prog of progs) {
         const planFile = join(base, college, prog, "plan.json");
-        const reqFile = join(base, college, prog, "parsed.initial.json");
+        const reqFile = join(base, college, prog, "requirements.json");
         if (!existsSync(planFile) || !existsSync(reqFile)) continue;
         try {
           out.push({

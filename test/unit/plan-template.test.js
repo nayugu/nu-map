@@ -249,7 +249,7 @@ const SEMESTERS = [
 ];
 
 function aRealPlan() {
-  const base = join(ROOT, "data/northeastern/programs/majors/2026");
+  const base = join(ROOT, "data/northeastern/programs/undergraduate/2026");
   for (const college of readdirSync(base)) {
     let progs = [];
     try { progs = readdirSync(join(base, college)); } catch { continue; }
@@ -269,7 +269,7 @@ test("REAL: the counts on the checkbox are what applying actually produces", () 
   // programs, not one.
   const courseMap = new Proxy({}, { get: (_, k) => ({ id: String(k), sh: 4 }), has: () => true });
   const ctx = { semesters: SEMESTERS, courseMap };
-  const base = join(ROOT, "data/northeastern/programs/majors/2026");
+  const base = join(ROOT, "data/northeastern/programs/undergraduate/2026");
   let checked = 0, sawPlaceholders = 0;
 
   for (const college of readdirSync(base)) {

@@ -20,7 +20,7 @@ import { ROOT } from "../helpers/paths.js";
 
 const ARCHIVE  = join(ROOT, "data/northeastern/programs/archive");
 const MANIFEST = join(ARCHIVE, "manifest.json");
-const TREES    = ["majors", "grad-majors"];
+const TREES    = ["undergraduate", "graduate"];
 
 const present = existsSync(MANIFEST);
 const manifest = present ? JSON.parse(readFileSync(MANIFEST, "utf8")) : { editions: {} };

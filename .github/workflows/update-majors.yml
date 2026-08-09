@@ -4,7 +4,7 @@ name: Update Major Requirements
 # Staggered 2 hours after update-courses.yml to avoid concurrent writes to the repo.
 #
 # Scrapes catalog.northeastern.edu degree requirement pages and writes
-# parsed.initial.json files to data/northeastern/programs/majors/{year}/{college}/{slug}/.
+# requirements.json files to data/northeastern/programs/undergraduate/{year}/{college}/{slug}/.
 #
 # Pushes directly to main — no PR. Same pattern as update-nupath.yml.
 
@@ -108,7 +108,7 @@ jobs:
           DATE=$(date -u '+%Y-%m')
           ADDED=$(grep -oP 'OK\s+' /tmp/majors-log.txt | wc -l | tr -d ' ')
 
-          git add data/northeastern/programs/majors/
+          git add data/northeastern/programs/undergraduate/
           # The verification verdict lives in each program file, and the report
           # and baseline are the human/machine record of this run's fidelity.
           git add docs/verification-report.md scripts/major-verify-baseline.json

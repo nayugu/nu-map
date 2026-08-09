@@ -2,7 +2,7 @@
 // SAMPLE PLAN LOADER  (data adapter)
 //
 // The department's published Sample Plan of Study for a program, kept in a
-// `plan.json` beside that program's `parsed.initial.json` and reached through
+// `plan.json` beside that program's `requirements.json` and reached through
 // its own import.meta.glob.
 //
 // ── Why it is a separate file and a separate glob ──────────────────
@@ -25,15 +25,15 @@
 
 import { parseMajorPathParts, resolveInMap } from "./programPaths.js";
 
-const _planMap = import.meta.glob("../../data/northeastern/programs/majors/**/plan.json",      { eager: false });
-const _gradMap = import.meta.glob("../../data/northeastern/programs/grad-majors/**/plan.json", { eager: false });
+const _planMap = import.meta.glob("../../data/northeastern/programs/undergraduate/**/plan.json",      { eager: false });
+const _gradMap = import.meta.glob("../../data/northeastern/programs/graduate/**/plan.json", { eager: false });
 
 /**
- * A program path points at `parsed.initial.json`; its plan is the sibling.
+ * A program path points at `requirements.json`; its plan is the sibling.
  * Derived rather than stored so the two can never drift apart.
  */
 const toPlanPath = (programPath) =>
-  String(programPath ?? "").replace(/parsed\.initial\.json$/, "plan.json");
+  String(programPath ?? "").replace(/requirements\.json$/, "plan.json");
 
 /**
  * Load the sample plans for a program path, or null when it publishes none.
@@ -41,7 +41,7 @@ const toPlanPath = (programPath) =>
  * `path` is the same string `loadMajor`/`loadGradMajor` take, so callers never
  * hold a second identifier for the same program.
  *
- * @param {string} path      e.g. "./majors/2026/science/biology_bs_(boston)/parsed.initial.json"
+ * @param {string} path      e.g. ".../programs/undergraduate/2026/science/biology_bs_(boston)/requirements.json"
  * @param {boolean} isGrad
  * @returns {Promise<{plans: Array}|null>}
  */

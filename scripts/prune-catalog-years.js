@@ -5,7 +5,7 @@
  * Retention for the frozen per-edition program trees.
  *
  * Requirements are locked to the catalog edition a student entered under, so
- * src/data/{majors,grad-majors}/<year>/ accumulates one directory per edition
+ * data/northeastern/programs/{undergraduate,graduate}/<year>/ accumulates one directory per edition
  * and older ones are never rescraped. Without a bound that grows forever; with
  * too tight a bound we delete the requirements a real student still follows.
  *
@@ -41,7 +41,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT  = join(dirname(fileURLToPath(import.meta.url)), '..');
-const TREES = ['data/northeastern/programs/majors', 'data/northeastern/programs/grad-majors'];
+const TREES = ['data/northeastern/programs/undergraduate', 'data/northeastern/programs/graduate'];
 const KEEP_YEARS = 7;
 const WRITE = process.argv.includes('--write');
 

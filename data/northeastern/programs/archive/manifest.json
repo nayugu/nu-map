@@ -2,7 +2,7 @@
   "editions": {
     "2020": {
       "label": "2019-2020",
-      "majors": {
+      "undergraduate": {
         "programs": 374,
         "colleges": 8,
         "sections": 2728,
@@ -10,7 +10,7 @@
         "plans": 194,
         "scrapedAt": "2026-08-07"
       },
-      "grad-majors": {
+      "graduate": {
         "programs": 369,
         "colleges": 10,
         "sections": 1396,
@@ -21,7 +21,7 @@
     },
     "2021": {
       "label": "2020-2021",
-      "majors": {
+      "undergraduate": {
         "programs": 405,
         "colleges": 9,
         "sections": 3016,
@@ -29,7 +29,7 @@
         "plans": 229,
         "scrapedAt": "2026-08-07"
       },
-      "grad-majors": {
+      "graduate": {
         "programs": 341,
         "colleges": 11,
         "sections": 1367,
@@ -40,7 +40,7 @@
     },
     "2022": {
       "label": "2021-2022",
-      "majors": {
+      "undergraduate": {
         "programs": 427,
         "colleges": 9,
         "sections": 3082,
@@ -48,7 +48,7 @@
         "plans": 245,
         "scrapedAt": "2026-08-07"
       },
-      "grad-majors": {
+      "graduate": {
         "programs": 356,
         "colleges": 11,
         "sections": 1429,
@@ -59,7 +59,7 @@
     },
     "2023": {
       "label": "2022-2023",
-      "majors": {
+      "undergraduate": {
         "programs": 440,
         "colleges": 9,
         "sections": 3180,
@@ -67,7 +67,7 @@
         "plans": 266,
         "scrapedAt": "2026-08-07"
       },
-      "grad-majors": {
+      "graduate": {
         "programs": 361,
         "colleges": 12,
         "sections": 1456,
@@ -78,7 +78,7 @@
     },
     "2024": {
       "label": "2023-2024",
-      "majors": {
+      "undergraduate": {
         "programs": 453,
         "colleges": 9,
         "sections": 3335,
@@ -86,7 +86,7 @@
         "plans": 270,
         "scrapedAt": "2026-08-07"
       },
-      "grad-majors": {
+      "graduate": {
         "programs": 356,
         "colleges": 12,
         "sections": 1404,
@@ -97,7 +97,7 @@
     },
     "2025": {
       "label": "2024-2025",
-      "majors": {
+      "undergraduate": {
         "programs": 489,
         "colleges": 9,
         "sections": 3711,
@@ -105,7 +105,7 @@
         "plans": 317,
         "scrapedAt": "2026-08-07"
       },
-      "grad-majors": {
+      "graduate": {
         "programs": 380,
         "colleges": 13,
         "sections": 1460,

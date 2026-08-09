@@ -24,7 +24,7 @@ import {
 import { applySamplePlan } from "../../src/core/applySamplePlan.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../..");
-const PLAN = join(ROOT, "data/northeastern/programs/majors/2026/computer-information-science",
+const PLAN = join(ROOT, "data/northeastern/programs/undergraduate/2026/computer-information-science",
   "computer_science_and_mathematics_bs_(boston)/plan.json");
 
 const SEMESTERS = [

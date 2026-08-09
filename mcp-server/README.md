@@ -16,7 +16,7 @@ Gives Claude direct access to your Northeastern course plan — read data, check
 ## Requirements
 
 - Node.js 18 or newer
-- NU Map project cloned locally (the MCP server reads from `public/northeastern/` and `data/northeastern/programs/majors/`)
+- NU Map project cloned locally (the MCP server reads from `public/northeastern/` and `data/northeastern/programs/undergraduate/`)
 
 ## Setup
 

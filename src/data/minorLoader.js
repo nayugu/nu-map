@@ -6,7 +6,7 @@
 // Same history as majorLoader.js: minor data originally came from an
 // external/graduatenu submodule (since removed). The scraper
 // (scripts/scrape-majors.js) outputs minors alongside majors into
-// data/northeastern/programs/majors/ — any folder ending in _minor is a minor program.
+// data/northeastern/programs/undergraduate/ — any folder ending in _minor is a minor program.
 // ═══════════════════════════════════════════════════════════════════
 
 import { resolveInMap } from './majorLoader.js';
@@ -14,7 +14,7 @@ import { pickCatalogYear } from './programPaths.js';
 
 // Scraped minors live alongside scraped majors; folder names end with _minor.
 const _moduleMap = import.meta.glob(
-  '../../data/northeastern/programs/majors/**/*_minor/parsed.initial.json',
+  '../../data/northeastern/programs/undergraduate/**/*_minor/requirements.json',
   { eager: false }
 );
 

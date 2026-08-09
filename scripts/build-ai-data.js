@@ -23,7 +23,7 @@
 //   dist/data/json/**                  the developer JSON API
 //
 // Runs AFTER `vite build` (writes into dist/), so the repo stays free of
-// thousands of generated files. Sources: the same parsed.initial.json
+// thousands of generated files. Sources: the same requirements.json
 // files that feed the app's hashed chunks, the programs bundle, and the
 // course catalog — nothing here can drift from what the app shows.
 //
@@ -71,7 +71,7 @@ const writeJSON = (rel, data) => {
 };
 
 // ── Gather programs ──────────────────────────────────────────────────
-// Tree shape: data/northeastern/programs/majors/{year}/{college}/{programDir}/parsed.initial.json
+// Tree shape: data/northeastern/programs/undergraduate/{year}/{college}/{programDir}/requirements.json
 // (grad-majors mirrors it). The internal id is the path fragment, with
 // grad ids prefixed "grad/" — matching programs-bundle ids exactly.
 
@@ -86,7 +86,7 @@ function* walkPrograms(baseDir, idPrefix) {
       const collegeDir = path.join(yearDir, college);
       if (!fs.statSync(collegeDir).isDirectory()) continue;
       for (const prog of fs.readdirSync(collegeDir).sort()) {
-        const file = path.join(collegeDir, prog, "parsed.initial.json");
+        const file = path.join(collegeDir, prog, "requirements.json");
         if (!fs.existsSync(file)) continue;
         yield { id: `${idPrefix}${year}/${college}/${prog}`, year, college, prog, file };
       }
@@ -109,7 +109,7 @@ const programRedirects = []; // old /data/programs/* page paths → new homes
 // professors: /data/majors/{slug}, /data/minors/{slug}, /data/graduate/{slug}.
 // Pages exist for the newest catalog year only, so slugs drop the
 // year-level-college prefix; the rare collision gets a college prefix.
-const allSrcs = [...walkPrograms("majors", ""), ...walkPrograms("grad-majors", "grad/")];
+const allSrcs = [...walkPrograms("undergraduate", ""), ...walkPrograms("graduate", "grad/")];
 const newestProgYear = Math.max(...allSrcs.map((s) => Number(s.year)));
 const pageSlugTaken = new Map(); // "dir/slug" → id
 

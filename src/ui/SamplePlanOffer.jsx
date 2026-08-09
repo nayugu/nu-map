@@ -332,7 +332,7 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
  *
  * Three things were wrong with what this produced:
  *
- *   "parsed.initial.json (sample plan)"
+ *   "requirements.json (sample plan)"
  *
  * The path ends in the FILE, so the program is the second-to-last segment —
  * taking the last one named every plan after the JSON it was read from.

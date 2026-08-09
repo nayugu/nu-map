@@ -24,7 +24,7 @@ const ROOT = resolve(__dirname, '..');
 const WRITE = process.argv.includes('--write');
 
 const files = execSync(
-  "find data/northeastern/programs/majors data/northeastern/programs/grad-majors -name 'parsed.initial.json'",
+  "find data/northeastern/programs/undergraduate data/northeastern/programs/graduate -name 'requirements.json'",
   { cwd: ROOT }
 ).toString().trim().split('\n').filter(Boolean);
 

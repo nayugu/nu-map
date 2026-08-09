@@ -7,27 +7,27 @@
 // external/graduatenu git submodule (a fork of sandboxnu/graduatenu) —
 // a bootstrap shortcut with no control over schema, coverage, or cadence.
 // Our own scraper (scripts/scrape-majors.js) pulls directly from
-// catalog.northeastern.edu and writes to data/northeastern/programs/majors/; it fully
+// catalog.northeastern.edu and writes to data/northeastern/programs/undergraduate/; it fully
 // replaced the submodule, which has been removed. Saved plans may still
 // hold old submodule paths — resolveInMap (programPaths.js) migrates them.
 //
 // IMPLEMENTATION NOTE
 // ───────────────────
 // Uses Vite's import.meta.glob for lazy, on-demand loading of the
-// parsed.initial.json files.  Only the selected major's JSON is ever
+// requirements.json files.  Only the selected major's JSON is ever
 // fetched; the other paths stay as stubs.
 // import.meta.glob requires static string literals at the call site.
 // ═══════════════════════════════════════════════════════════════════
 
-// Lazy stubs from our own scraper output (data/northeastern/programs/majors/).
+// Lazy stubs from our own scraper output (data/northeastern/programs/undergraduate/).
 const _moduleMap = import.meta.glob(
-  '../../data/northeastern/programs/majors/**/parsed.initial.json',
+  '../../data/northeastern/programs/undergraduate/**/requirements.json',
   { eager: false }
 );
 
-// Graduate program data (data/northeastern/programs/grad-majors/).
+// Graduate program data (data/northeastern/programs/graduate/).
 const _gradMap = import.meta.glob(
-  '../../data/northeastern/programs/grad-majors/**/parsed.initial.json',
+  '../../data/northeastern/programs/graduate/**/requirements.json',
   { eager: false }
 );
 
