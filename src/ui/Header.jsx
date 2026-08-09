@@ -7,7 +7,7 @@ import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
 import { exportReport, getOrderedCourses, filterInTimeline } from "../core/planModel.js";
-import { resolveTermByDuration, termSpans, computeGrantedAttrs } from "../core/specialTermUtils.js";
+import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
 import { donateEnabled } from "../core/donate.js";
@@ -545,23 +545,20 @@ export default function Header() {
 
   const handleExport = e => {
     e.stopPropagation();
-    const curIdx     = SEM_INDEX[currentSemId] ?? 0;
     const majorPath  = major  || "";
     const major2Path = major2 || "";
     const concLabel  = conc   || "";
     const minor1Path = minor1 || "";
     const minor2Path = minor2 || "";
-    const npCovered  = attributeSystem.getCoverage(filterInTimeline(placements, SEM_INDEX), courseMap, computeGrantedAttrs(specialTermPl, specialTerms.getTypes(), SEM_INDEX));
-    // Build set of course keys that are placed in already-completed semesters
-    const doneKeys = new Set();
-    for (const [id, semId] of Object.entries(placements)) {
-      const c = courseMap[id];
-      if (!c?.subject || !c?.number) continue;
-      if ((SEM_INDEX[semId] ?? 99) < curIdx) doneKeys.add(c.subject + c.number);
-    }
+    // The requirement audit, the completed-course set and the NUPath grid are
+    // derived inside exportReport from `placements` + `grades`. Building them
+    // here is what let the printed plan drift out of step with GradPanel: this
+    // caller had no grade view, so an F/W/U course printed as completed.
+    // `grades` is the same value GradPanel reads, so private mode (which
+    // blanks it) keeps hiding grade-derived surfaces on paper too.
     const gradInfo = {
       majorPath, major2Path, concLabel, minor1Path, minor2Path,
-      npCovered, doneKeys, totalSHRequired: 0,
+      grades, totalSHRequired: 0,
       placedOut, substitutions,
       isGrad: studentType === "graduate",
     };
@@ -1451,6 +1448,9 @@ export default function Header() {
               background: "var(--bg-surface)", border: "1px solid var(--border-2)", borderRadius: 8,
               padding: "10px 12px", minWidth: 190, boxShadow: "var(--shadow-modal)",
               display: "flex", flexDirection: "column", gap: 7,
+              // Hard cap on the panel's height so it never runs down the screen;
+              // .hdr-pop supplies overflow-y:auto, so it scrolls past this point.
+              maxHeight: "min(70vh, 460px)",
               ...(phonePopFixed || {}),
             }}>
               {/* Language */}

@@ -2,7 +2,8 @@
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
 import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
-import { resolveTermByDuration, termSpans } from "./specialTermUtils.js";
+import { resolveTermByDuration, termSpans, computeGrantedAttrs, computeGrantedCourses } from "./specialTermUtils.js";
+import { dropVoidTakes, dropUnearnedTakes } from "./gradeSystem.js";
 
 
 /**
@@ -274,9 +275,77 @@ function sectionHtml(sec, doneKeys) {
 }
 
 /**
+ * The grade-scoped course sets a degree audit runs on.
+ *
+ * Extracted because this derivation had two implementations that disagreed.
+ * GradPanel built these through the grade views; the printed report built its
+ * own from raw placements and had no grade view at all — so a course graded
+ * F/W/U/X was voided on screen and printed as COMPLETED, on the single
+ * artifact a student hands to an advisor.
+ *
+ * Returns:
+ *   projected     — PROJECTION view: still counts toward the degree (I stays)
+ *   earned        — EARNED view: registrar's hours earned (I has earned nothing)
+ *   placedSet     — satisfies requirements; includes substitution targets
+ *   realPlacedSet — same minus virtual targets, so General Electives don't
+ *                   list a substituted course twice at doubled SH
+ *   doneKeys      — completed course keys, from the EARNED view
+ *
+ * ORDER MATTERS: voids drop BEFORE substitutions re-apply, so a failed
+ * substituting course cannot smuggle its virtual target back in under the
+ * target's own ungraded id — which dropVoidTakes alone could never remove.
+ *
+ * `isCompleted` is a parameter, not a constant, because callers genuinely
+ * disagree about it and that disagreement is not this function's to settle:
+ * GradPanel's getSemStatus also treats the graduation semester as completed
+ * once the plan is marked graduated, and the printed report never has. The
+ * default is the report's rule. Callers pass their own to adopt this without
+ * silently changing what "done" means on their surface.
+ */
+export function derivePlanSets({
+  placements, grades = {}, substitutions = [], placedOut = new Set(),
+  courseMap, dynSemIdx, curIdx, isCompleted,
+  specialTermPl = {}, specialTermTypes = [],
+}) {
+  const done = isCompleted ?? (semId => (dynSemIdx[semId] ?? 99) < curIdx);
+  const projected = dropVoidTakes(placements, grades);
+  const earned    = dropUnearnedTakes(placements, grades);
+
+  const placedSet     = buildPlacedKeySet(
+    filterInTimeline(applySubstitutions(projected, substitutions), dynSemIdx), placedOut, courseMap);
+  const realPlacedSet = buildPlacedKeySet(
+    filterInTimeline(projected, dynSemIdx), placedOut, courseMap);
+
+  // A work term registers a real course (COOP 3945). It satisfies
+  // requirements but was never dragged onto the grid, so it joins placedSet
+  // ALONE — realPlacedSet feeds General Electives and must stay what the
+  // student actually placed. Same split the virtual substitution targets use.
+  for (const k of computeGrantedCourses(specialTermPl, specialTermTypes, dynSemIdx)) placedSet.add(k);
+
+  // …and a co-op that has already happened makes its course COMPLETED, not
+  // merely planned. Derived here rather than by the caller for the same
+  // reason as everything else in this function: two derivations disagree.
+  const finishedTerms = Object.fromEntries(
+    Object.entries(specialTermPl).filter(([, d]) => d?.semId && done(d.semId))
+  );
+
+  // A course in a completed semester is DONE only if its grade yielded credit
+  // (or none was entered).
+  const doneKeys = buildPlacedKeySet(
+    Object.fromEntries(
+      Object.entries(applySubstitutions(earned, substitutions)).filter(([, semId]) => done(semId))
+    ),
+    placedOut, courseMap
+  );
+  for (const k of computeGrantedCourses(finishedTerms, specialTermTypes, dynSemIdx)) doneKeys.add(k);
+
+  return { projected, earned, placedSet, realPlacedSet, doneKeys };
+}
+
+/**
  * Async: opens a print-ready HTML page and triggers Save-as-PDF.
  * gradInfo: { majorPath, concLabel, minor1Path, minor2Path,
- *             npCovered (Set<string>), doneKeys (Set<string>), totalSHRequired }
+ *             grades, totalSHRequired }
  */
 /**
  * The printed plan.
@@ -292,6 +361,14 @@ function sectionHtml(sec, doneKeys) {
  * elective calculation would credit a printed plan for a course nobody has
  * chosen. `view` defaults to the degree maps, so a caller that does not know
  * about reservations still prints a correct, if reservation-free, report.
+ *
+ * The three grade-derived sets — placedSet, doneKeys and the attribute grid —
+ * are derived HERE, from raw `placements` + `grades`, and never passed in.
+ * They used to be the caller's job, and the caller (Header) built them from
+ * raw placements while GradPanel built the same sets through dropVoidTakes:
+ * an F/W/U course was voided on screen and printed as completed, on the one
+ * artifact a student hands to an advisor. One owner is the fix — a second
+ * derivation is the bug.
  */
 export async function exportReport(placements, courseMap, currentSemId, dynSems, dynSemIdx, gradInfo = {}, specialTermPl = {}, adapter = {}, view = null) {
   const layoutPlacements = view?.occupants ?? placements;
@@ -308,12 +385,14 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
 
   const {
     majorPath = "", major2Path = "", concLabel = "", minor1Path = "", minor2Path = "",
-    npCovered = new Set(), doneKeys = new Set(), totalSHRequired = 0,
+    totalSHRequired = 0, grades = {},
     placedOut = new Set(), substitutions = [], isGrad = false,
   } = gradInfo;
 
-  // effectivePlacements: add virtual entries for substitution targets
-  const effectivePlacements = applySubstitutions(placements, substitutions);
+  const { projected, earned, placedSet, realPlacedSet, doneKeys } = derivePlanSets({
+    placements, grades, substitutions, placedOut, courseMap, dynSemIdx, curIdx,
+    specialTermPl, specialTermTypes: termTypes,
+  });
 
   // ── Load major + minors (async) ───────────────────────────────
   // Graduate plans resolve their programs through loadGradMajor (different data
@@ -366,17 +445,22 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     const isCur  = sem.id === currentSemId;
     ids.forEach(id => {
       const sh = courseMap[id]?.sh ?? 0;
-      if (isDone) doneSH += sh; else plannedSH += sh;
+      // Layout prints every card; only the matching grade view pays for it.
+      // A reservation is absent from both maps (and from courseMap), so it
+      // still contributes nothing — the pre-existing guarantee, now explicit.
+      if (isDone) { if (earned[id]    !== undefined) doneSH    += sh; }
+      else        { if (projected[id] !== undefined) plannedSH += sh; }
     });
     semRows.push({ sem, ids, isDone, isCur, hasStart, hasCont });
   });
 
   // ── Requirements sections HTML ────────────────────────────────
-  // placedSet includes virtual substitution targets (needed for requirement satisfaction).
-  // realPlacedSet excludes them so GE only lists courses the student actually placed.
-  // Both are timeline-scoped: entries parked outside the cohort range don't audit.
-  const placedSet     = buildPlacedKeySet(filterInTimeline(effectivePlacements, dynSemIdx), placedOut, courseMap);
-  const realPlacedSet = buildPlacedKeySet(filterInTimeline(placements, dynSemIdx), placedOut, courseMap);
+  // Attribute (NUPath) coverage, from the PROJECTION view: a failed course
+  // earns no attributes either, until a retake restores the base course.
+  const npCovered = attributeSystem?.getCoverage(
+    filterInTimeline(projected, dynSemIdx), courseMap,
+    computeGrantedAttrs(specialTermPl, termTypes, dynSemIdx)
+  ) ?? new Set();
 
   function renderProgram(prog, doneKeysSet, headerLabel, name, showGeneralElectives = true) {
     if (!prog) return "";
