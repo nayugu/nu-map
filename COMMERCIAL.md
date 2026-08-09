@@ -315,9 +315,23 @@ institutional rate under §3.1, and the minimum at limb (a) at half the minimum
 fee under §3.4, in recognition of the distribution, integration, and support
 functions a Supplier discharges. A Supplier's floor is accordingly half the
 institutional figure at every number of students, minimum included. Its purpose
-is to ensure that the Licensor's consideration does not depend materially upon whether an institution
-licenses the Work directly or acquires it through a Supplier, while preserving a
-margin in favour of the Supplier's channel.
+is to ensure that the Licensor's consideration does not depend materially upon
+whether an institution licenses the Work directly or acquires it through a
+Supplier, while preserving a margin in favour of the Supplier's channel.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(g) **Scoped supply.** Where a Supplier provides a
+Licensed Product to an institution for named colleges, schools, departments, or
+programs only, and not institution-wide, the Served Students for that institution
+are counted as the Scoped Students of those units, determined and certified as at
+§3.9(a), and limb (ii) is **two United States dollars (US$2.00)** per such Served
+Student. A Supplier relying on this limb shall name those units in its statement
+under limb (e), and limb (a) applies to the aggregate as it does to any other.
+That rate is half the rate at §3.9(b), so limb (f) holds on this path too: absent
+this limb, §2.5 would count a Supplier's Served Students institution-wide even
+where it supplies a single department, and a Supplier would pay more for a
+departmental deployment than the institution would pay to license the same
+deployment directly under §3.9 — reversing the margin limb (f) exists to
+preserve.
 
 ## 5. Which section applies; term; renewal; perpetual fallback
 
@@ -349,13 +363,16 @@ effect continuously, and thereafter from the date of renewal.
 not contingent upon the continued operation of the Licensor. Nothing already
 incorporated into a licensee's product may be withdrawn by the Licensor.
 
-5.3. **The fallback is banded.** The perpetual fallback at §5.2 subsists only in
-respect of use at or below the band under which it vested. Should the licensee's
-Enrolled Students or Product Revenue subsequently exceed that band, continued
-commercial use requires a current license at the then-applicable band; upon
-taking one, the licensee's fallback re-vests at that higher band. Growth in the
-licensee's size is accordingly not a means of acquiring a perpetual license at
-the price of a smaller one.
+5.3. **The fallback is banded, and scoped where the license was.** The perpetual
+fallback at §5.2 subsists only in respect of use at or below the band under which
+it vested, and — where it vested under a scoped license — only in respect of the
+Scoped Units it named. Should the licensee's Enrolled Students, Scoped Students,
+or Product Revenue subsequently exceed that band, or should the licensee come to
+provide the Work within a unit the fallback did not name, continued commercial
+use requires a current license at the then-applicable band and scope; upon taking
+one, the licensee's fallback re-vests at that band and scope. Neither growth in
+the licensee's size nor extension of its deployment is accordingly a means of
+acquiring a perpetual license at the price of a smaller one.
 
 ## 6. Rights conferred
 

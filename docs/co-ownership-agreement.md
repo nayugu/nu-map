@@ -12,10 +12,12 @@ grant is in consideration of the other, so no payment between us is needed. It
 survives either of us stopping work, or falling out.
 
 **3.** Of what NU Map brings in — commercial licences and donations alike, net of
-what the payment processor takes — **Nathan gets 65% and Matthew gets 35%**.
-Nathan's share is larger because he pays for the domains and infrastructure and
-carries the ongoing upkeep. Either of us can propose a different number any time;
-it changes if we both agree.
+what the payment processor takes and of the documented out-of-pocket costs of
+running NU Map, reimbursed to whichever of us paid them — **Nathan gets 65% and
+Matthew gets 35%**. That is a provisional interim rate, not the settled long-term
+split; it is reset at the first settlement event under A2. Nathan's share is
+larger because he carries the ongoing upkeep. Either of us can propose a
+different number any time; it changes if we both agree.
 
 **4.** A commercial licence is signed only if we both agree in writing. If one of
 us does not answer a written request within fourteen days, the other may sign
@@ -30,19 +32,20 @@ NU Map off AGPL-3.0 without the other agreeing.
 
 **Matthew Gu** Matthew Gu  Date July 31, 2026
 
-*§4 above was restated on 8 August 2026 to incorporate A4, so it can be read on
-its own. The signatures are to the text as signed on 31 July 2026. Every other
-section still carries its original wording — read the amendments below alongside
-them, since §3 in particular has been changed three times.*
+*§§3 and 4 above were restated on 8 August 2026 to incorporate A1–A4, so each can
+be read on its own. A1, A3 and A4 below now record only what changed and when;
+**A2 still carries the settlement-event terms that §3 refers to**, so read it in
+full. The signatures are to the text as signed on 31 July 2026. §§1, 2 and 5 are
+unamended and carry their original wording.*
 
 ### Amendments
 
 Recorded here rather than by silently rewriting signed terms, so it stays clear
 what each of us agreed to and when.
 
-**A1 — §3 extended to donations.** As originally signed, §3 covered commercial
-licences only. It now reads "commercial licences and donations alike, net of what
-the payment processor takes," so the 65/35 applies to donation income too.
+**A1 — §3 extended to donations.** As signed, §3 covered commercial licences
+only. Donation income now shares the split too; **§3 above carries the current
+wording.**
 *Agreed by both authors in person.*
 
 **A2 — 35/65 made provisional, pending a settlement event.** The 65/35 division
@@ -67,16 +70,16 @@ scope and difficulty of the work — not any single mechanical count. The result
 number is confirmed by both of us under §3.
 *Agreed by both authors in person, 8 August 2026.*
 
-**A3 — §3 nets off running costs.** As signed, §3 split revenue "net of what the
-payment processor takes," and nothing else came off the top — so whichever of us
-paid for the domains and the hosting carried that alone while sharing the income
-from it. §3 now reads "net of what the payment processor takes **and of the
-documented out-of-pocket costs of running NU Map — domains, hosting and the like
-— reimbursed to whichever of us paid them**," and the 65/35 applies to what is
-left. Reimbursement comes out of revenue, so in a year with none there is nothing
-to reimburse. Neither of us should be funding the other's share out of pocket.
-Either of us can spend on it; a new recurring cost gets mentioned to the other
-before it starts. The split itself is untouched.
+**A3 — §3 nets off running costs.** As signed, only "what the payment processor
+takes" came off the top, so whichever of us paid for the domains and the hosting
+carried that alone while sharing the income from it. Running costs now come off
+too, reimbursed out of revenue to whichever of us paid them — so in a year with
+no revenue there is nothing to reimburse, and neither of us funds the other's
+share out of pocket. **§3 above carries the current wording.** Its rationale no
+longer cites infrastructure, since those costs are now reimbursed directly rather
+than through the share; the ongoing upkeep remains. The split itself is
+untouched. Either of us can spend on it; a new recurring cost gets mentioned to
+the other before it starts.
 *Agreed by both authors in person, 8 August 2026.*
 
 **A4 — a commercial licence needs both of us.** §4's first sentence, as signed,
