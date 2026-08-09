@@ -40,6 +40,19 @@ import {
 /** Namespaced like the other grad-panel collapse flags. */
 const COLLAPSE_KEY = "numap-grad-expand-sampleplan";
 
+/**
+ * Type scale for this frame.
+ *
+ * Phone sizes are ~2/3 of what they were: the section read far larger than the
+ * panel around it. Two of the buttons were the reason it looked worst — they
+ * carried a hardcoded 10 and ignored `isPhone` entirely, so on a phone the
+ * actions were BIGGER than the body text describing them.
+ *
+ * One place, because five call sites drifting apart is how that happened.
+ */
+const PHONE_FZ  = (isPhone) => (isPhone ? 6 : 10);   // body, buttons, options
+const PHONE_FZL = (isPhone) => (isPhone ? 5.5 : 9);  // the section label
+
 export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) {
   const majorRequirements = usePort(IMajorRequirements);
   const { t } = useLanguage();
@@ -157,21 +170,24 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   const open = openResolved;
   const primary = offer.verbs[0] === "load" ? layOut : openAsNew;
   const primaryLabel = offer.verbs[0] === "load" ? t("grad.plan.load") : t("grad.plan.newplan");
-  const fz = isPhone ? 9 : 10;
+  const fz = PHONE_FZ(isPhone);
 
   return (
     <div style={{
-      margin: "8px 0 10px", padding: isPhone ? "7px 8px" : "9px 10px", borderRadius: 6,
+      // Padding tightened with the type, or 2/3-size text sits in a frame built
+      // for text half again as large and the box reads mostly as empty.
+      margin: isPhone ? "6px 0 7px" : "8px 0 10px",
+      padding: isPhone ? "5px 6px" : "9px 10px", borderRadius: 6,
       border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
     }}>
       {/* Header doubles as the collapse control, so the section is always in
           the same place whatever state it is in. */}
       <div
         onClick={() => setOpen(v => !v)}
-        style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer", userSelect: "none" }}
+        style={{ display: "flex", alignItems: "center", gap: isPhone ? 4 : 6, cursor: "pointer", userSelect: "none" }}
       >
         <span style={{
-          fontSize: isPhone ? 8 : 9, fontWeight: 700, letterSpacing: "0.06em", color: "var(--text-4)",
+          fontSize: PHONE_FZL(isPhone), fontWeight: 700, letterSpacing: "0.06em", color: "var(--text-4)",
         }}>{t("grad.plan.label")}</span>
         {/* Collapsed, the row still says something worth knowing: WHICH plan
             this canvas came from. Nothing else in the app surfaces that. */}
@@ -224,10 +240,10 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
                   beside the safe action — the same weight as "open as new
                   plan", which loses nothing. */}
               {offer.verbs.includes("replace") && (
-                <button onClick={replace} style={dangerBtn}>{t("grad.plan.replace")}</button>
+                <button onClick={replace} style={dangerBtn(isPhone)}>{t("grad.plan.replace")}</button>
               )}
               {justDid && (
-                <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn}>
+                <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn(isPhone)}>
                   {t("grad.plan.undo")}
                 </button>
               )}
@@ -272,9 +288,9 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
     };
   }, [open]);
 
-  const fz = isPhone ? 9 : 10;
+  const fz = PHONE_FZ(isPhone);
   return (
-    <div ref={boxRef} style={{ position: "relative", marginBottom: 6 }}>
+    <div ref={boxRef} style={{ position: "relative", marginBottom: isPhone ? 5 : 6 }}>
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
@@ -358,29 +374,20 @@ function planNameFor(path, fmtProgramLabel, taken) {
   }
 }
 
-function Row({ children, isPhone }) {
-  return (
-    <div style={{
-      margin: "8px 0 10px", padding: isPhone ? "7px 8px" : "9px 10px", borderRadius: 6,
-      border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
-      display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
-      fontSize: isPhone ? 9 : 10,
-    }}>{children}</div>
-  );
-}
-
 const primaryBtn = (isPhone) => ({
-  fontSize: isPhone ? 9 : 10, fontWeight: 600, padding: "3px 10px", borderRadius: 5,
+  fontSize: PHONE_FZ(isPhone), fontWeight: 600,
+  padding: isPhone ? "2px 7px" : "3px 10px", borderRadius: 5,
   cursor: "pointer", border: "1px solid var(--border-1)",
   background: "var(--bg-2)", color: "var(--text-2)",
 });
-const linkBtn = {
-  fontSize: 10, background: "transparent", border: "none", color: "var(--link-1)",
-  cursor: "pointer", padding: 0,
-};
+const linkBtn = (isPhone) => ({
+  fontSize: PHONE_FZ(isPhone), background: "transparent", border: "none",
+  color: "var(--link-1)", cursor: "pointer", padding: 0,
+});
 /** Replacing discards the student's own work, so it is coloured like it. */
-const dangerBtn = {
-  fontSize: 10, fontWeight: 600, background: "transparent",
-  border: "1px solid var(--error)", borderRadius: 5, padding: "3px 8px",
+const dangerBtn = (isPhone) => ({
+  fontSize: PHONE_FZ(isPhone), fontWeight: 600, background: "transparent",
+  border: "1px solid var(--error)", borderRadius: 5,
+  padding: isPhone ? "2px 6px" : "3px 8px",
   color: "var(--error-text)", cursor: "pointer",
-};
+});
