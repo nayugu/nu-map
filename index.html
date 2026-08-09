@@ -45,7 +45,18 @@
     <meta property="og:description" content="An independent course planner for Northeastern students. Free, no account, and your plan stays in your browser. Student-built, not affiliated with Northeastern University." />
     <meta property="og:url" content="https://numap.app" />
     <meta property="og:type" content="website" />
-    <meta name="twitter:card" content="summary" />
+    <!-- Absolute URL: relative og:image paths are ignored by most crawlers.
+         Dimensions are declared so a preview reserves the right space before
+         the image loads, instead of reflowing. -->
+    <meta property="og:image" content="https://numap.app/social-card.png" />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta property="og:image:alt" content="NU Map — degree planner for Northeastern" />
+    <!-- summary_large_image, not summary: the small card crops to a square
+         thumbnail, which would cut the wordmark off the 2:1 image. -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://numap.app/social-card.png" />
+    <meta name="twitter:image:alt" content="NU Map — degree planner for Northeastern" />
     <meta name="twitter:title" content="NU Map | Student-Built Northeastern Course Planner" />
     <meta name="twitter:description" content="An independent course planner for Northeastern students. Free, no account, and your plan stays in your browser. Student-built, not affiliated with Northeastern University." />
     <!-- Structured data: search engines read this directly; the disclaimer
