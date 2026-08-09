@@ -28,7 +28,7 @@ needed for that tier, just a one-time self-certification. A company that supplie
 institutions pays at least fifty cents per student it reaches, so that routing
 through a vendor does not cost the authors their fee. Licenses run for a year and
 do not expire retroactively: on non-renewal you keep the version you had, in
-perpetuity, so long as you stay within the size band you paid for. We promise no
+perpetuity, so long as you stay within the size you paid for. We promise no
 release schedule and may publish nothing at all in a given year; what comes after
 your license lapses needs a current one.
 
@@ -97,7 +97,8 @@ institutions to their enrolled students.
 2.8. **"Served Student"** means one Enrolled Student of an institution to which a
 Supplier provides a Licensed Product, the figure for each such institution being
 determined in accordance with §2.5, and the figures for all such institutions being
-aggregated.
+aggregated. Where the Supplier serves an institution for named units only, §4.9(g)
+displaces §2.5 for that institution and the figure is its Scoped Students instead.
 
 ## 3. Consideration — Institutional Licensees
 
@@ -322,10 +323,16 @@ Supplier, while preserving a margin in favour of the Supplier's channel.
 &nbsp;&nbsp;&nbsp;&nbsp;(g) **Scoped supply.** Where a Supplier provides a
 Licensed Product to an institution for named colleges, schools, departments, or
 programs only, and not institution-wide, the Served Students for that institution
-are counted as the Scoped Students of those units, determined and certified as at
-§3.9(a), and limb (ii) is **two United States dollars (US$2.00)** per such Served
-Student. A Supplier relying on this limb shall name those units in its statement
-under limb (e), and limb (a) applies to the aggregate as it does to any other.
+are counted as the Scoped Students of those units, determined on the basis at
+§2.5 and certified in writing **by an officer of the Supplier** — or by an
+officer of the institution, where the Supplier obtains that certificate — and are
+charged at **two United States dollars (US$2.00)** each in place of the rate at
+limb (ii). The institution is not a party to the Supplier's license and owes it
+no certificate, which is why the Supplier may certify: a cheaper assessment must
+not depend on a document its customer has no obligation to provide. Limb (ii) is
+then the sum of the amounts computed for each institution the Supplier serves,
+whether institution-wide or scoped, and limb (a) applies to that sum. A Supplier
+relying on this limb shall name those units in its statement under limb (e).
 That rate is half the rate at §3.9(b), so limb (f) holds on this path too: absent
 this limb, §2.5 would count a Supplier's Served Students institution-wide even
 where it supplies a single department, and a Supplier would pay more for a
@@ -363,16 +370,19 @@ effect continuously, and thereafter from the date of renewal.
 not contingent upon the continued operation of the Licensor. Nothing already
 incorporated into a licensee's product may be withdrawn by the Licensor.
 
-5.3. **The fallback is banded, and scoped where the license was.** The perpetual
-fallback at §5.2 subsists only in respect of use at or below the band under which
-it vested, and — where it vested under a scoped license — only in respect of the
-Scoped Units it named. Should the licensee's Enrolled Students, Scoped Students,
-or Product Revenue subsequently exceed that band, or should the licensee come to
-provide the Work within a unit the fallback did not name, continued commercial
-use requires a current license at the then-applicable band and scope; upon taking
-one, the licensee's fallback re-vests at that band and scope. Neither growth in
-the licensee's size nor extension of its deployment is accordingly a means of
-acquiring a perpetual license at the price of a smaller one.
+5.3. **The fallback is limited to what was paid for.** The perpetual fallback at
+§5.2 subsists only in respect of use at or below **the measure on which the fee
+was assessed** — the licensee's Enrolled Students under §3.4, its Scoped Students
+under §3.9, or its Product Revenue band under §4.1, as the case may be — and,
+where it vested under a scoped license, only in respect of the Scoped Units that
+license named. Should that measure subsequently be exceeded, or should the
+licensee come to provide the Work within a unit the fallback did not name,
+continued commercial use requires a current license assessed afresh; upon taking
+one, the licensee's fallback re-vests at the new measure and scope. Neither
+growth in the licensee's size nor extension of its deployment is accordingly a
+means of acquiring a perpetual license at the price of a smaller one. The measure
+is stated in these terms, rather than as a band, because §3.4 has no bands: for
+an Institutional Licensee it is a figure, and only §4.1 is banded.
 
 ## 6. Rights conferred
 
@@ -491,12 +501,13 @@ capable of being conveyed independently of the Licensed Product to which it
 attaches.
 
 7.4. **Anti-circumvention.** Where the purpose or effect of any arrangement is to
-obtain the benefit of this document at a band lower than that which the substance
-of the arrangement warrants — including by fragmenting revenue among entities, by
-interposing an intermediate licensee, by sublicensing beyond §6.2, or by assigning
-or lending a license — the Licensor may determine the applicable band by reference
-to the substance of the arrangement rather than its form, and §4.7(b) and §4.7(c)
-apply as though the licensee had understated its band.
+obtain the benefit of this document at a figure or band lower than that which the
+substance of the arrangement warrants — including by fragmenting revenue among
+entities, by interposing an intermediate licensee, by understating the units
+supplied under §3.9 or §4.9(g), by sublicensing beyond §6.2, or by assigning or
+lending a license — the Licensor may determine the applicable figure or band by
+reference to the substance of the arrangement rather than its form, and §4.7(b)
+and §4.7(c) apply as though the licensee had understated it.
 
 7.5. Nothing in this §7 restricts any right conferred by Option A. A person unable
 or unwilling to comply with this §7 may use the Work under the AGPL without
@@ -553,7 +564,7 @@ United States, without regard to its conflict-of-laws rules.
 submitting a
 [commercial licensing inquiry](https://github.com/nayugu/nu-map/issues/new?template=commercial-license.yml),
 stating the identity of the prospective licensee, the nature of the intended
-Licensed Product, and the applicable band under §3 or §4. The Licensor will
+Licensed Product, and the applicable figure or band under §3 or §4. The Licensor will
 respond with a quotation and a license instrument for execution, or, in the case
 of a Nil Band self-certification, with an acknowledgement.
 
