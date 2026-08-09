@@ -59,7 +59,7 @@ that share is meant to stand as the durable split. Contribution is assessed in
 good faith by both of us, informed by the git history — commits, code, and the
 scope and difficulty of the work — not any single mechanical count. The resulting
 number is confirmed by both of us under §3.
-*Pending — to be agreed by both authors on __________.*
+*Agreed by both authors in person, 8 August 2026.*
 
 **A3 — §3 nets off running costs.** As signed, §3 split revenue "net of what the
 payment processor takes," and nothing else came off the top — so whichever of us
