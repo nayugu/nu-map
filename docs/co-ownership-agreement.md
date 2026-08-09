@@ -61,5 +61,33 @@ scope and difficulty of the work — not any single mechanical count. The result
 number is confirmed by both of us under §3.
 *Pending — to be agreed by both authors on __________.*
 
+**A3 — §3 nets off running costs.** As signed, §3 split revenue "net of what the
+payment processor takes," and nothing else came off the top — so whichever of us
+paid for the domains and the hosting carried that alone while sharing the income
+from it. §3 now reads "net of what the payment processor takes **and of the
+documented out-of-pocket costs of running NU Map — domains, hosting and the like
+— reimbursed to whichever of us paid them**," and the 65/35 applies to what is
+left. Reimbursement comes out of revenue, so in a year with none there is nothing
+to reimburse. Neither of us should be funding the other's share out of pocket.
+Either of us can spend on it; a new recurring cost gets mentioned to the other
+before it starts. The split itself is untouched.
+*Proposed by Nathan Gu, 8 August 2026. Not in force until Matthew commits to
+this file.*
+
+**A4 — a commercial licence needs both of us.** §4's first sentence — "Either of
+us can sign a commercial licence alone, and tells the other after" — is replaced:
+**a commercial licence is signed only if we both agree in writing; if one of us
+does not answer a written request within fourteen days, the other may sign
+alone.** The rest of §4 is unchanged. The reason is `COMMERCIAL.md` §5.2: a
+licence survives non-renewal as to the version it covers, in perpetuity, and
+§5.3 only ever re-bands it upward — so one signature binds us both to a
+particular licensee at a particular band, permanently, with no way to unwind it.
+That was an even trade while we were both on this daily. It is a poor one as soon
+as either of us is out of context, because the person least likely to spot a bad
+term is the one who has been away. The fourteen days exist so that the same rule
+cannot turn absence into a veto.
+*Proposed by Nathan Gu, 8 August 2026. Not in force until Matthew commits to
+this file.*
+
 *Not written by a lawyer. Change the split in §3 or the signing rule in §4 by
 editing this file and both committing to it.*
