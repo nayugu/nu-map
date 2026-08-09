@@ -63,10 +63,15 @@ function aiDataDevPlugin() {
           res.end(`ai-data-dev: ${e}`);
           return;
         }
-        // No such page: same not-found the production rewrite serves.
-        res.statusCode = 404;
-        res.setHeader("Content-Type", "text/html; charset=utf-8");
-        res.end(fs.readFileSync("./public/data-404.html", "utf8"));
+        // No such page: hand it on, which is what production does. The SPA
+        // shell's inline check turns an unknown path into /404?p=… — that is
+        // precisely what superseded the old data-404.html stub when it was
+        // deleted (99ec1ab8), and this reader was left behind pointing at it.
+        //
+        // It mattered because the read sits OUTSIDE the try above: the ENOENT
+        // threw from a request handler with nothing to catch it, so a single
+        // mistyped /data URL took the whole dev server down.
+        return next();
       });
     },
   };
