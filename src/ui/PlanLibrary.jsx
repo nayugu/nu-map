@@ -18,7 +18,7 @@ import PlanTree, { FolderIcon } from "./PlanTree.jsx";
 import ContextMenu, { useLongPress } from "./ContextMenu.jsx";
 import {
   flattenTree, buildSearchIndex, matchIds, moveTargets, planMove,
-  topmostNodes, MAX_DEPTH,
+  topmostNodes, normalizeSearchText, MAX_DEPTH,
 } from "../core/planFolders.js";
 
 /** Spring-loaded folders: hover a closed folder mid-drag and it opens. */
@@ -151,7 +151,7 @@ export default function PlanLibrary() {
   // first folder exists. A student with three plans never meets the concept.
   const hasStudents = useMemo(() => plans.some(p => p.student), [plans]);
 
-  // The distinct advisees already in use, for the assign field's datalist.
+  // The distinct advisees already in use, with how many plans each holds.
   // Picking an existing name off the list is what stops one advisee turning
   // into "Jane Doe", "jane doe" and "Jane  Doe" — three groups that look like
   // one. Compared case/space-insensitively, but the FIRST spelling entered is
@@ -162,10 +162,30 @@ export default function PlanLibrary() {
       const s = (p.student ?? "").trim();
       if (!s) continue;
       const k = s.toLowerCase().replace(/\s+/g, " ");
-      if (!seen.has(k)) seen.set(k, s);
+      const hit = seen.get(k);
+      if (hit) hit.count++;
+      else seen.set(k, { name: s, count: 1 });
     }
-    return [...seen.values()].sort((a, b) => a.localeCompare(b, locale));
+    return [...seen.values()].sort((a, b) => a.name.localeCompare(b.name, locale));
   }, [plans, locale]);
+
+  // The roster filtered by what has been typed. Uses the SAME normalizer the
+  // library search uses, so "jose" finds "José" here exactly as it does there
+  // — an advisor should not have to reproduce an accent to find their advisee.
+  const assignMatches = useMemo(() => {
+    if (!assigning) return [];
+    const q = normalizeSearchText(assigning.value);
+    if (!q) return roster;
+    return roster.filter(r => normalizeSearchText(r.name).includes(q));
+  }, [assigning, roster]);
+
+  // Is what has been typed already an advisee, or would committing invent a
+  // new one? Drives the "new student" hint, so an advisor can SEE that a near
+  // miss ("Jane Doe " vs "Jane Doe") is about to create a second group.
+  const assignIsNew = useMemo(() => {
+    const v = normalizeSearchText(assigning?.value ?? "");
+    return !!v && !roster.some(r => normalizeSearchText(r.name) === v);
+  }, [assigning, roster]);
 
   const searchIndex = useMemo(
     () => buildSearchIndex(planTree, { slotLabel: id => labels.get(id) ?? "" }),
@@ -301,13 +321,20 @@ export default function PlanLibrary() {
     const planIds = ids.filter(id => !planTree.folderIds.has(id) && planTree.byId.has(id));
     if (!planIds.length) return;
     const values = new Set(planIds.map(id => planTree.byId.get(id).student ?? ""));
-    setAssigning({ ids: planIds, value: values.size === 1 ? [...values][0] : "" });
+    setAssigning({ ids: planIds, value: values.size === 1 ? [...values][0] : "", hi: -1 });
   };
 
-  const commitAssign = () => {
+  /**
+   * @param {string} [explicit] name to assign, when it comes from clicking a
+   *   roster row rather than from the field. Picking an existing advisee is
+   *   ONE click — the whole point of the list — so it commits directly instead
+   *   of filling the field and waiting for the button.
+   */
+  const commitAssign = (explicit) => {
     if (!assigning) return;
+    const value = explicit !== undefined ? explicit : assigning.value;
     pushFolderHistory();          // one ⌘Z undoes the whole batch
-    for (const id of assigning.ids) setPlanStudent(id, assigning.value);
+    for (const id of assigning.ids) setPlanStudent(id, value);
     setAssigning(null);
   };
 
@@ -710,6 +737,13 @@ export default function PlanLibrary() {
     return major ? t("folders.meta.studentAnd", { student, major }) : student;
   };
 
+  // Does any plan being assigned currently HAVE a student? An empty field means
+  // "clear" only if there is something to clear; on a plan with no student yet
+  // it means nothing at all, and a button reading "Clear" there looks
+  // destructive while in fact doing nothing.
+  const assignHadValue = !!assigning &&
+    assigning.ids.some(id => (planTree.byId.get(id)?.student ?? "") !== "");
+
   const iconBtn = {
     background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
     borderRadius: 6, cursor: "pointer", color: "var(--text-3)",
@@ -1001,26 +1035,102 @@ export default function PlanLibrary() {
             <input
               autoFocus
               value={assigning.value}
-              list="plan-library-roster"
-              onChange={e => setAssigning(a => ({ ...a, value: e.target.value }))}
+              role="combobox"
+              aria-expanded={assignMatches.length > 0}
+              aria-controls="plan-library-roster"
+              autoComplete="off"
+              onChange={e => setAssigning(a => ({ ...a, value: e.target.value, hi: -1 }))}
               onKeyDown={e => {
                 e.stopPropagation();
-                if (e.key === "Enter")  { e.preventDefault(); commitAssign(); }
-                if (e.key === "Escape") { e.preventDefault(); setAssigning(null); }
+                if (e.key === "Escape") { e.preventDefault(); setAssigning(null); return; }
+                if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+                  e.preventDefault();
+                  if (!assignMatches.length) return;
+                  const d = e.key === "ArrowDown" ? 1 : -1;
+                  // -1 is "use what I typed"; the list wraps around through it,
+                  // so arrowing off either end returns to the typed text rather
+                  // than trapping the cursor in the list.
+                  const next = assigning.hi + d;
+                  setAssigning(a => ({
+                    ...a,
+                    hi: next < -1 ? assignMatches.length - 1 : next >= assignMatches.length ? -1 : next,
+                  }));
+                  return;
+                }
+                if (e.key === "Enter") {
+                  e.preventDefault();
+                  const pick = assignMatches[assigning.hi];
+                  commitAssign(pick ? pick.name : undefined);
+                }
               }}
               placeholder={t("folders.assign.placeholder")}
               aria-label={t("folders.assign.placeholder")}
               style={{
                 width: "100%", boxSizing: "border-box", fontSize: 12,
-                padding: "6px 9px", borderRadius: 6, marginBottom: 8,
+                padding: "6px 9px", borderRadius: 6, marginBottom: 7,
                 border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
                 color: "var(--text-2)", outline: "none", fontFamily: "inherit",
               }}
             />
-            <datalist id="plan-library-roster">
-              {roster.map(s => <option key={s} value={s} />)}
-            </datalist>
+
+            {/* The advisees already on file, filtered as you type. A datalist
+                stood here and was the wrong control: it stays invisible until
+                the field is touched, renders differently in every browser (and
+                barely at all in Safari), and can never show how many plans a
+                student already has. An advisor's common act is re-filing onto
+                an EXISTING advisee, so that list has to be visible and one
+                click deep, not hidden behind an autocomplete. */}
+            {roster.length > 0 && (
+              <div style={{ marginBottom: 9 }}>
+                <div style={{ fontSize: 9, color: "var(--text-5)", marginBottom: 3, textTransform: "uppercase", letterSpacing: "0.04em" }}>
+                  {t("folders.assign.existing")}
+                </div>
+                <div id="plan-library-roster" role="listbox" style={{
+                  maxHeight: 148, overflowY: "auto",
+                  border: "1px solid var(--border-1)", borderRadius: 6,
+                  background: "var(--bg-surface-2)",
+                }}>
+                  {assignMatches.length === 0 ? (
+                    <div style={{ padding: "8px 9px", fontSize: 10.5, color: "var(--text-5)" }}>
+                      {t("folders.assign.noMatch")}
+                    </div>
+                  ) : assignMatches.map((r, i) => {
+                    const on = i === assigning.hi;
+                    const current = normalizeSearchText(r.name) === normalizeSearchText(assigning.value);
+                    return (
+                      <div
+                        key={r.name}
+                        role="option"
+                        aria-selected={on}
+                        onMouseEnter={() => setAssigning(a => ({ ...a, hi: i }))}
+                        onClick={() => commitAssign(r.name)}
+                        style={{
+                          display: "flex", alignItems: "center", gap: 6,
+                          padding: "5px 9px", cursor: "pointer", fontSize: 11.5,
+                          background: on ? "var(--active-bg)" : "transparent",
+                          color: on ? "var(--active)" : "var(--text-2)",
+                        }}
+                      >
+                        <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", fontWeight: current ? 700 : 400 }}>
+                          {r.name}
+                        </span>
+                        <span style={{ flexShrink: 0, fontSize: 9, color: "var(--text-5)", fontVariantNumeric: "tabular-nums" }}>
+                          {nPlans(r.count)}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
             <div style={{ fontSize: 10, color: "var(--text-5)", lineHeight: "calc(1.6 * var(--lh-scale, 1))", marginBottom: 11 }}>
+              {/* Said only when the roster is non-empty: with no advisees yet
+                  EVERY name is new, and announcing that would be noise. */}
+              {assignIsNew && roster.length > 0 && (
+                <div style={{ color: "var(--text-4)", marginBottom: 3 }}>
+                  {t("folders.assign.isNew", { name: assigning.value.trim() })}
+                </div>
+              )}
               {t("folders.assign.note")}
             </div>
             <div style={{ display: "flex", gap: 7 }}>
@@ -1029,16 +1139,27 @@ export default function PlanLibrary() {
                 background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
                 color: "var(--text-3)", fontFamily: "inherit",
               }}>{t("folders.delete.cancel")}</button>
-              <button onClick={commitAssign} style={{
-                flex: 1, fontSize: 11, fontWeight: 700, padding: "6px 10px", borderRadius: 6,
-                cursor: "pointer", background: "var(--active-bg)",
-                border: "1px solid var(--active)", color: "var(--active)", fontFamily: "inherit",
-              }}>
-                {/* Clearing is the same commit with an empty field, so the
-                    button says which one it is rather than hiding a second
-                    destructive-looking control next to it. */}
-                {assigning.value.trim() ? t("folders.assign.confirm") : t("folders.assign.clear")}
-              </button>
+              {/* Wrapped, not passed directly: an onClick handler receives the
+                  EVENT, which commitAssign would have taken as the name. */}
+              {(() => {
+                // Empty field + nothing to clear = no act to perform, so the
+                // button is disabled rather than offering a no-op.
+                const clearing = !assigning.value.trim();
+                const dead = clearing && !assignHadValue;
+                return (
+                  <button onClick={() => commitAssign()} disabled={dead} style={{
+                    flex: 1, fontSize: 11, fontWeight: 700, padding: "6px 10px", borderRadius: 6,
+                    cursor: dead ? "default" : "pointer", opacity: dead ? 0.4 : 1,
+                    background: "var(--active-bg)",
+                    border: "1px solid var(--active)", color: "var(--active)", fontFamily: "inherit",
+                  }}>
+                    {/* Clearing is the same commit with an empty field, so the
+                        button says which one it is rather than hiding a second
+                        destructive-looking control next to it. */}
+                    {clearing && assignHadValue ? t("folders.assign.clear") : t("folders.assign.confirm")}
+                  </button>
+                );
+              })()}
             </div>
           </div>
         </div>
