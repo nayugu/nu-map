@@ -1,4 +1,5 @@
 import { defineConfig } from "vite";
+import net from "net";
 import react from "@vitejs/plugin-react";
 import { spawn, execSync } from "child_process";
 import fs from "fs";
@@ -160,15 +161,48 @@ function buildManifestPlugin() {
 /** Spawns catalog-check-server alongside the dev server so no second terminal is needed. */
 function catalogCheckPlugin() {
   let child;
+
+  // `node --watch` runs the server in a GRANDCHILD, so killing the supervisor
+  // alone leaves the process that actually holds the port running, reparented to
+  // init. detached:true makes the pair its own process group; a negative pid then
+  // kills the group rather than just the supervisor.
+  const stop = () => {
+    if (!child) return;
+    const pid = child.pid;
+    child = null;
+    try { process.kill(-pid, "SIGKILL"); } catch { /* already gone */ }
+  };
+
+  const portBusy = (port) => new Promise((resolve) => {
+    const probe = net.createConnection({ port, host: "127.0.0.1" });
+    probe.once("connect", () => { probe.destroy(); resolve(true); });
+    probe.once("error", () => resolve(false));
+    probe.setTimeout(300, () => { probe.destroy(); resolve(false); });
+  });
+
   return {
     name: "catalog-check-server",
-    configureServer() {
-      child = spawn("node", ["--watch", "scripts/catalog-check-server.js"], { stdio: "inherit" });
-      child.on("error", () => {}); // silently ignore if port already in use
+    async configureServer(server) {
+      // Two dev servers at once is normal here. Without this the second spawns a
+      // --watch supervisor that can never bind, and retries forever with its
+      // stdio inherited — which is what fills the terminal with EADDRINUSE.
+      if (await portBusy(3333)) return;
+
+      child = spawn("node", ["--watch", "scripts/catalog-check-server.js"],
+                    { stdio: "inherit", detached: true });
+      child.on("error", () => {});
+
+      // buildEnd alone was the bug: it is a BUILD hook and never fires when a dev
+      // server is interrupted, so every `npm run dev` leaked one supervisor and
+      // every Ctrl-C orphaned it. Sixteen had accumulated over nine days. Hook
+      // the events that actually end a dev session instead.
+      server.httpServer?.once("close", stop);
+      process.once("exit", stop);
+      for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) {
+        process.once(sig, () => { stop(); process.exit(0); });
+      }
     },
-    buildEnd() {
-      if (child) { child.kill(); child = null; }
-    },
+    buildEnd: stop,
   };
 }
 
