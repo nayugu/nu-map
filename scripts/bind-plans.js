@@ -69,8 +69,8 @@ function main() {
   const hints = createPlanHints(subjects, { specAdmitsSubject, specAdmitsRange });
 
   const files = [
-    ...globSync(join(ROOT, "src/data/majors/*/*/*/plan.json")),
-    ...globSync(join(ROOT, "src/data/grad-majors/*/*/*/plan.json")),
+    ...globSync(join(ROOT, "data/northeastern/programs/majors/*/*/*/plan.json")),
+    ...globSync(join(ROOT, "data/northeastern/programs/grad-majors/*/*/*/plan.json")),
   ].sort();
 
   let programs = 0, cells = 0, forced = 0, ambiguous = 0, unbound = 0, legacy = 0;

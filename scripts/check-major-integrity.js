@@ -43,7 +43,7 @@ export const BASELINE = resolve(__dirname, 'major-integrity-baseline.json');
 /** Return sorted `"<relpath> :: <title>"` flags for sections impossible under allocation. */
 export function findImpossibleSections() {
   const files = execSync(
-    "find src/data/majors src/data/grad-majors -name 'parsed.initial.json'",
+    "find data/northeastern/programs/majors data/northeastern/programs/grad-majors -name 'parsed.initial.json'",
     { cwd: ROOT }
   ).toString().trim().split('\n').filter(Boolean);
 

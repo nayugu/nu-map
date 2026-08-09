@@ -24,7 +24,7 @@ test("edition › no flag means the live catalog", () => {
 });
 
 test("edition › the stored year is the END of the academic year", () => {
-  // src/data/majors/{year}/ and parseCatalogEdition both use the end year, so
+  // data/northeastern/programs/majors/{year}/ and parseCatalogEdition both use the end year, so
   // the 2022-2023 edition lands in 2023/. Storing the start year would file
   // every edition one folder early and silently shift every cohort by a year.
   assert.deepEqual(parseEditionArg(["--edition", "2022-2023"]), { label: "2022-2023", year: 2023 });

@@ -9,9 +9,9 @@
  * Uses the same HTML parsing logic as scrape-majors.js (undergrad), since
  * catalog.northeastern.edu renders graduate pages with the same structure.
  * Key differences: targets /graduate/ paths, lower credit minimum (20 vs 60),
- * and writes to src/data/grad-majors/ instead of src/data/majors/.
+ * and writes to data/northeastern/programs/grad-majors/ instead of data/northeastern/programs/majors/.
  *
- * Output: src/data/grad-majors/{year}/{college}/{slug}/parsed.initial.json
+ * Output: data/northeastern/programs/grad-majors/{year}/{college}/{slug}/parsed.initial.json
  *
  * Usage:
  *   node scripts/scrape-grad-majors.js               # preview (no writes)
@@ -42,15 +42,15 @@ import { parseRequirements, parseTotalCredits, findLeakedMarkers,
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
-const OUT_ROOT  = join(ROOT, 'src/data/grad-majors');
+const OUT_ROOT  = join(ROOT, 'data/northeastern/programs/grad-majors');
 const CHANGE_LOG     = join(ROOT, 'public/northeastern/change-log.json');
 const CHANGE_LOG_MAX = 600;
-const ARCHIVE_ROOT = join(ROOT, 'src/data/archive/grad-majors');
+const ARCHIVE_ROOT = join(ROOT, 'data/northeastern/programs/archive/grad-majors');
 // One index across every archived edition, written by BOTH scrapers under
 // their own key. It is what tells a reader (and later the loader) which
 // editions exist without opening ~12 MB of bundles to find out, and it is
 // the at-a-glance health check across a dozen unattended backfill runs.
-const ARCHIVE_MANIFEST = join(ROOT, 'src/data/archive/manifest.json');
+const ARCHIVE_MANIFEST = join(ROOT, 'data/northeastern/programs/archive/manifest.json');
 const TREE = 'grad-majors';
 const CATALOG   = 'https://catalog.northeastern.edu';
 // A past edition is the same catalog nested under /archive/{label}/, with its

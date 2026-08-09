@@ -1,4 +1,4 @@
-// INVARIANT · the archived catalog editions in src/data/archive/.
+// INVARIANT · the archived catalog editions in data/northeastern/programs/archive/.
 //
 // These are FROZEN snapshots of past catalogs, and the harm they can do is
 // specific: a student who entered in 2022 follows the 2022-2023 rules, so if
@@ -18,7 +18,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT } from "../helpers/paths.js";
 
-const ARCHIVE  = join(ROOT, "src/data/archive");
+const ARCHIVE  = join(ROOT, "data/northeastern/programs/archive");
 const MANIFEST = join(ARCHIVE, "manifest.json");
 const TREES    = ["majors", "grad-majors"];
 

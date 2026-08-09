@@ -29,7 +29,7 @@ function programs(dir, out = []) {
 }
 
 const ROOT = join(import.meta.dirname, '../..');
-const all = [...programs(join(ROOT, 'src/data/majors')), ...programs(join(ROOT, 'src/data/grad-majors'))]
+const all = [...programs(join(ROOT, 'data/northeastern/programs/majors')), ...programs(join(ROOT, 'data/northeastern/programs/grad-majors'))]
   .map(f => ({ f, json: JSON.parse(readFileSync(f, 'utf8')) }))
   .filter(p => p.json.metadata?.verification);
 

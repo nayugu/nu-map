@@ -15,7 +15,7 @@
  * anything older belongs to a student whose audit should be an advisor
  * conversation anyway.
  *
- * ARCHIVE EDITIONS ARE NOT TOUCHED. src/data/archive/ is a separate tree and
+ * ARCHIVE EDITIONS ARE NOT TOUCHED. data/northeastern/programs/archive/ is a separate tree and
  * TREES below does not include it, deliberately: the six editions backfilled
  * from catalog.northeastern.edu/archive/ are the ones this retention window
  * was sized for. With the live 2026 edition they come to exactly KEEP_YEARS.
@@ -41,7 +41,7 @@ import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT  = join(dirname(fileURLToPath(import.meta.url)), '..');
-const TREES = ['src/data/majors', 'src/data/grad-majors'];
+const TREES = ['data/northeastern/programs/majors', 'data/northeastern/programs/grad-majors'];
 const KEEP_YEARS = 7;
 const WRITE = process.argv.includes('--write');
 

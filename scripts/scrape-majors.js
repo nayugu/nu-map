@@ -10,7 +10,7 @@
  * ~45% of combined/joint major programs were missing writing requirements
  * and other sections because the old graduatenu scraper was removed in 2023.
  *
- * Output: src/data/majors/{year}/{college}/{slug}/parsed.initial.json
+ * Output: data/northeastern/programs/majors/{year}/{college}/{slug}/parsed.initial.json
  *
  * Usage:
  *   node scripts/scrape-majors.js               # preview (no writes)
@@ -41,15 +41,15 @@ import { parseRequirements, parseTotalCredits, findLeakedMarkers,
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
-const OUT_ROOT    = join(ROOT, 'src/data/majors');
+const OUT_ROOT    = join(ROOT, 'data/northeastern/programs/majors');
 const CHANGE_LOG  = join(ROOT, 'public/northeastern/change-log.json');
 const CHANGE_LOG_MAX = 600;
-const ARCHIVE_ROOT = join(ROOT, 'src/data/archive/majors');
+const ARCHIVE_ROOT = join(ROOT, 'data/northeastern/programs/archive/majors');
 // One index across every archived edition, written by BOTH scrapers under
 // their own key. It is what tells a reader (and later the loader) which
 // editions exist without opening ~12 MB of bundles to find out, and it is
 // the at-a-glance health check across a dozen unattended backfill runs.
-const ARCHIVE_MANIFEST = join(ROOT, 'src/data/archive/manifest.json');
+const ARCHIVE_MANIFEST = join(ROOT, 'data/northeastern/programs/archive/manifest.json');
 const TREE = 'majors';
 const CATALOG   = 'https://catalog.northeastern.edu';
 // A past edition is the same catalog nested under /archive/{label}/, with its

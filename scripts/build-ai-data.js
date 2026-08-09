@@ -71,12 +71,12 @@ const writeJSON = (rel, data) => {
 };
 
 // ── Gather programs ──────────────────────────────────────────────────
-// Tree shape: src/data/majors/{year}/{college}/{programDir}/parsed.initial.json
+// Tree shape: data/northeastern/programs/majors/{year}/{college}/{programDir}/parsed.initial.json
 // (grad-majors mirrors it). The internal id is the path fragment, with
 // grad ids prefixed "grad/" — matching programs-bundle ids exactly.
 
 function* walkPrograms(baseDir, idPrefix) {
-  const base = path.join(ROOT, "src", "data", baseDir);
+  const base = path.join(ROOT, "data", "northeastern", "programs", baseDir);
   if (!fs.existsSync(base)) throw new Error(`missing program tree: ${base}`);
   for (const year of fs.readdirSync(base).sort()) {
     const yearDir = path.join(base, year);

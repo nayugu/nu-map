@@ -27,7 +27,7 @@ import { dropOnCard, dropOnSemester, dropOnBank } from "../../src/core/planDrop.
 import { buildSemesterView, cardIdsIn, loadIn } from "../../src/core/semesterView.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../..");
-const MAJORS = join(ROOT, "src/data/majors/2026");
+const MAJORS = join(ROOT, "data/northeastern/programs/majors/2026");
 
 const SEMESTERS = [
   { id: "incoming", semTypeId: "incoming", type: "special" },

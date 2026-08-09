@@ -38,7 +38,7 @@ for (const c of raw) {
 
 /** A real program, so specs are the shapes the scraper actually emits. */
 function aProgram() {
-  const base = join(ROOT, "src/data/majors/2026");
+  const base = join(ROOT, "data/northeastern/programs/majors/2026");
   for (const college of readdirSync(base)) {
     let progs = [];
     try { progs = readdirSync(join(base, college)); } catch { continue; }
@@ -149,7 +149,7 @@ test("CORPUS FACT: no requirement section is open-ended", () => {
   // that is worth knowing. If this ever fails, the scraper started emitting a
   // shape the binder has never seen, and `~general`'s derived allowance (which
   // is sized from what the other sections demand) is the first thing to check.
-  const base = join(ROOT, "src/data/majors/2026");
+  const base = join(ROOT, "data/northeastern/programs/majors/2026");
   let sections = 0, openEnded = 0;
   for (const college of readdirSync(base)) {
     let progs = [];
@@ -319,7 +319,7 @@ test("CORPUS FACT: 36 named cells have a multi-course option group", () => {
   // rather than in a student's plan.
   let cells = 0, multi = 0;
   const walk = function* (es) { for (const e of es ?? []) { yield e; yield* walk(e.children); } };
-  for (const root of ["src/data/majors/2026", "src/data/grad-majors/2026"]) {
+  for (const root of ["data/northeastern/programs/majors/2026", "data/northeastern/programs/grad-majors/2026"]) {
     const base = join(ROOT, root);
     if (!existsSync(base)) continue;
     for (const college of readdirSync(base)) {

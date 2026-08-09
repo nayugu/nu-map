@@ -9,7 +9,7 @@
 // The trade-off was no control over coverage, accuracy, or update cadence.
 //
 // We later built scripts/scrape-majors.js to pull major requirements
-// directly from catalog.northeastern.edu, writing to src/data/majors/.
+// directly from catalog.northeastern.edu, writing to data/northeastern/programs/majors/.
 // The scraper fully replaced the submodule, which has been removed;
 // scraped data is now the sole source (see majorLoader.js).
 //

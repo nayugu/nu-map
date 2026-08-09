@@ -7,7 +7,7 @@
 // external/graduatenu git submodule (a fork of sandboxnu/graduatenu) —
 // a bootstrap shortcut with no control over schema, coverage, or cadence.
 // Our own scraper (scripts/scrape-majors.js) pulls directly from
-// catalog.northeastern.edu and writes to src/data/majors/; it fully
+// catalog.northeastern.edu and writes to data/northeastern/programs/majors/; it fully
 // replaced the submodule, which has been removed. Saved plans may still
 // hold old submodule paths — resolveInMap (programPaths.js) migrates them.
 //
@@ -19,15 +19,15 @@
 // import.meta.glob requires static string literals at the call site.
 // ═══════════════════════════════════════════════════════════════════
 
-// Lazy stubs from our own scraper output (src/data/majors/).
+// Lazy stubs from our own scraper output (data/northeastern/programs/majors/).
 const _moduleMap = import.meta.glob(
-  './majors/**/parsed.initial.json',
+  '../../data/northeastern/programs/majors/**/parsed.initial.json',
   { eager: false }
 );
 
-// Graduate program data (src/data/grad-majors/).
+// Graduate program data (data/northeastern/programs/grad-majors/).
 const _gradMap = import.meta.glob(
-  './grad-majors/**/parsed.initial.json',
+  '../../data/northeastern/programs/grad-majors/**/parsed.initial.json',
   { eager: false }
 );
 

@@ -44,7 +44,7 @@ const SEMESTERS = [
 /** Every program shipping both a plan and parsed requirements. */
 function corpus(limit = Infinity) {
   const out = [];
-  for (const root of ["src/data/majors/2026", "src/data/grad-majors/2026"]) {
+  for (const root of ["data/northeastern/programs/majors/2026", "data/northeastern/programs/grad-majors/2026"]) {
     const base = join(ROOT, root);
     if (!existsSync(base)) continue;
     for (const college of readdirSync(base)) {

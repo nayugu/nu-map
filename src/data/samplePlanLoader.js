@@ -25,8 +25,8 @@
 
 import { parseMajorPathParts, resolveInMap } from "./programPaths.js";
 
-const _planMap = import.meta.glob("./majors/**/plan.json",      { eager: false });
-const _gradMap = import.meta.glob("./grad-majors/**/plan.json", { eager: false });
+const _planMap = import.meta.glob("../../data/northeastern/programs/majors/**/plan.json",      { eager: false });
+const _gradMap = import.meta.glob("../../data/northeastern/programs/grad-majors/**/plan.json", { eager: false });
 
 /**
  * A program path points at `parsed.initial.json`; its plan is the sibling.

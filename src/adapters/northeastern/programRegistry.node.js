@@ -2,7 +2,8 @@
 // ADAPTER: northeastern/programRegistry.node  (Node.js, fs-based)
 //
 // The Node counterpart of majorLoader/minorLoader: scans BOTH program
-// trees (src/data/majors = undergrad, src/data/grad-majors = graduate)
+// trees (data/northeastern/programs/majors = undergrad,
+// data/northeastern/programs/grad-majors = graduate)
 // and exposes the same option shape the app builds, plus the parsed
 // requirement JSON. Stale saved paths resolve through the same tiered
 // logic (programPaths.resolveInMap) the browser uses.
@@ -16,8 +17,8 @@ import { parseMajorPathParts, resolveInMap } from "../../data/programPaths.js";
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../../..");
 
 const TREES = [
-  { dir: join(ROOT, "src/data/majors"),      level: "undergrad" },
-  { dir: join(ROOT, "src/data/grad-majors"), level: "grad" },
+  { dir: join(ROOT, "data/northeastern/programs/majors"),      level: "undergrad" },
+  { dir: join(ROOT, "data/northeastern/programs/grad-majors"), level: "grad" },
 ];
 
 function scanTree(dir, level, programs, programData) {

@@ -39,8 +39,8 @@ and `mcp-server/`. Status legend: ✅ exposed today · ⚠️ partial/drifted ·
 
 | # | Information | Source | Status |
 |---|---|---|---|
-| C1 | Undergrad majors + minors list (label, location, college, year) | `src/data/majors/` (522) | ✅ `list_programs` |
-| C2 | **Graduate programs** (485) | `src/data/grad-majors/` | ❌ not scanned |
+| C1 | Undergrad majors + minors list (label, location, college, year) | `data/northeastern/programs/majors/` (522) | ✅ `list_programs` |
+| C2 | **Graduate programs** (485) | `data/northeastern/programs/grad-majors/` | ❌ not scanned |
 | C3 | Concentrations per major: options + `minOptions` ("concentration required" warning) | major JSON `concentrations` | ❌ not listed, and… |
 | C4 | **Concentration audit** (selected conc's section merged into allocation, shared used-set) | `allocateMajorWithElectives` 4th arg | ❌ server hard-codes `null` (`server.js:163`) |
 | C5 | Requirement tree audit: sat/satCount/satSh/matched/warnings, one-course-used-once, coreq consumption, substitution virtual placements, General Electives | `gradRequirements.js` (imported from src — no drift) | ✅ |

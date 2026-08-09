@@ -25,7 +25,7 @@ function walk(dir, out = []) {
   }
   return out;
 }
-const files = [...walk(join(ROOT, 'src/data/majors')), ...walk(join(ROOT, 'src/data/grad-majors'))];
+const files = [...walk(join(ROOT, 'data/northeastern/programs/majors')), ...walk(join(ROOT, 'data/northeastern/programs/grad-majors'))];
 
 test('bundle › contains every program in src/data, and no extras', () => {
   const onDisk = files.length;

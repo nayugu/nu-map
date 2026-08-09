@@ -24,7 +24,7 @@ function walk(dir, out = []) {
   }
   return out;
 }
-const programs = [...walk(join(ROOT, 'src/data/majors')), ...walk(join(ROOT, 'src/data/grad-majors'))]
+const programs = [...walk(join(ROOT, 'data/northeastern/programs/majors')), ...walk(join(ROOT, 'data/northeastern/programs/grad-majors'))]
   .map(f => JSON.parse(readFileSync(f, 'utf8')))
   .filter(p => p.metadata?.verification);
 

@@ -79,7 +79,7 @@ const GIT_DATA_FILES = [
   "public/northeastern/scrape-state.json",
   "src/core/dataMeta.json",
   "public/data-meta.json",
-  "src/data/majors",
+  "data/northeastern/programs/majors",
   "data/northeastern",
 ];
 

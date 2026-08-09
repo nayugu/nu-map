@@ -1,4 +1,4 @@
-// INVARIANT · src/data/majors + src/data/grad-majors — requirement satisfiability.
+// INVARIANT · data/northeastern/programs/majors + data/northeastern/programs/grad-majors — requirement satisfiability.
 //
 // Guards against "impossible-to-satisfy" requirement sections (a course required
 // in two sections without being marked split/shared credit). The detection logic

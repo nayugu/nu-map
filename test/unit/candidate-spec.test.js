@@ -49,7 +49,7 @@ const sameSet = (a, b, msg) => {
 
 function realSpecs(limit = 240) {
   const out = [];
-  const base = join(ROOT, "src/data/majors/2026");
+  const base = join(ROOT, "data/northeastern/programs/majors/2026");
   for (const college of readdirSync(base)) {
     let progs = [];
     try { progs = readdirSync(join(base, college)); } catch { continue; }
