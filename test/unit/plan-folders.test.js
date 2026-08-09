@@ -157,6 +157,53 @@ test("flattenTree › sortMode 'recent' orders plans by lastOpened, folders by n
   assert.deepEqual(ids(rows), ["a", "z", "new", "old"]);
 });
 
+test("flattenTree › sortMode 'student' groups an advisee's plans together", () => {
+  // Interleaved on purpose: by NAME these would alternate between students.
+  const state = { folders: [], plans: [
+    P("a1", "Alt",     null, { student: "Jane Doe" }),
+    P("b1", "Baseline", null, { student: "Sam Ito" }),
+    P("a2", "Current",  null, { student: "Jane Doe" }),
+    P("b2", "Draft",    null, { student: "Sam Ito" }),
+  ] };
+  const rows = flattenTree(buildTree(state), { sortMode: "student", ...EN });
+  // Jane's two, then Sam's two — and within each run, ordered by plan name.
+  assert.deepEqual(ids(rows), ["a1", "a2", "b1", "b2"]);
+});
+
+test("flattenTree › sortMode 'student' puts UNASSIGNED plans last, not first", () => {
+  // "" would sort before every name under a plain collator — the ordinary
+  // student's scratch plans must not bury the advisee runs.
+  const state = { folders: [], plans: [
+    P("loose", "Aaa scratch"),
+    P("z", "Zed plan", null, { student: "Zoe Q" }),
+    P("a", "Aaa plan", null, { student: "Ann B" }),
+  ] };
+  const rows = flattenTree(buildTree(state), { sortMode: "student", ...EN });
+  assert.deepEqual(ids(rows), ["a", "z", "loose"]);
+});
+
+test("flattenTree › sortMode 'student' leaves folders on name, and sorts within each", () => {
+  // Folders never reorder by student — a container has none, and a folder that
+  // jumps around is disorienting (same rule 'recent' follows).
+  const state = {
+    folders: [F("z", "Zed"), F("a", "Alpha")],
+    plans: [
+      P("p1", "One", "a", { student: "Sam Ito" }),
+      P("p2", "Two", "a", { student: "Jane Doe" }),
+    ],
+  };
+  const rows = flattenTree(buildTree(state), { sortMode: "student", open: allOpen(state), ...EN });
+  assert.deepEqual(ids(rows), ["a", "p2", "p1", "z"]);
+});
+
+test("flattenTree › sortMode 'student' with no students assigned falls back to name", () => {
+  // The ordinary-student case: the mode must degrade to something sensible
+  // rather than to arbitrary order.
+  const state = { folders: [], plans: [P("b", "Beta"), P("a", "Alpha")] };
+  const rows = flattenTree(buildTree(state), { sortMode: "student", ...EN });
+  assert.deepEqual(ids(rows), ["a", "b"]);
+});
+
 test("flattenTree › hasChildren is direct membership, so an empty folder has no twisty", () => {
   const state = { folders: [F("outer", "Outer"), F("inner", "Inner", "outer")], plans: [] };
   const rows = flattenTree(buildTree(state), { open: allOpen(state), ...EN });

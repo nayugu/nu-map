@@ -90,7 +90,7 @@ export default function PlanLibrary() {
     showPlanLibrary, setShowPlanLibrary,
     plans, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort, reorderNodes, orderedSiblings,
-    activePlanId, switchPlan, renamePlan,
+    activePlanId, switchPlan, renamePlan, setPlanStudent,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
     pushFolderHistory, undoFolders, redoFolders, folderCanUndo, folderCanRedo,
@@ -107,6 +107,8 @@ export default function PlanLibrary() {
   const [selectMode, setSelectMode] = useState(false);
   const [menu, setMenu]             = useState(null);   // { x, y, row }
   const [moveMenu, setMoveMenu]     = useState(null);   // footer "Move to…"
+  const [sortMenu, setSortMenu]     = useState(null);   // "Sort by" dropdown
+  const [assigning, setAssigning]   = useState(null);   // { ids, value } assign student
   const [pending, setPending]       = useState(null);   // delete confirmation
   const [notice, setNotice]         = useState("");
   const [drag, setDrag]             = useState(null);   // { ids }
@@ -143,6 +145,28 @@ export default function PlanLibrary() {
     return out;
   }, [plans, showPlanLibrary, institution.storagePrefix, majorRequirements]);
 
+  // Every advisor affordance is gated on this — the student column, the "Sort
+  // by student" option, the roster. Nothing about advisees exists until a plan
+  // actually carries one, exactly as the folder tree stays hidden until the
+  // first folder exists. A student with three plans never meets the concept.
+  const hasStudents = useMemo(() => plans.some(p => p.student), [plans]);
+
+  // The distinct advisees already in use, for the assign field's datalist.
+  // Picking an existing name off the list is what stops one advisee turning
+  // into "Jane Doe", "jane doe" and "Jane  Doe" — three groups that look like
+  // one. Compared case/space-insensitively, but the FIRST spelling entered is
+  // the one offered back, so the advisor's own capitalisation is preserved.
+  const roster = useMemo(() => {
+    const seen = new Map();
+    for (const p of plans) {
+      const s = (p.student ?? "").trim();
+      if (!s) continue;
+      const k = s.toLowerCase().replace(/\s+/g, " ");
+      if (!seen.has(k)) seen.set(k, s);
+    }
+    return [...seen.values()].sort((a, b) => a.localeCompare(b, locale));
+  }, [plans, locale]);
+
   const searchIndex = useMemo(
     () => buildSearchIndex(planTree, { slotLabel: id => labels.get(id) ?? "" }),
     [planTree, labels]
@@ -162,7 +186,8 @@ export default function PlanLibrary() {
       return;
     }
     setQuery(""); setSelectedIds(new Set()); setFocusId(null); setEditingId(null);
-    setMenu(null); setPending(null); setNotice(""); setSelectMode(false);
+    setMenu(null); setMoveMenu(null); setSortMenu(null); setAssigning(null);
+    setPending(null); setNotice(""); setSelectMode(false);
     clearDrag();
     anchorIdx.current = -1;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -261,6 +286,29 @@ export default function PlanLibrary() {
     setNewPlanFolderId(parentId ?? null);
     setShowNewPlanModal(true);
     close();
+  };
+
+  /**
+   * Open the assign-student field for a set of plans.
+   *
+   * Folders are dropped rather than rejected: a folder has no advisee of its
+   * own, and a selection that mixes the two is ordinary (⌘-click down a list).
+   * Seeded with the common current value so re-assigning shows what is there
+   * now, and blank when the selection disagrees — which is the honest reading,
+   * since committing would overwrite all of them.
+   */
+  const requestAssign = (ids) => {
+    const planIds = ids.filter(id => !planTree.folderIds.has(id) && planTree.byId.has(id));
+    if (!planIds.length) return;
+    const values = new Set(planIds.map(id => planTree.byId.get(id).student ?? ""));
+    setAssigning({ ids: planIds, value: values.size === 1 ? [...values][0] : "" });
+  };
+
+  const commitAssign = () => {
+    if (!assigning) return;
+    pushFolderHistory();          // one ⌘Z undoes the whole batch
+    for (const id of assigning.ids) setPlanStudent(id, assigning.value);
+    setAssigning(null);
   };
 
   const requestDelete = (ids) => {
@@ -377,9 +425,10 @@ export default function PlanLibrary() {
     if (!showPlanLibrary) return;
     const onKey = (e) => {
       if (editingId) return;              // the rename field owns the keyboard
+      if (assigning) return;              // ditto the assign-student field
       // A context menu owns Escape while it is open, or dismissing the menu
       // would close the whole panel out from under it.
-      if (menu || moveMenu) return;
+      if (menu || moveMenu || sortMenu) return;
       if (pending) {
         if (e.key === "Escape") { e.preventDefault(); setPending(null); }
         if (e.key === "Enter")  { e.preventDefault(); confirmDelete(); }
@@ -451,7 +500,7 @@ export default function PlanLibrary() {
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showPlanLibrary, editingId, pending, menu, moveMenu, query, rows, focusId,
+  }, [showPlanLibrary, editingId, pending, menu, moveMenu, sortMenu, assigning, query, rows, focusId,
       selectedIds, openFolders, folderCanUndo, folderCanRedo]);
 
   // ── Drag and drop ───────────────────────────────────────────────
@@ -571,6 +620,13 @@ export default function PlanLibrary() {
       },
       { key: "rename", label: t("folders.menu.rename"), hint: "↵", disabled: n > 1,
         onSelect: () => setEditingId(row.id) },
+      // Only where there is a plan to assign — a folder has no advisee of its
+      // own, so offering it on a pure-folder selection would be a dead item.
+      ...(ids.some(id => !planTree.folderIds.has(id)) ? [{
+        key: "assign",
+        label: t("folders.menu.assignStudent"),
+        onSelect: () => requestAssign(ids),
+      }] : []),
       { divider: true },
       { key: "newFolder", label: t("folders.menu.newFolder"), hint: "⇧⌘N",
         onSelect: () => newFolder(parentFor(row)) },
@@ -606,6 +662,23 @@ export default function PlanLibrary() {
     ];
   };
 
+  // "By student" appears only once some plan HAS a student — an ordinary
+  // student never sees a sort mode that would do nothing for them.
+  const sortMenuItems = () => {
+    const modes = [
+      ["manual", "folders.sort.manual"],
+      ["name",   "folders.sort.name"],
+      ["recent", "folders.sort.recent"],
+      ...(hasStudents ? [["student", "folders.sort.student"]] : []),
+    ];
+    return modes.map(([mode, key]) => ({
+      key: mode,
+      label: t(key),
+      hint: folderSort === mode ? "✓" : undefined,
+      onSelect: () => setFolderSort(mode),
+    }));
+  };
+
   const footerMoveItems = () => {
     const ids = [...selectedIds];
     const targets = moveTargets(planTree, ids, { locale });
@@ -627,7 +700,14 @@ export default function PlanLibrary() {
       if (matches) return t("folders.meta.matched", { n: row.matched ?? 0, total: row.counts.plans });
       return row.counts.plans > 0 ? String(row.counts.plans) : "";
     }
-    return labels.get(row.id) ?? "";
+    // Student first, program second: when a plan HAS an advisee, whose plan it
+    // is outranks what it studies — that is the question an advisor is scanning
+    // for. With no student the line is unchanged from before, so the ordinary
+    // student sees exactly what they saw.
+    const major = labels.get(row.id) ?? "";
+    const student = row.item.student ?? "";
+    if (!student) return major;
+    return major ? t("folders.meta.studentAnd", { student, major }) : student;
   };
 
   const iconBtn = {
@@ -643,7 +723,7 @@ export default function PlanLibrary() {
       onClick={() => {
         // Portalled menus propagate through the REACT tree, so a click meant to
         // dismiss a menu would otherwise close the whole panel behind it.
-        if (menu || moveMenu) { setMenu(null); setMoveMenu(null); return; }
+        if (menu || moveMenu || sortMenu) { setMenu(null); setMoveMenu(null); setSortMenu(null); return; }
         close();
       }}
       style={{
@@ -749,23 +829,28 @@ export default function PlanLibrary() {
               color: "var(--text-2)", outline: "none", fontFamily: "inherit",
             }}
           />
-          <div style={{ display: "flex", border: "1px solid var(--border-2)", borderRadius: 5, overflow: "hidden", flexShrink: 0 }}>
-            {/* Custom first: it is the default, and the only mode in which
-                dragging a plan somewhere means anything — the other two
-                re-sort under you, so the insertion line is not drawn there. */}
-            {[["manual", t("folders.sort.manual")], ["name", t("folders.sort.name")],
-              ["recent", t("folders.sort.recent")]].map(([mode, label]) => (
-              <button key={mode} onClick={() => setFolderSort(mode)}
-                title={t("folders.sort.label")}
-                style={{
-                  border: "none", cursor: "pointer", fontSize: 9, padding: "4px 7px",
-                  fontFamily: "inherit", lineHeight: 1,
-                  background: folderSort === mode ? "var(--active-bg)" : "transparent",
-                  color: folderSort === mode ? "var(--active)" : "var(--text-5)",
-                  fontWeight: folderSort === mode ? 700 : 400,
-                }}>{label}</button>
-            ))}
-          </div>
+          {/* A named dropdown rather than three unlabelled segments. The
+              segmented control could not say what it CONTROLLED — "Custom /
+              Name / Recent" is only a sort order if you already knew — and it
+              has no room to grow: "by student" is a fourth mode, and a fifth
+              would not fit at all. The current mode stays visible on the
+              button, so naming the control costs no legibility. */}
+          <button
+            onClick={e => {
+              e.stopPropagation();
+              const r = e.currentTarget.getBoundingClientRect();
+              setSortMenu({ x: Math.max(6, r.right - 150), y: r.bottom + 4 });
+            }}
+            aria-haspopup="menu"
+            title={t("folders.sort.label")}
+            style={{ ...iconBtn, fontSize: 10, gap: 4 }}
+          >
+            <span style={{ color: "var(--text-5)" }}>{t("folders.sort.label")}</span>
+            <span style={{ fontWeight: 700, color: "var(--text-3)" }}>
+              {t(`folders.sort.${folderSort}`)}
+            </span>
+            <span aria-hidden="true" style={{ color: "var(--text-5)", fontSize: 7 }}>▼</span>
+          </button>
         </div>
 
         {notice && (
@@ -849,6 +934,14 @@ export default function PlanLibrary() {
               <span style={{ fontSize: 11, color: "var(--text-4)", flex: 1, minWidth: 0 }}>
                 {t("folders.selected", { n: selectedIds.size })}
               </span>
+              {/* Bulk assign is the advisor's other repeated verb — filing six
+                  of one advisee's plans at once. Hidden when the selection is
+                  all folders, which have no advisee. */}
+              {[...selectedIds].some(id => !planTree.folderIds.has(id)) && (
+                <button onClick={() => requestAssign([...selectedIds])} style={iconBtn}>
+                  {t("folders.assign.short")}
+                </button>
+              )}
               <button onClick={e => { e.stopPropagation(); const r = e.currentTarget.getBoundingClientRect(); setMoveMenu({ x: r.left, y: r.bottom + 4 }); }}
                 style={iconBtn}>{t("folders.moveTo")}</button>
               <button onClick={() => requestDelete([...selectedIds])}
@@ -876,6 +969,79 @@ export default function PlanLibrary() {
       )}
       {moveMenu && (
         <ContextMenu x={moveMenu.x} y={moveMenu.y} items={footerMoveItems()} onClose={() => setMoveMenu(null)} />
+      )}
+      {sortMenu && (
+        <ContextMenu x={sortMenu.x} y={sortMenu.y} items={sortMenuItems()} onClose={() => setSortMenu(null)} />
+      )}
+
+      {/* ── Assign student ──
+          A free-text field backed by a datalist of advisees already in use.
+          Free text because a roster cannot be fetched from anywhere — there is
+          no student directory in this app — and a fixed list would make the
+          first assignment impossible. The datalist is what keeps the free text
+          from fragmenting one advisee across three spellings. */}
+      {assigning && (
+        <div
+          onClick={e => { e.stopPropagation(); setAssigning(null); }}
+          style={{
+            position: "fixed", inset: 0, zIndex: 10100, background: "rgba(0,0,0,0.5)",
+            display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
+          }}
+        >
+          <div onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" style={{
+            background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+            borderRadius: 12, maxWidth: 330, width: "100%", padding: "15px 16px 13px",
+            boxShadow: "var(--shadow-modal)",
+          }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-1)", marginBottom: 7 }}>
+              {assigning.ids.length === 1
+                ? t("folders.assign.title", { name: planTree.byId.get(assigning.ids[0])?.name ?? "" })
+                : t("folders.assign.titleN", { n: assigning.ids.length })}
+            </div>
+            <input
+              autoFocus
+              value={assigning.value}
+              list="plan-library-roster"
+              onChange={e => setAssigning(a => ({ ...a, value: e.target.value }))}
+              onKeyDown={e => {
+                e.stopPropagation();
+                if (e.key === "Enter")  { e.preventDefault(); commitAssign(); }
+                if (e.key === "Escape") { e.preventDefault(); setAssigning(null); }
+              }}
+              placeholder={t("folders.assign.placeholder")}
+              aria-label={t("folders.assign.placeholder")}
+              style={{
+                width: "100%", boxSizing: "border-box", fontSize: 12,
+                padding: "6px 9px", borderRadius: 6, marginBottom: 8,
+                border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
+                color: "var(--text-2)", outline: "none", fontFamily: "inherit",
+              }}
+            />
+            <datalist id="plan-library-roster">
+              {roster.map(s => <option key={s} value={s} />)}
+            </datalist>
+            <div style={{ fontSize: 10, color: "var(--text-5)", lineHeight: "calc(1.6 * var(--lh-scale, 1))", marginBottom: 11 }}>
+              {t("folders.assign.note")}
+            </div>
+            <div style={{ display: "flex", gap: 7 }}>
+              <button onClick={() => setAssigning(null)} style={{
+                flex: 1, fontSize: 11, padding: "6px 10px", borderRadius: 6, cursor: "pointer",
+                background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+                color: "var(--text-3)", fontFamily: "inherit",
+              }}>{t("folders.delete.cancel")}</button>
+              <button onClick={commitAssign} style={{
+                flex: 1, fontSize: 11, fontWeight: 700, padding: "6px 10px", borderRadius: 6,
+                cursor: "pointer", background: "var(--active-bg)",
+                border: "1px solid var(--active)", color: "var(--active)", fontFamily: "inherit",
+              }}>
+                {/* Clearing is the same commit with an empty field, so the
+                    button says which one it is rather than hiding a second
+                    destructive-looking control next to it. */}
+                {assigning.value.trim() ? t("folders.assign.confirm") : t("folders.assign.clear")}
+              </button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* ── Delete confirmation ── */}
