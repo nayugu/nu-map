@@ -1,5 +1,7 @@
 // URL-based plan sharing via gzip + base64url (no external deps, uses browser CompressionStream).
 
+import { SHARE_KEYS, SHARE_KEYS_R, SHARE_INNER_KEYS } from './planSchema.js';
+
 async function _compress(str) {
   const bytes = new TextEncoder().encode(str);
   const cs = new CompressionStream('gzip');
@@ -47,39 +49,22 @@ async function _decompress(b64url) {
 }
 
 // v2 compact format: short key names + skip empty/default fields + drop unused `exported`.
+//
+// The key maps are derived from the canonical plan registry (planSchema.js) so
+// the share door cannot drift out of sync with the field list — the omissions
+// documented above (conc2 dropped, reservations dropped) are exactly what a
+// single source of truth prevents. See planSchema for which fields are shared
+// and which (grades, appliedTemplate) deliberately are not.
 
-const _KEYS = {
-  entSem: 'es', entYear: 'ey',
-  gradSem: 'gs', gradYear: 'gy',
-  placements: 'p', specialTermPl: 'sp',
-  semOrders: 'so', shOverrides: 'sh',
-  bonusSH: 'b', currentSemId: 'cs',
-  offeredOverrides: 'oo', collapsedSubs: 'cl',
-  major: 'mj', major2: 'mj2', conc: 'cn',
-  // conc2 was missing entirely: a second major's concentration survived a
-  // reload (it is in the plan slot) but was silently dropped from every share
-  // link and share code. 51 undergraduate programs REQUIRE a concentration, so
-  // a shared double major could arrive unsatisfiable.
-  conc2: 'cn2',
-  minor1: 'm1', minor2: 'm2',
-  // Cards in a semester with no course chosen yet. Without an entry here a
-  // shared plan arrives with its named courses and none of its reservations,
-  // which for a later year is most of the plan and reads as the sender's work
-  // having been lost. Roughly 800 bytes for a whole four-year plan, because
-  // only the reservations need carrying — the named courses are placements.
-  reservations: 'rv',
-  placedOut: 'po', planName: 'pn',
-  locale: 'lc', substitutions: 'su',
-  studentType: 'st',
-};
-const _KEYS_R = Object.fromEntries(Object.entries(_KEYS).map(([k, v]) => [v, k]));
+const _KEYS = SHARE_KEYS;
+const _KEYS_R = SHARE_KEYS_R;
 
 // Inner keys for specialTermPl entry objects
-const _SP = { typeId: 't', semId: 's', duration: 'd', company: 'c', companyDomain: 'cd', subline: 'sl' };
+const _SP = SHARE_INNER_KEYS.specialTerm;
 const _SP_R = Object.fromEntries(Object.entries(_SP).map(([k, v]) => [v, k]));
 
 // Inner keys for substitutions array entries
-const _SU = { from: 'f', to: 't' };
+const _SU = SHARE_INNER_KEYS.substitution;
 const _SU_R = Object.fromEntries(Object.entries(_SU).map(([k, v]) => [v, k]));
 
 function _isEmpty(v) {
