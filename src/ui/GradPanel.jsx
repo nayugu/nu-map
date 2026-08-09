@@ -18,7 +18,7 @@ import { IMajorRequirements } from "../ports/IMajorRequirements.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
-import { computeGrantedAttrs } from "../core/specialTermUtils.js";
+import { computeGrantedAttrs, computeGrantedCourses } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { cohortCatalogYear } from "../data/programPaths.js";
 import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
@@ -1478,9 +1478,16 @@ export default function GradPanel({ wideCatalog = false }) {
   // substituting course must not smuggle its virtual target back in
   // (effectivePlacements has the target under its own ungraded id, which
   // dropVoidTakes alone could never remove).
+  // A work term registers a real course (COOP 3945), which 37 undergraduate
+  // programs name as a requirement. It joins placedSet ONLY — realPlacedSet
+  // below feeds General Electives and must stay what the student placed.
   const placedSet = useMemo(
-    () => buildPlacedKeySet(filterInTimeline(applySubstitutions(dropVoidTakes(placements, grades), substitutions), SEM_INDEX), placedOut, courseMap),
-    [placements, substitutions, placedOut, courseMap, SEM_INDEX, grades]
+    () => {
+      const set = buildPlacedKeySet(filterInTimeline(applySubstitutions(dropVoidTakes(placements, grades), substitutions), SEM_INDEX), placedOut, courseMap);
+      for (const k of computeGrantedCourses(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX)) set.add(k);
+      return set;
+    },
+    [placements, substitutions, placedOut, courseMap, SEM_INDEX, grades, specialTermPl, specialTerms]
   );
 
   // Real-only placed set: excludes virtual substitution-target entries from effectivePlacements.
@@ -1499,8 +1506,16 @@ export default function GradPanel({ wideCatalog = false }) {
       Object.entries(applySubstitutions(dropUnearnedTakes(placements, grades), substitutions))
         .filter(([, semId]) => getSemStatus(semId) === "completed")
     );
-    return buildPlacedKeySet(donePlacements, placedOut, courseMap);
-  }, [placements, substitutions, placedOut, courseMap, getSemStatus, grades]);
+    const set = buildPlacedKeySet(donePlacements, placedOut, courseMap);
+    // A co-op that has already happened makes its course COMPLETED, not
+    // merely planned — otherwise the requirement row reads as still pending
+    // for a student who finished the co-op two years ago.
+    const finished = Object.fromEntries(
+      Object.entries(specialTermPl).filter(([, d]) => d?.semId && getSemStatus(d.semId) === "completed")
+    );
+    for (const k of computeGrantedCourses(finished, specialTerms?.getTypes() ?? [], SEM_INDEX)) set.add(k);
+    return set;
+  }, [placements, substitutions, placedOut, courseMap, getSemStatus, grades, specialTermPl, specialTerms, SEM_INDEX]);
 
   const concGroups = useMemo(() => {
     const opts = (major?.concentrations?.concentrationOptions ?? []).map(c => ({ path: c.title, label: c.title }));
