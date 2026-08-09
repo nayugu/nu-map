@@ -64,9 +64,18 @@ function aiDataDevPlugin() {
           return;
         }
         // No such page: same not-found the production rewrite serves.
+        //
+        // Read defensively, and note that this sits OUTSIDE the try above. An
+        // unguarded readFileSync on the fallback path turns "page not found"
+        // into "dev server dead" — the process exits on an unhandled ENOENT and
+        // takes the whole session with it. That is exactly what happened when
+        // 99ec1ab81c folded public/data-404.html into the site-wide
+        // public/404.html and left this line pointing at the deleted file.
         res.statusCode = 404;
         res.setHeader("Content-Type", "text/html; charset=utf-8");
-        res.end(fs.readFileSync("./public/data-404.html", "utf8"));
+        let notFound = "<!doctype html><meta charset=utf-8><title>Not found</title><h1>404 — not found</h1>";
+        try { notFound = fs.readFileSync("./public/404.html", "utf8"); } catch { /* inline fallback */ }
+        res.end(notFound);
       });
     },
   };
