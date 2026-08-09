@@ -84,14 +84,12 @@ read "Either of us can sign a commercial licence alone, and tells the other
 after." It now requires both of us to agree in writing, with a fourteen-day
 timeout so that absence cannot become a veto; **§4 above carries the current
 wording** and this entry only records what it replaced. The rest of §4 is
-unchanged. The reason is `COMMERCIAL.md` §5.2: a
-licence survives non-renewal as to the version it covers, in perpetuity, and
-§5.3 only ever re-bands it upward — so one signature binds us both to a
-particular licensee at a particular band, permanently, with no way to unwind it.
-That was an even trade while we were both on this daily. It is a poor one as soon
-as either of us is out of context, because the person least likely to spot a bad
-term is the one who has been away. The fourteen days exist so that the same rule
-cannot turn absence into a veto.
+unchanged. The reason is `COMMERCIAL.md` §5.2: a licence survives non-renewal as
+to the version it covers, in perpetuity, and §5.3 only ever re-bands it upward —
+so one signature binds us both to a particular licensee at a particular band,
+permanently, with no way to unwind it. That was an even trade while we were both
+on this daily. It is a poor one as soon as either of us is out of context,
+because the person least likely to spot a bad term is the one who has been away.
 *Agreed by both authors in person, 8 August 2026.*
 
 *Not written by a lawyer. Change the split in §3 or the signing rule in §4 by
