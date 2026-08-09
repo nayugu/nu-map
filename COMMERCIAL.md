@@ -292,10 +292,14 @@ fall away altogether merely because the same institution is reached through a
 Supplier.
 
 &nbsp;&nbsp;&nbsp;&nbsp;(b) **Trials.** Notwithstanding limb (a), this §4.9 does
-not apply where the Supplier provides the Licensed Product to a single institution
-under a written trial or pilot, of not more than twelve months and not renewed. A
+not apply where the Supplier provides the Licensed Product to **one institution
+and to no other**, under a written trial or pilot of not more than twelve months,
+neither renewed nor succeeded by a further trial with that institution. A
 Supplier in that position is assessed on revenue alone, and may be within the Nil
-Band.
+Band. This limb is for a Supplier with a single customer, finding out whether the
+thing works. A Supplier running trials across several institutions, whether at
+the same time or one after another, has a business rather than a pilot, and this
+§4.9 applies to it in full.
 
 &nbsp;&nbsp;&nbsp;&nbsp;(c) There is no upper limit on limb (ii), consistently
 with §3.4(a). The floor is a single multiplication at any number of Served
@@ -347,6 +351,21 @@ Supplier licensing the Work in order to provide it to institutions — **§4 app
 and §3 does not**, subject to the per-student floor at §4.9. An institution
 acquiring such a Supplier's product requires no separate license from the Licensor,
 the Supplier's sublicense under §6.2 being sufficient.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(a) **A licensee does not escape §3 by also supplying.**
+Where the licensee is itself an institution of the kind described at §2.4, §3
+continues to apply to its own Enrolled Students, and §4 applies only in respect
+of the students of other institutions it serves. Its own students are not Served
+Students for any purpose.
+
+&nbsp;&nbsp;&nbsp;&nbsp;(b) Limb (a) is not an exception to the precedence rule
+but an application of the reason for it. §4.9(f) sets the Supplier rate at half
+the rate at §3.1 in recognition of the distribution, integration, and support
+functions a Supplier discharges **for a customer**. An institution discharges
+none of them in respect of itself. Absent limb (a), an institution could halve
+its own fee, or extinguish it, by supplying a single other institution on any
+terms or none — an arrangement whose only purpose would be the reduction, and to
+which §7.4 would in any event apply.
 
 5.2. **Term and perpetual fallback.** A license under this document runs for **one
 year** from execution and is renewable annually. Upon expiry or non-renewal it does
@@ -502,9 +521,10 @@ attaches.
 
 7.4. **Anti-circumvention.** Where the purpose or effect of any arrangement is to
 obtain the benefit of this document at a figure or band lower than that which the
-substance of the arrangement warrants — including by fragmenting revenue among
-entities, by interposing an intermediate licensee, by understating the units
-supplied under §3.9 or §4.9(g), by sublicensing beyond §6.2, or by assigning or
+substance of the arrangement warrants — including by fragmenting revenue, Served
+Students, or Enrolled Students among entities, by interposing an intermediate
+licensee or a supply relationship, by understating the units supplied under §3.9
+or §4.9(g), by sublicensing beyond §6.2, or by assigning or
 lending a license — the Licensor may determine the applicable figure or band by
 reference to the substance of the arrangement rather than its form, and §4.7(b)
 and §4.7(c) apply as though the licensee had understated it.
