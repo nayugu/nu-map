@@ -37,8 +37,13 @@ import {
   sampleplanOffer, variantsFor, describeTemplate, isPlanEmpty,
 } from "../core/planTemplate.js";
 
-/** Namespaced like the other grad-panel collapse flags. */
-const COLLAPSE_KEY = "numap-grad-expand-sampleplan";
+/**
+ * Namespaced like the other grad-panel collapse flags, and kept separate per
+ * form factor — see where it is read for why a desktop choice must not follow
+ * the student onto a phone.
+ */
+const COLLAPSE_KEY = (isPhone) =>
+  `numap-grad-expand-sampleplan${isPhone ? "-phone" : ""}`;
 
 /**
  * Type scale for this frame.
@@ -72,14 +77,19 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   // Collapse is remembered ACROSS sessions but chosen BY STATE the first time.
   // An explicit preference outranks the state default, the same rule the other
   // credits toggle follows — someone who folded this away meant it.
+  //
+  // Remembered SEPARATELY per form factor. Expanding on a desktop is a
+  // reasonable thing to want and says nothing about a phone, where the same
+  // preference would put "Lay out" and "Replace my plan" back under the thumb.
+  const collapseKey = COLLAPSE_KEY(isPhone);
   const [openPref, setOpenPref] = useState(() => {
-    try { const v = localStorage.getItem(COLLAPSE_KEY); return v === null ? null : v === "true"; }
+    try { const v = localStorage.getItem(collapseKey); return v === null ? null : v === "true"; }
     catch { return null; }
   });
   const setOpen = (next) => {
     const val = typeof next === "function" ? next(openResolved) : next;
     setOpenPref(val);
-    try { localStorage.setItem(COLLAPSE_KEY, String(val)); } catch {}
+    try { localStorage.setItem(collapseKey, String(val)); } catch {}
   };
 
   // Question 1 of the rule, answered synchronously so nothing flickers in for a
@@ -163,10 +173,16 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   };
 
   const loaded = offer.state === "loaded";
-  // Collapsed once the plan IS the canvas — there is nothing to decide, so the
-  // row becomes a statement. Expanded whenever an action is available, because
-  // a collapsed offer is one nobody finds.
-  const openResolved = openPref ?? !loaded;
+  // On a desktop: collapsed once the plan IS the canvas — there is nothing to
+  // decide, so the row becomes a statement — and expanded whenever an action is
+  // available, because a collapsed offer is one nobody finds.
+  //
+  // On a phone: always collapsed. Expanded, this section puts "Lay out" and
+  // "Replace my plan" directly under the thumb in a list the student is
+  // scrolling, and one of those discards work. Discoverability is worth a
+  // mis-tap on a mouse; it is not worth one here, and the header still says the
+  // section exists.
+  const openResolved = openPref ?? (isPhone ? false : !loaded);
   const open = openResolved;
   const primary = offer.verbs[0] === "load" ? layOut : openAsNew;
   const primaryLabel = offer.verbs[0] === "load" ? t("grad.plan.load") : t("grad.plan.newplan");
