@@ -152,3 +152,92 @@ test("rankOptions › respects the result cap", () => {
   const many = Array.from({ length: 200 }, (_, i) => ({ path: `p${i}`, label: `Data Science ${i}`, location: "Boston" }));
   assert.equal(rankOptions(many, "data", 60).length, 60);
 });
+
+// ── Abbreviated components ───────────────────────────────────────
+
+const combined = [
+  "industrial_engineering_and_computer_science_bsie_(boston)",
+  "industrial_engineering_and_business_administration_bsie_(boston)",
+  "industrial_engineering_bsie_(boston)",
+  "computer_science_and_mathematics_bs_(boston)",
+  "civil_engineering_and_computer_science_bsce_(boston)",
+  "mechanical_engineering_and_computer_science_bsme_(boston)",
+  "electrical_and_computer_engineering_msece_(boston)",
+  "american_sign_language_and_theatre_bs_(boston)",
+  "global_studies_and_international_relations_ms_(boston)",
+  "computer_science_bscs_(boston)",
+  "biology_bs_(boston)",
+].map(f => opt(f));
+
+test("rankOptions › a component's initials find a combined major", () => {
+  // The reported bug: BSIE supplies "ie", nothing supplied "cs", so the whole
+  // query missed — while the strictly vaguer "ie and c" matched.
+  assert.equal(rank(combined, "ie and cs")[0],
+    "Industrial Engineering and Computer Science, BSIE (Boston)");
+});
+
+test("rankOptions › typing one more letter never drops the match", () => {
+  // "ie and c" worked only because a bare "c" prefixes "Computer". Every
+  // prefix of a query that matches must keep matching, or the result blinks out.
+  const q = "ie and cs";
+  const target = "Industrial Engineering and Computer Science, BSIE (Boston)";
+  for (let i = 1; i <= q.length; i++) {
+    assert.ok(rank(combined, q.slice(0, i)).includes(target),
+      `"${q.slice(0, i)}" lost the program`);
+  }
+});
+
+test("rankOptions › initials work for either component, with or without 'and'", () => {
+  for (const q of ["ie cs", "ie and cs", "industrial and cs", "ie and computer science"]) {
+    assert.equal(rank(combined, q)[0],
+      "Industrial Engineering and Computer Science, BSIE (Boston)", `query "${q}"`);
+  }
+  assert.equal(rank(combined, "cs and math")[0], "Computer Science and Mathematics, BS (Boston)");
+  assert.equal(rank(combined, "ce and cs")[0], "Civil Engineering and Computer Science, BSCE (Boston)");
+  assert.equal(rank(combined, "asl and theatre")[0], "American Sign Language and Theatre, BS (Boston)");
+});
+
+test("rankOptions › initials skip connectors inside a run but never open on one", () => {
+  assert.equal(rank(combined, "ece")[0], "Electrical and Computer Engineering, MSECE (Boston)");
+  // "…and Business" must not be readable as "ab", nor "…and Mathematics" as
+  // "am". Both names are free of those substrings, so a hit could only come
+  // from a run opening on the connector.
+  assert.ok(!rank(combined, "ab").includes("Industrial Engineering and Business Administration, BSIE (Boston)"));
+  assert.ok(!rank(combined, "am").includes("Computer Science and Mathematics, BS (Boston)"));
+  assert.ok(!rank(combined, "ac").includes("Electrical and Computer Engineering, MSECE (Boston)"));
+});
+
+test("rankOptions › a run is drawn from the name, not the degree or campus", () => {
+  // "b" from Boston + "cs" from the acronym must not compose into a match, and
+  // BSIE + Boston must not read as "bb".
+  const cs = opt("computer_science_bscs_(boston)");
+  assert.deepEqual(rankOptions([cs], "bc"), []);
+  assert.deepEqual(rankOptions([cs], "bb"), []);
+});
+
+test("rankOptions › initials never outrank a real prefix or acronym match", () => {
+  // "ie" is Industrial Engineering's own degree code; the combined majors that
+  // merely contain an "ie" run must stay below the plain program.
+  assert.equal(rank(combined, "ie")[0], "Industrial Engineering, BSIE (Boston)");
+  assert.equal(rank(combined, "cs")[0], "Computer Science, BSCS (Boston)");
+  // A whole-word prefix beats initials for the same query.
+  const r = rank(combined, "international relations");
+  assert.equal(r[0], "Global Studies and International Relations, MS (Boston)");
+});
+
+test("rankOptions › a run must be consecutive words, in order", () => {
+  const ie = "Industrial Engineering and Computer Science, BSIE (Boston)";
+  // "is" would need Industrial…Science to be adjacent; they are not.
+  assert.ok(!rank(combined, "is").includes(ie));
+  // Reversed components do not match: "cs and ie" is a different program.
+  assert.ok(!rank(combined, "cs and ie").includes(ie));
+});
+
+test("rankOptions › junk initials find nothing, and the matcher terminates", () => {
+  assert.deepEqual(rankOptions(combined, "qq and zz"), []);
+  // Pathological input: many repeated tokens against a long name must not hang.
+  const long = [{ path: "x", label: Array.from({ length: 40 }, () => "aaa").join(" ") }];
+  const t0 = Date.now();
+  rankOptions(long, Array.from({ length: 12 }, () => "aa").join(" "));
+  assert.ok(Date.now() - t0 < 500, "backtracking stays bounded");
+});
