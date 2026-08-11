@@ -41,6 +41,22 @@ function aiDataDevPlugin() {
         const url = (req.url || "").split("?")[0];
         if (url !== "/data" && url !== "/data.html" && !url.startsWith("/data/")) return next();
         if (url.includes("..")) return next();
+        // Two different things claim /data in dev, and only one of them is
+        // this surface. The repo's own `data/` directory sits at the project
+        // root, so Vite serves the planner's requirement files as module URLs
+        // under /data/northeastern/programs/**/requirements.json — the lazy
+        // import.meta.glob in src/data/majorLoader.js. Swallowing those and
+        // answering with the not-found page breaks every major in dev with
+        // "Failed to fetch dynamically imported module", because the AI
+        // surface has no such file to serve and never will.
+        //
+        // So: a Vite module request, or any /data path that is a real file on
+        // disk, belongs to the app and goes back to Vite.
+        if (/[?&](import|t=|v=)/.test(req.url || "")) return next();
+        try {
+          const onDisk = `.${decodeURIComponent(url)}`;
+          if (fs.existsSync(onDisk) && fs.statSync(onDisk).isFile()) return next();
+        } catch { /* undecodable URL — let the surface handle it */ }
         try {
           if (!fs.existsSync("./dist/data.html")) {
             building ??= import("./scripts/build-ai-data.js").then((m) => m.buildAiData());
