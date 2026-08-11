@@ -3,6 +3,11 @@ import net from "net";
 import react from "@vitejs/plugin-react";
 import { spawn, execSync } from "child_process";
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
+
+/** The repo root, resolved from this file rather than from cwd. */
+const ROOT = path.dirname(fileURLToPath(import.meta.url));
 
 /**
  * Emits the AI-readable data export (dist/northeastern/ai/**, see
@@ -54,7 +59,10 @@ function aiDataDevPlugin() {
         // disk, belongs to the app and goes back to Vite.
         if (/[?&](import|t=|v=)/.test(req.url || "")) return next();
         try {
-          const onDisk = `.${decodeURIComponent(url)}`;
+          // Resolved from the repo root, not cwd: a middleware that answers
+          // differently depending on where the process was started is a bug
+          // waiting for the one caller that starts it elsewhere.
+          const onDisk = path.join(ROOT, decodeURIComponent(url));
           if (fs.existsSync(onDisk) && fs.statSync(onDisk).isFile()) return next();
         } catch { /* undecodable URL — let the surface handle it */ }
         try {
