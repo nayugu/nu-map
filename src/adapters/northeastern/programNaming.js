@@ -41,9 +41,10 @@ const DEGREES = {
   mscp: 'MSCP', mscs: 'MSCS', msece: 'MSECE', msecel: 'MSECEL', msem: 'MSEM',
   msenes: 'MSEneS', msenve: 'MSEnvE', msf: 'MSF', msie: 'MSIE', msis: 'MSIS',
   msld: 'MSLD', msme: 'MSME', msor: 'MSOR', mssbs: 'MSSBS',
+  mdes: 'MDes',
   // Doctoral / professional
-  cags: 'CAGS', dlp: 'DLP', dmsc: 'DMSc', dnp: 'DNP', dps: 'DPS', edd: 'EdD',
-  jd: 'JD', llm: 'LLM', pharmd: 'PharmD', phd: 'PhD',
+  cags: 'CAGS', dlp: 'DLP', dmsc: 'DMSc', dnp: 'DNP', dps: 'DPS', dpt: 'DPT',
+  edd: 'EdD', jd: 'JD', llm: 'LLM', pharmd: 'PharmD', phd: 'PhD',
   // Non-degree credentials
   graduate_certificate: 'Graduate Certificate', certificate: 'Certificate',
   minor: 'Minor',
@@ -51,16 +52,34 @@ const DEGREES = {
 
 /** Delivery variants the catalog appends with an em dash ("MSCS—Align"). */
 const MODALITIES = {
-  align:          'Align',
-  online:         'Online',
-  connect:        'Connect',
-  bridge:         'Bridge',
-  bridgeonline:   'Bridge—Online',
-  accelerated:    'Accelerated',
-  'full-time':    'Full-Time',
-  'part-time':    'Part-Time',
-  'post-masters': "Post-Master's",
+  align:              'Align',
+  online:             'Online',
+  connect:            'Connect',
+  bridge:             'Bridge',
+  bridgeonline:       'Bridge—Online',
+  accelerated:        'Accelerated',
+  'full-time':        'Full-Time',
+  'part-time':        'Part-Time',
+  'post-masters':     "Post-Master's",
+  transfer:           'Transfer',
+  direct:             'Direct',
+  advanced:           'Advanced',
+  academic:           'Academic',
+  postbaccalaureate:  'Postbaccalaureate',
+  'one-year':         'One-Year',
+  'two-year':         'Two-Year',
+  'three-year':       'Three-Year',
 };
+
+/**
+ * The em dash also falls *inside* a program's name — "Applied AI—Connect",
+ * "Master of Architecture—One-Year Program" — where there is no degree stem to
+ * anchor the split. Only these suffixes are attested in that position, and the
+ * list stays a whitelist for a concrete reason: the rule is "a token ending in
+ * a modality", so admitting `bridge` would render a future "Cambridge" as
+ * "Cam—Bridge". Every suffix here is one no English word ends in.
+ */
+const NAME_SUFFIXES = ['connect', 'online', 'advanced', 'one-year', 'two-year', 'three-year'];
 
 // The `(modality)?$` anchor makes the alternation backtrack into longer stems,
 // so "mscsalign" resolves to mscs+align rather than failing on ms+"csalign".
@@ -85,6 +104,22 @@ function titleCaseWord(w, first) {
 /** Title-case a slug token, casing each side of a hyphen ("Speech-Language"). */
 function titleCaseToken(tok, first) {
   return tok.split('-').map((seg, i) => titleCaseWord(seg, first && i === 0)).join('-');
+}
+
+/**
+ * Title-case a *name* token, restoring an em dash the slug welded shut:
+ * "aiconnect" → "AI—Connect", "architectureone-year" → "Architecture—One-Year".
+ * The head must survive as a real fragment (2+ chars), so a token that merely
+ * equals a suffix is left alone.
+ */
+function titleCaseNameToken(tok, first) {
+  for (const suffix of NAME_SUFFIXES) {
+    if (tok.length > suffix.length + 1 && tok.endsWith(suffix)) {
+      const head = tok.slice(0, -suffix.length);
+      return `${titleCaseToken(head, first)}—${titleCaseToken(suffix, false)}`;
+    }
+  }
+  return titleCaseToken(tok, first);
 }
 
 // ── Acronyms ─────────────────────────────────────────────────────
@@ -150,20 +185,26 @@ export function parseProgram(raw) {
 
   // Some programs qualify the degree instead of ending on it — "Marine
   // Biology, BS with Three Seas". Take the first whole token that is a degree
-  // code, keeping the rest as a trailing phrase. The phrase must open with a
-  // connector, which is what makes this safe: without that guard,
+  // code, keeping the rest as a trailing phrase. A *bare* stem must be followed
+  // by a connector, which is what makes this safe: without that guard,
   // "additional_requirements_for_ba_students" reads "ba" as a degree.
+  //
+  // A stem welded to a modality needs no such guard, and must not have one:
+  // "bsntransfer" cannot be anything but a degree, and its phrase opens on an
+  // ordinary word ("Nursing, BSN—Transfer Track", "MS—Direct Entry"), so the
+  // connector rule was leaving the whole code stranded in the name.
   if (!stem) {
     for (let i = 1; i < parts.length - 1; i++) {
       const m = parts[i].match(DEGREE_RE);
-      if (!m || !CONNECTORS.has(parts[i + 1])) continue;
+      if (!m) continue;
+      if (!m[2] && !CONNECTORS.has(parts[i + 1])) continue;
       cut = i; stem = m[1]; modality = m[2] ?? ''; tail = parts.slice(i + 1);
       break;
     }
   }
 
   const nameParts = parts.slice(0, cut);
-  const name   = nameParts.map((w, i) => titleCaseToken(w, i === 0)).join(' ');
+  const name   = nameParts.map((w, i) => titleCaseNameToken(w, i === 0)).join(' ');
   const degree = stem
     ? DEGREES[stem]
       + (modality ? `—${MODALITIES[modality]}` : '')

@@ -60,3 +60,54 @@ test("fmtLocation › multi-word and truncated campus tags", () => {
     "one scraped folder is missing its closing paren");
   assert.equal(fmtLocation("animation_minor"), "");
 });
+
+// ── Em dashes the slug welded shut ───────────────────────────────
+
+test("parseProgram › restores an em dash between a degree and its modality", () => {
+  // The slug drops the catalog's em dash, so "BSN—Transfer" arrives as one
+  // token. Left unsplit, the whole code stayed stranded in the name
+  // ("Nursing Bsntransfer Track").
+  const cases = {
+    "nursing_bsntransfer_track_(boston)":                          ["Nursing", "BSN—Transfer Track"],
+    "nursing_bsnaccelerated_program_for_second-degree_students_(boston)":
+      ["Nursing", "BSN—Accelerated Program for Second-Degree Students"],
+    "nursing_msdirect_entry_(boston)":                             ["Nursing", "MS—Direct Entry"],
+    "pharmacy_pharmddirect_entry_(boston)":                        ["Pharmacy", "PharmD—Direct Entry"],
+    "physics_phdadvanced_entry_(boston)":                          ["Physics", "PhD—Advanced Entry"],
+    "physical_therapy_dptpostbaccalaureate_entry_(boston)":        ["Physical Therapy", "DPT—Postbaccalaureate Entry"],
+    "energy_systems_msenesacademic_link_(boston)":                 ["Energy Systems", "MSEneS—Academic Link"],
+    "sustainable_urban_environments_mdesone-year_program_(boston)": ["Sustainable Urban Environments", "MDes—One-Year Program"],
+  };
+  for (const [slug, [name, degree]] of Object.entries(cases)) {
+    const p = parseProgram(slug);
+    assert.equal(p.name, name, slug);
+    assert.equal(p.degree, degree, slug);
+  }
+});
+
+test("parseProgram › restores an em dash inside the name", () => {
+  // No degree stem anchors these, so the split comes off the modality suffix.
+  assert.equal(fmtProgramLabel("applied_aiconnect_mps_(boston)"), "Applied AI—Connect, MPS");
+  assert.equal(fmtProgramLabel("information_systemsonline_msis"), "Information Systems—Online, MSIS");
+  assert.equal(fmtProgramLabel("master_of_architectureone-year_program_(boston)"),
+    "Master of Architecture—One-Year Program");
+  assert.equal(fmtProgramLabel("master_of_architecturethree-year_programadvanced_degree_entrance_(boston)"),
+    "Master of Architecture—Three-Year Program—Advanced Degree Entrance",
+    "two welds in one slug");
+});
+
+test("parseProgram › the welded-modality split does not loosen the connector guard", () => {
+  // The guard exists for bare stems; welding must not become a way around it.
+  assert.equal(parseProgram("additional_requirements_for_ba_students").degree, "");
+  assert.equal(parseProgram("marine_biology_bs_with_three_seas_(boston)").degree, "BS with Three Seas");
+  // Unchanged cases that already worked.
+  assert.equal(fmtProgramLabel("computer_science_mscsalign_(arlington)"), "Computer Science, MSCS—Align");
+  assert.equal(fmtProgramLabel("computer_science_bscs_(boston)"), "Computer Science, BSCS");
+});
+
+test("parseProgram › a name suffix only splits when a real head survives", () => {
+  // "online" as the whole token is a name word, not a weld.
+  assert.equal(parseProgram("online_ms_(boston)").name, "Online");
+  // The suffix list deliberately omits "bridge", so a future Cambridge stays whole.
+  assert.equal(parseProgram("cambridge_ba_(boston)").name, "Cambridge");
+});
