@@ -225,12 +225,14 @@ test("rankOptions › initials never outrank a real prefix or acronym match", ()
   assert.equal(r[0], "Global Studies and International Relations, MS (Boston)");
 });
 
-test("rankOptions › a run must be consecutive words, in order", () => {
+test("rankOptions › a run must be consecutive words", () => {
   const ie = "Industrial Engineering and Computer Science, BSIE (Boston)";
-  // "is" would need Industrial…Science to be adjacent; they are not.
+  // "is" would need Industrial…Science to be adjacent; they are not. (Token
+  // order across the query is deliberately free — see the tier test below.)
   assert.ok(!rank(combined, "is").includes(ie));
-  // Reversed components do not match: "cs and ie" is a different program.
-  assert.ok(!rank(combined, "cs and ie").includes(ie));
+  // "ic" is Industrial…Computer, separated by "Engineering" — and unlike "sc"
+  // (which really does prefix "Science") it cannot match any single word.
+  assert.ok(!rank(combined, "ic").includes(ie));
 });
 
 test("rankOptions › junk initials find nothing, and the matcher terminates", () => {
@@ -240,4 +242,28 @@ test("rankOptions › junk initials find nothing, and the matcher terminates", (
   const t0 = Date.now();
   rankOptions(long, Array.from({ length: 12 }, () => "aa").join(" "));
   assert.ok(Date.now() - t0 < 500, "backtracking stays bounded");
+});
+
+test("rankOptions › component initials work in either order", () => {
+  // Word prefixes were already order-free ("math and cs" = "cs and math"),
+  // so initials mirror that rather than being the one ordered exception.
+  const ie = "Industrial Engineering and Computer Science, BSIE (Boston)";
+  assert.equal(rank(combined, "ie and cs")[0], ie);
+  assert.equal(rank(combined, "cs and ie")[0], ie);
+  assert.equal(rank(combined, "cs ie")[0], ie);
+});
+
+test("rankOptions › order is a tier, not a filter", () => {
+  // Where two real programs are mirror images, the one that matches in the
+  // typed order must still come first.
+  const pair = [
+    opt("chemical_engineering_and_environmental_engineering_bsche_(boston)"),
+    opt("environmental_engineering_and_chemical_engineering_bsenve_(boston)"),
+  ];
+  // "che" then "es" reads Chemical…Environmental Sciences in order; reversing
+  // the tokens must not promote it above the program that reads in order.
+  assert.equal(rankOptions(pair, "ce and ee")[0].name,
+    "Chemical Engineering and Environmental Engineering");
+  assert.equal(rankOptions(pair, "ee and ce")[0].name,
+    "Environmental Engineering and Chemical Engineering");
 });

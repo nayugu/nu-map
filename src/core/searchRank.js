@@ -61,6 +61,14 @@
 // "ir" → International Relations, "cv" → Computer Vision, "jj" → Criminal
 // Justice and Journalism.
 //
+// Word prefixes have always had an order-free tier (ORDERED → ANY), which is
+// why "math and cs" worked as well as "cs and math"; initials mirror that with
+// INITIALS → INITIALS_ANY, so "cs and ie" finds what "ie and cs" finds. That
+// took reversed queries from 5% found to 100% and changed no top result at all.
+// Order is kept as a *tier*, not a filter, because it still carries a little
+// information: the catalog has exactly one reversed pair (Chemical Engineering
+// and Environmental Engineering vs its mirror image) out of 298.
+//
 // Light typo tolerance: when strict matching is sparse, in-order subsequence
 // matches ("compter science" → "computer science") are added, ranked below
 // every strict match. Cheap — a few string ops over ~1.5k short labels.
@@ -76,6 +84,7 @@ const T = {
   ORDERED:      5000,  // every query word starts a name word, in order
   ANY:          4000,  // …in any order, campus and degree included ("cs boston")
   INITIALS:     3000,  // a token stands for a run of name words ("ie and cs")
+  INITIALS_ANY: 2500,  // …in any order ("cs and ie")
   LOOSE:        2000,  // mid-word, or a hit on the folder slug / group heading
   FUZZY:       -1000,  // dropped-letter fallback
 };
@@ -169,6 +178,11 @@ function orderedInitials(qTokens, nameWords) {
   return go(0, 0);
 }
 
+/** orderedInitials without the ordering: each token has to land somewhere. */
+function anyInitials(qTokens, nameWords) {
+  return qTokens.every(t => orderedInitials([t], nameWords));
+}
+
 /**
  * How much of the program's name the query accounts for, 0–COV_MAX.
  * The bonus that pushes combined and qualified programs down inside a tier.
@@ -206,6 +220,11 @@ function scoreOption(o, q, qTokens) {
   // Name only, and below ANY: an initials run is weaker than a word prefix,
   // so it may add candidates but must never reorder ones that already matched.
   if (orderedInitials(qTokens, nameWords))                return T.INITIALS + cov;
+
+  // Word prefixes get an order-free tier (ORDERED → ANY) and initials now get
+  // the same, so "cs and ie" finds what "ie and cs" finds. Keeping it a tier
+  // lower preserves the ordering signal where a name actually carries one.
+  if (anyInitials(qTokens, nameWords))                    return T.INITIALS_ANY + cov;
 
   if (f.name.includes(q))                                 return T.LOOSE   + cov;
   const folder = (o.folder ?? "").toLowerCase();
