@@ -442,10 +442,37 @@ export function cellLevelTarget(plan, courseMap, studentType = "undergraduate") 
     // put in year one — came out at a median position of 0.55.
     //
     // Null is the only "no level" value; 0 is a position.
+    // ── The MEDIAN across options, not the minimum ────────────────
+    //
+    // `Math.min` was the optimistic extreme: a cell offering eleven unrelated options was
+    // positioned as if the student would take its cheapest one. CS+Math's `Supporting
+    // Course` — 11 options across 7 subjects (SOCL, CY, PHIL, AFCS, DS, HIST, INSH),
+    // levels 1xxx:4, 2xxx:4, 4xxx:2, 5xxx:1, and unlocking NOTHING in the degree — came
+    // out at 0.00 and was placed in the first term of year 1, ahead of `MATH 2341`.
+    //
+    // The argument is internal to this function rather than from the corpus, which is
+    // what makes it safe. The POOL branch below already answers "which level is this
+    // cell about" with a typical value — the modal level of its candidates — and this
+    // branch answered it with an extreme. Those are different questions and only one of
+    // them is being asked: nobody knows which option a student takes.
+    //
+    // Median rather than mode, because the option list is small and lumpy and the
+    // Supporting Course's mode is a 4–4 tie between levels 1 and 2 that the mode's
+    // tie-break resolves back to 0.00.
+    //
+    // ── Why this cannot disturb anything that was right ──────────────
+    //
+    // For a cell with ONE option the median IS the minimum, and that is every named
+    // cell in the catalog. For a multi-option cell whose options share a level they are
+    // also equal. So the only cells that move are heterogeneous choices, and the two
+    // that matter are unchanged by construction: `ENGW 1111 or 1102` is all 1000-level
+    // so it keeps 0.00 (100% of published plans put first-year writing in year one), and
+    // `ENGW 3302 or 3307 or 3315` is all 3000-level so it keeps 0.64 (measured 0.78).
     const t = cell.groups
       .map(g => Math.max(...g.map(id => levelTarget(id, studentType) ?? -1)))
-      .filter(v => v >= 0);
-    return t.length ? Math.min(...t) : null;
+      .filter(v => v >= 0)
+      .sort((a, b) => a - b);
+    return t.length ? t[Math.floor((t.length - 1) / 2)] : null;
   }
   if (!plan.candidates?.length) return null;
   const counts = new Map();

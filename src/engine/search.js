@@ -511,11 +511,24 @@ function attemptPlacement({
       // ranked `MATH 3527`, which unlocks one pool candidate, alongside `CS 2000`, which
       // unlocks 57.
       if (!isGenerator(plan)) {
+        // ── The level target outranks the elective reserve, HERE ONLY ──
+        //
+        // These two were the other way round, and it is what left `MATH 2341` — a
+        // required major course with a 2000-level target of 0.36 — in the last term of
+        // year 4. The reserve marks every term already at its credit target, and by the
+        // time a below-bar cell is placed that is every early term and none of the late
+        // ones, so the reserve alone chose the term and the level target never spoke.
+        //
+        // Changed in this branch only. The generator branch below wants the earliest
+        // legal term and the reserve is the right tie-break there; the non-major branch
+        // after it is dominated by general electives, whose `want` falls through to 1 and
+        // for which the reserve is exactly the mechanism that spreads them. Reordering
+        // all three at once was tried and cost the elective spread across the board.
         const want = cellLevelTarget(plan, courseMap, studentType) ?? 1;
         return [...plan.domain].sort((a, b) =>
           byOptional(a, b) || crowded(plan, a) - crowded(plan, b)
-          || takesReserved(plan, a) - takesReserved(plan, b)
           || Math.abs(a / span - want) - Math.abs(b / span - want)
+          || takesReserved(plan, a) - takesReserved(plan, b)
           || f(a) - f(b) || a - b);
       }
       // Earliest, but not before a real plan has ever put a course of this level.
@@ -534,7 +547,7 @@ function attemptPlacement({
         || takesReserved(plan, a) - takesReserved(plan, b)
         || a - b || f(a) - f(b));
     }
-    // A cell with no level at all is a general elective, and it wants the END.
+    // A cell with no claim on any term wants the END.
     //
     // Measured against the departments' own plans, "emptiest term" was losing the
     // argument this engine was built to win: CHART put 773 unnamed cells in the first
@@ -542,7 +555,31 @@ function attemptPlacement({
     // placed last in the search ORDER is not the same as wanting the last TERM — the
     // early terms are the emptiest once every specific course has claimed its slot,
     // so load balance quietly walked the electives forward.
-    const want = cellLevelTarget(plan, courseMap, studentType) ?? 1;
+    //
+    // ── What counts as having no claim, stated once ────────────────
+    //
+    // It was "a cell with no level at all", which meant only the general electives, and
+    // that definition was too narrow by exactly one case. CS+Math's `Supporting Course`
+    // is 11 options across 7 unrelated subjects, unlocks NOTHING in the degree, and
+    // belongs to neither major — and it has a level target of 0.36 purely because its
+    // option list contains some 2000-level courses. It was landing in year 1 ahead of
+    // required major courses, and later, once the reserve was reordered, at the end only
+    // by accident of load.
+    //
+    // The general rule: NOTHING IN THE DEGREE DEPENDS ON IT AND IT IS NOBODY'S MAJOR.
+    // Such a requirement still has to be met, so it is not dropped — it simply has no
+    // argument for any particular term, and the level of options the student did not
+    // choose from is not such an argument. That is the same thing a general elective is,
+    // so it is handled by the same line rather than a rule about "supporting courses".
+    //
+    // The check that this is the right cut, and not just a cut that moves the cell
+    // complained about: `College Writing` (ENGW 1111 or 1102) unlocks 8 and so is NOT
+    // filler, keeping the 0.00 target that puts first-year writing in year one, which
+    // 100% of published plans do. `Advanced Writing` unlocks nothing and is nobody's
+    // major, so it becomes filler and goes late — where the corpus puts it anyway
+    // (median 0.78, p90 0.89).
+    const noClaim = unlockOf(plan) === 0 && !majorSubjects.has(cellSubject(plan, courseMap));
+    const want = noClaim ? 1 : (cellLevelTarget(plan, courseMap, studentType) ?? 1);
     return [...plan.domain].sort((a, b) =>
       byOptional(a, b) || crowded(plan, a) - crowded(plan, b)
       || takesReserved(plan, a) - takesReserved(plan, b)
