@@ -36,15 +36,19 @@ import { isLoopbackHost } from "../../core/planShare.js";
 // the scan reaches an app that cannot talk to the relay holding its code.
 // Loopback stays loopback — that is the ordinary single-machine case — and
 // a configured VITE_MCP_SERVER_URL (every deployed build) always wins.
-const _devServer = () => {
+const DEV_RELAY_PORT = 27182;
+
+const _devServer = (host) => `http://${host}:${DEV_RELAY_PORT}`;
+
+const _defaultServer = () => {
   try {
     const h = window.location.hostname;
-    if (h && !isLoopbackHost(h)) return `http://${h}:27182`;
+    if (h && !isLoopbackHost(h)) return _devServer(h);
   } catch { /* no window — fall through */ }
-  return "http://localhost:27182";
+  return _devServer("localhost");
 };
 
-const SERVER = (import.meta.env.VITE_MCP_SERVER_URL ?? _devServer())
+const SERVER = (import.meta.env.VITE_MCP_SERVER_URL ?? _defaultServer())
   .replace(/\/$/, "");
 const WS_SERVER = SERVER.replace(/^http/, "ws");
 

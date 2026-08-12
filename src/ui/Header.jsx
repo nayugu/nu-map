@@ -25,7 +25,7 @@ import HoverTip       from "./InfoTip.jsx";
 import FadeText       from "./FadeText.jsx";
 import { generateQr } from "../core/qrEncode.js";
 import { getHashCodeParam, buildCodeUrl } from "../core/planShare.js";
-import { CODE_LENGTH } from "../core/shareCrypto.js";
+import { CODE_LENGTH, filterCodeInput } from "../core/shareCrypto.js";
 
 // Measured header-row width (logical px) below which the labeled buttons fold
 // to icon-only. Above it, labeled buttons wrap into two stacked groups
@@ -536,7 +536,7 @@ export default function Header() {
   // Resolves true only if a plan actually landed, so the caller can tell
   // "claimed and imported" from "dead code" and from "user said no".
   const redeemCode = async (code) => {
-    if (code.length < 6 || claimBusy) return false;
+    if (code.length !== CODE_LENGTH || claimBusy) return false;
     setShareCodeError(null);
     setClaimBusy(true);
     try {
@@ -568,7 +568,7 @@ export default function Header() {
     }
   };
 
-  const handleClaimCode = () => redeemCode(claimInput.toUpperCase().replace(/[^A-Z0-9]/g, ""));
+  const handleClaimCode = () => redeemCode(filterCodeInput(claimInput));
 
   // A scanned QR (or a pasted #c= link) lands here. Three things matter:
   //
@@ -1515,8 +1515,15 @@ export default function Header() {
                       {/* Once a code exists the bar IS the code. Clicking
                           copies it; the countdown sits at the trailing edge
                           so the code itself stays centred. */}
+                      {/* A div rather than a button so the code can be
+                          selected with the mouse; given a button's role and
+                          key handling so it is not mouse-only. */}
                       <div
                         onClick={handleCopyCode}
+                        role="button"
+                        tabIndex={0}
+                        onKeyDown={e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); handleCopyCode(); } }}
+                        aria-label={`${shareCode.code} — ${t("header.io.code.copy.title")}`}
                         title={t("header.io.code.copy.title")}
                         style={{ display: "flex", alignItems: "center", justifyContent: "center",
                           minWidth: 0, fontSize: 10, fontWeight: 700,
@@ -1592,7 +1599,7 @@ export default function Header() {
                         value={claimInput}
                         onChange={e => {
                           setShareCodeError(null);
-                          const next = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, CODE_LENGTH);
+                          const next = filterCodeInput(e.target.value);
                           setClaimInput(next);
                           // Submit on the last character, not on a timer:
                           // the length is the completeness signal.

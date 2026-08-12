@@ -465,7 +465,6 @@ export const strings = {
   "header.io.code.copy.title":    "انقر لنسخ الرمز",
   "header.io.code.cancel.title":  "إلغاء هذا الرمز",
   "header.io.code.error":         "حدث خطأ ما. حاول مرة أخرى.",
-  "header.io.code.placeholder":   "أدخل الرمز",
   "header.io.code.load":          "تحميل",
   "header.io.code.load.title":    "تحميل خطة تمت مشاركتها برمز",
   "header.io.code.pickedup":      "تم الاستلام!",

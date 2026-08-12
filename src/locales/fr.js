@@ -466,7 +466,6 @@ export const strings = {
   "header.io.code.copy.title":    "Cliquez pour copier le code",
   "header.io.code.cancel.title":  "Annuler ce code",
   "header.io.code.error":         "Une erreur est survenue. Réessayez.",
-  "header.io.code.placeholder":   "Saisir le code",
   "header.io.code.load":          "Charger",
   "header.io.code.load.title":    "Charger un plan partagé par code",
   "header.io.code.pickedup":      "Récupéré !",

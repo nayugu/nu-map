@@ -466,7 +466,6 @@ export const strings = {
   "header.io.code.copy.title":    "कोड कॉपी करने के लिए क्लिक करें",
   "header.io.code.cancel.title":  "यह कोड रद्द करें",
   "header.io.code.error":         "कुछ गड़बड़ हुई। फिर से कोशिश करें।",
-  "header.io.code.placeholder":   "कोड दर्ज करें",
   "header.io.code.load":          "लोड करें",
   "header.io.code.load.title":    "कोड से साझा किया गया प्लान लोड करें",
   "header.io.code.pickedup":      "ले लिया गया!",

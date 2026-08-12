@@ -17,7 +17,7 @@
 import { test, afterEach } from "node:test";
 import assert from "node:assert/strict";
 import { buildCodeUrl, getHashCodeParam, isLoopbackHost } from "../../src/core/planShare.js";
-import { CODE_ALPHABET, CODE_LENGTH } from "../../src/core/shareCrypto.js";
+import { CODE_ALPHABET, CODE_LENGTH, filterCodeInput } from "../../src/core/shareCrypto.js";
 import { generateQr } from "../../src/core/qrEncode.js";
 
 const stub = ({ hash = "", origin = "https://numap.app", hostname = "numap.app", canonical = "https://numap.app/" } = {}) => {
@@ -28,6 +28,50 @@ const stub = ({ hash = "", origin = "https://numap.app", hostname = "numap.app",
 };
 
 afterEach(() => { delete globalThis.window; delete globalThis.document; });
+
+// ── What a human may type into the code field ───────────────────────
+// The field submits on the CODE_LENGTHth character, so anything this lets
+// through decides when a 300k-iteration derivation is spent.
+
+test("filterCodeInput › accepts a real code, however it was retyped", () => {
+  for (const raw of ["QK7FMP", "qk7fmp", "qk7-fmp", "QK 7F MP", " qk7fmp ", "q.k7f/mp"]) {
+    assert.equal(filterCodeInput(raw), "QK7FMP", `${JSON.stringify(raw)} should clean up`);
+  }
+});
+
+test("filterCodeInput › drops characters no code can contain", () => {
+  // 0/O/1/I/L are excluded from the alphabet precisely because they are
+  // misread aloud. Accepting one would spend a full derivation and then
+  // report "not found" about a character that could never have been there.
+  for (const ch of ["0", "O", "1", "I", "L"]) {
+    assert.equal(filterCodeInput(ch), "", `${ch} should be refused`);
+    assert.equal(filterCodeInput(`QK7${ch}FM`), "QK7FM", `${ch} should be dropped mid-code`);
+  }
+});
+
+test("filterCodeInput › never exceeds CODE_LENGTH, so it cannot over-trigger submit", () => {
+  assert.equal(filterCodeInput("QK7FMPQK7FMP").length, CODE_LENGTH);
+  assert.equal(filterCodeInput("QK7FMPZ"), "QK7FMP");
+});
+
+test("filterCodeInput › tolerates junk instead of throwing", () => {
+  for (const raw of [undefined, null, "", "!!!", 12345, {}]) {
+    assert.doesNotThrow(() => filterCodeInput(raw));
+  }
+  assert.equal(filterCodeInput(undefined), "");
+  assert.equal(filterCodeInput("!!!"), "");
+});
+
+test("filterCodeInput › output is always claimable-shaped or short, never invalid", () => {
+  // Anything reaching full length must parse as a code, or the auto-submit
+  // would fire on something getHashCodeParam would have rejected.
+  const samples = ["QK7FMP", "zzz999", "0O1IL0O1IL", "ab-cd-ef", "AAAAAAAAAA", "!@#$%^", "q1k7l0fmp"];
+  for (const raw of samples) {
+    const out = filterCodeInput(raw);
+    assert.ok(out.length <= CODE_LENGTH);
+    for (const ch of out) assert.ok(CODE_ALPHABET.includes(ch), `${ch} leaked from ${raw}`);
+  }
+});
 
 // ── The loopback rule ───────────────────────────────────────────────
 // Shared by buildCodeUrl and the relay's dev default (shareRelay.js), so

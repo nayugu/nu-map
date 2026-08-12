@@ -203,8 +203,13 @@ function _shareOrigin() {
   return origin ?? '';
 }
 
+// The whole wire format of a code link, in one place. Not exported —
+// nothing outside this module should be assembling or parsing the hash
+// itself; buildCodeUrl and getHashCodeParam are the seam.
+const CODE_HASH_PREFIX = '#c=';
+
 export function buildCodeUrl(code) {
-  return `${_shareOrigin()}/#c=${code}`;
+  return `${_shareOrigin()}/${CODE_HASH_PREFIX}${code}`;
 }
 
 // Returns the code only if it is one this app could have produced. The
@@ -214,8 +219,8 @@ export function buildCodeUrl(code) {
 // hand-typed "l" is a miss, not a silent near-match.
 export function getHashCodeParam() {
   const hash = window.location.hash;
-  if (!hash.startsWith('#c=')) return null;
-  const code = hash.slice('#c='.length).toUpperCase();
+  if (!hash.startsWith(CODE_HASH_PREFIX)) return null;
+  const code = hash.slice(CODE_HASH_PREFIX.length).toUpperCase();
   if (code.length !== CODE_LENGTH) return null;
   for (const ch of code) if (!CODE_ALPHABET.includes(ch)) return null;
   return code;

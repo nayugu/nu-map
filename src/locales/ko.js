@@ -466,7 +466,6 @@ export const strings = {
   "header.io.code.copy.title":    "클릭하여 코드 복사",
   "header.io.code.cancel.title":  "이 코드 취소",
   "header.io.code.error":         "문제가 발생했습니다. 다시 시도하세요.",
-  "header.io.code.placeholder":   "코드 입력",
   "header.io.code.load":          "불러오기",
   "header.io.code.load.title":    "코드로 공유된 계획 불러오기",
   "header.io.code.pickedup":      "전달 완료!",

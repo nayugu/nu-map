@@ -467,7 +467,6 @@ export const strings = {
   "header.io.code.copy.title":    "クリックしてコードをコピー",
   "header.io.code.cancel.title":  "このコードを取り消す",
   "header.io.code.error":         "問題が発生しました。もう一度お試しください。",
-  "header.io.code.placeholder":   "コードを入力",
   "header.io.code.load":          "読み込む",
   "header.io.code.load.title":    "コードで共有されたプランを読み込む",
   "header.io.code.pickedup":      "受け取られました！",

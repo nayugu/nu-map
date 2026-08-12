@@ -405,7 +405,6 @@ export const strings = {
   "header.io.code.copy.title":     "\u70b9\u51fb\u590d\u5236\u4ee3\u7801",
   "header.io.code.cancel.title":   "\u53d6\u6d88\u6b64\u4ee3\u7801",
   "header.io.code.error":          "\u51fa\u4e86\u70b9\u95ee\u9898\uff0c\u8bf7\u91cd\u8bd5\u3002",
-  "header.io.code.placeholder":    "\u8f93\u5165\u4ee3\u7801",
   "header.io.code.load":           "\u52a0\u8f7d",
   "header.io.code.load.title":     "\u52a0\u8f7d\u901a\u8fc7\u4ee3\u7801\u5206\u4eab\u7684\u8ba1\u5212",
   "header.io.code.pickedup":       "\u5df2\u88ab\u9886\u53d6\uff01",

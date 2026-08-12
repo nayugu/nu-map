@@ -486,7 +486,6 @@ export const strings = {
   "header.io.code.copy.title":    "Click to copy the code",
   "header.io.code.cancel.title":  "Cancel this code",
   "header.io.code.error":         "Something went wrong. Try again.",
-  "header.io.code.placeholder":   "Enter code",
   "header.io.code.load":          "Load",
   "header.io.code.load.title":    "Load a plan shared with a code",
   "header.io.code.pickedup":      "Picked up!",
