@@ -409,6 +409,15 @@ function collectCandidateKeys(sections, placedSet) {
 export function allocateSections(sections, placedSet, globalUsed, courseMap) {
   const results = [];
   for (const section of sections) {
+    // A hole in the array yields a placeholder rather than a crash. Index alignment
+    // with `requirementSections` is load-bearing — `requirementDemand` and
+    // `requirementBinding` both read `alloc[i]` against `sections[i]` — so the
+    // placeholder has to occupy its slot rather than be skipped.
+    if (!section || typeof section !== 'object') {
+      results.push({ type: 'SECTION', title: '', warnings: [], sat: false, satCount: 0,
+                     minRequired: 0, total: 0, children: [], allocatedCourses: new Set() });
+      continue;
+    }
     // Cross-count section (integrative/GPA re-lists, shared/split credit): its courses are
     // deliberately counted toward multiple requirements, so it must not be starved by, nor
     // starve, the sections that also list those courses. Evaluate it permissively (empty
@@ -447,8 +456,14 @@ export function allocateSections(sections, placedSet, globalUsed, courseMap) {
  *
  * This ensures all options appear as direct siblings, so minRequirementCount
  * applies uniformly across the entire pool. Handles any number of choice nodes.
+ *
+ * Exported because CHART derives its plan cells from the same sections this
+ * allocates over, and a cell derived from the RAW shape would disagree with the
+ * audit about how many things a section demands. Reshaping twice, in two places,
+ * is the drift `requirementDemand.js` exists to prevent.
  */
-function normalizePooledSection(section) {
+export function normalizePooledSection(section) {
+  if (!section || typeof section !== 'object') return { type: 'SECTION', requirements: [] };
   if (section.type !== 'SECTION') return section;
 
   const reqs = section.requirements ?? [];
@@ -576,6 +591,12 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
 }
 
 function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContext = false) {
+  // A hole or a scalar where a requirement node belongs. Unsatisfied and
+  // contributing nothing is the honest reading; crashing would take out the whole
+  // requirements panel over one bad entry.
+  if (!node || typeof node !== 'object') {
+    return { type: 'UNKNOWN', sat: false, label: '', allocatedCourses: new Set() };
+  }
   switch (node.type) {
     case 'COURSE': {
       const key = courseKey(node.subject, node.classId);

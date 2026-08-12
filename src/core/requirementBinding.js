@@ -110,7 +110,10 @@ export function obligationsOf(programData, { placedSet = new Set(), courseMap = 
     // `shared` sections are deliberately cross-counted toward several
     // requirements, so charging their demand to the total would shrink the
     // derived general-elective allowance below.
-    if (section.shared) demand -= demandOf(alloc[i], unitSH);
+    // Optional-chained because a hole in the array must not take down the whole
+    // audit: no shipped program has one, and a crash here would surface as a blank
+    // requirements panel rather than as the one bad section.
+    if (section?.shared) demand -= demandOf(alloc[i], unitSH);
     if (short <= 0) return;
     out.push({ target: i, title: section.title ?? "", spec, shortfallSH: short, unitSH });
   });

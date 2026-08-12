@@ -45,26 +45,80 @@ export function typicalSH(spec, courseMap, fallback = DEFAULT_UNIT_SH) {
 }
 
 /**
+ * A section's children, split by how they state their demand.
+ *
+ * `reqSh` marks a credit-hour threshold over a pool (an XOM); everything else is
+ * counted in courses. A section can hold BOTH — 61 of the 6,185 shipped sections
+ * do — and the two halves have to be added, not chosen between.
+ */
+function splitChildren(allocSection) {
+  const kids = allocSection?.children ?? [];
+  const pools = [], plain = [];
+  for (const c of kids) (typeof c.reqSh === "number" ? pools : plain).push(c);
+  return { kids, pools, plain };
+}
+
+/**
+ * How many of the plain children this section actually requires.
+ *
+ * `minRequired` counts ALL children, pools included, so the plain share is
+ * whatever is left after the pools have taken their places. Clamped both ways:
+ * a section may state a minimum above its child count, and one below its pool
+ * count would otherwise ask for a negative number of courses.
+ */
+function plainRequired(allocSection, pools, plain) {
+  const min = allocSection?.minRequired ?? allocSection?.total ?? (pools.length + plain.length);
+  return Math.max(0, Math.min(plain.length, min - pools.length));
+}
+
+/**
  * Credit a section demands in total, whatever is placed.
  *
  * A child carrying `reqSh` states its demand in credit hours (an XOM pool);
  * anything else is counted in courses via the section's own `minRequired`.
+ *
+ * ── Both halves, when a section has both ──────────────────────────
+ *
+ * This used to return the pool total ALONE as soon as any child carried
+ * `reqSh`, which reported Behavioral Neuroscience's eight-course, 34 SH
+ * "Foundation Requirements" as demanding **1 SH** — the credit of the one small
+ * pool sitting beside the courses. 61 sections mix the two shapes, understating
+ * their demand by a median of 4 SH and up to 32.
+ *
+ * That number is not cosmetic. `obligationsOf` derives the general-elective
+ * allowance as `totalCreditsRequired − Σ demand`, so an understated section
+ * inflated the free-elective bucket by exactly as much: 42 programs were
+ * affected, and Behavioral Neuroscience was told 84 of its 132 SH were free
+ * electives. It also sets `bindCells`' capacity, so a section could not absorb
+ * the cells it genuinely demands.
+ *
+ * All 61 have `minRequired >= children.length` — every child required — so the
+ * split is arithmetic rather than a guess. `plainRequired` generalises it in
+ * case a "choose N" section ever mixes the two.
  */
 export function demandOf(allocSection, unitSH = DEFAULT_UNIT_SH) {
-  let reqSh = 0, found = false;
-  for (const c of allocSection?.children ?? []) {
-    if (typeof c.reqSh === "number") { reqSh += c.reqSh; found = true; }
+  const { pools, plain } = splitChildren(allocSection);
+  if (!pools.length) {
+    return (allocSection?.minRequired ?? allocSection?.total ?? 0) * unitSH;
   }
-  return found ? reqSh : (allocSection?.minRequired ?? allocSection?.total ?? 0) * unitSH;
+  const poolSH = pools.reduce((n, c) => n + c.reqSh, 0);
+  if (!plain.length) return poolSH;
+  return poolSH + plainRequired(allocSection, pools, plain) * unitSH;
 }
 
-/** Credit of a section the placed courses already answer. */
+/**
+ * Credit of a section the placed courses already answer.
+ *
+ * Split the same way as `demandOf`, and for the same reason: measuring
+ * satisfaction over the pools alone while demanding both halves would report a
+ * section as permanently unmet.
+ */
 export function satisfiedOf(allocSection, unitSH = DEFAULT_UNIT_SH) {
-  let satSh = 0, found = false;
-  for (const c of allocSection?.children ?? []) {
-    if (typeof c.reqSh === "number") { satSh += c.satSh ?? 0; found = true; }
-  }
-  return found ? satSh : (allocSection?.satCount ?? 0) * unitSH;
+  const { pools, plain } = splitChildren(allocSection);
+  if (!pools.length) return (allocSection?.satCount ?? 0) * unitSH;
+  const poolSH = pools.reduce((n, c) => n + (c.satSh ?? 0), 0);
+  if (!plain.length) return poolSH;
+  return poolSH + plain.filter(c => c.sat).length * unitSH;
 }
 
 /** Credit of a section still outstanding. */
