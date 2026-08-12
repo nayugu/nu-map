@@ -118,7 +118,7 @@ const violations = [];
 const refusals = new Map();
 const gave = new Map();
 let shapes = 0, made = 0, threw = 0, relaxed = 0;
-let thin = 0, fullTerms = 0;
+let thin = 0, fullTerms = 0, emptyFull = 0;
 
 for (const d of degrees) {
   const variants = d.plan?.plans?.length ? d.plan.plans : [null];
@@ -174,6 +174,7 @@ for (const d of degrees) {
     });
     thin += g.thin.length;
     fullTerms += g.fullTerms;
+    emptyFull += g.emptyFull.length;
     if (!g.ok) {
       violations.push({
         label, kind: "hard-rule",
@@ -191,6 +192,9 @@ console.log(`  reached a fallback rung ${gave.size ? [...gave.entries()]
   .sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(", ") : "0 plans"}`
   + (relaxed ? `   (four-course bound genuinely relaxed in ${relaxed})` : ""));
 console.log(`  thin full terms ${thin} of ${fullTerms} (${(100 * thin / (fullTerms || 1)).toFixed(1)}%)  — reported, not gated`);
+// Counted separately because it is WORSE than thin and was previously invisible: `gatePlan`
+// skipped terms with no cells, so an empty fall or spring passed silently. See chart-gate.js.
+console.log(`  EMPTY full terms ${emptyFull}  — a semester the student is not enrolled in`);
 if (refusals.size) {
   console.log(`  refusals: ${[...refusals.entries()].sort((a, b) => b[1] - a[1])
     .map(([k, n]) => `${k} ${n}`).join(", ")}`);

@@ -1170,6 +1170,27 @@ function attemptPlacement({
   const fullCount = terms.filter(t => (t.weight ?? 1) >= 1).length;
   const realTotal = plans.filter(bigCell).length;
   const surplus = realTotal - minCourses * fullCount;
+  // ── When the bar is ARITHMETICALLY unsatisfiable, it does not apply ──
+  //
+  // A negative surplus means the degree names fewer real courses than its full terms need. No
+  // arrangement can give every full term four, so enforcing the bar refuses the degree over
+  // arithmetic rather than over any plan — and refuses it for a convention its own department
+  // does not follow. MEASURED, over the 20 shapes refusing this way:
+  //
+  //   health_science_bs                30 courses, 8 full terms need 32   short by 2
+  //   health_science_and_comm_studies   31 courses, 8 full terms need 32   short by 1
+  //   health_science_and_business_admin 29 courses, 10 full terms need 40  short by 11
+  //
+  // And the published plans for those degrees are duly light: `health_science_bs`'s own
+  // four-year plan puts THREE of six full terms under four courses, one of them with two, and
+  // its sibling variant has a Year 4 Spring holding one. `architectural_studies_and_design`
+  // publishes a three-course Year 1 Fall.
+  //
+  // This is NOT the four-course rule being relaxed. It is the same structure the rule already
+  // has twice over: `minCoursesFor` returns 0 for graduate degrees because they have no such
+  // convention, and `termIsFull` passes a 16 SH studio term because no fourth course can fit.
+  // A bar that cannot be met is not a bar, and the honest response is to plan and say so.
+  const barSatisfiable = surplus >= 0;
   const bigCap = terms.map((t) => {
     // Not enough courses to give every full term four: the rule is unsatisfiable for this
     // shape, so no ceiling is imposed and the relaxed tier plans anyway.
@@ -1194,7 +1215,11 @@ function attemptPlacement({
    * term holds one course it is committed to being used, and the bar applies.
    */
   const canStillFill = (nextIndex) => {
-    if (!enforceCardinality || minCourses <= 0) return true;
+    // `barSatisfiable` was already consulted by `bigCap`, which switches its ceiling off for the
+    // same reason, and NOT here — so the ceiling stopped constraining while this kept demanding
+    // four courses in every used full term. That asymmetry is what refused 20 degrees whose own
+    // departments publish light terms.
+    if (!enforceCardinality || minCourses <= 0 || !barSatisfiable) return true;
     const possible = suffix[nextIndex];
     let totalNeed = 0;
     const needing = [];
@@ -1554,7 +1579,14 @@ function attemptPlacement({
       const dead =
           !precedenceRoom()      ? { kind: "chain-has-no-room-left" }
         : !canStillSeat(i + 1)   ? { kind: "no-room-left-for-the-rest" }
-        : !canStillFill(i + 1)   ? { kind: "full-term-cannot-reach-four" }
+        : !canStillFill(i + 1)   ? {
+            kind: "full-term-cannot-reach-four",
+            // The degree's own arithmetic against this shape, because the verdict alone is not
+            // actionable and the arithmetic is. "32 real courses; 6 full terms need 24 and 4
+            // half terms hold at most 8" is a sentence an advisor can check; "no legal
+            // placement exists" is not. Free to attach: all three are already computed.
+            realCourses: realTotal, fullTerms: fullCount, minCourses, surplus,
+          }
         : null;
       if (dead) {
         worstFailure = worstFailure ?? { ...dead, cell: cell.id, title: cell.title, term: ti };
@@ -1647,6 +1679,18 @@ export function describe(f) {
   if (f.kind === "term-at-its-course-ceiling") {
     return `"${f.title}" cannot go anywhere without leaving some other full term short of `
       + `four courses`;
+  }
+  if (f.kind === "full-term-cannot-reach-four" && f.realCourses != null) {
+    const need = f.minCourses * f.fullTerms;
+    return f.surplus < 0
+      // The honest case: the degree does not contain enough courses for this shape, so the
+      // convention is unsatisfiable here whatever the search does. That is a fact about the
+      // published plan's length, not about our arrangement.
+      ? `this degree names ${f.realCourses} courses of ${f.minCourses}+ credits, but `
+        + `${f.fullTerms} full terms need ${need} to hold ${f.minCourses} each — `
+        + `${need - f.realCourses} short, so some full term must run light`
+      : `${f.realCourses} courses across ${f.fullTerms} full terms leaves only `
+        + `${f.surplus} spare, and no arrangement of them fills every full term`;
   }
   if (f.kind === "prereq-order-with-what-is-placed") {
     return `"${f.title}" cannot sit in any term that agrees with the courses already placed`;

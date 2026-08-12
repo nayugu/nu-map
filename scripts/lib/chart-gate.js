@@ -84,9 +84,22 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
     }
   }
 
-  const overCap = [], thin = [];
+  const overCap = [], thin = [], emptyFull = [];
   let fullTerms = 0;
   for (const r of rows) {
+    // ── An EMPTY fall or spring is the defect this gate could not see ──
+    //
+    // `cells === 0` skipped the term entirely, so a four-year plan with nothing at all in its
+    // final spring passed every check and reported zero thin terms. It is a worse outcome than
+    // a light term by any reading — the student is not enrolled that semester — and it was also
+    // a loophole: the four-course rule exempts terms not in use, so the search could satisfy
+    // "every used full term holds four" by emptying one instead of filling it. That is exactly
+    // what `american_sign_language_and_human_services` did, reaching 4/4/4/4/4/4/4/0.
+    //
+    // Reported, not gated, for the same reason `thin` is not: an empty term is unfollowable
+    // advice rather than an illegal registration, and the registrar refuses neither. But it is
+    // counted now, because a metric that cannot observe a defect will report its absence.
+    if (!r.coop && r.cells === 0 && !r.half) emptyFull.push(r.label);
     if (r.coop || r.cells === 0) continue;
     if (r.sh > creditCap * (r.half ? 0.5 : 1) + 0.01) overCap.push(`${r.label} ${r.sh} SH`);
     if (r.half || minCourses <= 0) continue;
@@ -100,7 +113,7 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
   }
 
   return {
-    order, availability, overCap, thin, fullTerms,
+    order, availability, overCap, thin, fullTerms, emptyFull,
     // `thin` is deliberately NOT part of `ok`. It is a convention CHART relaxes where it is
     // unsatisfiable — 4.2% of published full terms miss it too, and they are architecture and
     // art where one studio course is 16 credits. The other three are rules a student cannot
