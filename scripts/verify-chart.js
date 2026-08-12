@@ -125,7 +125,12 @@ for (const d of degrees) {
   variants.forEach((variant, vi) => {
     shapes++;
     const studentType = d.lvl === "graduate" ? "graduate" : "undergraduate";
-    const label = variants.length > 1 ? `${d.key}#${vi}` : d.key;
+    // The LEVEL is part of the identity. Without it the sweep reported 647 plans and only
+    // 643 fingerprints: an undergraduate and a graduate program can share a folder key
+    // (`cybersecurity_*`), so four snapshot entries silently overwrote each other and four
+    // plans were exempt from the very comparison the snapshot exists to make.
+    const label = `${d.lvl === "graduate" ? "grad" : "ug"}/${d.key}`
+      + (variants.length > 1 ? `#${vi}` : "");
     let out;
     try {
       out = generatePlan({

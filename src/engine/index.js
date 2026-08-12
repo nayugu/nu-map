@@ -32,7 +32,7 @@ import { deriveCells, cellsSH, substitutePrereqs } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
 import { buildDomains, wideAtFor } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
-import { preflight, tightestTerms } from "./preflight.js";
+import { preflight, tightestTerms, MAX_DERIVED_GE_SHARE } from "./preflight.js";
 import {
   placeCells, describe, DEFAULT_NODE_BUDGET, DEFAULT_TIME_BUDGET_MS,
   POOL_MIN_CANDIDATES, unlockUniverse, unlockOfCell, isPoolCell,
@@ -249,13 +249,54 @@ export function generatePlan({
   // over a defect in someone else's data. Auto-substituting `CS 4700` is NOT done: nothing
   // in the data says the two courses are the same requirement, and a wrong substitution is a
   // wrong plan.
-  const stranded = impossible.filter(isStranded);
-  if (stranded.length) {
-    const ids = new Set(stranded.map(x => x.cell));
-    // Dropped from the SEARCH, so nothing places them and no availability rule is broken.
-    // They are reported instead — see `unschedulable` in the report below.
-    plans = plans.filter(p => !ids.has(p.cell.id));
-    impossible = impossible.filter(x => !ids.has(x.cell));
+  // ── Why the cell is REPLACED and not dropped ────────────────────
+  //
+  // Dropping it was the first attempt and it does not work, which a test caught rather than
+  // a corpus run: the four-course rule is HARD, so removing one real course from a degree
+  // whose full terms were exactly filled leaves a term with three and the whole plan is
+  // refused for `full-term-cannot-reach-four`. The hole propagates — it also short-changes
+  // the credit total and the shape's own term targets.
+  //
+  // So the cell keeps its size and its requirement and loses only its COURSE LIST. That is
+  // not a fudge, it is what every other cell in a CHART plan already is: a reservation, not
+  // a decision. An elective cell is unsatisfied until a course is placed in it, and a
+  // requirement whose named course has been retired is in exactly that state — the student
+  // will put whatever their advisor now approves into that slot. `substitutePrereqs` spends
+  // an elective slot for the mirror-image problem, so this is the established currency here.
+  //
+  // Precedence is rebuilt rather than patched: the cell no longer names a course, so it has
+  // no prerequisites, depth or edges of its own, and the index that has to know is the one
+  // computed from the cells. Patching in place is how the two drift.
+  const strandedInfo = impossible.filter(isStranded);
+  if (strandedInfo.length) {
+    const ids = new Set(strandedInfo.map(x => x.cell));
+    // ── But a plan that is MOSTLY placeholder is worse than no plan ──
+    //
+    // If enough of a degree is stranded, emitting it produces the exact artifact the
+    // pre-flight gate exists to refuse: authoritative-looking and empty of information.
+    // Reusing `MAX_DERIVED_GE_SHARE` rather than inventing a second threshold, because it is
+    // the same question about the same quantity — what share of this degree is a slot we
+    // cannot name — and it was measured at the knee of the corpus distribution.
+    const share = cellsSH(cells.filter(c => ids.has(c.id))) / Math.max(1, cellsSH(cells));
+    if (share > MAX_DERIVED_GE_SHARE) {
+      return {
+        refused: {
+          reason: "mostly-unschedulable",
+          detail: `${Math.round(100 * share)}% of this degree's credits are requirements naming `
+            + `courses that are no longer offered, so a generated plan would be mostly `
+            + `placeholder. The catalog's own requirement list needs updating.`,
+          data: { share, cells: strandedInfo.slice(0, 5) },
+        },
+      };
+    }
+    cells = cells.map(c => (ids.has(c.id)
+      // `kind: "open"` with no spec is what makes `candidatesFor` return null — the cell
+      // admits any course. Keeping the ORIGINAL candidate list would reproduce the empty
+      // domain that stranded it in the first place.
+      ? { ...c, kind: "open", groups: null, spec: null, stranded: true }
+      : c));
+    precedence = buildPrecedence(cells, courseMap, { observed: observedOrder });
+    ({ terms, plans, impossible, critical } = layout(shape));
   }
 
   // ── 5. Refuse now, cheaply, or commit to searching ──────────────
@@ -335,7 +376,7 @@ export function generatePlan({
       // silently missing a requirement is exactly the "looks authoritative and says
       // nothing" failure the pre-flight gate exists to prevent, and this would be a
       // smaller, sneakier version of it.
-      unschedulable: stranded.map(x => ({
+      unschedulable: strandedInfo.map(x => ({
         title: x.title, target: x.target, reason: x.reason,
         // The named course, when the cell had exactly one candidate — which is the common
         // case here, and the difference between "a requirement is unavailable" and
