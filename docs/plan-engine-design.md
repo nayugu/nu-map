@@ -1973,18 +1973,39 @@ Every change gets one of four homes, and only the first three are permitted:
 | **a non-erosion guard** | rejects a phase-2 move that worsens a phase-1 property | **yes** wherever phase 2 was not already worsening it |
 | ❌ rung-1 propagators, branch order, objective weights | every program | **no — forbidden** |
 
-The fourth row is the one that needs stating, because it is counter-intuitive and it
-is where the accidental damage would come from. **Strengthening propagation is not
-output-neutral.** A sound propagator does not change the *set* of solutions, so it is
-tempting to think it is safe. But the search picks the next cell by MRV — fewest legal
-terms first (`byConstraint`, search.js) — and a propagator changes domain *sizes*. So
-it changes the variable order, hence which solution DFS reaches first, hence what
-phase 2 hill-climbs from, hence the plan. A better propagator in rung 1 would silently
-re-sequence programs it was never meant to touch.
+The fourth row needs stating carefully, because the first version of this section got
+it **wrong in the direction that matters** — it forbade the single most valuable fix
+available.
 
-That reads as a constraint and is actually a gift: **every program we want to rescue
-fails rung 1 by definition.** Putting the strong machinery in a later rung costs
-nothing, because the population it serves is exactly the population that got there.
+What it said: *strengthening propagation is never output-neutral*, because the search
+picks the next cell by MRV — fewest legal terms first (`byConstraint`) — so a
+propagator changes domain *sizes*, hence the variable order, hence which solution DFS
+reaches first, hence the plan.
+
+That argument is sound only for a propagator that **rewrites domains**. It is false
+for one that only **prunes**. A pruning propagator answers a single question — *is this
+branch dead* — and cutting branches that contain no solution cannot change the order in
+which SOLUTIONS are encountered. The variable order is untouched because
+`plan.domain.length` is untouched. The plan is bit-identical and merely reached without
+the detour.
+
+So the real rule is finer, and it is the one that decides where a fix may live:
+
+| propagator | effect | where it may live |
+|---|---|---|
+| **prunes** — returns "dead branch" | traversal order of solutions unchanged | **anywhere, including rung 1** |
+| **rewrites** — narrows `plan.domain` | changes MRV order → moves plans | a later rung only |
+
+This is not reasoned about, it is tested. `chart-propagator-neutral.test.js` generates
+every sampled program twice, with and without the propagator, and asserts that no plan
+moved and none was lost. It has demonstrated teeth: an off-by-one probe (`>=` for `>`)
+lost 9 plans and re-sequenced 12 — **while gaining 2**. That last number is the trap
+this whole section exists to close. An unsound propagator can raise the coverage
+figure and break twenty-one plans in the same change, and a coverage percentage cannot
+tell the two apart.
+
+The rest still holds: **every program we want to rescue fails rung 1 by definition**, so
+a *rewriting* propagator loses nothing by living in a later rung.
 
 Two properties of the existing ladder make this sound, both verified rather than
 assumed:
@@ -2133,23 +2154,43 @@ that can. And the verdict is reportable in the degree's own arithmetic, which
 
 That is the sentence a student or an advisor can act on.
 
-### 17.3 Mechanism 2 — rung S, for the unsolved
+### 17.3 Mechanism 2 — a stronger search, for the unsolved
 
-Same constraints. Same hard rules. More competent search, and nothing else:
+Same constraints. Same hard rules. More competent search, and nothing else.
 
-1. **Transitive precedence re-propagation after each assignment.** Today precedence is
-   forward-checked pairwise against cells already *placed* (`violatesPrecedence`), so
-   it cannot see that three unplaced cells in one chain need three distinct remaining
-   spring terms. This is the obstruction that IE+CS's Spring/Summer variant actually
-   has, and the one a per-cell domain check is blind to by construction.
+**1. Chain propagation over the cells not yet placed — BUILT, and it landed the case
+this was written for.** `violatesPrecedence` checks edges against cells that already
+have a term, and `criticalPath` narrows domains once before the search starts. Between
+them sat the blocking case: a chain of three *unplaced* cells needs three distinct terms
+in increasing order, and if the assignment has left only two terms where they can go
+that is decided immediately — but nothing noticed until all three had been tried and the
+budget was spent.
+
+It is the same longest-path computation `criticalPath` performs, with the one difference
+that is the point: **a placed cell contributes its actual term instead of its domain's
+endpoint**, so every bound tightens as the assignment grows. Two linear sweeps over a
+precomputed topological order, run *before* the matchings so a branch the chains already
+forbid never pays for one.
+
+Result: **Industrial Engineering and Computer Science generates on all four published
+variants**, including the exactly-tight v0/v1 that had survived a six-fold budget
+increase, fresh domains, and every constraint relaxation tried individually. Those were
+never short of time — they were looking in a space nothing could prune, because the
+instance is feasible on capacity, availability and depth (a matching seats all 36 cells)
+and its real obstruction is precedence interacting with the two spring terms its co-op
+cycle leaves. That is also, retrospectively, why the matching form of `canStillSeat` was
+built, measured and dropped: a capacity propagator has nothing to say here.
+
+Still to do, in order of expected value:
+
 2. **Conflict-directed backjumping.** Chronological backtracking re-walks into the same
-   wall by a different route; jumping to the deepest cell in the conflict does not.
+   wall by a different route; jumping to the deepest cell in the conflict does not. Note
+   the risk asymmetry that makes this acceptable to attempt: a CBJ bug costs coverage,
+   never correctness, because every returned plan still passes the full prereq-aware
+   witness and the hard-rule gate.
 3. **Order diversification across restarts.** Nogood learning already restarts, but the
    variable order never changes between attempts, so each restart explores a space of
    the same shape.
-
-All three are sound and none of them relaxes anything. A plan from rung S is as legal
-as a plan from rung 1 — it is merely found rather than stumbled upon.
 
 ### 17.4 Mechanism 3 — rung F, for the provably infeasible
 
