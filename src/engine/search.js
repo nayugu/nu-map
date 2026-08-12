@@ -242,6 +242,73 @@ export const NODES_PER_MS = 2.5;
 export const STRICT_TIER_SHARE = 0.4;
 
 /**
+ * How the NODE budget is divided between the tiers — shares that sum to one.
+ *
+ * ── The defect this replaces ────────────────────────────────────────
+ *
+ * Each rung used to take "half of whatever is left" (`(nodeBudget - totalNodes) / 2`). That is
+ * not a reservation, it is a scramble: it hands every tier a share of the REMAINDER, so an
+ * earlier tier that overruns silently consumes what a later one needed, and the later tiers are
+ * exactly the ones that rescue coverage.
+ *
+ * Two measured regressions, both this shape, both from an intuitive "the budget is too small"
+ * change:
+ *
+ *   NODES_PER_MS 2.5 -> 20     `strictNodes` became min(5000*20*0.4, 20000) = 20,000, so the
+ *                              strict tier consumed the WHOLE node budget and every rung got
+ *                              one node. Fallback usage 74/42 -> 49/18; cost 4 plans
+ *   nodeBudget 20k -> 200k     rung 1's half-the-remainder became 97,500 nodes, ~3 s of a 5 s
+ *                              clock, so rung 2 was starved of TIME rather than nodes.
+ *                              `term-width` usage 42 -> 20; cost 6 plans
+ *
+ * Fixed shares fix the FIRST of those and not the second, and the distinction matters enough to
+ * state rather than let a reader assume. No tier's NODE allowance depends on what another spent,
+ * so a tier can no longer consume the budget of the tier behind it. But a node share is not a
+ * time share: rung 1 holding 40% of the nodes can still spend 100% of the CLOCK if its nodes are
+ * expensive, and that is what starved rung 2 in the second regression.
+ *
+ * ── And the second one cannot be fixed here ─────────────────────────
+ *
+ * A per-rung DEADLINE would fix it and is forbidden: when it fired, rung 2 would run and might
+ * succeed, so a slow machine would produce rung 2's plan where a fast one produced rung 1's —
+ * the same input giving two different plans. That is the non-determinism this file has already
+ * been through twice, and the rule it settled on is absolute: the clock may turn an answer into
+ * a refusal, never into a different answer. Deriving rung allowances from `timeBudgetMs` instead
+ * does not escape it either — `NODES_PER_MS` is deliberately conservative, so the allowances
+ * come out smaller than today's and cost coverage.
+ *
+ * So inter-tier clock starvation is not solvable within the determinism rule. The route that
+ * actually works is making nodes uniformly cheap, which is what profiling delivered: caching one
+ * catalog sort took a node from 10 ms to 0.031 ms and won 50 plans. Cheap nodes make the clock
+ * stop binding at all, which dissolves the problem rather than allocating around it.
+ *
+ * ── What this is worth, stated honestly ─────────────────────────────
+ *
+ * Measured over all 1,031 shapes: 744 generated before and after, and the fingerprint diff reads
+ * 740 unchanged, 0 moved, 0 gained, 0 lost. It buys NOTHING today. It is kept because it removes
+ * a demonstrated failure mode — two regressions in one afternoon came through the remainder
+ * arithmetic — and because it stops leaving 3,750 nodes of 20,000 permanently unallocated. A
+ * structural correction with a measured value of zero is worth keeping only when it forecloses a
+ * mistake someone will otherwise repeat, and this one has been made twice already.
+ *
+ * ── Why the shares are what they are ────────────────────────────────
+ *
+ * 0.25 / 0.40 / 0.35, and they allocate the WHOLE budget where the old scheme left 3,750 nodes
+ * of 20,000 permanently unspent (5,000 + 7,500 + 3,750 = 16,250 — the constant that showed up
+ * in refusal after refusal).
+ *
+ * Strict gets the smallest share deliberately. It is the tier expected to succeed quickly — a
+ * program that generates uses a median of 19 nodes — so past a few thousand nodes it is hitting
+ * the same wall repeatedly, and the measurement is unambiguous that coverage is carried by the
+ * fallbacks. Its share is ALSO capped by the time-derived bound, so a short `timeBudgetMs`
+ * still shrinks it and the test suite's 1,200 ms budget behaves exactly as before.
+ *
+ * Rung 2 rises from 3,750 to 7,000, which is the whole point: it is the tier with nothing behind
+ * it, and it was the one being starved.
+ */
+export const TIER_SHARES = Object.freeze({ strict: 0.25, rungs: [0.40, 0.35] });
+
+/**
  * How close the remaining problem must be to tight before the exact Hall check runs.
  *
  * The matching is ~30k operations, so running it at every node of every program would cost
@@ -372,8 +439,14 @@ export function placeCells({
   // decide this is exactly what made generation non-deterministic.
   //
   // Floored at one full restart slice so nogood learning always gets a turn.
+  // BOTH bounds, and each one is load-bearing. The time-derived term keeps the strict tier from
+  // spending the clock it shares with the fallbacks — the invariant this constant has broken
+  // three times. The share term keeps it from spending their NODES, which is how raising
+  // `NODES_PER_MS` starved them even though the time term looked correct.
   const strictNodes = Math.max(300, Math.min(
-    Math.floor(timeBudgetMs * NODES_PER_MS * STRICT_TIER_SHARE), nodeBudget));
+    Math.floor(timeBudgetMs * NODES_PER_MS * STRICT_TIER_SHARE),
+    Math.floor(nodeBudget * TIER_SHARES.strict),
+    nodeBudget));
   // Domains are narrowed across restarts, so the originals are left untouched for
   // the caller (the objective phase moves cells within them).
   const working = plans.map(p => ({ ...p, domain: [...p.domain] }));
@@ -528,13 +601,19 @@ export function placeCells({
     { gave: "term-width", shape: null, wideTerms: true, preferenceFree: true },
   ];
   const given = [];
-  for (const rung of RUNGS) {
+  for (let ri = 0; ri < RUNGS.length; ri++) {
+    const rung = RUNGS[ri];
     if (totalNodes >= nodeBudget || now() > deadline) break;
     given.push(rung.gave);
     const r = attemptPlacement({
       plans: plans.map(p => ({ ...p, domain: [...p.domain] })),
       terms, ports, studentType, courseMap, repeatable,
-      nodeBudget: Math.max(1, Math.floor((nodeBudget - totalNodes) / 2)),
+      // This rung's RESERVED share, not half of whatever the tiers before it left. See
+      // `TIER_SHARES`: a share of the remainder is not a reservation, and it is how rung 1
+      // came to consume rung 2's allowance.
+      nodeBudget: Math.max(1, Math.min(
+        Math.floor(nodeBudget * (TIER_SHARES.rungs[ri] ?? 0.2)),
+        nodeBudget - totalNodes)),
       precedence, now, deadline, cal, propagateChains,
       shape: rung.shape,
       enforceCardinality: rung.enforceCardinality ?? true,
