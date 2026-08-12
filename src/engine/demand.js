@@ -385,7 +385,7 @@ export function deriveCells(programData, { courseMap = {}, repeatable = () => fa
   });
 
   const merged = poolExcess(
-    mergeForcedCells(cells, notes, repeatable),
+    mergeForcedCells(withCoreqPartners(cells, notes, courseMap), notes, repeatable),
     notes, { total: programData?.totalCreditsRequired ?? 0, courseMap, sections });
 
   // ── The two sentinels ────────────────────────────────────────────
@@ -473,6 +473,55 @@ export function deriveCells(programData, { courseMap = {}, repeatable = () => fa
   }
 
   return { cells: merged, notes, reconciliation };
+}
+
+/**
+ * A named course brings its corequisites, and their credit.
+ *
+ * A corequisite must be taken in the SAME term, and `applySamplePlan` already adds a
+ * placed course's partners for exactly that reason — "218 such gaps across the
+ * corpus, in 19.9% of plans". So they arrive in the student's plan whether CHART
+ * planned for them or not.
+ *
+ * Which means CHART has to plan for them, or its arithmetic is a fiction. 418 catalog
+ * courses have partners that carry credit, a mean of +2.67 SH and up to +7
+ * (`CHEM 2324` brings `CHEM 2315` and `CHEM 2316`). A term CHART sized at 18 SH
+ * arrives at 20 and blows the registration cap it was checked against — and the
+ * whole plan overshoots the degree total by credit nobody counted.
+ *
+ * Added to the GROUP, not just the credit, so the cell names what the student will
+ * actually register for and the emitted text matches the term load.
+ *
+ * A partner some other cell already names is left alone: `applySamplePlan` places a
+ * course once, so claiming it twice would double-count the credit — the same trap
+ * `mergeForcedCells` exists for.
+ */
+function withCoreqPartners(cells, notes, courseMap) {
+  const claimed = new Set();
+  for (const c of cells) {
+    if (c.kind === "named") for (const id of c.groups?.[0] ?? []) claimed.add(id);
+  }
+  // Deterministic, so two cells wanting the same partner resolve the same way twice.
+  const order = [...cells].sort((a, b) => String(a.id).localeCompare(String(b.id)));
+  for (const cell of order) {
+    if (cell.kind !== "named" || !cell.groups?.[0]) continue;
+    const add = [];
+    for (const id of cell.groups[0]) {
+      for (const r of courseMap[id]?.coreqs ?? []) {
+        if (!r || typeof r !== "object" || !r.subject) continue;
+        const partner = `${String(r.subject).toUpperCase()}${parseInt(r.number, 10)}`;
+        if (!courseMap[partner] || claimed.has(partner)) continue;
+        claimed.add(partner);
+        add.push(partner);
+      }
+    }
+    if (!add.length) continue;
+    const extra = add.reduce((n, id) => n + (courseMap[id]?.sh ?? 0), 0);
+    cell.groups = [[...cell.groups[0], ...add]];
+    cell.sh = (cell.sh ?? 0) + extra;
+    notes.push({ kind: "coreq-added", cell: cell.id, added: add, addedSH: extra });
+  }
+  return cells;
 }
 
 /**

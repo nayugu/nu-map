@@ -435,6 +435,57 @@ export function criticalPath(plans, precedence) {
 }
 
 /**
+ * How long a chain must follow each cell — its height in the precedence DAG.
+ *
+ * This is the weight that makes sequencing work, and it is worth being precise about
+ * why it beats the obvious alternative.
+ *
+ * Published plans run low-level to high-level, and copying that would be a mistake:
+ * the ladder is not a principle, it is a SYMPTOM. Two different things produce it —
+ * real prerequisite depth, which we model, and convention, which nothing enforces.
+ * Following the ladder for its own sake reproduces exactly the defect this engine
+ * exists to fix, because it is also what makes departments spend the general
+ * electives first and arrive at co-op recruiting with no depth.
+ *
+ * Chain height says the useful thing instead: **a course that unlocks a long run of
+ * others has to go early, and a course nothing depends on can go anywhere.** That
+ * single rule
+ *
+ *   · reproduces low-to-high ordering wherever a real chain exists, for the real
+ *     reason rather than by imitation;
+ *   · races as far up the major's chains as the calendar legally allows before the
+ *     first co-op, which is what "be competitive at recruiting" actually means;
+ *   · and leaves terminal courses, capstones and general electives last, which is
+ *     the complaint that started this.
+ *
+ * Counting DEPENDENTS instead of measuring height would get this wrong: a cell with
+ * three terminal dependents looks more urgent than one with a single dependent that
+ * has five more behind it, and the second is the one that must not slip.
+ *
+ * @returns {Map<string, number>} cell id → longest chain of cells after it
+ */
+export function chainHeight(plans, precedence) {
+  const ids = plans.map(p => p.cell.id);
+  const memo = new Map();
+  const open = new Set();
+  const height = (id) => {
+    if (memo.has(id)) return memo.get(id);
+    if (open.has(id)) return 0;              // a cycle is our data's defect
+    open.add(id);
+    let best = 0;
+    for (const next of precedence.after.get(id) ?? []) {
+      best = Math.max(best, 1 + height(next));
+    }
+    open.delete(id);
+    memo.set(id, best);
+    return best;
+  };
+  // Sorted, so a cyclic component resolves identically every run.
+  for (const id of [...ids].sort()) height(id);
+  return memo;
+}
+
+/**
  * Does an assignment respect every edge?
  *
  * Used both as a search filter and as a verification gate, so the two cannot

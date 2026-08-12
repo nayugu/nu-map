@@ -51,11 +51,11 @@
 // using for sequencing: course level (`courseLevel`) and offering probability.
 // ═══════════════════════════════════════════════════════════════════
 
-import { courseLevel } from "./prereqDepth.js";
+import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
 import { witnessPlan } from "./witness.js";
 import { termCapacity } from "./domains.js";
-import { precedenceViolations } from "./precedence.js";
-import { buildContention } from "./search.js";
+import { precedenceViolations, chainHeight } from "./precedence.js";
+import { buildContention } from "./witness.js";
 
 /**
  * The default ranking, in order, each with a band in its own units.
@@ -64,12 +64,38 @@ import { buildContention } from "./search.js";
  * the next one needs, so a fifth is decoration. Offering a ranking of nine that
  * pretends to be meaningful would be worse than offering four that are.
  */
+/**
+ * Three ranked objectives, and the division of labour that makes them meaningful.
+ *
+ * The base plan phase 1 hands over is already conventionally shaped — level target
+ * within the precedence window, fillers last — so these do not have to establish
+ * order, only improve it.
+ *
+ * `coop-depth` leads because it is the motivating complaint. Departments spend the
+ * general electives before the first co-op and students arrive at recruiting with
+ * the least major depth they will ever have again. Ranking it first lets it pull
+ * major courses earlier, and the band below it is what stops that becoming a plan of
+ * 4000-level courses in year 1.
+ *
+ * `level-order` follows with a band of 2, so it keeps the plan conventional
+ * everywhere co-op depth did not need to move something. It must not lead: ranking
+ * it first makes CHART imitate the published low-to-high ladder, which is the habit
+ * that causes the problem `coop-depth` exists to fix.
+ *
+ * `chain-first`, `early-breadth` and `interleave` remain available to rank
+ * explicitly. They are off by default because each earlier rank consumes the freedom
+ * the next needs, so a fourth and fifth are decoration — and because `chain-first`
+ * turned out to be phase 1's job rather than an objective: precedence is a hard
+ * constraint and the critical path narrows the domains, which is where a chain's
+ * claim on early terms actually belongs.
+ */
+export { LEVEL_POSITION, levelTarget, cellLevelTarget } from "./prereqDepth.js";
+
 export const DEFAULT_PREFERENCES = {
   ranked: [
-    { objective: "coop-depth",    tolerance: 1 },   // courses
-    { objective: "early-breadth", tolerance: 1 },   // distinct subjects
+    { objective: "coop-depth",    tolerance: 1 },   // levels of peak depth before co-op
+    { objective: "level-order",   tolerance: 2 },   // courses out of conventional place
     { objective: "robustness",    tolerance: 1 },   // expected missing offerings
-    { objective: "interleave",    tolerance: 1 },   // subject repeats per term
   ],
   thresholds: {
     // Full-time status. Scaled by term weight, so a summer half is not held to a
@@ -90,31 +116,64 @@ export const DEFAULT_PREFERENCES = {
  *
  * @returns {{coopDepth: number, earlyBreadth: number, robustness: number, interleave: number}}
  */
-export function scorePlan({ plans, terms, termOf, boundary, ports, courseMap }) {
+export function scorePlan({ plans, terms, termOf, boundary, ports, courseMap, heightOf }) {
   const byTerm = terms.map(() => []);
   for (const p of plans) {
     const ti = termOf.get(p.cell.id);
     if (ti != null) byTerm[ti].push(p);
   }
 
+  // ── chain-first ────────────────────────────────────────────────
+  //
+  // Σ (chain height × term index), negated. A cell that unlocks a long run of others
+  // is expensive to place late; one that unlocks nothing costs nothing wherever it
+  // goes. Maximising this races up the prerequisite chains and leaves the leaves for
+  // last, which is simultaneously the sequencing fix and the co-op fix.
+  //
+  // In units of course-terms, so a tolerance of 2 means "within two course-terms of
+  // the tightest schedule the chains allow".
+  let chainCost = 0;
+  for (let ti = 0; ti < terms.length; ti++) {
+    for (const p of byTerm[ti]) chainCost += (heightOf?.get(p.cell.id) ?? 0) * ti;
+  }
+
   // ── coop-depth ─────────────────────────────────────────────────
   //
-  // Major depth accumulated BEFORE the first work term, which is when co-op
-  // recruiting happens. Measured as the summed course level of cells whose
-  // candidates are concentrated in the plan's primary subject — so a 3000-level
-  // major course before co-op counts for more than a 1000-level one, and a
-  // general elective counts for nothing.
+  // The PEAK level reached in the plan's primary subject before the first work term,
+  // which is when co-op recruiting happens. A max, not a sum.
   //
-  // Level, not prereq depth: 71% of the catalog has prereq depth 0, so depth
-  // cannot tell an introduction from a capstone. Numbering can, and that is the
-  // one thing it is good for (see prereqDepth.js).
+  // Summing was wrong and wrong in an instructive way: it rewarded piling many
+  // major courses early regardless of how far they got, and it made "one 4000-level
+  // course" worth less than "four 1000-level courses". Depth is how far up you
+  // reached, so it is the maximum — and 4 is the ceiling, so the metric cannot be
+  // gamed by volume.
+  //
+  // Level rather than prereq depth, because 71% of the catalog has prereq depth 0
+  // and so depth cannot tell an introduction from a capstone.
   const primary = primarySubject(plans, courseMap);
   let coopDepth = 0;
   for (let ti = 0; ti < Math.min(boundary, terms.length); ti++) {
     for (const p of byTerm[ti]) {
-      const subj = cellSubject(p, courseMap);
-      if (subj !== primary) continue;
-      coopDepth += cellLevel(p, courseMap);
+      if (cellSubject(p, courseMap) !== primary) continue;
+      coopDepth = Math.max(coopDepth, cellLevel(p, courseMap));
+    }
+  }
+
+  // ── level-order ────────────────────────────────────────────────
+  //
+  // How many cells sit far from where their level conventionally belongs, counted
+  // rather than summed so the unit is "courses out of place" and the tolerance reads
+  // in courses. `LEVEL_POSITION` is measured from 12,848 published placements.
+  //
+  // A tolerance band of one third of the plan, because the corpus itself is that
+  // loose: 10% of published 1xxx placements sit past the midpoint.
+  const span = Math.max(1, terms.length - 1);
+  let outOfPlace = 0;
+  for (let ti = 0; ti < terms.length; ti++) {
+    for (const p of byTerm[ti]) {
+      const want = cellLevelTarget(p, courseMap);
+      if (want === null) continue;                  // a filler belongs nowhere
+      if (Math.abs(ti / span - want) > 1 / 3) outOfPlace++;
     }
   }
 
@@ -161,7 +220,9 @@ export function scorePlan({ plans, terms, termOf, boundary, ports, courseMap }) 
   }
 
   return {
+    chainFirst: -chainCost,
     coopDepth,
+    levelOrder: -outOfPlace,
     earlyBreadth: earlySubjects.size,
     robustness: -risk,
     interleave: -repeats,
@@ -169,7 +230,9 @@ export function scorePlan({ plans, terms, termOf, boundary, ports, courseMap }) 
 }
 
 const KEY = {
+  "chain-first": "chainFirst",
   "coop-depth": "coopDepth",
+  "level-order": "levelOrder",
   "early-breadth": "earlyBreadth",
   "robustness": "robustness",
   "interleave": "interleave",
@@ -279,7 +342,13 @@ export function checkThresholds({ plans, terms, termOf, ports, studentType, thre
     // subtracting two more made 8.5 the bar — which flagged the 9 SH summers the
     // published plans themselves print, in 22% of generated plans. A threshold
     // that fires on what the departments do is measuring the wrong thing.
-    const comfortable = w >= 1 ? max : cap * w;
+    //
+    // And where the shape is a PUBLISHED plan, its own per-term target outranks the
+    // comfort bar. CS+Math prints 19 SH in its first term; telling a student that
+    // their department's own stated load is uncomfortable is not advice, it is
+    // noise, and it fired on half of all generated plans.
+    const bar = w >= 1 ? max : cap * w;
+    const comfortable = Math.max(bar, t.targetSH || 0);
     if (load[ti] > comfortable) {
       failures.push({ kind: "above-comfortable-load", term: ti,
                       label: label(t), sh: load[ti], limit: comfortable });
@@ -308,28 +377,47 @@ const label = (t) => `${t.label ?? ""} ${t.termLabel ?? ""}`.trim();
  * climbs before the banded pass — cheap at this size, and it is what makes the
  * band a real bound rather than a number.
  */
-export const DEFAULT_IMPROVE_BUDGET_MS = 1500;
+/**
+ * Trials the improvement phase may evaluate, in total.
+ *
+ * Counted in WORK, not wall-clock. A time budget here made generation
+ * nondeterministic — the same program did a different number of moves on a loaded
+ * machine, so two runs produced two plans — and byte-identical output is a hard
+ * requirement, not a nicety: the diff review the data workflows depend on becomes
+ * noise without it.
+ *
+ * Sized from measurement: a median program takes 3 accepted moves and a p90 of 14,
+ * and each pass over ~35 cells × ~10 terms is ~350 trials. 20,000 is roughly six
+ * full passes per hill climb across five climbs, which is more than the search has
+ * ever needed and still bounded.
+ */
+export const DEFAULT_IMPROVE_TRIALS = 20000;
 
 export function improve({
   plans, terms, termOf, ports, studentType, courseMap, repeatable,
   preferences = DEFAULT_PREFERENCES, boundary, depthOf, precedence = null,
-  timeBudgetMs = DEFAULT_IMPROVE_BUDGET_MS, now = () => Date.now(),
+  trialBudget = DEFAULT_IMPROVE_TRIALS,
 }) {
+  // Chain height drives the leading objective, and it is a property of the
+  // precedence graph rather than of any one arrangement, so it is computed once.
+  const heightOf = precedence ? chainHeight(plans, precedence) : new Map();
   const ranked = (preferences.ranked ?? []).filter(r => KEY[r.objective]);
   const thresholds = { ...DEFAULT_PREFERENCES.thresholds, ...(preferences.thresholds ?? {}) };
   const byId = new Map(plans.map(p => [p.cell.id, p]));
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
 
-  const ctx = { plans, terms, boundary, ports, courseMap };
+  const ctx = { plans, terms, boundary, ports, courseMap, heightOf };
   // Cheap: capacity is checked by the caller, so this is precedence alone.
   const cheapLegal = (assignment) =>
     !precedence || precedenceViolations(precedence, assignment).length === 0;
   const fullLegal = (assignment) =>
     isLegal({ plans, terms, termOf: assignment, cap, courseMap, repeatable, ports, byId, precedence });
 
-  const deadline = now() + timeBudgetMs;
+  // One shared budget across every climb, so total work is bounded regardless of how
+  // many objectives are ranked.
+  const budget = { left: trialBudget };
   const climb = (from, score) =>
-    hillClimb(from, score, cheapLegal, fullLegal, plans, terms, cap, { deadline, now });
+    hillClimb(from, score, cheapLegal, fullLegal, plans, terms, cap, { budget });
 
   let current = new Map(termOf);
   let moves = 0;
@@ -366,7 +454,7 @@ export function improve({
       // outside an earlier rank's band is not a candidate at all.
       (a) => cheapLegal(a) && withinBands(a, r),
       fullLegal,
-      plans, terms, cap, { deadline, now },
+      plans, terms, cap, { budget },
     );
     current = res.termOf;
     moves += res.moves;
@@ -410,8 +498,12 @@ export function improve({
   };
 }
 
+// Every objective needs one, or a reported trade reads "3 undefined". The whole
+// point of a band is that the sacrifice is stated in units the student thinks in.
 const UNITS = {
+  "chain-first": "course-terms of delay in the prerequisite chains",
   "coop-depth": "levels of major depth before co-op",
+  "level-order": "courses away from their conventional year",
   "early-breadth": "distinct subjects in years 1–2",
   "robustness": "expected unavailable offerings",
   "interleave": "same-subject repeats within a term",
@@ -440,7 +532,7 @@ const UNITS = {
  * so there is always a legal state to stay in.
  */
 function hillClimb(start, score, cheapLegal, fullLegal, plans, terms, cap,
-                   { maxPasses = 6, deadline = Infinity, now = () => Date.now() } = {}) {
+                   { maxPasses = 6, budget = { left: Infinity } } = {}) {
   let current = new Map(start);
   let best = score(current);
   let moves = 0;
@@ -450,12 +542,13 @@ function hillClimb(start, score, cheapLegal, fullLegal, plans, terms, cap,
   for (let pass = 0; pass < maxPasses; pass++) {
     let improvedThisPass = false;
     for (const p of ordered) {
-      if (now() > deadline) return { termOf: current, moves, timedOut: true };
+      if (budget.left <= 0) return { termOf: current, moves, exhausted: true };
       const from = current.get(p.cell.id);
       if (from == null) continue;
       let bestTerm = from, bestScore = best;
       for (const ti of p.domain) {
         if (ti === from) continue;
+        budget.left--;
         const trial = new Map(current);
         trial.set(p.cell.id, ti);
         if (!fitsCapacity(trial, plans, terms, cap)) continue;

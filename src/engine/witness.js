@@ -389,3 +389,18 @@ function leastContended(cands, fits, contention) {
 /** A synthetic term id, since a shape's terms carry no plan semester ids. */
 const termId = (term, i) => `t${i}`;
 const labelOf = (term) => `${term?.label ?? ""} ${term?.termLabel ?? ""}`.trim();
+
+/**
+ * How many cells each course could answer.
+ *
+ * Bounded cells only. An unbounded cell admits the whole catalog, so counting it
+ * would add 1 to every course and leave the ordering unchanged while costing a
+ * pass over 8,000 ids per cell.
+ */
+export function buildContention(plans) {
+  const counts = new Map();
+  for (const p of plans) {
+    for (const id of p.candidates ?? []) counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+  return (id) => counts.get(id) ?? 0;
+}

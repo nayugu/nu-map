@@ -260,3 +260,114 @@ export function unlockCounts(ids, courseMap = {}) {
   }
   return out;
 }
+
+/**
+ * Where a course of each level belongs, as a fraction through the plan.
+ *
+ * MEASURED, not assumed: 12,848 course placements across 661 published plans. The
+ * relationship is the strongest in the corpus — **Pearson r = 0.809** between level
+ * and position, monotone at every step.
+ *
+ *   1xxx  0.00      2xxx  0.36      3xxx  0.64      4xxx  0.91
+ *
+ * ── The MEDIAN, not the mean, and the difference mattered ───────────
+ *
+ * The means are 0.10 / 0.36 / 0.61 / 0.88, and using them was a bug. A distribution
+ * bounded at zero with a long right tail has a mean above its median, so level 1
+ * came out at 0.10 — which is nearer term 1 than term 0 in a ten-term plan. First-year
+ * courses were duly pushed out of the first term, and four general electives filled
+ * the hole. The median says what the corpus actually does: a 1000-level course goes
+ * in term one.
+ *
+ * This is what was missing. Without it CHART produced plans where every prereq
+ * chain was correct and a reader could still see they were wrong: a 3000-level
+ * Number Theory course in the second term, first-year Discrete Structures in year
+ * two, a first-year seminar in year four. Nothing in prereqs or availability
+ * objects to any of that, because the catalog genuinely permits it — only the
+ * convention every department follows does.
+ *
+ * A PREFERENCE, not a constraint. A student legitimately takes a 4000-level
+ * elective early, and 10% of published 1xxx placements sit past the plan's midpoint.
+ */
+export const LEVEL_POSITION = { 1: 0.00, 2: 0.36, 3: 0.64, 4: 0.91 };
+
+/**
+ * The EARLIEST a published plan puts a course of each level — the p10 of the same
+ * 12,848 placements.
+ *
+ *   1xxx  0.00      2xxx  0.09      3xxx  0.22      4xxx  0.67
+ *
+ * ── Why a floor, and not just a target ──────────────────────────────
+ *
+ * Level is not merely a convention. It is a PROXY for a hard constraint we do not
+ * have: class standing. A 4000-level course generally requires junior or senior
+ * standing, the catalog states that in prose, and `RESTRICTION_ONLY` discards the
+ * prose — so nothing in our data objects to a senior seminar in the first term.
+ *
+ * Reading level as a target instead produced two opposite failures in turn. As a
+ * target it put general electives in year 1, because a degree has few 1000-level
+ * courses and year 1 has room for fourteen. Ignored in favour of "major courses as
+ * early as possible", it put `CS 4530` in the first term. A floor gets both right:
+ * go as early as the major wants, but not earlier than a real plan has ever put a
+ * course of that level.
+ *
+ * p10 rather than the minimum, because the minimum is one department's outlier and
+ * a floor built on it would not constrain anything.
+ */
+export const LEVEL_FLOOR = { 1: 0.00, 2: 0.09, 3: 0.22, 4: 0.67 };
+
+/** The earliest position a cell of this level should occupy, 0..1. */
+export function cellLevelFloor(plan, courseMap) {
+  const cell = plan.cell ?? plan;
+  const levels = cell.groups?.length
+    ? cell.groups.map(g => Math.max(...g.map(courseLevel)))
+    : (plan.candidates ?? []).map(courseLevel).filter(Boolean);
+  if (!levels.length) return 0;
+  // The SHALLOWEST option, because the student may pick that one and a floor must
+  // not forbid a placement some legal choice makes fine.
+  const lv = Math.min(...levels.filter(Boolean).concat(Infinity));
+  if (!Number.isFinite(lv) || !lv) return 0;
+  return LEVEL_FLOOR[Math.min(4, lv)] ?? LEVEL_FLOOR[4];
+}
+
+/**
+ * Graduate numbering does not continue the undergraduate ladder — a 5000-level
+ * course is often open to seniors — so everything above 4xxx gets one middling
+ * target rather than a fabricated extension of the fit.
+ */
+const GRAD_POSITION = 0.5;
+
+/** Where a course of this level wants to sit, 0..1 through the plan. */
+export function levelTarget(courseId) {
+  const lv = courseLevel(courseId);
+  if (!lv) return null;
+  return LEVEL_POSITION[lv] ?? GRAD_POSITION;
+}
+
+/**
+ * The target position for a whole cell.
+ *
+ * For a decided cell, its courses' deepest level — a group sits where its most
+ * advanced member belongs. For an undecided one, the modal level of its candidates,
+ * because a `MATH 3001–4999` pool is a third-year slot whichever course fills it.
+ * Null for a cell that admits anything: a general elective belongs nowhere in
+ * particular, which is exactly why it is the filler.
+ */
+export function cellLevelTarget(plan, courseMap) {
+  const cell = plan.cell ?? plan;
+  if (cell.groups?.length) {
+    const t = cell.groups
+      .map(g => Math.max(...g.map(id => levelTarget(id) ?? 0)))
+      .filter(v => v > 0);
+    return t.length ? Math.min(...t) : null;
+  }
+  if (!plan.candidates?.length) return null;
+  const counts = new Map();
+  for (const id of plan.candidates) {
+    const lv = courseLevel(id);
+    if (lv) counts.set(lv, (counts.get(lv) ?? 0) + 1);
+  }
+  if (!counts.size) return null;
+  const [lv] = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0];
+  return LEVEL_POSITION[lv] ?? GRAD_POSITION;
+}

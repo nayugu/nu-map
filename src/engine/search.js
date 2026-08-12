@@ -60,8 +60,11 @@
 // missing requirements, which is the one thing generation must never do.
 // ═══════════════════════════════════════════════════════════════════
 
-import { witnessPlan } from "./witness.js";
+import { witnessPlan, buildContention } from "./witness.js";
 import { termCapacity } from "./domains.js";
+import { chainHeight } from "./precedence.js";
+import { cellLevelTarget, cellLevelFloor } from "./prereqDepth.js";
+import { cellSubject, majorSubjectsOf } from "./subjects.js";
 
 /**
  * Nodes phase 1 may expand before refusing. Measured: a program that succeeds uses
@@ -243,9 +246,77 @@ function attemptPlacement({
   const evenShare = plans.reduce((n, p) => n + (p.cell.sh ?? 0), 0) / (terms.length || 1);
   const fill = (ti) => loadSH[ti] / (terms[ti]?.targetSH || evenShare || 1);
 
-  /** Which terms to try, for one cell: emptiest-relative-to-target first. */
-  const termPreference = (domain) =>
-    [...domain].sort((a, b) => fill(a) - fill(b) || a - b);
+  const heightOf = precedence ? chainHeight(plans, precedence) : new Map();
+  const majorSubjects = majorSubjectsOf(plans, courseMap);
+  const span = Math.max(1, terms.length - 1);
+
+  /**
+   * Which terms to try, for one cell.
+   *
+   * Emptiest-first alone produced plans that were legal and visibly wrong: a
+   * 3000-level Number Theory course in the second term, first-year Discrete
+   * Structures in year two, a first-year seminar in year four. Load balance has no
+   * opinion about sequencing, so it filled whatever happened to be empty.
+   *
+   * So a cell that unlocks a long chain takes the EARLIEST legal term, because every
+   * term it slips costs the whole chain behind it — and racing up the chains is also
+   * what puts real depth before the first co-op. A cell that unlocks nothing has no
+   * such claim and goes where courses of its level conventionally sit, which is a
+   * prior for the prerequisite edges the catalog never recorded rather than a rule of
+   * its own. Load balance survives as the tie-break it should always have been.
+   */
+  const termPreference = (plan) => {
+    // Where courses of this level conventionally sit, INSIDE the window precedence
+    // already narrowed the cell to. Two mechanisms doing two jobs:
+    //
+    //   precedence   guarantees order, as a hard constraint, and narrows the domain
+    //                to [earliest, latest] so a chain provably fits
+    //   level        chooses WITHIN that window, from 12,848 measured placements
+    //
+    // Earliest-first was tried and is wrong, in an instructive way. It reads the
+    // critical path as "start every chain immediately", when the actual claim is
+    // "do not DELAY a chain past its slack". Industrial Engineering duly put
+    // `MEIE 4701` and `IE 4530` — a senior capstone pair, chain height 1 — in the
+    // first term of year 1, because they unlock something and the term was empty.
+    //
+    // Co-op depth is not sacrificed to this; it is the objective layer's rank-1 job
+    // to pull major courses earlier inside a tolerance band, which is exactly what a
+    // ranked list with bands is for. What the base plan owes it is a sane starting
+    // point and empty early terms, and `isFiller` last is what supplies those.
+    // A MAJOR course goes as early as its prerequisites allow. Everything else goes
+    // where its level suggests, and a cell with no level at all — a general elective
+    // — goes at the end.
+    //
+    // This is what the corpus actually does, and it took three wrong heuristics to
+    // see it. CS+Math has 132 credits and barely 15 of them at 1000 level, while
+    // year 1 holds 57: no arrangement makes year 1 all first-year courses. The
+    // published plan fills it with CS 2000, CS 2100, CS 2800 and CS 3100 — MAJOR
+    // depth, two and three levels up, in the first year. Ordering by level put
+    // general electives there instead, which is the defect this engine exists to fix;
+    // ordering by chain height put senior capstones there, because they unlock one
+    // thing each.
+    //
+    // "As early as prerequisites allow" is safe because `plan.domain` has already
+    // been narrowed to the precedence window, so earliest here cannot mean earlier
+    // than legal.
+    if (majorSubjects.has(cellSubject(plan, courseMap))) {
+      // Earliest, but not before a real plan has ever put a course of this level.
+      // The floor stands in for class standing, which the catalog states only in
+      // prose and our data therefore does not have — without it, "as early as
+      // possible" put a 4000-level CS course in the first term.
+      // A PREFERENCE, expressed as ordering and never as a filter. Filtering the
+      // domain to terms at or after the floor cost 15 percentage points of coverage
+      // — 77.4% down to 62.6% — because it removed legal terms the search needed for
+      // capacity and turned a taste into an infeasibility. Terms below the floor are
+      // tried last, not excluded.
+      const floor = cellLevelFloor(plan, courseMap) * span;
+      return [...plan.domain].sort((a, b) =>
+        (a < floor ? 1 : 0) - (b < floor ? 1 : 0) || a - b || fill(a) - fill(b));
+    }
+    const want = cellLevelTarget(plan, courseMap) ?? 1;
+    return [...plan.domain].sort((a, b) =>
+      Math.abs(a / span - want) - Math.abs(b / span - want) || fill(a) - fill(b) || a - b);
+  };
 
   /**
    * Would putting `cellId` in term `ti` break an edge with a cell already placed?
@@ -294,7 +365,7 @@ function attemptPlacement({
       return false;
     }
 
-    for (const ti of termPreference(plan.domain)) {
+    for (const ti of termPreference(plan)) {
       // Term credit envelope — the registration cap, which is hard.
       if (loadSH[ti] + (cell.sh ?? 0) > cap[ti]) continue;
       // Precedence, forward-checked against what is already placed. This is what
@@ -363,20 +434,6 @@ export function describe(f) {
   return f.detail ?? "no legal placement exists";
 }
 
-/**
- * How many cells each course could answer.
- *
- * Bounded cells only. An unbounded cell admits the whole catalog, so counting it
- * would add 1 to every course and leave the ordering unchanged while costing a
- * pass over 8,000 ids per cell.
- */
-export function buildContention(plans) {
-  const counts = new Map();
-  for (const p of plans) {
-    for (const id of p.candidates ?? []) counts.set(id, (counts.get(id) ?? 0) + 1);
-  }
-  return (id) => counts.get(id) ?? 0;
-}
 
 /**
  * Search order: fewest legal terms first, then fewest candidates.
