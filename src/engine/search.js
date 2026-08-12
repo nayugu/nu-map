@@ -60,7 +60,7 @@
 // missing requirements, which is the one thing generation must never do.
 // ═══════════════════════════════════════════════════════════════════
 
-import { witnessPlan, buildContention } from "./witness.js";
+import { witnessPlan, buildContention, bipartiteMatch } from "./witness.js";
 import {
   termCapacity, termSlotCap, coursesInCell,
   SAME_REQ_PER_TERM, SAME_REQ_PER_TERM_MAX, POOL_REACH_MIN,
@@ -187,7 +187,25 @@ export const DEFAULT_TIME_BUDGET_MS = 5000;
  * The general shape: the strict tier must be bounded so it cannot spend the budget it
  * shares with the tier behind it.
  */
-export const STRICT_TIER_NODES = 1200;
+export const NODES_PER_MS = 2.5;
+
+/**
+ * The share of the time budget the strict tier may spend, expressed in nodes.
+ *
+ * 40%, leaving the majority to the fallback, whose whole purpose is protecting coverage.
+ */
+export const STRICT_TIER_SHARE = 0.4;
+
+/**
+ * How close the remaining problem must be to tight before the exact Hall check runs.
+ *
+ * The matching is ~30k operations, so running it at every node of every program would cost
+ * more than it saves — and where there are spare cells the cheap per-term count already
+ * decides. Two spare cells is the point at which cross-term interference becomes possible
+ * at all: with three or more, a term short by one always has an alternative and Hall cannot
+ * fail where the per-term check passed.
+ */
+export const HALL_SLACK = 0;
 
 /**
  * @typedef {Object} Assignment
@@ -278,7 +296,24 @@ export function placeCells({
   // 3,000 is sized off the measurement instead of a fraction: a program that generates uses
   // a median of 19 nodes and a p90 of 36, so this is roughly eighty times the headroom a
   // real plan needs, and anything past it is the same wall being hit repeatedly.
-  const strictNodes = Math.max(1, Math.min(STRICT_TIER_NODES, nodeBudget));
+  // Derived from the TIME budget, in nodes — which sounds contradictory and is the point.
+  //
+  // A node costs roughly 0.4 ms because each one runs a matching, so the strict tier must
+  // not be able to spend the clock it SHARES with the fallback behind it. Two earlier values
+  // failed in opposite directions: 60% of the node budget (12,000) and then a flat 3,000
+  // each consumed everything, so the tier that exists to protect coverage never ran and
+  // generation fell to 48%; a flat 1,200 was sized for the 1,200 ms TEST budget and left
+  // production's 5,000 ms mostly unused, pushing the five-year "Summer Second Half" variant
+  // out of the strict tier and giving it a thin term.
+  //
+  // So it scales with `timeBudgetMs`, which is an INPUT. That keeps determinism — the bound
+  // is a function of the arguments, not of how fast the machine happens to be running —
+  // while spending the budget actually available. Reading the clock DURING the search to
+  // decide this is exactly what made generation non-deterministic.
+  //
+  // Floored at one full restart slice so nogood learning always gets a turn.
+  const strictNodes = Math.max(300, Math.min(
+    Math.floor(timeBudgetMs * NODES_PER_MS * STRICT_TIER_SHARE), nodeBudget));
   // Domains are narrowed across restarts, so the originals are left untouched for
   // the caller (the objective phase moves cells within them).
   const working = plans.map(p => ({ ...p, domain: [...p.domain] }));
@@ -875,11 +910,127 @@ function attemptPlacement({
   const canStillFill = (nextIndex) => {
     if (!enforceCardinality) return true;
     const possible = suffix[nextIndex];
+    let totalNeed = 0;
+    const needing = [];
     for (let t = 0; t < terms.length; t++) {
       if ((terms[t].weight ?? 1) < 1) continue;         // a half term holds two, not four
       if (bigIn[t] === 0) continue;                     // not in use; may stay that way
       const need = FULL_TERM_MIN_COURSES - bigIn[t];
-      if (need > 0 && need > possible[t]) return false;
+      if (need <= 0) continue;
+      if (need > possible[t]) return false;
+      totalNeed += need;
+      needing.push({ t, need });
+    }
+    if (!needing.length) return true;
+
+    // ── Per term is the WEAK relaxation; Hall's condition is the real one ──
+    //
+    // Counting per term misses the case that actually blocks: two terms each needing two
+    // more courses, with only three unplaced cells that could serve either, passes every
+    // per-term check and is infeasible. That is Hall's condition, and it is what left
+    // Industrial Engineering and Computer Science's "Four Years, Two Co-ops in
+    // Spring/Summer First" refusing.
+    //
+    // Its arithmetic is IDENTICAL to the variant that succeeds — 6 full terms, 4 half, 32
+    // real courses, 24 + 8 = 32 with zero slack — and the difference is which seasons
+    // survive. Its co-ops sit on Spring and Summer 1, so almost no spring terms remain, and
+    // a spring-only course has nowhere to go. Every near-miss branch had to be exhausted
+    // before the search could know, and the budget ran out first: unsolved, not infeasible.
+    //
+    // The exact test is a bipartite matching between the slots still to fill and the cells
+    // that could fill them, which is the same `bipartiteMatch` the distinctness constraint
+    // already uses — `alldifferent` and global-cardinality are siblings, and this file was
+    // using one of them and hand-rolling the other.
+    //
+    // ── Run only when it can bite ──────────────────────────────────
+    //
+    // The matching costs O(slots x cells) per node, ~30k operations, which is unaffordable
+    // at every node and pointless where there is room: with plenty of spare cells the
+    // per-term check above already decides. So it runs only when the remaining problem is
+    // TIGHT — the slots to fill are within `HALL_SLACK` of the cells left to fill them.
+    // For a degree with room it never runs; for one that is exactly tight it always does,
+    // which is exactly where the pruning pays for itself.
+    let avail = 0;
+    for (let j = nextIndex; j < order.length; j++) if (bigCell(order[j])) avail += 1;
+    if (totalNeed + HALL_SLACK < avail) return true;
+
+    const slots = [];
+    for (const { t, need } of needing) {
+      const servers = [];
+      for (let j = nextIndex; j < order.length; j++) {
+        const p = order[j];
+        if (bigCell(p) && p.domain.includes(t)) servers.push(p.cell.id);
+      }
+      // A term needing more than the cells that can serve it is already dead, and the
+      // per-term check above caught that; this is the cross-term version.
+      for (let k = 0; k < need; k++) slots.push(servers);
+    }
+    return bipartiteMatch(slots).size === slots.length;
+  };
+
+  /**
+   * Can every cell still to place get a seat in the room that is left?
+   *
+   * ── The other direction of the same argument ────────────────────────
+   *
+   * `canStillFill` asks whether each TERM can still reach its minimum. This asks whether
+   * each CELL can still find a term, and both are Hall's condition — one over slots looking
+   * for cells, one over cells looking for slots. Having only the first is why capacity
+   * dead-ends were discovered by exhaustion instead of deduction: the search would place
+   * cells happily until some later cell had nowhere legal left, then unwind, then walk into
+   * the same wall by a different route.
+   *
+   * It matters most exactly where CHART struggles. Industrial Engineering and Computer
+   * Science's "Spring/Summer First" variant is feasible on capacity, availability and depth
+   * — a matching over the whole problem seats all 36 cells — yet the search could not find
+   * an arrangement in 3,000,000 nodes. Its co-ops take Spring and Summer 1, so only TWO
+   * spring terms remain against the sibling variant's four, and every spring-only course
+   * competes for them while the prerequisite chains order around them. Those are precisely
+   * the dead ends a cells-to-slots matching sees immediately and a per-cell domain check
+   * never does.
+   *
+   * Slots are counted in COURSES, matching `termSlotCap`, and a cell needing two courses
+   * takes two seats — a coreq group is one decision and two registrations.
+   */
+  const canStillSeat = (nextIndex) => {
+    const remaining = order.length - nextIndex;
+    if (remaining <= 0) return true;
+
+    // Free seats per term, after what is already placed.
+    let free = 0;
+    const seats = terms.map((t, ti) => {
+      const n = Math.max(0, slotCap[ti] - countIn[ti]);
+      free += n;
+      return n;
+    });
+    let want = 0;
+    for (let j = nextIndex; j < order.length; j++) want += coursesInCell(order[j].cell);
+    if (want > free) return false;                       // counting alone settles it
+
+    // ── The matching version was built, measured, and dropped ─────────
+    //
+    // A full cells-to-slots matching here is the exact form of this constraint, and it did
+    // not pay. Measured on the case it was built for — Industrial Engineering and Computer
+    // Science's "Spring/Summer First" variant — it changed nothing: that instance is
+    // FEASIBLE on capacity, availability and depth (a matching over the whole problem seats
+    // all 36 cells), so a capacity-based propagator has nothing to prune. Its obstruction is
+    // precedence interacting with only two remaining spring terms, which this cannot see.
+    //
+    // And it cost: ~2,000 operations at every node of every tight instance, which consumed
+    // enough of the strict tier's node budget to push the five-year "Summer Second Half"
+    // variant out of it and into the relaxed tier — turning a plan with four courses in
+    // every full term into one with a thin term. A propagator that prunes nothing and
+    // spends the budget is strictly worse than no propagator.
+    //
+    // What survives is the counting above, which is free and genuinely sound. The exact
+    // check remains the right tool for a constraint that BINDS on capacity; this one does
+    // not, and finding that out cost less than assuming it.
+    for (let j = nextIndex; j < order.length; j++) {
+      const p = order[j];
+      const need = coursesInCell(p.cell);
+      let open = 0;
+      for (const t of p.domain) open += seats[t];
+      if (open < need) return false;      // this cell alone has nowhere left to sit
     }
     return true;
   };
@@ -928,6 +1079,18 @@ function attemptPlacement({
 
       // The cardinality bound, before the witness because counting is free and a
       // matching is not.
+      if (!canStillSeat(i + 1)) {
+        worstFailure = worstFailure ?? {
+          kind: "no-room-left-for-the-rest", cell: cell.id, title: cell.title, term: ti,
+        };
+        termOf.delete(cell.id);
+        loadSH[ti] -= cell.sh ?? 0;
+        countIn[ti] -= coursesInCell(cell);
+        if ((cell.sh ?? 0) >= REAL_COURSE_SH) bigIn[ti] -= 1;
+        reqIn[ti].set(reqKey(cell), reqCount(ti, cell) - 1);
+        continue;
+      }
+
       if (!canStillFill(i + 1)) {
         worstFailure = worstFailure ?? {
           kind: "full-term-cannot-reach-four", cell: cell.id, title: cell.title, term: ti,
