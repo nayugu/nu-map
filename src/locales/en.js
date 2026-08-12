@@ -128,10 +128,38 @@ export const strings = {
   "grad.plan.cycle.spring":  "Spring cycle",
   "grad.plan.cycle.fall":    "Fall cycle",
   "grad.plan.replace":         "Replace my plan",
-  // Says what is LOST, not what arrives. Without it a destructive action reads
-  // as a small addition — "adds 2 courses" beside sixteen the student chose.
-  "grad.plan.replace.warn":    "This discards {n} courses you placed yourself.",
-  "grad.plan.replace.confirm": "Replace everything in this plan with the sample plan? You can undo this.",
+  // The confirmation dialog. It says what is LOST before what arrives —
+  // without that a destructive action reads as a small addition ("adds 2
+  // courses" beside sixteen the student chose) — and then what survives it,
+  // which is the question that actually stops people here.
+  "grad.plan.replace.title":       "Replace this plan?",
+  "grad.plan.replace.sub":         "“{label}” will be laid out on an empty canvas. Everything on this plan is cleared first.",
+  "grad.plan.replace.sub.generic": "The sample plan will be laid out on an empty canvas. Everything on this plan is cleared first.",
+  "grad.plan.replace.head.lose":   "CLEARED FROM THIS PLAN",
+  "grad.plan.replace.head.gain":   "LAID OUT INSTEAD",
+  "grad.plan.replace.lose.courses":"{n} courses you placed",
+  "grad.plan.replace.lose.slots":  "{n} placeholders",
+  "grad.plan.replace.lose.terms":  "{n} work terms, with the company and role you typed in",
+  "grad.plan.replace.lose.none":   "Nothing — this plan is empty.",
+  "grad.plan.replace.gain.courses":"{n} courses",
+  "grad.plan.replace.gain.slots":  "{n} placeholders to choose later",
+  "grad.plan.replace.gain.coops":  "{n} co-op blocks",
+  // Scoped precisely. Incoming-credit courses ARE ordinary placements and do
+  // get cleared, so this must not claim "transfer credit is safe"; what the
+  // replace genuinely leaves alone is the other plans, the placed-out set and
+  // the stored grades.
+  "grad.plan.replace.keeps":       "Only this plan changes. Your other plans and your placed-out courses stay as they are, entered grades aren’t deleted, and Undo puts this back.",
+  "grad.plan.replace.alt":         "Open as a new plan instead",
+  "grad.plan.replace.cancel":      "Keep my plan",
+  // The preview dialog.
+  "grad.plan.preview":         "Preview",
+  "grad.plan.preview.title":   "SAMPLE PLAN PREVIEW",
+  "grad.plan.preview.year":    "YEAR {n}",
+  // Whole phrase, not a "{n}" plus a "-month" fragment: a suffix cannot be
+  // reordered, and Japanese and Chinese put the unit differently.
+  "grad.plan.preview.duration": "{n}-month",
+  "grad.plan.preview.close":   "Close",
+  "grad.plan.preview.coops":   "{n} co-ops",
   "grad.plan.newplan.name":    "{name} (sample plan)",
   "grad.plan.did.loaded":      "Sample plan laid out.",
   "grad.plan.did.replaced":    "Plan replaced with the sample plan.",

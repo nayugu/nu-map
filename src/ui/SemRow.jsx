@@ -13,16 +13,14 @@ import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { TText, useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
+import { SEM_NAME_KEY } from "./SemLabel.jsx";
 import CourseCard from "./CourseCard.jsx";
 
 // Phone semester label: the label stacks in a 34px column — season name on
-// top (bold), year below — matching SummerRow's stacked header. Translating
-// per-word loses context ("Fall" → 落下 "falling") and whole-phrase engine
-// output reorders per locale (year-first Chinese), so use the hand-written
-// claude.sem.* season names instead: deterministic and consistently
-// season-first in every locale. Unknown semester types (no key) fall back
-// to whole-phrase engine translation with the calendar's translateAs hint.
-const SEM_NAME_KEY = { fall: "claude.sem.fall", spring: "claude.sem.spring", sumA: "claude.sem.sum1", sumB: "claude.sem.sum2", incoming: "claude.sem.incoming" };
+// top (bold), year below — matching SummerRow's stacked header. It uses the
+// shared SEM_NAME_KEY map (see SemLabel.jsx for why the names are written and
+// not machine-translated); unknown semester types fall back to whole-phrase
+// engine translation with the calendar's translateAs hint.
 function StackedSemLabel({ sem }) {
   const cal   = usePort(ICalendar);
   const { t } = useLanguage();
