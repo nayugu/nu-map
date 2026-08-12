@@ -8,7 +8,7 @@
 // snapshot (the SAME planShare v2 artifact a snapshot link carries, so
 // grades structurally cannot travel), gets back a short human-speakable
 // code, and the first claim of that code returns the payload once and
-// deletes it. Unclaimed shares expire server-side after ~10 minutes.
+// deletes it. Unclaimed shares expire server-side after ~5 minutes.
 //
 // Encoding/decoding stays in the app (src/core/planShare.js), and the
 // payload an implementation ferries is expected to be UNREADABLE to the

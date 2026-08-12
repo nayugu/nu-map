@@ -144,7 +144,7 @@ export function getHashPlanParam() {
 // ── Share-by-code links (#c=) ──────────────────────────────────────
 // A snapshot link (#plan=) carries the whole plan and lives forever. A
 // code link carries only the six characters, so it inherits everything
-// the code already is: single use, ten minutes, cancellable, and opaque
+// the code already is: single use, five minutes, cancellable, and opaque
 // to the relay (the code IS the decryption key — see shareCrypto.js).
 // This is what the QR encodes; nothing else is small enough to want to.
 

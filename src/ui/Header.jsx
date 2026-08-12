@@ -65,7 +65,7 @@ const shareErrorOf = (err) => {
 // ── The share QR ────────────────────────────────────────────────────
 // The QR encodes the share-code LINK (numap.app/#c=ABCDEF), not the plan.
 // That is what makes it small, and it means the QR is exactly as
-// short-lived as the code drawn on it: one use, ten minutes, and gone the
+// short-lived as the code drawn on it: one use, five minutes, and gone the
 // moment the sender cancels. A QR carrying the plan itself would be dense
 // AND permanent — anyone who photographed it would hold the plan forever.
 
@@ -430,7 +430,7 @@ export default function Header() {
   // A code lives only as long as this tab: pagehide fires the farewell
   // cancel (sendBeacon survives unload; fetch would be dropped), so a
   // closed or reloaded tab never leaves an unclaimed code behind. The
-  // server's 10-minute TTL remains only as the crash backstop.
+  // server's 5-minute TTL remains only as the crash backstop.
   const [shareCode, setShareCode]             = useState(null);
   const [shareCodePickedUp, setShareCodePickedUp] = useState(false);
   useEffect(() => {
@@ -471,6 +471,24 @@ export default function Header() {
   // Opening has to hand over the caret in the same motion, or "hover and
   // type" needs a click in the middle that nothing told the user about.
   const [claimOpen, setClaimOpen]             = useState(false);
+  // True while handling a code that arrived in the URL. A failure then is
+  // not the same event as mistyping into the field: the user did nothing
+  // wrong, is looking at a page they did not choose to open, and has no
+  // idea a claim was even attempted. Reported at the small size the typed
+  // path uses, it reads as "nothing happened" — which is exactly how it
+  // was reported to us.
+  const [scanArrival, setScanArrival]         = useState(false);
+  // Onboarding owed to a first-time visitor whose scanned code was dead,
+  // held until the panel carrying the explanation is closed. Restoring it
+  // immediately (the first attempt) drew the welcome modal straight over
+  // the notice, so the app both explained itself and hid the explanation.
+  // Read the message, close it, then get set up.
+  const [onboardingAfterPanel, setOnboardingAfterPanel] = useState(false);
+  useEffect(() => {
+    if (!onboardingAfterPanel || showIO) return;
+    setOnboardingAfterPanel(false);
+    setShowCohortSetup(true);
+  }, [onboardingAfterPanel, showIO]); // eslint-disable-line react-hooks/exhaustive-deps
   const claimRef                              = useRef(null);
   useEffect(() => { if (claimOpen) claimRef.current?.focus(); }, [claimOpen]);
   const [shareCodeError, setShareCodeError]   = useState(null); // { key, until? }
@@ -595,8 +613,10 @@ export default function Header() {
     // more often than not, so this is the common path, not the corner.
     openPhonePop();
     setShowIO(true);
+    setScanArrival(true);
     redeemCode(code).then(imported => {
-      if (!imported && onboardingDeferredForShare) setShowCohortSetup(true);
+      if (imported) setScanArrival(false);
+      else if (onboardingDeferredForShare) setOnboardingAfterPanel(true);
     });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [planSearch, setPlanSearch] = useState("");
@@ -1641,10 +1661,24 @@ export default function Header() {
                     </div>
                   )}
                   {shareCodeError && !claimBusy && (
-                    <div style={{ gridColumn: "1 / -1", fontSize: 9, fontWeight: 600,
-                      color: "var(--red, #ef4444)", textAlign: "center" }}>
+                    // A link the user followed gets a bordered, full-size
+                    // notice; a mistyped code gets the quiet line, because
+                    // there the user knows what they just did.
+                    <div style={{ gridColumn: "1 / -1", textAlign: "center",
+                      fontWeight: 600, color: "var(--red, #ef4444)",
+                      ...(scanArrival
+                        ? { fontSize: 10, lineHeight: 1.35, padding: "6px 8px", borderRadius: 5,
+                            border: "1px solid var(--red, #ef4444)",
+                            background: "color-mix(in srgb, var(--red, #ef4444) 8%, transparent)" }
+                        : { fontSize: 9 }) }}>
                       {t(shareCodeError.key, shareCodeError.until
                         ? { time: mmss(shareCodeError.until - codeNow) } : undefined)}
+                      {scanArrival && (
+                        <span style={{ display: "block", marginTop: 3, fontWeight: 500,
+                          color: "var(--text-4)" }}>
+                          {t("header.io.code.scanfailed")}
+                        </span>
+                      )}
                     </div>
                   )}
                 </div>

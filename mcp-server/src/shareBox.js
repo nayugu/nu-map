@@ -36,7 +36,14 @@
 
 import { ID_PATTERN } from "../../src/core/shareCrypto.js";
 
-export const SHARE_TTL_MS = 10 * 60 * 1000;
+// Five minutes. Sharing here is a hand-off happening right now — a code
+// read across a table or a QR held up to a phone — not a link you send and
+// forget, so the window only has to cover the handful of seconds between
+// showing the code and the other person taking it. The sender's tab
+// revoking on pagehide is the primary lifetime anyway; this is the backstop
+// for crashes and clients that never say goodbye, and a shorter backstop
+// means a smaller window in which an abandoned ciphertext exists at all.
+export const SHARE_TTL_MS = 5 * 60 * 1000;
 // A 4 KB plan becomes ~5.5 KB once the IV and GCM tag are added and the
 // whole thing is base64url'd (4/3 expansion). 6 KB preserves the previous
 // plan capacity exactly; it is still useless as a pastebin.
