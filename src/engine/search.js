@@ -519,6 +519,28 @@ export function placeCells({
     last = r.failure ? r : last;
   }
 
+  // ── A diversified retry phase was built here, measured, and REMOVED ──
+  //
+  // The observation that motivated it is real and still stands: refusals were ending at
+  // exactly 16,251 nodes in 181–688 ms — the ladder's own arithmetic, strict 5,000 + rung
+  // 7,500 + rung 3,750 — so they stopped holding 19% of the node budget and 96% of the wall
+  // clock unspent, simply because there was no rung left to spend it on.
+  //
+  // Six extra attempts were added, each varying the ARBITRARY tie-break in `byConstraint`
+  // (cells identical on claim, domain width, candidate count and depth are ordered by cell id
+  // for no reason but determinism). Node counts duly rose from 16,251 to 20,001, proving the
+  // leftover was being spent — and over a 344-shape sample it rescued **zero** programs.
+  //
+  // Why, in hindsight: varying the LAST key of a five-key comparator only re-orders cells that
+  // tie on all four keys before it, and few do. The "different" order was nearly the same
+  // order, so the search revisited the same region more thoroughly instead of looking
+  // elsewhere. Diversification is still the right idea for a heavy-tailed search; the VALUE
+  // order (which term a cell tries first) is the thing that actually varies, and that is where
+  // a future attempt should perturb.
+  //
+  // Recorded rather than silently dropped, because the measurement is the useful part: the
+  // unused budget is NOT the reason these programs refuse.
+
   const f = last?.failure?.lastObstruction ?? last?.failure;
   if (f?.cell != null && f.kind && f.kind !== "search-budget-exhausted") {
     return {
@@ -1550,6 +1572,13 @@ function byConstraint(a, b, termCount, rankOf = () => 0) {
   // Deeper cells before shallower ones at equal width: a long chain has fewer
   // places to go even when the bound has not noticed.
   if (a.minDepth !== b.minDepth) return b.minDepth - a.minDepth;
+  // Arbitrary, and only here because a total order is needed for determinism.
+  //
+  // Worth knowing if you are tempted to diversify the search by varying it: that was tried,
+  // and it rescued nothing over a 344-shape sample. Re-ordering the last key of a five-key
+  // comparator only moves cells that tie on all four before it, and few do — so the search
+  // explored the same region more thoroughly rather than a different one. The VALUE order
+  // (which term a cell tries first) is what actually varies between arrangements.
   return String(a.cell.id).localeCompare(String(b.cell.id));
 }
 
