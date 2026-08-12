@@ -136,13 +136,9 @@ export function generatePlan({
   }
 
   // ── 4. Where each cell could go, for a given shape ──────────────
-  //
-  // How many REAL courses this degree has to place — cells of at least 3 SH — is what
-  // decides whether the half-summers are needed at all. `studyTerms` uses it to mark a
-  // summer optional once the full terms can absorb the degree, which is what keeps every
-  // fall and spring at four. Counted here because the shape does not know the cells.
-  const realCourses = cells.filter(c => (c.sh ?? 0) >= cal.realCourseSH).length;
   const layout = (sh) => {
+    // How many REAL courses this degree has to place decides how many summers are surplus.
+    const realCourses = cells.filter(c => (c.sh ?? 0) >= cal.realCourseSH).length;
     const ts = studyTerms({ ...sh, realCourses }, studentType, cal);
     const { plans, impossible } = buildDomains(cells, ts, {
       courseMap, depthOf: depth.depthOf,

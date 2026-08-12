@@ -432,7 +432,25 @@ export function placeCells({
   // input always gets the same fallback attempt with the same allowance.
   {
     const r = attemptPlacement({
-      plans: working, terms, ports, studentType, courseMap, repeatable,
+      // ── FRESH domains, not the ones the nogoods narrowed ────────────
+      //
+      // This reused `working`, and that was unsound. A nogood records "cell C cannot be in
+      // term T", observed under the FULL constraint set — including the four-course bound
+      // this tier exists to relax. With the bound gone the observation may simply be false,
+      // and carrying it forward removes terms the relaxed problem needs.
+      //
+      // It is also the documented weakness of the mechanism compounding itself: a nogood is
+      // a heuristic, not a deduction, so it can already miss a plan that exists. Handing the
+      // fallback a domain set pruned by up to 40 such guesses gives it a strictly smaller
+      // space than the search that had just failed — the tier meant to rescue coverage was
+      // starting from a worse position than the one it was rescuing.
+      //
+      // Measured cause for looking: five known refusals survived a SIX-FOLD budget increase
+      // unchanged, so they were never latency-bound. A search that cannot find an answer in
+      // 30 seconds that it also cannot find in 5 is not short of time; it is looking in the
+      // wrong place, and inherited nogoods are how the place got smaller.
+      plans: plans.map(p => ({ ...p, domain: [...p.domain] })),
+      terms, ports, studentType, courseMap, repeatable,
       nodeBudget: Math.max(1, nodeBudget - totalNodes),
       precedence, now, shape, deadline, cal,
       enforceCardinality: false,

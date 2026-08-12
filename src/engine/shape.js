@@ -278,26 +278,78 @@ export function defaultShape({
  * corpus bar draws.
  */
 export function studyTerms(shape, studentType = "undergraduate", cal = DEFAULT_CALIBRATION) {
+  // ── Only a term the DEPARTMENT left empty is a last resort ────────
+  //
+  // A surplus rule used to live here: count the real courses, subtract four per full term,
+  // and mark every half-summer past that surplus `optional` so the falls would fill first.
+  // The arithmetic was right and the conclusion was wrong, and it cost coverage in a way
+  // that took three failed hypotheses to find.
+  //
+  // `optional` is the FIRST rank in every branch of the term ordering — it has to be, since
+  // it exists to stop CHART using a summer the department deliberately left blank. So
+  // marking a summer optional does not gently deprioritise it; it forces the search to
+  // exhaust every arrangement that avoids it first. On an exactly-tight degree that is
+  // combinatorially prohibitive.
+  //
+  // Architecture BS is the case that proved it. 32 real courses, 7 full terms, 5 half terms:
+  // 7x4 + 2x2 = 32, exactly tight, so the surplus rule marked 3 of the 5 summers optional —
+  // and its studio courses are 8-16 SH, so a term holding one cannot reach four courses
+  // inside the 19 SH cap at all. It refused. Measured, with the four-course bar still ON and
+  // only this marking removed, it generates.
+  //
+  // The deeper error: our surplus arithmetic is a heuristic, and the department's own plan is
+  // EVIDENCE. A summer the department uses is one it means to use, whatever our count says
+  // about whether it is needed. Only a summer left empty carries the opposite evidence, and
+  // that is the only one demoted here.
+  //
+  // ── But removing it outright cost more than it saved ──────────────
+  //
+  // Measured both ways. Dropping the surplus rule entirely fixed Architecture and improved
+  // thin full terms from 2.6% to 0.7% — and coverage on the same sample fell from 85 programs
+  // to 68. The marking was doing two jobs: a fatal constraint on an exactly-tight degree, and
+  // a genuinely valuable SEARCH HEURISTIC everywhere else, because trying the falls before the
+  // summers is usually right and prunes hard.
+  //
+  // So it stays, with a margin. The arithmetic assumes every full term can hold four courses,
+  // and that assumption is what fails: Architecture's 16 SH studios mean a term holding one
+  // cannot reach four inside the 19 SH cap, so the real plan needs MORE summers than the count
+  // predicts. A margin of two half-terms covers that gap without giving up the pruning — and
+  // the same experiment that found the problem confirms the fix, since Architecture generates
+  // as soon as the demoted set shrinks.
+  //
+  // The four-course rule does not depend on any of this: it is enforced by the cardinality
+  // propagator in the search and repaired by `fillFullTerms`, both of which act on where cells
+  // actually land rather than on which terms are permitted.
   const terms = (shape?.terms ?? []).filter(t => !t.work);
   const fullCount = terms.filter(t => (t.weight ?? 1) >= 1 && !t.unused).length;
-  // Undergraduate only: a graduate plan has no four-course bar, so there is no "surplus"
-  // to define and every half term it publishes is one the department meant to use.
   const minCourses = minCoursesFor(cal, studentType);
   if (minCourses <= 0) return terms.map(t => (t.unused ? { ...t, optional: true } : t));
+
   const surplus = (shape?.realCourses ?? 0) - fullCount * minCourses;
-  const halvesNeeded = surplus > 0 ? Math.ceil(surplus / cal.halfTermCourses) : 0;
+  const halvesNeeded = surplus > 0
+    ? Math.ceil(surplus / cal.halfTermCourses) + OPTIONAL_HALF_MARGIN
+    : Infinity;   // the bar is unsatisfiable here, so the degree needs every term it has
 
   let halvesUsed = 0;
   return terms.map((t) => {
     if (t.unused) return { ...t, optional: true };
     if ((t.weight ?? 1) >= 1) return t;
-    // A half term is real only while surplus courses remain to put in it. Earliest
-    // first, because the department's own ordering is the only prior available for
+    // Earliest first, because the department's own ordering is the only prior available for
     // WHICH summer a degree leans on.
     if (halvesUsed < halvesNeeded) { halvesUsed += 1; return t; }
     return { ...t, optional: true };
   });
 }
+
+/**
+ * Extra half-terms kept as real beyond what the surplus arithmetic asks for.
+ *
+ * Two. The arithmetic assumes a full term can hold `fullTermMinCourses` courses, and a term
+ * carrying a 16 SH studio cannot — so on those degrees the plan needs more summers than the
+ * count predicts and demoting them refuses the program outright. Two is what the failing case
+ * required; a larger margin gives back the pruning that makes this rule worth having.
+ */
+export const OPTIONAL_HALF_MARGIN = 2;
 
 /**
  * Courses a half term holds. Half the full-term bar, which is what "half term" means and
