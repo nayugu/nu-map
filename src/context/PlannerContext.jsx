@@ -29,6 +29,7 @@ import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState, writeKey } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
 import { LIBRARY_BUNDLE_KIND } from "../core/planSchema.js";
+import { buildLibraryBundle, parseLibraryBundle } from "../core/libraryBackup.js";
 import { tabTitle, FIRST_PLAN_NAME } from "../core/tabTitle.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
@@ -3412,51 +3413,27 @@ export function PlannerProvider({ children }) {
    */
   const exportLibraryJSON = () => {
     saveCurrentPlanToSlot();
+    // The ACTIVE plan is read from live state, not from its slot, so an export
+    // taken mid-edit contains the edit rather than the last autosave.
     const live = captureCurrentPlan();
-    const entries = [];
-    const skipped = [];
-    for (const p of plans) {
-      let data;
-      if (p.id === activePlanId) {
-        data = live;
-      } else {
-        try {
-          const raw = localStorage.getItem(key(`plan-data-${p.id}`));
-          data = raw ? JSON.parse(raw) : null;
-        } catch { data = null; }
-      }
-      // A plan with no readable slot is one the user has never opened since it
-      // was created, or whose slot a quota-exceeded write truncated. Recording
-      // it as skipped is the honest outcome — silently omitting it would make
-      // the backup claim completeness it does not have.
-      if (!data) { skipped.push({ id: p.id, name: p.name }); continue; }
-      if (privateGrades) delete data.grades;
-      if (privateCoop) data.specialTermPl = redactCoopDetails(data.specialTermPl);
-      entries.push({
-        id: p.id,
-        name: p.name,
-        parentId: p.parentId ?? null,
-        studentType: p.studentType ?? "undergrad",
-        order: p.order ?? null,
-        data,
-      });
-    }
-    const bundle = {
-      kind: LIBRARY_BUNDLE_KIND,
-      version: 1,
-      exported: new Date().toISOString(),
+    const { bundle, skipped } = buildLibraryBundle({
+      plans, folders, activePlanId,
       institution: institution.id ?? institution.shortName ?? null,
-      activePlanId,
-      folders: folders.map(f => ({ id: f.id, name: f.name, parentId: f.parentId ?? null, order: f.order ?? null })),
-      plans: entries,
-      skipped,
-    };
+      privateGrades, privateCoop, redactCoop: redactCoopDetails,
+      readSlot: (id) => {
+        if (id === activePlanId) return live;
+        try {
+          const raw = localStorage.getItem(key(`plan-data-${id}`));
+          return raw ? JSON.parse(raw) : null;
+        } catch { return null; }
+      },
+    });
     const dateStr = new Date().toISOString().slice(0, 10);
     downloadJSON(
       bundle,
       `${safeFilePart(institution.shortName ?? institution.name, 'Map')} Map Library - ${dateStr}.json`
     );
-    return { plans: entries.length, folders: bundle.folders.length, skipped: skipped.length };
+    return { plans: bundle.plans.length, folders: bundle.folders.length, skipped: skipped.length };
   };
 
   const applyPlanData = (d) => {
@@ -3520,63 +3497,41 @@ export function PlannerProvider({ children }) {
    */
   const importLibraryJSON = (file) => new Promise((resolve) => {
     const reader = new FileReader();
-    reader.onerror = () => resolve({ ok: false, reason: "unreadable" });
+    reader.onerror = () => resolve({ ok: false, reason: "parse" });
     reader.onload = () => {
-      let b;
-      try { b = JSON.parse(reader.result); }
+      let raw;
+      try { raw = JSON.parse(reader.result); }
       catch { resolve({ ok: false, reason: "parse" }); return; }
-      if (b?.kind !== LIBRARY_BUNDLE_KIND || !Array.isArray(b.plans)) {
-        resolve({ ok: false, reason: "not-a-bundle" }); return;
-      }
-      saveCurrentPlanToSlot();
 
       const stamp = Date.now();
-      const idMap = new Map();
-      const newId = (oldId, i) => {
-        if (!idMap.has(oldId)) idMap.set(oldId, `plan_${stamp}_${i}`);
-        return idMap.get(oldId);
-      };
-      const folderMap = new Map();
-      (Array.isArray(b.folders) ? b.folders : []).forEach((f, i) => {
-        folderMap.set(f.id, `folder_${stamp}_${i}`);
-      });
+      const parsed = parseLibraryBundle(raw, { stamp, fallbackName: FIRST_PLAN_NAME });
+      if (!parsed.ok) { resolve(parsed); return; }
 
-      // Slots first: a plan must never appear on the index before its data
+      saveCurrentPlanToSlot();
+
+      // Slots FIRST: a plan must never appear on the index before its data
       // exists, or the activePlanId effect can read a missing slot and reset the
-      // plan to defaults — importing a backup would blank the plan it restored.
-      let written = 0;
-      let failed = 0;
+      // plan to defaults — an import that blanks the very plan it restored.
       const rows = [];
-      b.plans.forEach((entry, i) => {
-        if (!entry?.data) { failed++; return; }
-        const id = newId(entry.id ?? `x${i}`, i);
-        const res = writeKey(key(`plan-data-${id}`), JSON.stringify(entry.data));
-        if (!res.ok) { reportWrite(res); failed++; return; }
-        written++;
-        const mappedParent = entry.parentId ? folderMap.get(entry.parentId) ?? null : null;
+      let failed = parsed.failed;
+      for (const p of parsed.plans) {
+        const res = writeKey(key(`plan-data-${p.id}`), JSON.stringify(p.data));
+        if (!res.ok) { reportWrite(res); failed++; continue; }
         rows.push({
-          id,
-          name: entry.name || FIRST_PLAN_NAME,
-          studentType: entry.studentType ?? entry.data?.studentType ?? "undergrad",
-          parentId: mappedParent,
-          lastOpened: stamp,
+          id: p.id, name: p.name, studentType: p.studentType,
+          parentId: p.parentId, lastOpened: stamp,
         });
-      });
-
-      if (written === 0) { resolve({ ok: false, reason: failed ? "write-failed" : "empty" }); return; }
+      }
+      if (rows.length === 0) { resolve({ ok: false, reason: "write-failed" }); return; }
 
       pushFolderHistory();
-      // Only folders that ended up holding something, or whose parent chain is
-      // needed, are worth creating; an empty folder from the backup is harmless
-      // so they are all kept for fidelity.
-      const newFolders = (Array.isArray(b.folders) ? b.folders : []).map(f => ({
-        id: folderMap.get(f.id),
-        name: f.name || "untitled folder",
-        parentId: f.parentId ? folderMap.get(f.parentId) ?? null : null,
-      }));
+      // EVERY folder is restored, including empty ones. Pruning them would cost
+      // a few bytes less and silently flatten a tree the user built on purpose,
+      // and an empty folder in a backup is evidence they wanted it.
+      const newFolders = parsed.folders;
       if (newFolders.length) setFolders(prev => [...prev, ...newFolders]);
       setPlans(prev => [...prev, ...rows]);
-      resolve({ ok: true, plans: written, folders: newFolders.length, failed });
+      resolve({ ok: true, plans: rows.length, folders: newFolders.length, failed });
     };
     reader.readAsText(file);
   });
