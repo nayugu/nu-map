@@ -112,6 +112,8 @@ export function generatePlan({
   // scheduling, and the engine holding them is what made `FULL_TERM_MIN_COURSES` get
   // applied to master's degrees. See calibration.js.
   calibration = {},
+  // See the call site below. A test-only escape hatch for one propagator, not a tuning knob.
+  propagateChains = true,
 } = {}) {
   const cal = withCalibration(calibration);
   const prepSet = new Set(coopPrep);
@@ -313,6 +315,10 @@ export function generatePlan({
   const placed = placeCells({
     plans, terms, ports, studentType, courseMap, repeatable, nodeBudget, timeBudgetMs,
     precedence, shape, cal,
+    // Off only so the claim "a pruning propagator does not move an existing plan" can be
+    // TESTED rather than argued — see `chart-propagator-neutral.test.js`. Production never
+    // passes false, and the invariant it protects is the whole basis of §17's placement rule.
+    propagateChains,
     // Injectable so DETERMINISM can be tested as the property it is, rather than as a race
     // against the machine. With a frozen clock the search is bounded by nodes alone and the
     // same input must give the same plan; with the real clock a slow run can only ever

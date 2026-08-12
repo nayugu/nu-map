@@ -270,6 +270,7 @@ export function placeCells({
   repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, now = () => Date.now(),
   precedence = null, maxRestarts = 40, shape = null, cal = DEFAULT_CALIBRATION,
+  propagateChains = true,
 }) {
   const deadline = now() + timeBudgetMs;
   // ── The fallback tier gets a RESERVED share, not the leftovers ────
@@ -346,7 +347,7 @@ export function placeCells({
     const r = attemptPlacement({
       plans: working, terms, ports, studentType, courseMap, repeatable,
       nodeBudget: Math.min(perAttempt, Math.max(1, strictNodes - totalNodes)),
-      precedence, now, shape, cal,
+      precedence, now, shape, cal, propagateChains,
       // The GLOBAL deadline only. Each attempt used to get a time slice as well, and that
       // was the last source of non-determinism: how many nodes an attempt explored depended
       // on machine load, so `business_administration_and_public_health_bs` returned
@@ -485,7 +486,7 @@ export function placeCells({
       plans: plans.map(p => ({ ...p, domain: [...p.domain] })),
       terms, ports, studentType, courseMap, repeatable,
       nodeBudget: Math.max(1, Math.floor((nodeBudget - totalNodes) / 2)),
-      precedence, now, deadline, cal,
+      precedence, now, deadline, cal, propagateChains,
       shape: rung.shape,
       enforceCardinality: rung.enforceCardinality ?? true,
       preferenceFree: rung.preferenceFree ?? false,
@@ -539,6 +540,8 @@ function attemptPlacement({
   // Order terms by position alone, dropping every sequencing preference. NOT a relaxation:
   // the constraints are identical. See `termPreference`.
   preferenceFree = false,
+  // See `precedenceRoom`. Test-only when false; production is always true.
+  propagateChains = true,
 }) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
   const slotCap = terms.map(t => termSlotCap(t, shape));
@@ -1176,6 +1179,145 @@ function attemptPlacement({
     return true;
   };
 
+  // ── Precedence, propagated over the cells NOT yet placed ──────────
+  //
+  // `violatesPrecedence` checks edges against cells that already have a term, and
+  // `criticalPath` narrowed every domain once before the search began. Between them sits the
+  // case that actually blocks: a chain of three UNPLACED cells needs three distinct terms in
+  // increasing order, and if the assignment so far has left only two terms where they can go,
+  // that is decided now — but nothing notices until each of the three has been tried.
+  //
+  // Industrial Engineering and Computer Science's "Spring/Summer First" variant is exactly
+  // this. Its co-ops take Spring and Summer 1, so two spring terms remain against the sibling
+  // variant's four, and a spring-only chain has to thread them. The instance is FEASIBLE on
+  // capacity, availability and depth — a matching seats all 36 cells — so no capacity
+  // propagator has anything to prune, and the search could not find an arrangement in
+  // 3,000,000 nodes. The obstruction is precedence interacting with the seasons that survive,
+  // which is what this sees and nothing else does.
+  //
+  // It is the same longest-path computation `criticalPath` does, with one difference that is
+  // the whole point: a PLACED cell contributes its actual term instead of its domain's
+  // endpoint, so every bound tightens as the assignment grows.
+  //
+  // ── Why this is safe to run at every tier, including the strict one ──
+  //
+  // Because it PRUNES and never REWRITES. A propagator that narrowed `plan.domain` would
+  // change `byConstraint`'s MRV ordering — it sorts on domain length — and therefore which
+  // legal plan the search reaches first, which would silently re-sequence programs that
+  // already generate. This only answers "is this branch dead", and pruning branches that
+  // contain no solution cannot change the order in which SOLUTIONS are met. The plan a
+  // succeeding program produces is identical; it is simply reached without the detour.
+  //
+  // Sound, so nothing valid is cut: every bound here is implied by the partial assignment and
+  // the edges, and a cell with no term inside its own tightened window genuinely admits no
+  // completion.
+  const topo = (() => {
+    if (!precedence) return [];
+    const ids = order.map(p => p.cell.id);
+    const idset = new Set(ids);
+    const indeg = new Map(ids.map(id => [id, 0]));
+    for (const id of ids) {
+      for (const p of precedence.before.get(id) ?? []) {
+        if (idset.has(p)) indeg.set(id, indeg.get(id) + 1);
+      }
+    }
+    const queue = ids.filter(id => indeg.get(id) === 0).sort();
+    const out = [];
+    while (queue.length) {
+      const id = queue.shift();
+      out.push(id);
+      for (const s of precedence.after.get(id) ?? []) {
+        if (!idset.has(s)) continue;
+        const d = indeg.get(s) - 1;
+        indeg.set(s, d);
+        if (d === 0) queue.push(s);
+      }
+    }
+    // Cells in a precedence CYCLE are never emitted, and are therefore never propagated
+    // through. A cycle means the data contradicts itself — `criticalPath` reports it — and
+    // declining to deduce from a contradiction is the conservative choice: it costs pruning
+    // and cannot cut a valid branch.
+    return out;
+  })();
+
+  const domLo = new Map(plans.map(p => [p.cell.id, p.domain[0] ?? 0]));
+  const domHi = new Map(plans.map(p =>
+    [p.cell.id, p.domain[p.domain.length - 1] ?? terms.length - 1]));
+  const domainOf = new Map(plans.map(p => [p.cell.id, p.domain]));
+  // Allocated once. Two Maps per node at twenty thousand nodes is measurable churn.
+  const pLo = new Map(), pHi = new Map();
+
+  const precedenceRoom = () => {
+    if (!propagateChains || !topo.length) return true;
+    pLo.clear();
+    pHi.clear();
+    // Earliest, honouring predecessors — which precede `id` in `topo`, so they are done.
+    for (const id of topo) {
+      const at = termOf.get(id);
+      if (at != null) { pLo.set(id, at); continue; }
+      let v = domLo.get(id);
+      for (const p of precedence.before.get(id) ?? []) {
+        const pv = pLo.get(p);
+        if (pv == null) continue;                       // a cycle member: no deduction
+        const shifted = pv + (precedence.concurrentOk.has(`${p}|${id}`) ? 0 : 1);
+        if (shifted > v) v = shifted;
+      }
+      pLo.set(id, v);
+    }
+    // Latest, honouring successors — which follow `id` in `topo`, hence the reverse sweep.
+    for (let k = topo.length - 1; k >= 0; k--) {
+      const id = topo[k];
+      const at = termOf.get(id);
+      if (at != null) { pHi.set(id, at); continue; }
+      let v = domHi.get(id);
+      for (const s of precedence.after.get(id) ?? []) {
+        const sv = pHi.get(s);
+        if (sv == null) continue;
+        const shifted = sv - (precedence.concurrentOk.has(`${id}|${s}`) ? 0 : 1);
+        if (shifted < v) v = shifted;
+      }
+      pHi.set(id, v);
+    }
+    for (const id of topo) {
+      if (termOf.has(id)) continue;
+      const a = pLo.get(id), b = pHi.get(id);
+      // `>` and not `>=`: a cell whose earliest and latest coincide has exactly one legal
+      // term, which is tight but perfectly satisfiable. An off-by-one here was tried as a
+      // deliberate probe and cost 9 plans outright and re-sequenced 12 more — while GAINING
+      // 2, which is the trap: an unsound propagator can raise the coverage number and break
+      // twenty-one plans in the same change. See chart-propagator-neutral.test.js.
+      if (a > b) return false;
+      // The window alone is not enough: the cell also has to have a LEGAL term inside it,
+      // and its domain already encodes availability. A chain that fits the calendar but
+      // needs a spring the co-op cycle removed fails here and nowhere else.
+      let any = false;
+      for (const t of domainOf.get(id)) if (t >= a && t <= b) { any = true; break; }
+      if (!any) return false;
+    }
+    return true;
+  };
+
+  // One place that commits an assignment and one that undoes it.
+  //
+  // These were four hand-copied five-line blocks, one per rejection path, and adding a fifth
+  // propagator meant a fifth copy. That is the shape of bug this engine can least afford: an
+  // undo that forgets one counter leaves the search reasoning about a term that does not
+  // exist, and it would show up as a wrong plan rather than as a crash.
+  const place = (c, ti) => {
+    termOf.set(c.id, ti);
+    loadSH[ti] += c.sh ?? 0;
+    countIn[ti] += coursesInCell(c);
+    if ((c.sh ?? 0) >= cal.realCourseSH) bigIn[ti] += 1;
+    reqIn[ti].set(reqKey(c), reqCount(ti, c) + 1);
+  };
+  const unplace = (c, ti) => {
+    termOf.delete(c.id);
+    loadSH[ti] -= c.sh ?? 0;
+    countIn[ti] -= coursesInCell(c);
+    if ((c.sh ?? 0) >= cal.realCourseSH) bigIn[ti] -= 1;
+    reqIn[ti].set(reqKey(c), reqCount(ti, c) - 1);
+  };
+
   function step(i) {
     if (++nodes > nodeBudget) return "budget";
     // Checked every 64 nodes rather than every one: a clock read per node is
@@ -1224,35 +1366,19 @@ function attemptPlacement({
       // after the whole plan was built on top of it.
       if (violatesPrecedence(cell.id, ti)) continue;
 
-      termOf.set(cell.id, ti);
-      loadSH[ti] += cell.sh ?? 0;
-      countIn[ti] += coursesInCell(cell);
-      if ((cell.sh ?? 0) >= cal.realCourseSH) bigIn[ti] += 1;
-      reqIn[ti].set(reqKey(cell), reqCount(ti, cell) + 1);
+      place(cell, ti);
 
-      // The cardinality bound, before the witness because counting is free and a
-      // matching is not.
-      if (!canStillSeat(i + 1)) {
-        worstFailure = worstFailure ?? {
-          kind: "no-room-left-for-the-rest", cell: cell.id, title: cell.title, term: ti,
-        };
-        termOf.delete(cell.id);
-        loadSH[ti] -= cell.sh ?? 0;
-        countIn[ti] -= coursesInCell(cell);
-        if ((cell.sh ?? 0) >= cal.realCourseSH) bigIn[ti] -= 1;
-        reqIn[ti].set(reqKey(cell), reqCount(ti, cell) - 1);
-        continue;
-      }
-
-      if (!canStillFill(i + 1)) {
-        worstFailure = worstFailure ?? {
-          kind: "full-term-cannot-reach-four", cell: cell.id, title: cell.title, term: ti,
-        };
-        termOf.delete(cell.id);
-        loadSH[ti] -= cell.sh ?? 0;
-        countIn[ti] -= coursesInCell(cell);
-        if ((cell.sh ?? 0) >= cal.realCourseSH) bigIn[ti] -= 1;
-        reqIn[ti].set(reqKey(cell), reqCount(ti, cell) - 1);
+      // Cheapest deduction first, matchings last. `precedenceRoom` is two linear sweeps over
+      // ~40 cells; `canStillFill` runs a matching. Ordering them this way means a branch the
+      // chains already forbid never pays for a matching to find that out.
+      const dead =
+          !precedenceRoom()      ? { kind: "chain-has-no-room-left" }
+        : !canStillSeat(i + 1)   ? { kind: "no-room-left-for-the-rest" }
+        : !canStillFill(i + 1)   ? { kind: "full-term-cannot-reach-four" }
+        : null;
+      if (dead) {
+        worstFailure = worstFailure ?? { ...dead, cell: cell.id, title: cell.title, term: ti };
+        unplace(cell, ti);
         continue;
       }
 
@@ -1269,11 +1395,7 @@ function attemptPlacement({
         worstFailure = w.failure;
       }
 
-      termOf.delete(cell.id);
-      loadSH[ti] -= cell.sh ?? 0;
-      countIn[ti] -= coursesInCell(cell);
-      if ((cell.sh ?? 0) >= cal.realCourseSH) bigIn[ti] -= 1;
-      reqIn[ti].set(reqKey(cell), reqCount(ti, cell) - 1);
+      unplace(cell, ti);
     }
     return false;
   }
@@ -1313,6 +1435,10 @@ export function describe(f) {
     return `no course can answer "${f.title}" in ${f.termLabel}`;
   }
   if (f.kind === "empty-domain") return `"${f.title}" has no legal term`;
+  if (f.kind === "chain-has-no-room-left") {
+    return `placing "${f.title}" there leaves a prerequisite chain with no room in the terms `
+      + `that remain`;
+  }
   return f.detail ?? "no legal placement exists";
 }
 
