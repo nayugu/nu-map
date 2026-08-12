@@ -23,6 +23,8 @@ import PlanTree, { PlanIcon } from "./PlanTree.jsx";
 import { flattenTree, buildSearchIndex, matchIds } from "../core/planFolders.js";
 import HoverTip       from "./InfoTip.jsx";
 import FadeText       from "./FadeText.jsx";
+import { generateQr } from "../core/qrEncode.js";
+import { getHashCodeParam, buildCodeUrl } from "../core/planShare.js";
 
 // Measured header-row width (logical px) below which the labeled buttons fold
 // to icon-only. Above it, labeled buttons wrap into two stacked groups
@@ -59,6 +61,130 @@ const shareErrorOf = (err) => {
   }
 };
 
+// ── The share QR ────────────────────────────────────────────────────
+// The QR encodes the share-code LINK (numap.app/#c=ABCDEF), not the plan.
+// That is what makes it small, and it means the QR is exactly as
+// short-lived as the code drawn on it: one use, ten minutes, and gone the
+// moment the sender cancels. A QR carrying the plan itself would be dense
+// AND permanent — anyone who photographed it would hold the plan forever.
+
+const QR_DARK = "#0f172a"; // slate-900 — softer than pure black, still high-contrast
+
+// One rounded finder "eye": outer ring + centre pip, both with rounded corners.
+function QrEye({ x, y }) {
+  return (
+    <g>
+      <rect x={x + 0.5} y={y + 0.5} width={6} height={6} rx={2} ry={2}
+        fill="none" stroke={QR_DARK} strokeWidth={1} />
+      <rect x={x + 2} y={y + 2} width={3} height={3} rx={1} ry={1} fill={QR_DARK} />
+    </g>
+  );
+}
+
+// Renders a QR matrix with rounded finder eyes. A ~28-character code link
+// always lands on a sparse High-EC code, so the dots-and-logo treatment is
+// what actually ships; the square-module fallback stays for any denser code
+// because dots at lower EC drop enough module area that scanners fail, and
+// reliability has to win over style.
+function QrArt({ qr }) {
+  const { size, modules, ecl } = qr;
+  const fancy = ecl === "H"; // dots + logo only when the EC budget can afford it
+  const logoR = fancy ? Math.max(2, Math.floor(size * 0.11)) : 0; // half-extent in modules
+  const c = (size - 1) / 2;
+
+  const inFinder = (x, y) =>
+    (x < 7 && y < 7) || (x >= size - 7 && y < 7) || (x < 7 && y >= size - 7);
+  const underLogo = (x, y) => fancy && Math.abs(x - c) <= logoR && Math.abs(y - c) <= logoR;
+
+  const cells = [];
+  for (let y = 0; y < size; y++)
+    for (let x = 0; x < size; x++)
+      if (modules[y][x] && !inFinder(x, y) && !underLogo(x, y))
+        cells.push(
+          fancy
+            ? <circle key={`${x}-${y}`} cx={x + 0.5} cy={y + 0.5} r={0.5} fill={QR_DARK} />
+            : <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} rx={0.28} ry={0.28} fill={QR_DARK} />,
+        );
+
+  const logoSize = (logoR * 2 + 1) - 0.6;
+  return (
+    <svg viewBox={`-4 -4 ${size + 8} ${size + 8}`} width="100%" height="100%"
+      shapeRendering={fancy ? "auto" : "geometricPrecision"} aria-hidden="true">
+      {cells}
+      <QrEye x={0} y={0} />
+      <QrEye x={size - 7} y={0} />
+      <QrEye x={0} y={size - 7} />
+      {fancy && (
+        <g>
+          <rect x={c + 0.5 - logoSize / 2} y={c + 0.5 - logoSize / 2} width={logoSize} height={logoSize}
+            rx={1.4} ry={1.4} fill="#fff" />
+          <image href="/logo.png" x={c + 0.5 - (logoSize - 1) / 2} y={c + 0.5 - (logoSize - 1) / 2}
+            width={logoSize - 1} height={logoSize - 1} preserveAspectRatio="xMidYMid meet" />
+        </g>
+      )}
+    </svg>
+  );
+}
+
+// Full-screen enlarged QR — the dropdown preview is necessarily small, so
+// showing it large (~360px) makes the same modules comfortable to scan from
+// across a table. Forced white card so it scans in any theme; click anywhere
+// to dismiss.
+function QrModal({ qr, scanLabel, closeLabel, onClose }) {
+  return (
+    <div onClick={onClose} role="dialog" aria-modal="true"
+      style={{ position: "fixed", inset: 0, zIndex: 300, background: "rgba(2,6,23,0.66)",
+        display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+      <div onClick={e => e.stopPropagation()}
+        style={{ background: "#fff", borderRadius: 18, padding: 22, boxShadow: "var(--shadow-modal)",
+          display: "flex", flexDirection: "column", alignItems: "center", gap: 14, maxWidth: "92vw" }}>
+        <div style={{ width: "min(78vw, 360px)", height: "min(78vw, 360px)" }}>
+          <QrArt qr={qr} />
+        </div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: "#334155" }}>{scanLabel}</div>
+        <button onClick={onClose}
+          style={{ fontSize: 11, fontWeight: 700, cursor: "pointer", border: "1px solid #cbd5e1",
+            background: "#f8fafc", color: "#334155", borderRadius: 7, padding: "6px 18px" }}>
+          {closeLabel}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// The QR box. Rendered only while a code is live, so it appears with the
+// code and vanishes with it. Kept on white so it scans regardless of theme,
+// and clickable to blow the code up to a comfortably scannable size.
+//
+// generateQr returns null only when text cannot fit a version-40 code —
+// unreachable at this length — so there is no "too large" state to render;
+// a null would simply draw nothing rather than claim something false.
+function QrShareBox({ url, label, enlargeLabel, scanLabel, closeLabel }) {
+  const [expanded, setExpanded] = useState(false);
+  const qr = useMemo(() => {
+    if (!url) return null;
+    try { return generateQr(url); } catch { return null; }
+  }, [url]);
+  if (!qr) return null;
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3, marginTop: 1 }}>
+      <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", textTransform: "uppercase", letterSpacing: 0.4 }}>
+        {label}
+      </div>
+      <div onClick={() => setExpanded(true)} title={enlargeLabel}
+        style={{ border: "1px solid var(--border-2)", borderRadius: 8, padding: 8, background: "#fff",
+          width: 136, height: 136, display: "flex", alignItems: "center", justifyContent: "center",
+          cursor: "zoom-in" }}>
+        <QrArt qr={qr} />
+      </div>
+      <div style={{ fontSize: 8, fontWeight: 600, color: "var(--text-4)", opacity: 0.75 }}>⤢ {enlargeLabel}</div>
+      {expanded && (
+        <QrModal qr={qr} scanLabel={scanLabel} closeLabel={closeLabel} onClose={() => setExpanded(false)} />
+      )}
+    </div>
+  );
+}
 
 // Touch scroll-lock for header dropdown panels: consume touchmove at the
 // panel's scroll bounds so the gesture never chains into the planner's
@@ -340,7 +466,7 @@ export default function Header() {
   const [claimInput, setClaimInput]           = useState("");
   const [claimBusy, setClaimBusy]             = useState(false);
   const [shareCodeError, setShareCodeError]   = useState(null); // { key, until? }
-  const [clockHover, setClockHover]           = useState(false); // red = click cancels
+  const [cancelHover, setCancelHover]         = useState(false); // red = click cancels
   const [codeNow, setCodeNow]                 = useState(Date.now());
   useEffect(() => {
     if (!shareCode && !shareCodeError?.until) return;
@@ -353,19 +479,13 @@ export default function Header() {
     if (shareCodeError?.until && shareCodeError.until <= codeNow) setShareCodeError(null);
   }, [shareCode, shareCodeError, codeNow]);
 
-  // No code → mint one. Code live (the button shows the countdown) →
-  // cancel it: the code is revoked server-side and the button returns to
-  // Share. Want a fresh code? Cancel, then share again — two honest
-  // clicks instead of one ambiguous regenerate.
-  const handleShareCode = async () => {
+  // Share and cancel used to be one button that changed meaning with the
+  // state; they are now two controls (the full-width Share bar, and the ×
+  // beside a live code), so they are two functions. Regenerating is still
+  // deliberately two clicks — cancel, then share — rather than one
+  // ambiguous "refresh" that silently strands whoever holds the old code.
+  const handleShare = async () => {
     setShareCodeError(null);
-    if (shareCode) {
-      const dead = shareCode.code;
-      setShareCode(null);
-      setClockHover(false);
-      cancelShareCode(dead); // fire-and-forget; expired/claimed no-ops
-      return;
-    }
     setShareCodeBusy(true);
     try {
       const { code, expiresInSeconds } = await createShareCode(shareLinkLocale);
@@ -379,6 +499,19 @@ export default function Header() {
     }
   };
 
+  // Clearing shareCode first tears down the watch socket and the QR in the
+  // same render, so nothing lingers pointing at a code that is being
+  // revoked. The revoke itself is fire-and-forget — an already claimed or
+  // expired code is the outcome we wanted anyway.
+  const handleCancelCode = () => {
+    if (!shareCode) return;
+    const dead = shareCode.code;
+    setShareCode(null);
+    setCancelHover(false);
+    setShareCodeError(null);
+    cancelShareCode(dead);
+  };
+
   // The code lives in a box styled exactly like the entry field below it
   // — clicking the box copies it (a color flash confirms).
   const handleCopyCode = async () => {
@@ -388,8 +521,11 @@ export default function Header() {
     setTimeout(() => setShareCodeCopied(false), 1500);
   };
 
-  const handleClaimCode = async () => {
-    const code = claimInput.toUpperCase().replace(/[^A-Z0-9]/g, "");
+  // One redemption path for both ways in — typed into the box, or carried
+  // by a scanned #c= link. They must not drift: a claim burns the payload
+  // exactly once either way, so both need the same confirm-before-import
+  // ordering and the same error reporting.
+  const redeemCode = async (code) => {
     if (code.length < 6 || claimBusy) return;
     setShareCodeError(null);
     setClaimBusy(true);
@@ -411,6 +547,28 @@ export default function Header() {
       setClaimBusy(false);
     }
   };
+
+  const handleClaimCode = () => redeemCode(claimInput.toUpperCase().replace(/[^A-Z0-9]/g, ""));
+
+  // A scanned QR (or a pasted #c= link) lands here. Three things matter:
+  //
+  //  1. The hash is stripped BEFORE the claim. Claiming burns the payload,
+  //     so a reload that re-ran it would report "not found" about a code
+  //     that had in fact just worked.
+  //  2. The ⇅ panel is opened first. Deriving the key is a 300k-iteration
+  //     PBKDF2 — up to a second on a phone — and the panel is where both
+  //     the busy state and any localized failure are already rendered.
+  //     Without it the app would sit silent and then show a bare dialog.
+  //  3. A link-preview crawler cannot burn a code on the user's behalf:
+  //     the code rides in the fragment, which is never sent to a server,
+  //     and only this JS ever claims it.
+  useEffect(() => {
+    const code = getHashCodeParam();
+    if (!code) return;
+    history.replaceState(null, "", window.location.pathname + window.location.search);
+    setShowIO(true);
+    redeemCode(code);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [planSearch, setPlanSearch] = useState("");
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
@@ -1286,10 +1444,10 @@ export default function Header() {
                   value={shareLinkLocale}
                   onChange={e => setShareLinkLocale(e.target.value)}
                   title={t("header.io.share.locale.title") ?? "Language for recipient"}
-                  style={{ fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  style={{ fontSize: 9, fontWeight: 700, cursor: "pointer",
                     background: "var(--bg-surface)", color: "var(--text-4)",
                     border: "1px solid var(--border-2)", borderRadius: 5,
-                    padding: "4px 6px", flexShrink: 0 }}>
+                    padding: "4px 2px", flexShrink: 0 }}>
                   {locales.map(l => (
                     <option key={l.code} value={l.code}>{l.code.toUpperCase()}</option>
                   ))}
@@ -1300,53 +1458,90 @@ export default function Header() {
                 // Share ↔ Load. The auto column sizes to the wider button,
                 // so the pair stays width-matched in every locale.
                 <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr) auto", gap: 4, alignItems: "stretch" }}>
-                  <div
-                    onClick={handleCopyCode}
-                    title={shareCode ? t("header.io.code.copy.title") : undefined}
-                    style={{ display: "flex", alignItems: "center", justifyContent: "center",
-                      position: "relative", minWidth: 0, fontSize: 10, fontWeight: 700,
-                      fontFamily: "ui-monospace, monospace",
-                      letterSpacing: shareCodePickedUp ? 0 : 2,
-                      background: shareCodeCopied ? "var(--active)" : "var(--bg-surface)",
-                      color: shareCodeCopied ? "#fff"
-                        : shareCodePickedUp ? "#22c55e"
-                        : shareCode ? "var(--text-2)" : "var(--text-5)",
-                      border: `1px solid ${shareCodeCopied ? "var(--active)" : shareCodePickedUp ? "#22c55e" : "var(--border-2)"}`,
-                      borderRadius: 5, padding: "4px 8px",
-                      cursor: shareCode ? "pointer" : "default", userSelect: "none",
-                      transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
-                    <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {shareCodePickedUp ? t("header.io.code.pickedup") : shareCode ? shareCode.code : "······"}
-                    </span>
-                  </div>
-                  {/* While a code is live the countdown takes over this
-                      button's slot, and clicking CANCELS the code (revoked
-                      server-side) — hovering turns the clock red to say so.
-                      The invisible Share label keeps the width pinned, so
-                      the swap never shifts the column in any locale. */}
-                  <button className="hdr-btn-dd" onClick={handleShareCode}
-                    onMouseEnter={() => setClockHover(true)}
-                    onMouseLeave={() => setClockHover(false)}
-                    title={shareCode ? t("header.io.code.cancel.title") : t("header.io.code.send.title")}
-                    disabled={shareCodeBusy}
-                    style={{ position: "relative", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                      background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                      border: `1px solid ${shareCode && clockHover ? "var(--red, #ef4444)" : "var(--border-2)"}`,
-                      color: "var(--text-4)",
-                      opacity: shareCodeBusy ? 0.6 : 1,
-                      transition: "border-color 0.15s" }}>
-                    <span style={{ visibility: shareCode ? "hidden" : "visible", whiteSpace: "nowrap" }}>
-                      {t("header.io.code.share")}
-                    </span>
-                    {shareCode && (
-                      <span style={{ position: "absolute", inset: 0, display: "flex",
-                        alignItems: "center", justifyContent: "center",
-                        fontVariantNumeric: "tabular-nums", transition: "color 0.15s",
-                        color: clockHover ? "var(--red, #ef4444)" : "var(--text-5)" }}>
+                  {/* With no code there is nothing to show, so the row is
+                      simply Share, full width — the old placeholder box
+                      drew the outline of a code that did not exist. The
+                      auto column still exists for the Load button below,
+                      so the two rows stay width-matched in every locale. */}
+                  {!shareCode ? (
+                    <button className="hdr-btn-dd" onClick={handleShare}
+                      title={t("header.io.code.send.title")}
+                      disabled={shareCodeBusy}
+                      style={{ gridColumn: "1 / -1", fontSize: 10, fontWeight: 700,
+                        cursor: shareCodeBusy ? "default" : "pointer",
+                        background: shareCodePickedUp ? "#22c55e" : "var(--bg-surface)",
+                        padding: "4px 8px", borderRadius: 5,
+                        border: `1px solid ${shareCodePickedUp ? "#22c55e" : "var(--border-2)"}`,
+                        color: shareCodePickedUp ? "#fff" : "var(--text-4)",
+                        opacity: shareCodeBusy ? 0.6 : 1,
+                        transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
+                      {/* The pickup confirmation takes this bar for its
+                          2.5 s, since the code it belonged to is already
+                          gone and the bar is otherwise back to Share. */}
+                      {shareCodePickedUp ? t("header.io.code.pickedup") : t("header.io.code.share")}
+                    </button>
+                  ) : (
+                    <>
+                      {/* Once a code exists the bar IS the code. Clicking
+                          copies it; the countdown sits at the trailing edge
+                          so the code itself stays centred. */}
+                      <div
+                        onClick={handleCopyCode}
+                        title={t("header.io.code.copy.title")}
+                        style={{ display: "flex", alignItems: "center", justifyContent: "center",
+                          minWidth: 0, fontSize: 10, fontWeight: 700,
+                          fontFamily: "ui-monospace, monospace", letterSpacing: 2,
+                          background: shareCodeCopied ? "var(--active)" : "var(--bg-surface)",
+                          color: shareCodeCopied ? "#fff" : "var(--text-2)",
+                          border: `1px solid ${shareCodeCopied ? "var(--active)" : "var(--border-2)"}`,
+                          borderRadius: 5, padding: "4px 6px",
+                          cursor: "pointer", userSelect: "none",
+                          transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
+                        {/* Nothing shares this box with the code. The clock
+                            used to sit inside it, which cost ~18px of a
+                            column whose width is set by the widest of × and
+                            Load ACROSS LOCALES — measured, Japanese "Load"
+                            left 98px and the code was ellipsized to
+                            "9MCMY…". A code that cannot be read in full is
+                            not a code, so the clock moved to its own line
+                            below and this box holds one thing. */}
+                        <span style={{ minWidth: 0, overflow: "hidden",
+                          textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                          {shareCode.code}
+                        </span>
+                      </div>
+                      {/* × revokes the code server-side. It reddens on hover
+                          because it is the one control here that destroys
+                          something someone else may be about to use.
+                          Deliberately NOT .hdr-btn-dd: that class carries
+                          `:hover { border-color: … !important }` (index.html),
+                          which outranks an inline style and would quietly
+                          repaint the warning grey. */}
+                      <button onClick={handleCancelCode}
+                        onMouseEnter={() => setCancelHover(true)}
+                        onMouseLeave={() => setCancelHover(false)}
+                        title={t("header.io.code.cancel.title")}
+                        aria-label={t("header.io.code.cancel.title")}
+                        style={{ fontSize: 11, fontWeight: 700, cursor: "pointer", lineHeight: 1,
+                          background: "var(--bg-surface)", padding: "4px 10px", borderRadius: 5,
+                          border: `1px solid ${cancelHover ? "var(--red, #ef4444)" : "var(--border-2)"}`,
+                          color: cancelHover ? "var(--red, #ef4444)" : "var(--text-4)",
+                          transition: "border-color 0.15s, color 0.15s" }}>
+                        ×
+                      </button>
+                      {/* The clock, on its own full-width line. Muted, so it
+                          reads as a fact about the code rather than another
+                          control, and it reddens with the × so hovering the
+                          destructive button says plainly what is about to
+                          stop counting. */}
+                      <div style={{ gridColumn: "1 / -1", marginTop: -2, fontSize: 9, fontWeight: 600,
+                        textAlign: "center", fontVariantNumeric: "tabular-nums",
+                        color: cancelHover ? "var(--red, #ef4444)" : "var(--text-5)",
+                        transition: "color 0.15s" }}>
                         {mmss(shareCode.expiresAt - codeNow)}
-                      </span>
-                    )}
-                  </button>
+                      </div>
+                    </>
+                  )}
                   <input
                     value={claimInput}
                     onChange={e => { setShareCodeError(null); setClaimInput(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6)); }}
@@ -1370,7 +1565,18 @@ export default function Header() {
                       opacity: claimInput.length < 6 || claimBusy ? 0.5 : 1 }}>
                     {t("header.io.code.load")}
                   </button>
-                  {shareCodeError && (
+                  {/* Redeeming derives an AES key with 300k PBKDF2 rounds —
+                      up to a second on a phone, and a whole second of
+                      nothing is indistinguishable from a dead button. This
+                      line is the only feedback a QR arrival gets, since it
+                      never touches the entry field or its Load button. */}
+                  {claimBusy && (
+                    <div style={{ gridColumn: "1 / -1", fontSize: 9, fontWeight: 600,
+                      color: "var(--text-5)", textAlign: "center" }}>
+                      {t("header.io.code.loading")}
+                    </div>
+                  )}
+                  {shareCodeError && !claimBusy && (
                     <div style={{ gridColumn: "1 / -1", fontSize: 9, fontWeight: 600,
                       color: "var(--red, #ef4444)", textAlign: "center" }}>
                       {t(shareCodeError.key, shareCodeError.until
@@ -1418,6 +1624,16 @@ export default function Header() {
               </button>
               </HoverTip>
               </div>
+              {/* The QR closes the panel out, below every group, because it
+                  is the one thing here aimed at a second device rather than
+                  at this one. It exists only while a code does. */}
+              {shareRelayAvailable && shareCode && (
+                <QrShareBox url={buildCodeUrl(shareCode.code)}
+                  label={t("header.io.qr")}
+                  enlargeLabel={t("header.io.qr.enlarge")}
+                  scanLabel={t("header.io.qr.scan")}
+                  closeLabel={t("header.io.qr.close")} />
+              )}
             </div>
           )}
         </div>

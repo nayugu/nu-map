@@ -1,6 +1,7 @@
 // URL-based plan sharing via gzip + base64url (no external deps, uses browser CompressionStream).
 
 import { SHARE_KEYS, SHARE_KEYS_R, SHARE_INNER_KEYS } from './planSchema.js';
+import { CODE_ALPHABET, CODE_LENGTH } from './shareCrypto.js';
 
 async function _compress(str) {
   const bytes = new TextEncoder().encode(str);
@@ -138,4 +139,50 @@ export function getHashPlanParam() {
   const hash = window.location.hash;
   if (!hash.startsWith('#plan=')) return null;
   return hash.slice('#plan='.length);
+}
+
+// ── Share-by-code links (#c=) ──────────────────────────────────────
+// A snapshot link (#plan=) carries the whole plan and lives forever. A
+// code link carries only the six characters, so it inherits everything
+// the code already is: single use, ten minutes, cancellable, and opaque
+// to the relay (the code IS the decryption key — see shareCrypto.js).
+// This is what the QR encodes; nothing else is small enough to want to.
+
+// A QR is scanned by a DIFFERENT device, so window.location.origin is the
+// wrong anchor: on a preview build it is a pages.dev / github.io mirror and
+// the scan would 404. Production therefore anchors to the canonical origin
+// declared in index.html (https://numap.app).
+//
+// Dev is the deliberate exception. A dev app parks its code on the
+// localhost relay, and a link pointing at numap.app would ask the
+// PRODUCTION relay for a code it has never seen — an unclaimable QR that
+// looks like a bug in sharing rather than in the URL. So dev keeps its own
+// origin and stays scannable from a phone on the same network.
+function _shareOrigin() {
+  try {
+    if (import.meta.env?.DEV) return window.location.origin;
+  } catch { /* no import.meta (plain-Node tests) — fall through to canonical */ }
+  try {
+    const href = document.querySelector('link[rel="canonical"]')?.href;
+    if (href) return new URL(href).origin;
+  } catch { /* no DOM — fall through */ }
+  return window.location.origin;
+}
+
+export function buildCodeUrl(code) {
+  return `${_shareOrigin()}/#c=${code}`;
+}
+
+// Returns the code only if it is one this app could have produced. The
+// claim path runs a 300k-iteration PBKDF2 over whatever comes back, so
+// junk in the hash is rejected here rather than paid for in key
+// derivation. Case is normalised; the alphabet excludes 0/O/1/I/L, so a
+// hand-typed "l" is a miss, not a silent near-match.
+export function getHashCodeParam() {
+  const hash = window.location.hash;
+  if (!hash.startsWith('#c=')) return null;
+  const code = hash.slice('#c='.length).toUpperCase();
+  if (code.length !== CODE_LENGTH) return null;
+  for (const ch of code) if (!CODE_ALPHABET.includes(ch)) return null;
+  return code;
 }
