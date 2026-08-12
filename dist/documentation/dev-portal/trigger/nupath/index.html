@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/png" href="/northeastern/dev_logo.png"><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NUPath Attributes - NU Map Docs</title>
+  <link rel="stylesheet" href="../../../style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+</head>
+<body data-page="dev-portal/trigger/nupath">
+<div class="layout">
+  <nav class="sidebar">
+    <div class="sidebar-brand"><div class="brand-logo">N</div><div><div class="brand-name">Nu-Map Docs</div><div class="brand-sub">Developer Reference</div></div></div>
+    <div id="nav-tree"></div><hr class="nav-divider"><a id="nav-back" class="nav-back-link" href="#">← Back to Nu-Map</a>
+  </nav>
+  <main class="content">
+
+    <div class="breadcrumb">
+      <a href="../../../">nu-map/documentation</a><span class="sep"> / </span><a href="../../">dev-portal</a><span class="sep"> / </span><a href="../">Trigger tab</a><span class="sep"> / </span><strong>NUPath Attributes</strong>
+    </div>
+
+    <h1>NUPath Attributes <span class="badge blue">fetch-nupath.js</span></h1>
+    <p class="lead">Updates the <code>nuPath</code> field for every course in <code>all-courses.json</code> by pulling from the official NUPath source. Tableau is the authoritative Registrar dashboard; the catalog HTML scrape is the fallback. After writing, patches are re-applied automatically.</p>
+
+    <div class="node-box">
+      <div class="nb-group"><div class="nb-label">Script</div><div class="nb-value"><code>scripts/fetch-nupath.js</code></div></div>
+      <div class="nb-group"><div class="nb-label">Output</div><div class="nb-value"><code>public/northeastern/all-courses.json</code> (nuPath fields updated)</div></div>
+      <div class="nb-group"><div class="nb-label">Primary source</div><div class="nb-value">Tableau NUpath Attributes dashboard (<code>tableau.northeastern.edu</code>) — Registrar-maintained</div></div>
+      <div class="nb-group"><div class="nb-label">Fallback source</div><div class="nb-value"><code>catalog.northeastern.edu</code> HTML scrape (parallel, 6 concurrent workers)</div></div>
+    </div>
+
+    <h2>Two-source strategy</h2>
+    <div class="diagram-wrap">
+      <div class="mermaid">
+flowchart TD
+    A["fetch-nupath.js --write"] --> B{"Tableau\navailable?"}
+    B -->|Yes| C["Download Tableau CSV\n(tableau.northeastern.edu\n/Registrar/NUpathAttributes)"]
+    B -->|No, or --catalog flag| D["Scrape catalog.northeastern.edu\nall subjects in parallel\n(6 workers, 300 ms delay)"]
+    C --> E["Build nuPathMap: courseId → codes[]"]
+    D --> E
+    E --> F["Update nuPath for every course\nin all-courses.json"]
+    F --> G["Write all-courses.json"]
+    G --> H["Log nupath-auto-update entry\nto change-log.json"]
+      </div>
+    </div>
+
+    <p>Why Tableau? The Registrar's Tableau dashboard is the same source the catalog ultimately derives NUPath designations from. When the catalog HTML is inconsistent or has parsing artifacts, Tableau is more reliable. When Tableau is behind a login or temporarily unavailable, the catalog scrape produces equivalent results.</p>
+
+    <h2>Concurrency model (catalog fallback)</h2>
+    <p>The catalog fallback scrapes all subject pages in parallel using a concurrency pool. Default: 6 concurrent workers, 300 ms delay between each worker's requests. Override with <code>--concurrency 8</code> or <code>NUPATH_DELAY_MS=150</code>.</p>
+
+    <h2>After a write — patches</h2>
+    <p>This script updates <code>all-courses.json</code> directly, overwriting any previous nuPath values. <strong>Patches are not automatically re-applied by this script.</strong> After running <code>fetch-nupath.js --write</code>, run <code>npm run data:nupath:apply:write</code> to apply the nupath map to <code>catalog-courses.json</code>, then <code>npm run data:patch:write</code> to re-apply any manual corrections. The full flow:</p>
+    <pre><code>node scripts/fetch-nupath.js --write        <span class="cmt"># update nuPath in all-courses.json</span>
+npm run data:nupath:apply:write             <span class="cmt"># apply nupath-map.json → catalog-courses.json</span>
+npm run data:patch:write                    <span class="cmt"># re-apply manual patches on top</span></code></pre>
+
+    <p>When run via the Trigger tab's ⚡ Run locally button, the server runs the script as configured in <code>catalog-check-server.js</code> — check the ADAPTER_DEFS there to see exactly which flags are passed.</p>
+
+    <h2>Change log entry</h2>
+    <pre><code>{
+  "type": "nupath-auto-update",
+  "subject": "🤖 NUpath Auto-Update",
+  "timestamp": "2026-05-19T10:00:00.000Z",
+  "source": "Tableau",
+  "triggeredBy": "local",
+  "runId": null,
+  "stats": {
+    "scanned": 4800,
+    "changed": 12,
+    "cleared": 0,
+    "unchanged": 4788,
+    "gained": 8,
+    "lost": 4,
+    "gainedOnly": 6,
+    "lostOnly": 3,
+    "mixed": 3
+  }
+}</code></pre>
+    <p>When triggered by GitHub Actions, <code>triggeredBy</code> is the actor username and <code>runId</code> is the Actions run ID (links to the run from the Log tab).</p>
+
+    <h2>Usage</h2>
+    <pre><code>node scripts/fetch-nupath.js               <span class="cmt"># dry run — shows diff</span>
+node scripts/fetch-nupath.js --write        <span class="cmt"># write all-courses.json</span>
+node scripts/fetch-nupath.js --catalog      <span class="cmt"># force catalog strategy (skip Tableau)</span>
+node scripts/fetch-nupath.js --tableau      <span class="cmt"># force Tableau strategy (error if unavailable)</span>
+node scripts/fetch-nupath.js --concurrency 8  <span class="cmt"># more parallel workers (catalog mode)</span></code></pre>
+
+  </main>
+</div>
+<script src="../../../nav.js"></script>
+<script>mermaid.initialize({ startOnLoad: true, theme: 'neutral' });</script>
+</body>
+</html>
