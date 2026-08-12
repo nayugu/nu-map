@@ -115,6 +115,58 @@ export function emitPlan({
 
 const kindRank = (cell) => cell.kind === "named" ? 0 : cell.kind === "choice" ? 1 : 2;
 
+/**
+ * How a cell READS, as distinct from which requirement it is FOR.
+ *
+ * A reservation carries both strings and they do different jobs: `label` is what the
+ * card shows, `requirement.title` is what it matches against the requirements panel.
+ * Collapsing them into the section title made every card read like a catalog index —
+ * `Mathematics Electives` where the department writes `MATH elective`, and
+ * `Computer Science Required Courses` on a card four words wide.
+ *
+ * So the exact section title still travels, in `binding`, where matching happens and
+ * where being verbatim matters. The label is singularised, because a cell is ONE
+ * course and a plural title describes the whole requirement:
+ *
+ *   Mathematics Electives        -> Mathematics Elective
+ *   Khoury Approved Electives    -> Khoury Approved Elective
+ *   Supporting Courses           -> Supporting Course
+ *
+ * Nothing is dropped or reworded beyond that. A shortening rule clever enough to
+ * turn "Khoury Approved Electives" into the department's own "Khoury Elective" would
+ * be guessing at which words carry the meaning, and this file is not entitled to
+ * decide that a requirement's name has redundant parts.
+ */
+export function cellLabel(title) {
+  const s = String(title ?? "").trim();
+  if (!s) return "Elective";
+  // Only the LAST word, and only when it is a plural we recognise. Blind
+  // de-pluralisation mangles words that merely end in s ("Statistics", "Physics",
+  // "Studies"), which are subject names rather than counts.
+  return s.replace(/\b(Electives|Courses|Requirements|Options|Choices)$/i, (m) => ({
+    electives: "Elective", courses: "Course", requirements: "Requirement",
+    options: "Option", choices: "Choice",
+  })[m.toLowerCase()] ?? m);
+}
+
+/**
+ * `CS 4300 or 4100`, the way the catalog prints a choice within one subject.
+ *
+ * Repeating the subject is not wrong, just not how a plan reads. Only collapsed when
+ * every option is a single course in the SAME subject — `PSYC 3200 or PT 5410 and
+ * PT 5411` has to state both subjects and both halves.
+ */
+function choiceText(groups, courseMap) {
+  const singles = groups.every(g => g.length === 1 && courseMap[g[0]]);
+  const subjects = new Set(groups.flat().map(id => courseMap[id]?.subject));
+  if (singles && subjects.size === 1) {
+    const [first, ...rest] = groups.map(g => courseMap[g[0]]);
+    return `${first.subject} ${first.number}` +
+      rest.map(c => ` or ${c.number}`).join("");
+  }
+  return groups.map(g => g.map(id => spaced(id, courseMap)).join(" and ")).join(" or ");
+}
+
 /** One grid entry, in the catalog's own vocabulary. */
 function entryFor(plan, courseMap, reasons) {
   const cell = plan.cell;
@@ -130,7 +182,7 @@ function entryFor(plan, courseMap, reasons) {
   if (cell.kind === "choice" && cell.groups?.length) {
     return {
       ...base,
-      text: cell.groups.map(g => g.map(id => spaced(id, courseMap)).join(" and ")).join(" or "),
+      text: choiceText(cell.groups, courseMap),
       options: cell.groups.map(g => [...g]),
       // A choice cell carries its binding too. No published plan does — the
       // scraper only binds cells with no options — but generation KNOWS the
@@ -149,11 +201,11 @@ function entryFor(plan, courseMap, reasons) {
   // would arrive knowing nothing, and a cell drawing on six named colleges would
   // offer all 8,000 courses. Naming them keeps the precision the derivation had.
   const enumerated = cell.spec ? [...materialize(cell.spec, courseMap)].sort() : [];
+  const text = cellLabel(cell.title);
   if (enumerated.length && enumerated.length <= MAX_NAMED_OPTIONS) {
-    return { ...base, text: cell.title, options: enumerated.map(id => [id]), ...bindingFor(cell) };
+    return { ...base, text, options: enumerated.map(id => [id]), ...bindingFor(cell) };
   }
-
-  return { ...base, text: cell.title, options: [], ...bindingFor(cell) };
+  return { ...base, text, options: [], ...bindingFor(cell) };
 }
 
 /**

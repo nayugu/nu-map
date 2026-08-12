@@ -53,7 +53,7 @@
 
 import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
 import { witnessPlan } from "./witness.js";
-import { termCapacity, termSlotCap } from "./domains.js";
+import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
 import { precedenceViolations, chainHeight } from "./precedence.js";
 import { buildContention } from "./witness.js";
 
@@ -578,7 +578,7 @@ function fitsCapacity(assignment, plans, terms, cap) {
     const ti = assignment.get(p.cell.id);
     if (ti == null) continue;
     load[ti] += p.cell.sh ?? 0;
-    count[ti] += 1;
+    count[ti] += coursesInCell(p.cell);
   }
   // Both bounds, or a move the search refused would be reachable by the objective.
   return load.every((sh, ti) => sh <= cap[ti])

@@ -61,7 +61,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { witnessPlan, buildContention } from "./witness.js";
-import { termCapacity, termSlotCap } from "./domains.js";
+import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
 import { chainHeight } from "./precedence.js";
 import { cellLevelTarget, cellLevelFloor } from "./prereqDepth.js";
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
@@ -315,6 +315,14 @@ function attemptPlacement({
       return [...plan.domain].sort((a, b) =>
         (a < floor ? 1 : 0) - (b < floor ? 1 : 0) || a - b || fill(a) - fill(b));
     }
+    // A cell with no level at all is a general elective, and it wants the END.
+    //
+    // Measured against the departments' own plans, "emptiest term" was losing the
+    // argument this engine was built to win: CHART put 773 unnamed cells in the first
+    // 30% of the plan against their 583, mean position 0.576 against 0.601. Being
+    // placed last in the search ORDER is not the same as wanting the last TERM — the
+    // early terms are the emptiest once every specific course has claimed its slot,
+    // so load balance quietly walked the electives forward.
     const want = cellLevelTarget(plan, courseMap, studentType) ?? 1;
     return [...plan.domain].sort((a, b) =>
       Math.abs(a / span - want) - Math.abs(b / span - want) || fill(a) - fill(b) || a - b);
@@ -372,7 +380,7 @@ function attemptPlacement({
       if (loadSH[ti] + (cell.sh ?? 0) > cap[ti]) continue;
       // Eleven courses in one term fits inside 19 credits and is not a plan anyone
       // would follow. Bounded by the worst any published plan does.
-      if (countIn[ti] + 1 > slotCap[ti]) continue;
+      if (countIn[ti] + coursesInCell(cell) > slotCap[ti]) continue;
       // Precedence, forward-checked against what is already placed. This is what
       // turns discovering the prereq order from 20,000 nodes of backtracking into
       // a few dozen: the witness would catch a violation eventually, but only
@@ -381,7 +389,7 @@ function attemptPlacement({
 
       termOf.set(cell.id, ti);
       loadSH[ti] += cell.sh ?? 0;
-      countIn[ti] += 1;
+      countIn[ti] += coursesInCell(cell);
 
       // Propagate `alldifferent` over what is placed so far, plus named-course
       // prereq order. Sound on a partial assignment: candidate prereqs are
@@ -398,7 +406,7 @@ function attemptPlacement({
 
       termOf.delete(cell.id);
       loadSH[ti] -= cell.sh ?? 0;
-      countIn[ti] -= 1;
+      countIn[ti] -= coursesInCell(cell);
     }
     return false;
   }

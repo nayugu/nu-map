@@ -93,6 +93,17 @@ export const SLOT_CAP_HALF = 5;
 export const termSlotCap = (term) => ((term?.weight ?? 1) >= 1 ? SLOT_CAP_FULL : SLOT_CAP_HALF);
 
 /**
+ * How many COURSES one term may hold, which is not the same as how many cells.
+ *
+ * A cell can name several courses — `CHEM 1211 and CHEM 1212 and CHEM 1213` is one
+ * cell and three registrations — so a 9-cell cap still permitted an 11-course term
+ * where the worst published plan has 9. The student registers for courses, so the
+ * bound belongs on courses.
+ */
+export const coursesInCell = (cell) =>
+  cell?.groups?.length ? Math.max(...cell.groups.map(g => g.length)) : 1;
+
+/**
  * Materialise a cell's candidate courses, or null when it admits any.
  *
  * The distinction is the one `candidates.js` already draws and that the whole
