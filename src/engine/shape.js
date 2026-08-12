@@ -90,7 +90,11 @@ const DEFAULT_SEM_TYPES = [
 export function shapeFromPlan(plan) {
   const terms = [];
   (plan?.years ?? []).forEach((year, yearIndex) => {
-    for (const term of year.terms ?? []) {
+    // A hole in the array, or a term that is not an object. No shipped plan has one,
+    // and a crash here would refuse the whole program over a single bad row — the
+    // same reasoning as the guards in `allocateNode`.
+    for (const term of (year?.terms ?? [])) {
+      if (!term || typeof term !== "object") continue;
       const entries = flatten(term.entries);
       const coopCells = entries.filter(e => e.coop).length;
       // A heading, a vacation row and an `either` wrapper are labels, not work.

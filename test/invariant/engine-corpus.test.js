@@ -263,10 +263,15 @@ test("corpus › a cell's named options really can answer its requirement", () =
         const targets = (e.binding?.targets ?? []).filter(x => typeof x === "number");
         if (targets.length !== 1 || !e.options?.length) continue;
         const spec = specForNode(sections[targets[0]]);
+        // A corequisite partner is in the group because the registrar requires it in
+        // the same term, not because the requirement named it. The binding is a claim
+        // about the CELL, and the cell answers its section through the course that
+        // came from it — so the partner is excluded rather than the check weakened.
+        const registrar = new Set(e.coreqAdded ?? []);
         for (const group of e.options) {
           for (const id of group) {
             const c = courseMap[id];
-            if (!c) continue;
+            if (!c || registrar.has(id)) continue;
             if (!courseEligible(c, spec)) {
               bad.push(`${p.key}: ${id} offered for §${targets[0]} "${sections[targets[0]].title}", which does not admit it`);
             }

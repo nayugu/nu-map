@@ -165,6 +165,11 @@ export function generatePlan({
       cells: cells.length,
       cellsSH: cellsSH(cells),
       totalCreditsRequired: program?.totalCreditsRequired ?? null,
+      // How many academic years the plan spans. A CALLER CONTRACT, not decoration:
+      // `applySamplePlan` silently drops a year it has no semester for, so a five-year
+      // grid loses a six-year plan's last year and reports `outside-timeline`. PharmD
+      // is six years. Whoever calls CHART must supply a grid at least this long.
+      years: shape.terms.length ? Math.max(...shape.terms.map(t => t.yearIndex)) + 1 : 0,
       studyTerms: terms.length,
       workTerms: shape.terms.filter(t => t.work).length,
       unusedTerms: shape.terms.filter(t => t.unused).length,

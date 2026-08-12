@@ -185,8 +185,22 @@ function entryFor(plan, courseMap, reasons) {
 
   if (cell.kind === "named" && cell.groups?.[0]) {
     // The catalog writes a co-requisite pair as one cell: "CS 1800 and CS 1802".
-    return { ...base, text: cell.groups[0].map(id => spaced(id, courseMap)).join(" and "),
-             options: [cell.groups[0]] };
+    //
+    // The binding travels here too, even though a named cell becomes a course
+    // placement rather than a reservation and `applySamplePlan` will not read it.
+    // Split credit is the reason: `GE 1501` answers three sections at once, and that
+    // is exactly the fact a reader of the plan needs and cannot recover from the
+    // grid. Omitting it discarded `alsoAnswers` for every merged cell.
+    return {
+      ...base,
+      text: cell.groups[0].map(id => spaced(id, courseMap)).join(" and "),
+      options: [cell.groups[0]],
+      ...bindingFor(cell),
+      // Which members of the group are here for the registrar rather than for the
+      // requirement. Without this the binding reads as a claim that every course in
+      // the group answers the section, which for a corequisite partner is false.
+      ...(cell.coreqAdded?.length ? { coreqAdded: [...cell.coreqAdded] } : {}),
+    };
   }
 
   if (cell.kind === "choice" && cell.groups?.length) {

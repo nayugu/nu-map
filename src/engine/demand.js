@@ -529,6 +529,14 @@ function withCoreqPartners(cells, notes, courseMap) {
     const extra = add.reduce((n, id) => n + (courseMap[id]?.sh ?? 0), 0);
     cell.groups = [[...cell.groups[0], ...add]];
     cell.sh = (cell.sh ?? 0) + extra;
+    // Recorded ON THE CELL, not only in the notes.
+    //
+    // A partner is in the group because the REGISTRAR requires it in the same term,
+    // not because the requirement asked for it — `CHEM 2313` is nowhere in the
+    // section that names `CHEM 2311`. So the cell's binding is a true claim about the
+    // CELL and a false one about that course, and anything checking "can these
+    // options answer this requirement" has to be able to tell the two apart.
+    cell.coreqAdded = [...(cell.coreqAdded ?? []), ...add];
     notes.push({ kind: "coreq-added", cell: cell.id, added: add, addedSH: extra });
   }
   return cells;
