@@ -523,10 +523,19 @@ export function placeCells({
   if (f?.cell != null && f.kind && f.kind !== "search-budget-exhausted") {
     return {
       ok: false, nodes: totalNodes, restarts: maxRestarts,
+      // Whether the SPACE ran out or the ALLOWANCE did. Measured, 37 of 71 search refusals
+      // end early — several inside 200 ms of a 5,000 ms clock — and reporting all of them as
+      // "budget exhausted" is what pointed the next round of work at search strength for
+      // programs the search had already settled. The two need different answers: one wants a
+      // better search, the other wants a different shape or a correction to the catalog.
+      exhaustedSpace: last?.exhaustedSpace ?? false,
       failure: { ...f, detail: describe(f), exhausted: true },
     };
   }
-  return { ...last, nodes: totalNodes, restarts: maxRestarts };
+  return {
+    ...last, nodes: totalNodes, restarts: maxRestarts,
+    exhaustedSpace: last?.exhaustedSpace ?? false,
+  };
 }
 
 function attemptPlacement({
@@ -595,6 +604,8 @@ function attemptPlacement({
   const reqCount = (ti, cell) => reqIn[ti].get(reqKey(cell)) ?? 0;
   let nodes = 0;
   let worstFailure = null;
+  // Reporting only — never fed to nogood learning. See the `block` calls in `step`.
+  let blockedBy = null;
 
   // How many cells each course could answer. Computed once over the BOUNDED cells
   // only — an unbounded cell admits everything, so counting it would flatten the
@@ -1351,20 +1362,39 @@ function attemptPlacement({
     }
 
     for (const ti of termPreference(plan)) {
+      // ── A branch cut here used to leave NO trace, and that is a reporting hole ──
+      //
+      // These five rejections are the cheap ones, and none of them recorded anything. A
+      // program every one of whose branches dies on the credit cap therefore reached the end
+      // of the ladder with `worstFailure` still null and was reported as
+      // `search-budget-exhausted` — a statement about the search, for a program the search
+      // had actually settled. Measured: 37 of 71 search refusals end EARLY, several in under
+      // 200 ms against a 5,000 ms clock, and calling those "out of budget" is what sent the
+      // next round of work at search strength instead of at the real obstruction.
+      // (precedence.js already recorded the same complaint: "Bioengineering failed after
+      // 20,000 nodes with NOTHING to report".)
+      //
+      // Kept in a SEPARATE variable from `worstFailure` on purpose. `worstFailure` feeds
+      // nogood learning, which rewrites domains between restarts, so adding sources to it
+      // would change which nogoods are learned and could re-sequence a program that restarts.
+      // This one is consulted only when nothing better is known, and only for the message.
+      const block = (kind) => { blockedBy = { kind, cell: cell.id, title: cell.title, term: ti }; };
       // Term credit envelope — the registration cap, which is hard.
-      if (loadSH[ti] + (cell.sh ?? 0) > cap[ti]) continue;
+      if (loadSH[ti] + (cell.sh ?? 0) > cap[ti]) { block("term-at-credit-cap"); continue; }
       // Eleven courses in one term fits inside 19 credits and is not a plan anyone
       // would follow. Bounded by the worst any published plan does.
-      if (countIn[ti] + coursesInCell(cell) > slotCap[ti]) continue;
-      if (reqCount(ti, cell) + 1 > sameReqMax) continue;
+      if (countIn[ti] + coursesInCell(cell) > slotCap[ti]) { block("term-at-slot-cap"); continue; }
+      if (reqCount(ti, cell) + 1 > sameReqMax) { block("too-many-of-one-requirement"); continue; }
       // The derived per-term ceiling on real courses. See `bigCap`: where the arithmetic
       // is exactly tight this forbids the five-in-a-term branches that are provably dead.
-      if (enforceCardinality && bigCell(plan) && bigIn[ti] + 1 > bigCap[ti]) continue;
+      if (enforceCardinality && bigCell(plan) && bigIn[ti] + 1 > bigCap[ti]) {
+        block("term-at-its-course-ceiling"); continue;
+      }
       // Precedence, forward-checked against what is already placed. This is what
       // turns discovering the prereq order from 20,000 nodes of backtracking into
       // a few dozen: the witness would catch a violation eventually, but only
       // after the whole plan was built on top of it.
-      if (violatesPrecedence(cell.id, ti)) continue;
+      if (violatesPrecedence(cell.id, ti)) { block("prereq-order-with-what-is-placed"); continue; }
 
       place(cell, ti);
 
@@ -1416,9 +1446,22 @@ function attemptPlacement({
       },
     };
   }
+  // ── The search EXHAUSTED THE SPACE, which is a different sentence ──
+  //
+  // Reaching here means `step` returned false rather than "budget" or "time": every branch was
+  // explored and none led to a plan. That is a fact about the degree under these constraints,
+  // not about our allowance, and it is worth marking as such — `exhaustedSpace` lets the
+  // caller stop spending the rest of the budget on rungs that cannot help.
+  //
+  // `blockedBy` is the fallback message. Before it existed, a program whose every branch died
+  // on the credit cap or the slot cap arrived here with `worstFailure` null and got
+  // "no legal placement exists", which names nothing.
   return {
-    ok: false, nodes,
-    failure: worstFailure ?? { kind: "infeasible", detail: "no legal placement exists" },
+    ok: false, nodes, exhaustedSpace: true,
+    failure: worstFailure
+      ?? (blockedBy
+        ? { ...blockedBy, detail: describe(blockedBy) }
+        : { kind: "infeasible", detail: "no legal placement exists" }),
   };
 }
 
@@ -1438,6 +1481,25 @@ export function describe(f) {
   if (f.kind === "chain-has-no-room-left") {
     return `placing "${f.title}" there leaves a prerequisite chain with no room in the terms `
       + `that remain`;
+  }
+  // The cheap rejections. Each names the wall the last branch died on, which is the only
+  // thing known about a program whose every branch died the same way.
+  if (f.kind === "term-at-credit-cap") {
+    return `every term that could hold "${f.title}" is already at its credit cap`;
+  }
+  if (f.kind === "term-at-slot-cap") {
+    return `every term that could hold "${f.title}" already holds as many courses as any `
+      + `published plan does`;
+  }
+  if (f.kind === "too-many-of-one-requirement") {
+    return `"${f.title}" would be the third or fourth cell of one requirement in the same term`;
+  }
+  if (f.kind === "term-at-its-course-ceiling") {
+    return `"${f.title}" cannot go anywhere without leaving some other full term short of `
+      + `four courses`;
+  }
+  if (f.kind === "prereq-order-with-what-is-placed") {
+    return `"${f.title}" cannot sit in any term that agrees with the courses already placed`;
   }
   return f.detail ?? "no legal placement exists";
 }

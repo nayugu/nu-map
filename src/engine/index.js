@@ -336,7 +336,14 @@ export function generatePlan({
         detail: tight.length
           ? `${tight[0].label} must hold ${tight[0].forcedSH} credits but allows ${tight[0].cap}.`
           : (placed.failure.detail ?? describe(placed.failure)),
-        data: { ...placed.failure, tightestTerms: tight.slice(0, 3) },
+        // `nodes` and `exhaustedSpace` make the refusal classifiable without re-running it:
+        // a shape that stops after 400 nodes with the space exhausted is a different problem
+        // from one that spends 20,000 and gives up, and the reason string alone conflated them.
+        data: {
+          ...placed.failure, tightestTerms: tight.slice(0, 3),
+          nodes: placed.nodes, restarts: placed.restarts,
+          exhaustedSpace: placed.exhaustedSpace ?? false,
+        },
       },
     };
   }
