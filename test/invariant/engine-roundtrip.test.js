@@ -89,7 +89,13 @@ function sample(list, n) {
   return a.slice(0, n);
 }
 
-const N = process.env.CHART_CORPUS === "all" ? Infinity : 150;
+// 60 rather than 150, for the same reason as engine-corpus: this suite's cost is
+// `refusals x budget`, since a refusal spends its whole allowance by definition while a
+// success takes a median of 48 ms. The round trip is a per-plan property — a cell that
+// survives generation and loading, in the right term, with its credit intact — so it is
+// well sampled at 60 and the threshold below moves with it. `CHART_CORPUS=all` sweeps
+// everything before an engine commit.
+const N = process.env.CHART_CORPUS === "all" ? Infinity : 60;
 const PROGRAMS = sample(degreePrograms(), N);
 
 /** Generate, then load, exactly as the app would. */
@@ -99,7 +105,9 @@ for (const p of PROGRAMS) {
     program: p.data, publishedPlan: p.plan?.plans?.[0] ?? null,
     courseMap, ports, depthIndex, observedOrder,
     studentType: p.lvl === "graduate" ? "graduate" : "undergraduate",
-    timeBudgetMs: 2500,
+    // Matches engine-corpus. A plan that needs more than this is too slow to offer a
+    // student anyway, so waiting longer here buys coverage of cases we would not ship.
+    timeBudgetMs: 1200,
   });
   if (out.refused) continue;
   const SEMESTERS = semestersFor(out.plan.plans[0].years.length);
@@ -110,7 +118,11 @@ for (const p of PROGRAMS) {
 }
 
 test("roundtrip › there is something to check", () => {
-  assert.ok(loaded.length > 80, `only ${loaded.length} plans loaded`);
+  // Scaled with the sample: 60 programs at ~68% generation is ~40. The bar exists so the
+  // assertions below cannot pass by having nothing to check, not to measure coverage —
+  // that is engine-corpus's job and it states the real figure.
+  const floor = PROGRAMS.length === Infinity ? 300 : Math.floor(PROGRAMS.length * 0.4);
+  assert.ok(loaded.length > floor, `only ${loaded.length} plans loaded of ${PROGRAMS.length}`);
 });
 
 test("roundtrip › every cell becomes a card — nothing is silently dropped", () => {

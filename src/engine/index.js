@@ -83,6 +83,7 @@ export function generatePlan({
   studentType = "undergraduate", preferences = DEFAULT_PREFERENCES,
   depthIndex = null, repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, observedOrder = [], coopPrep = [],
+  now = () => Date.now(),
 } = {}) {
   const prepSet = new Set(coopPrep);
   const ports = withDefaults(rawPorts);
@@ -188,6 +189,11 @@ export function generatePlan({
   const placed = placeCells({
     plans, terms, ports, studentType, courseMap, repeatable, nodeBudget, timeBudgetMs,
     precedence, shape,
+    // Injectable so DETERMINISM can be tested as the property it is, rather than as a race
+    // against the machine. With a frozen clock the search is bounded by nodes alone and the
+    // same input must give the same plan; with the real clock a slow run can only ever
+    // convert an answer into a refusal, never into a different answer.
+    now,
   });
   if (!placed.ok) {
     // Name a term where the shape itself cannot hold what only it can hold. The

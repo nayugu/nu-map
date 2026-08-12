@@ -186,6 +186,51 @@ export function applySamplePlan(plan, {
   }
   notes.push(...coreqNotes);
 
+  // ── A cycle is indivisible: displaced co-ops come out first ──────
+  //
+  // Applying a plan used to add its courses and leave every existing co-op exactly
+  // where it was. That is right for a co-op the plan ALSO wants there, and wrong for one
+  // sitting in a term the plan needs for study — the term ends up being a work term and
+  // holding courses at the same time, and the courses have nowhere to be.
+  //
+  // It is what makes switching cycles look like nothing happened. "Four Years, Two Co-ops
+  // in Spring/Summer First" and "…in Summer Second Half" differ ONLY in which terms are
+  // work terms; load the second over the first and every one of its study terms is still
+  // blocked by the first's co-ops, so the courses cannot land and the grid barely moves.
+  //
+  // A published cycle is a coherent whole — you cannot take half of it — so a co-op the
+  // new plan contradicts is removed and reported. The student's own work is still
+  // protected everywhere it does not conflict: a co-op in a term this plan also leaves for
+  // work is kept, which is the `coop-kept` case below.
+  // Term order, shared with the run-merging below: one map, so the two cannot disagree
+  // about which terms are adjacent.
+  const order = new Map((semesters ?? []).map((s, i) => [s.id, i]));
+
+  const studySemIds = new Set(
+    Object.values(nextPlacements).concat(
+      Object.values(nextReservations).map(r => r?.semId)).filter(Boolean));
+  for (const sem of coopCells) studySemIds.delete(sem.id);
+
+  // Judged by the co-op's START term, and only that.
+  //
+  // The first version re-derived the whole span from the stored duration — a co-op records
+  // only where it begins and how many months it runs — and walked forward accumulating term
+  // weights. That broke IDEMPOTENCE on 9 plans: the re-derived span could include a term
+  // the plan legitimately uses for courses, so re-applying a plan displaced the very co-op
+  // its own first application had created. The derivation and the run-merging below
+  // disagreed about which terms a block covers, and the derivation is the guess.
+  //
+  // The start term needs no guessing and is exactly the case that matters: switching
+  // cycles moves where co-ops BEGIN. A co-op whose start term this plan wants for study is
+  // unambiguously contradicted; anything subtler is left alone, and a term that ends up
+  // both working and studying is reported by the planner's own checks rather than
+  // guessed at here.
+  for (const [id, d] of Object.entries(nextSpecial)) {
+    if (!d?.semId || !studySemIds.has(d.semId)) continue;
+    delete nextSpecial[id];
+    notes.push({ kind: "coop-displaced", semId: d.semId });
+  }
+
   // ── Co-ops are runs, not cells ───────────────────────────────────
   //
   // The catalog writes a six-month co-op as TWO cells — Spring "Co-op" and
@@ -194,7 +239,6 @@ export function applySamplePlan(plan, {
   // requires. So consecutive co-op terms merge into one block, and its length
   // comes from the terms it spans: a full term is four months, a summer half
   // is two, so Spring + Summer 1 is the six-month co-op it actually is.
-  const order = new Map((semesters ?? []).map((s, i) => [s.id, i]));
   coopCells.sort((a, b) => order.get(a.id) - order.get(b.id));
 
   let run = [];
@@ -211,8 +255,12 @@ export function applySamplePlan(plan, {
     // An existing co-op anywhere in the run means the student already planned
     // this stretch; leave every part of it alone. Applying a plan must not
     // overwrite a decision already made.
+    // Read from `nextSpecial`, not the incoming `specialTermPl`: a co-op displaced above
+    // is gone, and consulting the original would have it still "occupying" the run and
+    // silently suppress the co-op this plan is asking for — leaving the student with
+    // neither the old block nor the new one.
     const occupied = run.some(s =>
-      Object.values(specialTermPl).some(d => d?.semId === s.id));
+      Object.values(nextSpecial).some(d => d?.semId === s.id));
     if (occupied) {
       notes.push({ kind: "coop-kept", semId: start.id });
     } else {

@@ -169,6 +169,27 @@ export const DEFAULT_NODE_BUDGET = 20000;
 export const DEFAULT_TIME_BUDGET_MS = 5000;
 
 /**
+ * Nodes the STRICT tier may spend before the four-course bound is relaxed.
+ *
+ * Sized against BOTH bounds, because it has to satisfy two things at once.
+ *
+ * Against nodes: a program that generates uses a median of 19 and a p90 of 36, so 1,200 is
+ * ~33x the headroom a real plan needs, and it allows four restarts at the 300-node slice —
+ * enough for nogood learning, which measurably rescued 46 programs.
+ *
+ * Against the clock: a node costs roughly 0.4 ms, since each one runs a matching. That is
+ * what killed the two earlier values. 60% of the node budget (12,000) and then 3,000 both
+ * consumed the ENTIRE shared wall clock before the fallback tier was reached, so the tier
+ * that exists to protect coverage never ran — and once the clock became a refusal rather
+ * than a tier switch, generation fell to 48%. 1,200 nodes is ~480 ms, which leaves the
+ * majority of even a 1,200 ms budget to the fallback.
+ *
+ * The general shape: the strict tier must be bounded so it cannot spend the budget it
+ * shares with the tier behind it.
+ */
+export const STRICT_TIER_NODES = 1200;
+
+/**
  * @typedef {Object} Assignment
  * @property {Map<string, number>} termOf   cell id → study-term index
  * @property {number} nodes
@@ -234,7 +255,30 @@ export function placeCells({
   // fallback. 60/40 rather than 50/50 because the strict pass is the one expected to
   // succeed — a program that generates at all uses a median of 19 nodes — and the fallback
   // is a single attempt with no restarts to pay for.
-  const strictDeadline = now() + Math.floor(timeBudgetMs * 0.6);
+  // ── The tier boundary is in NODES, because wall clock is not reproducible ──
+  //
+  // This reserved the fallback's share as a fraction of the TIME budget, and that made
+  // generation non-deterministic — a defect this engine had already been through once, for
+  // the same reason, in the objective's improve loop.
+  //
+  // Which tier answers decides the plan: the strict tier enforces four courses in every
+  // full term and the relaxed one does not, so they return DIFFERENT plans. Gate that on a
+  // clock and the answer depends on machine load — `business_administration_and_public_
+  // health_bs` duly differed between two runs in the same process. A plan that changes
+  // run to run also makes the diff review the monthly data workflows rely on into noise.
+  //
+  // Nodes are a property of the search, so the boundary is now 60% of the NODE budget. The
+  // wall clock survives as an outer guard only, and when it fires the answer is a refusal
+  // rather than a quietly different plan: deterministic, or honest about having given up.
+  // 60% of the node budget was too much: at 20,000 nodes the strict tier gets 12,000, each
+  // node runs a matching, and it spent the entire WALL CLOCK before the fallback tier was
+  // reached — so coverage fell instead of recovering. The clock is shared; the point of
+  // reserving anything is that the fallback actually runs.
+  //
+  // 3,000 is sized off the measurement instead of a fraction: a program that generates uses
+  // a median of 19 nodes and a p90 of 36, so this is roughly eighty times the headroom a
+  // real plan needs, and anything past it is the same wall being hit repeatedly.
+  const strictNodes = Math.max(1, Math.min(STRICT_TIER_NODES, nodeBudget));
   // Domains are narrowed across restarts, so the originals are left untouched for
   // the caller (the objective phase moves cells within them).
   const working = plans.map(p => ({ ...p, domain: [...p.domain] }));
@@ -252,19 +296,46 @@ export function placeCells({
   // hundred is already ten times the headroom a real plan needs. Past that it is the
   // same wall being hit repeatedly, and the useful move is to learn and start again.
   let perAttempt = Math.max(64, Math.min(nodeBudget, 300));
-  const slice = Math.max(200, Math.floor(timeBudgetMs / 8));
 
   for (let attempt = 0; attempt <= maxRestarts; attempt++) {
     const r = attemptPlacement({
       plans: working, terms, ports, studentType, courseMap, repeatable,
-      nodeBudget: perAttempt, precedence, now, shape,
-      deadline: Math.min(strictDeadline, now() + slice),
+      nodeBudget: Math.min(perAttempt, Math.max(1, strictNodes - totalNodes)),
+      precedence, now, shape,
+      // The GLOBAL deadline only. Each attempt used to get a time slice as well, and that
+      // was the last source of non-determinism: how many nodes an attempt explored depended
+      // on machine load, so `business_administration_and_public_health_bs` returned
+      // different plans on two runs in the same process. Attempts are bounded by nodes,
+      // which is a property of the search; the clock is the outer guard and firing it means
+      // refusing, not answering differently.
+      deadline,
     });
     totalNodes += r.nodes;
     if (r.ok) return { ...r, nodes: totalNodes, restarts: attempt };
     last = r;
 
-    if (now() > strictDeadline) break;
+    // Node-bounded, so the same input always reaches the fallback at the same point.
+    if (totalNodes >= strictNodes) break;
+
+    // ── A clock may cost you an answer; it must not change which answer ──
+    //
+    // Breaking here on time fell through to the relaxed tier, and the two tiers return
+    // DIFFERENT plans — the strict one holds four courses in every full term and the
+    // relaxed one does not. So a slow machine silently produced the other plan, which is
+    // what `business_administration_and_public_health_bs` was doing: same input, two
+    // outputs, decided by load.
+    //
+    // On the clock we now refuse outright. The set of possible outputs for one input is
+    // then {strict plan, relaxed plan, refusal}, and only the first two are ever REACHED
+    // BY THE SEARCH — the third is the clock giving up. A refusal under load is a cost;
+    // a different plan under load is a correctness failure, and the diff review the
+    // monthly workflows depend on cannot tell the two apart.
+    if (now() > deadline) {
+      return {
+        ok: false, nodes: totalNodes, restarts: attempt,
+        failure: { kind: "search-budget-exhausted", detail: describe({ kind: "search-budget-exhausted" }) },
+      };
+    }
 
     // Only a failure that names a cell AND a term can become a nogood.
     const f = r.failure?.lastObstruction ?? r.failure;
@@ -312,10 +383,13 @@ export function placeCells({
   // And it keeps refusal honest. A refusal now means the relaxed problem is infeasible,
   // not that a stricter search ran out of time, which is the difference between a fact
   // about the degree and a fact about my search.
-  if (now() <= deadline) {
+  // Reached whenever the strict tiers are done, on nodes rather than on time, so the same
+  // input always gets the same fallback attempt with the same allowance.
+  {
     const r = attemptPlacement({
       plans: working, terms, ports, studentType, courseMap, repeatable,
-      nodeBudget, precedence, now, shape, deadline,
+      nodeBudget: Math.max(1, nodeBudget - totalNodes),
+      precedence, now, shape, deadline,
       enforceCardinality: false,
     });
     totalNodes += r.nodes;
