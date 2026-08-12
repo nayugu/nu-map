@@ -178,13 +178,42 @@ test("witness › unknown offering is PERMISSION, not refusal", () => {
   assert.equal(r.ok, true);
 });
 
-test("witness › only an explicit zero blocks a season", () => {
+// The season bar is now ONE decision, made by the `offered` port and not re-derived
+// here from a probability.
+//
+// It used to be `offeringProbability(...) !== 0` — a course was barred only from a
+// season it had never once run in. The APP flags a course offered in half or fewer of
+// the recorded instances of a season, so the two layers disagreed, and CHART emitted
+// plans the app itself marked `offered?`: `CS 3800`, recorded in Summer B once in four
+// years, was placed in a Summer B. This test asserted the weaker rule, so it passed
+// throughout.
+//
+// The judgement moved into the port (`enginePorts.offered` → `effectiveOffered`, the
+// app's own), which is the only way the two cannot drift. What the witness owes is that
+// it asks, and abides by the answer.
+test("witness › the season bar is exactly what the `offered` port says", () => {
   const cm = mapOf(course("A100"));
   const never = run([open("o", 0)], { o: ["A100"] }, cm,
-    { offeringProbability: (id, s) => (s === "fall" ? 0 : 1) });
-  assert.equal(never.ok, false);
-  const rare = run([open("o", 0)], { o: ["A100"] }, cm, { offeringProbability: () => 0.01 });
+    { offered: (id, s) => s !== "fall" });
+  assert.equal(never.ok, false, "a term the port calls unoffered must not be used");
+
+  const fine = run([open("o", 0)], { o: ["A100"] }, cm, { offered: () => true });
+  assert.equal(fine.ok, true);
+});
+
+test("witness › the raw probability does not decide legality", () => {
+  // A 1% chance and a 99% chance are the same LEGAL answer; the difference is the
+  // robustness objective's business. Passing a probability alone must not bar a term,
+  // or the old weaker rule would be back by a side door.
+  const cm = mapOf(course("A100"));
+  const rare = run([open("o", 0)], { o: ["A100"] }, cm,
+    { offeringProbability: () => 0.01, offered: () => true });
   assert.equal(rare.ok, true, "a low probability is a risk, not an illegality");
+
+  const zeroProbButOffered = run([open("o", 0)], { o: ["A100"] }, cm,
+    { offeringProbability: () => 0, offered: () => true });
+  assert.equal(zeroProbButOffered.ok, true,
+    "the witness must consult `offered`, never re-derive it from the probability");
 });
 
 test("witness › the season bar is NEVER relaxed", () => {
@@ -200,7 +229,7 @@ test("witness › the season bar is NEVER relaxed", () => {
   // smaller liberty than overriding "this course has never run in the spring".
   const cm = mapOf(course("A100"));
   const cells = [{ ...open("o", 0), availabilityRelaxed: true }];
-  const r = run(cells, { o: ["A100"] }, cm, { offeringProbability: () => 0 });
+  const r = run(cells, { o: ["A100"] }, cm, { offered: () => false });
   assert.equal(r.ok, false, "a stale relaxation flag must not reopen the hatch");
   assert.equal(r.failure.kind, "no-candidate");
 });

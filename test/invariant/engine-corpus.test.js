@@ -79,14 +79,38 @@ const ALL = degreePrograms();
 const N = process.env.CHART_CORPUS === "all" ? ALL.length : 200;
 const PROGRAMS = sample(ALL, N);
 
-const generate = (p) => generatePlan({
-  program: p.data, publishedPlan: p.plan?.plans?.[0] ?? null,
+const generate = (p, variant) => generatePlan({
+  program: p.data, publishedPlan: variant ?? null,
   courseMap, ports, depthIndex,
   studentType: p.lvl === "graduate" ? "graduate" : "undergraduate",
   timeBudgetMs: 3000,
 });
 
-const results = PROGRAMS.map(p => ({ p, out: generate(p) }));
+// ── EVERY published variant, not just the first ────────────────────
+//
+// This tested `plans[0]` only, and that single choice hid a whole class of defect for
+// as long as the engine existed. Programs publish ~1.8 variants — "Four Years, Two
+// Co-ops" alongside a five-year, three-co-op pattern — and CHART inherits its SHAPE from
+// whichever one the student picks. So roughly half the shapes it is asked to fill were
+// never exercised here.
+//
+// What was hiding in the untested half: both five-year Industrial Engineering and
+// Computer Science variants broke the four-courses-per-full-term rule, and failed the
+// first time they were ever measured, while all four-year variants of the same program
+// passed. A shape with more summers behaves differently from one with fewer, and nothing
+// about testing the first variant tells you anything about the second.
+// Each result carries the VARIANT it was generated from, so a test that re-generates
+// feeds the same input. Dropping it made the determinism check compare a plan built on a
+// published shape against one built on a derived skeleton and call the engine
+// non-deterministic — a false alarm produced by the harness, not the engine.
+const results = PROGRAMS.flatMap((p) => {
+  const variants = p.plan?.plans?.length ? p.plan.plans : [null];
+  return variants.map((v, vi) => ({
+    p: { ...p, key: variants.length > 1 ? `${p.key}#${vi}` : p.key },
+    variant: v,
+    out: generate(p, v),
+  }));
+});
 const made = results.filter(r => !r.out.refused);
 
 test("corpus › the engine has programs to work with", () => {
@@ -96,15 +120,33 @@ test("corpus › the engine has programs to work with", () => {
 test("corpus › nothing throws", () => {
   // `generate` already ran; reaching here means none of them threw. Asserted
   // explicitly so the reason this suite exists is visible.
-  assert.equal(results.length, PROGRAMS.length);
+  //
+  // One result per (program, variant), so this is >= the program count — a program
+  // publishing four patterns contributes four. Comparing against `PROGRAMS.length` read as
+  // a throw when the only thing that had changed was the arity.
+  assert.ok(results.length >= PROGRAMS.length,
+    `${results.length} results from ${PROGRAMS.length} programs`);
 });
 
 test("corpus › the generated share does not regress", () => {
   const share = made.length / results.length;
-  // Measured 78% on a shuffled 150. The floor is deliberately below that: this
-  // guards against a change that starts refusing everything, which every other
-  // assertion here would read as success.
-  assert.ok(share >= 0.70,
+  // Measured 63.2% over all published variants of a shuffled 200 programs — 277 shapes.
+  //
+  // The floor was 0.70, measured when this suite generated only `plans[0]`. That is a
+  // different and easier population: a program's first variant is the pattern the
+  // department leads with, and the alternates include the five-year, three-co-op shapes
+  // that are harder to fill. So the old number is not comparable, and lowering the floor
+  // here is a change of POPULATION, not a relaxation of the bar — it is measured against
+  // strictly more shapes than before, including ones never tested.
+  //
+  // Two real costs are also inside this number and are recorded rather than hidden: the
+  // availability rule now matches the app's (`offered`, not `probability !== 0`), which
+  // trades ~4 points of coverage for zero availability errors; and the four-course
+  // cardinality bound makes some shapes need the relaxed tier.
+  //
+  // Still a ratchet, and still doing its job: it guards against a change that starts
+  // refusing everything, which every other assertion here would read as success.
+  assert.ok(share >= 0.60,
     `only ${made.length}/${results.length} (${(100 * share).toFixed(1)}%) generated — ` +
     `the other assertions pass trivially when nothing is emitted`);
 });
@@ -334,8 +376,8 @@ test("corpus › a co-op in the shape becomes a co-op cell in the grid", () => {
 test("corpus › generation is deterministic", () => {
   // Byte-identical output, or the diff review the data workflows rely on becomes
   // noise. Checked on a subset: it doubles the run cost.
-  for (const { p, out } of made.slice(0, 25)) {
-    const again = generate(p);
+  for (const { p, variant, out } of made.slice(0, 25)) {
+    const again = generate(p, variant);
     assert.deepEqual(JSON.parse(JSON.stringify(again.plan)),
                      JSON.parse(JSON.stringify(out.plan)), `${p.key} differs between runs`);
   }
@@ -343,9 +385,9 @@ test("corpus › generation is deterministic", () => {
 
 test("corpus › a plan is produced in a time a person would wait for", () => {
   const times = [];
-  for (const p of PROGRAMS.slice(0, 40)) {
+  for (const { p, variant } of results.slice(0, 40)) {
     const t = Date.now();
-    generate(p);
+    generate(p, variant);
     times.push(Date.now() - t);
   }
   times.sort((a, b) => a - b);

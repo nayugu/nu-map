@@ -166,7 +166,14 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   // So the "already started" flag lives in a ref keyed by what a generation is FOR.
   // A ref does not re-run anything, and keying it means switching program or student
   // type starts a new one while flipping the toggle back and forth does not.
-  const genKey = `${path}|${isGrad}|${studentType}`;
+  // The VARIANT is part of what a generation is for, and leaving it out was a bug.
+  //
+  // CHART inherits the shape — how many years, which terms are used, where the co-ops
+  // fall — from a published variant, so a different variant is a different plan, not a
+  // different view of one. Measured, the difference is not cosmetic: the five-year
+  // Industrial Engineering and Computer Science patterns exercise a shape the four-year
+  // ones never do, and they were the two that failed the four-course rule.
+  const genKey = `${path}|${isGrad}|${studentType}|${variantIdx}`;
   const startedRef = useRef(null);
 
   useEffect(() => {
@@ -179,9 +186,14 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
     planGenerator.generate({
       programKey: path, isGrad, programData, courseMap, studentType,
       // The catalog's own SHAPE — years, terms, where the co-ops fall — is real
-      // departmental intent and worth inheriting even when its CONTENT is not. The
-      // first catalog variant is the one whose calendar the department leads with.
-      publishedPlan: catalogVariants[0] ?? null,
+      // departmental intent and worth inheriting even when its CONTENT is not.
+      //
+      // The SELECTED variant, not `[0]`. Hard-coding the first one meant a student who
+      // picked the five-year pattern was silently given a plan built on the four-year
+      // skeleton, and the picker was hidden in CHART mode so they could not even see the
+      // choice being ignored. CHART should adapt to any pattern the catalog publishes;
+      // that is the whole reason it inherits a shape instead of inventing one.
+      publishedPlan: catalogVariants[Math.min(variantIdx, Math.max(catalogVariants.length - 1, 0))] ?? null,
     })
       .then(r => { if (live) setGen(r); })
       .catch(() => {
@@ -368,10 +380,19 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
               made the safe action look dangerous too. It belongs where it can
               only mean one thing: the red button, and the confirm behind it. */}
 
-          {/* Only when the cohort's year count leaves a real choice. */}
-          {!usingChart && variants.length > 1 && (
+          {/* Only when the cohort's year count leaves a real choice.
+
+              Shown in BOTH modes. It used to be hidden for CHART, on the assumption that a
+              generated plan has one variant — but CHART inherits its SHAPE from a
+              published variant, so the choice is just as real there: four years with two
+              co-ops and five years with three are different plans, not different views.
+              Hiding it meant the student's selection was silently ignored. The list is
+              always the CATALOG's variants, because that is what is being chosen. */}
+          {catalogVariants.length > 1 && (
             <VariantPicker
-              variants={variants} value={safeIdx} onChange={setVariantIdx} isPhone={isPhone}
+              variants={catalogVariants}
+              value={Math.min(variantIdx, catalogVariants.length - 1)}
+              onChange={setVariantIdx} isPhone={isPhone}
             />
           )}
 

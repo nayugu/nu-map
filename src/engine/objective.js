@@ -55,6 +55,7 @@ import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
 import { witnessPlan } from "./witness.js";
 import {
   termCapacity, termSlotCap, coursesInCell, SAME_REQ_PER_TERM_MAX, POOL_REACH_MIN,
+  FULL_TERM_MIN_COURSES, REAL_COURSE_SH,
 } from "./domains.js";
 import { unlockUniverse, unlockOfCell, isPoolCell, generatorBar } from "./search.js";
 import { unlockValues } from "./prereqDepth.js";
@@ -309,9 +310,14 @@ export function checkThresholds({ plans, terms, termOf, ports, studentType, thre
   const cap = ports.creditMax(studentType);
   const max = thresholds.maxTermSH ?? (cap - (thresholds.slackSH ?? 0));
   const load = terms.map(() => 0);
+  // Courses of at least 3 SH, counted separately from credit: "four courses" and
+  // "sixteen credits" are different claims and only the first is the rule below.
+  const big = terms.map(() => 0);
   for (const p of plans) {
     const ti = termOf.get(p.cell.id);
-    if (ti != null) load[ti] += p.cell.sh ?? 0;
+    if (ti == null) continue;
+    load[ti] += p.cell.sh ?? 0;
+    if ((p.cell.sh ?? 0) >= REAL_COURSE_SH) big[ti] += 1;
   }
   const failures = [];
   terms.forEach((t, ti) => {
@@ -337,9 +343,40 @@ export function checkThresholds({ plans, terms, termOf, ports, studentType, thre
       failures.push({ kind: "above-comfortable-load", term: ti,
                       label: label(t), sh: load[ti], limit: comfortable });
     }
+    // ── Four real courses in every full fall and spring ─────────────
+    //
+    // MEASURED over 3,941 published full fall/spring terms: 97.7% carry four cells or
+    // more, and 95.8% carry four of at least 3 SH. It is not a tendency, it is how a
+    // degree is built — the credit total is designed so four courses a term over eight
+    // full terms arrives at the degree.
+    //
+    // CHART broke it in 13.0% of full terms against their 2.3%, and the shape of the
+    // error is always the same: a course sits in a half-summer while a fall runs three
+    // deep. That is the wrong way round — a summer is optional and a fall is not.
+    //
+    // ── Why a threshold and not a hard constraint ───────────────────
+    //
+    // Because the 4.2% of published exceptions are real and not noise: they are
+    // architecture and art, where one studio course IS 16 credits and there is no fourth
+    // course to add. A hard rule would refuse those programs outright, and refusing a
+    // degree over a rule its own department does not follow is the failure this codebase
+    // keeps paying for. So it is checked, reported, and repaired by moving cells — and
+    // where it cannot be met it is stated rather than hidden.
+    //
+    // Cells of under 3 SH do not count toward the four. A one-credit lab and a course
+    // are not two courses, and the corpus bar is explicitly four of >= 3 SH.
+    if (w >= 1 && load[ti] > 0 && big[ti] < FULL_TERM_MIN_COURSES) {
+      failures.push({ kind: "full-term-under-four", term: ti,
+                      label: label(t), courses: big[ti], need: FULL_TERM_MIN_COURSES });
+    }
   });
   return { failures, load };
 }
+
+// `FULL_TERM_MIN_COURSES` and `REAL_COURSE_SH` live in domains.js with the other
+// measured bounds. Defining them here made search.js import objective.js while
+// objective.js imports search.js — a cycle that happens to survive because both are read
+// inside functions, which is not a reason to keep it.
 
 const label = (t) => `${t.label ?? ""} ${t.termLabel ?? ""}`.trim();
 
@@ -394,8 +431,11 @@ export function improve({
   // Cheap: capacity is checked by the caller, so this is precedence alone.
   const cheapLegal = (assignment) =>
     !precedence || precedenceViolations(precedence, assignment).length === 0;
+  // Established once, from the plan phase 1 handed over: phase 2 may never make it worse.
+  const maxThin = thinFullTerms(termOf, plans, terms);
   const fullLegal = (assignment) =>
-    isLegal({ plans, terms, termOf: assignment, cap, courseMap, repeatable, ports, byId, precedence, shape });
+    isLegal({ plans, terms, termOf: assignment, cap, courseMap, repeatable, ports, byId,
+              precedence, shape, maxThin });
 
   // One shared budget across every climb, so total work is bounded regardless of how
   // many objectives are ranked.
@@ -466,6 +506,24 @@ export function improve({
   const traded = tradeDepth(current, { plans, terms, cap, courseMap, fullLegal });
   current = traded.termOf;
   moves += traded.moves;
+
+  // ── Then fill every full fall and spring to four ────────────────
+  //
+  // After the trade, because a trade moves cells between terms and would otherwise undo
+  // this; before the threshold repair, because a term left thin here is exactly what that
+  // repair should then report. See `fillFullTerms` for why this cannot be a preference.
+  const packed = fillFullTerms(current, { plans, terms, cap, fullLegal });
+  current = packed.termOf;
+  moves += packed.moves;
+
+  // ── Then spend the electives to settle availability ─────────────
+  //
+  // Last of the three, and the order is the argument: a swap preserves each term's course
+  // count exactly, so it cannot undo the fill above, while a fill moves cells between
+  // terms and would undo a swap. See `swapForAvailability`.
+  const settled = swapForAvailability(current, { plans, terms, cap, ports, fullLegal });
+  current = settled.termOf;
+  moves += settled.moves;
 
   // ── Repair thresholds last ──────────────────────────────────────
   //
@@ -583,6 +641,171 @@ function hillClimb(start, score, cheapLegal, fullLegal, plans, terms, cap,
 }
 
 /**
+ * Move a course to a season it is KNOWN to run in, spending a general elective to do it.
+ *
+ * ── Unknown is not the same as barred, and both matter ──────────────
+ *
+ * A season a course has never been recorded in is barred outright — `offeringProbability`
+ * returns 0 and the domain never contained that term. What survives is the UNKNOWN case:
+ * 40.8% of the catalog has no offering history at all, `semTypeProb` returns null, and the
+ * engine reads null as allowed because the alternative is refusing to schedule 40% of the
+ * catalog. The UI is more honest with the student than the engine was with itself and
+ * draws `offered?`.
+ *
+ * So the plan is legal and the student still sees a warning. Measured, 12.0% of named
+ * placements sat in a season with no history for that course.
+ *
+ * ── Why a general elective is the right thing to spend ──────────────
+ *
+ * Because it is the only cell in the plan with NO season constraint whatsoever. A general
+ * elective is an unbounded pool — its candidate list is `null`, meaning it admits any
+ * course — so whatever season it lands in, some course answers it. Every other cell is
+ * narrower. That makes the electives a buffer in the strict sense: they can absorb an
+ * awkward slot at zero cost, which is exactly what a free elective is for.
+ *
+ * A SWAP rather than a move, and both halves matter: moving the course alone would empty
+ * the slot it leaves and break the four-courses-per-full-term rule the pass before this
+ * one just established. Trading with a cell of its own size keeps every term's course
+ * count identical, so this pass cannot undo that one.
+ *
+ * Verified against the full witness like every other pass here. A swap that would create
+ * an order or distinctness problem is not made, and the warning stays — degrade to less
+ * information, never to a wrong plan.
+ *
+ * @returns {{termOf: Map, moves: number, swapped: object[]}}
+ */
+export function swapForAvailability(termOf, { plans, terms, cap, ports, fullLegal }) {
+  const prob = (id, ti) => ports.offeringProbability(id, terms[ti].semTypeId);
+  /** Is this cell's answer provably offered where it sits? */
+  const known = (p, ti) => {
+    const groups = p.cell.groups;
+    if (!groups?.length) return true;         // a pool always has an answer; see above
+    return groups.some(g => g.every(id => (prob(id, ti) ?? 0) > 0));
+  };
+  const isBig = (p) => (p.cell.sh ?? 0) >= REAL_COURSE_SH;
+  // The buffer: unbounded pools only. A BOUNDED pool has a candidate list and therefore a
+  // season constraint of its own, so spending it can move the problem rather than solve it.
+  const buffers = plans.filter(p => p.candidates === null && isBig(p));
+  if (!buffers.length) return { termOf, moves: 0, swapped: [] };
+
+  let current = new Map(termOf);
+  const swapped = [];
+  let moves = 0;
+
+  for (const p of plans) {
+    const at = current.get(p.cell.id);
+    if (at == null || !p.cell.groups?.length || known(p, at)) continue;
+    // Somewhere this course is actually recorded as running, and it must be a term this
+    // cell could legally occupy in the first place.
+    for (const to of p.domain) {
+      if (to === at || !known(p, to)) continue;
+      const buf = buffers.find((b) => {
+        const bAt = current.get(b.cell.id);
+        return bAt === to && b.domain.includes(at) && (b.cell.sh ?? 0) === (p.cell.sh ?? 0);
+      });
+      if (!buf) continue;
+      const trial = new Map(current);
+      trial.set(p.cell.id, to);
+      trial.set(buf.cell.id, at);
+      if (!fitsCapacity(trial, plans, terms, cap)) continue;
+      if (!fullLegal(trial)) continue;
+      current = trial;
+      moves += 1;
+      swapped.push({ cell: p.cell.title ?? "", from: at, to, buffer: buf.cell.title ?? "" });
+      break;
+    }
+  }
+  return { termOf: current, moves, swapped };
+}
+
+/**
+ * Fill every full fall and spring to four real courses, by moving cells that can move.
+ *
+ * ── Why this is a pass and not a preference ─────────────────────────
+ *
+ * Four courses in every full term is not a taste, it is how a degree is built: 97.7% of
+ * 3,941 published full terms carry four cells or more. And MEASURED over 94 programs, of
+ * the 50 with a thin term, **0** were short of courses and **50** had courses sitting
+ * somewhere else. It was never arithmetic. It was always a move that nothing made.
+ *
+ * Four attempts to get there by ordering all failed, and the last one showed why any
+ * such attempt must:
+ *
+ *   `PHYS 1151` sat alone in a Summer B while the final Spring held three courses and an
+ *   empty slot. Moving it fixes both. But PHYS 1151 is a 1000-level course, so its level
+ *   target is 0.00, and that Summer B is CLOSER to 0.00 than the final Spring is. Every
+ *   level-aware comparator therefore prefers the summer, correctly by its own lights, and
+ *   the under-filled tie-break is never reached because the two terms do not tie.
+ *
+ * A preference expresses where a cell would LIKE to go. This rule is about a property of
+ * the finished grid, and no amount of per-cell preference guarantees a global property.
+ * So it is checked and repaired directly, exhaustively, until no legal move remains.
+ *
+ * ── What it will not do ─────────────────────────────────────────────
+ *
+ * It never robs a full term that needs its own four, never exceeds a term's credit cap,
+ * and verifies every move against the full prereq-aware witness before keeping it. So it
+ * cannot introduce the order or availability errors that a plan must never have — a move
+ * that would is simply not made, and the term stays thin and is reported.
+ *
+ * @returns {{termOf: Map, moves: number, filled: object[]}}
+ */
+export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses = 4 }) {
+  let current = new Map(termOf);
+  const isBig = (p) => (p.cell.sh ?? 0) >= REAL_COURSE_SH;
+  const big = terms.map(() => 0);
+  const load = terms.map(() => 0);
+  for (const p of plans) {
+    const ti = current.get(p.cell.id);
+    if (ti == null) continue;
+    load[ti] += p.cell.sh ?? 0;
+    if (isBig(p)) big[ti] += 1;
+  }
+
+  const filled = [];
+  let moves = 0;
+
+  for (let pass = 0; pass < maxPasses; pass++) {
+    let changed = false;
+    for (let t = 0; t < terms.length; t++) {
+      const w = terms[t].weight ?? 1;
+      // Half terms are half a term and hold two; an EMPTY full term is a term the student
+      // is not enrolled in, which is a different thing and not this rule's business.
+      if (w < 1 || load[t] === 0) continue;
+
+      while (big[t] < FULL_TERM_MIN_COURSES) {
+        let donor = null;
+        // `plans` order is deterministic, so the same input yields the same plan.
+        for (const p of plans) {
+          const from = current.get(p.cell.id);
+          if (from == null || from === t || !isBig(p)) continue;
+          if (!p.domain.includes(t)) continue;
+          // Never solve one thin term by creating another.
+          if ((terms[from].weight ?? 1) >= 1 && big[from] <= FULL_TERM_MIN_COURSES) continue;
+          if (load[t] + (p.cell.sh ?? 0) > cap[t]) continue;
+          const trial = new Map(current);
+          trial.set(p.cell.id, t);
+          if (!fitsCapacity(trial, plans, terms, cap)) continue;
+          if (!fullLegal(trial)) continue;
+          donor = { p, from, trial };
+          break;
+        }
+        if (!donor) break;                     // nothing can legally move; report it
+        const sh = donor.p.cell.sh ?? 0;
+        current = donor.trial;
+        big[t] += 1; load[t] += sh;
+        big[donor.from] -= 1; load[donor.from] -= sh;
+        moves += 1;
+        changed = true;
+        filled.push({ cell: donor.p.cell.title ?? "", from: donor.from, to: t });
+      }
+    }
+    if (!changed) break;
+  }
+  return { termOf: current, moves, filled };
+}
+
+/**
  * Swap major-subject elective pools earlier, past requirements that unlock nothing.
  *
  * Greedy, largest gain first, each swap verified before it is kept. Greedy is right here
@@ -641,7 +864,52 @@ export function tradeDepth(termOf, { plans, terms, cap, courseMap, fullLegal }) 
   return { termOf: current, moves, applied };
 }
 
-function fitsCapacity(assignment, plans, terms, cap, shape = null) {
+/**
+ * How many thin full terms phase 2 is allowed to leave.
+ *
+ * ── The general defect this closes ──────────────────────────────────
+ *
+ * Phase 1's cardinality propagator makes "four real courses in every full fall and spring"
+ * true of every plan it returns — at the last placement, `need > possible` is checked with
+ * nothing left to place, so a thin term cannot survive. And the property was STILL absent
+ * from the emitted plans: `Year 3 Fall — 3 courses` in the five-year Industrial Engineering
+ * and Computer Science variants, with the relaxed tier never invoked.
+ *
+ * Phase 2 was undoing it. Every mutation there — the hill climber, the depth trade, the
+ * availability swap, the threshold repair — is screened by `fitsCapacity`, which knew the
+ * credit cap, the slot cap and the same-requirement cap, and did not know this one. So each
+ * phase enforced its own list, and a rule in one list and not the other erodes the moment
+ * the other phase runs.
+ *
+ * That is the class of bug, not an instance of it: an invariant is only as strong as the
+ * WEAKEST legality check any mutation passes through. The fix is that every hard rule lives
+ * in the one function every mutation calls.
+ *
+ * ── A budget rather than a floor, and why ───────────────────────────
+ *
+ * Not "no thin terms": a plan can arrive here already carrying one, from the relaxed tier
+ * or from a shape whose arithmetic cannot give every full term four. A hard floor would
+ * then reject every move and freeze the plan unimproved. A non-increasing budget is
+ * monotone — phase 2 may never make it worse, and `fillFullTerms` can still make it better.
+ */
+export function thinFullTerms(assignment, plans, terms) {
+  const big = terms.map(() => 0);
+  const any = terms.map(() => false);
+  for (const p of plans) {
+    const ti = assignment.get(p.cell.id);
+    if (ti == null) continue;
+    any[ti] = true;
+    if ((p.cell.sh ?? 0) >= REAL_COURSE_SH) big[ti] += 1;
+  }
+  let n = 0;
+  for (let t = 0; t < terms.length; t++) {
+    if ((terms[t].weight ?? 1) < 1 || !any[t]) continue;
+    if (big[t] < FULL_TERM_MIN_COURSES) n += 1;
+  }
+  return n;
+}
+
+function fitsCapacity(assignment, plans, terms, cap, shape = null, maxThin = Infinity) {
   const load = terms.map(() => 0);
   const count = terms.map(() => 0);
   // Per requirement, matching search.js. Phase 2 shares this check because a bound the
@@ -660,12 +928,15 @@ function fitsCapacity(assignment, plans, terms, cap, shape = null) {
   // Every bound, or a move the search refused would be reachable by the objective.
   return load.every((sh, ti) => sh <= cap[ti])
       && count.every((n, ti) => n <= termSlotCap(terms[ti], shape))
-      && req.every(m => [...m.values()].every(n => n <= SAME_REQ_PER_TERM_MAX));
+      && req.every(m => [...m.values()].every(n => n <= SAME_REQ_PER_TERM_MAX))
+      // The four-course floor, as a non-increasing budget. See `thinFullTerms`.
+      && (maxThin === Infinity || thinFullTerms(assignment, plans, terms) <= maxThin);
 }
 
 /** Full hard-constraint check, including the prereq-aware witness. */
-function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId, precedence, shape }) {
-  if (!fitsCapacity(termOf, plans, terms, cap, shape)) return false;
+function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId, precedence,
+                  shape, maxThin = Infinity }) {
+  if (!fitsCapacity(termOf, plans, terms, cap, shape, maxThin)) return false;
   // Cheapest first: a precedence check is a map lookup, the witness is a matching.
   if (precedence && precedenceViolations(precedence, termOf).length) return false;
   const cells = plans
@@ -674,6 +945,7 @@ function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId
   return witnessPlan({
     cells, candidatesOf: (c) => byId.get(c.id).candidates,
     terms, courseMap, offeringProbability: ports.offeringProbability,
+      offered: ports.offered,
     repeatable, checkPrereqs: true, contention: buildContention(plans),
   }).ok;
 }

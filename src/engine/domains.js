@@ -169,6 +169,35 @@ export const SAME_REQ_PER_TERM_MAX = 4;
  */
 export const POOL_REACH_MIN = 0.69;
 
+/**
+ * How many courses of at least 3 SH a full fall or spring term should carry.
+ *
+ * The corpus's own number rather than one chosen for tidiness. MEASURED over 3,941
+ * published full fall/spring terms: 54.8% hold exactly four, 97.7% hold four cells or
+ * more, and 95.8% hold four or more of at least 3 SH. Credits per full term are p10 16,
+ * median 17, p90 18 — consistent with four courses of four.
+ *
+ * It is how a degree is BUILT, not a tendency: the credit total is designed so that four
+ * courses a term across the full terms arrives at the degree. CHART broke it in 13.0% of
+ * full terms against their 2.3%, always the same way — a course parked in a half-summer
+ * while a fall ran three deep.
+ *
+ * Enforced as a threshold with a repair rather than as a hard constraint, because the
+ * 4.2% of published exceptions are real: architecture and art, where a single studio
+ * course IS 16 credits and there is no fourth course to add. Refusing a degree over a
+ * rule its own department does not follow is the failure this codebase keeps paying for.
+ */
+export const FULL_TERM_MIN_COURSES = 4;
+
+/**
+ * The credit floor at which a cell counts as one of the four.
+ *
+ * A one-credit lab and a course are not two courses, and the corpus bar is explicitly
+ * four of >= 3 SH — which is 95.8%, against 97.7% for four cells of any size. The
+ * difference between those two numbers is exactly the terms padded with small labs.
+ */
+export const REAL_COURSE_SH = 3;
+
 export const termSlotCap = (term, shape = null) => {
   const full = (term?.weight ?? 1) >= 1;
   const inherited = full ? shape?.maxCoursesFull : shape?.maxCoursesHalf;
@@ -302,6 +331,10 @@ export function registrable(candidates, studentType) {
 
 export function buildDomains(cells, terms, {
   courseMap = {}, depthOf = () => 0, offeringProbability = () => null,
+  // Defaults to "offered", matching `offeringProbability`'s null: absent data is not
+  // evidence of absence, and a default of `false` would make every cell unschedulable
+  // for a caller that has no offering port at all.
+  offered = () => true,
   planDepthOf = null, wideAt = wideAtFor((cells ?? []).length),
   coopPrep = null, coopBoundary = Infinity, studentType = "undergraduate",
 } = {}) {
@@ -317,7 +350,23 @@ export function buildDomains(cells, terms, {
     if (!s) {
       s = new Set();
       for (const t of terms) {
-        if (offeringProbability(id, t.semTypeId) !== 0) s.add(t.semTypeId);
+        // ── The app's rule, not a weaker one of our own ────────────
+        //
+        // This asked `offeringProbability(...) !== 0`, which bars a course only from a
+        // season it has NEVER run in. The app flags a course offered in half or fewer of
+        // the recorded instances of a season, and the app is what the student sees.
+        //
+        // `CS 3800` is recorded in Summer B once in four years. Probability 0.25, so the
+        // old test said yes, CHART put it in a Summer B, and the card came up `offered?`.
+        // A plan the app flags has a hard error in it whatever the engine thinks, and
+        // there is no version of "no availability errors" that survives the two layers
+        // asking different questions.
+        //
+        // `offered` is the port that carries the app's own `effectiveOffered`, including
+        // its two extra rules: a student's override outranks history, and fewer than two
+        // recorded instances is no evidence and reads as offered — which is what keeps the
+        // 40.8% of the catalog with no history schedulable.
+        if (offered(id, t.semTypeId)) s.add(t.semTypeId);
       }
       seasonCache.set(id, s);
     }

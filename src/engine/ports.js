@@ -63,6 +63,10 @@
 export function permissivePorts(overrides = {}) {
   return {
     offeringProbability: () => null,
+    // Defaults to offered, matching `offeringProbability`'s null. Absent data is not
+    // evidence of absence, and a default of `false` would make every cell unschedulable
+    // for a caller with no offering port at all — silently, in every test.
+    offered: () => true,
     seatPressure: () => null,
     creditMin: () => 0,
     creditMax: () => Infinity,

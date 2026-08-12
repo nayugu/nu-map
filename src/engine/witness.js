@@ -203,7 +203,7 @@ export function prereqReachable(course, placements, semIndex, ti, courseMap) {
  */
 export function witnessPlan({
   cells, candidatesOf, terms, courseMap,
-  offeringProbability = () => null, repeatable = () => false,
+  offeringProbability = () => null, offered = () => true, repeatable = () => false,
   checkPrereqs = true, contention = () => 0,
 }) {
   // Course id → the term index it is committed to, in the form evalPrereqTree
@@ -278,7 +278,8 @@ export function witnessPlan({
         // defect this engine exists to fix, so availability is the one preference
         // that never gives way. Where the shape leaves a cell nowhere to go, the
         // SHAPE yields instead — see `shape.studyTerms`.
-        if (offeringProbability(id, term.semTypeId) === 0) continue;
+        // The app's rule, not `!== 0`. See domains.js `allowedSeasons`.
+        if (!offered(id, term.semTypeId)) continue;
         if (checkPrereqs && !prereqReachable(course, placements, semIndex, ti, courseMap)) continue;
         legal.push(id);
         // Stop enumerating once the cell is provably matchable regardless of
@@ -337,7 +338,7 @@ export function witnessPlan({
     for (const cell of wide) {
       const cands = candidatesOf(cell, term.semTypeId);
       const fits = (id) => (!used.has(id) || repeatable(id)) && courseMap[id]
-        && offeringProbability(id, term.semTypeId) !== 0
+        && offered(id, term.semTypeId)
         && (!checkPrereqs || prereqReachable(courseMap[id], placements, semIndex, ti, courseMap));
       const pick = cands === null
         ? firstFree(courseMap, fits)

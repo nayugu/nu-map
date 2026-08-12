@@ -65,6 +65,8 @@
  * @property {"published"|"derived"} source
  */
 
+import { FULL_TERM_MIN_COURSES } from "./domains.js";
+
 /** NU's calendar, as the default skeleton uses it. Injectable via `semTypes`. */
 const DEFAULT_SEM_TYPES = [
   { semTypeId: "fall",   termLabel: "Fall",     weight: 1.0 },
@@ -235,11 +237,69 @@ export function defaultShape({
  * Using a summer the department left blank is a much smaller liberty, and one a
  * student can act on: the report names which optional terms a plan needed.
  */
+/**
+ * And a HALF term is optional whenever the full terms can absorb the degree.
+ *
+ * ── Why this belongs in the shape and not in the search ─────────────
+ *
+ * Every full fall and spring carrying four real courses is not a preference; it is how a
+ * degree is built. MEASURED over 3,941 published full terms, 97.7% carry four cells or
+ * more and 95.8% carry four of at least 3 SH, and the credit total is designed so that
+ * four courses a term across the full terms arrives at the degree.
+ *
+ * CHART broke it in 13.0% of full terms, always the same way: a course parked in a
+ * half-summer while a fall ran three deep. Two fixes were tried at the wrong layer and
+ * both were the wrong shape for the rule.
+ *
+ *   a THRESHOLD with a repair   satisficing, applied after the fact. Cut the failures
+ *                              from 13.0% to 7.0% and left a visible gap in year 1,
+ *                              because a repair can only move what still has somewhere
+ *                              to go.
+ *   a PLACEMENT preference     steering the search toward thin terms mid-flight. It
+ *                              changes which branch is explored and the search reaches
+ *                              its budget in a worse region.
+ *
+ * The rule is arithmetic, so it belongs where the arithmetic is: a half-summer exists to
+ * take the SURPLUS, and there is no surplus until every full term has its four. Marking
+ * the halves optional says exactly that, and `byOptional` is the FIRST rank in every
+ * branch of the term ordering — so it outranks level targets, load balance and the
+ * elective reserve, which is what a hard requirement should do.
+ *
+ * ── It still yields, and that is deliberate ────────────────────────
+ *
+ * `optional` means tried last, not forbidden. A degree whose courses genuinely do not fit
+ * in its full terms still gets a plan that uses the summers, and the report names them.
+ * The alternative — forbidding it — would refuse programs over a rule that their own
+ * credit total makes impossible, and architecture, where one studio course is 16 credits,
+ * is 4.2% of the published corpus.
+ *
+ * The surplus is counted in COURSES of at least 3 SH, not credits and not cells: a
+ * one-credit lab riding along with a course is not a course, which is the same line the
+ * corpus bar draws.
+ */
 export function studyTerms(shape) {
-  return (shape?.terms ?? [])
-    .filter(t => !t.work)
-    .map(t => (t.unused ? { ...t, optional: true } : t));
+  const terms = (shape?.terms ?? []).filter(t => !t.work);
+  const fullCount = terms.filter(t => (t.weight ?? 1) >= 1 && !t.unused).length;
+  const surplus = (shape?.realCourses ?? 0) - fullCount * FULL_TERM_MIN_COURSES;
+  const halvesNeeded = surplus > 0 ? Math.ceil(surplus / HALF_TERM_COURSES) : 0;
+
+  let halvesUsed = 0;
+  return terms.map((t) => {
+    if (t.unused) return { ...t, optional: true };
+    if ((t.weight ?? 1) >= 1) return t;
+    // A half term is real only while surplus courses remain to put in it. Earliest
+    // first, because the department's own ordering is the only prior available for
+    // WHICH summer a degree leans on.
+    if (halvesUsed < halvesNeeded) { halvesUsed += 1; return t; }
+    return { ...t, optional: true };
+  });
 }
+
+/**
+ * Courses a half term holds. Half the full-term bar, which is what "half term" means and
+ * what the published summers do — measured, 2 cells is the median for a Summer A or B.
+ */
+export const HALF_TERM_COURSES = 2;
 
 /** Credit the shape intends to carry across all study terms. */
 export function shapeCapacitySH(shape, { creditMax = () => Infinity, studentType = "undergraduate" } = {}) {

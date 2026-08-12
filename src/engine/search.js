@@ -64,8 +64,10 @@ import { witnessPlan, buildContention } from "./witness.js";
 import {
   termCapacity, termSlotCap, coursesInCell,
   SAME_REQ_PER_TERM, SAME_REQ_PER_TERM_MAX, POOL_REACH_MIN,
+  FULL_TERM_MIN_COURSES, REAL_COURSE_SH,
 } from "./domains.js";
 import { chainHeight } from "./precedence.js";
+import { HALF_TERM_COURSES } from "./shape.js";
 import { cellLevelTarget, cellLevelFloor, unlockValues } from "./prereqDepth.js";
 
 /**
@@ -221,6 +223,18 @@ export function placeCells({
   precedence = null, maxRestarts = 40, shape = null,
 }) {
   const deadline = now() + timeBudgetMs;
+  // ── The fallback tier gets a RESERVED share, not the leftovers ────
+  //
+  // The relaxed attempt below was gated on `now() <= deadline` and therefore almost never
+  // ran: the strict restarts spend the whole budget by construction — they escalate until
+  // they hit it — so the tier meant to protect coverage was unreachable in exactly the
+  // cases that needed it. Measured, generation stayed at 59 of 150 instead of recovering.
+  //
+  // So the strict tiers run against a shorter clock and the remainder belongs to the
+  // fallback. 60/40 rather than 50/50 because the strict pass is the one expected to
+  // succeed — a program that generates at all uses a median of 19 nodes — and the fallback
+  // is a single attempt with no restarts to pay for.
+  const strictDeadline = now() + Math.floor(timeBudgetMs * 0.6);
   // Domains are narrowed across restarts, so the originals are left untouched for
   // the caller (the objective phase moves cells within them).
   const working = plans.map(p => ({ ...p, domain: [...p.domain] }));
@@ -244,13 +258,13 @@ export function placeCells({
     const r = attemptPlacement({
       plans: working, terms, ports, studentType, courseMap, repeatable,
       nodeBudget: perAttempt, precedence, now, shape,
-      deadline: Math.min(deadline, now() + slice),
+      deadline: Math.min(strictDeadline, now() + slice),
     });
     totalNodes += r.nodes;
     if (r.ok) return { ...r, nodes: totalNodes, restarts: attempt };
     last = r;
 
-    if (now() > deadline) break;
+    if (now() > strictDeadline) break;
 
     // Only a failure that names a cell AND a term can become a nogood.
     const f = r.failure?.lastObstruction ?? r.failure;
@@ -276,6 +290,41 @@ export function placeCells({
   // A cell whose last legal term was tried and rejected is not "we ran out of
   // attempts" — it is "nothing can answer this cell anywhere", which is a different
   // sentence and the only one a person can act on.
+  // ── One last attempt with the four-course bound RELAXED ───────────
+  //
+  // The cardinality propagator is what finally made "every full fall and spring holds
+  // four" a property of the answer rather than something repaired afterwards — thin terms
+  // fell from 3.5% to 0.3%. It also costs coverage, because a tighter constraint means
+  // more dead branches and a budget that expires inside them: generation fell from 85
+  // programs of 150 to 61.
+  //
+  // Both of those are real, and the choice between them is a false one. The bar is a
+  // convention, measured at 95.8% of published full terms — strong, and NOT universal:
+  // the 4.2% that miss it are architecture and art, where one studio course is 16 credits
+  // and no fourth course exists to add. Refusing a degree over a rule its own department
+  // does not follow is the failure this codebase keeps paying for.
+  //
+  // So the bound is enforced wherever it is SATISFIABLE and dropped where it is not, which
+  // is the most any method can promise. Nothing else relaxes: prerequisite order,
+  // availability, distinctness, the credit cap and requirement coverage are all still in
+  // force on this pass — a relaxed run yields a plan with a thin term, never a wrong one.
+  //
+  // And it keeps refusal honest. A refusal now means the relaxed problem is infeasible,
+  // not that a stricter search ran out of time, which is the difference between a fact
+  // about the degree and a fact about my search.
+  if (now() <= deadline) {
+    const r = attemptPlacement({
+      plans: working, terms, ports, studentType, courseMap, repeatable,
+      nodeBudget, precedence, now, shape, deadline,
+      enforceCardinality: false,
+    });
+    totalNodes += r.nodes;
+    if (r.ok) {
+      return { ...r, nodes: totalNodes, restarts: maxRestarts, cardinalityRelaxed: true };
+    }
+    last = r.failure ? r : last;
+  }
+
   const f = last?.failure?.lastObstruction ?? last?.failure;
   if (f?.cell != null && f.kind && f.kind !== "search-budget-exhausted") {
     return {
@@ -289,6 +338,7 @@ export function placeCells({
 function attemptPlacement({
   plans, terms, ports, studentType, courseMap,
   repeatable, nodeBudget, deadline, now, precedence, shape = null,
+  enforceCardinality = true,
 }) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
   const slotCap = terms.map(t => termSlotCap(t, shape));
@@ -325,6 +375,9 @@ function attemptPlacement({
   const termOf = new Map();
   const loadSH = new Array(terms.length).fill(0);
   const countIn = new Array(terms.length).fill(0);
+  // Courses of at least 3 SH per term, which is a different count from the cells above:
+  // a one-credit lab and a course are not two courses. See `underFilled`.
+  const bigIn = new Array(terms.length).fill(0);
   // Tracked separately from the course count, and PER REQUIREMENT: a term at its
   // elective cap can still take a real course, and stacking four cells of one
   // requirement — four "General Elective" cards, or three "Mathematics Elective" — is
@@ -359,6 +412,7 @@ function attemptPlacement({
       : (c, season) => byId.get(c.id).seasonOk.get(season) ?? null,
     terms, courseMap,
     offeringProbability: ports.offeringProbability,
+      offered: ports.offered,
     repeatable, checkPrereqs, contention: contentionOf,
   });
 
@@ -432,6 +486,47 @@ function attemptPlacement({
   // CS+Math did. It must NOT outrank the standing floor, which is about legality-in-
   // practice rather than taste.
   const crowded = (plan, ti) => (reqCount(ti, plan.cell) >= SAME_REQ_PER_TERM ? 1 : 0);
+
+  /**
+   * A full fall or spring still short of four real courses wants this cell; a term that
+   * already has its four does not.
+   *
+   * ── The reason every earlier attempt at this was INERT ─────────────
+   *
+   * MEASURED over 94 programs: of 50 with a thin full term, **0** were short of courses
+   * and **50** had courses that went elsewhere. 30 real courses for 24 slots, and still a
+   * thin term. So it was never arithmetic — it was always ordering, and three separate
+   * fixes failed to change the number at all.
+   *
+   * They failed for one reason. `Math.abs(ti / span - want)` is a near-continuous value,
+   * so it almost never ties, so it decided every comparison and every rank below it was
+   * dead code. Both `takesReserved` and this were ranked under it. Removing this rank
+   * changed the measurement by nothing — 8.3% either way — which is the proof it was
+   * never running.
+   *
+   * A tie-break only works where ties exist. So the level distance is truncated to WHOLE
+   * TERMS (`levelGap`): two terms within one term of the level target are equally
+   * conventional — which they genuinely are, `LEVEL_POSITION` being a median over 12,848
+   * placements rather than a per-term prediction — and THAT is the tie in which "does
+   * this fall still need a fourth course" gets to decide.
+   *
+   * The slot cap was never the missing bound either. It is an upper bound, taken from the
+   * published plan's own worst term (often 5–7 courses), and load balance is by CREDITS.
+   * A fall with three big courses at 17 SH is perfectly balanced by credit and perfectly
+   * legal, and nothing in the system ever wanted a fourth course in it.
+   */
+  const underFilled = (ti) => {
+    if ((terms[ti].weight ?? 1) < 1) return 1;      // a half term cannot satisfy the rule
+    return bigIn[ti] < FULL_TERM_MIN_COURSES ? 0 : 1;
+  };
+
+  /**
+   * Distance from where this cell's level conventionally sits, in WHOLE TERMS.
+   *
+   * The truncation is the point: it manufactures the ties that `underFilled` and the
+   * elective reserve need in order to have any effect at all. See above.
+   */
+  const levelGap = (ti, want) => Math.floor(Math.abs(ti / span - want) * span);
 
   /**
    * Would this cell take the room a later elective needs? A specific course prefers a
@@ -527,7 +622,8 @@ function attemptPlacement({
         const want = cellLevelTarget(plan, courseMap, studentType) ?? 1;
         return [...plan.domain].sort((a, b) =>
           byOptional(a, b) || crowded(plan, a) - crowded(plan, b)
-          || Math.abs(a / span - want) - Math.abs(b / span - want)
+          || levelGap(a, want) - levelGap(b, want)
+          || underFilled(a) - underFilled(b)
           || takesReserved(plan, a) - takesReserved(plan, b)
           || f(a) - f(b) || a - b);
       }
@@ -582,8 +678,9 @@ function attemptPlacement({
     const want = noClaim ? 1 : (cellLevelTarget(plan, courseMap, studentType) ?? 1);
     return [...plan.domain].sort((a, b) =>
       byOptional(a, b) || crowded(plan, a) - crowded(plan, b)
+      || levelGap(a, want) - levelGap(b, want)
+      || underFilled(a) - underFilled(b)
       || takesReserved(plan, a) - takesReserved(plan, b)
-      || Math.abs(a / span - want) - Math.abs(b / span - want)
       || f(a) - f(b) || a - b);
   };
 
@@ -614,6 +711,105 @@ function attemptPlacement({
     return false;
   };
 
+  // ── The per-term LOWER bound, as a propagator ─────────────────────
+  //
+  // Every other constraint here is an upper bound — a credit cap, a slot cap, a
+  // same-requirement cap — and upper bounds prune monotonically: once a term is over, no
+  // later placement can rescue it, so the search cuts immediately. "Four real courses in
+  // every full fall and spring" is a LOWER bound, and that asymmetry is the whole reason
+  // it resisted four separate fixes:
+  //
+  //   a PREFERENCE cannot guarantee it   preferences do not count things
+  //   a REPAIR PASS acts too late        the search has already committed, so which cells
+  //                                      remain movable is path-dependent — the flakiness
+  //   a TIE-BREAK was literally dead     ranked under a continuous comparator that never
+  //                                      ties, so it never ran. Removing it changed
+  //                                      nothing, which is how it was found
+  //
+  // A lower bound is only VIOLATED at the end, but it becomes UNSATISFIABLE much earlier,
+  // and counting is what detects that. This is the standard global-cardinality relaxation:
+  // if a term in use still needs more courses than there are unplaced cells that could go
+  // there, no completion can satisfy it, so the branch is dead now.
+  //
+  // Sound and incomplete, in that order. Sound because `need > possible` genuinely admits
+  // no completion — nothing valid is ever cut. Incomplete because it reasons per term: two
+  // terms each needing two, with three cells that could serve either, passes this and
+  // fails Hall's condition. The exact version is a flow; this is the O(1) relaxation, and
+  // it is the same trade `buildContention` already makes for `alldifferent`.
+  //
+  // `suffix[i][t]` counts the big cells at or after position i whose domain contains t.
+  // Precomputed once per attempt because domains do not move inside one, so maintaining it
+  // costs nothing per node.
+  const bigCell = (p) => (p.cell.sh ?? 0) >= REAL_COURSE_SH;
+
+  // ── The four-course rule has an UPPER bound too, and it is derivable ──
+  //
+  // Industrial Engineering is the case that shows why this matters. It has 32 real
+  // courses, 6 full terms and 4 half terms:
+  //
+  //     6 full x 4 = 24 minimum        4 half x 2 = 8 maximum        24 + 8 = 32
+  //
+  // Exactly the number of courses. There is ZERO slack, so the distribution is FORCED:
+  // every full term holds exactly four and every half term exactly two. A branch that
+  // puts five in a full term is dead — some other full term must then hold three — and
+  // the search was exploring those branches until the budget expired, then reporting
+  // "search-budget-exhausted", which is a statement about the search and not the degree.
+  //
+  // The slack is a single subtraction and it bounds every term at once. Where a degree has
+  // room, this is loose and costs nothing; where it is tight, it collapses the space.
+  //
+  // Sound: a term exceeding `min + slack` forces some other term below its minimum, by
+  // counting alone. Nothing valid is cut.
+  // A half term is an OPTIONAL consumer, and the first version of this got that wrong.
+  // It computed the slack as
+  //
+  //     realTotal - (4 x fullTerms + 2 x halfTerms)
+  //
+  // which treats every summer as a term that MUST hold two courses. A summer can hold
+  // zero. So on a five-year shape, with more summers than a four-year one, the slack went
+  // NEGATIVE, the ceiling switched itself off, and the summers were free to take the
+  // courses the falls needed — which is exactly the `Year 3 Fall — 3 courses` in the
+  // five-year Industrial Engineering and Computer Science variants.
+  //
+  // The right statement: the full terms have a floor and the summers only get the SURPLUS.
+  const fullCount = terms.filter(t => (t.weight ?? 1) >= 1).length;
+  const realTotal = plans.filter(bigCell).length;
+  const surplus = realTotal - FULL_TERM_MIN_COURSES * fullCount;
+  const bigCap = terms.map((t) => {
+    // Not enough courses to give every full term four: the rule is unsatisfiable for this
+    // shape, so no ceiling is imposed and the relaxed tier plans anyway.
+    if (surplus < 0) return Infinity;
+    return (t.weight ?? 1) >= 1
+      ? FULL_TERM_MIN_COURSES + surplus       // a full term may take extra, up to the surplus
+      : Math.min(HALF_TERM_COURSES, surplus); // a summer gets only what is left over
+  });
+  const suffix = new Array(order.length + 1);
+  suffix[order.length] = new Array(terms.length).fill(0);
+  for (let i = order.length - 1; i >= 0; i--) {
+    const cur = suffix[i + 1].slice();
+    if (bigCell(order[i])) for (const t of order[i].domain) cur[t] += 1;
+    suffix[i] = cur;
+  }
+
+  /**
+   * Can every full term still reach four, given what is left to place?
+   *
+   * An EMPTY full term is exempt, and deliberately: a term with no courses is a term the
+   * student is not enrolled in, which is a different thing from a term with three. Once a
+   * term holds one course it is committed to being used, and the bar applies.
+   */
+  const canStillFill = (nextIndex) => {
+    if (!enforceCardinality) return true;
+    const possible = suffix[nextIndex];
+    for (let t = 0; t < terms.length; t++) {
+      if ((terms[t].weight ?? 1) < 1) continue;         // a half term holds two, not four
+      if (bigIn[t] === 0) continue;                     // not in use; may stay that way
+      const need = FULL_TERM_MIN_COURSES - bigIn[t];
+      if (need > 0 && need > possible[t]) return false;
+    }
+    return true;
+  };
+
   function step(i) {
     if (++nodes > nodeBudget) return "budget";
     // Checked every 64 nodes rather than every one: a clock read per node is
@@ -641,6 +837,9 @@ function attemptPlacement({
       // would follow. Bounded by the worst any published plan does.
       if (countIn[ti] + coursesInCell(cell) > slotCap[ti]) continue;
       if (reqCount(ti, cell) + 1 > SAME_REQ_PER_TERM_MAX) continue;
+      // The derived per-term ceiling on real courses. See `bigCap`: where the arithmetic
+      // is exactly tight this forbids the five-in-a-term branches that are provably dead.
+      if (enforceCardinality && bigCell(plan) && bigIn[ti] + 1 > bigCap[ti]) continue;
       // Precedence, forward-checked against what is already placed. This is what
       // turns discovering the prereq order from 20,000 nodes of backtracking into
       // a few dozen: the witness would catch a violation eventually, but only
@@ -650,7 +849,22 @@ function attemptPlacement({
       termOf.set(cell.id, ti);
       loadSH[ti] += cell.sh ?? 0;
       countIn[ti] += coursesInCell(cell);
+      if ((cell.sh ?? 0) >= REAL_COURSE_SH) bigIn[ti] += 1;
       reqIn[ti].set(reqKey(cell), reqCount(ti, cell) + 1);
+
+      // The cardinality bound, before the witness because counting is free and a
+      // matching is not.
+      if (!canStillFill(i + 1)) {
+        worstFailure = worstFailure ?? {
+          kind: "full-term-cannot-reach-four", cell: cell.id, title: cell.title, term: ti,
+        };
+        termOf.delete(cell.id);
+        loadSH[ti] -= cell.sh ?? 0;
+        countIn[ti] -= coursesInCell(cell);
+        if ((cell.sh ?? 0) >= REAL_COURSE_SH) bigIn[ti] -= 1;
+        reqIn[ti].set(reqKey(cell), reqCount(ti, cell) - 1);
+        continue;
+      }
 
       // Propagate `alldifferent` over what is placed so far, plus named-course
       // prereq order. Sound on a partial assignment: candidate prereqs are
@@ -668,6 +882,7 @@ function attemptPlacement({
       termOf.delete(cell.id);
       loadSH[ti] -= cell.sh ?? 0;
       countIn[ti] -= coursesInCell(cell);
+      if ((cell.sh ?? 0) >= REAL_COURSE_SH) bigIn[ti] -= 1;
       reqIn[ti].set(reqKey(cell), reqCount(ti, cell) - 1);
     }
     return false;

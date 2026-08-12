@@ -30,7 +30,7 @@
 
 import { deriveCells, cellsSH } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
-import { buildDomains, wideAtFor, POOL_REACH_MIN } from "./domains.js";
+import { buildDomains, wideAtFor, POOL_REACH_MIN, REAL_COURSE_SH } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
 import { preflight, tightestTerms } from "./preflight.js";
 import {
@@ -110,12 +110,19 @@ export function generatePlan({
   const precedence = buildPrecedence(cells, courseMap, { observed: observedOrder });
 
   // ── 4. Where each cell could go, for a given shape ──────────────
+  //
+  // How many REAL courses this degree has to place — cells of at least 3 SH — is what
+  // decides whether the half-summers are needed at all. `studyTerms` uses it to mark a
+  // summer optional once the full terms can absorb the degree, which is what keeps every
+  // fall and spring at four. Counted here because the shape does not know the cells.
+  const realCourses = cells.filter(c => (c.sh ?? 0) >= REAL_COURSE_SH).length;
   const layout = (sh) => {
-    const ts = studyTerms(sh);
+    const ts = studyTerms({ ...sh, realCourses });
     const { plans, impossible } = buildDomains(cells, ts, {
       courseMap, depthOf: depth.depthOf,
       planDepthOf: precedence.planDepthOf,
       offeringProbability: ports.offeringProbability,
+      offered: ports.offered,
       wideAt: wideAtFor(cells.length),
       coopPrep: prepSet.size ? prepSet : null,
       coopBoundary: firstWorkBoundary(sh),
@@ -228,6 +235,10 @@ export function generatePlan({
       unusedTerms: shape.terms.filter(t => t.unused).length,
       shapeSource: shape.source,
       nodes: placed.nodes,
+      // Which tier produced this plan. `true` means the four-courses-per-full-term bound
+      // could not be met and was dropped — a fact about the degree's arithmetic against
+      // this shape, and the difference between "thin term" and "thin term for a reason".
+      cardinalityRelaxed: placed.cardinalityRelaxed ?? false,
       moves: improved.moves,
       scores: improved.scores,
       thresholds: improved.thresholds,
