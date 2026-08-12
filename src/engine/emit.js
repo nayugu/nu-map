@@ -51,10 +51,16 @@ export function emitPlan({
   // including the work and unused ones. Mapping between the two is the one place
   // an off-by-one would put a whole year's courses in the wrong term, so it is
   // done once, explicitly.
+  // The filter here MUST be the same one `shape.studyTerms` applies, or the two
+  // disagree about what index 4 means and a whole year's courses land in the wrong
+  // term. Making unused terms placeable broke exactly this: `studyTerms` began
+  // including them while this still skipped them, and the shift showed up as 116
+  // season violations and 89 terms over the credit cap — a plan that had been
+  // verified against one indexing and written out under another.
   const studyIndexOf = new Map();
   let s = 0;
   shape.terms.forEach((t, i) => {
-    if (!t.work && !t.unused) studyIndexOf.set(i, s++);
+    if (!t.work) studyIndexOf.set(i, s++);
   });
 
   const cellsAt = new Map();          // study index → CellPlan[]
@@ -79,7 +85,11 @@ export function emitPlan({
       // side, which is how a six-month co-op printed as two columns becomes one
       // block rather than two co-ops.
       entries.push({ text: "Co-op", coop: true });
-    } else if (!t.unused) {
+    } else {
+      // Unused terms are emitted too, now that a cell may legitimately land in one.
+      // A term that stayed empty emits nothing and reads as vacation, exactly as
+      // before — the difference is that CHART is allowed to use it when a course
+      // runs only in that season.
       const here = (cellsAt.get(studyIndexOf.get(i)) ?? []).slice()
         // Stable, readable order: forced courses first, then choices, then open
         // cells, alphabetically within each. Deterministic output is a hard

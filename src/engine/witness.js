@@ -273,11 +273,12 @@ export function witnessPlan({
         if (used.has(id) && !repeatable(id)) continue;
         const course = courseMap[id];
         if (!course) continue;
-        // Only an explicit zero blocks; null is unknown and unknown is allowed. A
-        // cell whose availability was relaxed in `buildDomains` has no season-legal
-        // candidate anywhere, so applying the bar here would reject what the domain
-        // deliberately permitted.
-        if (!cell.availabilityRelaxed && offeringProbability(id, term.semTypeId) === 0) continue;
+        // Only an explicit zero blocks; null is unknown and unknown is allowed.
+        // Never relaxed: a course scheduled in a season it has not run in is the
+        // defect this engine exists to fix, so availability is the one preference
+        // that never gives way. Where the shape leaves a cell nowhere to go, the
+        // SHAPE yields instead — see `shape.studyTerms`.
+        if (offeringProbability(id, term.semTypeId) === 0) continue;
         if (checkPrereqs && !prereqReachable(course, placements, semIndex, ti, courseMap)) continue;
         legal.push(id);
         // Stop enumerating once the cell is provably matchable regardless of
@@ -336,7 +337,7 @@ export function witnessPlan({
     for (const cell of wide) {
       const cands = candidatesOf(cell, term.semTypeId);
       const fits = (id) => (!used.has(id) || repeatable(id)) && courseMap[id]
-        && (cell.availabilityRelaxed || offeringProbability(id, term.semTypeId) !== 0)
+        && offeringProbability(id, term.semTypeId) !== 0
         && (!checkPrereqs || prereqReachable(courseMap[id], placements, semIndex, ti, courseMap));
       const pick = cands === null
         ? firstFree(courseMap, fits)

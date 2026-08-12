@@ -336,3 +336,36 @@ test("corpus › a plan is produced in a time a person would wait for", () => {
   // prereq-aware witness on every trial move (it was 4.9 seconds).
   assert.ok(median < 1500, `median generation time ${median} ms`);
 });
+
+test("corpus › the term a cell was verified in is the term it is emitted in", () => {
+  // The one off-by-one that can invalidate everything else here.
+  //
+  // `termOf` indexes the terms `shape.studyTerms` returns; `emit` walks the shape's
+  // full term list and has to skip exactly the same ones. When unused terms became
+  // placeable, `studyTerms` started including them while `emit` still skipped them —
+  // and every cell shifted. The plans stayed internally consistent, passed the
+  // search's own checks, and came out with 116 season violations and 89 terms over
+  // the credit cap, because they had been verified against one indexing and written
+  // out under another.
+  //
+  // Re-derived here from the EMITTED grid, so it cannot share the bug: a course in
+  // the emitted plan must be offered in the season of the term it is emitted into,
+  // which is the property the shift destroyed.
+  const bad = [];
+  for (const { p, out } of made) {
+    for (const t of readPlan(out.plan)) {
+      if (t.coop) continue;
+      for (const e of t.entries) {
+        if (e.options?.length !== 1) continue;
+        for (const id of e.options[0]) {
+          if (ports.offeringProbability(id, t.semTypeId) === 0) {
+            bad.push(`${p.key}: ${id} emitted into ${t.label} (${t.semTypeId})`);
+          }
+        }
+      }
+    }
+  }
+  assert.deepEqual(bad.slice(0, 8), [],
+    `${bad.length} courses emitted into a season they have never run in — ` +
+    `if this fires alongside many others, suspect the study-term indexing first`);
+});

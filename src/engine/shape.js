@@ -188,12 +188,30 @@ export function defaultShape({
 /**
  * The terms cells may be placed in, in order.
  *
- * Work terms carry no course credit; unused terms are ones the published plan
- * leaves empty, and using them anyway would override departmental intent about
- * which terms this degree occupies.
+ * Work terms are excluded outright: they carry no course credit and the student is
+ * not enrolled.
+ *
+ * UNUSED terms — the summers a published plan leaves empty — are included but marked
+ * `optional`, and the search tries them last. That is a deliberate ranking of two
+ * inheritances against each other:
+ *
+ *   which terms this degree occupies   the department's intent. Soft. It is a
+ *                                      convention about how a plan is usually spread.
+ *   when a course is actually offered   a fact about the world. Hard.
+ *
+ * Availability used to lose that contest. A cell whose every candidate is barred from
+ * every term the plan uses had the availability constraint RELAXED and was placed
+ * anyway — 3 season violations that the published plans, for those two programs, did
+ * not have. Scheduling a course in a season it has never run in is the exact defect
+ * this engine exists to fix, so it cannot be the thing that gives way.
+ *
+ * Using a summer the department left blank is a much smaller liberty, and one a
+ * student can act on: the report names which optional terms a plan needed.
  */
 export function studyTerms(shape) {
-  return (shape?.terms ?? []).filter(t => !t.work && !t.unused);
+  return (shape?.terms ?? [])
+    .filter(t => !t.work)
+    .map(t => (t.unused ? { ...t, optional: true } : t));
 }
 
 /** Credit the shape intends to carry across all study terms. */

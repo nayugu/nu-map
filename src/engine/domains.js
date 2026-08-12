@@ -223,29 +223,6 @@ export function buildDomains(cells, terms, {
       if (ok) domain.push(ti);
     }
 
-    // ── When availability alone is what makes a cell impossible ─────
-    //
-    // Offering history is strong evidence and stays a hard constraint wherever it
-    // CAN be satisfied — placing a course in a season it has never run in is the
-    // defect this engine exists to fix. But `semTypeProb` returns 0 on as little as
-    // two observed terms, and for a graduate program with three study terms that
-    // was enough to refuse the whole plan: 9 of 150 programs died on a single cell
-    // whose candidates had thin history for the seasons their own published plan
-    // uses.
-    //
-    // A plan with a flagged availability risk is worth more than no plan, and the
-    // requirement is real either way. So the constraint is relaxed for exactly the
-    // cells it would otherwise strand, and the relaxation is recorded on the cell
-    // so the report can say which courses to check with a department. Degrading to
-    // less confidence, not to a wrong answer.
-    let relaxed = false;
-    if (!domain.length && candidates?.length && minDepth < terms.length) {
-      for (let ti = minDepth; ti < terms.length; ti++) {
-        if (candidates.some(id => depthBoth(id) <= ti)) domain.push(ti);
-      }
-      relaxed = domain.length > 0;
-    }
-
     if (!domain.length) {
       impossible.push({
         cell: cell.id, title: cell.title, target: cell.target, minDepth,
@@ -255,6 +232,12 @@ export function buildDomains(cells, terms, {
         reason: minDepth >= terms.length ? "prereq-chain-longer-than-plan"
               : candidates?.length === 0 ? "no-catalog-course-answers-it"
               : "never-offered-in-any-term-this-plan-uses",
+        // Which seasons its candidates DO run in, so the refusal is actionable: a
+        // plan that needs a term the calendar does not offer is a different problem
+        // from a course nothing can answer.
+        seasons: candidates
+          ? [...new Set(candidates.flatMap(id => [...allowedSeasons(id)]))].sort()
+          : null,
       });
     }
 
@@ -272,18 +255,14 @@ export function buildDomains(cells, terms, {
       if (candidates === null) { seasonOk.set(s, null); continue; }
       const list = [];
       for (const id of candidates) {
-        // A relaxed cell has no season-legal candidate anywhere; filtering by
-        // season would leave it empty and the witness would reject what the domain
-        // just permitted.
-        if (!relaxed && !allowedSeasons(id).has(s)) continue;
+          if (!allowedSeasons(id).has(s)) continue;
         list.push(id);
         if (list.length >= wideAt) break;
       }
       seasonOk.set(s, list);
     }
 
-    plans.push({ cell, domain, candidates, seasonOk, minDepth,
-                 ...(relaxed ? { availabilityRelaxed: true } : {}) });
+    plans.push({ cell, domain, candidates, seasonOk, minDepth });
   }
   return { plans, impossible };
 }

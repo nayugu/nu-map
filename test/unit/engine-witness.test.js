@@ -187,11 +187,22 @@ test("witness › only an explicit zero blocks a season", () => {
   assert.equal(rare.ok, true, "a low probability is a risk, not an illegality");
 });
 
-test("witness › a relaxed cell ignores the season bar", () => {
+test("witness › the season bar is NEVER relaxed", () => {
+  // There used to be an escape hatch: a cell whose every candidate was barred from
+  // every term the plan uses had availability waived and was placed anyway. It
+  // produced 3 season violations the departments' own plans did not have, in the one
+  // dimension where our data is better than theirs.
+  //
+  // Availability is the constraint that never gives way. Where the shape leaves a
+  // cell nowhere legal, the SHAPE yields — `shape.studyTerms` marks the terms a
+  // published plan leaves empty as optional rather than excluded, and the search
+  // tries them last. Overriding "the department leaves this summer blank" is a much
+  // smaller liberty than overriding "this course has never run in the spring".
   const cm = mapOf(course("A100"));
   const cells = [{ ...open("o", 0), availabilityRelaxed: true }];
   const r = run(cells, { o: ["A100"] }, cm, { offeringProbability: () => 0 });
-  assert.equal(r.ok, true);
+  assert.equal(r.ok, false, "a stale relaxation flag must not reopen the hatch");
+  assert.equal(r.failure.kind, "no-candidate");
 });
 
 // ── The two meanings of null ───────────────────────────────────────

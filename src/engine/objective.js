@@ -592,8 +592,7 @@ function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId
   if (precedence && precedenceViolations(precedence, termOf).length) return false;
   const cells = plans
     .filter(p => termOf.get(p.cell.id) != null)
-    .map(p => ({ ...p.cell, term: termOf.get(p.cell.id),
-                 availabilityRelaxed: !!p.availabilityRelaxed }));
+    .map(p => ({ ...p.cell, term: termOf.get(p.cell.id) }));
   return witnessPlan({
     cells, candidatesOf: (c) => byId.get(c.id).candidates,
     terms, courseMap, offeringProbability: ports.offeringProbability,

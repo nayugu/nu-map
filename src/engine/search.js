@@ -226,8 +226,7 @@ function attemptPlacement({
 
   const assignedCells = () => order
     .filter(p => termOf.has(p.cell.id))
-    .map(p => ({ ...p.cell, term: termOf.get(p.cell.id),
-                 availabilityRelaxed: !!p.availabilityRelaxed }));
+    .map(p => ({ ...p.cell, term: termOf.get(p.cell.id) }));
 
   const runWitness = (checkPrereqs) => witnessPlan({
     cells: assignedCells(),
@@ -267,6 +266,12 @@ function attemptPlacement({
    * prior for the prerequisite edges the catalog never recorded rather than a rule of
    * its own. Load balance survives as the tie-break it should always have been.
    */
+  // A term the published plan leaves empty is a last resort, whatever else prefers
+  // it. Ranked ahead of every other consideration so the preference cannot be
+  // outvoted by load balance or a level target.
+  const optional = terms.map(t => (t.optional ? 1 : 0));
+  const byOptional = (a, b) => optional[a] - optional[b];
+
   const termPreference = (plan) => {
     // Where courses of this level conventionally sit, INSIDE the window precedence
     // already narrowed the cell to. Two mechanisms doing two jobs:
@@ -313,7 +318,8 @@ function attemptPlacement({
       // tried last, not excluded.
       const floor = cellLevelFloor(plan, courseMap, studentType) * span;
       return [...plan.domain].sort((a, b) =>
-        (a < floor ? 1 : 0) - (b < floor ? 1 : 0) || a - b || fill(a) - fill(b));
+        byOptional(a, b) || (a < floor ? 1 : 0) - (b < floor ? 1 : 0)
+        || a - b || fill(a) - fill(b));
     }
     // A cell with no level at all is a general elective, and it wants the END.
     //
@@ -325,7 +331,8 @@ function attemptPlacement({
     // so load balance quietly walked the electives forward.
     const want = cellLevelTarget(plan, courseMap, studentType) ?? 1;
     return [...plan.domain].sort((a, b) =>
-      Math.abs(a / span - want) - Math.abs(b / span - want) || fill(a) - fill(b) || a - b);
+      byOptional(a, b) || Math.abs(a / span - want) - Math.abs(b / span - want)
+      || fill(a) - fill(b) || a - b);
   };
 
   /**

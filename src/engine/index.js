@@ -175,13 +175,16 @@ export function generatePlan({
       thresholds: improved.thresholds,
       trades: improved.trades,
       notes, reconciliation,
-      // Cells CHART could only place by setting the availability constraint aside,
-      // because every candidate is barred from every term this plan uses. Named
-      // rather than counted, because "check these with the department" is the
-      // action, and a number alone is not actionable.
-      availabilityRelaxedCells: plans.filter(p => p.availabilityRelaxed).length,
-      availabilityRelaxed: plans.filter(p => p.availabilityRelaxed)
-        .map(p => ({ cell: p.cell.id, title: p.cell.title })),
+      // Terms the published plan leaves empty that this plan needed. Availability
+      // never gives way, so where a course only runs in a season the department's
+      // own plan skips, the SHAPE yields and says so. That is a statement a student
+      // can act on — "your plan uses a summer the department's does not, because
+      // X only runs then" — where a silently violated season is not.
+      optionalTermsUsed: terms
+        .map((t, i) => ({ t, i }))
+        .filter(({ t, i }) => t.optional &&
+          [...improved.termOf.values()].includes(i))
+        .map(({ t }) => `${t.label} ${t.termLabel}`.trim()),
       // Courses whose prerequisites this plan does not schedule at all. Not a
       // sequencing error — the student may meet them by transfer, AP or an
       // elective — but the student is entitled to know which they are.
