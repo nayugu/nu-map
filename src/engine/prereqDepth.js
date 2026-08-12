@@ -314,34 +314,69 @@ export const LEVEL_POSITION = { 1: 0.00, 2: 0.36, 3: 0.64, 4: 0.91 };
  * p10 rather than the minimum, because the minimum is one department's outlier and
  * a floor built on it would not constrain anything.
  */
-export const LEVEL_FLOOR = { 1: 0.00, 2: 0.09, 3: 0.22, 4: 0.67 };
+export const LEVEL_FLOOR = { 1: 0.00, 2: 0.09, 3: 0.22, 4: 0.67, 5: 0.57 };
 
-/** The earliest position a cell of this level should occupy, 0..1. */
-export function cellLevelFloor(plan, courseMap) {
-  const cell = plan.cell ?? plan;
-  const levels = cell.groups?.length
-    ? cell.groups.map(g => Math.max(...g.map(courseLevel)))
-    : (plan.candidates ?? []).map(courseLevel).filter(Boolean);
-  if (!levels.length) return 0;
-  // The SHALLOWEST option, because the student may pick that one and a floor must
-  // not forbid a placement some legal choice makes fine.
-  const lv = Math.min(...levels.filter(Boolean).concat(Infinity));
-  if (!Number.isFinite(lv) || !lv) return 0;
-  return LEVEL_FLOOR[Math.min(4, lv)] ?? LEVEL_FLOOR[4];
+/**
+ * ── A GRADUATE program has no standing ladder, and clamping to 4xxx was a bug ──
+ *
+ * Measured over 62 graduate plans and 683 placements, the p10 position is **0.00 at
+ * every level from 5xxx to 8xxx**: a student admitted to a master's takes 5000-level
+ * courses in their first term, which is the whole point of being admitted.
+ *
+ * Clamping level to 4 gave every one of those courses the 4xxx floor of 0.67 — so in
+ * a program where every course is 5000-level, every cell was barred from the first
+ * two thirds of its own plan.
+ *
+ * The medians do not form a usable ladder either — 5xxx 0.21, 6xxx 0.33, 7xxx 0.75,
+ * 8xxx 0.27 — and the non-monotonicity is not signal, it is 33 observations at 8xxx.
+ * So graduate study gets one target and no floor rather than a fabricated ladder.
+ *
+ * A 5000-level course inside an UNDERGRADUATE plan is a different case and does have
+ * a floor: measured p10 0.57 across 154 placements, which is why `LEVEL_FLOOR` carries
+ * a 5 rather than reusing 4's.
+ */
+export const GRADUATE_TARGET = 0.3;
+
+/** Levels at and above this are graduate study. */
+export const GRADUATE_LEVEL = 5;
+
+/**
+ * The earliest position a cell of this level should occupy, 0..1.
+ *
+ * `studentType` matters: the same 5000-level course is late in an undergraduate plan
+ * and immediate in a master's.
+ */
+export function cellLevelFloor(plan, courseMap, studentType = "undergraduate") {
+  if (studentType === "graduate") return 0;
+  const lv = shallowestLevel(plan);
+  if (!lv) return 0;
+  return LEVEL_FLOOR[Math.min(5, lv)] ?? LEVEL_FLOOR[5];
 }
 
 /**
- * Graduate numbering does not continue the undergraduate ladder — a 5000-level
- * course is often open to seniors — so everything above 4xxx gets one middling
- * target rather than a fabricated extension of the fit.
+ * The shallowest level among a cell's options.
+ *
+ * Shallowest, not deepest: the student may pick that option, and a floor must not
+ * forbid a placement some legal choice makes perfectly fine.
  */
-const GRAD_POSITION = 0.5;
+function shallowestLevel(plan) {
+  const cell = plan.cell ?? plan;
+  const levels = (cell.groups?.length
+    ? cell.groups.map(g => Math.max(...g.map(courseLevel)))
+    : (plan.candidates ?? []).map(courseLevel)).filter(Boolean);
+  return levels.length ? Math.min(...levels) : 0;
+}
+
+
 
 /** Where a course of this level wants to sit, 0..1 through the plan. */
-export function levelTarget(courseId) {
+export function levelTarget(courseId, studentType = "undergraduate") {
   const lv = courseLevel(courseId);
   if (!lv) return null;
-  return LEVEL_POSITION[lv] ?? GRAD_POSITION;
+  if (studentType === "graduate" || lv >= GRADUATE_LEVEL) {
+    return studentType === "graduate" ? GRADUATE_TARGET : LEVEL_POSITION[4];
+  }
+  return LEVEL_POSITION[lv];
 }
 
 /**
@@ -353,11 +388,11 @@ export function levelTarget(courseId) {
  * Null for a cell that admits anything: a general elective belongs nowhere in
  * particular, which is exactly why it is the filler.
  */
-export function cellLevelTarget(plan, courseMap) {
+export function cellLevelTarget(plan, courseMap, studentType = "undergraduate") {
   const cell = plan.cell ?? plan;
   if (cell.groups?.length) {
     const t = cell.groups
-      .map(g => Math.max(...g.map(id => levelTarget(id) ?? 0)))
+      .map(g => Math.max(...g.map(id => levelTarget(id, studentType) ?? 0)))
       .filter(v => v > 0);
     return t.length ? Math.min(...t) : null;
   }
@@ -369,5 +404,8 @@ export function cellLevelTarget(plan, courseMap) {
   }
   if (!counts.size) return null;
   const [lv] = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0];
-  return LEVEL_POSITION[lv] ?? GRAD_POSITION;
+  if (studentType === "graduate" || lv >= GRADUATE_LEVEL) {
+    return studentType === "graduate" ? GRADUATE_TARGET : LEVEL_POSITION[4];
+  }
+  return LEVEL_POSITION[lv];
 }

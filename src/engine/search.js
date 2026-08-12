@@ -61,7 +61,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { witnessPlan, buildContention } from "./witness.js";
-import { termCapacity } from "./domains.js";
+import { termCapacity, termSlotCap } from "./domains.js";
 import { chainHeight } from "./precedence.js";
 import { cellLevelTarget, cellLevelFloor } from "./prereqDepth.js";
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
@@ -208,12 +208,14 @@ function attemptPlacement({
   repeatable, nodeBudget, deadline, now, precedence,
 }) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
+  const slotCap = terms.map(termSlotCap);
   // Deterministic order before any heuristic reorders: two runs must agree.
   const order = [...plans].sort((a, b) => byConstraint(a, b, terms.length));
 
   const byId = new Map(plans.map(p => [p.cell.id, p]));
   const termOf = new Map();
   const loadSH = new Array(terms.length).fill(0);
+  const countIn = new Array(terms.length).fill(0);
   let nodes = 0;
   let worstFailure = null;
 
@@ -309,11 +311,11 @@ function attemptPlacement({
       // — 77.4% down to 62.6% — because it removed legal terms the search needed for
       // capacity and turned a taste into an infeasibility. Terms below the floor are
       // tried last, not excluded.
-      const floor = cellLevelFloor(plan, courseMap) * span;
+      const floor = cellLevelFloor(plan, courseMap, studentType) * span;
       return [...plan.domain].sort((a, b) =>
         (a < floor ? 1 : 0) - (b < floor ? 1 : 0) || a - b || fill(a) - fill(b));
     }
-    const want = cellLevelTarget(plan, courseMap) ?? 1;
+    const want = cellLevelTarget(plan, courseMap, studentType) ?? 1;
     return [...plan.domain].sort((a, b) =>
       Math.abs(a / span - want) - Math.abs(b / span - want) || fill(a) - fill(b) || a - b);
   };
@@ -368,6 +370,9 @@ function attemptPlacement({
     for (const ti of termPreference(plan)) {
       // Term credit envelope — the registration cap, which is hard.
       if (loadSH[ti] + (cell.sh ?? 0) > cap[ti]) continue;
+      // Eleven courses in one term fits inside 19 credits and is not a plan anyone
+      // would follow. Bounded by the worst any published plan does.
+      if (countIn[ti] + 1 > slotCap[ti]) continue;
       // Precedence, forward-checked against what is already placed. This is what
       // turns discovering the prereq order from 20,000 nodes of backtracking into
       // a few dozen: the witness would catch a violation eventually, but only
@@ -376,6 +381,7 @@ function attemptPlacement({
 
       termOf.set(cell.id, ti);
       loadSH[ti] += cell.sh ?? 0;
+      countIn[ti] += 1;
 
       // Propagate `alldifferent` over what is placed so far, plus named-course
       // prereq order. Sound on a partial assignment: candidate prereqs are
@@ -392,6 +398,7 @@ function attemptPlacement({
 
       termOf.delete(cell.id);
       loadSH[ti] -= cell.sh ?? 0;
+      countIn[ti] -= 1;
     }
     return false;
   }

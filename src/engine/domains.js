@@ -72,6 +72,27 @@ import { groupDepth } from "./prereqDepth.js";
 export const wideAtFor = (cellCount) => cellCount + 1;
 
 /**
+ * How many cells one term may hold.
+ *
+ * MEASURED as the worst any published plan does: 9 in a full term, 5 in a summer
+ * half, across both the undergraduate and graduate corpora. CHART produced an
+ * 11-cell term — legal on credit, because eleven 1 SH seminars fit inside 19, and
+ * absurd as advice.
+ *
+ * The bound is deliberately the observed MAXIMUM rather than the p90 of 6. A term
+ * with seven courses is unusual and real; one with eleven is not, and a cap set at
+ * the typical case would forbid plans departments actually publish.
+ *
+ * `semester.maxSlots` in semGrid is 4 and 2 — that is LAYOUT, how many cards a row
+ * draws before scrolling, and 1,692 real terms exceed it. Using it as a constraint
+ * would reject most of the corpus.
+ */
+export const SLOT_CAP_FULL = 9;
+export const SLOT_CAP_HALF = 5;
+
+export const termSlotCap = (term) => ((term?.weight ?? 1) >= 1 ? SLOT_CAP_FULL : SLOT_CAP_HALF);
+
+/**
  * Materialise a cell's candidate courses, or null when it admits any.
  *
  * The distinction is the one `candidates.js` already draws and that the whole

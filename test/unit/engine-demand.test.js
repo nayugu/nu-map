@@ -219,7 +219,29 @@ test("demand › a required concentration reserves credit without choosing one",
   }, { courseMap: CM });
   const conc = cells.filter(c => c.target === CONCENTRATION);
   assert.equal(conc.length, 2, "the minimum over the options, not one of them");
-  assert.equal(conc[0].spec, null, "which concentration is the student's choice");
+
+  // The UNION of every option, not null and not one option's courses.
+  //
+  // Null read as "admits anything", so the cell sorted as filler and was placed
+  // last — measured median position 0.89 through the plan. A concentration is major
+  // depth; 51 programs require one and CS BSCS spends 16 credits on it.
+  //
+  // The union is not a guess about which concentration the student will pick. It is
+  // exactly what can answer the cell BEFORE they pick, which is what a candidate set
+  // means everywhere else in the engine.
+  assert.deepEqual([...conc[0].spec.keys].sort(), ["CS2800", "CS3000", "CS4100", "CS4300"]);
+  assert.equal(conc[0].groups, null, "still not a choice the engine makes");
+});
+
+test("demand › a concentration with nothing enumerable stays unbounded", () => {
+  const { cells } = deriveCells({
+    totalCreditsRequired: 100,
+    requirementSections: [SECTION("Core", 1, C("CS", "1800"))],
+    concentrations: { minOptions: 1, concentrationOptions: [SECTION("Empty", 1)] },
+  }, { courseMap: CM });
+  for (const c of cells.filter(x => x.target === CONCENTRATION)) {
+    assert.equal(c.spec, null, "unbounded is honest when the options name nothing");
+  }
 });
 
 // ── Reconciliation, reported and not silently absorbed ─────────────

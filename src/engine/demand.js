@@ -459,10 +459,20 @@ export function deriveCells(programData, { courseMap = {}, repeatable = () => fa
         sh: unit,
         kind: "open",
         groups: null,
-        // Null, not an empty spec: an empty spec means "names nothing", which is
-        // the opposite of "admits anything". `candidates.js` draws the same line
-        // and the whole planner depends on it.
-        spec: null,
+        // A CONCENTRATION carries the union of its options, so it is a bounded cell.
+        //
+        // Emitting `null` made it read as "admits anything", so it sorted as filler
+        // and was placed last: measured median position 0.89 through the plan. A
+        // concentration is major depth — 51 programs require one and CS BSCS spends
+        // 16 credits on it — and burying it at the end is the same defect as burying
+        // the major courses, one level up.
+        //
+        // The union is not a guess about which concentration the student will choose.
+        // It is exactly the set of courses that can answer the cell BEFORE they
+        // choose, which is what a candidate set means everywhere else here.
+        //
+        // General electives keep `null`, correctly: they really do admit anything.
+        spec: target === CONCENTRATION ? concentrationSpec(programData) : null,
         // Marked when the bucket rests on OUR arithmetic rather than the catalog's
         // statement, because that is what pre-flight's "mostly unlabelled" gate is
         // entitled to refuse over. A bucket the catalog stated is evidence; one we
@@ -558,6 +568,19 @@ function mergeForcedCells(cells, notes, repeatable = () => false) {
                  keptFor: seen.target, alsoFor: cell.target, savedSH: cell.sh ?? 0 });
   }
   return out;
+}
+
+/**
+ * Every course any of a program's concentrations admits.
+ *
+ * Null when the program has none, or when the options name nothing enumerable — an
+ * unbounded concentration cell is honest, it just cannot be sequenced as depth.
+ */
+function concentrationSpec(programData) {
+  const options = programData?.concentrations?.concentrationOptions ?? [];
+  if (!options.length) return null;
+  const spec = options.reduce((acc, o) => unionSpec(acc, specForNode(o)), emptySpec());
+  return specIsEmpty(spec) ? null : spec;
 }
 
 /** The courses a cell can be answered by, as a spec, whichever shape it stores. */

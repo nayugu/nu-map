@@ -53,7 +53,7 @@
 
 import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
 import { witnessPlan } from "./witness.js";
-import { termCapacity } from "./domains.js";
+import { termCapacity, termSlotCap } from "./domains.js";
 import { precedenceViolations, chainHeight } from "./precedence.js";
 import { buildContention } from "./witness.js";
 
@@ -116,7 +116,7 @@ export const DEFAULT_PREFERENCES = {
  *
  * @returns {{coopDepth: number, earlyBreadth: number, robustness: number, interleave: number}}
  */
-export function scorePlan({ plans, terms, termOf, boundary, ports, courseMap, heightOf }) {
+export function scorePlan({ plans, terms, termOf, boundary, ports, courseMap, heightOf, studentType }) {
   const byTerm = terms.map(() => []);
   for (const p of plans) {
     const ti = termOf.get(p.cell.id);
@@ -171,7 +171,7 @@ export function scorePlan({ plans, terms, termOf, boundary, ports, courseMap, he
   let outOfPlace = 0;
   for (let ti = 0; ti < terms.length; ti++) {
     for (const p of byTerm[ti]) {
-      const want = cellLevelTarget(p, courseMap);
+      const want = cellLevelTarget(p, courseMap, studentType);
       if (want === null) continue;                  // a filler belongs nowhere
       if (Math.abs(ti / span - want) > 1 / 3) outOfPlace++;
     }
@@ -406,7 +406,7 @@ export function improve({
   const byId = new Map(plans.map(p => [p.cell.id, p]));
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
 
-  const ctx = { plans, terms, boundary, ports, courseMap, heightOf };
+  const ctx = { plans, terms, boundary, ports, courseMap, heightOf, studentType };
   // Cheap: capacity is checked by the caller, so this is precedence alone.
   const cheapLegal = (assignment) =>
     !precedence || precedenceViolations(precedence, assignment).length === 0;
@@ -573,11 +573,16 @@ function hillClimb(start, score, cheapLegal, fullLegal, plans, terms, cap,
 
 function fitsCapacity(assignment, plans, terms, cap) {
   const load = terms.map(() => 0);
+  const count = terms.map(() => 0);
   for (const p of plans) {
     const ti = assignment.get(p.cell.id);
-    if (ti != null) load[ti] += p.cell.sh ?? 0;
+    if (ti == null) continue;
+    load[ti] += p.cell.sh ?? 0;
+    count[ti] += 1;
   }
-  return load.every((sh, ti) => sh <= cap[ti]);
+  // Both bounds, or a move the search refused would be reachable by the objective.
+  return load.every((sh, ti) => sh <= cap[ti])
+      && count.every((n, ti) => n <= termSlotCap(terms[ti]));
 }
 
 /** Full hard-constraint check, including the prereq-aware witness. */
