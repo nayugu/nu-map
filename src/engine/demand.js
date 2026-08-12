@@ -321,6 +321,146 @@ function cellsForSection(section, target, courseMap) {
   return { cells, notes };
 }
 
+/**
+ * Spend a general-elective slot on a prerequisite the degree never requires.
+ *
+ * ── The gap this closes, and why an elective is the right currency ───
+ *
+ * 115 named courses across the corpus need a prerequisite their own degree does not
+ * require anywhere. `MATH 1341` needs precalculus; a program that assumes you arrive with
+ * it lists neither. The plan was therefore complete against the requirements and NOT
+ * followable: the student cannot register for the course, and CHART reported the fact in
+ * `unscheduledPrereqs` and scheduled nothing about it.
+ *
+ * Three answers were possible — report it (what it did), refuse the program, or schedule
+ * the prerequisite. Scheduling is right, and the reason it is affordable is that such a
+ * course IS free-elective credit for this student: it counts toward the degree total
+ * without answering any named requirement, which is exactly what the general-elective
+ * bucket is. So the substitution spends a slot the student was going to fill with
+ * something arbitrary on something they actually need first.
+ *
+ * ── What it does not do ─────────────────────────────────────────────
+ *
+ * It never invents capacity. If no general-elective slot is free, nothing is substituted
+ * and the gap is still reported — a plan one course over the degree total would be a
+ * quiet lie about how long the degree takes, and the student can see the gap and place the
+ * course themselves.
+ *
+ * One course per gap, the shallowest first: a prerequisite with its own unmet
+ * prerequisites would need a chain, and adding the foundation lets the next pass see
+ * whether the rest is still missing rather than guessing at the whole ladder at once.
+ *
+ * The substituted cell keeps `target: GENERAL_ELECTIVE`, because that is the truth about
+ * which requirement it answers — free-elective credit — and the binding a reader sees
+ * should not claim otherwise. It carries the course's OWN credit value, so the degree
+ * total stays honest even where a 3 SH prerequisite replaces a 4 SH placeholder.
+ *
+ * @returns {{cells: object[], substituted: object[]}}
+ */
+/**
+ * How many prerequisites one plan will schedule into elective slots.
+ *
+ * Three. A degree with one or two courses assuming a prerequisite it does not list is
+ * ordinary — a program expecting you to arrive with precalculus. A degree with ten is
+ * telling you something about our parse of its requirements, not about the student's
+ * schedule, and spending ten free electives on that guess would rewrite the plan around a
+ * data defect. Bounded, and the rest reported.
+ */
+export const MAX_PREREQ_SUBSTITUTIONS = 3;
+
+export function substitutePrereqs(cells, unscheduled, courseMap, { depthOf = () => 0 } = {}) {
+  if (!unscheduled?.length) return { cells, substituted: [] };
+
+  const out = [...cells];
+  const substituted = [];
+  const already = new Set(cells.flatMap(c => c.groups?.flat() ?? []));
+
+  // ── ONE course per gap, because `needs` is usually an OR ──────────
+  //
+  // The first version took the union of every `needs` list and substituted all of it,
+  // which spent three elective slots on alternatives to each other: `ECON 2560` lists
+  // `ENGW 1113 or ENGW 1114 or INSH 3102 …`, and one of them satisfies it. Measured, that
+  // turned 30-odd real gaps into 100 substitutions and burned electives the student needs
+  // for something else.
+  //
+  // This is the same mistake this engine already paid for in `buildDepthIndex`, where
+  // reading an OR's operands as jointly required inflated every bound — an OR takes the
+  // MINIMUM. One course per gap is the honest reading, and if a gap needs a whole ladder
+  // the next generation sees what is still missing rather than guessing at it now.
+  //
+  // Sorted for determinism; shallowest first so a foundation is chosen over something that
+  // would itself need prerequisites.
+  const gaps = [...unscheduled].sort((a, b) =>
+    String(a.course).localeCompare(String(b.course)) || String(a.cell).localeCompare(String(b.cell)));
+
+  for (const gap of gaps) {
+    if (substituted.length >= MAX_PREREQ_SUBSTITUTIONS) break;
+    const options = (gap.needs ?? [])
+      .filter(id => courseMap[id])
+      // ── Only a course that itself needs nothing ────────────────────
+      //
+      // A substituted prerequisite has to sit BEFORE its consumer, so it tightens
+      // precedence — and if it carries prerequisites of its own it needs a whole ladder,
+      // each rung tightening further. Unfiltered, this made the test suite go from 1:05 to
+      // over ten minutes: not because substitution is expensive to compute, but because the
+      // plans became much harder to solve, and a harder plan spends its whole budget before
+      // refusing. Closing a gap by making the program unplannable is not closing it.
+      //
+      // Depth 0 means the catalog records no prerequisite for it, so it can go anywhere its
+      // season allows and cannot lengthen a chain. Deeper gaps are reported instead, which
+      // is what the student can act on: they are usually a course the degree assumes you
+      // arrive with, and no arrangement of THIS degree supplies it.
+      .filter(id => depthOf(id) === 0)
+      .sort((a, b) => a.localeCompare(b));
+    if (!options.length) continue;
+    // Already covered — by an earlier substitution, or by a branch of this very OR.
+    if (options.some(id => already.has(id))) continue;
+
+    const slot = out.findIndex(c =>
+      c.target === GENERAL_ELECTIVE && c.kind === "open" && !c.substitutedFor);
+    if (slot < 0) break;                              // no elective left to spend; reported instead
+
+    const id = options[0];
+    const course = courseMap[id];
+    const slotSH = out[slot].sh ?? 0;
+    const courseSH = course.sh ?? slotSH;
+
+    out[slot] = {
+      ...out[slot],
+      kind: "named",
+      groups: [[id]],
+      spec: null,
+      sh: courseSH,
+      title: course.title ? `${id} ${course.title}` : id,
+      // Recorded on the cell so the explainer can say WHY a named course is sitting in
+      // what the requirements call a free elective.
+      substitutedFor: gap.course ?? null,
+    };
+
+    // ── Never UNDER the free-elective pool ──────────────────────────
+    //
+    // A 1 SH prerequisite replacing a 4 SH placeholder would leave the degree three
+    // credits short — `POLS 1000` for `POLS 1150` did exactly that. Being over the pool is
+    // a slot the student can drop; being under it is a degree they cannot finish, and the
+    // two are not symmetric. So the remainder stays in the plan as elective credit.
+    if (courseSH < slotSH) {
+      out.push({
+        ...out[slot],
+        id: `${out[slot].id}~rem`,
+        kind: "open", groups: null, spec: null,
+        sh: slotSH - courseSH,
+        title: cells.find(c => c.target === GENERAL_ELECTIVE)?.title ?? out[slot].title,
+        substitutedFor: null,
+      });
+    }
+
+    already.add(id);
+    substituted.push({ course: id, forCourse: gap.course ?? null, sh: courseSH,
+                       remainderSH: Math.max(0, slotSH - courseSH) });
+  }
+  return { cells: out, substituted };
+}
+
 /** A label for a spec, when nothing in the tree carries a title. */
 export function specLabel(spec) {
   if (!spec) return "";

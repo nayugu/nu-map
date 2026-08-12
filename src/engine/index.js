@@ -28,7 +28,7 @@
 // outcome, and the official plan still loads beside it.
 // ═══════════════════════════════════════════════════════════════════
 
-import { deriveCells, cellsSH } from "./demand.js";
+import { deriveCells, cellsSH, substitutePrereqs } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
 import { buildDomains, wideAtFor, POOL_REACH_MIN, REAL_COURSE_SH } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
@@ -90,7 +90,7 @@ export function generatePlan({
   const depth = depthIndex ?? buildDepthIndex(courseMap);
 
   // ── 1. What the degree demands ──────────────────────────────────
-  const { cells, notes, reconciliation } = deriveCells(program, { courseMap, repeatable });
+  let { cells, notes, reconciliation } = deriveCells(program, { courseMap, repeatable });
 
   // ── 2. The skeleton ─────────────────────────────────────────────
   const baseShape = publishedPlan
@@ -108,7 +108,24 @@ export function generatePlan({
   // Before domains, because it supplies the depth floor they need. The catalog-wide
   // DAG says CS 2800 has depth 0; within a plan that also names CS 1800 it has
   // depth 1, and that difference is the whole of the sequencing bound.
-  const precedence = buildPrecedence(cells, courseMap, { observed: observedOrder });
+  let precedence = buildPrecedence(cells, courseMap, { observed: observedOrder });
+
+  // ── A prerequisite the degree never requires gets an elective slot ──
+  //
+  // `unscheduledPrereqs` is a real gap, not a nicety: the plan meets every requirement and
+  // the student still cannot register, because a named course needs something the degree
+  // lists nowhere. Such a course is free-elective credit for them, so a general-elective
+  // slot is exactly the right currency — see `substitutePrereqs`.
+  //
+  // Rebuilt afterwards rather than patched: the new cell is a named course, so it has
+  // prerequisites, depth and precedence edges of its own, and the index that has to know
+  // about them is the one computed from the cells. Patching precedence in place is how the
+  // two would drift.
+  const subbed = substitutePrereqs(cells, precedence.unscheduledPrereqs, courseMap, depth);
+  if (subbed.substituted.length) {
+    cells = subbed.cells;
+    precedence = buildPrecedence(cells, courseMap, { observed: observedOrder });
+  }
 
   // ── 4. Where each cell could go, for a given shape ──────────────
   //
@@ -267,6 +284,10 @@ export function generatePlan({
       // sequencing error — the student may meet them by transfer, AP or an
       // elective — but the student is entitled to know which they are.
       unscheduledPrereqs: precedence.unscheduledPrereqs,
+      // Prerequisites the degree never requires, now scheduled into a free-elective slot.
+      // Reported because a named course sitting in what the requirements call a general
+      // elective needs an explanation, and "you cannot take X without this" is one.
+      substitutedPrereqs: subbed.substituted,
       // A bound resting on prereq data we know is incomplete. Surfaced rather
       // than buried: it is the difference between a verified plan and a plausible
       // one, and the student is entitled to know which they have.
