@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { spawn, execSync } from "child_process";
 import fs from "fs";
+import net from "net";
 
 /**
  * Emits the AI-readable data export (dist/northeastern/ai/**, see
@@ -153,19 +154,61 @@ function buildManifestPlugin() {
   };
 }
 
-/** Spawns catalog-check-server alongside the dev server so no second terminal is needed. */
+/**
+ * Spawns catalog-check-server alongside the dev server so no second terminal
+ * is needed.
+ *
+ * Two things this has to get right, both learned the hard way:
+ *
+ *  1. **Do not spawn onto a taken port.** `child.on("error")` catches a failure
+ *     to SPAWN, not the child's own `EADDRINUSE` exit — so a second dev server
+ *     printed a full Node stack trace over the Vite banner and then sat in
+ *     `node --watch`'s "waiting for file changes" state forever. The port is
+ *     probed first instead, and a live server is left alone: one is all anyone
+ *     needs, and it is already serving.
+ *
+ *  2. **Kill the child when the parent goes.** `buildEnd` does not fire when a
+ *     dev server is stopped, so every run leaked a `node --watch` holding 3333
+ *     — which is what made (1) fire on the next start. The child is killed on
+ *     server close and on the signals that actually end a dev session.
+ */
 function catalogCheckPlugin() {
-  let child;
+  let child = null;
+  const stop = () => { if (child) { child.kill(); child = null; } };
   return {
     name: "catalog-check-server",
-    configureServer() {
+    async configureServer(server) {
+      if (await portInUse(CATALOG_CHECK_PORT)) {
+        server.config.logger.info(
+          `catalog-check-server: port ${CATALOG_CHECK_PORT} already serving — reusing it`);
+        return;
+      }
       child = spawn("node", ["--watch", "scripts/catalog-check-server.js"], { stdio: "inherit" });
-      child.on("error", () => {}); // silently ignore if port already in use
+      child.on("error", () => { child = null; });
+      server.httpServer?.on("close", stop);
+      for (const sig of ["SIGINT", "SIGTERM", "exit"]) process.once(sig, stop);
     },
-    buildEnd() {
-      if (child) { child.kill(); child = null; }
-    },
+    buildEnd: stop,
   };
+}
+
+const CATALOG_CHECK_PORT = 3333;
+
+/**
+ * Is something already listening? Resolves false on any error — never blocks a
+ * build. Probes BOTH stacks: catalog-check-server binds `*:3333`, which macOS
+ * reports as IPv6, so a 127.0.0.1-only probe would miss a live one and spawn a
+ * duplicate that dies on EADDRINUSE — the exact thing this exists to prevent.
+ */
+function portInUse(port) {
+  const probe = (host) => new Promise((resolve) => {
+    const s = net.createConnection({ port, host });
+    const done = (v) => { s.destroy(); resolve(v); };
+    s.once("connect", () => done(true));
+    s.once("error",   () => done(false));
+    s.setTimeout(400, () => done(false));
+  });
+  return Promise.all([probe("127.0.0.1"), probe("::1")]).then(r => r.some(Boolean));
 }
 
 export default defineConfig({

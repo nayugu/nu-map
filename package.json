@@ -7,6 +7,11 @@
   "type": "module",
   "scripts": {
     "dev": "node scripts/copy-ort-wasm.js && vite",
+    "dev:up": "node scripts/copy-ort-wasm.js && node scripts/dev-daemon.mjs up",
+    "dev:down": "node scripts/dev-daemon.mjs down",
+    "dev:restart": "node scripts/copy-ort-wasm.js && node scripts/dev-daemon.mjs restart",
+    "dev:status": "node scripts/dev-daemon.mjs status",
+    "dev:log": "tail -f .dev/vite.log",
     "build": "node scripts/copy-ort-wasm.js && node scripts/build-programs-bundle.js && vite build",
     "data:programs-bundle": "node scripts/build-programs-bundle.js",
     "preview": "vite preview",

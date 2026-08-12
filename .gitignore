@@ -12,6 +12,9 @@ test-results/
 # Rewritten on every `wrangler dev`, so it dirties the tree constantly.
 .wrangler/
 
+# Detached dev server's pid file and log (npm run dev:up) — per-machine state.
+.dev/
+
 # Opt-in HTML cache for the catalog scrapers (CATALOG_HTML_CACHE=.cache/catalog).
 # Development only — never enabled in CI, which must see the live catalog.
 .cache/
