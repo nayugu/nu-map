@@ -3,6 +3,7 @@
 //           relationship legend, co-op/grad conflict warning
 // ═══════════════════════════════════════════════════════════════════
 import { useState, useEffect, useMemo, useRef } from "react";
+import { createPortal } from "react-dom";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
@@ -150,6 +151,62 @@ function QrModal({ qr, scanLabel, closeLabel, onClose }) {
         </button>
       </div>
     </div>
+  );
+}
+
+// Confirmation for a plan that arrived by code, as an in-app sheet rather
+// than window.confirm.
+//
+// The native dialog is the wrong tool precisely where this feature lives.
+// Mobile browsers suppress dialogs raised during page load, and offer the
+// user a "block further dialogs" checkbox that persists; a suppressed
+// confirm returns FALSE, so the plan was silently discarded — after the
+// claim had already burned the code, leaving nothing to retry. From the
+// outside that is indistinguishable from the app ignoring the link, which
+// is how it kept getting reported. This cannot be suppressed, is readable
+// in every locale and theme, and says plainly that the code is now spent.
+// Portalled to document.body, which is not optional here: the header root
+// is `position: sticky; z-index: 30`, and that is a stacking context — every
+// z-index inside it is flattened to 30. Rendered in place, this sheet sat
+// UNDER the onboarding modal (z-index 200) and that modal swallowed the
+// clicks, so on a first run the confirm was visible-ish and unusable. A
+// browser test caught it; nothing else could have.
+function ShareImportModal({ name, onLoad, onCancel, title, note, loadLabel, cancelLabel }) {
+  useEffect(() => {
+    const onKey = (e) => { if (e.key === "Escape") onCancel(); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [onCancel]);
+  return createPortal(
+    <div role="dialog" aria-modal="true"
+      style={{ position: "fixed", inset: 0, zIndex: 10000, background: "rgba(2,6,23,0.66)",
+        display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+      <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+        borderRadius: 14, padding: 18, boxShadow: "var(--shadow-modal)", maxWidth: 340, width: "100%",
+        display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ fontSize: 13, fontWeight: 700, color: "var(--text-2)", lineHeight: 1.4 }}>
+          {title}
+        </div>
+        <div style={{ fontSize: 10, fontWeight: 500, color: "var(--text-4)", lineHeight: 1.45 }}>
+          {note}
+        </div>
+        <div style={{ display: "flex", gap: 8, marginTop: 2 }}>
+          <button onClick={onCancel}
+            style={{ flex: 1, fontSize: 11, fontWeight: 700, cursor: "pointer", padding: "7px 10px",
+              borderRadius: 7, border: "1px solid var(--border-2)",
+              background: "var(--bg-surface-2)", color: "var(--text-4)" }}>
+            {cancelLabel}
+          </button>
+          <button onClick={onLoad} autoFocus
+            style={{ flex: 1, fontSize: 11, fontWeight: 700, cursor: "pointer", padding: "7px 10px",
+              borderRadius: 7, border: "1px solid var(--active)",
+              background: "var(--active)", color: "#fff" }}>
+            {loadLabel}
+          </button>
+        </div>
+      </div>
+    </div>,
+    document.body,
   );
 }
 
@@ -478,6 +535,10 @@ export default function Header() {
   // path uses, it reads as "nothing happened" — which is exactly how it
   // was reported to us.
   const [scanArrival, setScanArrival]         = useState(false);
+  // { name, resolve } while the import sheet is up; resolve settles the
+  // promise redeemCode is waiting on, so one code path serves both the
+  // typed and the scanned arrival.
+  const [pendingShare, setPendingShare]       = useState(null);
   // Onboarding owed to a first-time visitor whose scanned code was dead,
   // held until the panel carrying the explanation is closed. Restoring it
   // immediately (the first attempt) drew the welcome modal straight over
@@ -561,13 +622,13 @@ export default function Header() {
       const d = await claimShareCode(code);
       // The claim already burned the code server-side, so a declined
       // confirm discards the plan — it can't be re-fetched. That's the
-      // right failure direction: nothing imports without a yes.
+      // right failure direction: nothing imports without a yes, and the
+      // sheet says so rather than letting the user find out.
       const name = d.planName || "Plan";
-      let imported = false;
-      if (window.confirm(t("header.io.code.confirm", { name }))) {
+      const imported = await new Promise(resolve => setPendingShare({ name, resolve }));
+      if (imported) {
         importSharedPlan(d);
         setShowIO(false);
-        imported = true;
       }
       setClaimInput("");
       setClaimOpen(false);
@@ -2273,6 +2334,16 @@ export default function Header() {
       )}
 
       {/* ── New plan modal ── */}
+      {pendingShare && (
+        <ShareImportModal
+          name={pendingShare.name}
+          title={t("header.io.code.confirm", { name: pendingShare.name })}
+          note={t("header.io.code.confirm.note")}
+          loadLabel={t("header.io.code.load")}
+          cancelLabel={t("header.io.code.confirm.no")}
+          onLoad={() => { pendingShare.resolve(true); setPendingShare(null); }}
+          onCancel={() => { pendingShare.resolve(false); setPendingShare(null); }} />
+      )}
       <NewPlanModal open={showNewPlanModal} onClose={() => setShowNewPlanModal(false)} />
       <ClaudeConnectModal open={showClaudeConnect} onClose={() => setShowClaudeConnect(false)} />
       <ClaudeOAuthModal />

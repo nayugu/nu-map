@@ -475,6 +475,8 @@ export const strings = {
   "header.io.code.toomanylive":   "未使用のコードが多すぎます。最も古いものは {time} 後に期限切れになります。",
   "header.io.code.busy":          "共有が満杯です。しばらくしてからお試しください。",
   "header.io.code.confirm":       "共有されたプラン「{name}」を読み込みますか？既存のプランの隣に新しいプランとして開きます。",
+  "header.io.code.confirm.note":  "コードはすでに使い切られているため、断るとこのプランは失われます。もう一度試すには新しいコードをもらってください。",
+  "header.io.code.confirm.no":    "破棄",
   "header.io.code.loading":       "共有されたプランを開いています…",
   "header.io.code.scanfailed":    "送った相手にもう一度共有してもらってください。コードの有効期間は10分で、使えるのは1回だけです。",
   "header.io.qr":                 "スキャンして開く",

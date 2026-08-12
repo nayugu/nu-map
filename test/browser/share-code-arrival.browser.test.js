@@ -63,27 +63,38 @@ describe("share-code arrival", { skip: up ? false : "dev server or relay not run
     return code;
   };
 
+  // The import sheet is in-app, NOT window.confirm — a native dialog is
+  // suppressible on mobile and returns false when suppressed, which
+  // discarded the plan after the claim had already burned the code. Any
+  // native dialog appearing here is therefore itself a failure, so these
+  // tests refuse to answer one.
+  const sheet = (page) => page.locator('[role="dialog"]').filter({ hasText: /Load shared plan/ });
+  const failOnNativeDialog = (page) => page.on("dialog", async d => {
+    await d.dismiss();
+    throw new Error(`a native dialog appeared: ${d.message()}`);
+  });
+
   // THE REGRESSION. Kept first because it is the one that shipped broken.
   test("a link opened while the app is ALREADY OPEN still claims the code", async () => {
-    const ctx = await browser.newContext();
-    const sender = await ctx.newPage();
+    const sender = await (await browser.newContext()).newPage();
     const code = await mintCode(sender, await openApp(sender));
 
     const recipient = await (await browser.newContext()).newPage();
-    let confirmed = null;
-    recipient.on("dialog", async d => { confirmed = d.message(); await d.accept(); });
+    failOnNativeDialog(recipient);
     await recipient.goto(APP, { waitUntil: "domcontentloaded" });   // app already open
     await recipient.waitForTimeout(2500);
 
     // Fragment-only navigation: no reload, hashchange only.
     await recipient.evaluate(u => { window.location.href = u; }, `${APP}/#c=${code}`);
-    await recipient.waitForTimeout(6000);
 
+    await sheet(recipient).waitFor({ state: "visible", timeout: 20_000 });
     const navigations = await recipient.evaluate(() => performance.getEntriesByType("navigation").length);
     assert.equal(navigations, 1, "the page reloaded; this no longer tests same-document navigation");
-    assert.ok(confirmed, "no import confirm: the hashchange arrival was missed");
-    assert.match(confirmed, /Plan/);
     assert.ok(!recipient.url().includes("#c="), "the burned code was left in the URL");
+
+    await sheet(recipient).getByRole("button", { name: /^Load$/ }).click();
+    await recipient.waitForTimeout(1500);
+    assert.equal(await sheet(recipient).count(), 0, "the sheet stayed up after Load");
   });
 
   test("a link opened on a COLD load still claims the code", async () => {
@@ -91,11 +102,33 @@ describe("share-code arrival", { skip: up ? false : "dev server or relay not run
     const code = await mintCode(sender, await openApp(sender));
 
     const recipient = await (await browser.newContext()).newPage();
-    let confirmed = null;
-    recipient.on("dialog", async d => { confirmed = d.message(); await d.accept(); });
+    failOnNativeDialog(recipient);
     await recipient.goto(`${APP}/#c=${code}`, { waitUntil: "domcontentloaded" });
-    await recipient.waitForTimeout(6000);
-    assert.ok(confirmed, "no import confirm on a cold load");
+    await sheet(recipient).waitFor({ state: "visible", timeout: 20_000 });
+    await sheet(recipient).getByRole("button", { name: /^Load$/ }).click();
+    await recipient.waitForTimeout(1500);
+    assert.equal(await sheet(recipient).count(), 0);
+  });
+
+  // The phone case that started all this: a suppressed native dialog
+  // returns false. Playwright auto-dismisses unhandled dialogs, which is
+  // the same thing — so a page with NO dialog handler must still import.
+  test("import survives a browser that suppresses native dialogs", async () => {
+    const sender = await (await browser.newContext()).newPage();
+    const code = await mintCode(sender, await openApp(sender));
+
+    const phone = await (await browser.newContext({
+      viewport: { width: 390, height: 844 }, isMobile: true, hasTouch: true,
+    })).newPage();
+    // Deliberately no dialog handler: unhandled dialogs are auto-dismissed.
+    await phone.goto(`${APP}/#c=${code}`, { waitUntil: "domcontentloaded" });
+    await sheet(phone).waitFor({ state: "visible", timeout: 20_000 });
+    await sheet(phone).getByRole("button", { name: /^Load$/ }).click();
+    await phone.waitForTimeout(2000);
+    const active = await phone.evaluate(() =>
+      [...Array(localStorage.length).keys()].map(i => localStorage.key(i))
+        .filter(k => /active-plan/.test(k)).map(k => localStorage.getItem(k)));
+    assert.ok(active[0], "no plan became active after accepting the import");
   });
 
   test("the QR really decodes to the link, read back by an outside decoder", async (t) => {

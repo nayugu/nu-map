@@ -474,6 +474,8 @@ export const strings = {
   "header.io.code.toomanylive":   "아직 사용되지 않은 코드가 너무 많습니다. 가장 오래된 코드는 {time} 후에 만료됩니다.",
   "header.io.code.busy":          "공유가 가득 찼습니다. 나중에 다시 시도하세요.",
   "header.io.code.confirm":       "공유된 계획 “{name}”을(를) 불러올까요? 기존 계획 옆에 새 계획으로 열립니다.",
+  "header.io.code.confirm.note":  "코드는 이미 사용되었으므로 거절하면 이 계획은 사라집니다. 다시 시도하려면 새 코드를 요청하세요.",
+  "header.io.code.confirm.no":    "버리기",
   "header.io.code.loading":       "공유된 계획을 여는 중…",
   "header.io.code.scanfailed":    "보낸 사람에게 다시 공유해 달라고 하세요. 코드는 10분간 유효하며 한 번만 사용할 수 있습니다.",
   "header.io.qr":                 "스캔하여 열기",

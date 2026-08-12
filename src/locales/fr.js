@@ -474,6 +474,8 @@ export const strings = {
   "header.io.code.toomanylive":   "Trop de vos codes ne sont pas encore réclamés. Le plus ancien expire dans {time}.",
   "header.io.code.busy":          "Le partage est à pleine capacité. Réessayez plus tard.",
   "header.io.code.confirm":       "Charger le plan partagé « {name} » ? Il s'ouvrira comme un nouveau plan à côté de vos plans existants.",
+  "header.io.code.confirm.note":  "Le code est déjà consommé : refuser abandonne ce plan. Demandez-en un nouveau pour réessayer.",
+  "header.io.code.confirm.no":    "Abandonner",
   "header.io.code.loading":       "Ouverture du plan partagé…",
   "header.io.code.scanfailed":    "Demandez à l'expéditeur de le partager à nouveau. Un code dure 10 minutes et ne sert qu'une fois.",
   "header.io.qr":                 "Scanner pour ouvrir",

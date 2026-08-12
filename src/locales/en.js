@@ -494,6 +494,8 @@ export const strings = {
   "header.io.code.toomanylive":   "Too many of your codes are still unclaimed. The oldest expires in {time}.",
   "header.io.code.busy":          "Sharing is at full capacity right now. Try again later.",
   "header.io.code.confirm":       "Load shared plan “{name}”? It will open as a new plan alongside your existing ones.",
+  "header.io.code.confirm.note":  "The code has already been used up, so declining discards this plan. Ask for a new code to try again.",
+  "header.io.code.confirm.no":    "Discard",
   "header.io.code.loading":       "Opening the shared plan…",
   "header.io.code.scanfailed":    "Ask the sender to share again. A code lasts 10 minutes and works once.",
   "header.io.qr":                 "Scan to open",
