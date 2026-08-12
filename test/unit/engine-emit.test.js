@@ -294,20 +294,34 @@ test("preflight › a STATED elective bucket is evidence, not a gap", () => {
   assert.equal(pf({ cells, shape }), null);
 });
 
-test("preflight › refuses when the requirements exceed the degree", () => {
+test("preflight › requirements exceeding the degree WARN rather than refuse", () => {
+  // It used to refuse, which answered the wrong question. "The sections total more
+  // than the degree" is a fact about the catalog's consistency; whether a plan can be
+  // built is a question about capacity, and `does-not-fit` asks that exactly. Refusing
+  // on the totals alone discarded 26 programs, some of which fit fine.
   const cells = Array.from({ length: 40 }, (_, i) => ({ id: `c${i}`, target: 0, sh: 4 }));
-  const r = pf({ cells });
-  assert.equal(r?.reason, "sections-exceed-degree");
-  assert.ok(r.data.over > 0);
+  const shape = shapeOf(Array.from({ length: 10 }, (_, i) =>
+    ({ term: "Fall", type: "fall", yearIndex: i, targetSH: 19 })));
+  const r = pf({ cells, shape });
+  assert.equal(r?.warn, "sections-exceed-degree");
+  assert.equal(r.reason, undefined, "a warning is not a refusal");
+  assert.equal(r.data.over, 60);
 });
 
-test("preflight › concentration credit counts toward the degree", () => {
+test("preflight › it still refuses when the excess does not FIT", () => {
+  const cells = Array.from({ length: 40 }, (_, i) => ({ id: `c${i}`, target: 0, sh: 4 }));
+  assert.equal(pf({ cells })?.reason, "does-not-fit");
+});
+
+test("preflight › concentration credit counts toward the excess", () => {
   // Excluding it let one program through at 140 credits for a 133-credit degree.
   const cells = [
     ...Array.from({ length: 25 }, (_, i) => ({ id: `c${i}`, target: 0, sh: 4 })),
     ...Array.from({ length: 8 }, (_, i) => ({ id: `k${i}`, target: CONCENTRATION, sh: 4 })),
   ];
-  assert.equal(pf({ cells })?.reason, "sections-exceed-degree");
+  const shape = shapeOf(Array.from({ length: 10 }, (_, i) =>
+    ({ term: "Fall", type: "fall", yearIndex: i, targetSH: 19 })));
+  assert.equal(pf({ cells, shape })?.warn, "sections-exceed-degree");
 });
 
 test("preflight › refuses when the shape cannot hold the credit", () => {
@@ -323,6 +337,16 @@ test("preflight › names the cell nothing can place, and why", () => {
   assert.equal(r?.reason, "cell-has-no-legal-term");
   assert.match(r.detail, /Capstone/);
   assert.match(r.detail, /prereq-chain-longer-than-plan/);
+});
+
+test("preflight › a warning never masquerades as a refusal", () => {
+  // `index.js` branches on `warn`, so a gate result that carried both would either
+  // refuse a plannable program or let an unplannable one through.
+  const cells = Array.from({ length: 40 }, (_, i) => ({ id: `c${i}`, target: 0, sh: 4 }));
+  const shape = shapeOf(Array.from({ length: 10 }, (_, i) =>
+    ({ term: "Fall", type: "fall", yearIndex: i, targetSH: 19 })));
+  const r = pf({ cells, shape });
+  assert.ok(r.warn && !r.reason);
 });
 
 test("preflight › every refusal carries a readable sentence", () => {

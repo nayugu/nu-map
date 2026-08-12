@@ -396,7 +396,7 @@ export const DEFAULT_IMPROVE_TRIALS = 20000;
 export function improve({
   plans, terms, termOf, ports, studentType, courseMap, repeatable,
   preferences = DEFAULT_PREFERENCES, boundary, depthOf, precedence = null,
-  trialBudget = DEFAULT_IMPROVE_TRIALS,
+  trialBudget = DEFAULT_IMPROVE_TRIALS, shape = null,
 }) {
   // Chain height drives the leading objective, and it is a property of the
   // precedence graph rather than of any one arrangement, so it is computed once.
@@ -411,13 +411,13 @@ export function improve({
   const cheapLegal = (assignment) =>
     !precedence || precedenceViolations(precedence, assignment).length === 0;
   const fullLegal = (assignment) =>
-    isLegal({ plans, terms, termOf: assignment, cap, courseMap, repeatable, ports, byId, precedence });
+    isLegal({ plans, terms, termOf: assignment, cap, courseMap, repeatable, ports, byId, precedence, shape });
 
   // One shared budget across every climb, so total work is bounded regardless of how
   // many objectives are ranked.
   const budget = { left: trialBudget };
   const climb = (from, score) =>
-    hillClimb(from, score, cheapLegal, fullLegal, plans, terms, cap, { budget });
+    hillClimb(from, score, cheapLegal, fullLegal, plans, terms, cap, { budget, shape });
 
   let current = new Map(termOf);
   let moves = 0;
@@ -454,7 +454,7 @@ export function improve({
       // outside an earlier rank's band is not a candidate at all.
       (a) => cheapLegal(a) && withinBands(a, r),
       fullLegal,
-      plans, terms, cap, { budget },
+      plans, terms, cap, { budget, shape },
     );
     current = res.termOf;
     moves += res.moves;
@@ -532,7 +532,7 @@ const UNITS = {
  * so there is always a legal state to stay in.
  */
 function hillClimb(start, score, cheapLegal, fullLegal, plans, terms, cap,
-                   { maxPasses = 6, budget = { left: Infinity } } = {}) {
+                   { maxPasses = 6, budget = { left: Infinity }, shape = null } = {}) {
   let current = new Map(start);
   let best = score(current);
   let moves = 0;
@@ -551,7 +551,7 @@ function hillClimb(start, score, cheapLegal, fullLegal, plans, terms, cap,
         budget.left--;
         const trial = new Map(current);
         trial.set(p.cell.id, ti);
-        if (!fitsCapacity(trial, plans, terms, cap)) continue;
+        if (!fitsCapacity(trial, plans, terms, cap, shape)) continue;
         if (!cheapLegal(trial)) continue;
         const s = score(trial);
         if (s > bestScore) { bestScore = s; bestTerm = ti; }
@@ -571,7 +571,7 @@ function hillClimb(start, score, cheapLegal, fullLegal, plans, terms, cap,
   return { termOf: current, moves };
 }
 
-function fitsCapacity(assignment, plans, terms, cap) {
+function fitsCapacity(assignment, plans, terms, cap, shape = null) {
   const load = terms.map(() => 0);
   const count = terms.map(() => 0);
   for (const p of plans) {
@@ -582,12 +582,12 @@ function fitsCapacity(assignment, plans, terms, cap) {
   }
   // Both bounds, or a move the search refused would be reachable by the objective.
   return load.every((sh, ti) => sh <= cap[ti])
-      && count.every((n, ti) => n <= termSlotCap(terms[ti]));
+      && count.every((n, ti) => n <= termSlotCap(terms[ti], shape));
 }
 
 /** Full hard-constraint check, including the prereq-aware witness. */
-function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId, precedence }) {
-  if (!fitsCapacity(termOf, plans, terms, cap)) return false;
+function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId, precedence, shape }) {
+  if (!fitsCapacity(termOf, plans, terms, cap, shape)) return false;
   // Cheapest first: a precedence check is a map lookup, the witness is a matching.
   if (precedence && precedenceViolations(precedence, termOf).length) return false;
   const cells = plans

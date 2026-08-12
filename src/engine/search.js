@@ -135,7 +135,7 @@ export function placeCells({
   plans, terms, ports, studentType = "undergraduate", courseMap = {},
   repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, now = () => Date.now(),
-  precedence = null, maxRestarts = 40,
+  precedence = null, maxRestarts = 40, shape = null,
 }) {
   const deadline = now() + timeBudgetMs;
   // Domains are narrowed across restarts, so the originals are left untouched for
@@ -160,7 +160,7 @@ export function placeCells({
   for (let attempt = 0; attempt <= maxRestarts; attempt++) {
     const r = attemptPlacement({
       plans: working, terms, ports, studentType, courseMap, repeatable,
-      nodeBudget: perAttempt, precedence, now,
+      nodeBudget: perAttempt, precedence, now, shape,
       deadline: Math.min(deadline, now() + slice),
     });
     totalNodes += r.nodes;
@@ -205,10 +205,10 @@ export function placeCells({
 
 function attemptPlacement({
   plans, terms, ports, studentType, courseMap,
-  repeatable, nodeBudget, deadline, now, precedence,
+  repeatable, nodeBudget, deadline, now, precedence, shape = null,
 }) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
-  const slotCap = terms.map(termSlotCap);
+  const slotCap = terms.map(t => termSlotCap(t, shape));
   // Deterministic order before any heuristic reorders: two runs must agree.
   const order = [...plans].sort((a, b) => byConstraint(a, b, terms.length));
 

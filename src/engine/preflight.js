@@ -137,15 +137,27 @@ export function preflight({
   // General electives are excluded because they are the residual and are already
   // clamped to zero when the sections overrun — including them would double-count
   // the overrun.
+  // ── Not a refusal. A DISAGREEMENT, reported ─────────────────────
+  //
+  // This used to refuse, and refusing was answering the wrong question. "The sections
+  // total more than the degree" is a statement about the CATALOG's internal
+  // consistency; whether a plan can be built is a question about capacity, and the
+  // gate below already asks it exactly.
+  //
+  // Where the excess is poolable, `poolExcess` has already absorbed it. Where it is
+  // not — the remaining cases are programs whose surplus is all NAMED courses, and a
+  // named course cannot be dropped — the two possibilities are:
+  //
+  //   it still fits    emit it, and say the requirements exceed the stated degree.
+  //                    A plan the student can follow plus a discrepancy they should
+  //                    raise beats no plan at all.
+  //   it does not fit  `does-not-fit` refuses, naming the credit and the room, which
+  //                    is the more useful sentence anyway.
+  //
+  // Refusing on the totals alone discarded 26 programs, some of which fit fine.
   const scheduled = cellsSH(cells.filter(c => c.target !== GENERAL_ELECTIVE));
-  if (scheduled > total + DEFAULT_UNIT_SH) {
-    return {
-      reason: "sections-exceed-degree",
-      detail: `This program's requirements total ${scheduled} credits against a stated ` +
-              `degree of ${total}, so we cannot tell which of them are alternatives.`,
-      data: { scheduled, total, over: scheduled - total },
-    };
-  }
+  const excess = scheduled > total + DEFAULT_UNIT_SH
+    ? { scheduled, total, over: scheduled - total } : null;
 
   const terms = studyTerms(shape);
   if (!terms.length) {
@@ -180,7 +192,7 @@ export function preflight({
     };
   }
 
-  return null;
+  return excess ? { warn: "sections-exceed-degree", data: excess } : null;
 }
 
 /**

@@ -117,7 +117,30 @@ export function shapeFromPlan(plan) {
       });
     }
   });
-  return { pattern: plan?.label ?? "", terms, source: "published" };
+  // ── The plan's own worst term, as a ceiling CHART may not exceed ──
+  //
+  // A corpus-wide cap of 9 courses keeps CHART inside what SOME department does. It
+  // does not keep it inside what THIS department does, and measured per program CHART
+  // packed a term harder than the program's own plan in 27 cases. "Never worse than
+  // the plan we inherited from" is the stronger and the right bar.
+  //
+  // Recorded per term weight, because a full term and a summer half are different
+  // questions and one number for both would either free the half or strangle the full.
+  const coursesIn = (term) => flatten(term.entries)
+    .filter(e => !e.coop && !e.vacation && !e.heading && !e.either)
+    .reduce((n, e) => n + Math.max(1, e.options?.[0]?.length ?? 1), 0);
+  const perWeight = (want) => {
+    const counts = (plan?.years ?? []).flatMap(y => (y?.terms ?? [])
+      .filter(t => t && typeof t === "object" && (weightOf(t.type) >= 1) === want)
+      .map(coursesIn));
+    const max = Math.max(0, ...counts);
+    return max > 0 ? max : null;
+  };
+  return {
+    pattern: plan?.label ?? "", terms, source: "published",
+    maxCoursesFull: perWeight(true),
+    maxCoursesHalf: perWeight(false),
+  };
 }
 
 /** Every entry, co-op and vacation rows included, with nesting flattened. */
@@ -246,4 +269,52 @@ export function firstWorkBoundary(shape) {
     studied++;
   }
   return studied;
+}
+
+/**
+ * Add academic years to a shape.
+ *
+ * ── Why this exists ─────────────────────────────────────────────────
+ *
+ * 16 programs refused with `prereq-chain-longer-than-plan`: a graduate certificate
+ * whose department prints three terms, holding a chain of four courses that must be
+ * taken in order. No arrangement fits, and refusing was the wrong answer — the
+ * interesting fact is not "we cannot plan this" but **"this cannot be completed in
+ * the terms the department publishes"**, which is a finding about the program.
+ *
+ * So the shape stretches and the report says by how much. It is the same ranking the
+ * availability fix established: how long a degree takes is the department's
+ * convention, and a prerequisite chain is a fact. The convention yields.
+ *
+ * The added years copy the LAST year's term pattern minus its co-ops, because that is
+ * the calendar the program already uses and inventing a different one would be a
+ * second guess. Targets come from the pattern too, so a stretched plan is loaded the
+ * same way as any other.
+ */
+export function extendShape(shape, extraYears) {
+  if (!(extraYears > 0) || !shape?.terms?.length) return shape;
+  const lastYear = Math.max(...shape.terms.map(t => t.yearIndex));
+  // The pattern to repeat: the final year's STUDY terms. A co-op is a decision about
+  // this student's calendar, not a template — repeating one would invent a work term
+  // nobody planned.
+  const pattern = shape.terms.filter(t => t.yearIndex === lastYear && !t.work);
+  if (!pattern.length) return shape;
+
+  const added = [];
+  for (let k = 1; k <= extraYears; k++) {
+    const yearIndex = lastYear + k;
+    for (const t of pattern) {
+      added.push({
+        ...t,
+        yearIndex,
+        label: `Year ${yearIndex + 1}`,
+        work: false,
+        // Not `unused`: an added term exists precisely to be used. Its target is the
+        // pattern's, or the pattern's own weight-scaled share where that was empty.
+        unused: false,
+        targetSH: t.targetSH > 0 ? t.targetSH : Math.round(16 * (t.weight ?? 1)),
+      });
+    }
+  }
+  return { ...shape, terms: [...shape.terms, ...added], extendedBy: extraYears };
 }

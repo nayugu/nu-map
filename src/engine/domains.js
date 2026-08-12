@@ -90,7 +90,22 @@ export const wideAtFor = (cellCount) => cellCount + 1;
 export const SLOT_CAP_FULL = 9;
 export const SLOT_CAP_HALF = 5;
 
-export const termSlotCap = (term) => ((term?.weight ?? 1) >= 1 ? SLOT_CAP_FULL : SLOT_CAP_HALF);
+/**
+ * How many courses this term may hold.
+ *
+ * The inherited plan's own worst term wins where there is one, because "no worse than
+ * the plan we started from" is a stronger promise than "inside what some department
+ * somewhere does" — and measured, CHART was packing a term harder than the program's
+ * own plan in 27 cases while still respecting the corpus-wide 9.
+ *
+ * The corpus maximum is the fallback, for the 363 programs that publish no plan and
+ * therefore have nothing to be no-worse-than.
+ */
+export const termSlotCap = (term, shape = null) => {
+  const full = (term?.weight ?? 1) >= 1;
+  const inherited = full ? shape?.maxCoursesFull : shape?.maxCoursesHalf;
+  return inherited ?? (full ? SLOT_CAP_FULL : SLOT_CAP_HALF);
+};
 
 /**
  * How many COURSES one term may hold, which is not the same as how many cells.
@@ -214,12 +229,21 @@ export function buildDomains(cells, terms, {
       const term = terms[ti];
       if (ti < minDepth) continue;
       if (candidates === null) { domain.push(ti); continue; }
-      // A term is legal when at least one candidate is both deep enough by then
-      // and not barred from that season. Both conditions on the SAME candidate —
-      // testing them separately would admit a term where one course is deep
-      // enough and a different one is offered.
-      const ok = candidates.some(id =>
-        depthBoth(id) <= ti && allowedSeasons(id).has(term.semTypeId));
+      // A term is legal when SOME OPTION is entirely takeable in it.
+      //
+      // The unit is the option, not the course, and getting that wrong is how a season
+      // violation survived every other gate. `CHEM 2311 and CHEM 2313` is one option
+      // of two courses taken together, and `candidates.some(...)` accepted a term
+      // where only ONE of them runs — because it asked "is any of these courses
+      // offered" when the question is "is any WHOLE option available".
+      //
+      // Both conditions on the same option too: testing depth and season separately
+      // would admit a term where one course is deep enough and a different one is
+      // offered.
+      const options = liveGroups(cell, courseMap)
+        ?? candidates.map(id => [id]);      // an open pool: each candidate stands alone
+      const ok = options.some(g =>
+        g.every(id => depthBoth(id) <= ti && allowedSeasons(id).has(term.semTypeId)));
       if (ok) domain.push(ti);
     }
 

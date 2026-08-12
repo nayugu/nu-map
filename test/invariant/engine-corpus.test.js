@@ -206,6 +206,19 @@ test("corpus › the plan totals the degree's own credit requirement", () => {
     const sh = readPlan(out.plan).reduce(
       (n, t) => n + t.entries.reduce((m, e) => m + (e.sh ?? 0), 0), 0);
     const want = p.data.totalCreditsRequired;
+    // A program whose own requirements total more than its stated degree legitimately
+    // overshoots, and CHART says so rather than refusing: `sections-exceed-degree`.
+    // The plan must then exceed by AT MOST what the requirements exceed by — anything
+    // more is CHART's error rather than the catalog's — and the warning must be there,
+    // so a silent overshoot cannot hide behind this exemption.
+    const excess = (out.report.warnings ?? []).find(w => w.kind === "sections-exceed-degree");
+    if (excess) {
+      assert.ok(excess.over > 0, `${p.key}: excess warning with no amount`);
+      if (sh - want > excess.over + 5) {
+        bad.push(`${p.key}: ${sh} SH vs ${want} required, beyond the ${excess.over} the requirements themselves exceed by`);
+      }
+      continue;
+    }
     // A whole-cell plan cannot always hit a number exactly: a section demanding
     // 3 SH answered by 4 SH courses overshoots by one, and the catalog's own
     // printed totals disagree with its own cells in 7 terms. One course of slack.
