@@ -38,7 +38,7 @@
  * nothing would pass every other check vacuously, which is the failure mode that lets a gate
  * report success while doing nothing.
  */
-import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
+import { readFileSync, readdirSync, existsSync, statSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { generatePlan } from "../src/engine/index.js";
@@ -49,6 +49,7 @@ import { loadCatalog } from "../src/adapters/northeastern/courseCatalog.node.js"
 import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { gatePlan } from "./lib/chart-gate.js";
+import { fingerprintPlan, canonicalPlan } from "./lib/chart-fingerprint.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 
@@ -101,9 +102,21 @@ const observed = existsSync(orderFile)
 const limitAt = process.argv.indexOf("--limit");
 const LIMIT = limitAt > -1 ? Number(process.argv[limitAt + 1]) : Infinity;
 
+/**
+ * `--fingerprint <path>` also writes a hash of every plan produced.
+ *
+ * The sweep already generates all of them, so this is free, and it is what makes "this change
+ * moved nothing" checkable: snapshot, change, snapshot, `chart-fingerprint-diff`. See
+ * `lib/chart-fingerprint.js` for why there is no committed baseline.
+ */
+const fpAt = process.argv.indexOf("--fingerprint");
+const FINGERPRINT = fpAt > -1 ? process.argv[fpAt + 1] : null;
+const prints = {};
+
 const degrees = Number.isFinite(LIMIT) ? degreePrograms().slice(0, LIMIT) : degreePrograms();
 const violations = [];
 const refusals = new Map();
+const gave = new Map();
 let shapes = 0, made = 0, threw = 0, relaxed = 0;
 let thin = 0, fullTerms = 0;
 
@@ -131,7 +144,20 @@ for (const d of degrees) {
       return;
     }
     made++;
+    // What a fallback rung actually gave up, per plan. Counting `cardinalityRelaxed` here
+    // printed "four-course bound relaxed in 27 plans" while the bound was relaxed in none —
+    // the flag was stale and the 27 were simply plans that reached a fallback rung. Reporting
+    // the named conventions cannot go stale, because the names come from the ladder itself.
     if (out.report.cardinalityRelaxed) relaxed++;
+    for (const g of out.report.relaxed ?? []) gave.set(g, (gave.get(g) ?? 0) + 1);
+    if (FINGERPRINT) {
+      prints[label] = {
+        hash: fingerprintPlan(out.plan.plans[0]),
+        // The readable form too, so a moved hash can be explained rather than merely
+        // detected. A pair of hashes says something changed and nothing about what.
+        canonical: canonicalPlan(out.plan.plans[0]),
+      };
+    }
 
     const g = gatePlan({
       plan: out.plan.plans[0], courseMap,
@@ -156,11 +182,20 @@ for (const d of degrees) {
 const ratio = shapes ? made / shapes : 0;
 console.log(`\nCHART verification — ${degrees.length} degrees, ${shapes} shapes`);
 console.log(`  generated ${made} (${(100 * ratio).toFixed(1)}%)   refused ${shapes - made - threw}   threw ${threw}`);
-console.log(`  four-course bound relaxed in ${relaxed} plans`);
+console.log(`  reached a fallback rung ${gave.size ? [...gave.entries()]
+  .sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(", ") : "0 plans"}`
+  + (relaxed ? `   (four-course bound genuinely relaxed in ${relaxed})` : ""));
 console.log(`  thin full terms ${thin} of ${fullTerms} (${(100 * thin / (fullTerms || 1)).toFixed(1)}%)  — reported, not gated`);
 if (refusals.size) {
   console.log(`  refusals: ${[...refusals.entries()].sort((a, b) => b[1] - a[1])
     .map(([k, n]) => `${k} ${n}`).join(", ")}`);
+}
+
+if (FINGERPRINT) {
+  writeFileSync(FINGERPRINT, JSON.stringify({
+    meta: { shapes, made, at: new Date().toISOString() }, plans: prints,
+  }, null, 1));
+  console.log(`  fingerprints for ${Object.keys(prints).length} plans → ${FINGERPRINT}`);
 }
 
 if (threw) {

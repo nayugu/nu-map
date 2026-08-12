@@ -497,7 +497,18 @@ export function placeCells({
     if (r.ok) {
       return {
         ...r, nodes: totalNodes, restarts: maxRestarts,
-        cardinalityRelaxed: true,
+        // ── Report what was ACTUALLY given up, not what used to be ────
+        //
+        // This was a hardcoded `true`, left behind when the four-course rung came off the
+        // ladder. Neither remaining rung relaxes cardinality — `enforceCardinality` is true
+        // for both — so the report claimed the four-course bound had been dropped in 27
+        // plans when it had been dropped in none, and the full sweep duly printed
+        // "four-course bound relaxed in 27 plans". The plans were fine; the sentence about
+        // them was false, and it was the kind of false that gets quoted.
+        //
+        // Derived from the rung instead, so the flag stays truthful if a cardinality-
+        // relaxing rung is ever added again and cannot go stale if one is removed.
+        cardinalityRelaxed: rung.enforceCardinality === false,
         // Named so the report — and the student — can see WHICH convention was spent. A plan
         // that quietly stops following a rule it claims to follow is worse than one that says
         // so.
