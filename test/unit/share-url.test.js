@@ -16,12 +16,12 @@
 // touches them inside the two functions under test.
 import { test, afterEach } from "node:test";
 import assert from "node:assert/strict";
-import { buildCodeUrl, getHashCodeParam } from "../../src/core/planShare.js";
+import { buildCodeUrl, getHashCodeParam, isLoopbackHost } from "../../src/core/planShare.js";
 import { CODE_ALPHABET, CODE_LENGTH } from "../../src/core/shareCrypto.js";
 import { generateQr } from "../../src/core/qrEncode.js";
 
-const stub = ({ hash = "", origin = "http://localhost:5173", canonical = "https://numap.app/" } = {}) => {
-  globalThis.window = { location: { origin, hash, pathname: "/", search: "" } };
+const stub = ({ hash = "", origin = "https://numap.app", hostname = "numap.app", canonical = "https://numap.app/" } = {}) => {
+  globalThis.window = { location: { origin, hostname, hash, pathname: "/", search: "" } };
   globalThis.document = {
     querySelector: (sel) => (canonical && sel === 'link[rel="canonical"]' ? { href: canonical } : null),
   };
@@ -29,24 +29,78 @@ const stub = ({ hash = "", origin = "http://localhost:5173", canonical = "https:
 
 afterEach(() => { delete globalThis.window; delete globalThis.document; });
 
-// ── The origin a scanned QR resolves against ────────────────────────
+// ── The loopback rule ───────────────────────────────────────────────
+// Shared by buildCodeUrl and the relay's dev default (shareRelay.js), so
+// it is tested once, here, rather than twice and differently.
 
-test("buildCodeUrl › anchors to the canonical origin, not the serving one", () => {
-  // The whole point: a preview build served from a pages.dev mirror must
-  // still emit a link that resolves on a stranger's phone.
-  stub({ origin: "https://nu-map.pages.dev" });
-  assert.equal(buildCodeUrl("QK7FMP"), "https://numap.app/#c=QK7FMP");
+test("isLoopbackHost › catches every form that means 'this device'", () => {
+  for (const h of [
+    "localhost", "LOCALHOST", "localhost.", "app.localhost", "a.b.localhost",
+    "127.0.0.1", "127.1", "127.0.0.53", "127.255.255.255",
+    "0.0.0.0", "::1", "[::1]", "::", "[::]",
+  ]) {
+    assert.equal(isLoopbackHost(h), true, `${h} should be loopback`);
+  }
 });
 
-test("buildCodeUrl › falls back to the live origin when no canonical tag exists", () => {
-  stub({ origin: "https://example.test", canonical: null });
-  assert.equal(buildCodeUrl("QK7FMP"), "https://example.test/#c=QK7FMP");
+test("isLoopbackHost › does not over-reach onto reachable hosts", () => {
+  // These all resolve for someone else, so a QR naming them is fine.
+  // 127x.dev and localhost.evil.com are the classic near-miss shapes.
+  for (const h of [
+    "numap.app", "nu-map.pages.dev", "nayugu.github.io",
+    "192.168.1.42", "10.0.0.7", "172.16.3.9",
+    "127x.dev", "1270.0.0.1", "localhost.evil.com", "notlocalhost",
+    "mylocalhost", "example.com",
+  ]) {
+    assert.equal(isLoopbackHost(h), false, `${h} should NOT be loopback`);
+  }
+});
+
+test("isLoopbackHost › treats junk as not-loopback rather than throwing", () => {
+  for (const h of [undefined, null, "", 42, {}]) {
+    assert.doesNotThrow(() => isLoopbackHost(h));
+  }
+  assert.equal(isLoopbackHost(undefined), false);
+});
+
+// ── The origin a scanned QR resolves against ────────────────────────
+
+test("buildCodeUrl › keeps the serving origin, because that origin's relay holds the code", () => {
+  // A preview deploy is configured against its own relay. Rewriting its
+  // links to numap.app would hand the recipient an app talking to a
+  // different relay, which cannot have the code.
+  for (const origin of ["https://numap.app", "https://nu-map.pages.dev", "https://nayugu.github.io", "http://192.168.1.42:5173"]) {
+    stub({ origin, hostname: new URL(origin).hostname });
+    assert.equal(buildCodeUrl("QK7FMP"), `${origin}/#c=QK7FMP`);
+  }
+});
+
+test("buildCodeUrl › never puts a loopback host in a QR", () => {
+  // "localhost" on the scanning phone means the phone. A loopback QR does
+  // not fail informatively — it resolves to nothing at all.
+  for (const [origin, hostname] of [
+    ["http://localhost:5173", "localhost"],
+    ["http://127.0.0.1:5173", "127.0.0.1"],
+    ["http://127.1.2.3:5173", "127.1.2.3"],
+    ["http://0.0.0.0:5173", "0.0.0.0"],
+    ["http://[::1]:5173", "[::1]"],
+    ["http://app.localhost:5173", "app.localhost"],
+    ["http://LOCALHOST:5173", "LOCALHOST"],
+  ]) {
+    stub({ origin, hostname });
+    assert.equal(buildCodeUrl("QK7FMP"), "https://numap.app/#c=QK7FMP", `${hostname} leaked into the QR`);
+  }
+});
+
+test("buildCodeUrl › a loopback origin with no canonical tag degrades, never throws", () => {
+  stub({ origin: "http://localhost:5173", hostname: "localhost", canonical: null });
+  assert.equal(buildCodeUrl("QK7FMP"), "http://localhost:5173/#c=QK7FMP");
 });
 
 test("buildCodeUrl › survives a malformed canonical href instead of throwing", () => {
-  globalThis.window = { location: { origin: "https://example.test", hash: "", pathname: "/", search: "" } };
+  globalThis.window = { location: { origin: "http://localhost:5173", hostname: "localhost", hash: "", pathname: "/", search: "" } };
   globalThis.document = { querySelector: () => ({ href: "not a url" }) };
-  assert.equal(buildCodeUrl("QK7FMP"), "https://example.test/#c=QK7FMP");
+  assert.equal(buildCodeUrl("QK7FMP"), "http://localhost:5173/#c=QK7FMP");
 });
 
 // ── Round trip ──────────────────────────────────────────────────────

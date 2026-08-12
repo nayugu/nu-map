@@ -148,25 +148,59 @@ export function getHashPlanParam() {
 // to the relay (the code IS the decryption key — see shareCrypto.js).
 // This is what the QR encodes; nothing else is small enough to want to.
 
-// A QR is scanned by a DIFFERENT device, so window.location.origin is the
-// wrong anchor: on a preview build it is a pages.dev / github.io mirror and
-// the scan would 404. Production therefore anchors to the canonical origin
-// declared in index.html (https://numap.app).
+// A QR is scanned by a DIFFERENT device, so the only origin that can ever
+// be in it is one that device can reach. Loopback cannot be: "localhost"
+// on a phone means the phone, so a localhost QR resolves to nothing at all
+// — it does not even fail informatively. That is the one case that has to
+// be overridden, and it is overridden with the canonical origin declared
+// in index.html (https://numap.app).
 //
-// Dev is the deliberate exception. A dev app parks its code on the
-// localhost relay, and a link pointing at numap.app would ask the
-// PRODUCTION relay for a code it has never seen — an unclaimable QR that
-// looks like a bug in sharing rather than in the URL. So dev keeps its own
-// origin and stays scannable from a phone on the same network.
+// Everything else keeps window.location.origin, deliberately. An earlier
+// version of this function preferred canonical everywhere, on the reasoning
+// that a preview build's pages.dev / github.io origin "would 404" — that
+// was simply wrong, those origins serve the whole app. Worse, overriding
+// them is actively harmful: a preview deploy is configured against its own
+// relay, so rewriting its links to numap.app would send the recipient to an
+// app talking to a DIFFERENT relay, which cannot hold the code. The origin
+// that minted a code is the origin whose relay has it, so that is the
+// origin the QR must name.
+//
+// The residual honest gap is dev-over-loopback: the code is parked on the
+// localhost relay, and the canonical link we fall back to reaches
+// production, which has never seen it. The recipient gets "Code not found
+// or expired" — the correct message, and a far better failure than a URL
+// that cannot load. A developer who wants a genuinely scannable dev QR
+// serves over the LAN (vite --host) and points VITE_MCP_SERVER_URL at the
+// same host; then origin is a LAN address, this returns it, and the whole
+// flow works end to end.
+// Exported because the share relay needs exactly the same judgement for
+// exactly the same reason (its dev default follows the page's host), and
+// two copies of a rule like this drift — the first draft of them already
+// disagreed about `127.x` and `0.0.0.0`.
+// `127.` rather than `127.0.0.1` because the whole /8 is loopback and the
+// shorthands resolve there too (http://127.1 is a real thing).
+const _LOOPBACK = new Set(['localhost', '0.0.0.0', '::1', '[::1]', '::', '[::]']);
+
+export function isLoopbackHost(hostname) {
+  const h = String(hostname ?? '').toLowerCase().replace(/\.$/, '');
+  return _LOOPBACK.has(h) || h.endsWith('.localhost') || /^127\./.test(h);
+}
+
 function _shareOrigin() {
+  let origin, hostname;
   try {
-    if (import.meta.env?.DEV) return window.location.origin;
-  } catch { /* no import.meta (plain-Node tests) — fall through to canonical */ }
+    origin = window.location.origin;
+    hostname = window.location.hostname;
+  } catch { /* no window (tests) — canonical is all we have */ }
+
+  if (origin && !isLoopbackHost(hostname)) return origin;
+
   try {
     const href = document.querySelector('link[rel="canonical"]')?.href;
     if (href) return new URL(href).origin;
-  } catch { /* no DOM — fall through */ }
-  return window.location.origin;
+  } catch { /* no DOM, or a malformed canonical — fall through */ }
+
+  return origin ?? '';
 }
 
 export function buildCodeUrl(code) {

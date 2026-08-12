@@ -25,6 +25,7 @@ import HoverTip       from "./InfoTip.jsx";
 import FadeText       from "./FadeText.jsx";
 import { generateQr } from "../core/qrEncode.js";
 import { getHashCodeParam, buildCodeUrl } from "../core/planShare.js";
+import { CODE_LENGTH } from "../core/shareCrypto.js";
 
 // Measured header-row width (logical px) below which the labeled buttons fold
 // to icon-only. Above it, labeled buttons wrap into two stacked groups
@@ -465,6 +466,12 @@ export default function Header() {
   const [shareCodeBusy, setShareCodeBusy]     = useState(false);
   const [claimInput, setClaimInput]           = useState("");
   const [claimBusy, setClaimBusy]             = useState(false);
+  // The Load bar is a button until you reach for it, then an entry field.
+  // Opening has to hand over the caret in the same motion, or "hover and
+  // type" needs a click in the middle that nothing told the user about.
+  const [claimOpen, setClaimOpen]             = useState(false);
+  const claimRef                              = useRef(null);
+  useEffect(() => { if (claimOpen) claimRef.current?.focus(); }, [claimOpen]);
   const [shareCodeError, setShareCodeError]   = useState(null); // { key, until? }
   const [cancelHover, setCancelHover]         = useState(false); // red = click cancels
   const [codeNow, setCodeNow]                 = useState(Date.now());
@@ -540,9 +547,15 @@ export default function Header() {
         setShowIO(false);
       }
       setClaimInput("");
+      setClaimOpen(false);
     } catch (err) {
       setShareCodeError(shareErrorOf(err));
       setCodeNow(Date.now());
+      // Clear the field on failure. Submitting happens on the sixth
+      // character, so leaving a rejected six-character code in place would
+      // wedge the input at maxLength — every retry would start with a
+      // delete the user was never told to make.
+      setClaimInput("");
     } finally {
       setClaimBusy(false);
     }
@@ -1542,34 +1555,61 @@ export default function Header() {
                       </div>
                     </>
                   )}
-                  <input
-                    value={claimInput}
-                    onChange={e => { setShareCodeError(null); setClaimInput(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 6)); }}
-                    onKeyDown={e => { if (e.key === "Enter") handleClaimCode(); }}
-                    placeholder={t("header.io.code.placeholder")}
-                    title={t("header.io.code.load.title")}
-                    style={{ minWidth: 0, fontSize: 10, fontWeight: 700, textAlign: "center",
-                      // Spacing only once there's a code being typed — the
-                      // localized placeholder is longer than 6 chars and
-                      // overflowed the box with letter-spacing applied.
-                      fontFamily: "ui-monospace, monospace", letterSpacing: claimInput ? 2 : "normal",
-                      background: "var(--bg-surface)", color: "var(--text-2)",
-                      border: "1px solid var(--border-2)", borderRadius: 5, padding: "4px 6px" }} />
-                  <button className="hdr-btn-dd" onClick={handleClaimCode}
-                    title={t("header.io.code.load.title")}
-                    disabled={claimInput.length < 6 || claimBusy}
-                    style={{ fontSize: 10, fontWeight: 700,
-                      cursor: claimInput.length < 6 ? "default" : "pointer",
-                      background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                      border: "1px solid var(--border-2)", color: "var(--text-4)",
-                      opacity: claimInput.length < 6 || claimBusy ? 0.5 : 1 }}>
-                    {t("header.io.code.load")}
-                  </button>
+                  {/* The receiving half mirrors the sending half: one
+                      full-width bar, one job. At rest it just says Load —
+                      an entry field standing permanently open is an empty
+                      box asking a question nobody asked. Hover (or focus,
+                      so it is reachable by keyboard) turns it into six
+                      dots, and you type the code straight into them.
+                      There is no separate Load button because the code is
+                      a known six characters long: the sixth keystroke IS
+                      the submit, the way every one-time-code field works.
+                      Enter still submits, for anyone who expects it. */}
+                  <div
+                    onMouseEnter={() => setClaimOpen(true)}
+                    onMouseLeave={() => { if (!claimInput && document.activeElement !== claimRef.current) setClaimOpen(false); }}
+                    style={{ gridColumn: "1 / -1", display: "flex" }}>
+                    {claimOpen || claimInput ? (
+                      <input
+                        ref={claimRef}
+                        value={claimInput}
+                        onChange={e => {
+                          setShareCodeError(null);
+                          const next = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, CODE_LENGTH);
+                          setClaimInput(next);
+                          // Submit on the last character, not on a timer:
+                          // the length is the completeness signal.
+                          if (next.length === CODE_LENGTH) redeemCode(next);
+                        }}
+                        onKeyDown={e => { if (e.key === "Enter") handleClaimCode(); if (e.key === "Escape") { setClaimInput(""); setClaimOpen(false); e.currentTarget.blur(); } }}
+                        onBlur={() => { if (!claimInput) setClaimOpen(false); }}
+                        disabled={claimBusy}
+                        placeholder={"·".repeat(CODE_LENGTH)}
+                        title={t("header.io.code.load.title")}
+                        aria-label={t("header.io.code.load.title")}
+                        maxLength={CODE_LENGTH}
+                        style={{ flex: 1, minWidth: 0, width: "100%", fontSize: 10, fontWeight: 700,
+                          textAlign: "center", fontFamily: "ui-monospace, monospace", letterSpacing: 3,
+                          background: "var(--bg-surface)", color: "var(--text-2)",
+                          border: "1px solid var(--border-2)", borderRadius: 5, padding: "4px 6px",
+                          opacity: claimBusy ? 0.6 : 1 }} />
+                    ) : (
+                      <button className="hdr-btn-dd"
+                        onClick={() => setClaimOpen(true)}
+                        onFocus={() => setClaimOpen(true)}
+                        title={t("header.io.code.load.title")}
+                        style={{ flex: 1, fontSize: 10, fontWeight: 700, cursor: "text",
+                          background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
+                          border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
+                        {t("header.io.code.load")}
+                      </button>
+                    )}
+                  </div>
                   {/* Redeeming derives an AES key with 300k PBKDF2 rounds —
                       up to a second on a phone, and a whole second of
                       nothing is indistinguishable from a dead button. This
                       line is the only feedback a QR arrival gets, since it
-                      never touches the entry field or its Load button. */}
+                      never touches the entry field. */}
                   {claimBusy && (
                     <div style={{ gridColumn: "1 / -1", fontSize: 9, fontWeight: 600,
                       color: "var(--text-5)", textAlign: "center" }}>
