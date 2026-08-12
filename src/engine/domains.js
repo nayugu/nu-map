@@ -35,7 +35,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { materialize } from "../core/candidateSpec.js";
-import { groupDepth } from "./prereqDepth.js";
+import { groupDepth, courseLevel } from "./prereqDepth.js";
 
 /**
  * @typedef {Object} CellPlan
@@ -102,32 +102,72 @@ export const SLOT_CAP_HALF = 5;
  * therefore have nothing to be no-worse-than.
  */
 /**
- * How many general electives one term may hold.
+ * How many cells of ONE REQUIREMENT one term may hold.
  *
- * MEASURED over 6,959 published study terms: 44% hold none, 24% hold one, 23% hold
- * two, and only 9% hold three or more. CHART was putting them in FEWER terms than the
- * departments do — 34% of terms held one against their 56% — which reads as three or
- * four stacked in a single semester instead of one or two spread out.
+ * ── This started as a rule about general electives and should not have been ──
  *
- * Two, not one. One would be tidier and is not what the corpus says: a quarter of real
- * terms carry two, and forcing one per term would need more terms than some plans have.
+ * It was `GENERAL_PER_TERM`, counting only cells whose target is `~general`, because
+ * that is the complaint that arrived first: four free electives stacked in year 4.
+ * Generalising it was not tidying. Keyed to one requirement it left the same defect
+ * standing everywhere else, and the measurement is unambiguous:
+ *
+ *   cells of one requirement in a term   published   CHART
+ *     3                                       0.6%    7.8%
+ *     4                                       0.1%    6.5%
+ *
+ * 82 of 99 paired programs stacked harder than the department's own plan — three
+ * `Mathematics Elective` cells in one term, three `Khoury Elective` in another. The
+ * departments essentially never exceed two of anything, and `~general` is not special
+ * to them; it is one requirement among many that they spread.
+ *
+ * Two, not one. One would be tidier and is not what the corpus says: 16.3% of real
+ * terms carry two of a requirement, and forcing one per term would need more terms
+ * than some plans have.
+ *
+ * ── Why the first measurement said there was no problem ─────────────
+ *
+ * Counting COURSES of one subject per term said CHART (mean 1.09) was already better
+ * than the departments (1.17). That metric is blind: 38–44% of published terms hold no
+ * named course at all, so it cannot see a term made of three identical placeholders.
+ * A metric that cannot observe the defect will report its absence.
  */
-export const GENERAL_PER_TERM = 2;
+export const SAME_REQ_PER_TERM = 2;
 
 /**
  * And the HARD bound, which is a different number.
  *
- * `GENERAL_PER_TERM` is the target the search orders by; this is the point past which a
- * term is worse than anything the corpus contains. Published plans reach 4 at p90 and 6
- * at the extreme, so 4 is "no worse than almost every real plan" while still cutting
- * the stacks of five and six.
+ * `SAME_REQ_PER_TERM` is the target the search orders by; this is the point past which
+ * a term is worse than anything the corpus contains — published plans reach 4 at the
+ * extreme for both general electives (p90 4, max 6) and same-requirement stacks
+ * (max 4, one term in 988).
  *
  * Two numbers because one was not enough: a HARD cap of 2 refused a third of the
  * programs it had been planning, since a degree with nine free electives and eight
  * study terms genuinely cannot hold two per term. A preference spreads them without
  * making a taste into an infeasibility — the same lesson as the standing floor.
  */
-export const GENERAL_PER_TERM_MAX = 4;
+export const SAME_REQ_PER_TERM_MAX = 4;
+
+/**
+ * How much of an elective pool must be open before a term is a good place for it.
+ *
+ * The p10 of what departments do (mean 0.92, median 1.00, p10 0.69) rather than the
+ * median, and the difference is the whole point. At the median — wait until the pool is
+ * entirely open — a Khoury Elective cannot be placed until after the last prerequisite
+ * in the pool is done, which is the behaviour that puts every major elective in the
+ * final year. At the p10 a pool can go early as soon as MOST of it is genuinely
+ * available, which is what "major electives early" requires in order to mean anything.
+ *
+ * A share bar and not a level floor. For a POOL, course level is an artifact of how its
+ * candidates happen to be numbered — a `Khoury Elective` of 4000-level courses got a
+ * level target of 0.91, the last term, from numbering alone. The share is a fact about
+ * whether the student can actually take it.
+ *
+ * A PREFERENCE, ranked and never filtered: a pool whose share never reaches this in any
+ * term still gets placed. The standing floor and the hard elective cap both cost
+ * coverage when a taste was expressed as a constraint.
+ */
+export const POOL_REACH_MIN = 0.69;
 
 export const termSlotCap = (term, shape = null) => {
   const full = (term?.weight ?? 1) >= 1;
@@ -224,9 +264,46 @@ export function minDepthOf(cell, { depthOf, courseMap, planDepthOf = null }) {
  * @param {(id: string, semTypeId: string) => number|null} [ctx.offeringProbability]
  * @returns {{plans: CellPlan[], impossible: object[]}}
  */
+/**
+ * The level at and above which a course is graduate-only.
+ *
+ * 6000 and up, not 5000. 5000-level courses are genuinely open to undergraduates at
+ * Northeastern — combined BS/MS programs are built on it — so cutting there would remove
+ * courses the degree legitimately expects. 6000 and above is doctoral: seminars,
+ * candidacy, dissertation credit, and no undergraduate can register for any of it.
+ */
+export const GRADUATE_ONLY_LEVEL = 6;
+
+/**
+ * Drop courses this student cannot register for.
+ *
+ * MEASURED: 178 cells across 92 of 529 undergraduate programs (17.4%) had candidate sets
+ * admitting 6000-level-and-above courses — median 39% of the pool, and one cell where it
+ * was 100%. `Khoury Approved Electives` in Computer Science and Mathematics came out as
+ * 247 candidates of which 155 were graduate, including 53 at 7000 level.
+ *
+ * Two things were wrong because of it, and only one of them is cosmetic. The reachable
+ * SHARE was computed over courses the student cannot take, so a pool read as 82% open in
+ * term 1 when its undergraduate half was not. And the WITNESS — the proof that a legal
+ * completion exists — could satisfy an undergraduate's elective with a doctoral seminar.
+ *
+ * ── Degrade to less information, never to a broken plan ──────────────
+ *
+ * If filtering would empty a cell, the unfiltered set is kept. A cell whose candidates
+ * are ALL graduate courses is a fact about our parse of the requirement, not about the
+ * student, and refusing to plan the program is a worse answer than planning it with a
+ * candidate set we can see is wrong.
+ */
+export function registrable(candidates, studentType) {
+  if (candidates === null || studentType === "graduate") return candidates;
+  const ok = candidates.filter(id => (courseLevel(id) ?? 0) < GRADUATE_ONLY_LEVEL);
+  return ok.length ? ok : candidates;
+}
+
 export function buildDomains(cells, terms, {
   courseMap = {}, depthOf = () => 0, offeringProbability = () => null,
   planDepthOf = null, wideAt = wideAtFor((cells ?? []).length),
+  coopPrep = null, coopBoundary = Infinity, studentType = "undergraduate",
 } = {}) {
   const plans = [];
   const impossible = [];
@@ -248,12 +325,55 @@ export function buildDomains(cells, terms, {
   };
 
   for (const cell of cells) {
-    const candidates = candidatesFor(cell, courseMap);
+    const candidates = registrable(candidatesFor(cell, courseMap), studentType);
     const minDepth = minDepthOf(cell, { depthOf, courseMap, planDepthOf });
     const depthBoth = (id) => Math.max(depthOf(id), planDepthOf ? planDepthOf(id) : 0);
 
+    // ── Co-op preparation goes BEFORE the co-op it prepares for ─────
+    //
+    // Northeastern requires a professional-development course before a student may go
+    // on co-op, and nothing in the catalog records it — the co-op is not a course, so
+    // it cannot have a prerequisite. The published plans state it unanimously: `ENCP
+    // 2000` appears before the first work term in 141 of 141 plans that contain both,
+    // `CS 1210` in 84 of 84, typically two terms before.
+    //
+    // CHART put CS 1210 after the co-op it prepares for. A hard bound, not a
+    // preference: this is a rule the university enforces at registration, and a plan
+    // that breaks it is one the student cannot follow.
+    const isPrep = coopPrep && (cell.groups ?? []).some(g => g.some(id => coopPrep.has(id)));
+    const lastAllowed = isPrep ? Math.min(terms.length - 1, coopBoundary - 1) : terms.length - 1;
+
+    // ── How much of a pool is actually OPEN in each term ────────────
+    //
+    // `domain` answers "is this cell legal here", and for a pool that means ONE
+    // candidate is reachable — a share above zero. Measured, that is not how a
+    // department places a pool: over 742 major-subject pools in 195 published plans,
+    // the share of the pool already prereq-reachable where they put it is
+    //
+    //     mean 0.92    median 1.00    p10 0.69
+    //
+    // They wait until essentially the whole pool is open. A cell placed at share 0.05
+    // passes the witness — one candidate is enough to prove legality — and hands the
+    // student a `Mathematics Elective` they can answer exactly one way, which is not an
+    // elective. This is the measurable form of "look at what the pool's courses need
+    // first": the share rises precisely when the pool's common prerequisites are done,
+    // and it needs no opinion about WHICH course the student picks.
+    //
+    // Per term, computed here because the search sorts terms thousands of times and
+    // must not re-scan 250 candidates to do it.
+    const reachAt = new Array(terms.length).fill(1);
+    if (candidates !== null && candidates.length) {
+      for (let ti = 0; ti < terms.length; ti++) {
+        let ok = 0;
+        for (const id of candidates) {
+          if (depthBoth(id) <= ti && allowedSeasons(id).has(terms[ti].semTypeId)) ok++;
+        }
+        reachAt[ti] = ok / candidates.length;
+      }
+    }
+
     const domain = [];
-    for (let ti = 0; ti < terms.length; ti++) {
+    for (let ti = 0; ti <= lastAllowed; ti++) {
       const term = terms[ti];
       if (ti < minDepth) continue;
       if (candidates === null) { domain.push(ti); continue; }
@@ -281,7 +401,8 @@ export function buildDomains(cells, terms, {
         candidates: candidates === null ? null : candidates.length,
         // Which bound killed it, so the refusal is actionable rather than
         // "infeasible".
-        reason: minDepth >= terms.length ? "prereq-chain-longer-than-plan"
+        reason: isPrep && lastAllowed < minDepth ? "coop-prep-cannot-precede-the-coop"
+              : minDepth >= terms.length ? "prereq-chain-longer-than-plan"
               : candidates?.length === 0 ? "no-catalog-course-answers-it"
               : "never-offered-in-any-term-this-plan-uses",
         // Which seasons its candidates DO run in, so the refusal is actionable: a
@@ -314,7 +435,7 @@ export function buildDomains(cells, terms, {
       seasonOk.set(s, list);
     }
 
-    plans.push({ cell, domain, candidates, seasonOk, minDepth });
+    plans.push({ cell, domain, candidates, seasonOk, minDepth, reachAt });
   }
   return { plans, impossible };
 }

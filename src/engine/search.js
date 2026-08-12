@@ -61,10 +61,92 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { witnessPlan, buildContention } from "./witness.js";
-import { termCapacity, termSlotCap, coursesInCell, GENERAL_PER_TERM, GENERAL_PER_TERM_MAX } from "./domains.js";
+import {
+  termCapacity, termSlotCap, coursesInCell,
+  SAME_REQ_PER_TERM, SAME_REQ_PER_TERM_MAX, POOL_REACH_MIN,
+} from "./domains.js";
 import { chainHeight } from "./precedence.js";
-import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
-import { cellLevelTarget, cellLevelFloor } from "./prereqDepth.js";
+import { cellLevelTarget, cellLevelFloor, unlockValues } from "./prereqDepth.js";
+
+/**
+ * Above how many candidates a cell is a pool rather than a choice.
+ *
+ * `CS 4300 or CS 4100` is a choice between two named courses and belongs where its
+ * level says; `Khoury Approved Elective` with 247 candidates is a pool and belongs
+ * where its reachable share says. The line is drawn at the corpus's own: a published
+ * `or` cell names at most 5 courses, so anything past that is not a printed choice.
+ */
+export const POOL_MIN_CANDIDATES = 5;
+
+/**
+ * Every course this program could schedule — required courses AND every elective-pool
+ * candidate.
+ *
+ * The universe has to include the pools, because a course that unlocks half the Khoury
+ * pool and nothing the degree names outright is the clearest case of "opens a lot" there
+ * is, and counting required cells only scores it zero. See `unlockValues`.
+ */
+export function unlockUniverse(plans) {
+  const universe = new Set();
+  for (const p of plans) for (const id of p.candidates ?? []) universe.add(id);
+  return universe;
+}
+
+/** A cell's unlock value: the most any single course answering it opens. */
+export function unlockOfCell(plan, unlockValue) {
+  const groups = plan.cell?.groups;
+  if (!groups) return 0;          // a pool is not a generator; it is the thing unlocked
+  let n = 0;
+  for (const g of groups) for (const id of g) n = Math.max(n, unlockValue.get(id) ?? 0);
+  return n;
+}
+
+/**
+ * A cell offering a genuine choice among many courses, rather than naming one.
+ *
+ * `CS 4300 or CS 4100` is a choice between two named courses and belongs where its level
+ * says; `Khoury Approved Elective` with 247 candidates is a pool and belongs where its
+ * reachable share says.
+ */
+export function isPoolCell(plan) {
+  return plan.cell?.kind === "open" || (plan.candidates?.length ?? 0) > POOL_MIN_CANDIDATES;
+}
+
+/**
+ * The unlock value at which a course earns an early slot: this program's own MEDIAN over
+ * its named major cells.
+ *
+ * ── Why a median, and why "unlocks nothing" was the wrong bar ────────
+ *
+ * The first version treated only a zero as terminal, on the reasoning that any positive
+ * cut would be an invented constant. That reasoning was wrong, and the measurement shows
+ * how badly. In Computer Science and Mathematics the named major cells score:
+ *
+ *     CS 2000  57   CS 2100  56   MATH 1341  40   MATH 1342  39   CS 1800  33
+ *     CS 3100  30   MATH 2331  19   MATH 2321  17   MATH 3081  12   CS 3000  11
+ *     MATH 2341  8   CS 3800  6   MATH 3175  5   MATH 3527  2   CS 2800  1  …
+ *
+ * A zero bar catches 3 of 19. `MATH 3527` (Number Theory 1) unlocks exactly one pool
+ * candidate — Number Theory 2 — and was therefore ranked with `CS 2000`, which unlocks
+ * 57. The distribution is heavily skewed, so the question "does this open a lot" has no
+ * absolute answer; it only has one relative to the degree it is in.
+ *
+ * The median needs no constant and is self-calibrating: half of a degree's major courses
+ * take the earliest term their prerequisites allow, and the other half go where their
+ * level conventionally sits, freeing the early terms for the electives that carry depth.
+ * A degree of long chains and a degree of independent courses each get their own bar.
+ *
+ * Ties count as generators (`>=`), so a cell sitting exactly at the median is not
+ * demoted by an accident of how the halves divide.
+ */
+export function generatorBar(plans, courseMap, unlockValue, majorSubjects) {
+  const vals = plans
+    .filter(p => p.cell?.groups && !isPoolCell(p) && majorSubjects.has(cellSubject(p, courseMap)))
+    .map(p => unlockOfCell(p, unlockValue))
+    .sort((a, b) => a - b);
+  if (!vals.length) return 1;            // no major named cells: everything specific is a generator
+  return vals[Math.floor(vals.length / 2)];
+}
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
 
 /**
@@ -210,18 +292,51 @@ function attemptPlacement({
 }) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
   const slotCap = terms.map(t => termSlotCap(t, shape));
+  const unlockValue = unlockValues(unlockUniverse(plans), courseMap);
+  const unlockOf = (plan) => unlockOfCell(plan, unlockValue);
+  const isPool = isPoolCell;
+  const majorSubjects = majorSubjectsOf(plans, courseMap);
+  const unlockBar = generatorBar(plans, courseMap, unlockValue, majorSubjects);
+  /** Does this cell open up enough of the degree to earn an early slot? */
+  const isGenerator = (plan) => unlockOf(plan) >= unlockBar;
+  const isMajor = (plan) => majorSubjects.has(cellSubject(plan, courseMap));
+
+  /**
+   * Who gets first claim on a scarce early term.
+   *
+   * 0  a chain-bearing course — genuinely the most constrained, and everything else
+   *    depends on it, so it cannot be displaced by a preference
+   * 1  a major-subject pool — the depth a co-op employer reads, and the thing the
+   *    published plans put LAST. This is the deliberate inversion
+   * 2  everything else specific, including a major requirement that unlocks nothing
+   * 3  fillers, handled above and unconditionally last
+   */
+  const claimRank = (plan) => {
+    if (isPool(plan)) return isMajor(plan) ? 1 : 2;
+    return isGenerator(plan) ? 0 : 2;
+  };
+  const rank = new Map(plans.map(p => [p.cell.id, claimRank(p)]));
+  const rankOf = (p) => rank.get(p.cell.id) ?? 2;
+
   // Deterministic order before any heuristic reorders: two runs must agree.
-  const order = [...plans].sort((a, b) => byConstraint(a, b, terms.length));
+  const order = [...plans].sort((a, b) => byConstraint(a, b, terms.length, rankOf));
 
   const byId = new Map(plans.map(p => [p.cell.id, p]));
   const termOf = new Map();
   const loadSH = new Array(terms.length).fill(0);
   const countIn = new Array(terms.length).fill(0);
-  // Tracked separately from the course count: a term at its elective cap can still
-  // take a real course, and stacking four "General Elective" cards in one semester is
+  // Tracked separately from the course count, and PER REQUIREMENT: a term at its
+  // elective cap can still take a real course, and stacking four cells of one
+  // requirement — four "General Elective" cards, or three "Mathematics Elective" — is
   // the specific thing that reads as unrealistic.
-  const genIn = new Array(terms.length).fill(0);
-  const isGeneral = (cell) => cell.target === GENERAL_ELECTIVE;
+  //
+  // Keyed by requirement target rather than by `~general`, because the departments do
+  // not treat `~general` specially: measured, they hold 3+ cells of ANY one requirement
+  // in 0.7% of terms, against CHART's 14.3%. A cell with no target is its own key, so
+  // an unlabelled cell never crowds out anything but itself.
+  const reqIn = terms.map(() => new Map());
+  const reqKey = (cell) => cell.target ?? `#${cell.id}`;
+  const reqCount = (ti, cell) => reqIn[ti].get(reqKey(cell)) ?? 0;
   let nodes = 0;
   let worstFailure = null;
 
@@ -247,14 +362,42 @@ function attemptPlacement({
     repeatable, checkPrereqs, contention: contentionOf,
   });
 
+  // ── Room is RESERVED for the electives, not left over ─────────────
+  //
+  // Fillers are placed last, so with no reservation the specific courses fill every
+  // early term to the department's own target and the electives land wherever is
+  // left — which is the final year, four at a time. Measured, real plans carry a
+  // general elective in 56% of their terms; CHART managed 34%.
+  //
+  // The departments' `targetSH` is not the problem: their 19 SH first term ALREADY
+  // includes their electives. Ours has to leave the same room, so a term's target for
+  // a specific course is its stated target minus this term's share of the electives
+  // still to come. An even share, because nothing in the corpus prefers any term.
+  // ── And a reservation has to be a RANK, not a tie-break ───────────
+  //
+  // The first version subtracted the reserve inside `fill()`, which is the LAST term of
+  // the sort — after earliest-first, which decides every comparison before it is
+  // reached. So it changed nothing: CS+Math still filled year 1 to 19 SH and put seven
+  // general electives in the last two terms. The hard cap is the registration limit, not
+  // the department's target, so nothing else was stopping it either.
+  //
+  // As a rank it works, and it stays a preference: a term with no room left is tried
+  // LAST rather than removed, so a program whose electives genuinely do not fit
+  // anywhere else still gets a plan.
+  const fillerSH = plans.filter(p => p.candidates === null)
+    .reduce((n, p) => n + (p.cell.sh ?? 0), 0);
+  const reserve = terms.map((t) => (t.optional ? 0 : fillerSH / Math.max(1,
+    terms.filter(x => !x.optional).length)));
+
   // How full a term is relative to what the shape intends for it. `targetSH` is
   // the department's own stated intent; where a shape does not state one, an
   // equal share of total demand stands in, so a derived skeleton balances too.
   const evenShare = plans.reduce((n, p) => n + (p.cell.sh ?? 0), 0) / (terms.length || 1);
-  const fill = (ti) => loadSH[ti] / (terms[ti]?.targetSH || evenShare || 1);
+  const target = (ti) => terms[ti]?.targetSH || evenShare || 1;
+  const fill = (ti, isFillerCell = false) => loadSH[ti] /
+    Math.max(1, target(ti) - (isFillerCell ? 0 : reserve[ti]));
 
   const heightOf = precedence ? chainHeight(plans, precedence) : new Map();
-  const majorSubjects = majorSubjectsOf(plans, courseMap);
   const span = Math.max(1, terms.length - 1);
 
   /**
@@ -278,7 +421,31 @@ function attemptPlacement({
   const optional = terms.map(t => (t.optional ? 1 : 0));
   const byOptional = (a, b) => optional[a] - optional[b];
 
+  // Spreading beats position, for EVERY requirement and in BOTH branches below.
+  //
+  // A term already carrying `SAME_REQ_PER_TERM` cells of this cell's requirement is
+  // tried only after every term that is not — which turns "four stacked in year 4" into
+  // "one or two here and there" without forbidding the fourth outright.
+  //
+  // It has to outrank earliest-first, or the major branch defeats it: three Mathematics
+  // Electives all legal from term 4 onwards all take term 4, which is exactly what
+  // CS+Math did. It must NOT outrank the standing floor, which is about legality-in-
+  // practice rather than taste.
+  const crowded = (plan, ti) => (reqCount(ti, plan.cell) >= SAME_REQ_PER_TERM ? 1 : 0);
+
+  /**
+   * Would this cell take the room a later elective needs? A specific course prefers a
+   * term that still has its share of elective space free; an elective ignores the
+   * reserve, since the reserve exists for it.
+   */
+  const takesReserved = (plan, ti) => {
+    if (plan.candidates === null) return 0;
+    return loadSH[ti] + (plan.cell.sh ?? 0) > target(ti) - reserve[ti] ? 1 : 0;
+  };
+
   const termPreference = (plan) => {
+    const filler = plan.candidates === null;
+    const f = (ti) => fill(ti, filler);
     // Where courses of this level conventionally sit, INSIDE the window precedence
     // already narrowed the cell to. Two mechanisms doing two jobs:
     //
@@ -313,6 +480,44 @@ function attemptPlacement({
     // been narrowed to the precedence window, so earliest here cannot mean earlier
     // than legal.
     if (majorSubjects.has(cellSubject(plan, courseMap))) {
+      // ── A major-subject POOL is placed by its reachable share ─────
+      //
+      // And this is a DELIBERATE departure from the corpus, recorded as such. Published
+      // plans put major-subject pools at median position 0.67 and general electives at
+      // 0.56 — their major electives come LATER than their free ones, behind terminal
+      // requirements that come earlier. That ordering does not serve the student it is
+      // written for: a co-op employer reads depth in the major, and a `Number Theory 1`
+      // that unlocks nothing does not supply any, while the elective the student would
+      // have chosen for that reason sits in the final term where no recruiter sees it.
+      //
+      // So a pool goes as EARLY as its share allows, not as early as it is legal. The
+      // share is what stops that being nominal — see POOL_REACH_MIN.
+      if (isPool(plan)) {
+        const thin = (ti) => ((plan.reachAt?.[ti] ?? 1) < POOL_REACH_MIN ? 1 : 0);
+        return [...plan.domain].sort((a, b) =>
+          byOptional(a, b) || thin(a) - thin(b)
+          || crowded(plan, a) - crowded(plan, b)
+          || takesReserved(plan, a) - takesReserved(plan, b)
+          || a - b || f(a) - f(b));
+      }
+      // ── A named major course, ranked by what it opens up ──────────
+      //
+      // A course that opens up little of the degree has no claim on an early slot and is
+      // taking one from a course that does. Its own requirement still has to be met, so
+      // it is not dropped — it is placed where its level says, which is later, and the
+      // early terms it vacates are what let the electives above come forward.
+      //
+      // The bar is this program's own median, not zero. See `generatorBar`: a zero bar
+      // ranked `MATH 3527`, which unlocks one pool candidate, alongside `CS 2000`, which
+      // unlocks 57.
+      if (!isGenerator(plan)) {
+        const want = cellLevelTarget(plan, courseMap, studentType) ?? 1;
+        return [...plan.domain].sort((a, b) =>
+          byOptional(a, b) || crowded(plan, a) - crowded(plan, b)
+          || takesReserved(plan, a) - takesReserved(plan, b)
+          || Math.abs(a / span - want) - Math.abs(b / span - want)
+          || f(a) - f(b) || a - b);
+      }
       // Earliest, but not before a real plan has ever put a course of this level.
       // The floor stands in for class standing, which the catalog states only in
       // prose and our data therefore does not have — without it, "as early as
@@ -325,7 +530,9 @@ function attemptPlacement({
       const floor = cellLevelFloor(plan, courseMap, studentType) * span;
       return [...plan.domain].sort((a, b) =>
         byOptional(a, b) || (a < floor ? 1 : 0) - (b < floor ? 1 : 0)
-        || a - b || fill(a) - fill(b));
+        || crowded(plan, a) - crowded(plan, b)
+        || takesReserved(plan, a) - takesReserved(plan, b)
+        || a - b || f(a) - f(b));
     }
     // A cell with no level at all is a general elective, and it wants the END.
     //
@@ -336,17 +543,11 @@ function attemptPlacement({
     // early terms are the emptiest once every specific course has claimed its slot,
     // so load balance quietly walked the electives forward.
     const want = cellLevelTarget(plan, courseMap, studentType) ?? 1;
-    // For a general elective, spreading beats position. A term already carrying the
-    // target number is tried only after every term that is not — which is what turns
-    // "four stacked in year 4" into "one or two here and there" without forbidding the
-    // fourth outright.
-    const crowded = isGeneral(plan.cell)
-      ? (ti) => (genIn[ti] >= GENERAL_PER_TERM ? 1 : 0)
-      : () => 0;
     return [...plan.domain].sort((a, b) =>
-      byOptional(a, b) || crowded(a) - crowded(b)
+      byOptional(a, b) || crowded(plan, a) - crowded(plan, b)
+      || takesReserved(plan, a) - takesReserved(plan, b)
       || Math.abs(a / span - want) - Math.abs(b / span - want)
-      || fill(a) - fill(b) || a - b);
+      || f(a) - f(b) || a - b);
   };
 
   /**
@@ -402,7 +603,7 @@ function attemptPlacement({
       // Eleven courses in one term fits inside 19 credits and is not a plan anyone
       // would follow. Bounded by the worst any published plan does.
       if (countIn[ti] + coursesInCell(cell) > slotCap[ti]) continue;
-      if (isGeneral(cell) && genIn[ti] + 1 > GENERAL_PER_TERM_MAX) continue;
+      if (reqCount(ti, cell) + 1 > SAME_REQ_PER_TERM_MAX) continue;
       // Precedence, forward-checked against what is already placed. This is what
       // turns discovering the prereq order from 20,000 nodes of backtracking into
       // a few dozen: the witness would catch a violation eventually, but only
@@ -412,7 +613,7 @@ function attemptPlacement({
       termOf.set(cell.id, ti);
       loadSH[ti] += cell.sh ?? 0;
       countIn[ti] += coursesInCell(cell);
-      if (isGeneral(cell)) genIn[ti] += 1;
+      reqIn[ti].set(reqKey(cell), reqCount(ti, cell) + 1);
 
       // Propagate `alldifferent` over what is placed so far, plus named-course
       // prereq order. Sound on a partial assignment: candidate prereqs are
@@ -430,7 +631,7 @@ function attemptPlacement({
       termOf.delete(cell.id);
       loadSH[ti] -= cell.sh ?? 0;
       countIn[ti] -= coursesInCell(cell);
-      if (isGeneral(cell)) genIn[ti] -= 1;
+      reqIn[ti].set(reqKey(cell), reqCount(ti, cell) - 1);
     }
     return false;
   }
@@ -481,7 +682,7 @@ export function describe(f) {
  * admits any course sorts last on BOTH keys, so it is placed into whatever room
  * is left rather than claiming a term a specific course needed.
  */
-function byConstraint(a, b, termCount) {
+function byConstraint(a, b, termCount, rankOf = () => 0) {
   // Fillers last, unconditionally. This is the ordering the whole engine exists
   // for, and it must not be left to emerge from a tie-break: the motivating
   // complaint is that departments spend the general electives before the first
@@ -494,6 +695,21 @@ function byConstraint(a, b, termCount) {
   // candidate counts happen to compare.
   const fa = isFiller(a) ? 1 : 0, fb = isFiller(b) ? 1 : 0;
   if (fa !== fb) return fa - fb;
+
+  // ── Who claims a scarce early term, among the non-fillers ─────────
+  //
+  // Ordering by domain width alone decided this badly, and it is the reason a term
+  // preference for early major electives changed nothing: a 247-candidate `Khoury
+  // Approved Elective` has the widest domain of anything in the program, so it was
+  // placed dead last among non-fillers — after every terminal major requirement had
+  // already filled the early terms to the registration cap. By then the only room left
+  // was year 4, whatever the pool preferred.
+  //
+  // So the claim is stated rather than inferred from width: chain-bearing courses first
+  // (they are genuinely the most constrained), then major-subject pools, then the
+  // requirements that unlock nothing. See `claimRank`.
+  const ra = rankOf(a), rb = rankOf(b);
+  if (ra !== rb) return ra - rb;
 
   const da = a.domain.length || termCount + 1;
   const db = b.domain.length || termCount + 1;

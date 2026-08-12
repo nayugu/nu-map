@@ -30,10 +30,14 @@
 
 import { deriveCells, cellsSH } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
-import { buildDomains, wideAtFor } from "./domains.js";
+import { buildDomains, wideAtFor, POOL_REACH_MIN } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
 import { preflight, tightestTerms } from "./preflight.js";
-import { placeCells, describe, DEFAULT_NODE_BUDGET, DEFAULT_TIME_BUDGET_MS } from "./search.js";
+import {
+  placeCells, describe, DEFAULT_NODE_BUDGET, DEFAULT_TIME_BUDGET_MS,
+  POOL_MIN_CANDIDATES, unlockUniverse, unlockOfCell, isPoolCell,
+} from "./search.js";
+import { unlockValues } from "./prereqDepth.js";
 import { improve, DEFAULT_PREFERENCES } from "./objective.js";
 import { emitPlan } from "./emit.js";
 import { buildDepthIndex } from "./prereqDepth.js";
@@ -78,8 +82,9 @@ export function generatePlan({
   program, publishedPlan = null, courseMap = {}, ports: rawPorts = {},
   studentType = "undergraduate", preferences = DEFAULT_PREFERENCES,
   depthIndex = null, repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
-  timeBudgetMs = DEFAULT_TIME_BUDGET_MS, observedOrder = [],
+  timeBudgetMs = DEFAULT_TIME_BUDGET_MS, observedOrder = [], coopPrep = [],
 } = {}) {
+  const prepSet = new Set(coopPrep);
   const ports = withDefaults(rawPorts);
   const depth = depthIndex ?? buildDepthIndex(courseMap);
 
@@ -112,6 +117,11 @@ export function generatePlan({
       planDepthOf: precedence.planDepthOf,
       offeringProbability: ports.offeringProbability,
       wideAt: wideAtFor(cells.length),
+      coopPrep: prepSet.size ? prepSet : null,
+      coopBoundary: firstWorkBoundary(sh),
+      // So an undergraduate's pools are not answered by doctoral courses. See
+      // `registrable` — this feeds both the witness and the reachable share.
+      studentType,
     });
     // Fold precedence into the domains, and catch a chain that cannot fit before the
     // search tries to discover it by exhaustion. Narrowing here also gives MRV a
@@ -246,6 +256,59 @@ export function generatePlan({
       approximateBounds: [...new Set(
         plans.flatMap(p => (p.candidates ?? []).filter(id => depth.approximate(id))),
       )].length,
+      // Major electives actually pulled ahead of a low-unlock requirement.
+      depthTrades: improved.depthTrades ?? [],
+      // ── Is any major depth being left on the table? ───────────────
+      //
+      // The question a student cares about is not where a pool sits in the abstract, it
+      // is whether something with LESS to say about the degree took an earlier slot from
+      // it. Absolute earliness is not a defect: 34 cells and 10 terms means nearly every
+      // cell "could" have been earlier in isolation, so measuring a pool against the
+      // first term its share clears mostly measures arithmetic. That version reported
+      // 58% of pools "late" and meant nothing.
+      //
+      // The comparative version is a real defect count: a major-subject elective placed
+      // AFTER a requirement that unlocks nothing, where the two could simply trade
+      // terms. Each such pair is depth a co-op recruiter would have seen and does not.
+      //
+      // ── An UPPER BOUND, not a defect count ────────────────────────
+      //
+      // This check is deliberately cheaper than `tradeDepth`, which applies these trades
+      // and verifies each one against the full prereq-aware witness. So a pair reported
+      // here may be one the witness legitimately rejects, and the count is a ceiling on
+      // what is still available rather than a list of mistakes. Read the other way round
+      // it is worth having: if this is ZERO, no trade exists under even the loose test,
+      // which is a real guarantee.
+      //
+      // Recorded because the looser reading was nearly published as "43.6% of programs
+      // still leave depth on the table", which the number does not say.
+      depthLeftOnTable: (() => {
+        const at = (p) => improved.termOf.get(p.cell.id);
+        const cap = terms.map(t => t.targetSH || Infinity);
+        const load = terms.map(() => 0);
+        for (const p of plans) {
+          const i = at(p);
+          if (i != null) load[i] += p.cell.sh ?? 0;
+        }
+        const unlockValue = unlockValues(unlockUniverse(plans), courseMap);
+        const pools = plans.filter(p => p.reachAt && isPoolCell(p));
+        const flat = plans.filter(p => p.cell.groups && unlockOfCell(p, unlockValue) === 0);
+        const pairs = [];
+        for (const pool of pools) {
+          const j = at(pool);
+          if (j == null) continue;
+          for (const t of flat) {
+            const i = at(t);
+            if (i == null || i >= j) continue;
+            if (!pool.domain.includes(i) || !t.domain.includes(j)) continue;
+            if ((pool.reachAt[i] ?? 1) < POOL_REACH_MIN) continue;
+            const dsh = (pool.cell.sh ?? 0) - (t.cell.sh ?? 0);
+            if (load[i] + dsh > cap[i] || load[j] - dsh > cap[j]) continue;
+            pairs.push({ pool: pool.cell.title ?? "", flat: t.cell.title ?? "", from: j, to: i });
+          }
+        }
+        return pairs;
+      })(),
     },
   };
 }

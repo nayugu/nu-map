@@ -52,9 +52,13 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
-import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
 import { witnessPlan } from "./witness.js";
-import { termCapacity, termSlotCap, coursesInCell, GENERAL_PER_TERM_MAX } from "./domains.js";
+import {
+  termCapacity, termSlotCap, coursesInCell, SAME_REQ_PER_TERM_MAX, POOL_REACH_MIN,
+} from "./domains.js";
+import { unlockUniverse, unlockOfCell, isPoolCell, generatorBar } from "./search.js";
+import { unlockValues } from "./prereqDepth.js";
+import { cellSubject, majorSubjectsOf } from "./subjects.js";
 import { precedenceViolations, chainHeight } from "./precedence.js";
 import { buildContention } from "./witness.js";
 
@@ -239,32 +243,11 @@ const KEY = {
   "interleave": "interleave",
 };
 
-/**
- * The subject a cell is about.
- *
- * For a forced or chosen cell, the subject its groups agree on. For an open cell,
- * the modal subject of its candidates — a `MATH 3001–4999` pool is about MATH
- * whatever course fills it. Null for a cell that admits anything, which is
- * correct: a general elective is about no subject, and inventing one for it would
- * make it score as depth.
- */
-export function cellSubject(plan, courseMap) {
-  const cell = plan.cell ?? plan;
-  if (cell.groups?.length) {
-    const subs = new Set(cell.groups.flat().map(id => courseMap[id]?.subject).filter(Boolean));
-    return subs.size === 1 ? [...subs][0] : null;
-  }
-  if (!plan.candidates?.length) return null;
-  const counts = new Map();
-  for (const id of plan.candidates) {
-    const s = courseMap[id]?.subject;
-    if (s) counts.set(s, (counts.get(s) ?? 0) + 1);
-  }
-  if (!counts.size) return null;
-  const [top] = [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  // A pool spread across many subjects is not "about" the largest of them.
-  return top[1] / plan.candidates.length >= 0.5 ? top[0] : null;
-}
+// `cellSubject` lived here as a second, character-for-character-different but
+// behaviourally identical copy of `subjects.js`'s. Deleted rather than called from a
+// third place: search.js decides "is this a major subject" from subjects.js, and two
+// copies of that judgement would let the search and the objective disagree about which
+// cells are the major — silently, and only after one of them was edited.
 
 /** How advanced a cell is: the level of its lowest option, since that is what a student could legitimately take. */
 function cellLevel(plan, courseMap) {
@@ -461,6 +444,29 @@ export function improve({
     moves += res.moves;
   }
 
+  // ── Trade a terminal requirement for major depth ────────────────
+  //
+  // A DELIBERATE departure from the published plans, and the only one CHART makes.
+  // Measured over 195 published plans, departments place major-subject elective pools at
+  // median position 0.67 and general electives at 0.56 — their major electives come
+  // LATER than their free ones, behind requirements that unlock nothing. A `Number
+  // Theory 1` in term 2 and a `Khoury Approved Elective` in term 9 is a plan that shows
+  // a co-op recruiter the least major depth it ever will.
+  //
+  // Why this is not left to the ranked objectives: `coop-depth` only counts what sits
+  // before the FIRST work term, so a trade between terms 5 and 9 scores zero on it and
+  // the hill climber has no reason to make it. And it is a SWAP, not a move — pulling
+  // the pool forward alone breaks the term's target, so a one-cell climber cannot reach
+  // it either. Measured, 52.9% of programs had at least one such trade available and
+  // untaken.
+  //
+  // Every trade is verified by the same `fullLegal` the climber uses, so the witness,
+  // precedence and availability all still hold; an unverifiable trade is skipped rather
+  // than forced.
+  const traded = tradeDepth(current, { plans, terms, cap, courseMap, fullLegal });
+  current = traded.termOf;
+  moves += traded.moves;
+
   // ── Repair thresholds last ──────────────────────────────────────
   //
   // Last because a threshold is a bar: satisfying it is worth giving up ranked
@@ -495,6 +501,10 @@ export function improve({
   return {
     termOf: repaired, moves, scores: finalScores,
     thresholds: after.failures, trades,
+    // Which major electives were pulled ahead of a low-unlock requirement, and from
+    // where. Reported because it is the one place CHART deliberately departs from the
+    // published plans, and a departure a student cannot see is one they cannot judge.
+    depthTrades: traded.applied,
     reasons: reasonsFor({ plans, terms, termOf: repaired, byId, depthOf, ports, trades }),
   };
 }
@@ -572,21 +582,85 @@ function hillClimb(start, score, cheapLegal, fullLegal, plans, terms, cap,
   return { termOf: current, moves };
 }
 
+/**
+ * Swap major-subject elective pools earlier, past requirements that unlock nothing.
+ *
+ * Greedy, largest gain first, each swap verified before it is kept. Greedy is right here
+ * rather than a search: the trades are near-independent (each frees the term it vacates)
+ * and a swap that turns out illegal is simply skipped, so there is no branch to explore.
+ *
+ * @returns {{termOf: Map, moves: number, applied: object[]}}
+ */
+export function tradeDepth(termOf, { plans, terms, cap, courseMap, fullLegal }) {
+  const unlockValue = unlockValues(unlockUniverse(plans), courseMap);
+  const majors = majorSubjectsOf(plans, courseMap);
+  const bar = generatorBar(plans, courseMap, unlockValue, majors);
+  const pools = plans.filter(p =>
+    p.reachAt && isPoolCell(p) && majors.has(cellSubject(p, courseMap)));
+  // The same bar the search uses, so the two cannot disagree about which requirement is
+  // worth trading away. A zero bar here found almost nothing to trade: the courses a
+  // student would call low-value mostly unlock one or two pool candidates, not none.
+  const flats = plans.filter(p =>
+    p.cell.groups && !isPoolCell(p) && unlockOfCell(p, unlockValue) < bar);
+  if (!pools.length || !flats.length) return { termOf, moves: 0, applied: [] };
+
+  let current = new Map(termOf);
+  const applied = [];
+  let moves = 0;
+
+  // Largest earliness gain first, so a pool that can come forward four terms is not
+  // blocked by one that only gains one.
+  const pairs = [];
+  for (const pool of pools) {
+    for (const flat of flats) {
+      const j = current.get(pool.cell.id), i = current.get(flat.cell.id);
+      if (i == null || j == null || i >= j) continue;
+      pairs.push({ pool, flat, gain: j - i });
+    }
+  }
+  pairs.sort((a, b) => b.gain - a.gain
+    || String(a.pool.cell.id).localeCompare(String(b.pool.cell.id))
+    || String(a.flat.cell.id).localeCompare(String(b.flat.cell.id)));
+
+  for (const { pool, flat } of pairs) {
+    const j = current.get(pool.cell.id), i = current.get(flat.cell.id);
+    if (i == null || j == null || i >= j) continue;              // moved by an earlier trade
+    if (!pool.domain.includes(i) || !flat.domain.includes(j)) continue;
+    // The share bar is what stops "earlier" being nominal: a pool with one reachable
+    // candidate is not an elective, however early it sits.
+    if ((pool.reachAt[i] ?? 1) < POOL_REACH_MIN) continue;
+    const trial = new Map(current);
+    trial.set(pool.cell.id, i);
+    trial.set(flat.cell.id, j);
+    if (!fitsCapacity(trial, plans, terms, cap)) continue;
+    if (!fullLegal(trial)) continue;
+    current = trial;
+    moves++;
+    applied.push({ pool: pool.cell.title ?? "", flat: flat.cell.title ?? "", from: j, to: i });
+  }
+  return { termOf: current, moves, applied };
+}
+
 function fitsCapacity(assignment, plans, terms, cap, shape = null) {
   const load = terms.map(() => 0);
   const count = terms.map(() => 0);
-  const gen = terms.map(() => 0);
+  // Per requirement, matching search.js. Phase 2 shares this check because a bound the
+  // objective does not know about is a bound it will spend its whole budget undoing:
+  // spreading a requirement across terms costs load balance, so the hill climber would
+  // happily re-stack all four in one term for a point of it.
+  const req = terms.map(() => new Map());
   for (const p of plans) {
     const ti = assignment.get(p.cell.id);
     if (ti == null) continue;
     load[ti] += p.cell.sh ?? 0;
     count[ti] += coursesInCell(p.cell);
-    if (p.cell.target === GENERAL_ELECTIVE) gen[ti] += 1;
+    const k = p.cell.target ?? `#${p.cell.id}`;
+    req[ti].set(k, (req[ti].get(k) ?? 0) + 1);
   }
   // Every bound, or a move the search refused would be reachable by the objective.
   return load.every((sh, ti) => sh <= cap[ti])
       && count.every((n, ti) => n <= termSlotCap(terms[ti], shape))
-      && gen.every(n => n <= GENERAL_PER_TERM_MAX);
+      && req.every(m => [...m.values()].every(n => n <= SAME_REQ_PER_TERM_MAX));
 }
 
 /** Full hard-constraint check, including the prereq-aware witness. */
