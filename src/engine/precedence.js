@@ -59,7 +59,63 @@ const CAP = 24;
  * @param {Record<string,object>} courseMap
  * @returns {PrecedenceIndex}
  */
-export function buildPrecedence(cells, courseMap = {}) {
+/**
+ * Prerequisites the catalog does not record, observed in its own published plans.
+ *
+ * MATH 2321 (Calculus 3) has an EMPTY prereq field, so nothing in our data stops a
+ * plan putting it first. 53 programs place it after MATH 1342 and none before.
+ * `scripts/derive-plan-order.js` turns that agreement into edges, under filters
+ * strict enough to keep the calculus sequence and drop the 5,000-odd pairs that are
+ * merely conventional.
+ *
+ * Folded in as EXTRA REFS on the successor rather than as a separate mechanism, so
+ * the union-of-options rule, concurrency and plan-depth all apply to them unchanged
+ * — and so an inferred edge cannot behave differently from a recorded one.
+ *
+ * @param {{before: string, after: string}[]} observed
+ * @returns {Map<string, Set<string>>} course id → courses that must precede it
+ */
+export function observedRefs(observed = []) {
+  const out = new Map();
+  for (const e of observed) {
+    if (!e?.before || !e?.after || e.before === e.after) continue;
+    if (!out.has(e.after)) out.set(e.after, new Set());
+    out.get(e.after).add(e.before);
+  }
+  return out;
+}
+
+/**
+ * @param {object[]} cells
+ * @param {Record<string,object>} courseMap
+ * @param {object} [opts]
+ * @param {{before: string, after: string}[]} [opts.observed]
+ *   edges derived from published plans. Evidence, not fact — see `observedRefs`.
+ */
+export function buildPrecedence(cells, courseMap = {}, { observed = [] } = {}) {
+  const extra = observedRefs(observed);
+
+  // A course's prerequisites as CHART reads them: what the catalog records, plus
+  // what the published plans unanimously show. Composed as one token list so every
+  // consumer below folds a single tree and cannot treat the two sources
+  // differently.
+  const prereqsOf = (id) => {
+    const base = courseMap[id]?.prereqs;
+    const add = extra.get(id);
+    if (!add?.size) return base;
+    const refs = [...add].sort()
+      .filter(r => courseMap[r])
+      .map(r => ({ subject: courseMap[r].subject, number: courseMap[r].number }));
+    if (!refs.length) return base;
+    // AND, because an observed edge is a claim that this course comes after that
+    // one in every plan that has both — not one of several ways to be ready.
+    const chain = refs.flatMap((r, i) => (i ? ["And", r] : [r]));
+    return base?.length ? ["(", ...base, ")", "And", ...chain] : chain;
+  };
+  const view = (id) => {
+    const c = courseMap[id];
+    return c ? { ...c, prereqs: prereqsOf(id) } : c;
+  };
   // Every course the plan commits to outright. Only these can create order:
   // a choice cell's answer is not decided, and an elective's is the student's.
   const plannedCourses = new Map();          // course id → cell id
@@ -78,7 +134,7 @@ export function buildPrecedence(cells, courseMap = {}) {
     const course = courseMap[id];
     if (!course) return 0;
     inProgress.add(id);
-    const below = foldPrereqTree(course.prereqs, {
+    const below = foldPrereqTree(prereqsOf(id), {
       or:  (a, b) => Math.min(a, b),
       and: (a, b) => Math.max(a, b),
       note: () => 0,
@@ -134,7 +190,7 @@ export function buildPrecedence(cells, courseMap = {}) {
 
   /** Is a whole option (a group of co-required courses) satisfied in this world? */
   const optionOk = (group, placements, ti) => group.every(id => {
-    const course = courseMap[id];
+    const course = view(id);
     if (!course) return true;
     return reach(course, placements, semIndex, ti);
   });
@@ -171,7 +227,7 @@ export function buildPrecedence(cells, courseMap = {}) {
 
       // Does any option share a ref with A? Cheap gate before the tree evals.
       const shares = liveOptions.some(g =>
-        refsOf(g, courseMap).some(r => aCourses.has(r)));
+        refsOf(g, prereqsOf).some(r => aCourses.has(r)));
       if (!shares) continue;
 
       const withALate = { ...allEarly };
@@ -225,12 +281,12 @@ export function buildPrecedence(cells, courseMap = {}) {
   const unscheduledPrereqs = [];
   for (const c of named) {
     for (const id of c.groups[0]) {
-      const missing = refsOf([id], courseMap)
+      const missing = refsOf([id], prereqsOf)
         .filter(r => !plannedCourses.has(r) && courseMap[r]);
       if (!missing.length) continue;
       // Only when NOTHING the plan schedules can satisfy the tree — an OR with one
       // planned branch is fine and must not be reported as a gap.
-      if (satisfiableByPlan(courseMap[id])) continue;
+      if (satisfiableByPlan(view(id))) continue;
       unscheduledPrereqs.push({ cell: c.id, course: id, needs: missing.sort() });
     }
   }
@@ -275,10 +331,10 @@ function optionsOf(cell, courseMap, plannedCourses) {
 }
 
 /** Every course id a group's courses list as a prerequisite. */
-function refsOf(group, courseMap) {
+function refsOf(group, prereqsOf) {
   const out = [];
   for (const id of group ?? []) {
-    foldPrereqTree(courseMap[id]?.prereqs, {
+    foldPrereqTree(prereqsOf(id), {
       or: () => 1, and: () => 1, note: () => 1,
       course: (tok) => { out.push(refId(tok)); return 1; },
     });

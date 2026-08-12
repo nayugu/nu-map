@@ -56,6 +56,11 @@ export { permissivePorts } from "./ports.js";
  * @param {object} [args.preferences]  ranked objectives and thresholds
  * @param {object} [args.depthIndex]   a prebuilt depth index, to share across programs
  * @param {(id: string) => boolean} [args.repeatable]
+ * @param {{before: string, after: string}[]} [args.observedOrder]
+ *   prerequisites the catalog does not record but its own published plans agree on
+ *   — `public/northeastern/plan-order.json`, from `scripts/derive-plan-order.js`.
+ *   Injected rather than imported, because it is derived data with a confidence
+ *   level and a caller is entitled to plan without it.
  * @param {number} [args.nodeBudget]
  * @returns {{plan: object, report: object} | {refused: {reason, detail, data?}}}
  */
@@ -63,7 +68,7 @@ export function generatePlan({
   program, publishedPlan = null, courseMap = {}, ports: rawPorts = {},
   studentType = "undergraduate", preferences = DEFAULT_PREFERENCES,
   depthIndex = null, repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
-  timeBudgetMs = DEFAULT_TIME_BUDGET_MS,
+  timeBudgetMs = DEFAULT_TIME_BUDGET_MS, observedOrder = [],
 } = {}) {
   const ports = withDefaults(rawPorts);
   const depth = depthIndex ?? buildDepthIndex(courseMap);
@@ -89,7 +94,7 @@ export function generatePlan({
   // Before domains, because it supplies the depth floor they need. The catalog-wide
   // DAG says CS 2800 has depth 0; within a plan that also names CS 1800 it has
   // depth 1, and that difference is the whole of the sequencing bound.
-  const precedence = buildPrecedence(cells, courseMap);
+  const precedence = buildPrecedence(cells, courseMap, { observed: observedOrder });
 
   // ── 4. Where each cell could go ─────────────────────────────────
   const { plans, impossible } = buildDomains(cells, terms, {

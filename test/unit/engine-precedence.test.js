@@ -6,7 +6,9 @@
 // a course before its prerequisite.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { buildPrecedence, criticalPath, precedenceViolations } from "../../src/engine/precedence.js";
+import {
+  buildPrecedence, criticalPath, precedenceViolations, observedRefs,
+} from "../../src/engine/precedence.js";
 
 const ref = (subject, number, extra = {}) => ({ subject, number, ...extra });
 const course = (id, prereqs = null, sh = 4) => ({
@@ -295,6 +297,76 @@ test("violations › an unplaced cell cannot be in violation", () => {
   const p = buildPrecedence([named("a", ["A100"]), named("b", ["A200"])], cm);
   assert.equal(precedenceViolations(p, new Map([["b", 0]])).length, 0);
   assert.equal(precedenceViolations(p, new Map()).length, 0);
+});
+
+// ── Order observed in published plans ──────────────────────────────
+//
+// MATH 2321 (Calculus 3) has an EMPTY catalog prereq field, so nothing in our data
+// stops a plan putting it first. 53 published programs place it after MATH 1342 and
+// none before. These tests pin the mechanism that uses that.
+
+const observed = (before, after) => [{ before, after, programs: 53, observations: 166 }];
+
+test("observed › an edge with no catalog prereq to back it still orders the cells", () => {
+  const cm = mapOf(course("MATH1342"), course("MATH2321"));   // both prereq-free
+  const bare = buildPrecedence(
+    [named("a", ["MATH1342"]), named("b", ["MATH2321"])], cm);
+  assert.deepEqual(edgesOf(bare, "b"), [], "the catalog alone says nothing");
+
+  const withPlans = buildPrecedence(
+    [named("a", ["MATH1342"]), named("b", ["MATH2321"])], cm,
+    { observed: observed("MATH1342", "MATH2321") });
+  assert.deepEqual(edgesOf(withPlans, "b"), ["a"]);
+  assert.equal(withPlans.planDepthOf("MATH2321"), 1);
+});
+
+test("observed › it ADDS to a catalog prereq rather than replacing it", () => {
+  const cm = mapOf(course("A100"), course("B100"),
+                   course("C300", [ref("A", "100")]));
+  const p = buildPrecedence(
+    [named("a", ["A100"]), named("b", ["B100"]), named("c", ["C300"])], cm,
+    { observed: observed("B100", "C300") });
+  assert.deepEqual(edgesOf(p, "c"), ["a", "b"], "both the recorded and the observed");
+});
+
+test("observed › an observed edge is a conjunction, not another OR branch", () => {
+  // If it joined the OR, an observed predecessor would make the catalog's own
+  // requirement optional — the opposite of adding a constraint.
+  const cm = mapOf(course("A100"), course("B100"),
+                   course("C300", [ref("A", "100"), "Or", ref("B", "100")]));
+  const p = buildPrecedence(
+    [named("a", ["A100"]), named("b", ["B100"]), named("c", ["C300"])], cm,
+    { observed: observed("A100", "C300") });
+  // A100 is now required outright, so it is an edge; B100 alone no longer suffices.
+  assert.ok(edgesOf(p, "c").includes("a"));
+});
+
+test("observed › a non-strict edge cannot be satisfied by the same term", () => {
+  const cm = mapOf(course("A100"), course("B200"));
+  const p = buildPrecedence([named("a", ["A100"]), named("b", ["B200"])], cm,
+                            { observed: observed("A100", "B200") });
+  assert.equal(p.concurrentOk.has("a|b"), false);
+  assert.equal(precedenceViolations(p, new Map([["a", 1], ["b", 1]])).length, 1);
+  assert.equal(precedenceViolations(p, new Map([["a", 0], ["b", 1]])).length, 0);
+});
+
+test("observedRefs › ignores junk and self-edges", () => {
+  const m = observedRefs([
+    null, undefined, {}, { before: "A" }, { after: "B" },
+    { before: "X", after: "X" },
+    { before: "A", after: "B" }, { before: "C", after: "B" },
+  ]);
+  assert.deepEqual([...(m.get("B") ?? [])].sort(), ["A", "C"]);
+  assert.equal(m.has("X"), false);
+});
+
+test("observed › an edge naming a course the catalog lost is dropped, not thrown on", () => {
+  const cm = mapOf(course("B200"));
+  assert.doesNotThrow(() => {
+    const p = buildPrecedence([named("b", ["B200"])], cm,
+                              { observed: observed("GONE999", "B200") });
+    assert.equal(p.planDepthOf("B200"), 0);
+  });
 });
 
 // ── Degenerate input ───────────────────────────────────────────────
