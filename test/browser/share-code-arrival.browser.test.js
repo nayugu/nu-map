@@ -110,6 +110,32 @@ describe("share-code arrival", { skip: up ? false : "dev server or relay not run
     assert.equal(await sheet(recipient).count(), 0);
   });
 
+  // The sheet is portalled to document.body to escape the header's
+  // stacking context, and body does NOT carry the app's typography — that
+  // lives on a wrapper div in App.jsx. The first version inherited the
+  // browser default and rendered the confirm in serif. Nothing but a real
+  // browser can see that, so check it here.
+  test("the sheet uses the app's font, not the browser default", async () => {
+    const sender = await (await browser.newContext()).newPage();
+    const code = await mintCode(sender, await openApp(sender));
+
+    const recipient = await (await browser.newContext()).newPage();
+    failOnNativeDialog(recipient);
+    await recipient.goto(`${APP}/#c=${code}`, { waitUntil: "domcontentloaded" });
+    await sheet(recipient).waitFor({ state: "visible", timeout: 20_000 });
+
+    const fonts = await sheet(recipient).evaluate(el => {
+      const title = el.querySelector("div > div");
+      return {
+        sheet: getComputedStyle(el).fontFamily,
+        title: getComputedStyle(title).fontFamily,
+      };
+    });
+    for (const [where, family] of Object.entries(fonts)) {
+      assert.match(family, /Inter/, `${where} fell back to "${family}" instead of the app font`);
+    }
+  });
+
   // The phone case that started all this: a suppressed native dialog
   // returns false. Playwright auto-dismisses unhandled dialogs, which is
   // the same thing — so a page with NO dialog handler must still import.

@@ -165,12 +165,26 @@ function QrModal({ qr, scanLabel, closeLabel, onClose }) {
 // outside that is indistinguishable from the app ignoring the link, which
 // is how it kept getting reported. This cannot be suppressed, is readable
 // in every locale and theme, and says plainly that the code is now spent.
-// Portalled to document.body, which is not optional here: the header root
+// Portalled OUT of the header, which is not optional here: the header root
 // is `position: sticky; z-index: 30`, and that is a stacking context — every
 // z-index inside it is flattened to 30. Rendered in place, this sheet sat
 // UNDER the onboarding modal (z-index 200) and that modal swallowed the
 // clicks, so on a first run the confirm was visible-ish and unusable. A
 // browser test caught it; nothing else could have.
+//
+// The target is document.body, and it has to be. The obvious alternative —
+// portal into the app's own scale root, so the font comes for free — fails
+// on desktop: that element carries `transform: scale(uiScale)`, which is
+// itself a stacking context, so z-index 10000 is trapped inside it and the
+// onboarding modal (a sibling OUTSIDE it, z-index 200) wins again. On a
+// phone `transform` is none, so that version passed the phone check and
+// failed the desktop one. Body is the only ancestor guaranteed not to trap
+// it.
+//
+// The cost of leaving the app is inheritance: font-family, colour and size
+// are set on the app wrapper, not on body, so a body portal renders in the
+// browser's default serif. That shipped and was noticed. Hence the explicit
+// font stack below — it must stay in step with App.jsx's wrapper.
 function ShareImportModal({ name, onLoad, onCancel, title, note, loadLabel, cancelLabel }) {
   useEffect(() => {
     const onKey = (e) => { if (e.key === "Escape") onCancel(); };
@@ -180,7 +194,10 @@ function ShareImportModal({ name, onLoad, onCancel, title, note, loadLabel, canc
   return createPortal(
     <div role="dialog" aria-modal="true"
       style={{ position: "fixed", inset: 0, zIndex: 10000, background: "rgba(2,6,23,0.66)",
-        display: "flex", alignItems: "center", justifyContent: "center", padding: 20 }}>
+        display: "flex", alignItems: "center", justifyContent: "center", padding: 20,
+        // Mirrors the wrapper in App.jsx; body does not carry it.
+        fontFamily: "'Inter', system-ui, sans-serif", fontSize: 13,
+        color: "var(--text-1)" }}>
       <div style={{ background: "var(--bg-surface)", border: "1px solid var(--border-2)",
         borderRadius: 14, padding: 18, boxShadow: "var(--shadow-modal)", maxWidth: 340, width: "100%",
         display: "flex", flexDirection: "column", gap: 12 }}>
