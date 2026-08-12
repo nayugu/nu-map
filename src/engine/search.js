@@ -204,6 +204,20 @@ export const STRICT_TIER_SHARE = 0.4;
 export const HALL_SLACK = 0;
 
 /**
+ * The most work one Hall check may do, as `slots² × cells`.
+ *
+ * 40,000 — about a 20-slot, 100-cell instance, which is comfortably larger than the case the
+ * check was built for (Industrial Engineering and Computer Science: 24 slots, 32 cells) and
+ * far below the one that broke it (22 terms, 15 needing, 40 cells ≈ 144,000 per node).
+ *
+ * A bound rather than a smarter algorithm because the check is OPTIONAL. It prunes; it does
+ * not decide. Declining to prune costs search time and cannot cost correctness, so the honest
+ * trade for a pathological instance is to think less rather than to hang — 168 seconds in a
+ * browser tab is not a slow answer, it is no answer.
+ */
+export const HALL_MAX_WORK = 40_000;
+
+/**
  * @typedef {Object} Assignment
  * @property {Map<string, number>} termOf   cell id → study-term index
  * @property {number} nodes
@@ -954,6 +968,22 @@ function attemptPlacement({
     for (let j = nextIndex; j < order.length; j++) if (bigCell(order[j])) avail += 1;
     if (totalNeed + HALL_SLACK < avail) return true;
 
+    // ── Bounded, because its cost scales with the instance ────────────
+    //
+    // Kuhn's is O(V*E), so this is roughly `totalNeed * totalNeed * avail`. On a small plan
+    // that is the ~30k operations it was budgeted at; on a 22-term program with 15 terms
+    // still needing courses and 40 cells left it is ~144,000 — PER NODE. At 20,000 nodes that
+    // is billions of operations, and the full sweep duly found a shape spending 168,000 ms
+    // against a 5,000 ms budget.
+    //
+    // Skipping is SOUND. This is a propagator: it prunes branches that cannot lead to a
+    // solution, and declining to prune costs search time, never correctness. The per-term
+    // count above still runs, the final witness still verifies, and a plan that survives is
+    // as legal as one from an instance small enough to check exactly. So the expensive case
+    // gets the cheap check and the search works harder, which is the right way round — the
+    // alternative is a frozen tab.
+    if (totalNeed * totalNeed * avail > HALL_MAX_WORK) return true;
+
     const slots = [];
     for (const { t, need } of needing) {
       const servers = [];
@@ -1039,7 +1069,19 @@ function attemptPlacement({
     if (++nodes > nodeBudget) return "budget";
     // Checked every 64 nodes rather than every one: a clock read per node is
     // itself measurable at this node rate, and 64 nodes is well inside the budget.
-    if ((nodes & 63) === 0 && now() > deadline) return "time";
+    // Every 8 nodes, not every 64.
+    //
+    // The interval was chosen when a node was cheap, on the reasoning that a clock read per
+    // node is itself measurable. It is not, next to what a node now costs: each one runs a
+    // distinctness matching and, on a tight instance, a Hall matching too. So 63 nodes of
+    // overshoot stopped being microseconds and became seconds — the full sweep found a shape
+    // taking 168,000 ms against a 5,000 ms budget.
+    //
+    // `Date.now()` is tens of nanoseconds against a matching's hundreds of microseconds, so
+    // this is free where it used to be worth avoiding, and it bounds the overshoot to eight
+    // nodes instead of sixty-four. It does not affect DETERMINISM: the clock can only turn an
+    // answer into a refusal, never into a different answer.
+    if ((nodes & 7) === 0 && now() > deadline) return "time";
     if (i >= order.length) {
       // The one place prereq-reachability is checked: a complete assignment, where
       // every cell that could supply a prerequisite has a term.

@@ -135,6 +135,25 @@ jobs:
       - name: Build course equivalences
         run: node scripts/build-equivalences.js --write 2>&1 | tee /tmp/equivalences-log.txt
 
+      # ── CHART: every plan this data can produce must be legal ────────────────
+      #
+      # Runs BEFORE the commit, and a failure stops the run. That ordering is the whole
+      # point: this workflow pushes straight to main unattended, so the alternative is
+      # discovering the problem from a student.
+      #
+      # It is needed because CHART's inputs move without any code change to review. A course
+      # whose offering history tips past the 50% availability bar, or a requirement section
+      # that gains a course, can turn a clean plan into one carrying a hard error — and the
+      # monthly scrape is exactly what tips it. The invariant suite checks a sample so it can
+      # run after every edit; this checks all ~748 degrees against every published variant.
+      #
+      # Gated on order, availability and the credit cap — the rules a student cannot work
+      # around, because the registrar refuses the enrolment. The four-course convention is
+      # reported and not gated: CHART relaxes it where it is unsatisfiable, and 4.2% of
+      # published full terms miss it too.
+      - name: Verify CHART can still plan this catalog
+        run: node scripts/verify-chart.js 2>&1 | tee /tmp/chart-verify-log.txt
+
       # ── Commit and push directly to main ──────────────────────────────────────
       - name: Check for changes
         id: changes

@@ -44,6 +44,7 @@
     "data:verify": "node scripts/verify-majors.js --report",
     "data:verify:write": "node scripts/verify-majors.js --report --write",
     "data:verify:update": "node scripts/verify-majors.js --update",
+    "verify:chart": "node scripts/verify-chart.js",
     "catalog:check": "node scripts/catalog-check-server.js",
     "dev:pw": "node scripts/generate-dev-password.js",
     "test": "npm run test:unit && npm run test:contract && npm run test:invariant",
