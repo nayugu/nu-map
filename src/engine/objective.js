@@ -54,7 +54,7 @@
 import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
 import { witnessPlan } from "./witness.js";
 import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
-import { DEFAULT_CALIBRATION, minCoursesFor } from "./calibration.js";
+import { DEFAULT_CALIBRATION, minCoursesFor, termIsFull } from "./calibration.js";
 import { unlockUniverse, unlockOfCell, isPoolCell, generatorBar } from "./search.js";
 import { unlockValues } from "./prereqDepth.js";
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
@@ -364,7 +364,9 @@ export function checkThresholds({ plans, terms, termOf, ports, studentType, thre
     // Cells of under 3 SH do not count toward the four. A one-credit lab and a course
     // are not two courses, and the corpus bar is explicitly four of >= 3 SH.
     const minCourses = minCoursesFor(cal, studentType);
-    if (w >= 1 && load[ti] > 0 && minCourses > 0 && big[ti] < minCourses) {
+    // Credit-aware: a term with no room for another real course is full, whatever its count.
+    if (w >= 1 && load[ti] > 0 && minCourses > 0
+        && !termIsFull(big[ti], load[ti], bar, cal, studentType)) {
       failures.push({ kind: "full-term-under-four", term: ti,
                       label: label(t), courses: big[ti], need: minCourses });
     }
@@ -431,7 +433,7 @@ export function improve({
   const cheapLegal = (assignment) =>
     !precedence || precedenceViolations(precedence, assignment).length === 0;
   // Established once, from the plan phase 1 handed over: phase 2 may never make it worse.
-  const maxThin = thinFullTerms(termOf, plans, terms, studentType, cal);
+  const maxThin = thinFullTerms(termOf, plans, terms, studentType, cal, cap);
   const fullLegal = (assignment) =>
     isLegal({ plans, terms, termOf: assignment, cap, courseMap, repeatable, ports, byId,
               precedence, shape, maxThin, studentType, cal });
@@ -778,7 +780,7 @@ export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses 
       // is not enrolled in, which is a different thing and not this rule's business.
       if (w < 1 || load[t] === 0) continue;
 
-      while (big[t] < minCourses) {
+      while (!termIsFull(big[t], load[t], cap[t], cal, studentType)) {
         let donor = null;
         // `plans` order is deterministic, so the same input yields the same plan.
         for (const p of plans) {
@@ -897,21 +899,29 @@ export function tradeDepth(termOf, { plans, terms, cap, courseMap, fullLegal, ca
  * then reject every move and freeze the plan unimproved. A non-increasing budget is
  * monotone — phase 2 may never make it worse, and `fillFullTerms` can still make it better.
  */
-export function thinFullTerms(assignment, plans, terms, studentType = "undergraduate", cal = DEFAULT_CALIBRATION) {
+export function thinFullTerms(assignment, plans, terms, studentType = "undergraduate",
+                              cal = DEFAULT_CALIBRATION, cap = null) {
   const minCourses = minCoursesFor(cal, studentType);
   if (minCourses <= 0) return 0;
   const big = terms.map(() => 0);
+  const load = terms.map(() => 0);
   const any = terms.map(() => false);
   for (const p of plans) {
     const ti = assignment.get(p.cell.id);
     if (ti == null) continue;
     any[ti] = true;
+    load[ti] += p.cell.sh ?? 0;
     if ((p.cell.sh ?? 0) >= cal.realCourseSH) big[ti] += 1;
   }
   let n = 0;
   for (let t = 0; t < terms.length; t++) {
     if ((terms[t].weight ?? 1) < 1 || !any[t]) continue;
-    if (big[t] < minCourses) n += 1;
+    // Without a cap to compare against, fall back to the count — the caller that has one
+    // passes it, and a missing cap must not silently make every term look full.
+    const full = cap
+      ? termIsFull(big[t], load[t], cap[t], cal, studentType)
+      : big[t] >= minCourses;
+    if (!full) n += 1;
   }
   return n;
 }
@@ -938,7 +948,7 @@ function fitsCapacity(assignment, plans, terms, cap, shape = null, maxThin = Inf
       && count.every((n, ti) => n <= termSlotCap(terms[ti], shape))
       && req.every(m => [...m.values()].every(n => n <= cal.sameRequirementPerTermMax))
       // The four-course floor, as a non-increasing budget. See `thinFullTerms`.
-      && (maxThin === Infinity || thinFullTerms(assignment, plans, terms, studentType, cal) <= maxThin);
+      && (maxThin === Infinity || thinFullTerms(assignment, plans, terms, studentType, cal, cap) <= maxThin);
 }
 
 /** Full hard-constraint check, including the prereq-aware witness. */

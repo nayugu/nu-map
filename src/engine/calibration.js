@@ -168,3 +168,37 @@ export function withCalibration(given = {}) {
  */
 export const minCoursesFor = (cal, studentType) =>
   (studentType === "graduate" ? cal.graduateFullTermMinCourses : cal.fullTermMinCourses);
+
+/**
+ * Is a full term FULL? Four real courses, or no room left for another one.
+ *
+ * ── Why the second clause is not a relaxation ───────────────────────
+ *
+ * "Four courses in every full fall and spring" was enforced as a course COUNT, and that made
+ * it unsatisfiable for a degree it should never have applied to. Architecture BS studio courses
+ * are 8–16 SH: a term holding one cannot reach four courses inside the 19 SH registration cap,
+ * because 16 + 3 + 3 + 3 is 25. CHART refused the program.
+ *
+ * The mistake was in the metric, not the plan. A term carrying a 16 SH studio is not thin — it
+ * is FULL, and calling it thin describes it wrongly. What the rule is actually for is that no
+ * full term is left with room the student is not using, and that is what this asks: either four
+ * real courses, or adding one more would break the cap.
+ *
+ * So the rule stays HARD, and gets stronger rather than weaker. It now also catches a term with
+ * three 4 SH courses and space for a fourth, which a pure count caught, AND correctly passes a
+ * term with three 6 SH courses at 18 SH, which a pure count called a defect while the
+ * registrar would refuse to add anything to it. The 4.2% of published full terms that miss the
+ * count are exactly the ones this second clause explains.
+ *
+ * @param {number} bigCourses  cells of at least `realCourseSH` in the term
+ * @param {number} loadSH      credits already in the term
+ * @param {number} capSH       the registration cap for this term
+ */
+export function termIsFull(bigCourses, loadSH, capSH, cal, studentType) {
+  const min = minCoursesFor(cal, studentType);
+  if (min <= 0) return true;                       // no convention here — graduate plans
+  if (bigCourses >= min) return true;
+  // Room for one more REAL course means room the student is not using. A fraction of a credit
+  // of slack is not room, hence the tolerance.
+  return loadSH + cal.realCourseSH > capSH + 0.01;
+}

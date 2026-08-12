@@ -52,6 +52,10 @@ export default function PlanSourceToggle({
         return (
           <button
             key={o.id}
+            // A stable hook for the live browser test, which cannot select on the label: the
+            // copy exists in eight languages, so a text selector would fail on a translation
+            // rather than on a defect. See test/live/chart-ui.live.test.js.
+            data-testid={`plan-source-${o.id}`}
             role="radio" aria-checked={on} disabled={!o.enabled || busy}
             title={o.enabled ? undefined : o.why}
             onClick={() => o.enabled && onChange(o.id)}

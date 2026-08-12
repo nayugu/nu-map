@@ -91,7 +91,12 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
     if (r.sh > creditCap * (r.half ? 0.5 : 1) + 0.01) overCap.push(`${r.label} ${r.sh} SH`);
     if (r.half || minCourses <= 0) continue;
     fullTerms++;
-    if (r.big < minCourses) thin.push(`${r.label} (${r.big})`);
+    // Credit-aware, matching the engine: a term with no room for another real course is FULL,
+    // whatever its course count. A 16 SH studio cannot reach four inside a 19 SH cap, and
+    // calling it thin described it wrongly rather than finding a defect.
+    if (r.big < minCourses && r.sh + realCourseSH <= creditCap + 0.01) {
+      thin.push(`${r.label} (${r.big} courses, ${r.sh} SH)`);
+    }
   }
 
   return {

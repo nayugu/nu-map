@@ -63,7 +63,7 @@
 import { witnessPlan, buildContention, bipartiteMatch } from "./witness.js";
 import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
 import { chainHeight } from "./precedence.js";
-import { DEFAULT_CALIBRATION, minCoursesFor } from "./calibration.js";
+import { DEFAULT_CALIBRATION, minCoursesFor, termIsFull } from "./calibration.js";
 import { cellLevelTarget, cellLevelFloor, unlockValues } from "./prereqDepth.js";
 
 /**
@@ -428,36 +428,81 @@ export function placeCells({
   // And it keeps refusal honest. A refusal now means the relaxed problem is infeasible,
   // not that a stricter search ran out of time, which is the difference between a fact
   // about the degree and a fact about my search.
-  // Reached whenever the strict tiers are done, on nodes rather than on time, so the same
-  // input always gets the same fallback attempt with the same allowance.
-  {
+  // ── Give up a CONVENTION before giving up on the degree ───────────
+  //
+  // A refusal should mean "no legal plan exists", never "no plan exists that also follows
+  // every convention we measured". Those are different claims, and only the first is worth
+  // withholding a plan over: a student cannot register for a plan that breaks a prerequisite,
+  // and can perfectly well follow one with five courses in a term.
+  //
+  // So the fallbacks relax, in order, the things that are conventions rather than rules:
+  //
+  //   1. the four-course full term        strong (95.8%) and not universal — architecture's
+  //                                      16 SH studios cannot reach four inside the 19 SH cap
+  //   2. the same-requirement cap         the corpus MAXIMUM, not a limit anyone enforces
+  //      and the inherited slot cap       "no worse than this program's own worst term" is a
+  //                                      courtesy; the corpus-wide 9 and 5 are the real bound
+  //
+  // What NEVER relaxes, at any rung: prerequisite order, availability, distinctness, the
+  // registration credit cap, and requirement coverage. Those are the hard rules, the CI gate
+  // asserts them at zero over all 1,031 shapes, and a relaxed plan differs from a strict one
+  // only in being less conventional — never in being illegal.
+  //
+  // Each rung gets FRESH domains. A nogood records "cell C cannot be in term T" observed
+  // under the constraint set that was in force, and with a constraint gone the observation may
+  // simply be false — carrying it forward hands the tier meant to rescue coverage a space up
+  // to 40 guesses smaller than the search that just failed. Measured separately: five known
+  // refusals survived a SIX-FOLD budget increase unchanged, so they were never short of time;
+  // they were looking in a space that had been narrowed.
+  //
+  // Reached on NODES rather than on the clock, so the same input always gets the same rungs
+  // with the same allowances and generation stays deterministic.
+  // The four-course rule is NOT on this ladder. It is a hard requirement — a full term with
+  // room the student is not using is a defect, not a preference — and the reason it looked
+  // unsatisfiable was a wrong metric rather than a real conflict: it was enforced as a course
+  // COUNT, so a term carrying a 16 SH studio was called thin when it is in fact full. See
+  // `termIsFull`. Fixing the metric made the rule both satisfiable and stronger, which is
+  // strictly better than relaxing it.
+  //
+  // What remains here is genuinely conventional: the same-requirement cap is the corpus
+  // MAXIMUM rather than a limit anyone enforces, and the inherited slot cap is a courtesy
+  // ("no worse than this program's own worst published term") over the corpus-wide 9 and 5.
+  const RUNGS = [
+    // FIRST, and it gives up nothing that matters: the same constraints, searched in a plain
+    // order. A plan found here is as legal as one found above and merely less well sequenced
+    // before phase 2 gets to it.
+    { gave: "sequencing-preferences", shape, preferenceFree: true },
+    // Only then a convention: the same-requirement cap is the corpus MAXIMUM rather than a
+    // limit anyone enforces, and `shape: null` swaps this program's own worst published term
+    // for the corpus-wide 9 and 5.
+    { gave: "term-width", shape: null, wideTerms: true, preferenceFree: true },
+  ];
+  const given = [];
+  for (const rung of RUNGS) {
+    if (totalNodes >= nodeBudget || now() > deadline) break;
+    given.push(rung.gave);
     const r = attemptPlacement({
-      // ── FRESH domains, not the ones the nogoods narrowed ────────────
-      //
-      // This reused `working`, and that was unsound. A nogood records "cell C cannot be in
-      // term T", observed under the FULL constraint set — including the four-course bound
-      // this tier exists to relax. With the bound gone the observation may simply be false,
-      // and carrying it forward removes terms the relaxed problem needs.
-      //
-      // It is also the documented weakness of the mechanism compounding itself: a nogood is
-      // a heuristic, not a deduction, so it can already miss a plan that exists. Handing the
-      // fallback a domain set pruned by up to 40 such guesses gives it a strictly smaller
-      // space than the search that had just failed — the tier meant to rescue coverage was
-      // starting from a worse position than the one it was rescuing.
-      //
-      // Measured cause for looking: five known refusals survived a SIX-FOLD budget increase
-      // unchanged, so they were never latency-bound. A search that cannot find an answer in
-      // 30 seconds that it also cannot find in 5 is not short of time; it is looking in the
-      // wrong place, and inherited nogoods are how the place got smaller.
       plans: plans.map(p => ({ ...p, domain: [...p.domain] })),
       terms, ports, studentType, courseMap, repeatable,
-      nodeBudget: Math.max(1, nodeBudget - totalNodes),
-      precedence, now, shape, deadline, cal,
-      enforceCardinality: false,
+      nodeBudget: Math.max(1, Math.floor((nodeBudget - totalNodes) / 2)),
+      precedence, now, deadline, cal,
+      shape: rung.shape,
+      enforceCardinality: rung.enforceCardinality ?? true,
+      preferenceFree: rung.preferenceFree ?? false,
+      // Relaxed to the corpus bound, which is still a bound: it forbids only what no
+      // published plan does.
+      sameReqMax: rung.wideTerms ? Infinity : cal.sameRequirementPerTermMax,
     });
     totalNodes += r.nodes;
     if (r.ok) {
-      return { ...r, nodes: totalNodes, restarts: maxRestarts, cardinalityRelaxed: true };
+      return {
+        ...r, nodes: totalNodes, restarts: maxRestarts,
+        cardinalityRelaxed: true,
+        // Named so the report — and the student — can see WHICH convention was spent. A plan
+        // that quietly stops following a rule it claims to follow is worse than one that says
+        // so.
+        relaxed: [...given],
+      };
     }
     last = r.failure ? r : last;
   }
@@ -476,6 +521,13 @@ function attemptPlacement({
   plans, terms, ports, studentType, courseMap,
   repeatable, nodeBudget, deadline, now, precedence, shape = null,
   enforceCardinality = true, cal = DEFAULT_CALIBRATION,
+  // The same-requirement bound, overridable by the relaxation ladder. `Infinity` still leaves
+  // the slot cap and the credit cap in force; it only stops the corpus MAXIMUM being treated
+  // as a limit someone enforces.
+  sameReqMax = cal.sameRequirementPerTermMax,
+  // Order terms by position alone, dropping every sequencing preference. NOT a relaxation:
+  // the constraints are identical. See `termPreference`.
+  preferenceFree = false,
 }) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
   const slotCap = terms.map(t => termSlotCap(t, shape));
@@ -654,7 +706,7 @@ function attemptPlacement({
    */
   const underFilled = (ti) => {
     if ((terms[ti].weight ?? 1) < 1) return 1;      // a half term cannot satisfy the rule
-    return bigIn[ti] < minCourses ? 0 : 1;
+    return termIsFull(bigIn[ti], loadSH[ti], cap[ti], cal, studentType) ? 1 : 0;
   };
 
   /**
@@ -676,6 +728,33 @@ function attemptPlacement({
   };
 
   const termPreference = (plan) => {
+    // ── FEASIBILITY MUST NOT DEPEND ON TASTE ────────────────────────
+    //
+    // This file's own header says phase 1 "does not try to find a GOOD one; that is phase 2's
+    // job", and everything below this line contradicts it: level targets, a standing floor,
+    // unlock ranking, pool reachable-share, an elective reserve, crowding, and demoting the
+    // summers a department left blank. Phase 1 has been trying to produce a good plan, and
+    // that is precisely how it sometimes produces NONE.
+    //
+    // Branch order cannot change what is legal — only which legal thing is found first, and
+    // whether one is found inside the budget. So every preference here is a way to spend the
+    // budget looking somewhere prettier, and when the pretty region holds no solution the
+    // student gets nothing. Three of today's defects were exactly that and nothing else:
+    // `optional` summers made Architecture unsolvable, the standing floor cost 15 points of
+    // coverage, and `takesReserved` pulled a 4000-level pair into year 1.
+    //
+    // `preferenceFree` is the answer to that, and it is deliberately not a relaxation: the
+    // constraints are identical on this pass. It orders terms by nothing but position, so the
+    // search explores the whole space in a fixed, cheap order instead of the region our
+    // measurements consider handsome. Sequencing is not lost — phase 2 owns it and verifies
+    // every move against the same hard rules — it is simply approached from the other side.
+    //
+    // The property worth having: adding a sequencing preference can no longer make a program
+    // unplannable. Which is the guarantee the priority order demands, since a student cannot
+    // register for a plan that does not exist, and can perfectly well follow an ugly one.
+    if (preferenceFree) {
+      return [...plan.domain].sort((a, b) => byOptional(a, b) || a - b);
+    }
     const filler = plan.candidates === null;
     const f = (ti) => fill(ti, filler);
     // Where courses of this level conventionally sit, INSIDE the window precedence
@@ -947,6 +1026,9 @@ function attemptPlacement({
     for (let t = 0; t < terms.length; t++) {
       if ((terms[t].weight ?? 1) < 1) continue;         // a half term holds two, not four
       if (bigIn[t] === 0) continue;                     // not in use; may stay that way
+      // A term with no ROOM for another real course is already full, however few courses it
+      // holds — a 16 SH studio term cannot reach four and needs nothing. See `termIsFull`.
+      if (termIsFull(bigIn[t], loadSH[t], cap[t], cal, studentType)) continue;
       const need = minCourses - bigIn[t];
       if (need <= 0) continue;
       if (need > possible[t]) return false;
@@ -1121,7 +1203,7 @@ function attemptPlacement({
       // Eleven courses in one term fits inside 19 credits and is not a plan anyone
       // would follow. Bounded by the worst any published plan does.
       if (countIn[ti] + coursesInCell(cell) > slotCap[ti]) continue;
-      if (reqCount(ti, cell) + 1 > cal.sameRequirementPerTermMax) continue;
+      if (reqCount(ti, cell) + 1 > sameReqMax) continue;
       // The derived per-term ceiling on real courses. See `bigCap`: where the arithmetic
       // is exactly tight this forbids the five-in-a-term branches that are provably dead.
       if (enforceCardinality && bigCell(plan) && bigIn[ti] + 1 > bigCap[ti]) continue;

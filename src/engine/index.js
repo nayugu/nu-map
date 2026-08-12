@@ -267,6 +267,10 @@ export function generatePlan({
       // could not be met and was dropped — a fact about the degree's arithmetic against
       // this shape, and the difference between "thin term" and "thin term for a reason".
       cardinalityRelaxed: placed.cardinalityRelaxed ?? false,
+      // WHICH conventions were spent to get a plan at all, in the order they were given up.
+      // A plan that stops following a rule it claims to follow, without saying so, is worse
+      // than one that says so.
+      relaxed: placed.relaxed ?? [],
       moves: improved.moves,
       scores: improved.scores,
       thresholds: improved.thresholds,

@@ -345,6 +345,21 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
           </div>
 
           {/* Generation is the one thing here that takes visible time. */}
+          {/* A machine-readable status for the live browser test.
+              Rendered whenever CHART is the source, including while busy, because the bug it
+              guards against is generation NEVER finishing — the panel sat on "Working out an
+              order…" for ever with no error anywhere. A test can only catch that by watching
+              `data-busy` go false; watching for a string cannot distinguish "still working"
+              from "stuck working". */}
+          {usingChart && (
+            <div
+              data-testid="chart-status"
+              data-busy={genBusy ? "true" : "false"}
+              data-state={genBusy ? "busy" : gen?.refused ? "refused" : chartPlan ? "ready" : "idle"}
+              style={{ display: "none" }}
+            />
+          )}
+
           {usingChart && genBusy && (
             <div style={{ fontSize: fz, color: "var(--text-5)", marginBottom: 6 }}>
               {t("chart.busy")}
