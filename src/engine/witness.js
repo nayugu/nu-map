@@ -363,11 +363,44 @@ export function witnessPlan({
   return { ok: true, failure: null, witness };
 }
 
+/**
+ * Every catalog id in a fixed order, computed ONCE per catalog.
+ *
+ * ── The single most expensive line in the engine, until it was measured ──
+ *
+ * `firstFree` sorted `Object.keys(courseMap)` on every call, and it is called once per
+ * UNBOUNDED cell per NODE. A degree with five general-elective cells therefore performed five
+ * 7,966-element string sorts at every node of the search.
+ *
+ * Profiled: `StringCompare` 13.1% and `ArrayTimSort` 8.7% of ticks, and
+ * `business_administration_bsba` spent 5,041 ms to explore 477 nodes — 10.6 ms per node,
+ * against 11 microseconds for a cheap program. Twenty seconds of budget bought 1,798–3,222
+ * nodes on those shapes, which is why 4x the time rescued none of them: the budget was never
+ * the binding constraint, the cost of a node was.
+ *
+ * A `WeakMap` rather than a module-level variable because the catalog is an argument, not a
+ * singleton — the MCP server, the tests and the CI sweep each hold their own, and a shared
+ * cache keyed on nothing would hand one caller another's ordering. Weak so a discarded catalog
+ * is collectable.
+ *
+ * The order is IDENTICAL to what the sort produced, so every witness, every plan and every
+ * fingerprint is unchanged. This is purely the same work done once instead of a million times.
+ */
+const idOrderCache = new WeakMap();
+function catalogIdOrder(courseMap) {
+  let ids = idOrderCache.get(courseMap);
+  if (!ids) {
+    // Sorted, so the witness is deterministic: two runs must agree or the diff
+    // review the data workflows rely on becomes noise.
+    ids = Object.keys(courseMap).sort();
+    idOrderCache.set(courseMap, ids);
+  }
+  return ids;
+}
+
 /** Any catalog course legal here — for a cell that admits the whole catalog. */
 function firstFree(courseMap, fits) {
-  // Sorted, so the witness is deterministic: two runs must agree or the diff
-  // review the data workflows rely on becomes noise.
-  for (const id of Object.keys(courseMap).sort()) if (fits(id)) return id;
+  for (const id of catalogIdOrder(courseMap)) if (fits(id)) return id;
   return null;
 }
 
