@@ -14,6 +14,7 @@ import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges, coreqPartnersOf } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
+import { pruneSemOrders } from "../core/planSchema.js";
 import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
@@ -2924,8 +2925,16 @@ export function PlannerProvider({ children }) {
     });
   }, [studentType, activePlanId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Capture full plan state as a serializable object
-  const captureCurrentPlan = () => ({
+  // Capture full plan state as a serializable object.
+  //
+  // Everything that leaves this plan goes through here — the localStorage
+  // slot, the exported file, the zip archive, the share link — so it is the
+  // one place worth tidying at. `pruneSemOrders` drops term-order entries
+  // naming cards the plan no longer holds: invisible in the app, but they
+  // accumulate silently and ride into every file as references to nothing.
+  // It leaves cards parked outside the timeline alone, on purpose — see the
+  // note on the helper.
+  const captureCurrentPlan = () => pruneSemOrders({
     version: 1,
     exported: new Date().toISOString(),
     entSem: planEntSem, entYear: planEntYear,

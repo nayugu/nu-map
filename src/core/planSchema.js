@@ -114,3 +114,50 @@ export const SHARE_NESTED = Object.fromEntries(
 
 /** Field names that must never appear in a share payload (hard invariant). */
 export const PRIVATE_FIELDS = PLAN_FIELDS.filter(f => f.private).map(f => f.name);
+
+/**
+ * Drop term-order entries that name a card the plan does not contain.
+ *
+ * `semOrders` is positional bookkeeping: "in this term, draw these ids in this
+ * sequence". Every drop rewrites the orders of the terms it touched, and only
+ * those — so an id can be left behind in the order of a term it no longer
+ * occupies, and a card deleted from the plan can stay named in an order
+ * somewhere. The grid never shows it (`getOrderedCourses` filters an order
+ * against what is actually in the term), so nothing looks wrong; the entries
+ * simply accumulate, and ride into every exported file and share link as
+ * references to cards that are not in the plan.
+ *
+ * ── What this deliberately does NOT touch ──────────────────────────
+ *
+ * Placements in a term outside the plan's current window. Those look like the
+ * same kind of ghost and are not: shortening a cohort PARKS cards rather than
+ * deleting them, so they return when it widens again. Pruning them at a door
+ * would turn "I shortened my plan by a year" into silent, permanent data loss.
+ * They are invisible in the app on purpose, and they are carried on purpose.
+ * The rule here uses no timeline knowledge at all — only whether the plan
+ * itself still holds the card — which is what keeps the two cases apart.
+ *
+ * @param {object} data a plan body (capture / slot / file shape)
+ * @returns {object} the same object when nothing is stale, so callers can
+ *                   cheaply skip a write
+ */
+export function pruneSemOrders(data) {
+  const orders = data?.semOrders;
+  if (!orders || typeof orders !== "object") return data;
+
+  const held = new Set(Object.keys(data.placements ?? {}));
+  for (const id of Object.keys(data.reservations ?? {})) held.add(id);
+
+  let changed = false;
+  const next = {};
+  for (const [semId, ids] of Object.entries(orders)) {
+    if (!Array.isArray(ids)) { changed = true; continue; }
+    const kept = ids.filter(id => held.has(id));
+    if (kept.length !== ids.length) changed = true;
+    // An order that has emptied out carries nothing; keeping the key would
+    // just be a term id with a `[]` beside it in every file from here on.
+    if (kept.length) next[semId] = kept;
+    else if (ids.length) changed = true;
+  }
+  return changed ? { ...data, semOrders: next } : data;
+}
