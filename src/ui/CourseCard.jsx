@@ -7,6 +7,7 @@ import { useRelevance }   from "../context/RelevanceContext.jsx";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { ICalendar }      from "../ports/ICalendar.js";
+import { ICourseOffering } from "../ports/ICourseOffering.js";
 import { REL_STYLE } from "../core/constants.js";
 import { baseId, takesUsed } from "../core/repeatInstances.js";
 import GradePopover from "./GradePopover.jsx";
@@ -188,21 +189,23 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   // entry after a course is first offered isn't enough evidence it's never offered there.
   const semMeta    = semId ? SEMESTERS.find(s => s.id === semId) : null;
   const semOffType = inSem ? semMeta?.semTypeId ?? null : null;
+  // ── ONE availability rule, reached through a port ────────────────
+  //
+  // This block restated `effectiveOffered` inline — the post-birth filter, the
+  // two-entries-minimum, the 50% bar and the override precedence, all copied. That made
+  // FOUR implementations of one judgement: this, `effectiveOffered` itself, a local
+  // `semTypeProb` in InfoPanel, and the engine's `offeringProbability !== 0`, which asked a
+  // strictly weaker question and therefore disagreed.
+  //
+  // The disagreement was not hypothetical. `CS 3800` is recorded in Summer B once in four
+  // years, so CHART placed it in a Summer B — legal by its rule, `offered?` by this one —
+  // and shipped a plan the app itself flagged. There was no port to hold the rule, so the
+  // hexagonal boundary made copying it the path of least resistance; `ICourseOffering` is
+  // that missing port.
+  const offering = usePort(ICourseOffering);
   let notOffered = false;
   if (inSem && semOffType && semMeta?.type !== "special") {
-    const rawOvr = offeredOverrides[course.id];
-    const semOvr = (rawOvr && !Array.isArray(rawOvr)) ? rawOvr[semOffType] : undefined;
-    if (semOvr === false) {
-      notOffered = true;
-    } else if (semOvr !== true) {
-      const birth   = course.birthTermCode ?? null;
-      const entries = Object.entries(course.termHistory ?? {})
-        .filter(([code]) => (birth === null || Number(code) >= birth)
-                         && calendar.decodeTermCode(code) === semOffType);
-      if (entries.length >= 2) {
-        notOffered = entries.filter(([, v]) => v).length / entries.length <= 0.5;
-      }
-    }
+    notOffered = !offering.offered(course, semOffType, offeredOverrides[course.id]);
   }
 
   let borderColor = isCardHov ? "var(--active)" : "var(--border-card)";

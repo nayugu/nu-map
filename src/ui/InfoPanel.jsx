@@ -10,6 +10,7 @@ import { usePort }                  from "../context/InstitutionContext.jsx";
 import { IAttributeSystem }         from "../ports/IAttributeSystem.js";
 import { ICreditSystem }            from "../ports/ICreditSystem.js";
 import { ICalendar }                from "../ports/ICalendar.js";
+import { ICourseOffering }          from "../ports/ICourseOffering.js";
 import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
@@ -809,6 +810,10 @@ function CourseInstructors({ selCourse, compact = false }) {
 
 function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverrides, compact = false }) {
   const cal         = usePort(ICalendar);
+  // `offeringPort`, not `offering`: this component already binds `offering` to the course's
+  // own per-term enrollment detail a few lines down, and shadowing it silently swapped the
+  // meaning of the name halfway through the function.
+  const offeringPort = usePort(ICourseOffering);
   const { t }       = useLanguage();
   // Order rows so each calendar-year column reads top-to-bottom in chronological order. Sort by
   // the earliest calendar month each term covers (Spring=Jan → Summer=May/Jul → Fall=Sep), via the
@@ -917,17 +922,17 @@ function CourseOfferingHistory({ selCourse, offeredOverrides, setOfferedOverride
   const ovrMap     = (rawOvr && !Array.isArray(rawOvr)) ? rawOvr : {};
   const hasOverride = Object.keys(ovrMap).length > 0;
 
-  // Historical offering probability for a given semTypeId (null if no data or < 2 post-birth entries).
-  // Pre-birth entries are excluded: a false entry before birthTermCode means the course didn't
-  // exist yet, not that it was offered and stopped. Requires ≥ 2 entries to flag as not offered
-  // so sparse data for new courses doesn't produce a misleading 0% probability.
-  function semTypeProb(semTypeId) {
-    const entries = Object.entries(termHistory)
-      .filter(([code]) => (birth === null || Number(code) >= birth)
-                       && cal.decodeTermCode(code) === semTypeId);
-    if (entries.length < 2) return null;
-    return entries.filter(([, v]) => v).length / entries.length;
-  }
+  // Historical offering probability for a given semTypeId — through the port, not restated.
+  //
+  // This was a fourth private copy of one rule: the post-birth filter and the
+  // two-entries-minimum, duplicating `effectiveOffered` in the adapter, an inline block in
+  // CourseCard, and a weaker test in CHART. Four copies of "is this offered" is how the
+  // engine came to place `CS 3800` in a Summer B that the card next to it marked `offered?`.
+  //
+  // Null still means "not enough evidence" and is not a zero; the popover renders the two
+  // differently, which is the whole reason it wants the number rather than the verdict.
+  const semTypeProb = (semTypeId) =>
+    offeringPort.probability(selCourse, semTypeId, ovrMap);
 
   // Write an explicit override (true/false) or clear it (undefined → delete key).
   function setOverride(semTypeId, value) {

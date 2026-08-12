@@ -24,6 +24,7 @@ import localization      from './adapters/northeastern/localization.js';
 import aiAssistant       from './adapters/northeastern/aiAssistant.js'; // MCP integration (defaults to localhost:27182; set VITE_MCP_SERVER_URL when hosted)
 import shareRelay        from './adapters/northeastern/shareRelay.js';  // share-by-code relay on the same server
 import planGenerator     from './adapters/northeastern/planGenerator.js';   // CHART — generates a plan of study
+import courseOffering    from './adapters/northeastern/courseOffering.js';  // when a course runs — ONE rule, shared by the UI and CHART
 
 // Comment out any line to fall back to the generic default for that port.
 export const institutionAdapter = wire({
@@ -36,6 +37,7 @@ export const institutionAdapter = wire({
   courseCatalog,
   localization,
   planGenerator,
+  courseOffering,
   // Claude integration + share-by-code: active in dev (localhost MCP
   // server) or when a hosted server URL is baked into the build. Excluded
   // otherwise so production never shows a Connect flow (or a share-code

@@ -60,6 +60,7 @@ const KNOWN_PORTS = new Set([
   "aiAssistant",    // driven port  — app pushes plan context to an AI assistant
   "shareRelay",     // driven port  — one-shot share-by-code plan relay
   "planGenerator",  // driven port  — generates a Sample Plan of Study (CHART)
+  "courseOffering", // when a course runs — ONE rule, shared by the UI and CHART
 ]);
 
 /**
