@@ -603,9 +603,19 @@ export default function Header() {
   //  4. First-run onboarding was deferred for this arrival (see
   //     PlannerContext). If the code was dead, the visitor is a genuine
   //     first-timer holding nothing, so give them their setup back.
-  useEffect(() => {
+  //  5. It must run on a FRAGMENT CHANGE, not only on mount. This is the
+  //     one that actually bit: if NU Map is already open on the phone,
+  //     opening a #c= link is same-document navigation. The browser
+  //     changes the fragment and fires hashchange — it does not reload,
+  //     so React never remounts and a mount-only effect never sees the
+  //     code. Measured: the URL became #c=…, performance navigation
+  //     entries stayed at 1, and nothing happened at all. Every earlier
+  //     test missed it by using a fresh page load, which is a different
+  //     kind of navigation.
+  const arrivalRef = useRef(null);
+  arrivalRef.current = () => {
     const code = getHashCodeParam();
-    if (!code) return;
+    if (!code || claimBusy) return;
     history.replaceState(null, "", window.location.pathname + window.location.search);
     // openPhonePop first, exactly as the ⇅ button itself does: on a phone
     // the panel is a fixed sheet pinned under the header, and without this
@@ -618,6 +628,15 @@ export default function Header() {
       if (imported) setScanArrival(false);
       else if (onboardingDeferredForShare) setOnboardingAfterPanel(true);
     });
+  };
+  useEffect(() => {
+    // Through a ref so the listener is registered once but always runs the
+    // current closure — re-subscribing every render would be the only
+    // other way to avoid claiming against stale state.
+    const run = () => arrivalRef.current?.();
+    run();                                        // full page load
+    window.addEventListener("hashchange", run);   // already-open tab
+    return () => window.removeEventListener("hashchange", run);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [planSearch, setPlanSearch] = useState("");
   const [selectMode, setSelectMode] = useState(false);
