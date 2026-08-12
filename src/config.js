@@ -10,6 +10,18 @@
 //   1. Copy src/adapters/northeastern/ to src/adapters/myuniversity/
 //   2. Edit the files inside to match your institution's data.
 //   3. Change the import below to point at your new folder.
+//
+// ── THIS is the wiring. There is no other. ─────────────────────────
+//
+// `src/adapters/northeastern/index.js` used to export a second `overrides` map that looked
+// exactly like the `wire()` call below, and nothing imported it — the only mentions were a
+// doc comment. It was a trap rather than a duplicate: CHART's `planGenerator` was added
+// there and not here, so `usePort` returned undefined, the Generate button sat correctly
+// disabled, and nothing anywhere said why. Finding that took driving a browser.
+//
+// It had also drifted — no `shareRelay`, no `courseOffering` — which is what a second list
+// always does. Deleted, and `test/contract/port-wiring.test.js` now asserts that every port
+// the UI asks for is wired HERE, so the same mistake fails a test instead of a student.
 // ═══════════════════════════════════════════════════════════════════
 
 import { wire }              from './adapters/wire.js';
