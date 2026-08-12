@@ -65,7 +65,7 @@ const shareErrorOf = (err) => {
 // ── The share QR ────────────────────────────────────────────────────
 // The QR encodes the share-code LINK (numap.app/#c=ABCDEF), not the plan.
 // That is what makes it small, and it means the QR is exactly as
-// short-lived as the code drawn on it: one use, five minutes, and gone the
+// short-lived as the code drawn on it: one use, ten minutes, and gone the
 // moment the sender cancels. A QR carrying the plan itself would be dense
 // AND permanent — anyone who photographed it would hold the plan forever.
 
@@ -430,7 +430,7 @@ export default function Header() {
   // A code lives only as long as this tab: pagehide fires the farewell
   // cancel (sendBeacon survives unload; fetch would be dropped), so a
   // closed or reloaded tab never leaves an unclaimed code behind. The
-  // server's 5-minute TTL remains only as the crash backstop.
+  // server's 10-minute TTL remains only as the crash backstop.
   const [shareCode, setShareCode]             = useState(null);
   const [shareCodePickedUp, setShareCodePickedUp] = useState(false);
   useEffect(() => {

@@ -36,14 +36,19 @@
 
 import { ID_PATTERN } from "../../src/core/shareCrypto.js";
 
-// Five minutes. Sharing here is a hand-off happening right now — a code
-// read across a table or a QR held up to a phone — not a link you send and
-// forget, so the window only has to cover the handful of seconds between
-// showing the code and the other person taking it. The sender's tab
-// revoking on pagehide is the primary lifetime anyway; this is the backstop
-// for crashes and clients that never say goodbye, and a shorter backstop
-// means a smaller window in which an abandoned ciphertext exists at all.
-export const SHARE_TTL_MS = 5 * 60 * 1000;
+// Ten minutes, and note where this number actually takes effect: the Node
+// dev relay reads it at import, but production is the Cloudflare worker's
+// ShareBoxDO, which only picks it up on `npx wrangler deploy`. Changing
+// this constant and shipping the site alone puts the two out of step — the
+// UI promised five minutes while live codes still ran for ten, because
+// expiresInSeconds comes from the server. It was briefly shortened and put
+// back for exactly that reason. If it changes again, the worker deploy is
+// part of the change, not a follow-up.
+//
+// The value itself is not load-bearing: the sender's tab revokes on
+// pagehide, so this is only the backstop for crashes and clients that
+// never say goodbye.
+export const SHARE_TTL_MS = 10 * 60 * 1000;
 // A 4 KB plan becomes ~5.5 KB once the IV and GCM tag are added and the
 // whole thing is base64url'd (4/3 expansion). 6 KB preserves the previous
 // plan capacity exactly; it is still useless as a pastebin.
