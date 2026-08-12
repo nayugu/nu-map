@@ -487,6 +487,13 @@ export function buildDomains(cells, terms, {
       impossible.push({
         cell: cell.id, title: cell.title, target: cell.target, minDepth,
         candidates: candidates === null ? null : candidates.length,
+        // The candidate ids themselves, capped. `candidates` above is a COUNT, which is
+        // enough to explain a refusal to a developer and not enough to explain it to a
+        // student: "a requirement is unavailable" and "CS 3700 is no longer offered" are
+        // the same fact, and only one of them can be acted on. Capped because a 247-course
+        // pool named in full is not an explanation either.
+        courses: candidates === null ? null : candidates.slice(0, 4),
+        sh: cell.sh ?? null,
         // Which bound killed it, so the refusal is actionable rather than
         // "infeasible".
         reason: isPrep && lastAllowed < minDepth ? "coop-prep-cannot-precede-the-coop"

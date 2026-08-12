@@ -54,6 +54,27 @@ import { withCalibration } from "./calibration.js";
  */
 export const MAX_EXTRA_TERMS = 4;
 
+/**
+ * Is this blocked cell STRANDED — unplaceable by any shape, rather than by this one?
+ *
+ * The distinction decides whether the degree still gets a plan (§4c). A cell whose
+ * candidates run in no season at all cannot be rescued by choosing a different variant,
+ * adding a summer or extending a year, so refusing the degree over it buys nothing. A cell
+ * whose candidates run SOMEWHERE is a shape problem, and pointing the student at a variant
+ * that works is a better answer than a plan with a hole in it.
+ *
+ * `no-catalog-course-answers-it` is stranded for the same reason by a different route: the
+ * requirement names courses the catalog does not contain, so no season can help.
+ *
+ * Deliberately NOT stranded: `prereq-chain-longer-than-plan` and
+ * `coop-prep-cannot-precede-the-coop`. Both are the SHAPE being too short or the co-op
+ * sitting too early, both are fixable by stretching it, and dropping the cell would hide a
+ * solvable problem behind a hole in the plan.
+ */
+export const isStranded = (x) =>
+  x?.reason === "no-catalog-course-answers-it"
+  || (x?.reason === "never-offered-in-any-term-this-plan-uses" && !(x?.seasons?.length));
+
 export { DEFAULT_PREFERENCES } from "./objective.js";
 export { permissivePorts } from "./ports.js";
 
@@ -197,6 +218,46 @@ export function generatePlan({
     }
   }
 
+  // ── 4c. A retired course must not cost the whole degree ──────────
+  //
+  // MEASURED: 65 of 89 refused shapes were blocked by exactly ONE cell, and the biggest
+  // single cause is a requirement naming a course the catalog no longer runs. `CS 3700
+  // Networks and Distributed Systems` blocks four cybersecurity degrees on its own — its
+  // offering history ends Spring 2024, so every season reads below the availability bar,
+  // while `CS 4700 Network Fundamentals` carries the same role with all seasons populated.
+  // It was renumbered and the requirements still name the dead one.
+  //
+  // Refusing to SCHEDULE it is correct: the engine and the app agree it is unavailable, and
+  // placing it anywhere would be a hard availability violation. Refusing the whole DEGREE
+  // over it is not — 31 of 32 courses were placeable, and the student is told nothing.
+  //
+  // ── The cut is on `seasons`, not on the reason ──────────────────
+  //
+  // `never-offered-in-any-term-this-plan-uses` is SHAPE-DEPENDENT, and reading it as
+  // "retired" would have been wrong. A course that runs only in fall looks identical to a
+  // dead one when the chosen co-op cycle leaves no fall term free — and one of those is our
+  // problem while the other is the catalog's. `seasons` already records where the
+  // candidates DO run, so the two are distinguishable without new data.
+  //
+  // MEASURED over the 89 blocked cells: 81 run in NO season whatsoever, 8 run in fall. So
+  // the stranded class is real and dominant, and the 8 stay refusals — a different published
+  // variant would place them, which is a better answer than a plan with a hole in it.
+  //
+  // What this trades, stated plainly: "requirement coverage is true by construction" becomes
+  // "true except where the catalog names a course that cannot be taken". That is a real
+  // weakening of a guarantee, and the alternative was withholding an otherwise correct plan
+  // over a defect in someone else's data. Auto-substituting `CS 4700` is NOT done: nothing
+  // in the data says the two courses are the same requirement, and a wrong substitution is a
+  // wrong plan.
+  const stranded = impossible.filter(isStranded);
+  if (stranded.length) {
+    const ids = new Set(stranded.map(x => x.cell));
+    // Dropped from the SEARCH, so nothing places them and no availability rule is broken.
+    // They are reported instead — see `unschedulable` in the report below.
+    plans = plans.filter(p => !ids.has(p.cell.id));
+    impossible = impossible.filter(x => !ids.has(x.cell));
+  }
+
   // ── 5. Refuse now, cheaply, or commit to searching ──────────────
   const gate = preflight({
     program, programData: program, cells, shape, ports, studentType,
@@ -267,6 +328,21 @@ export function generatePlan({
       // could not be met and was dropped — a fact about the degree's arithmetic against
       // this shape, and the difference between "thin term" and "thin term for a reason".
       cardinalityRelaxed: placed.cardinalityRelaxed ?? false,
+      // ── Requirements this plan does NOT cover, and why ──────────
+      //
+      // The one place coverage is not true by construction (§4c). Empty for all but the
+      // shapes the catalog strands, and it must be rendered wherever the plan is: a plan
+      // silently missing a requirement is exactly the "looks authoritative and says
+      // nothing" failure the pre-flight gate exists to prevent, and this would be a
+      // smaller, sneakier version of it.
+      unschedulable: stranded.map(x => ({
+        title: x.title, target: x.target, reason: x.reason,
+        // The named course, when the cell had exactly one candidate — which is the common
+        // case here, and the difference between "a requirement is unavailable" and
+        // "CS 3700 is no longer offered".
+        courses: x.courses ?? null,
+        sh: x.sh ?? null,
+      })),
       // WHICH conventions were spent to get a plan at all, in the order they were given up.
       // A plan that stops following a rule it claims to follow, without saying so, is worse
       // than one that says so.
