@@ -26,8 +26,9 @@ import { baseId, isInstanceId, takesUsed, resolveAddId, resolveDropId, retakeUnl
 import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
          effectiveGradeOfTakes } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
-import { loadSaved, saveState } from "../data/persistence.js";
+import { loadSaved, saveState, writeKey } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
+import { LIBRARY_BUNDLE_KIND } from "../core/planSchema.js";
 import { tabTitle, FIRST_PLAN_NAME } from "../core/tabTitle.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
@@ -81,7 +82,7 @@ function redactCoopDetails(stp) {
 }
 
 export function PlannerProvider({ children }) {
-  const { locale, setLocale, locales } = useLanguage();
+  const { locale, setLocale, locales, t } = useLanguage();
   const institution    = usePort(IInstitution);
   const calendar       = usePort(ICalendar);
   const clock          = usePort(IClock);
@@ -740,9 +741,47 @@ export function PlannerProvider({ children }) {
     return () => { mounted = false; };
   }, []);
 
+  // ── Storage alarm ─────────────────────────────────────────────
+  //
+  // A failed write is recovered from silently (the render must not die over a
+  // mirror) but it is no longer SILENT to the user. Without this, a full store
+  // is indistinguishable from a healthy one: edits keep appearing, nothing is
+  // being saved, and the loss only surfaces on the next reload — by which point
+  // the user cannot tell which edits were real.
+  //
+  // Held in a ref as well as state because the reporter is called from write
+  // paths that run inside effects and event handlers; the ref makes "have we
+  // already alarmed" readable without adding the alarm to every dep array, and
+  // keeps a failing autosave from re-rendering on every keystroke.
+  const [storageAlarm, setStorageAlarm] = useState(null); // { kind, at } | null
+  const storageAlarmRef = useRef(null);
+
+  /**
+   * Record a failed write. First failure wins: 'quota' and 'unavailable' need
+   * different advice, and a quota failure that later degrades into a different
+   * error should not relabel the message the user is already reading.
+   * @param {{ok: boolean, kind?: 'quota'|'unavailable'}} res
+   */
+  const reportWrite = (res) => {
+    if (!res || res.ok) return res;
+    if (storageAlarmRef.current) return res;
+    const alarm = { kind: res.kind ?? "unavailable", at: Date.now() };
+    storageAlarmRef.current = alarm;
+    setStorageAlarm(alarm);
+    return res;
+  };
+
+  // Dismissing clears the ref too, so a LATER failure can raise the alarm
+  // again. Anything else would show the warning once per session and then hide
+  // permanent, ongoing data loss.
+  const dismissStorageAlarm = () => {
+    storageAlarmRef.current = null;
+    setStorageAlarm(null);
+  };
+
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, appliedTemplate, planId: activePlanId });
+    reportWrite(saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, appliedTemplate, planId: activePlanId }));
   }, [persistEnabled, placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
 
   useEffect(() => {
@@ -2548,9 +2587,12 @@ export function PlannerProvider({ children }) {
     try { return localStorage.getItem(key("active-plan")) || "default"; } catch { return "default"; }
   });
 
-  // Persist plan index whenever it changes
+  // Persist plan index whenever it changes.
+  // Reported for the same reason as the slot write: the index is the LIST of
+  // plans, so losing it orphans every slot — the data is all still there and
+  // nothing can reach it.
   useEffect(() => {
-    try { localStorage.setItem(key("plan-index"), JSON.stringify(plans)); } catch {}
+    reportWrite(writeKey(key("plan-index"), JSON.stringify(plans)));
   }, [plans]);
   useEffect(() => {
     try { localStorage.setItem(key("active-plan"), activePlanId); } catch {}
@@ -2625,6 +2667,25 @@ export function PlannerProvider({ children }) {
   const TRASH_TTL_MS = 30 * 24 * 60 * 60 * 1000;
   const FOLDER_HISTORY_MAX = 50;
 
+  /**
+   * The tombstone a delete leaves behind.
+   *
+   * It carries enough of the INDEX entry to put the row back where it was —
+   * parentId and studentType, not just the name. Restoring to the root would
+   * work, but a user who deletes one plan out of a folder and immediately
+   * restores it expects it back in that folder, and the plan's own data slot
+   * has never held its folder (folder membership lives on the index by design,
+   * see the folders block above), so if the tombstone doesn't record it nothing
+   * does. `parentId` is re-validated at restore time — the folder may itself
+   * have been deleted in the meantime.
+   */
+  const tombstoneFor = (plan, at) => ({
+    name: plan?.name ?? "",
+    deletedAt: at,
+    parentId: plan?.parentId ?? null,
+    studentType: plan?.studentType ?? "undergrad",
+  });
+
   const [planTrash, setPlanTrash] = useState(() => {
     try {
       const raw = localStorage.getItem(key("plan-trash"));
@@ -2672,8 +2733,9 @@ export function PlannerProvider({ children }) {
     setPlanTrash(prev => {
       const next = { ...prev };
       for (const id of alive) delete next[id];
+      const now = Date.now();
       for (const p of plans) {
-        if (!alive.has(p.id)) next[p.id] = { name: p.name, deletedAt: Date.now() };
+        if (!alive.has(p.id)) next[p.id] = tombstoneFor(p, now);
       }
       return next;
     });
@@ -2872,7 +2934,7 @@ export function PlannerProvider({ children }) {
     setPlanTrash(prev => {
       const next = { ...prev };
       for (const id of scope.planIds) {
-        next[id] = { name: plans.find(p => p.id === id)?.name ?? "", deletedAt: now };
+        next[id] = tombstoneFor(plans.find(p => p.id === id), now);
       }
       return next;
     });
@@ -2889,6 +2951,108 @@ export function PlannerProvider({ children }) {
     if (doomedPlans.has(activePlanId)) setActivePlanId(remaining[0].id);
     return { ok: true, ...scope };
   };
+
+  // ── Trash (browsable, survives a reload) ─────────────────────────
+  //
+  // Undo already reversed a delete, but the undo stack is IN MEMORY: reload the
+  // tab and a mistaken delete became unrecoverable even though its data was
+  // still sitting in localStorage under a tombstone. The trash makes that
+  // recoverable through the whole TRASH_TTL window instead of until the next
+  // refresh, which is what "deleting a plan is safe" has to mean for someone
+  // who closes the tab before noticing.
+  //
+  // A tombstoned id whose slot has already been reclaimed is NOT listed:
+  // offering a restore that silently produces an empty plan would be worse than
+  // not offering it. This is also the self-heal for a trash entry that outlived
+  // its data for any reason.
+  const trashedPlans = useMemo(() => {
+    const now = Date.now();
+    return Object.entries(planTrash)
+      .map(([id, meta]) => ({
+        id,
+        name: meta?.name ?? "",
+        deletedAt: meta?.deletedAt ?? 0,
+        parentId: meta?.parentId ?? null,
+        studentType: meta?.studentType ?? "undergrad",
+        expiresAt: (meta?.deletedAt ?? 0) + TRASH_TTL_MS,
+        expiresInMs: Math.max(0, (meta?.deletedAt ?? 0) + TRASH_TTL_MS - now),
+        hasData: (() => {
+          try { return localStorage.getItem(key(`plan-data-${id}`)) != null; }
+          catch { return false; }
+        })(),
+      }))
+      .filter(e => e.hasData)
+      .sort((a, b) => b.deletedAt - a.deletedAt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planTrash]);
+
+  /**
+   * Put trashed plans back on the index.
+   *
+   * The data slot was never removed, so this is a pure index restore — there is
+   * nothing to reconstruct and nothing that can half-succeed. Two things are
+   * re-validated rather than trusted: the recorded parentId (the folder may have
+   * been deleted since, in which case the plan lands at the root instead of
+   * pointing at a folder that no longer exists, which would hide it from the
+   * tree entirely) and the id (an entry already back on the index is skipped,
+   * so a double-click cannot duplicate a row).
+   */
+  const restoreFromTrash = (ids) => {
+    const wanted = (Array.isArray(ids) ? ids : [ids]).filter(id => planTrash[id]);
+    if (wanted.length === 0) return { ok: false, reason: "none", restored: [] };
+
+    const live = new Set(plans.map(p => p.id));
+    const fresh = wanted.filter(id => !live.has(id));
+    if (fresh.length === 0) return { ok: false, reason: "already-live", restored: [] };
+
+    pushFolderHistory();
+    const folderIds = new Set(folders.map(f => f.id));
+    const now = Date.now();
+    const revived = fresh.map(id => {
+      const meta = planTrash[id];
+      const parentId = meta?.parentId && folderIds.has(meta.parentId) ? meta.parentId : null;
+      return {
+        id,
+        name: meta?.name || FIRST_PLAN_NAME,
+        studentType: meta?.studentType ?? "undergrad",
+        parentId,
+        lastOpened: now,
+      };
+    });
+    setPlans(prev => [...prev, ...revived]);
+    setPlanTrash(prev => {
+      const next = { ...prev };
+      for (const id of fresh) delete next[id];
+      return next;
+    });
+    for (const p of revived) if (p.parentId) setFolderOpen(p.parentId, true);
+    return { ok: true, restored: revived.map(p => p.id) };
+  };
+
+  /**
+   * Permanently drop trashed plans — the ONLY user-reachable hard delete left.
+   *
+   * Everything else in the app now tombstones, so this function is where the
+   * irreversible step is concentrated on purpose: one place to guard in the UI
+   * rather than three paths that each destroy a slot. Deliberately does NOT
+   * push folder history — undoing to a state whose data slot is gone would
+   * restore an index row pointing at nothing.
+   */
+  const purgeFromTrash = (ids) => {
+    const wanted = (Array.isArray(ids) ? ids : [ids]).filter(id => planTrash[id]);
+    if (wanted.length === 0) return { ok: false, purged: 0 };
+    for (const id of wanted) {
+      try { localStorage.removeItem(key(`plan-data-${id}`)); } catch {}
+    }
+    setPlanTrash(prev => {
+      const next = { ...prev };
+      for (const id of wanted) delete next[id];
+      return next;
+    });
+    return { ok: true, purged: wanted.length };
+  };
+
+  const emptyTrash = () => purgeFromTrash(Object.keys(planTrash));
 
   // Browser tab title = "✎ <active plan> · <app>", but only once the tab is
   // actually the user's document — a crawler renders the app with empty
@@ -3083,9 +3247,16 @@ export function PlannerProvider({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePlanId]);
 
-  // Save current plan to its localStorage slot
+  // Save current plan to its localStorage slot.
+  //
+  // This is the write that matters most: the slot is what the activePlanId
+  // effect RELOADS from, so a silent failure here is the case where the user
+  // keeps working, sees every edit on screen, and loses all of it on refresh.
+  // It is therefore the one write that must always be reported.
   const saveCurrentPlanToSlot = () => {
-    try { localStorage.setItem(key(`plan-data-${activePlanId}`), JSON.stringify(captureCurrentPlan())); } catch {}
+    return reportWrite(
+      writeKey(key(`plan-data-${activePlanId}`), JSON.stringify(captureCurrentPlan()))
+    );
   };
 
   // Switch to a different plan
@@ -3141,29 +3312,21 @@ export function PlannerProvider({ children }) {
     setActivePlanId(id);
   };
 
-  // Delete a plan
-  const deletePlan = (id) => {
-    if (plans.length <= 1) return; // can't delete last plan
-    try { localStorage.removeItem(key(`plan-data-${id}`)); } catch {}
-    const remaining = plans.filter(p => p.id !== id);
-    setPlans(remaining);
-    if (id === activePlanId) {
-      // Switch to first remaining plan – the useEffect will load its data (or reset)
-      setActivePlanId(remaining[0].id);
-    }
-  };
+  // Delete a plan.
+  //
+  // Both of these used to localStorage.removeItem the plan's data slot outright,
+  // which made the header's ✕ button — one native confirm() away from a click —
+  // the single most destructive control in the app, while the library's delete of
+  // the very same plan was undoable. Two paths, two different meanings of
+  // "delete", and the dangerous one was the easier to reach.
+  //
+  // They now delegate to deleteNodes, so there is exactly ONE delete in the
+  // codebase: it tombstones, keeps the data slot, records folder history, and
+  // enforces the surviving-plan invariant. Only purgeFromTrash destroys data.
+  const deletePlan = (id) => { deleteNodes([id]); };
 
   // Delete multiple plans at once — avoids stale-closure issue of calling deletePlan in a loop
-  const bulkDeletePlans = (ids) => {
-    const idSet = new Set(ids);
-    const remaining = plans.filter(p => !idSet.has(p.id));
-    if (remaining.length === 0) return;
-    for (const id of ids) {
-      try { localStorage.removeItem(key(`plan-data-${id}`)); } catch {}
-    }
-    setPlans(remaining);
-    if (idSet.has(activePlanId)) setActivePlanId(remaining[0].id);
-  };
+  const bulkDeletePlans = (ids) => { deleteNodes(ids); };
 
   // Rename a plan
   const renamePlan = (id, name) => {
@@ -3186,6 +3349,23 @@ export function PlannerProvider({ children }) {
   }, [placements, reservations, appliedTemplate, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
+
+  /** Trigger a file download. Shared so the two exports cannot drift. */
+  const downloadJSON = (data, filename) => {
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  };
+
+  /** `A/B: c` is illegal or awkward in a filename on some platform or other. */
+  const safeFilePart = (s, fallback) =>
+    (s || "").replace(/[^a-z0-9]/gi, "_").replace(/_+/g, "_").replace(/^_|_$/g, "") || fallback;
+
   const exportPlanJSON = () => {
     // ONE builder for the plan artifact: hand-building a second object here
     // is how grades were silently missing from JSON backups (round-trip
@@ -3202,17 +3382,81 @@ export function PlannerProvider({ children }) {
     };
     if (privateGrades) delete data.grades;
     if (privateCoop) data.specialTermPl = redactCoopDetails(data.specialTermPl);
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
     const planName = plans.find(p => p.id === activePlanId)?.name || 'Untitled';
-    const sanitizedPlanName = planName.replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
     const dateStr = new Date().toISOString().slice(0, 10);
-    a.download = `${sanitizedPlanName || 'Plan'} - ${institution.shortName ?? institution.name} Map - ${dateStr}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    downloadJSON(
+      data,
+      `${safeFilePart(planName, 'Plan')} - ${institution.shortName ?? institution.name} Map - ${dateStr}.json`
+    );
+  };
+
+  /**
+   * Export the WHOLE library — every plan, plus the folder tree — as one file.
+   *
+   * Why this exists: nothing in the browser can stop a user clearing site data,
+   * and there is no server copy of a plan (share links and share codes are
+   * transfers, not backups — the code relay is client-encrypted and one-shot).
+   * So a file is the only real backup, and until now the only export was the
+   * ACTIVE plan. A user with eleven plans had to open and export each one, in
+   * order, without missing any, and no folder structure came with it — which
+   * means in practice nobody had a backup of their library.
+   *
+   * The live plan is captured fresh rather than read from its slot, so an
+   * export taken mid-edit includes the edit instead of the last autosave.
+   *
+   * `privateGrades`/`privateCoop` are honoured exactly as the single-plan export
+   * honours them. That is the conservative reading: this file is far more likely
+   * to be handed to an advisor than a single plan is, so the toggle that exists
+   * to stop a leak has to hold across every plan in the bundle, not just the
+   * open one.
+   */
+  const exportLibraryJSON = () => {
+    saveCurrentPlanToSlot();
+    const live = captureCurrentPlan();
+    const entries = [];
+    const skipped = [];
+    for (const p of plans) {
+      let data;
+      if (p.id === activePlanId) {
+        data = live;
+      } else {
+        try {
+          const raw = localStorage.getItem(key(`plan-data-${p.id}`));
+          data = raw ? JSON.parse(raw) : null;
+        } catch { data = null; }
+      }
+      // A plan with no readable slot is one the user has never opened since it
+      // was created, or whose slot a quota-exceeded write truncated. Recording
+      // it as skipped is the honest outcome — silently omitting it would make
+      // the backup claim completeness it does not have.
+      if (!data) { skipped.push({ id: p.id, name: p.name }); continue; }
+      if (privateGrades) delete data.grades;
+      if (privateCoop) data.specialTermPl = redactCoopDetails(data.specialTermPl);
+      entries.push({
+        id: p.id,
+        name: p.name,
+        parentId: p.parentId ?? null,
+        studentType: p.studentType ?? "undergrad",
+        order: p.order ?? null,
+        data,
+      });
+    }
+    const bundle = {
+      kind: LIBRARY_BUNDLE_KIND,
+      version: 1,
+      exported: new Date().toISOString(),
+      institution: institution.id ?? institution.shortName ?? null,
+      activePlanId,
+      folders: folders.map(f => ({ id: f.id, name: f.name, parentId: f.parentId ?? null, order: f.order ?? null })),
+      plans: entries,
+      skipped,
+    };
+    const dateStr = new Date().toISOString().slice(0, 10);
+    downloadJSON(
+      bundle,
+      `${safeFilePart(institution.shortName ?? institution.name, 'Map')} Map Library - ${dateStr}.json`
+    );
+    return { plans: entries.length, folders: bundle.folders.length, skipped: skipped.length };
   };
 
   const applyPlanData = (d) => {
@@ -3259,11 +3503,94 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem(key("student-type"), st); } catch {}
   };
 
+  /**
+   * Restore a whole-library backup — ADDITIVELY.
+   *
+   * Every id is remapped rather than reused. Reusing the exported ids would be
+   * the obvious implementation and it is destructive: a user restoring a backup
+   * into a browser that still has plans would silently overwrite same-id slots,
+   * so the recovery tool would itself be capable of losing work. Remapping means
+   * the worst case of an unnecessary restore is duplicate plans, which the user
+   * can delete — and deleting is now undoable.
+   *
+   * Folder ids are remapped through the same table, so the tree comes back
+   * intact without colliding with existing folders of the same name.
+   *
+   * @returns {{ok: true, plans: number, folders: number}|{ok: false, reason: string}}
+   */
+  const importLibraryJSON = (file) => new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onerror = () => resolve({ ok: false, reason: "unreadable" });
+    reader.onload = () => {
+      let b;
+      try { b = JSON.parse(reader.result); }
+      catch { resolve({ ok: false, reason: "parse" }); return; }
+      if (b?.kind !== LIBRARY_BUNDLE_KIND || !Array.isArray(b.plans)) {
+        resolve({ ok: false, reason: "not-a-bundle" }); return;
+      }
+      saveCurrentPlanToSlot();
+
+      const stamp = Date.now();
+      const idMap = new Map();
+      const newId = (oldId, i) => {
+        if (!idMap.has(oldId)) idMap.set(oldId, `plan_${stamp}_${i}`);
+        return idMap.get(oldId);
+      };
+      const folderMap = new Map();
+      (Array.isArray(b.folders) ? b.folders : []).forEach((f, i) => {
+        folderMap.set(f.id, `folder_${stamp}_${i}`);
+      });
+
+      // Slots first: a plan must never appear on the index before its data
+      // exists, or the activePlanId effect can read a missing slot and reset the
+      // plan to defaults — importing a backup would blank the plan it restored.
+      let written = 0;
+      let failed = 0;
+      const rows = [];
+      b.plans.forEach((entry, i) => {
+        if (!entry?.data) { failed++; return; }
+        const id = newId(entry.id ?? `x${i}`, i);
+        const res = writeKey(key(`plan-data-${id}`), JSON.stringify(entry.data));
+        if (!res.ok) { reportWrite(res); failed++; return; }
+        written++;
+        const mappedParent = entry.parentId ? folderMap.get(entry.parentId) ?? null : null;
+        rows.push({
+          id,
+          name: entry.name || FIRST_PLAN_NAME,
+          studentType: entry.studentType ?? entry.data?.studentType ?? "undergrad",
+          parentId: mappedParent,
+          lastOpened: stamp,
+        });
+      });
+
+      if (written === 0) { resolve({ ok: false, reason: failed ? "write-failed" : "empty" }); return; }
+
+      pushFolderHistory();
+      // Only folders that ended up holding something, or whose parent chain is
+      // needed, are worth creating; an empty folder from the backup is harmless
+      // so they are all kept for fidelity.
+      const newFolders = (Array.isArray(b.folders) ? b.folders : []).map(f => ({
+        id: folderMap.get(f.id),
+        name: f.name || "untitled folder",
+        parentId: f.parentId ? folderMap.get(f.parentId) ?? null : null,
+      }));
+      if (newFolders.length) setFolders(prev => [...prev, ...newFolders]);
+      setPlans(prev => [...prev, ...rows]);
+      resolve({ ok: true, plans: written, folders: newFolders.length, failed });
+    };
+    reader.readAsText(file);
+  });
+
   const importPlanJSON = (file) => {
     const reader = new FileReader();
     reader.onload = () => {
       try {
         const d = JSON.parse(reader.result);
+        // A library bundle also has version 1, so without this guard the
+        // single-plan door would happily create one plan whose slot is a
+        // `plans` array — an import that appears to succeed and restores
+        // nothing. Route it to the importer that understands it.
+        if (d?.kind === LIBRARY_BUNDLE_KIND) { alert(t("backup.import.wrongDoor")); return; }
         if (d.version !== 1) { alert("Unrecognized plan file format."); return; }
         saveCurrentPlanToSlot();
         const id = `plan_${Date.now()}`;
@@ -3939,6 +4266,14 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
+    // Whole-library backup — the only real defence against cleared site data,
+    // since nothing server-side holds a copy of a plan.
+    exportLibraryJSON, importLibraryJSON,
+    // Trash: a delete is recoverable for TRASH_TTL, across reloads.
+    trashedPlans, restoreFromTrash, purgeFromTrash, emptyTrash,
+    trashTtlMs: TRASH_TTL_MS,
+    // Storage alarm: a write that failed, so the user learns before a reload.
+    storageAlarm, dismissStorageAlarm,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     // Folders — structure, view state, and the mutations that respect both.

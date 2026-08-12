@@ -84,6 +84,15 @@ export const PLAN_FIELDS = [
   { name: 'locale',   share: 'lc', envelope: true },
 ];
 
+/**
+ * Discriminator for a whole-library backup file, so the import can tell a
+ * bundle from a single plan before touching anything. A single-plan file is
+ * identified only by `version: 1`, which a bundle also carries — without a
+ * distinct marker the two doors are indistinguishable, and feeding a bundle to
+ * the single-plan importer would create one plan holding a `plans` array.
+ */
+export const LIBRARY_BUNDLE_KIND = "map-library-backup";
+
 /** Inner key maps for fields whose values are compacted element-by-element. */
 export const SHARE_INNER_KEYS = {
   // specialTermPl entry objects
