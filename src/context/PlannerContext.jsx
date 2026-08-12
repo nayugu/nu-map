@@ -28,7 +28,7 @@ import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
          effectiveGradeOfTakes } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState } from "../data/persistence.js";
-import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
+import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam, getHashCodeParam } from "../core/planShare.js";
 import { tabTitle, FIRST_PLAN_NAME } from "../core/tabTitle.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
@@ -517,12 +517,29 @@ export function PlannerProvider({ children }) {
   // "+ New plan" inside a folder; null means root.
   const [newPlanFolderId,     setNewPlanFolderId]     = useState(null);
   const [showPlanLibrary,     setShowPlanLibrary]     = useState(false);
+  // Arriving on a share-code link (a scanned QR) as a first-time visitor is
+  // the COMMON case for that link, and first-run onboarding is exactly wrong
+  // for it twice over: it covers the import confirm, and finishing it writes
+  // entry/grad/type onto the plan that was just imported, silently replacing
+  // the cohort the sender chose. The shared plan already carries all of it,
+  // so onboarding is deferred while the code is redeemed — and restored (see
+  // Header) if the code turns out to be dead, because then the visitor really
+  // is a first-timer with nothing.
+  //
+  // Read here, in a render-phase initializer, because Header strips the hash
+  // in an effect — by the time effects run the evidence is gone.
+  const [onboardingDeferredForShare] = useState(() => {
+    try {
+      return !!getHashCodeParam() && !localStorage.getItem(key("seen-cohort-setup"));
+    } catch { return false; }
+  });
   const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
     // Pure read — the "seen" flag is written on completion (finishOnboarding),
     // not here, so a reload mid-setup re-shows it rather than stranding the user.
     // Append ?onboarding to the URL to force it during development.
     try {
       if (new URLSearchParams(window.location.search).has("onboarding")) return true;
+      if (getHashCodeParam()) return false;
       return !localStorage.getItem(key("seen-cohort-setup"));
     } catch { return false; }
   });
@@ -4101,7 +4118,7 @@ export function PlannerProvider({ children }) {
     setBankSearch, setBankSort, setBankTab, setBankFilters, setBankWidth, setShowSubjectKeys,
     setCollapsedSubs,
     setShowDisclaimer, setShowSettings,
-    showCohortSetup, setShowCohortSetup, finishOnboarding,
+    showCohortSetup, setShowCohortSetup, onboardingDeferredForShare, finishOnboarding,
     showTour, setShowTour,
     setPersistEnabled,
     setOfferedOverrides,

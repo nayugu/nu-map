@@ -342,6 +342,7 @@ export default function Header() {
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
     shareRelayAvailable, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
+    onboardingDeferredForShare, setShowCohortSetup,
     aiAssistantAvailable, claudePreview, claudePaired,
     plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
     folders, planTree, openFolders, toggleFolder, folderSort, setShowPlanLibrary,
@@ -532,8 +533,10 @@ export default function Header() {
   // by a scanned #c= link. They must not drift: a claim burns the payload
   // exactly once either way, so both need the same confirm-before-import
   // ordering and the same error reporting.
+  // Resolves true only if a plan actually landed, so the caller can tell
+  // "claimed and imported" from "dead code" and from "user said no".
   const redeemCode = async (code) => {
-    if (code.length < 6 || claimBusy) return;
+    if (code.length < 6 || claimBusy) return false;
     setShareCodeError(null);
     setClaimBusy(true);
     try {
@@ -542,12 +545,15 @@ export default function Header() {
       // confirm discards the plan — it can't be re-fetched. That's the
       // right failure direction: nothing imports without a yes.
       const name = d.planName || "Plan";
+      let imported = false;
       if (window.confirm(t("header.io.code.confirm", { name }))) {
         importSharedPlan(d);
         setShowIO(false);
+        imported = true;
       }
       setClaimInput("");
       setClaimOpen(false);
+      return imported;
     } catch (err) {
       setShareCodeError(shareErrorOf(err));
       setCodeNow(Date.now());
@@ -556,6 +562,7 @@ export default function Header() {
       // wedge the input at maxLength — every retry would start with a
       // delete the user was never told to make.
       setClaimInput("");
+      return false;
     } finally {
       setClaimBusy(false);
     }
@@ -575,12 +582,22 @@ export default function Header() {
   //  3. A link-preview crawler cannot burn a code on the user's behalf:
   //     the code rides in the fragment, which is never sent to a server,
   //     and only this JS ever claims it.
+  //  4. First-run onboarding was deferred for this arrival (see
+  //     PlannerContext). If the code was dead, the visitor is a genuine
+  //     first-timer holding nothing, so give them their setup back.
   useEffect(() => {
     const code = getHashCodeParam();
     if (!code) return;
     history.replaceState(null, "", window.location.pathname + window.location.search);
+    // openPhonePop first, exactly as the ⇅ button itself does: on a phone
+    // the panel is a fixed sheet pinned under the header, and without this
+    // it uses the stale default offset. A scanned QR lands on a phone far
+    // more often than not, so this is the common path, not the corner.
+    openPhonePop();
     setShowIO(true);
-    redeemCode(code);
+    redeemCode(code).then(imported => {
+      if (!imported && onboardingDeferredForShare) setShowCohortSetup(true);
+    });
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const [planSearch, setPlanSearch] = useState("");
   const [selectMode, setSelectMode] = useState(false);
