@@ -210,9 +210,13 @@ function cellsForSection(section, target, courseMap) {
     const poolUnit = typicalSH(spec, courseMap) || unit;
     // Credit-shaped pools divide; count-shaped ones do not, and rounding a count
     // through credit and back is how a 3-course pool becomes 2 or 4 cells.
+    // Rounded UP, never down. A section demanding 5 SH answered by 4 SH courses
+    // needs two cells: one leaves the student a credit short of a requirement they
+    // cannot graduate without, and being a course over is a slot they can drop.
+    // Over is recoverable, under is not.
     const n = count != null
       ? count
-      : Math.max(1, Math.round((credits ?? poolUnit) / (poolUnit || DEFAULT_UNIT_SH)));
+      : Math.max(1, Math.ceil((credits ?? poolUnit) / (poolUnit || DEFAULT_UNIT_SH)));
     // An indivisible remainder — 3 SH of demand answered by 4 SH courses — has no
     // clean answer, so it is recorded rather than hidden. The catalog has the
     // same problem: its own printed term totals disagree with its own cells in
@@ -380,7 +384,9 @@ export function deriveCells(programData, { courseMap = {}, repeatable = () => fa
     cells.push(...got);
   });
 
-  const merged = mergeForcedCells(cells, notes, repeatable);
+  const merged = poolExcess(
+    mergeForcedCells(cells, notes, repeatable),
+    notes, { total: programData?.totalCreditsRequired ?? 0, courseMap, sections });
 
   // ── The two sentinels ────────────────────────────────────────────
   //
@@ -437,7 +443,10 @@ export function deriveCells(programData, { courseMap = {}, repeatable = () => fa
     const wanted = target === GENERAL_ELECTIVE ? geSH : (ob?.shortfallSH ?? 0);
     if (wanted <= 0) continue;
     const unit = ob?.unitSH || DEFAULT_UNIT_SH;
-    const n = Math.max(1, Math.round(wanted / unit));
+    // Up, for the same reason as a pool: 13 SH of free electives rounded down to
+    // three 4 SH slots leaves the plan a credit short of the degree, and a student
+    // who follows it graduates late. Rounded up it is a slot they can drop.
+    const n = Math.max(1, Math.ceil(wanted / unit));
     if (wanted % unit !== 0) {
       notes.push({ kind: "indivisible-pool", target, credits: wanted,
                    unit, emitting: n * unit });
@@ -500,6 +509,108 @@ function mergeForcedCells(cells, notes, repeatable = () => false) {
                  keptFor: seen.target, alsoFor: cell.target, savedSH: cell.sh ?? 0 });
   }
   return out;
+}
+
+/** The courses a cell can be answered by, as a spec, whichever shape it stores. */
+const specOfCell = (cell) =>
+  cell.spec ?? (cell.groups ? { keys: new Set(cell.groups.flat()), ranges: [] } : emptySpec());
+
+/**
+ * When the sections demand more credit than the degree, pool the excess.
+ *
+ * `data_science_ms` states 32 credits and lists six sections each reading "choose
+ * one course from College X" — 44 credits in total. Those are not six
+ * requirements. The student takes three electives from ANY of them, and the
+ * catalog is listing where they may come from. 67 of 748 programs are shaped this
+ * way, and CHART previously refused all of them rather than emit a plan a third
+ * too long.
+ *
+ * Nothing in the data says which sections are alternatives, and picking three of
+ * six would be a guess dressed as an answer. So instead of choosing, the surviving
+ * cells are WIDENED: fewer cells, each able to draw on every section that lost one.
+ * That is not a guess — it is the honest reading of "these six are where your three
+ * electives come from", and every one of the six stays answerable.
+ *
+ * Named cells are never shed. Their courses are decided, and a degree that names a
+ * course means it.
+ */
+function poolExcess(cells, notes, { total, courseMap, sections }) {
+  if (!(total > 0)) return cells;
+  const scheduled = cells.filter(c => typeof c.target === "number");
+  let structural = cellsSH(scheduled);
+  if (structural <= total) return cells;
+
+  // Deterministic order, shed from the end. There is no signal in the data for
+  // which sections are the alternatives, so the choice is arbitrary — and being
+  // arbitrary is fine precisely because the survivors absorb what the shed cells
+  // stood for. What must NOT be arbitrary is the run-to-run answer.
+  const poolable = scheduled
+    .filter(c => c.kind !== "named")
+    .sort((a, b) => b.target - a.target || String(b.id).localeCompare(String(a.id)));
+
+  const dropped = [];
+  // Always leave one poolable cell to carry the union. Without a survivor the shed
+  // sections would simply vanish from the plan.
+  for (const cell of poolable) {
+    if (structural <= total || dropped.length >= poolable.length - 1) break;
+    dropped.push(cell);
+    structural -= cell.sh ?? 0;
+  }
+  if (!dropped.length) return cells;
+
+  const droppedIds = new Set(dropped.map(c => c.id));
+  const lostTargets = [...new Set(dropped.map(c => c.target))].sort((a, b) => a - b);
+  const lostSpec = dropped.reduce((acc, c) => unionSpec(acc, specOfCell(c)), emptySpec());
+  const survivors = poolable.filter(c => !droppedIds.has(c.id));
+
+  notes.push({
+    kind: "pooled-excess",
+    scheduledBefore: cellsSH(scheduled), total,
+    droppedCells: dropped.length, droppedSH: cellsSH(dropped),
+    lostTargets,
+    detail: `sections total ${cellsSH(scheduled)} SH against a ${total} SH degree; ` +
+            `${dropped.length} cells pooled into ${survivors.length} that draw on ` +
+            `${lostTargets.length + survivors.length} sections`,
+  });
+
+  const widen = new Map(survivors.map(c => [c.id, {
+    ...c,
+    // A pooled cell is no longer a specific choice; it is a slot drawing on several
+    // sections, so its groups give way to the union of their course sets.
+    kind: "open",
+    groups: null,
+    spec: unionSpec(specOfCell(c), lostSpec),
+    alsoAnswers: [...new Set([...(c.alsoAnswers ?? []), ...lostTargets])]
+      .filter(t => t !== c.target).sort((a, b) => a - b),
+    pooled: true,
+    // Titled for what it now is. Keeping "College of Science" on a cell that also
+    // admits five other colleges would be the over-specific label this engine
+    // exists to avoid.
+    title: pooledTitle(c, lostTargets, sections),
+  }]));
+
+  return cells
+    .filter(c => !droppedIds.has(c.id))
+    .map(c => widen.get(c.id) ?? c);
+}
+
+/**
+ * A name for a cell that answers several sections at once.
+ *
+ * The sections' own titles, joined, when there are few enough to read; otherwise a
+ * count. Either way it says what the cell is for rather than naming one of the
+ * several requirements it covers.
+ */
+function pooledTitle(cell, lostTargets, sections) {
+  const own = (cell.title ?? "").trim();
+  const others = lostTargets
+    .map(t => (sections?.[t]?.title ?? "").trim())
+    .filter(Boolean)
+    .filter(t => t !== own);
+  if (!others.length) return own || "Elective";
+  const all = [own, ...others].filter(Boolean);
+  if (all.length <= 3) return all.join(" / ");
+  return `${all[0]} or ${all.length - 1} other areas`;
 }
 
 /** Total credit the cells account for — what the plan will actually schedule. */

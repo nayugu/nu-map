@@ -99,13 +99,111 @@ export const DEFAULT_TIME_BUDGET_MS = 5000;
  * @param {number} [args.nodeBudget]
  * @returns {{ok: boolean, termOf?: Map, failure?: object, nodes: number}}
  */
+/**
+ * Place every cell, learning from each dead end.
+ *
+ * ── Why an outer restart loop ───────────────────────────────────────
+ *
+ * Phase 1 prunes on everything that is SOUND to prune on mid-assignment:
+ * distinctness, capacity, precedence, named-course order. Candidate prerequisites
+ * are not on that list — whether a course can answer a cell in term 6 depends on
+ * where the OTHER cells land — so they are only checked once the plan is complete.
+ *
+ * That leaves the search discovering one class of conflict at the very last step
+ * and then backtracking blindly into the same wall. Measured: 46 programs failed
+ * this way, all of them reporting "no course can answer X in term T".
+ *
+ * So a failure that names a cell and a term is recorded as a NOGOOD and the search
+ * restarts with that pairing removed. Each restart is cheap (a median program uses
+ * 19 nodes) and each one strictly narrows the space, so it converges.
+ *
+ * ── What this trades, stated plainly ────────────────────────────────
+ *
+ * A nogood is a HEURISTIC, not a deduction: "C cannot be in T" was observed under
+ * one arrangement of the other cells, and a different arrangement might have made
+ * it work. So this can miss a plan that exists — it is incomplete.
+ *
+ * That is an acceptable trade only because of what it does NOT trade: every plan
+ * it returns has passed the full prereq-aware witness, so no wrong plan can escape
+ * this way. And the alternative was not completeness, it was refusal — the 46
+ * programs got no plan at all.
+ */
 export function placeCells({
   plans, terms, ports, studentType = "undergraduate", courseMap = {},
   repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, now = () => Date.now(),
-  precedence = null,
+  precedence = null, maxRestarts = 40,
 }) {
   const deadline = now() + timeBudgetMs;
+  // Domains are narrowed across restarts, so the originals are left untouched for
+  // the caller (the objective phase moves cells within them).
+  const working = plans.map(p => ({ ...p, domain: [...p.domain] }));
+  let totalNodes = 0;
+  let last = null;
+
+  // Each attempt gets a SMALL slice of the budget, in BOTH currencies.
+  //
+  // Bounding only the nodes was not enough. Attempt 0 stopped at 768 nodes — under
+  // its 800-node share — because it had used the whole three-second wall-clock
+  // budget, and the loop then had no time to restart. Traced by hand on one program,
+  // the second restart succeeds in 34 nodes; it simply never ran.
+  //
+  // A program that succeeds uses a median of 19 nodes and a p90 of 36, so a few
+  // hundred is already ten times the headroom a real plan needs. Past that it is the
+  // same wall being hit repeatedly, and the useful move is to learn and start again.
+  let perAttempt = Math.max(64, Math.min(nodeBudget, 300));
+  const slice = Math.max(200, Math.floor(timeBudgetMs / 8));
+
+  for (let attempt = 0; attempt <= maxRestarts; attempt++) {
+    const r = attemptPlacement({
+      plans: working, terms, ports, studentType, courseMap, repeatable,
+      nodeBudget: perAttempt, precedence, now,
+      deadline: Math.min(deadline, now() + slice),
+    });
+    totalNodes += r.nodes;
+    if (r.ok) return { ...r, nodes: totalNodes, restarts: attempt };
+    last = r;
+
+    if (now() > deadline) break;
+
+    // Only a failure that names a cell AND a term can become a nogood.
+    const f = r.failure?.lastObstruction ?? r.failure;
+    const target = f?.cell != null ? working.find(p => p.cell.id === f.cell) : null;
+    const canLearn = target && f.term != null
+      && target.domain.length > 1 && target.domain.includes(f.term);
+
+    if (canLearn) {
+      target.domain = target.domain.filter(t => t !== f.term);
+      continue;
+    }
+
+    // Nothing to learn: the attempt ran out of allowance before it reached a
+    // conflict it could name. Escalating rather than giving up, because a small
+    // allowance is what makes learning possible in the common case and must not
+    // become a ceiling in the rare one. Doubling means the total stays bounded by
+    // the overall deadline rather than by the number of restarts.
+    if (perAttempt >= nodeBudget) break;
+    perAttempt = Math.min(nodeBudget, perAttempt * 4);
+  }
+
+  // Report what actually stopped it, not the budget it happened to stop inside.
+  // A cell whose last legal term was tried and rejected is not "we ran out of
+  // attempts" — it is "nothing can answer this cell anywhere", which is a different
+  // sentence and the only one a person can act on.
+  const f = last?.failure?.lastObstruction ?? last?.failure;
+  if (f?.cell != null && f.kind && f.kind !== "search-budget-exhausted") {
+    return {
+      ok: false, nodes: totalNodes, restarts: maxRestarts,
+      failure: { ...f, detail: describe(f), exhausted: true },
+    };
+  }
+  return { ...last, nodes: totalNodes, restarts: maxRestarts };
+}
+
+function attemptPlacement({
+  plans, terms, ports, studentType, courseMap,
+  repeatable, nodeBudget, deadline, now, precedence,
+}) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
   // Deterministic order before any heuristic reorders: two runs must agree.
   const order = [...plans].sort((a, b) => byConstraint(a, b, terms.length));
@@ -238,7 +336,7 @@ export function placeCells({
         // itself: it names a cell and a term the student can look at.
         detail: worstFailure
           ? `${describe(worstFailure)} (gave up after ${nodes} attempts)`
-          : `no legal placement found within ${result === "time" ? `${timeBudgetMs} ms` : `${nodeBudget} nodes`}`,
+          : `no legal placement found within ${result === "time" ? "the time budget" : `${nodeBudget} nodes`}`,
         lastObstruction: worstFailure ?? null,
       },
     };

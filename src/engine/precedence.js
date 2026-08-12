@@ -107,18 +107,23 @@ export function buildPrecedence(cells, courseMap = {}) {
   // planned course available early and A's courses late: if B still passes, A was
   // not required, and if it fails A is the only thing that can have caused it.
   //
-  // Only a NAMED cell can be the predecessor — its course is decided, so it is the
-  // only kind that can be relied on to supply anything.
-  //
-  // But any cell with enumerable options can be the SUCCESSOR, under the rule this
+  // Both roles are open to any cell with enumerable options, under the rule this
   // repo already uses for reservation edges: the edge holds only if it holds under
-  // EVERY option. `CS 4300 or CS 4100` must follow CS 3100 because both branches
-  // need it, whichever the student picks. Leaving choice cells out of this is what
-  // made CS+Math fail — the search placed the choice before its prerequisite and
-  // only the final witness noticed, which is 20,000 nodes too late.
-  const named = cells.filter(c => c.kind === "named" && c.groups?.[0]?.length);
-  const successors = cells.filter(c => optionsOf(c, courseMap, plannedCourses) !== null);
-  const before = new Map(successors.map(c => [c.id, new Set()]));
+  // EVERY option.
+  //
+  //   as SUCCESSOR   `CS 4300 or CS 4100` must follow CS 3100 because both branches
+  //                  need it, whichever the student picks.
+  //   as PREDECESSOR the union of its options is what a successor may NOT rely on
+  //                  being early. Whichever option the student takes, only that
+  //                  one's courses appear, so the worst case is none of them — and
+  //                  a successor that cannot survive that must come after.
+  //
+  // Restricting predecessors to NAMED cells was what left 39 programs refusing.
+  // `Statistics Foundation` needs MATH 1341, which this program offers as
+  // `MATH 1341 or MATH 1251`; no edge was derived, the search placed the successor
+  // first, and only the final witness noticed — 20,000 nodes too late.
+  const enumerable = cells.filter(c => optionsOf(c, courseMap, plannedCourses) !== null);
+  const before = new Map(enumerable.map(c => [c.id, new Set()]));
   const after  = new Map(cells.map(c => [c.id, new Set()]));
   const concurrentOk = new Set();
 
@@ -134,11 +139,18 @@ export function buildPrecedence(cells, courseMap = {}) {
     return reach(course, placements, semIndex, ti);
   });
 
-  for (const b of successors) {
-    const options = optionsOf(b, courseMap, plannedCourses);
+  // Every cell's option courses, computed once — the predecessor role needs the
+  // union and the successor role needs the groups.
+  const optionsById = new Map(
+    enumerable.map(c => [c.id, optionsOf(c, courseMap, plannedCourses)]));
+  const unionById = new Map(
+    [...optionsById].map(([id, opts]) => [id, new Set(opts.flat())]));
+
+  for (const b of enumerable) {
+    const options = optionsById.get(b.id);
     // Everything available early, minus the cell's own courses — a course cannot be
     // its own prerequisite, and leaving it in would make every cell depend on itself.
-    const ownCourses = new Set(options.flat());
+    const ownCourses = unionById.get(b.id);
     const allEarly = {};
     for (const id of plannedCourses.keys()) if (!ownCourses.has(id)) allEarly[id] = EARLY;
 
@@ -147,15 +159,23 @@ export function buildPrecedence(cells, courseMap = {}) {
     const liveOptions = options.filter(g => optionOk(g, allEarly, semIndex[SAME]));
     if (!liveOptions.length) continue;
 
-    for (const a of named) {
+    for (const a of enumerable) {
       if (a.id === b.id) continue;
+      const aCourses = unionById.get(a.id);
+      // Two cells drawing on the same courses cannot order each other: the test
+      // below would derive A ≺ B and B ≺ A both, and the search would then find
+      // neither placeable. This is the split-credit and shared-pool case.
+      let overlaps = false;
+      for (const id of aCourses) if (ownCourses.has(id)) { overlaps = true; break; }
+      if (overlaps) continue;
+
       // Does any option share a ref with A? Cheap gate before the tree evals.
       const shares = liveOptions.some(g =>
-        refsOf(g, courseMap).some(r => a.groups[0].includes(r)));
+        refsOf(g, courseMap).some(r => aCourses.has(r)));
       if (!shares) continue;
 
       const withALate = { ...allEarly };
-      for (const id of a.groups[0]) if (!ownCourses.has(id)) withALate[id] = LATE;
+      for (const id of aCourses) withALate[id] = LATE;
       // The edge holds only if EVERY live option needs A. One option that survives
       // without A means the student can avoid the dependency entirely, and asserting
       // the edge would forbid a legal plan.
@@ -167,12 +187,14 @@ export function buildPrecedence(cells, courseMap = {}) {
       // Would the SAME term do? Only a `concurrent` ref allows it, and again it has
       // to hold for every option.
       const withASame = { ...allEarly };
-      for (const id of a.groups[0]) if (!ownCourses.has(id)) withASame[id] = SAME;
+      for (const id of aCourses) withASame[id] = SAME;
       if (liveOptions.every(g => optionOk(g, withASame, semIndex[SAME]))) {
         concurrentOk.add(`${a.id}|${b.id}`);
       }
     }
   }
+
+  const named = cells.filter(c => c.kind === "named" && c.groups?.[0]?.length);
 
   // ── What the plan does not schedule ─────────────────────────────
   //

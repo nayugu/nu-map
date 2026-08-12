@@ -127,12 +127,37 @@ test("precedence › a small OPEN pool is a successor; a wide one is not", () =>
     "a cell that admits any course can never require anything");
 });
 
-test("precedence › only a NAMED cell can be a predecessor", () => {
-  // A choice cell's answer is undecided, so nothing can be relied on to come from it.
-  const cm = mapOf(course("A100"), course("B100"),
-                   course("C300", [ref("A", "100"), "And", ref("B", "100")]));
+test("precedence › a CHOICE cell can be a predecessor, via the UNION of its options", () => {
+  // Restricting predecessors to named cells left 39 programs refusing:
+  // `Statistics Foundation` needs MATH 1341, offered as `MATH 1341 or MATH 1251`,
+  // so no edge was derived and the search placed the successor first.
+  //
+  // The union is the sound reading. Whichever option the student takes, only that
+  // one's courses appear, so the worst case a successor must survive is none of
+  // them — and a successor that cannot survive that has to come after.
+  const cm = mapOf(course("A100"), course("A150"),
+                   course("C300", [ref("A", "100"), "Or", ref("A", "150")]));
   const p = buildPrecedence(
-    [choice("ch", [["A100"], ["B100"]]), named("c", ["C300"])], cm);
+    [choice("ch", [["A100"], ["A150"]]), named("c", ["C300"])], cm);
+  assert.deepEqual(edgesOf(p, "c"), ["ch"],
+    "C300 needs one of A100/A150 and only `ch` supplies either");
+});
+
+test("precedence › two cells drawing on the same courses do NOT order each other", () => {
+  // Without this guard the union test derives A before B and B before A both, and
+  // the search then finds neither placeable. This is the split-credit and
+  // shared-pool case, where the two cells are alternatives rather than a sequence.
+  const cm = mapOf(course("A100"), course("A150", [ref("A", "100")]));
+  const p = buildPrecedence(
+    [choice("x", [["A100"], ["A150"]]), choice("y", [["A100"], ["A150"]])], cm);
+  assert.deepEqual(edgesOf(p, "x"), []);
+  assert.deepEqual(edgesOf(p, "y"), []);
+});
+
+test("precedence › a cell that admits ANY course can never be a predecessor", () => {
+  // Nothing specific can be relied on to come from a general elective.
+  const cm = mapOf(course("A100"), course("C300", [ref("A", "100")]));
+  const p = buildPrecedence([wideOpen("w"), named("c", ["C300"])], cm);
   assert.deepEqual(edgesOf(p, "c"), []);
 });
 

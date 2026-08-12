@@ -28,6 +28,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { GENERAL_ELECTIVE, CONCENTRATION } from "../core/requirementDemand.js";
+import { materialize } from "../core/candidateSpec.js";
 
 /**
  * Turn an assignment into a plan.json grid.
@@ -139,8 +140,31 @@ function entryFor(plan, courseMap, reasons) {
     };
   }
 
+  // An open cell whose candidate set is small enough to write out gets `options`,
+  // which makes the reservation BOUNDED downstream: `candidates.js` seeds from the
+  // options rather than falling back to the whole catalog.
+  //
+  // This matters most for a pooled cell. Its binding names several sections, and
+  // `applySamplePlan` only adopts a binding forced to one — so without options it
+  // would arrive knowing nothing, and a cell drawing on six named colleges would
+  // offer all 8,000 courses. Naming them keeps the precision the derivation had.
+  const enumerated = cell.spec ? [...materialize(cell.spec, courseMap)].sort() : [];
+  if (enumerated.length && enumerated.length <= MAX_NAMED_OPTIONS) {
+    return { ...base, text: cell.title, options: enumerated.map(id => [id]), ...bindingFor(cell) };
+  }
+
   return { ...base, text: cell.title, options: [], ...bindingFor(cell) };
 }
+
+/**
+ * How many courses a cell may name before it is better described than listed.
+ *
+ * Measured against the corpus: requirement sections admit a median of 8 courses and
+ * the bulk sit under 40, so this enumerates almost every real elective pool while
+ * leaving the genuinely open ones — a `CS 2500–9999` range with 247 members, a
+ * general elective with all of them — as descriptions.
+ */
+export const MAX_NAMED_OPTIONS = 40;
 
 /**
  * The binding a cell carries into the plan.
