@@ -32,6 +32,9 @@ import { usePlanner }         from "../context/PlannerContext.jsx";
 import { usePort }            from "../context/InstitutionContext.jsx";
 import { useLanguage }        from "../context/LanguageContext.jsx";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
+import { IPlanGenerator }     from "../ports/IPlanGenerator.js";
+import PlanSourceToggle       from "./PlanSourceToggle.jsx";
+import ChartExplainer         from "./ChartExplainer.jsx";
 import { applySamplePlan }    from "../core/applySamplePlan.js";
 import {
   sampleplanOffer, variantsFor, describeTemplate, isPlanEmpty,
@@ -60,6 +63,7 @@ const PHONE_FZL = (isPhone) => (isPhone ? 5.5 : 9);  // the section label
 
 export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) {
   const majorRequirements = usePort(IMajorRequirements);
+  const planGenerator     = usePort(IPlanGenerator);
   const { t } = useLanguage();
   const {
     major2, appliedTemplate, placements, reservations, specialTermPl, placedOut,
@@ -73,6 +77,20 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   const [plans,      setPlans]      = useState(null);
   const [variantIdx, setVariantIdx] = useState(0);
   const [justDid,    setJustDid]    = useState(null);   // "loaded" | "replaced" | "opened"
+
+  // ── CHART, the generated alternative ──────────────────────────────
+  //
+  // A generated plan is a plan.json variant like any other, so it slots in beside
+  // the catalog's rather than needing a parallel path: everything below — counts,
+  // verbs, replace, undo — works on `chosen` and does not care where it came from.
+  //
+  // Generated LAZILY, on the first switch to it. It is ~100 ms of work that most
+  // students never ask for, and doing it on mount would tax every program view for
+  // a feature used on some of them.
+  const [source,   setSource]   = useState("catalog");
+  const [gen,      setGen]      = useState(null);     // {plan, report} | {refused}
+  const [genBusy,  setGenBusy]  = useState(false);
+  const [showWhy,  setShowWhy]  = useState(false);
 
   // Collapse is remembered ACROSS sessions but chosen BY STATE the first time.
   // An explicit preference outranks the state default, the same rule the other
@@ -98,6 +116,11 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
 
   useEffect(() => {
     setPlans(null); setVariantIdx(0); setJustDid(null);
+    setGen(null); setGenBusy(false); setShowWhy(false);
+    // Back to the catalog when the program changes: a source choice is about the
+    // program in front of you, not a standing preference, and silently generating
+    // for the next program would spend work nobody asked for.
+    setSource("catalog");
     if (!hasSamplePlan) return;
     let live = true;
     majorRequirements.loadSamplePlans(path, isGrad)
@@ -110,14 +133,43 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
     () => isPlanEmpty({ placements, reservations, specialTermPl, placedOut }),
     [placements, reservations, specialTermPl, placedOut]);
 
+  // `hasSamplePlan` gates the section, and CHART widens that gate: a program that
+  // publishes nothing (632 of 1,017) previously had no section at all, and is exactly
+  // the case where a generated plan is worth the most.
   const offer = useMemo(() => sampleplanOffer({
-    major: path, major2, hasSamplePlan, appliedTemplate, canvasEmpty,
-  }), [path, major2, hasSamplePlan, appliedTemplate, canvasEmpty]);
+    major: path, major2, hasSamplePlan: hasSamplePlan || canGenerate,
+    appliedTemplate, canvasEmpty,
+  }), [path, major2, hasSamplePlan, canGenerate, appliedTemplate, canvasEmpty]);
 
   const years = Math.round(((planGradYear * 2 + (planGradSem === "fall" ? 1 : 0)) -
                             (planEntYear  * 2 + (planEntSem  === "fall" ? 1 : 0)) + 1) / 2);
-  const variants = useMemo(() => variantsFor(plans ?? [], { years }), [plans, years]);
-  const safeIdx  = Math.min(Math.max(variantIdx, 0), Math.max(variants.length - 1, 0));
+  const catalogVariants = useMemo(() => variantsFor(plans ?? [], { years }), [plans, years]);
+  const canGenerate = !!planGenerator?.canGenerate?.(path, isGrad, programData);
+
+  // Generated on demand, once per program, and only for the source actually chosen.
+  useEffect(() => {
+    if (source !== "chart" || gen || genBusy || !canGenerate) return;
+    let live = true;
+    setGenBusy(true);
+    planGenerator.generate({
+      programKey: path, isGrad, programData, courseMap, studentType,
+      // The catalog's own SHAPE — years, terms, where the co-ops fall — is real
+      // departmental intent and worth inheriting even when its CONTENT is not. The
+      // first catalog variant is the one whose calendar the department leads with.
+      publishedPlan: catalogVariants[0] ?? null,
+    })
+      .then(r => { if (live) setGen(r); })
+      .catch(() => { if (live) setGen({ refused: { reason: "error", detail: t("chart.refused") } }); })
+      .finally(() => { if (live) setGenBusy(false); });
+    return () => { live = false; };
+  }, [source, gen, genBusy, canGenerate, planGenerator, path, isGrad, programData,
+      courseMap, studentType, catalogVariants, t]);
+
+  const usingChart = source === "chart";
+  const chartPlan  = gen && !gen.refused ? gen.plan : null;
+  // One list, whichever source. Everything downstream reads `chosen` and never asks.
+  const variants = usingChart ? (chartPlan ? [chartPlan] : []) : catalogVariants;
+  const safeIdx  = Math.min(Math.max(usingChart ? 0 : variantIdx, 0), Math.max(variants.length - 1, 0));
   const chosen   = variants[safeIdx] ?? null;
 
   // Counted against the canvas the OFFERED VERB will actually use.
@@ -220,8 +272,55 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
         <span style={{ fontSize: fz - 1, color: "var(--text-5)" }}>{open ? "▾" : "▸"}</span>
       </div>
 
+      {showWhy && gen?.report && (
+        <ChartExplainer
+          report={gen.report} program={programData} isPhone={isPhone}
+          onClose={() => setShowWhy(false)}
+        />
+      )}
+
       {open && (
         <div style={{ marginTop: 6 }}>
+          {/* Whose plan this is. First, because it changes everything below it. */}
+          <div style={{
+            display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
+            marginBottom: 7,
+          }}>
+            <PlanSourceToggle
+              value={source} onChange={setSource}
+              hasCatalog={hasSamplePlan} canGenerate={canGenerate}
+              busy={genBusy} isPhone={isPhone}
+            />
+            {/* Only offered once there is a plan to explain. An explainer that
+                describes the algorithm in general rather than THIS plan is a
+                brochure, and the panel is built to refuse being one. */}
+            {usingChart && gen?.report && (
+              <button onClick={() => setShowWhy(true)} style={linkBtn(isPhone)}>
+                {t("chart.why")}
+              </button>
+            )}
+          </div>
+
+          {/* Generation is the one thing here that takes visible time. */}
+          {usingChart && genBusy && (
+            <div style={{ fontSize: fz, color: "var(--text-5)", marginBottom: 6 }}>
+              {t("chart.busy")}
+            </div>
+          )}
+
+          {/* A refusal is an ANSWER, and it names something actionable. Shown as
+              prose rather than an error, because "this program cannot be planned
+              from what the catalog states" is a fact about the program. */}
+          {usingChart && gen?.refused && (
+            <div style={{
+              fontSize: fz, color: "var(--text-3)", marginBottom: 6,
+              padding: isPhone ? "5px 7px" : "7px 9px", borderRadius: 5,
+              background: "var(--bg-surface-1)", border: "1px solid var(--border-2)",
+            }}>
+              {gen.refused.detail || t("chart.refused")}
+            </div>
+          )}
+
           {/* What arrives, before deciding. */}
           {!!chosen && (
             <div style={{ fontSize: fz, color: "var(--text-3)", marginBottom: 6 }}>
@@ -239,7 +338,7 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
               only mean one thing: the red button, and the confirm behind it. */}
 
           {/* Only when the cohort's year count leaves a real choice. */}
-          {variants.length > 1 && (
+          {!usingChart && variants.length > 1 && (
             <VariantPicker
               variants={variants} value={safeIdx} onChange={setVariantIdx} isPhone={isPhone}
             />
