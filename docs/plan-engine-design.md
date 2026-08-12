@@ -2181,16 +2181,71 @@ and its real obstruction is precedence interacting with the two spring terms its
 cycle leaves. That is also, retrospectively, why the matching form of `canStillSeat` was
 built, measured and dropped: a capacity propagator has nothing to say here.
 
-Still to do, in order of expected value:
+**2. The cost of a node, which turned out to be the whole story.** `firstFree` re-sorted
+`Object.keys(courseMap)` — all 7,966 catalog ids — on every call, and it is called once
+per *unbounded* cell per *node*. A degree with five general-elective cells performed five
+8,000-element string sorts at every node.
 
-2. **Conflict-directed backjumping.** Chronological backtracking re-walks into the same
+```
+business_administration_bsba, one of the clock-bound refusals
+  before   5,041 ms      477 nodes    10.6  ms/node
+  after      508 ms   16,251 nodes     0.031 ms/node      ~340x
+```
+
+Corpus effect: **694 → 744 shapes (67.3% → 72.2%)**, `search-budget-exhausted` 151 → 65,
+and the fingerprint diff read **690 unchanged, 0 moved, 50 gained, 0 lost** — the ideal
+shape of a performance change, and the clearest demonstration that the §17.1 discipline
+works.
+
+Found by *profiling*, after two wrong guesses (an unbounded budget, then per-attempt
+setup cost in `unlockValues`, which measures 0 ms). The V8 tick profile was 13.1%
+`StringCompare` and 8.7% `ArrayTimSort`, which pointed straight at it.
+
+### 17.3a Three things that were tried and did NOT work
+
+Recorded because each cost real time and the next person will otherwise have the same
+three ideas. All were measured, not reasoned about.
+
+**Diversified retry orders — 0 rescues of 344 shapes.** Six extra attempts after the
+ladder, each varying the tie-break in `byConstraint`. Node counts rose 16,251 → 20,001,
+proving the leftover budget was being spent, and nothing was rescued. Why: re-ordering the
+*last* key of a five-key comparator only moves cells that tie on all four keys before it,
+and few do — the search re-explored the same region more thoroughly. If diversification is
+attempted again, perturb the **value** order (which term a cell tries first), which is what
+actually differs between arrangements. Removed; 80 lines for no gain.
+
+**More time — 0 rescues of 5 clock-bound shapes at 4x.** This is the one that matters
+most, because it kills a whole feature's justification. Twenty seconds bought only
+1,798–3,222 nodes on those shapes, so the budget was never the binding constraint; the
+cost of a node was. It follows that **"remove the time limit" buys no coverage**, and
+therefore a streaming UI or a Web Worker cannot be justified as a coverage fix. Both may
+still be worth building to *explain* the engine — a different argument, which must be made
+on its own terms.
+
+**Raising `NODES_PER_MS` to the newly-measured rate — a regression.** Once a node cost
+0.031 ms rather than 0.4 ms, correcting 2.5 → 20 looked like straightforward bookkeeping.
+It cost 4 plans (744 → 740) and tripled thin terms (1 → 3), and the rung tally says why:
+fallback usage collapsed from 74/42 to 49/18. A larger strict allowance spends more of the
+*shared wall clock*, so the tiers that actually rescue coverage never ran. This constant
+has now failed the same way three times (60% of the node budget, a flat 3,000, and the
+"correct" rate), and the invariant behind all three is worth stating once:
+
+> **The strict tier must not be able to spend the clock the fallbacks need.** Coverage is
+> carried by the fallback rungs, so starving them is always the wrong trade — even in
+> exchange for a strictly better tier running longer.
+
+The node *budget* was raised instead, which gives the rungs headroom without touching the
+strict tier's share.
+
+### 17.3b Still to do
+
+1. **Conflict-directed backjumping.** Chronological backtracking re-walks into the same
    wall by a different route; jumping to the deepest cell in the conflict does not. Note
    the risk asymmetry that makes this acceptable to attempt: a CBJ bug costs coverage,
    never correctness, because every returned plan still passes the full prereq-aware
    witness and the hard-rule gate.
-3. **Order diversification across restarts.** Nogood learning already restarts, but the
-   variable order never changes between attempts, so each restart explores a space of
-   the same shape.
+2. **Another profiling pass.** The first one found a 340x win in one line. The profile
+   after the fix has not been read, and there is no reason to assume it is now flat.
 
 ### 17.4 Mechanism 3 — rung F, for the provably infeasible
 

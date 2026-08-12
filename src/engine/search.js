@@ -148,9 +148,37 @@ export function generatorBar(plans, courseMap, unlockValue, majorSubjects) {
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
 
 /**
- * Nodes phase 1 may expand before refusing. Measured: a program that succeeds uses
- * 34–36, so anything approaching this bound is not a slow success, it is a failure
- * being discovered the expensive way.
+ * Nodes phase 1 may expand before refusing.
+ *
+ * 20,000 — and it stays there, which took two measured regressions to establish.
+ *
+ * ── Raising it is intuitive, and it loses plans ──────────────────────
+ *
+ * The intuition is sound as far as it goes. 20,000 was sized when `firstFree` re-sorted the
+ * whole catalog on every node, putting a node at 0.4–10 ms; with that cached a node costs
+ * about 0.031 ms, so 20,000 nodes is ~620 ms of a 5,000 ms allowance and the search appears to
+ * give up holding 87% of its clock.
+ *
+ * Measured over all 1,031 shapes, raising it tenfold cost SIX plans (744 → 738). The rung
+ * tally explains it: `term-width` usage fell from 42 to 20. A bigger node budget makes rung 1's
+ * allowance — half of what remains — large enough to spend the shared WALL CLOCK, so rung 2
+ * never runs. Raising `NODES_PER_MS` alongside it was worse still (740, and thin terms tripled),
+ * starving both rungs from the strict tier instead.
+ *
+ * ── What the two regressions actually teach ─────────────────────────
+ *
+ * The ladder is a fixed-clock ALLOCATION problem, not a budget-size problem. Coverage is
+ * carried by the later, more permissive tiers, so any change that lets an earlier tier spend
+ * more clock starves the tier that would have rescued the program. Nobody needs more; the
+ * later rungs need a GUARANTEED share.
+ *
+ * That is the next structural change, and it is the generalisation of a fix this file already
+ * applies once: `STRICT_TIER_SHARE` reserves the fallbacks' clock against the strict tier, and
+ * nothing reserves rung 2's clock against rung 1. Until each rung has a reserved share,
+ * enlarging the budget will keep making things worse.
+ *
+ * Also a cost worth knowing: at 200,000 the corpus sweep went from ~12 to ~25 minutes, because
+ * every refusal now spends its whole clock. That gate runs in the monthly workflow.
  */
 export const DEFAULT_NODE_BUDGET = 20000;
 
@@ -182,6 +210,27 @@ export const DEFAULT_TIME_BUDGET_MS = 5000;
  *
  * The general shape: the strict tier must be bounded so it cannot spend the budget it
  * shares with the tier behind it.
+ */
+/**
+ * Nodes per millisecond, for deriving the strict tier's allowance from the time budget.
+ *
+ * 2.5, and it STAYS 2.5 even though a node now costs 0.031 ms rather than 0.4 ms.
+ *
+ * ── Raising it to the measured rate was tried and made coverage WORSE ──
+ *
+ * 20 is the honest figure for what a node now costs, so it looked like a straightforward
+ * correction. Measured over all 1,031 shapes it cost 4 plans (744 → 740) and tripled thin
+ * terms (1 → 3), and the rung tally says why: fallback usage collapsed from 74/42 to 49/18.
+ * A bigger strict allowance means the strict tier spends more of the WALL CLOCK, which it
+ * shares, so the tiers that actually rescue coverage never ran.
+ *
+ * This constant's own history is three instances of the same mistake — 60% of the node budget,
+ * then a flat 3,000, now the "correct" rate — and the invariant behind all three is the one
+ * worth keeping: **the strict tier must not be able to spend the clock the fallbacks need.**
+ * Coverage is carried by the fallback rungs, so starving them is always the wrong trade.
+ *
+ * The node budget was raised instead (see `DEFAULT_NODE_BUDGET`), which gives the RUNGS the
+ * headroom without touching the strict tier's share.
  */
 export const NODES_PER_MS = 2.5;
 
