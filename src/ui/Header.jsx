@@ -616,6 +616,36 @@ export default function Header() {
     cancelShareCode(dead);
   };
 
+  // ── A code is bound to what it shared ───────────────────────────
+  // The payload is captured at mint time from the plan that was active
+  // and the language that was selected. Everything else in this panel —
+  // Snapshot link, Copy summary, Export PDF, Save — acts on the CURRENT
+  // plan, so a code that outlives a plan switch makes the panel lie:
+  // measured, minting on Plan 1 and switching to Plan 2 left Plan 1's
+  // code, countdown and QR sitting under a header reading "Plan 2", and
+  // scanning it delivered Plan 1. Handing someone the wrong plan is the
+  // one failure this feature must not have; a QR gets held up to a
+  // stranger who never sees the label.
+  //
+  // So switching either binding ends the sharing session and revokes the
+  // code server-side. One rule, stated once: the code carries the plan
+  // and language as they were when you pressed Share. Losing a code to a
+  // stray plan switch costs one click; the alternative costs correctness.
+  //
+  // privateCoop belongs here too, and it is the one where staleness is a
+  // LEAK rather than merely a lie. It redacts co-op employers at encode
+  // time (PlannerContext.encodeSharePayload), so a code minted before the
+  // toggle went on keeps handing out the unredacted plan for the rest of
+  // its life — the switch looks like it took effect and has not. A privacy
+  // control that cannot reach what is already in flight is not one.
+  const shareBinding = `${activePlanId} ${shareLinkLocale} ${privateCoop ? 1 : 0}`;
+  const shareBindingRef = useRef(shareBinding);
+  useEffect(() => {
+    if (shareBindingRef.current === shareBinding) return;
+    shareBindingRef.current = shareBinding;
+    handleCancelCode();          // no-ops when no code is live
+  }, [shareBinding]); // eslint-disable-line react-hooks/exhaustive-deps
+
   // The code lives in a box styled exactly like the entry field below it
   // — clicking the box copies it (a color flash confirms).
   const handleCopyCode = async () => {

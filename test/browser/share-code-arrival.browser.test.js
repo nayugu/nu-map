@@ -136,6 +136,82 @@ describe("share-code arrival", { skip: up ? false : "dev server or relay not run
     }
   });
 
+  // ── The code is bound to what it shared ──────────────────────────
+  // Everything else in the ⇅ panel acts on the CURRENT plan, so a code
+  // that outlives its context turns the panel into a liar: a QR reading
+  // "Plan 2" that hands over Plan 1. These assert the binding actually
+  // revokes, server-side, not merely that the bar looks empty.
+  const seedTwoPlans = async (page) => {
+    await page.evaluate(() => {
+      localStorage.setItem("ncp-plan-data-second", localStorage.getItem("ncp-plan-data-default") ?? "{}");
+      localStorage.setItem("ncp-plan-index", JSON.stringify([
+        { id: "default", name: "Plan 1", studentType: "undergrad" },
+        { id: "second", name: "Plan 2", studentType: "undergrad" }]));
+      localStorage.setItem("ncp-seen-cohort-setup", "1");
+    });
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(2500);
+  };
+  const stillClaimable = (page, code) => page.evaluate(async (c) => {
+    const { deriveShareId } = await import("/src/core/shareCrypto.js");
+    const r = await fetch(`http://localhost:27182/claim/${await deriveShareId(c)}`, { method: "POST" });
+    return (await r.json()).ok === true;
+  }, code);
+
+  test("switching plans revokes the code, so no QR ever hands over the wrong plan", async () => {
+    const page = await (await browser.newContext()).newPage();
+    await page.goto(APP, { waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(2000);
+    await seedTwoPlans(page);
+
+    const panel = await openApp(page);
+    const code = await mintCode(page, panel);
+
+    await page.locator("button").filter({ hasText: /⇅/ }).first().click();   // close panel
+    await page.waitForTimeout(300);
+    await page.locator("button").filter({ hasText: /Plan/ }).first().click();
+    await page.waitForTimeout(700);
+    await page.getByText("Plan 2", { exact: true }).first().click();
+    await page.waitForTimeout(2000);
+
+    const panel2 = await openApp(page);
+    assert.doesNotMatch(await panel2.innerText(), new RegExp(code), "the old plan's code is still on screen");
+    assert.equal(await panel2.locator("svg circle").count(), 0, "the old plan's QR is still on screen");
+    assert.equal(await stillClaimable(page, code), false, "the code was hidden but not revoked");
+  });
+
+  test("turning on co-op privacy revokes a code minted without it", async () => {
+    // Staleness here is a leak, not a lie: the payload was encoded with
+    // employers in it and would keep serving them for the code's full life.
+    const page = await (await browser.newContext()).newPage();
+    await page.goto(APP, { waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(2000);
+    await page.evaluate(() => localStorage.setItem("ncp-seen-cohort-setup", "1"));
+    await page.reload({ waitUntil: "domcontentloaded" });
+    await page.waitForTimeout(2500);
+
+    const panel = await openApp(page);
+    const code = await mintCode(page, panel);
+
+    // Drive the real control in ⚙ Settings. Asserted, not best-effort: an
+    // earlier draft used a guessed selector, found nothing, returned early
+    // and reported a pass having tested nothing at all.
+    await page.locator("button").filter({ hasText: /⇅/ }).first().click();  // close ⇅
+    await page.waitForTimeout(300);
+    await page.locator("button").filter({ hasText: /⚙/ }).first().click();
+    await page.waitForTimeout(600);
+    const toggle = page.getByRole("button", { name: /co-?op/i })
+      .or(page.locator('[aria-label*="co-op" i]')).first();
+    await toggle.waitFor({ state: "visible", timeout: 10_000 });
+    await toggle.click();
+    await page.waitForTimeout(1500);
+
+    assert.equal(await page.evaluate(() => localStorage.getItem("ncp-private-coop")), "true",
+      "the co-op privacy toggle did not actually turn on");
+    assert.equal(await stillClaimable(page, code), false,
+      "privacy toggled but the in-flight code still serves employers");
+  });
+
   // The phone case that started all this: a suppressed native dialog
   // returns false. Playwright auto-dismisses unhandled dialogs, which is
   // the same thing — so a page with NO dialog handler must still import.
