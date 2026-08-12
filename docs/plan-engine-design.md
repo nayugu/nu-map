@@ -1951,6 +1951,307 @@ and **1 is a prerequisite for CHART's availability constraint meaning anything**
 7** together are the cheapest large gain in binding quality. **19 and 21** are additive
 scrape steps with the biggest long-term payoff.
 
+## 17. Coverage without moving the plans that already work (2026-08-12)
+
+36% of shapes refuse. Fixing that is the remaining work, and it is constrained by
+something that is easy to state and easy to violate: **CS+Math's plan is currently
+good, and it must come out identical.** A coverage fix that quietly re-sequences the
+479 programs that already generate is not an improvement, it is a regression nobody
+asked for wearing a coverage number as a disguise.
+
+So the architecture question is not "how do we search harder". It is **where a fix is
+allowed to live** such that it cannot reach a plan that already succeeds.
+
+### 17.1 The placement rule
+
+Every change gets one of four homes, and only the first three are permitted:
+
+| home | when it runs | output-neutral for today's plans? |
+|---|---|---|
+| **a later rung** | only after every earlier rung has refused | **yes, by construction** |
+| **a pre-flight verdict** | before the search; decides routing, not domains | **yes** — converts refusal↔attempt, nothing else |
+| **a non-erosion guard** | rejects a phase-2 move that worsens a phase-1 property | **yes** wherever phase 2 was not already worsening it |
+| ❌ rung-1 propagators, branch order, objective weights | every program | **no — forbidden** |
+
+The fourth row is the one that needs stating, because it is counter-intuitive and it
+is where the accidental damage would come from. **Strengthening propagation is not
+output-neutral.** A sound propagator does not change the *set* of solutions, so it is
+tempting to think it is safe. But the search picks the next cell by MRV — fewest legal
+terms first (`byConstraint`, search.js) — and a propagator changes domain *sizes*. So
+it changes the variable order, hence which solution DFS reaches first, hence what
+phase 2 hill-climbs from, hence the plan. A better propagator in rung 1 would silently
+re-sequence programs it was never meant to touch.
+
+That reads as a constraint and is actually a gift: **every program we want to rescue
+fails rung 1 by definition.** Putting the strong machinery in a later rung costs
+nothing, because the population it serves is exactly the population that got there.
+
+Two properties of the existing ladder make this sound, both verified rather than
+assumed:
+
+- **rungs are domain-isolated.** Each rung re-derives from the original `plans`
+  (`plans.map(p => ({ ...p, domain: [...p.domain] }))`), so a nogood learned under one
+  constraint set cannot narrow the next rung's space.
+- **rungs are budget-additive, not budget-stealing.** A rung takes half of what is
+  *left* (`(nodeBudget - totalNodes) / 2`), and the wall clock is a single shared
+  deadline that every rung checks. So appending a rung spends budget that was
+  otherwise unspent, and cannot make a succeeding program slower or a hung tab more
+  likely.
+
+### 17.1a The measurement that reordered this section
+
+Written before the post-change sweep landed, §17 assumed `search-budget-exhausted`
+dominated the refusals. **It does not**, and the real breakdown moves the priorities:
+
+```
+1031 shapes · generated 647 (62.8%) · refused 384 · threw 0
+thin full terms 1 of 2019 (0.0%)
+
+search-budget-exhausted   153      no-candidate                14
+mostly-unlabelled         105      over-subscribed              9
+cell-has-no-legal-term     89      full-term-cannot-reach-four  9
+                                   named-prereq 3 · does-not-fit 1 · infeasible 1
+```
+
+Three things follow, and two of them contradict what §17 was built around:
+
+- **`search-budget-exhausted` is 40% of refusals, not 75%.** Rung S is still the
+  single biggest lever, but it is not most of the problem.
+- **194 of 384 refusals (50.5%) are decided BEFORE any search runs** —
+  `mostly-unlabelled` in pre-flight and `cell-has-no-legal-term` in domain
+  construction. No amount of search strength touches either. A design aimed
+  entirely at the search would have addressed under half the population.
+- **`mostly-unlabelled` (105) is a CORRECT refusal and must stay.** It fires when
+  more than half the degree is derived placeholder — measured at
+  `MAX_DERIVED_GE_SHARE = 0.5`, the knee of the distribution — and what it declines
+  are PhDs whose stated requirements really are "48 credits of dissertation and
+  electives" and studio BAs like `theatre_ba`, which publishes 6 sections covering
+  19 of 132 credits. A plan that is 60% "General Elective" cards looks authoritative
+  and says nothing. Refusing is the right answer.
+
+Which means the **honest denominator is not 1031.** 105 shapes are refused on
+purpose, so the figure that measures the engine rather than the catalog is
+647 / 926 = **69.9%**, and the remaining work is 279 shapes, not 384.
+
+### 17.1b `cell-has-no-legal-term` is a catalog fact, not a search failure
+
+Measured at a 60 ms budget — every class here is decided before the search runs, so
+the budget cannot affect the anatomy — the 89 blocked shapes break down by which
+bound killed the cell:
+
+```
+89  (66.4%)  never-offered-in-any-term-this-plan-uses
+43  (32.1%)  prereq-chain-longer-than-plan
+ 1  ( 0.7%)  no-legal-term-after-prerequisites
+ 1  ( 0.7%)  no-catalog-course-answers-it
+
+blocked cells per refused shape: min 1 · median 1 · max 5
+65 of 89 shapes are blocked by exactly ONE cell
+```
+
+**A median of one cell blocks a whole degree**, which is why this class looked like a
+search problem and is not one at all.
+
+Traced to the end, the `never-offered` majority is **program requirements naming
+courses that no longer run.** `CS 3700 Networks and Distributed Systems` blocks four
+cybersecurity degrees on its own. Its offering history ends at 202430 — Spring 2024 —
+so its fall and spring probability is 0.333 and the >50% bar reads `false` in every
+season. `CS 4700 Network Fundamentals` runs 202530, 202540, 202610, 202630 with all
+its seasons populated. CS 3700 was renumbered; the requirements still name the dead
+one. This is the same pattern already recorded for CS 2500/2510/3500.
+
+Two things this settles, both of which had to be checked rather than assumed:
+
+- **the engine and the app agree.** `offeringProbability` and `offered` return the
+  same verdict here, so this is not another instance of the four-implementations bug.
+  Refusing to schedule CS 3700 is *correct given the data* — it is not offered.
+- **`terms: []` is not the documented unknown case.** 3,250 courses (40.8%, matching
+  the recorded figure exactly) have no offering history and read as unknown, hence
+  allowed. A further **571 have history that clears no season's bar**, which reads as
+  "never offered anywhere". Those are two different states and only the first is the
+  one the design licenses as permissive.
+
+So the addressable population splits again, and only two thirds of it is code:
+
+| class | shapes | what actually fixes it |
+|---|---|---|
+| `search-budget-exhausted` | ~153 | **rung S** — sound, no decision needed |
+| `prereq-chain-longer-than-plan` | ~29 | **rung F** — sound, no decision needed |
+| requirements naming retired courses | ~59 | **a policy decision**, not an algorithm |
+| `mostly-unlabelled` | 105 | nothing — the refusal is right |
+| the remainder | ~38 | individually diagnosable |
+
+The retired-course class is the one that cannot be fixed by searching harder, because
+the search is right. The options are to keep refusing the degree, or to emit the plan
+with the stale requirement named as an unresolvable gap — which trades
+"requirement coverage is true by construction" for giving the student the 31 of 32
+courses that are correct. That is a product decision about what a student should see,
+not an engine question, and it is recorded here as open rather than settled quietly.
+Auto-substituting a successor course is explicitly **not** on the list: a wrong
+substitution is a wrong plan, and conservative beats clever.
+
+And one problem this section was written to solve has already been solved by the
+preference-free rung: **thin full terms are 1 of 2019 (0.0%)**, down from 27 of 1659
+(1.6%). The four-course rule no longer needs new machinery — §17.5's guard exists to
+stop a *future* optimiser eroding it, not to fix a live defect.
+
+### 17.2 The refusal reason we have is not a diagnosis
+
+153 refusals report `search-budget-exhausted`. That string is a fact about the
+search, not about the degree, and it conflates two problems with opposite fixes:
+
+- **unsolved** — a legal plan exists and we did not find it → *search harder*
+- **infeasible** — no legal plan exists in this shape → *change the shape, or refuse*
+
+Relaxing constraints for the first is wrong (it degrades a plan that did not need
+degrading). Searching harder for the second is wrong (it burns the whole budget
+proving nothing). Today the ladder does both blindly, in a fixed order, for every
+program.
+
+**Mechanism 1 — the feasibility verdict.** A pre-flight that runs the propagators over
+the *whole* problem at depth 0: the cells→seats matching that `alldifferent` already
+uses, plus the full-term cardinality arithmetic (`surplus`), over domains that
+precedence has already narrowed transitively (`critical.earliest/latest`, applied in
+index.js).
+
+The verdict is deliberately **one-sided**, and saying so is the point:
+
+- relaxation **infeasible** ⟹ *provably* no plan in this shape. Sound: the relaxation
+  drops constraints, so infeasible-when-relaxed is infeasible-when-not.
+- relaxation **feasible** ⟹ **undecided**. It drops credit knapsacking, prereq
+  reachability and the interaction between precedence and season, any of which can
+  still block.
+
+One-sided is enough to route. On an infeasible verdict the strong-search rung is
+*skipped entirely* — it cannot succeed, and skipping it hands its budget to the rung
+that can. And the verdict is reportable in the degree's own arithmetic, which
+`search-budget-exhausted` never was:
+
+> Industrial Engineering, four years, two co-ops: 32 real courses; 6 full terms need
+> 24 of them and 4 half terms hold at most 8. 24 + 8 = 32, zero slack — every full
+> term must hold exactly four and every summer exactly two.
+
+That is the sentence a student or an advisor can act on.
+
+### 17.3 Mechanism 2 — rung S, for the unsolved
+
+Same constraints. Same hard rules. More competent search, and nothing else:
+
+1. **Transitive precedence re-propagation after each assignment.** Today precedence is
+   forward-checked pairwise against cells already *placed* (`violatesPrecedence`), so
+   it cannot see that three unplaced cells in one chain need three distinct remaining
+   spring terms. This is the obstruction that IE+CS's Spring/Summer variant actually
+   has, and the one a per-cell domain check is blind to by construction.
+2. **Conflict-directed backjumping.** Chronological backtracking re-walks into the same
+   wall by a different route; jumping to the deepest cell in the conflict does not.
+3. **Order diversification across restarts.** Nogood learning already restarts, but the
+   variable order never changes between attempts, so each restart explores a space of
+   the same shape.
+
+All three are sound and none of them relaxes anything. A plan from rung S is as legal
+as a plan from rung 1 — it is merely found rather than stumbled upon.
+
+### 17.4 Mechanism 3 — rung F, for the provably infeasible
+
+Reached **only** on an infeasible verdict, which is the guard that matters: a program
+that merely needed more search must never have its shape altered, because that is
+answering a different question from the one asked.
+
+Ordered by how much of the deal it changes, least first:
+
+1. use a half term the published shape leaves blank (already legal — `optional` terms
+   are demoted in branch order, not forbidden — so the verdict tells us whether this
+   is even the binding constraint);
+2. add one half term: +4 SH, still four years;
+3. extend by a full term: changes the number of years.
+
+Each is named in `relaxed[]` so the UI can say *which*, exactly as the existing rungs
+do. A plan silently spanning 13 terms when the department published 12 would be worse
+than a refusal.
+
+### 17.5 Mechanism 4 — the non-erosion vector
+
+The second permanent problem is not coverage, it is that **the objective is incomplete
+and therefore cannot be optimised harder safely.** Measured against the code: the
+default ranked objectives are `coop-depth`, `level-order`, `robustness`. These are
+*not* scored and exist only as phase-1 branch ordering:
+
+| what makes a plan read well | implemented as | scored? |
+|---|---|---|
+| electives spread rather than stacked | `crowded` | ❌ |
+| a pool placed where its pool is open | `reachAt` / `poolReachMin` | ❌ |
+| generators early, terminal courses late | `claimRank` / `generatorBar` | ❌ |
+| room left for the electives still to come | `takesReserved` | ❌ |
+| a blank summer stays blank | `byOptional` | ❌ |
+
+So a strictly stronger optimiser — branch-and-bound over the stated objective — would
+maximise three scores while being free to wreck five properties it cannot see. It
+would stack the general electives again and score better for it. That is Goodhart's
+law, and it is the specific reason "optimise harder" is not automatically an
+improvement here.
+
+The fix is **not** to promote them to scores. Adding scores changes phase 2's landscape
+and therefore changes plans that are already good — the forbidden fourth row of §17.1.
+
+The fix is to generalise the one guard that already works. `maxThin` is established
+from the plan phase 1 hands over and enforced at every phase-2 commit through
+`fullLegal`, so phase 2 cannot erode the four-course floor no matter which pass tries.
+That pattern extends to a **vector**: phase 1 records a profile of every convention it
+achieved, and phase 2 may not worsen any entry.
+
+Why this is the right shape and not a dodge:
+
+- it is **output-neutral** wherever phase 2 was not already degrading the property, so
+  the plans that read well today are untouched;
+- it only ever rejects a move that was making the plan worse on a measured axis;
+- it makes the objective *complete for the purpose that matters* — a future
+  branch-and-bound cannot wreck these, because they are constraints on the trajectory
+  rather than scores in the sum;
+- it needs no invented weights, which is the thing this codebase keeps refusing to do.
+
+The honest cost, to be measured rather than assumed: the guard can block a move that
+gains a lot of `coop-depth` while worsening `crowded` by one. Given the stated priority
+— hard correctness first, sequencing explicitly a nice-to-have — that is the right way
+to be wrong, but the number of blocked moves is a measurement owed, not a guess.
+
+### 17.6 Mechanism 5 — fingerprints, so "unchanged" is a test and not a claim
+
+Everything above rests on an invariant that is currently checked by argument:
+*adding a rung, or a later-rung propagator, must not change any plan that generates
+today.* Argument is not enough — three separate measurements this month were
+confounded by uncontrolled comparisons, and one attributed a six-commit span to a
+single change.
+
+So: a committed file of one hash per generating shape. A change that moves a plan
+fails loudly and names the shape. `--accept` regenerates it deliberately, so an
+intended improvement arrives as a reviewed diff rather than as silence.
+
+This is cheap (~630 hashes), exact, and it is what converts §17.1's table from a
+design intention into an enforced property.
+
+### 17.7 What is deliberately not done
+
+- **No branch-and-bound yet.** It is the last step, not the first, precisely because
+  §17.5 must land before a stronger optimiser is safe.
+- **No new relaxation rungs.** The hard rules — prerequisite order, availability,
+  distinctness, the registration cap, requirement coverage, and four real courses in
+  every full fall and spring — do not move. The whole point of the verdict is to stop
+  trading them for coverage when the real problem was the search.
+- **No wall-clock decisions.** Budgets stay in nodes. The clock may turn an answer into
+  a refusal; it must never turn it into a different answer.
+
+### 17.8 Order of work, risk-ordered
+
+Fingerprints first, because it is the instrument every later step is verified with;
+then the verdict, because it is a measurement that decides how much of rung S versus
+rung F is worth building. Neither changes any output.
+
+1. fingerprints (§17.6) — output-neutral
+2. the feasibility verdict (§17.2) — output-neutral; reclassifies the 269 refusals
+3. rung S (§17.3) — reachable only by programs that already refuse
+4. rung F (§17.4) — reachable only on a proven-infeasible verdict
+5. the non-erosion vector (§17.5) — the only step with a measurable quality trade
+
 ## 16. Licence / IP
 
 Greenfield and clean-room. It must not touch `sandboxnu/graduatenu` (copyleft,
