@@ -95,6 +95,19 @@ export function observedRefs(observed = []) {
 export function buildPrecedence(cells, courseMap = {}, { observed = [] } = {}) {
   const extra = observedRefs(observed);
 
+  // Every course the plan commits to outright. Only these can create order: a choice cell's
+  // answer is not decided, and an elective's is the student's.
+  //
+  // Computed HERE, before `prereqsOf`, because that closure now consults it — an observed
+  // ordering edge only applies when both of its courses are in the plan. It worked when
+  // declared below, since nothing calls `prereqsOf` until later, but resting a correctness
+  // property on statement order is how the `canGenerate` TDZ bug happened.
+  const plannedCourses = new Map();          // course id → cell id
+  for (const c of cells) {
+    if (c.kind !== "named" || !c.groups?.[0]) continue;
+    for (const id of c.groups[0]) if (courseMap[id]) plannedCourses.set(id, c.id);
+  }
+
   // A course's prerequisites as CHART reads them: what the catalog records, plus
   // what the published plans unanimously show. Composed as one token list so every
   // consumer below folds a single tree and cannot treat the two sources
@@ -104,7 +117,22 @@ export function buildPrecedence(cells, courseMap = {}, { observed = [] } = {}) {
     const add = extra.get(id);
     if (!add?.size) return base;
     const refs = [...add].sort()
-      .filter(r => courseMap[r])
+      // ── An observed edge is CONDITIONAL on both courses being present ──
+      //
+      // The claim the derivation supports is "this course comes after that one in every plan
+      // that has BOTH" — and AND-ing it in unconditionally turned that into "this course
+      // REQUIRES that one", which is a different and false statement.
+      //
+      // It showed up as CHART adding `MATH 1365` to Computer Science and Mathematics for no
+      // reason a reader could find. MATH 1365 is not a prerequisite of anything that degree
+      // requires; the plans merely agree that programs requiring both put it before
+      // `MATH 2321` (11 programs, 18 observations) and `MATH 2341` (9, 13). CS+Math requires
+      // 2321 and 2341 and NOT 1365, so the edge fired anyway, `unscheduledPrereqs` reported a
+      // gap that did not exist, and the substitution pass spent a free elective closing it.
+      //
+      // Filtering to courses the plan actually commits to restores the conditional. Where both
+      // are present the edge still orders them, which is all it was ever evidence for.
+      .filter(r => courseMap[r] && plannedCourses.has(r))
       .map(r => ({ subject: courseMap[r].subject, number: courseMap[r].number }));
     if (!refs.length) return base;
     // AND, because an observed edge is a claim that this course comes after that
@@ -116,14 +144,6 @@ export function buildPrecedence(cells, courseMap = {}, { observed = [] } = {}) {
     const c = courseMap[id];
     return c ? { ...c, prereqs: prereqsOf(id) } : c;
   };
-  // Every course the plan commits to outright. Only these can create order:
-  // a choice cell's answer is not decided, and an elective's is the student's.
-  const plannedCourses = new Map();          // course id → cell id
-  for (const c of cells) {
-    if (c.kind !== "named" || !c.groups?.[0]) continue;
-    for (const id of c.groups[0]) if (courseMap[id]) plannedCourses.set(id, c.id);
-  }
-
   // ── Plan-relative depth ─────────────────────────────────────────
   const depths = new Map();
   const inProgress = new Set();
