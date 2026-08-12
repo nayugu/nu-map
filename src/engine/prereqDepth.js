@@ -391,9 +391,16 @@ export function levelTarget(courseId, studentType = "undergraduate") {
 export function cellLevelTarget(plan, courseMap, studentType = "undergraduate") {
   const cell = plan.cell ?? plan;
   if (cell.groups?.length) {
+    // `filter(v => v > 0)` was here, and it discarded the ONE value that matters
+    // most: `LEVEL_POSITION[1]` is 0.00, so every first-year course in a group-based
+    // cell was read as having no level at all and sent to the end of the plan as
+    // filler. `ENGW 1111 or 1102` — first-year writing, which 100% of published plans
+    // put in year one — came out at a median position of 0.55.
+    //
+    // Null is the only "no level" value; 0 is a position.
     const t = cell.groups
-      .map(g => Math.max(...g.map(id => levelTarget(id, studentType) ?? 0)))
-      .filter(v => v > 0);
+      .map(g => Math.max(...g.map(id => levelTarget(id, studentType) ?? -1)))
+      .filter(v => v >= 0);
     return t.length ? Math.min(...t) : null;
   }
   if (!plan.candidates?.length) return null;

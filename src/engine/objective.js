@@ -52,8 +52,9 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
+import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
 import { witnessPlan } from "./witness.js";
-import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
+import { termCapacity, termSlotCap, coursesInCell, GENERAL_PER_TERM_MAX } from "./domains.js";
 import { precedenceViolations, chainHeight } from "./precedence.js";
 import { buildContention } from "./witness.js";
 
@@ -574,15 +575,18 @@ function hillClimb(start, score, cheapLegal, fullLegal, plans, terms, cap,
 function fitsCapacity(assignment, plans, terms, cap, shape = null) {
   const load = terms.map(() => 0);
   const count = terms.map(() => 0);
+  const gen = terms.map(() => 0);
   for (const p of plans) {
     const ti = assignment.get(p.cell.id);
     if (ti == null) continue;
     load[ti] += p.cell.sh ?? 0;
     count[ti] += coursesInCell(p.cell);
+    if (p.cell.target === GENERAL_ELECTIVE) gen[ti] += 1;
   }
-  // Both bounds, or a move the search refused would be reachable by the objective.
+  // Every bound, or a move the search refused would be reachable by the objective.
   return load.every((sh, ti) => sh <= cap[ti])
-      && count.every((n, ti) => n <= termSlotCap(terms[ti], shape));
+      && count.every((n, ti) => n <= termSlotCap(terms[ti], shape))
+      && gen.every(n => n <= GENERAL_PER_TERM_MAX);
 }
 
 /** Full hard-constraint check, including the prereq-aware witness. */

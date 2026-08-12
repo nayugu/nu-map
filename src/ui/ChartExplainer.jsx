@@ -69,17 +69,31 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
       role="dialog" aria-modal="true" aria-label={t("chart.explain.title")}
       onClick={onClose}
       style={{
-        position: "fixed", inset: 0, zIndex: 1000, display: "grid", placeItems: "center",
-        background: "rgba(0,0,0,.45)", padding: isPhone ? 10 : 24,
+        position: "fixed", inset: 0, zIndex: 1000,
+        // The BACKDROP scrolls, not the card. `placeItems: center` on a fixed grid
+        // pins the card's centre to the viewport's, so a card taller than the screen
+        // has its top and bottom cut off with no way to reach them. Scrolling the
+        // backdrop and letting the card size to its content reaches all of it.
+        overflowY: "auto", overscrollBehavior: "contain",
+        display: "flex", alignItems: "flex-start", justifyContent: "center",
+        background: "rgba(0,0,0,.5)",
+        padding: isPhone ? "12px 10px" : "32px 24px",
       }}
     >
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          maxWidth: 620, maxHeight: "88vh", overflowY: "auto",
-          background: "var(--bg-surface-1)", border: "1px solid var(--border-2)",
+          width: "100%", maxWidth: 620,
+          // OPAQUE, with a literal fallback. `--bg-surface-1` is translucent in this
+          // theme, so the card showed the grid straight through it and every line of
+          // text sat on top of a course card.
+          background: "var(--bg-solid, var(--bg-1, #ffffff))",
+          color: "var(--text-1)",
+          border: "1px solid var(--border-2)",
           borderRadius: 10, padding: isPhone ? 14 : 22,
-          boxShadow: "0 18px 48px rgba(0,0,0,.35)",
+          boxShadow: "0 18px 48px rgba(0,0,0,.45)",
+          // No maxHeight and no inner scroll: the backdrop above owns scrolling, so the
+          // card is as tall as it needs to be and nothing is unreachable.
         }}
       >
         <header style={{ marginBottom: isPhone ? 10 : 16 }}>
@@ -170,7 +184,7 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
 
         <footer style={{
           display: "flex", justifyContent: "flex-end", gap: 8,
-          borderTop: "1px solid var(--border-2)", paddingTop: 10, marginTop: 4,
+          borderTop: "1px solid var(--border-2)", paddingTop: 12, marginTop: 2,
         }}>
           <button
             onClick={onClose}

@@ -61,8 +61,9 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { witnessPlan, buildContention } from "./witness.js";
-import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
+import { termCapacity, termSlotCap, coursesInCell, GENERAL_PER_TERM, GENERAL_PER_TERM_MAX } from "./domains.js";
 import { chainHeight } from "./precedence.js";
+import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
 import { cellLevelTarget, cellLevelFloor } from "./prereqDepth.js";
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
 
@@ -216,6 +217,11 @@ function attemptPlacement({
   const termOf = new Map();
   const loadSH = new Array(terms.length).fill(0);
   const countIn = new Array(terms.length).fill(0);
+  // Tracked separately from the course count: a term at its elective cap can still
+  // take a real course, and stacking four "General Elective" cards in one semester is
+  // the specific thing that reads as unrealistic.
+  const genIn = new Array(terms.length).fill(0);
+  const isGeneral = (cell) => cell.target === GENERAL_ELECTIVE;
   let nodes = 0;
   let worstFailure = null;
 
@@ -330,8 +336,16 @@ function attemptPlacement({
     // early terms are the emptiest once every specific course has claimed its slot,
     // so load balance quietly walked the electives forward.
     const want = cellLevelTarget(plan, courseMap, studentType) ?? 1;
+    // For a general elective, spreading beats position. A term already carrying the
+    // target number is tried only after every term that is not — which is what turns
+    // "four stacked in year 4" into "one or two here and there" without forbidding the
+    // fourth outright.
+    const crowded = isGeneral(plan.cell)
+      ? (ti) => (genIn[ti] >= GENERAL_PER_TERM ? 1 : 0)
+      : () => 0;
     return [...plan.domain].sort((a, b) =>
-      byOptional(a, b) || Math.abs(a / span - want) - Math.abs(b / span - want)
+      byOptional(a, b) || crowded(a) - crowded(b)
+      || Math.abs(a / span - want) - Math.abs(b / span - want)
       || fill(a) - fill(b) || a - b);
   };
 
@@ -388,6 +402,7 @@ function attemptPlacement({
       // Eleven courses in one term fits inside 19 credits and is not a plan anyone
       // would follow. Bounded by the worst any published plan does.
       if (countIn[ti] + coursesInCell(cell) > slotCap[ti]) continue;
+      if (isGeneral(cell) && genIn[ti] + 1 > GENERAL_PER_TERM_MAX) continue;
       // Precedence, forward-checked against what is already placed. This is what
       // turns discovering the prereq order from 20,000 nodes of backtracking into
       // a few dozen: the witness would catch a violation eventually, but only
@@ -397,6 +412,7 @@ function attemptPlacement({
       termOf.set(cell.id, ti);
       loadSH[ti] += cell.sh ?? 0;
       countIn[ti] += coursesInCell(cell);
+      if (isGeneral(cell)) genIn[ti] += 1;
 
       // Propagate `alldifferent` over what is placed so far, plus named-course
       // prereq order. Sound on a partial assignment: candidate prereqs are
@@ -414,6 +430,7 @@ function attemptPlacement({
       termOf.delete(cell.id);
       loadSH[ti] -= cell.sh ?? 0;
       countIn[ti] -= coursesInCell(cell);
+      if (isGeneral(cell)) genIn[ti] -= 1;
     }
     return false;
   }

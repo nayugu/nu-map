@@ -101,6 +101,34 @@ export const SLOT_CAP_HALF = 5;
  * The corpus maximum is the fallback, for the 363 programs that publish no plan and
  * therefore have nothing to be no-worse-than.
  */
+/**
+ * How many general electives one term may hold.
+ *
+ * MEASURED over 6,959 published study terms: 44% hold none, 24% hold one, 23% hold
+ * two, and only 9% hold three or more. CHART was putting them in FEWER terms than the
+ * departments do — 34% of terms held one against their 56% — which reads as three or
+ * four stacked in a single semester instead of one or two spread out.
+ *
+ * Two, not one. One would be tidier and is not what the corpus says: a quarter of real
+ * terms carry two, and forcing one per term would need more terms than some plans have.
+ */
+export const GENERAL_PER_TERM = 2;
+
+/**
+ * And the HARD bound, which is a different number.
+ *
+ * `GENERAL_PER_TERM` is the target the search orders by; this is the point past which a
+ * term is worse than anything the corpus contains. Published plans reach 4 at p90 and 6
+ * at the extreme, so 4 is "no worse than almost every real plan" while still cutting
+ * the stacks of five and six.
+ *
+ * Two numbers because one was not enough: a HARD cap of 2 refused a third of the
+ * programs it had been planning, since a degree with nine free electives and eight
+ * study terms genuinely cannot hold two per term. A preference spreads them without
+ * making a taste into an infeasibility — the same lesson as the standing floor.
+ */
+export const GENERAL_PER_TERM_MAX = 4;
+
 export const termSlotCap = (term, shape = null) => {
   const full = (term?.weight ?? 1) >= 1;
   const inherited = full ? shape?.maxCoursesFull : shape?.maxCoursesHalf;
