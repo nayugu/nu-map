@@ -30,7 +30,7 @@
 
 import { deriveCells, cellsSH, substitutePrereqs } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
-import { buildDomains, wideAtFor, POOL_REACH_MIN, REAL_COURSE_SH } from "./domains.js";
+import { buildDomains, wideAtFor } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
 import { preflight, tightestTerms } from "./preflight.js";
 import {
@@ -42,6 +42,7 @@ import { improve, DEFAULT_PREFERENCES } from "./objective.js";
 import { emitPlan } from "./emit.js";
 import { buildDepthIndex } from "./prereqDepth.js";
 import { withDefaults } from "./ports.js";
+import { withCalibration } from "./calibration.js";
 
 /**
  * The most a prerequisite chain may stretch a plan, in terms.
@@ -84,7 +85,14 @@ export function generatePlan({
   depthIndex = null, repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, observedOrder = [], coopPrep = [],
   now = () => Date.now(),
+  // The institution's measured conventions — four courses to a full term, where a
+  // 3000-level course sits, what counts as a real course. Injected for the same reason
+  // availability and co-op legality are: they are facts about Northeastern, not about
+  // scheduling, and the engine holding them is what made `FULL_TERM_MIN_COURSES` get
+  // applied to master's degrees. See calibration.js.
+  calibration = {},
 } = {}) {
+  const cal = withCalibration(calibration);
   const prepSet = new Set(coopPrep);
   const ports = withDefaults(rawPorts);
   const depth = depthIndex ?? buildDepthIndex(courseMap);
@@ -133,9 +141,9 @@ export function generatePlan({
   // decides whether the half-summers are needed at all. `studyTerms` uses it to mark a
   // summer optional once the full terms can absorb the degree, which is what keeps every
   // fall and spring at four. Counted here because the shape does not know the cells.
-  const realCourses = cells.filter(c => (c.sh ?? 0) >= REAL_COURSE_SH).length;
+  const realCourses = cells.filter(c => (c.sh ?? 0) >= cal.realCourseSH).length;
   const layout = (sh) => {
-    const ts = studyTerms({ ...sh, realCourses }, studentType);
+    const ts = studyTerms({ ...sh, realCourses }, studentType, cal);
     const { plans, impossible } = buildDomains(cells, ts, {
       courseMap, depthOf: depth.depthOf,
       planDepthOf: precedence.planDepthOf,
@@ -147,6 +155,7 @@ export function generatePlan({
       // So an undergraduate's pools are not answered by doctoral courses. See
       // `registrable` — this feeds both the witness and the reachable share.
       studentType,
+      cal,
     });
     // Fold precedence into the domains, and catch a chain that cannot fit before the
     // search tries to discover it by exhaustion. Narrowing here also gives MRV a
@@ -205,7 +214,7 @@ export function generatePlan({
   // ── 6. A legal plan ────────────────────────────────────────────
   const placed = placeCells({
     plans, terms, ports, studentType, courseMap, repeatable, nodeBudget, timeBudgetMs,
-    precedence, shape,
+    precedence, shape, cal,
     // Injectable so DETERMINISM can be tested as the property it is, rather than as a race
     // against the machine. With a frozen clock the search is bounded by nodes alone and the
     // same input must give the same plan; with the real clock a slow run can only ever
@@ -231,7 +240,7 @@ export function generatePlan({
   // ── 7. A better plan ───────────────────────────────────────────
   const improved = improve({
     plans, terms, termOf: placed.termOf, ports, studentType, courseMap,
-    repeatable, preferences, precedence, shape,
+    repeatable, preferences, precedence, shape, cal,
     boundary: firstWorkBoundary(shape),
     depthOf: depth.depthOf,
   });
@@ -339,7 +348,7 @@ export function generatePlan({
             const i = at(t);
             if (i == null || i >= j) continue;
             if (!pool.domain.includes(i) || !t.domain.includes(j)) continue;
-            if ((pool.reachAt[i] ?? 1) < POOL_REACH_MIN) continue;
+            if ((pool.reachAt[i] ?? 1) < cal.poolReachMin) continue;
             const dsh = (pool.cell.sh ?? 0) - (t.cell.sh ?? 0);
             if (load[i] + dsh > cap[i] || load[j] - dsh > cap[j]) continue;
             pairs.push({ pool: pool.cell.title ?? "", flat: t.cell.title ?? "", from: j, to: i });

@@ -91,6 +91,10 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { foldPrereqTree, refId } from "../core/prereqFold.js";
+// Derived, not declared. `levelPosition` and `levelFloor` are Northeastern measurements over
+// its own published plans, so they are owned by the calibration; a second literal here would
+// drift from it silently, which is the whole reason the calibration exists.
+import { DEFAULT_CALIBRATION } from "./calibration.js";
 
 /**
  * Depth is capped so a pathological chain cannot dominate every domain. A degree
@@ -333,7 +337,7 @@ const EMPTY_SET = new Set();
  * A PREFERENCE, not a constraint. A student legitimately takes a 4000-level
  * elective early, and 10% of published 1xxx placements sit past the plan's midpoint.
  */
-export const LEVEL_POSITION = { 1: 0.00, 2: 0.36, 3: 0.64, 4: 0.91 };
+export const LEVEL_POSITION = DEFAULT_CALIBRATION.levelPosition;
 
 /**
  * The EARLIEST a published plan puts a course of each level — the p10 of the same
@@ -358,7 +362,7 @@ export const LEVEL_POSITION = { 1: 0.00, 2: 0.36, 3: 0.64, 4: 0.91 };
  * p10 rather than the minimum, because the minimum is one department's outlier and
  * a floor built on it would not constrain anything.
  */
-export const LEVEL_FLOOR = { 1: 0.00, 2: 0.09, 3: 0.22, 4: 0.67, 5: 0.57 };
+export const LEVEL_FLOOR = DEFAULT_CALIBRATION.levelFloor;
 
 /**
  * ── A GRADUATE program has no standing ladder, and clamping to 4xxx was a bug ──
@@ -379,10 +383,10 @@ export const LEVEL_FLOOR = { 1: 0.00, 2: 0.09, 3: 0.22, 4: 0.67, 5: 0.57 };
  * a floor: measured p10 0.57 across 154 placements, which is why `LEVEL_FLOOR` carries
  * a 5 rather than reusing 4's.
  */
-export const GRADUATE_TARGET = 0.3;
+export const GRADUATE_TARGET = DEFAULT_CALIBRATION.graduateLevelTarget;
 
 /** Levels at and above this are graduate study. */
-export const GRADUATE_LEVEL = 5;
+export const GRADUATE_LEVEL = DEFAULT_CALIBRATION.graduateStudyLevel;
 
 /**
  * The earliest position a cell of this level should occupy, 0..1.

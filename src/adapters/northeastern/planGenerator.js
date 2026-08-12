@@ -19,6 +19,7 @@ import { IPlanGenerator } from "../../ports/IPlanGenerator.js";
 import { generatePlan, DEFAULT_PREFERENCES } from "../../engine/index.js";
 import { buildDepthIndex } from "../../engine/prereqDepth.js";
 import enginePorts from "./enginePorts.js";
+import chartCalibration from "./chartCalibration.js";
 
 /** Where the recovered order lives. Same origin as the rest of the catalog data. */
 const PLAN_ORDER_URL = "/northeastern/plan-order.json";
@@ -87,6 +88,10 @@ export default {
       observedOrder: order.edges,
       coopPrep: order.coopPrep,
       studentType: type,
+      // Northeastern's measured conventions, OWNED by the adapter. The engine ships the same
+      // values as a fallback so it works unwired, but they are institution facts and this is
+      // where they belong — see chartCalibration.js.
+      calibration: chartCalibration,
       preferences: preferences ?? DEFAULT_PREFERENCES,
       // A repeatable course legitimately answers two cells, and merging them would
       // schedule one registration where the program wants two. `courseNorm` has

@@ -53,10 +53,8 @@
 
 import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
 import { witnessPlan } from "./witness.js";
-import {
-  termCapacity, termSlotCap, coursesInCell, SAME_REQ_PER_TERM_MAX, POOL_REACH_MIN,
-  FULL_TERM_MIN_COURSES, REAL_COURSE_SH, fullTermMinCourses,
-} from "./domains.js";
+import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
+import { DEFAULT_CALIBRATION, minCoursesFor } from "./calibration.js";
 import { unlockUniverse, unlockOfCell, isPoolCell, generatorBar } from "./search.js";
 import { unlockValues } from "./prereqDepth.js";
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
@@ -305,7 +303,7 @@ function bestProbability(plan, semTypeId, ports) {
  * Which bars an arrangement fails. Reported, and repaired where a legal move
  * exists — never scored, because a bar is not a direction.
  */
-export function checkThresholds({ plans, terms, termOf, ports, studentType, thresholds }) {
+export function checkThresholds({ plans, terms, termOf, ports, studentType, thresholds, cal = DEFAULT_CALIBRATION }) {
   const min = thresholds.minTermSH ?? ports.creditMin(studentType);
   const cap = ports.creditMax(studentType);
   const max = thresholds.maxTermSH ?? (cap - (thresholds.slackSH ?? 0));
@@ -317,7 +315,7 @@ export function checkThresholds({ plans, terms, termOf, ports, studentType, thre
     const ti = termOf.get(p.cell.id);
     if (ti == null) continue;
     load[ti] += p.cell.sh ?? 0;
-    if ((p.cell.sh ?? 0) >= REAL_COURSE_SH) big[ti] += 1;
+    if ((p.cell.sh ?? 0) >= cal.realCourseSH) big[ti] += 1;
   }
   const failures = [];
   terms.forEach((t, ti) => {
@@ -365,7 +363,7 @@ export function checkThresholds({ plans, terms, termOf, ports, studentType, thre
     //
     // Cells of under 3 SH do not count toward the four. A one-credit lab and a course
     // are not two courses, and the corpus bar is explicitly four of >= 3 SH.
-    const minCourses = fullTermMinCourses(studentType);
+    const minCourses = minCoursesFor(cal, studentType);
     if (w >= 1 && load[ti] > 0 && minCourses > 0 && big[ti] < minCourses) {
       failures.push({ kind: "full-term-under-four", term: ti,
                       label: label(t), courses: big[ti], need: minCourses });
@@ -418,7 +416,7 @@ export const DEFAULT_IMPROVE_TRIALS = 20000;
 export function improve({
   plans, terms, termOf, ports, studentType, courseMap, repeatable,
   preferences = DEFAULT_PREFERENCES, boundary, depthOf, precedence = null,
-  trialBudget = DEFAULT_IMPROVE_TRIALS, shape = null,
+  trialBudget = DEFAULT_IMPROVE_TRIALS, shape = null, cal = DEFAULT_CALIBRATION,
 }) {
   // Chain height drives the leading objective, and it is a property of the
   // precedence graph rather than of any one arrangement, so it is computed once.
@@ -433,10 +431,10 @@ export function improve({
   const cheapLegal = (assignment) =>
     !precedence || precedenceViolations(precedence, assignment).length === 0;
   // Established once, from the plan phase 1 handed over: phase 2 may never make it worse.
-  const maxThin = thinFullTerms(termOf, plans, terms, studentType);
+  const maxThin = thinFullTerms(termOf, plans, terms, studentType, cal);
   const fullLegal = (assignment) =>
     isLegal({ plans, terms, termOf: assignment, cap, courseMap, repeatable, ports, byId,
-              precedence, shape, maxThin, studentType });
+              precedence, shape, maxThin, studentType, cal });
 
   // One shared budget across every climb, so total work is bounded regardless of how
   // many objectives are ranked.
@@ -504,7 +502,7 @@ export function improve({
   // Every trade is verified by the same `fullLegal` the climber uses, so the witness,
   // precedence and availability all still hold; an unverifiable trade is skipped rather
   // than forced.
-  const traded = tradeDepth(current, { plans, terms, cap, courseMap, fullLegal });
+  const traded = tradeDepth(current, { plans, terms, cap, courseMap, fullLegal, cal });
   current = traded.termOf;
   moves += traded.moves;
 
@@ -513,7 +511,7 @@ export function improve({
   // After the trade, because a trade moves cells between terms and would otherwise undo
   // this; before the threshold repair, because a term left thin here is exactly what that
   // repair should then report. See `fillFullTerms` for why this cannot be a preference.
-  const packed = fillFullTerms(current, { plans, terms, cap, fullLegal, studentType });
+  const packed = fillFullTerms(current, { plans, terms, cap, fullLegal, studentType, cal });
   current = packed.termOf;
   moves += packed.moves;
 
@@ -522,7 +520,7 @@ export function improve({
   // Last of the three, and the order is the argument: a swap preserves each term's course
   // count exactly, so it cannot undo the fill above, while a fill moves cells between
   // terms and would undo a swap. See `swapForAvailability`.
-  const settled = swapForAvailability(current, { plans, terms, cap, ports, fullLegal });
+  const settled = swapForAvailability(current, { plans, terms, cap, ports, fullLegal, cal });
   current = settled.termOf;
   moves += settled.moves;
 
@@ -530,19 +528,19 @@ export function improve({
   //
   // Last because a threshold is a bar: satisfying it is worth giving up ranked
   // score for, and doing it first would let the ranked passes undo it.
-  const before = checkThresholds({ plans, terms, termOf: current, ports, studentType, thresholds });
+  const before = checkThresholds({ plans, terms, termOf: current, ports, studentType, thresholds, cal });
   let repaired = current;
   if (before.failures.length) {
     const res = climb(
       current,
-      (a) => -checkThresholds({ plans, terms, termOf: a, ports, studentType, thresholds }).failures.length,
+      (a) => -checkThresholds({ plans, terms, termOf: a, ports, studentType, thresholds, cal }).failures.length,
     );
     repaired = res.termOf;
     moves += res.moves;
   }
 
   const finalScores = scorePlan({ ...ctx, termOf: repaired });
-  const after = checkThresholds({ plans, terms, termOf: repaired, ports, studentType, thresholds });
+  const after = checkThresholds({ plans, terms, termOf: repaired, ports, studentType, thresholds, cal });
 
   // What each rank gave up, in its own units — so a considered trade is
   // distinguishable from a bug.
@@ -675,7 +673,7 @@ function hillClimb(start, score, cheapLegal, fullLegal, plans, terms, cap,
  *
  * @returns {{termOf: Map, moves: number, swapped: object[]}}
  */
-export function swapForAvailability(termOf, { plans, terms, cap, ports, fullLegal }) {
+export function swapForAvailability(termOf, { plans, terms, cap, ports, fullLegal, cal = DEFAULT_CALIBRATION }) {
   const prob = (id, ti) => ports.offeringProbability(id, terms[ti].semTypeId);
   /** Is this cell's answer provably offered where it sits? */
   const known = (p, ti) => {
@@ -683,7 +681,7 @@ export function swapForAvailability(termOf, { plans, terms, cap, ports, fullLega
     if (!groups?.length) return true;         // a pool always has an answer; see above
     return groups.some(g => g.every(id => (prob(id, ti) ?? 0) > 0));
   };
-  const isBig = (p) => (p.cell.sh ?? 0) >= REAL_COURSE_SH;
+  const isBig = (p) => (p.cell.sh ?? 0) >= cal.realCourseSH;
   // The buffer: unbounded pools only. A BOUNDED pool has a candidate list and therefore a
   // season constraint of its own, so spending it can move the problem rather than solve it.
   const buffers = plans.filter(p => p.candidates === null && isBig(p));
@@ -752,14 +750,14 @@ export function swapForAvailability(termOf, { plans, terms, cap, ports, fullLega
  * @returns {{termOf: Map, moves: number, filled: object[]}}
  */
 export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses = 4,
-                                        studentType = "undergraduate" }) {
+                                        studentType = "undergraduate", cal = DEFAULT_CALIBRATION }) {
   // No bar, nothing to fill. Graduate plans have no four-course convention — measured, 39%
   // of their published full terms carry zero or one course — so this pass would be moving
   // cells to satisfy a rule their own departments do not follow.
-  const minCourses = fullTermMinCourses(studentType);
+  const minCourses = minCoursesFor(cal, studentType);
   if (minCourses <= 0) return { termOf, moves: 0, filled: [] };
   let current = new Map(termOf);
-  const isBig = (p) => (p.cell.sh ?? 0) >= REAL_COURSE_SH;
+  const isBig = (p) => (p.cell.sh ?? 0) >= cal.realCourseSH;
   const big = terms.map(() => 0);
   const load = terms.map(() => 0);
   for (const p of plans) {
@@ -821,7 +819,7 @@ export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses 
  *
  * @returns {{termOf: Map, moves: number, applied: object[]}}
  */
-export function tradeDepth(termOf, { plans, terms, cap, courseMap, fullLegal }) {
+export function tradeDepth(termOf, { plans, terms, cap, courseMap, fullLegal, cal = DEFAULT_CALIBRATION }) {
   const unlockValue = unlockValues(unlockUniverse(plans), courseMap);
   const majors = majorSubjectsOf(plans, courseMap);
   const bar = generatorBar(plans, courseMap, unlockValue, majors);
@@ -858,7 +856,7 @@ export function tradeDepth(termOf, { plans, terms, cap, courseMap, fullLegal }) 
     if (!pool.domain.includes(i) || !flat.domain.includes(j)) continue;
     // The share bar is what stops "earlier" being nominal: a pool with one reachable
     // candidate is not an elective, however early it sits.
-    if ((pool.reachAt[i] ?? 1) < POOL_REACH_MIN) continue;
+    if ((pool.reachAt[i] ?? 1) < cal.poolReachMin) continue;
     const trial = new Map(current);
     trial.set(pool.cell.id, i);
     trial.set(flat.cell.id, j);
@@ -899,8 +897,8 @@ export function tradeDepth(termOf, { plans, terms, cap, courseMap, fullLegal }) 
  * then reject every move and freeze the plan unimproved. A non-increasing budget is
  * monotone — phase 2 may never make it worse, and `fillFullTerms` can still make it better.
  */
-export function thinFullTerms(assignment, plans, terms, studentType = "undergraduate") {
-  const minCourses = fullTermMinCourses(studentType);
+export function thinFullTerms(assignment, plans, terms, studentType = "undergraduate", cal = DEFAULT_CALIBRATION) {
+  const minCourses = minCoursesFor(cal, studentType);
   if (minCourses <= 0) return 0;
   const big = terms.map(() => 0);
   const any = terms.map(() => false);
@@ -908,7 +906,7 @@ export function thinFullTerms(assignment, plans, terms, studentType = "undergrad
     const ti = assignment.get(p.cell.id);
     if (ti == null) continue;
     any[ti] = true;
-    if ((p.cell.sh ?? 0) >= REAL_COURSE_SH) big[ti] += 1;
+    if ((p.cell.sh ?? 0) >= cal.realCourseSH) big[ti] += 1;
   }
   let n = 0;
   for (let t = 0; t < terms.length; t++) {
@@ -919,7 +917,7 @@ export function thinFullTerms(assignment, plans, terms, studentType = "undergrad
 }
 
 function fitsCapacity(assignment, plans, terms, cap, shape = null, maxThin = Infinity,
-                      studentType = "undergraduate") {
+                      studentType = "undergraduate", cal = DEFAULT_CALIBRATION) {
   const load = terms.map(() => 0);
   const count = terms.map(() => 0);
   // Per requirement, matching search.js. Phase 2 shares this check because a bound the
@@ -938,15 +936,16 @@ function fitsCapacity(assignment, plans, terms, cap, shape = null, maxThin = Inf
   // Every bound, or a move the search refused would be reachable by the objective.
   return load.every((sh, ti) => sh <= cap[ti])
       && count.every((n, ti) => n <= termSlotCap(terms[ti], shape))
-      && req.every(m => [...m.values()].every(n => n <= SAME_REQ_PER_TERM_MAX))
+      && req.every(m => [...m.values()].every(n => n <= cal.sameRequirementPerTermMax))
       // The four-course floor, as a non-increasing budget. See `thinFullTerms`.
-      && (maxThin === Infinity || thinFullTerms(assignment, plans, terms, studentType) <= maxThin);
+      && (maxThin === Infinity || thinFullTerms(assignment, plans, terms, studentType, cal) <= maxThin);
 }
 
 /** Full hard-constraint check, including the prereq-aware witness. */
 function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId, precedence,
-                  shape, maxThin = Infinity, studentType = "undergraduate" }) {
-  if (!fitsCapacity(termOf, plans, terms, cap, shape, maxThin, studentType)) return false;
+                  shape, maxThin = Infinity, studentType = "undergraduate",
+                  cal = DEFAULT_CALIBRATION }) {
+  if (!fitsCapacity(termOf, plans, terms, cap, shape, maxThin, studentType, cal)) return false;
   // Cheapest first: a precedence check is a map lookup, the witness is a matching.
   if (precedence && precedenceViolations(precedence, termOf).length) return false;
   const cells = plans

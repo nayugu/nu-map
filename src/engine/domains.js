@@ -36,6 +36,12 @@
 
 import { materialize } from "../core/candidateSpec.js";
 import { groupDepth, courseLevel } from "./prereqDepth.js";
+// Every institution CONVENTION below is derived from `DEFAULT_CALIBRATION` rather than
+// written twice. Extracting them into calibration.js and leaving the literals here would have
+// recreated, on the same afternoon, the duplication the extraction exists to remove — the
+// numbers would agree until someone edited one. The long provenance comments stay where a
+// reader of this file looks for them; only the VALUE has a single home.
+import { DEFAULT_CALIBRATION, minCoursesFor } from "./calibration.js";
 
 /**
  * @typedef {Object} CellPlan
@@ -87,8 +93,8 @@ export const wideAtFor = (cellCount) => cellCount + 1;
  * draws before scrolling, and 1,692 real terms exceed it. Using it as a constraint
  * would reject most of the corpus.
  */
-export const SLOT_CAP_FULL = 9;
-export const SLOT_CAP_HALF = 5;
+export const SLOT_CAP_FULL = DEFAULT_CALIBRATION.slotCapFull;
+export const SLOT_CAP_HALF = DEFAULT_CALIBRATION.slotCapHalf;
 
 /**
  * How many courses this term may hold.
@@ -131,7 +137,7 @@ export const SLOT_CAP_HALF = 5;
  * named course at all, so it cannot see a term made of three identical placeholders.
  * A metric that cannot observe the defect will report its absence.
  */
-export const SAME_REQ_PER_TERM = 2;
+export const SAME_REQ_PER_TERM = DEFAULT_CALIBRATION.sameRequirementPerTerm;
 
 /**
  * And the HARD bound, which is a different number.
@@ -146,7 +152,7 @@ export const SAME_REQ_PER_TERM = 2;
  * study terms genuinely cannot hold two per term. A preference spreads them without
  * making a taste into an infeasibility — the same lesson as the standing floor.
  */
-export const SAME_REQ_PER_TERM_MAX = 4;
+export const SAME_REQ_PER_TERM_MAX = DEFAULT_CALIBRATION.sameRequirementPerTermMax;
 
 /**
  * How much of an elective pool must be open before a term is a good place for it.
@@ -167,7 +173,7 @@ export const SAME_REQ_PER_TERM_MAX = 4;
  * term still gets placed. The standing floor and the hard elective cap both cost
  * coverage when a taste was expressed as a constraint.
  */
-export const POOL_REACH_MIN = 0.69;
+export const POOL_REACH_MIN = DEFAULT_CALIBRATION.poolReachMin;
 
 /**
  * How many courses of at least 3 SH a full fall or spring term should carry.
@@ -187,7 +193,7 @@ export const POOL_REACH_MIN = 0.69;
  * course IS 16 credits and there is no fourth course to add. Refusing a degree over a
  * rule its own department does not follow is the failure this codebase keeps paying for.
  */
-export const FULL_TERM_MIN_COURSES = 4;
+export const FULL_TERM_MIN_COURSES = DEFAULT_CALIBRATION.fullTermMinCourses;
 
 /**
  * The four-course bar is an UNDERGRADUATE convention. Graduate plans have none.
@@ -215,7 +221,7 @@ export const FULL_TERM_MIN_COURSES = 4;
  * coin flip with extra steps. Where the corpus has no rule, CHART should not invent one.
  */
 export const fullTermMinCourses = (studentType) =>
-  (studentType === "graduate" ? 0 : FULL_TERM_MIN_COURSES);
+  minCoursesFor(DEFAULT_CALIBRATION, studentType);
 
 /**
  * The credit floor at which a cell counts as one of the four.
@@ -224,7 +230,7 @@ export const fullTermMinCourses = (studentType) =>
  * four of >= 3 SH — which is 95.8%, against 97.7% for four cells of any size. The
  * difference between those two numbers is exactly the terms padded with small labs.
  */
-export const REAL_COURSE_SH = 3;
+export const REAL_COURSE_SH = DEFAULT_CALIBRATION.realCourseSH;
 
 export const termSlotCap = (term, shape = null) => {
   const full = (term?.weight ?? 1) >= 1;
@@ -329,7 +335,7 @@ export function minDepthOf(cell, { depthOf, courseMap, planDepthOf = null }) {
  * courses the degree legitimately expects. 6000 and above is doctoral: seminars,
  * candidacy, dissertation credit, and no undergraduate can register for any of it.
  */
-export const GRADUATE_ONLY_LEVEL = 6;
+export const GRADUATE_ONLY_LEVEL = DEFAULT_CALIBRATION.graduateOnlyLevel;
 
 /**
  * Drop courses this student cannot register for.
@@ -351,9 +357,10 @@ export const GRADUATE_ONLY_LEVEL = 6;
  * student, and refusing to plan the program is a worse answer than planning it with a
  * candidate set we can see is wrong.
  */
-export function registrable(candidates, studentType) {
+export function registrable(candidates, studentType, cal = DEFAULT_CALIBRATION) {
   if (candidates === null || studentType === "graduate") return candidates;
-  const ok = candidates.filter(id => (courseLevel(id) ?? 0) < GRADUATE_ONLY_LEVEL);
+  const bar = cal.graduateOnlyLevel ?? GRADUATE_ONLY_LEVEL;
+  const ok = candidates.filter(id => (courseLevel(id) ?? 0) < bar);
   return ok.length ? ok : candidates;
 }
 
@@ -365,6 +372,10 @@ export function buildDomains(cells, terms, {
   offered = () => true,
   planDepthOf = null, wideAt = wideAtFor((cells ?? []).length),
   coopPrep = null, coopBoundary = Infinity, studentType = "undergraduate",
+  // The institution's conventions. Defaulted so an existing caller is unaffected, and named
+  // `cal` at every use site so it is obvious a value came from outside rather than from a
+  // constant two hundred lines up. See calibration.js.
+  cal = DEFAULT_CALIBRATION,
 } = {}) {
   const plans = [];
   const impossible = [];
@@ -402,7 +413,7 @@ export function buildDomains(cells, terms, {
   };
 
   for (const cell of cells) {
-    const candidates = registrable(candidatesFor(cell, courseMap), studentType);
+    const candidates = registrable(candidatesFor(cell, courseMap), studentType, cal);
     const minDepth = minDepthOf(cell, { depthOf, courseMap, planDepthOf });
     const depthBoth = (id) => Math.max(depthOf(id), planDepthOf ? planDepthOf(id) : 0);
 

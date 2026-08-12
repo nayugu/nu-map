@@ -65,7 +65,7 @@
  * @property {"published"|"derived"} source
  */
 
-import { fullTermMinCourses } from "./domains.js";
+import { DEFAULT_CALIBRATION, minCoursesFor } from "./calibration.js";
 
 /** NU's calendar, as the default skeleton uses it. Injectable via `semTypes`. */
 const DEFAULT_SEM_TYPES = [
@@ -277,15 +277,15 @@ export function defaultShape({
  * one-credit lab riding along with a course is not a course, which is the same line the
  * corpus bar draws.
  */
-export function studyTerms(shape, studentType = "undergraduate") {
+export function studyTerms(shape, studentType = "undergraduate", cal = DEFAULT_CALIBRATION) {
   const terms = (shape?.terms ?? []).filter(t => !t.work);
   const fullCount = terms.filter(t => (t.weight ?? 1) >= 1 && !t.unused).length;
   // Undergraduate only: a graduate plan has no four-course bar, so there is no "surplus"
   // to define and every half term it publishes is one the department meant to use.
-  const minCourses = fullTermMinCourses(studentType);
+  const minCourses = minCoursesFor(cal, studentType);
   if (minCourses <= 0) return terms.map(t => (t.unused ? { ...t, optional: true } : t));
   const surplus = (shape?.realCourses ?? 0) - fullCount * minCourses;
-  const halvesNeeded = surplus > 0 ? Math.ceil(surplus / HALF_TERM_COURSES) : 0;
+  const halvesNeeded = surplus > 0 ? Math.ceil(surplus / cal.halfTermCourses) : 0;
 
   let halvesUsed = 0;
   return terms.map((t) => {

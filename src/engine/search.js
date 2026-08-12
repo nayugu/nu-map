@@ -61,13 +61,9 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { witnessPlan, buildContention, bipartiteMatch } from "./witness.js";
-import {
-  termCapacity, termSlotCap, coursesInCell,
-  SAME_REQ_PER_TERM, SAME_REQ_PER_TERM_MAX, POOL_REACH_MIN,
-  FULL_TERM_MIN_COURSES, REAL_COURSE_SH, fullTermMinCourses,
-} from "./domains.js";
+import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
 import { chainHeight } from "./precedence.js";
-import { HALF_TERM_COURSES } from "./shape.js";
+import { DEFAULT_CALIBRATION, minCoursesFor } from "./calibration.js";
 import { cellLevelTarget, cellLevelFloor, unlockValues } from "./prereqDepth.js";
 
 /**
@@ -259,7 +255,7 @@ export function placeCells({
   plans, terms, ports, studentType = "undergraduate", courseMap = {},
   repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, now = () => Date.now(),
-  precedence = null, maxRestarts = 40, shape = null,
+  precedence = null, maxRestarts = 40, shape = null, cal = DEFAULT_CALIBRATION,
 }) {
   const deadline = now() + timeBudgetMs;
   // ── The fallback tier gets a RESERVED share, not the leftovers ────
@@ -336,7 +332,7 @@ export function placeCells({
     const r = attemptPlacement({
       plans: working, terms, ports, studentType, courseMap, repeatable,
       nodeBudget: Math.min(perAttempt, Math.max(1, strictNodes - totalNodes)),
-      precedence, now, shape,
+      precedence, now, shape, cal,
       // The GLOBAL deadline only. Each attempt used to get a time slice as well, and that
       // was the last source of non-determinism: how many nodes an attempt explored depended
       // on machine load, so `business_administration_and_public_health_bs` returned
@@ -424,7 +420,7 @@ export function placeCells({
     const r = attemptPlacement({
       plans: working, terms, ports, studentType, courseMap, repeatable,
       nodeBudget: Math.max(1, nodeBudget - totalNodes),
-      precedence, now, shape, deadline,
+      precedence, now, shape, deadline, cal,
       enforceCardinality: false,
     });
     totalNodes += r.nodes;
@@ -447,7 +443,7 @@ export function placeCells({
 function attemptPlacement({
   plans, terms, ports, studentType, courseMap,
   repeatable, nodeBudget, deadline, now, precedence, shape = null,
-  enforceCardinality = true,
+  enforceCardinality = true, cal = DEFAULT_CALIBRATION,
 }) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
   const slotCap = terms.map(t => termSlotCap(t, shape));
@@ -594,7 +590,7 @@ function attemptPlacement({
   // Electives all legal from term 4 onwards all take term 4, which is exactly what
   // CS+Math did. It must NOT outrank the standing floor, which is about legality-in-
   // practice rather than taste.
-  const crowded = (plan, ti) => (reqCount(ti, plan.cell) >= SAME_REQ_PER_TERM ? 1 : 0);
+  const crowded = (plan, ti) => (reqCount(ti, plan.cell) >= cal.sameRequirementPerTerm ? 1 : 0);
 
   /**
    * A full fall or spring still short of four real courses wants this cell; a term that
@@ -697,7 +693,7 @@ function attemptPlacement({
       // So a pool goes as EARLY as its share allows, not as early as it is legal. The
       // share is what stops that being nominal — see POOL_REACH_MIN.
       if (isPool(plan)) {
-        const thin = (ti) => ((plan.reachAt?.[ti] ?? 1) < POOL_REACH_MIN ? 1 : 0);
+        const thin = (ti) => ((plan.reachAt?.[ti] ?? 1) < cal.poolReachMin ? 1 : 0);
         return [...plan.domain].sort((a, b) =>
           byOptional(a, b) || thin(a) - thin(b)
           || crowded(plan, a) - crowded(plan, b)
@@ -849,11 +845,11 @@ function attemptPlacement({
   // `suffix[i][t]` counts the big cells at or after position i whose domain contains t.
   // Precomputed once per attempt because domains do not move inside one, so maintaining it
   // costs nothing per node.
-  const bigCell = (p) => (p.cell.sh ?? 0) >= REAL_COURSE_SH;
+  const bigCell = (p) => (p.cell.sh ?? 0) >= cal.realCourseSH;
   // Undergraduate only. A master's has no four-course convention — measured, 39% of published
   // graduate full terms carry zero or one course, and four 4 SH courses is its ENTIRE 16 SH
   // envelope — so enforcing it there imposes a habit those degrees do not have.
-  const minCourses = fullTermMinCourses(studentType);
+  const minCourses = minCoursesFor(cal, studentType);
 
   // ── The four-course rule has an UPPER bound too, and it is derivable ──
   //
@@ -894,7 +890,7 @@ function attemptPlacement({
     if (surplus < 0 || minCourses <= 0) return Infinity;
     return (t.weight ?? 1) >= 1
       ? minCourses + surplus                 // a full term may take extra, up to the surplus
-      : Math.min(HALF_TERM_COURSES, surplus); // a summer gets only what is left over
+      : Math.min(cal.halfTermCourses, surplus); // a summer gets only what is left over
   });
   const suffix = new Array(order.length + 1);
   suffix[order.length] = new Array(terms.length).fill(0);
@@ -1065,7 +1061,7 @@ function attemptPlacement({
       // Eleven courses in one term fits inside 19 credits and is not a plan anyone
       // would follow. Bounded by the worst any published plan does.
       if (countIn[ti] + coursesInCell(cell) > slotCap[ti]) continue;
-      if (reqCount(ti, cell) + 1 > SAME_REQ_PER_TERM_MAX) continue;
+      if (reqCount(ti, cell) + 1 > cal.sameRequirementPerTermMax) continue;
       // The derived per-term ceiling on real courses. See `bigCap`: where the arithmetic
       // is exactly tight this forbids the five-in-a-term branches that are provably dead.
       if (enforceCardinality && bigCell(plan) && bigIn[ti] + 1 > bigCap[ti]) continue;
@@ -1078,7 +1074,7 @@ function attemptPlacement({
       termOf.set(cell.id, ti);
       loadSH[ti] += cell.sh ?? 0;
       countIn[ti] += coursesInCell(cell);
-      if ((cell.sh ?? 0) >= REAL_COURSE_SH) bigIn[ti] += 1;
+      if ((cell.sh ?? 0) >= cal.realCourseSH) bigIn[ti] += 1;
       reqIn[ti].set(reqKey(cell), reqCount(ti, cell) + 1);
 
       // The cardinality bound, before the witness because counting is free and a
@@ -1090,7 +1086,7 @@ function attemptPlacement({
         termOf.delete(cell.id);
         loadSH[ti] -= cell.sh ?? 0;
         countIn[ti] -= coursesInCell(cell);
-        if ((cell.sh ?? 0) >= REAL_COURSE_SH) bigIn[ti] -= 1;
+        if ((cell.sh ?? 0) >= cal.realCourseSH) bigIn[ti] -= 1;
         reqIn[ti].set(reqKey(cell), reqCount(ti, cell) - 1);
         continue;
       }
@@ -1102,7 +1098,7 @@ function attemptPlacement({
         termOf.delete(cell.id);
         loadSH[ti] -= cell.sh ?? 0;
         countIn[ti] -= coursesInCell(cell);
-        if ((cell.sh ?? 0) >= REAL_COURSE_SH) bigIn[ti] -= 1;
+        if ((cell.sh ?? 0) >= cal.realCourseSH) bigIn[ti] -= 1;
         reqIn[ti].set(reqKey(cell), reqCount(ti, cell) - 1);
         continue;
       }
@@ -1123,7 +1119,7 @@ function attemptPlacement({
       termOf.delete(cell.id);
       loadSH[ti] -= cell.sh ?? 0;
       countIn[ti] -= coursesInCell(cell);
-      if ((cell.sh ?? 0) >= REAL_COURSE_SH) bigIn[ti] -= 1;
+      if ((cell.sh ?? 0) >= cal.realCourseSH) bigIn[ti] -= 1;
       reqIn[ti].set(reqKey(cell), reqCount(ti, cell) - 1);
     }
     return false;
