@@ -115,6 +115,31 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
               {t("chart.explain.complete.excess", { over: over.over, total: over.total })}
             </p>
           )}
+          {/* ── The one place completeness is NOT true by construction ──
+            *
+            * Section 1 claims every requirement is covered, so the exception belongs HERE
+            * rather than in section 4 with the diagnostics. A requirement naming a course the
+            * catalog no longer offers is a fact the student has to act on — they will need
+            * their advisor to say what satisfies it now — and burying it under "limits"
+            * would make this a quieter version of the failure the refusal gate prevents.
+            *
+            * Styled as a warning for the same reason: the plan holds a slot of the right size
+            * in the right term, so nothing LOOKS wrong, which is exactly why it has to say so.
+            */}
+          {(report.unschedulable ?? []).length > 0 && (
+            <div style={{
+              margin: "8px 0 0", padding: "7px 9px", borderRadius: 6,
+              background: "var(--warn-bg)", border: "1px solid var(--warn-border)",
+              color: "var(--warn)", fontWeight: 600,
+            }}>
+              {t("chart.explain.complete.unschedulable", {
+                n: report.unschedulable.length,
+                courses: report.unschedulable
+                  .map(u => (u.courses ?? []).join(" / ") || u.title)
+                  .filter(Boolean).join(", "),
+              })}
+            </div>
+          )}
         </Section>
 
         {/* ── 2. Legality ────────────────────────────────────────── */}

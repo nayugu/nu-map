@@ -137,6 +137,7 @@ export const strings = {
   "chart.explain.complete.cells": "cards, each one a requirement this degree states",
   "chart.explain.complete.credits": "credits scheduled, against the {required} this degree requires",
   "chart.explain.complete.excess": "This program’s own requirements total {over} credits more than the {total} it states as the degree. The plan schedules all of them — worth raising with an advisor.",
+  "chart.explain.complete.unschedulable": "{n} requirement(s) name a course the catalog no longer offers ({courses}). The plan keeps the slot, but ask an advisor what satisfies it now.",
 
   "chart.explain.legal.h":    "Can you actually register for it?",
   "chart.explain.legal.p":    "Four things are checked for every card, and a plan that fails any of them is never shown:",

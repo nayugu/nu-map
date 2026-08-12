@@ -132,6 +132,7 @@ export const strings = {
   "chart.explain.complete.cells": "tarjetas, cada una un requisito que exige esta titulación",
   "chart.explain.complete.credits": "créditos programados, frente a los {required} que exige la titulación",
   "chart.explain.complete.excess": "Los requisitos de este programa suman {over} créditos más que los {total} que declara como titulación. El plan los programa todos: conviene consultarlo con un asesor.",
+  "chart.explain.complete.unschedulable": "{n} requisito(s) nombran un curso que el catálogo ya no ofrece ({courses}). El plan conserva el hueco, pero pregunta a un asesor qué lo satisface ahora.",
   "chart.explain.legal.h": "¿Puedes matricularte realmente?",
   "chart.explain.legal.p": "Se comprueban cuatro cosas en cada tarjeta, y un plan que falle alguna nunca se muestra:",
   "chart.explain.legal.prereq": "todo prerrequisito registrado en el catálogo va antes",

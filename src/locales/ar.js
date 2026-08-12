@@ -132,6 +132,7 @@ export const strings = {
   "chart.explain.complete.cells": "بطاقة، كل واحدة متطلب تنص عليه هذه الدرجة",
   "chart.explain.complete.credits": "ساعة مجدولة، مقابل {required} تشترطها الدرجة",
   "chart.explain.complete.excess": "مجموع متطلبات هذا البرنامج يزيد {over} ساعة عن الـ{total} المعلنة للدرجة. الخطة تجدولها جميعًا — يستحسن مراجعة المرشد الأكاديمي.",
+  "chart.explain.complete.unschedulable": "{n} من المتطلبات تسمّي مقررًا لم يعد الدليل يطرحه ({courses}). الخطة تحتفظ بالمكان، لكن اسأل المرشد الأكاديمي عمّا يستوفيه الآن.",
   "chart.explain.legal.h": "هل يمكنك التسجيل فيها فعلًا؟",
   "chart.explain.legal.p": "تُفحص أربعة أمور لكل بطاقة، وأي خطة تخالف واحدًا منها لا تُعرض أبدًا:",
   "chart.explain.legal.prereq": "كل متطلب سابق مسجَّل في الدليل يأتي قبلها",

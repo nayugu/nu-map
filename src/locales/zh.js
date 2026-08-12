@@ -132,6 +132,7 @@ export const strings = {
   "chart.explain.complete.cells": "张卡片，每张对应本学位的一条要求",
   "chart.explain.complete.credits": "已安排学分，本学位要求 {required} 学分",
   "chart.explain.complete.excess": "该专业各部分要求合计比其声明的 {total} 学分多出 {over} 学分。方案已全部安排——建议与导师确认。",
+  "chart.explain.complete.unschedulable": "有 {n} 项要求指定了课程目录已不再开设的课程（{courses}）。方案保留了该位置，但请向导师确认现在由什么来满足它。",
   "chart.explain.legal.h": "真的能选上课吗？",
   "chart.explain.legal.p": "每张卡片都会检查四项，任何一项不通过的方案都不会显示：",
   "chart.explain.legal.prereq": "课程目录记载的先修课都排在前面",

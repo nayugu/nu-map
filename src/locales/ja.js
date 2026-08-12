@@ -133,6 +133,7 @@ export const strings = {
   "chart.explain.complete.cells": "枚のカード。それぞれがこの学位の要件です",
   "chart.explain.complete.credits": "単位を配置（この学位が求めるのは {required} 単位）",
   "chart.explain.complete.excess": "このプログラムの要件合計は、学位として掲げる {total} 単位より {over} 単位多くなっています。プランはすべてを配置しています——アドバイザーに確認する価値があります。",
+  "chart.explain.complete.unschedulable": "{n} 件の要件が、カタログにもう開講されていない科目を指定しています（{courses}）。プランは枠を残していますが、何がこれを満たすかはアドバイザーに確認してください。",
   "chart.explain.legal.h": "実際に履修登録できますか？",
   "chart.explain.legal.p": "各カードについて4点を確認し、1つでも満たさないプランは表示されません：",
   "chart.explain.legal.prereq": "カタログに記載された前提科目はすべて先に配置されている",

@@ -132,6 +132,7 @@ export const strings = {
   "chart.explain.complete.cells": "개의 카드, 각각 이 학위가 요구하는 요건입니다",
   "chart.explain.complete.credits": "학점 배치 (이 학위가 요구하는 학점은 {required})",
   "chart.explain.complete.excess": "이 프로그램의 요건 합계가 학위로 명시한 {total}학점보다 {over}학점 많습니다. 계획은 전부 배치했으니 지도교수와 확인해 보세요.",
+  "chart.explain.complete.unschedulable": "{n}개 요건이 카탈로그에 더 이상 개설되지 않는 과목을 지정합니다({courses}). 계획은 자리를 남겨 두었으니, 지금 무엇으로 충족되는지 지도교수에게 확인하세요.",
   "chart.explain.legal.h": "실제로 수강 신청할 수 있나요?",
   "chart.explain.legal.p": "모든 카드에 대해 네 가지를 확인하며, 하나라도 어기는 계획은 표시하지 않습니다:",
   "chart.explain.legal.prereq": "요람에 기재된 선수과목이 모두 앞에 옵니다",

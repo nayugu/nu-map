@@ -132,6 +132,7 @@ export const strings = {
   "chart.explain.complete.cells": "cartes, chacune une exigence de ce diplôme",
   "chart.explain.complete.credits": "crédits programmés, sur les {required} exigés par le diplôme",
   "chart.explain.complete.excess": "Les exigences de ce programme totalisent {over} crédits de plus que les {total} annoncés pour le diplôme. Le plan les programme toutes — à signaler à un conseiller.",
+  "chart.explain.complete.unschedulable": "{n} exigence(s) nomment un cours que le catalogue ne propose plus ({courses}). Le plan garde la place, mais demandez à un conseiller ce qui la remplit désormais.",
   "chart.explain.legal.h": "Pouvez‑vous réellement vous y inscrire ?",
   "chart.explain.legal.p": "Quatre points sont vérifiés pour chaque carte, et un plan qui en échoue un n’est jamais affiché :",
   "chart.explain.legal.prereq": "tout prérequis inscrit au catalogue vient avant",
