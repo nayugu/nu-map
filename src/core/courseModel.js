@@ -52,6 +52,35 @@ export function extractEdges(courseId, prereqs, coreqs) {
   return edges;
 }
 
+/**
+ * The courses that must move with `id`, because they must be taken together.
+ *
+ * Symmetric on purpose: 19 of the corpus's corequisite pairs are declared on
+ * one side only (ARCH 1310 names ARCH 1311; ARCH 1311 names nothing), and a
+ * one-way rule would carry the partner in one drag direction and abandon it in
+ * the other.
+ *
+ * Extracted because every drag handler needs it and each had its own copy of
+ * the same filter/map/dedupe. Copies are how the swap path came to carry the
+ * dragged card's partners and not the displaced card's — one of them was
+ * simply never written.
+ *
+ * @param {Array}  edges     all graph edges (`allEdges`)
+ * @param {string} id        the card being moved
+ * @param {string[]} exclude ids already spoken for by another group
+ */
+export function coreqPartnersOf(edges, id, exclude = []) {
+  if (!id) return [];
+  const skip = new Set([id, ...exclude]);
+  const out = new Set();
+  for (const e of edges ?? []) {
+    if (e.type !== "corequisite") continue;
+    const other = e.from === id ? e.to : e.to === id ? e.from : null;
+    if (other && !skip.has(other)) out.add(other);
+  }
+  return [...out];
+}
+
 // ── Offering helpers ─────────────────────────────────────────────
 
 /**

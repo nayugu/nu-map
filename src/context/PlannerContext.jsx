@@ -12,7 +12,7 @@
 import { createContext, useContext, useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
-import { extractEdges } from "../core/courseModel.js";
+import { extractEdges, coreqPartnersOf } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
@@ -2238,13 +2238,25 @@ export function PlannerProvider({ children }) {
     const targetSemType = SEMESTERS.find(s => s.id === targetSemId)?.type;
 
     // Always carry all coreq partners of the dragged course
-    const coreqPartners = [...new Set(
-      allEdges
-        .filter(e2 => e2.type === "corequisite" && (e2.from === dragId || e2.to === dragId))
-        .map(e2 => e2.from === dragId ? e2.to : e2.from)
-        .filter(cid => cid !== dragId)
-    )];
+    const coreqPartners = coreqPartnersOf(allEdges, dragId);
     const allMoving = [dragId, ...coreqPartners];
+
+    // ── And the DISPLACED card carries its own ──────────────────────
+    //
+    // Dropping onto an occupied card in another term is a SWAP: the target
+    // goes back to the semester the dragged card left. It was the only card
+    // in the app that moved semester without its corequisites — so dragging
+    // CS 3500 onto CS 3000 sent CS 3000 across the board and left CS 3001
+    // behind, a coreq violation created by the very rule that exists to
+    // prevent them. Every other path moves one card in one direction, which
+    // is why this hid: the bug needed a target that was both occupied and in
+    // a different term.
+    //
+    // The dragged card's group wins any overlap. If the two cards are each
+    // other's partners they are already in `allMoving` and must not be split
+    // apart by being sent in opposite directions.
+    const targetPartners = coreqPartnersOf(allEdges, targetId, allMoving);
+    const allSwapped = [targetId, ...targetPartners];
 
     if (targetSemType === "special") {
       // Append to special/incoming sem — carry coreqs along
@@ -2271,18 +2283,27 @@ export function PlannerProvider({ children }) {
       setPlacements(p => {
         const n = { ...p, [dragId]: targetSemId, [targetId]: fromSem };
         coreqPartners.forEach(cid => { n[cid] = targetSemId; });
+        // After the dragged group, so an id claimed by both lands with the
+        // card that was actually dragged.
+        targetPartners.forEach(cid => { n[cid] = fromSem; });
         return n;
       });
       setSemOrders(prev => {
         const next = { ...prev };
-        // nf: remove dragId+coreqs, insert targetId where dragId was
-        const nf = fromOrder.filter(c => !allMoving.includes(c));
-        nf.splice(Math.min(fi, nf.length), 0, targetId);
-        // nt: remove targetId, insert dragId+coreqs where targetId was
-        const nt = toOrder.filter(c => c !== targetId);
+        // nf: remove dragId+coreqs, insert targetId+its coreqs where dragId was
+        const nf = fromOrder.filter(c => !allMoving.includes(c) && !allSwapped.includes(c));
+        nf.splice(Math.min(fi, nf.length), 0, ...allSwapped);
+        // nt: remove targetId+its coreqs, insert dragId+coreqs where it was
+        const nt = toOrder.filter(c => !allSwapped.includes(c));
         nt.splice(Math.min(ti, nt.length), 0, dragId, ...coreqPartners);
-        // Remove coreqs from any other sems they were in
+        // Remove either group from any OTHER sem it was in — a partner does
+        // not have to have been sitting with the card it belongs to.
         coreqPartners.forEach(cid => {
+          const cOld = placements[cid];
+          if (cOld && cOld !== fromSem && cOld !== targetSemId)
+            next[cOld] = (next[cOld] || []).filter(x => x !== cid);
+        });
+        targetPartners.forEach(cid => {
           const cOld = placements[cid];
           if (cOld && cOld !== fromSem && cOld !== targetSemId)
             next[cOld] = (next[cOld] || []).filter(x => x !== cid);
