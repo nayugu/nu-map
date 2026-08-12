@@ -55,7 +55,7 @@ import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
 import { witnessPlan } from "./witness.js";
 import {
   termCapacity, termSlotCap, coursesInCell, SAME_REQ_PER_TERM_MAX, POOL_REACH_MIN,
-  FULL_TERM_MIN_COURSES, REAL_COURSE_SH,
+  FULL_TERM_MIN_COURSES, REAL_COURSE_SH, fullTermMinCourses,
 } from "./domains.js";
 import { unlockUniverse, unlockOfCell, isPoolCell, generatorBar } from "./search.js";
 import { unlockValues } from "./prereqDepth.js";
@@ -365,9 +365,10 @@ export function checkThresholds({ plans, terms, termOf, ports, studentType, thre
     //
     // Cells of under 3 SH do not count toward the four. A one-credit lab and a course
     // are not two courses, and the corpus bar is explicitly four of >= 3 SH.
-    if (w >= 1 && load[ti] > 0 && big[ti] < FULL_TERM_MIN_COURSES) {
+    const minCourses = fullTermMinCourses(studentType);
+    if (w >= 1 && load[ti] > 0 && minCourses > 0 && big[ti] < minCourses) {
       failures.push({ kind: "full-term-under-four", term: ti,
-                      label: label(t), courses: big[ti], need: FULL_TERM_MIN_COURSES });
+                      label: label(t), courses: big[ti], need: minCourses });
     }
   });
   return { failures, load };
@@ -432,10 +433,10 @@ export function improve({
   const cheapLegal = (assignment) =>
     !precedence || precedenceViolations(precedence, assignment).length === 0;
   // Established once, from the plan phase 1 handed over: phase 2 may never make it worse.
-  const maxThin = thinFullTerms(termOf, plans, terms);
+  const maxThin = thinFullTerms(termOf, plans, terms, studentType);
   const fullLegal = (assignment) =>
     isLegal({ plans, terms, termOf: assignment, cap, courseMap, repeatable, ports, byId,
-              precedence, shape, maxThin });
+              precedence, shape, maxThin, studentType });
 
   // One shared budget across every climb, so total work is bounded regardless of how
   // many objectives are ranked.
@@ -512,7 +513,7 @@ export function improve({
   // After the trade, because a trade moves cells between terms and would otherwise undo
   // this; before the threshold repair, because a term left thin here is exactly what that
   // repair should then report. See `fillFullTerms` for why this cannot be a preference.
-  const packed = fillFullTerms(current, { plans, terms, cap, fullLegal });
+  const packed = fillFullTerms(current, { plans, terms, cap, fullLegal, studentType });
   current = packed.termOf;
   moves += packed.moves;
 
@@ -750,7 +751,13 @@ export function swapForAvailability(termOf, { plans, terms, cap, ports, fullLega
  *
  * @returns {{termOf: Map, moves: number, filled: object[]}}
  */
-export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses = 4 }) {
+export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses = 4,
+                                        studentType = "undergraduate" }) {
+  // No bar, nothing to fill. Graduate plans have no four-course convention — measured, 39%
+  // of their published full terms carry zero or one course — so this pass would be moving
+  // cells to satisfy a rule their own departments do not follow.
+  const minCourses = fullTermMinCourses(studentType);
+  if (minCourses <= 0) return { termOf, moves: 0, filled: [] };
   let current = new Map(termOf);
   const isBig = (p) => (p.cell.sh ?? 0) >= REAL_COURSE_SH;
   const big = terms.map(() => 0);
@@ -773,7 +780,7 @@ export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses 
       // is not enrolled in, which is a different thing and not this rule's business.
       if (w < 1 || load[t] === 0) continue;
 
-      while (big[t] < FULL_TERM_MIN_COURSES) {
+      while (big[t] < minCourses) {
         let donor = null;
         // `plans` order is deterministic, so the same input yields the same plan.
         for (const p of plans) {
@@ -781,7 +788,7 @@ export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses 
           if (from == null || from === t || !isBig(p)) continue;
           if (!p.domain.includes(t)) continue;
           // Never solve one thin term by creating another.
-          if ((terms[from].weight ?? 1) >= 1 && big[from] <= FULL_TERM_MIN_COURSES) continue;
+          if ((terms[from].weight ?? 1) >= 1 && big[from] <= minCourses) continue;
           if (load[t] + (p.cell.sh ?? 0) > cap[t]) continue;
           const trial = new Map(current);
           trial.set(p.cell.id, t);
@@ -892,7 +899,9 @@ export function tradeDepth(termOf, { plans, terms, cap, courseMap, fullLegal }) 
  * then reject every move and freeze the plan unimproved. A non-increasing budget is
  * monotone — phase 2 may never make it worse, and `fillFullTerms` can still make it better.
  */
-export function thinFullTerms(assignment, plans, terms) {
+export function thinFullTerms(assignment, plans, terms, studentType = "undergraduate") {
+  const minCourses = fullTermMinCourses(studentType);
+  if (minCourses <= 0) return 0;
   const big = terms.map(() => 0);
   const any = terms.map(() => false);
   for (const p of plans) {
@@ -904,12 +913,13 @@ export function thinFullTerms(assignment, plans, terms) {
   let n = 0;
   for (let t = 0; t < terms.length; t++) {
     if ((terms[t].weight ?? 1) < 1 || !any[t]) continue;
-    if (big[t] < FULL_TERM_MIN_COURSES) n += 1;
+    if (big[t] < minCourses) n += 1;
   }
   return n;
 }
 
-function fitsCapacity(assignment, plans, terms, cap, shape = null, maxThin = Infinity) {
+function fitsCapacity(assignment, plans, terms, cap, shape = null, maxThin = Infinity,
+                      studentType = "undergraduate") {
   const load = terms.map(() => 0);
   const count = terms.map(() => 0);
   // Per requirement, matching search.js. Phase 2 shares this check because a bound the
@@ -930,13 +940,13 @@ function fitsCapacity(assignment, plans, terms, cap, shape = null, maxThin = Inf
       && count.every((n, ti) => n <= termSlotCap(terms[ti], shape))
       && req.every(m => [...m.values()].every(n => n <= SAME_REQ_PER_TERM_MAX))
       // The four-course floor, as a non-increasing budget. See `thinFullTerms`.
-      && (maxThin === Infinity || thinFullTerms(assignment, plans, terms) <= maxThin);
+      && (maxThin === Infinity || thinFullTerms(assignment, plans, terms, studentType) <= maxThin);
 }
 
 /** Full hard-constraint check, including the prereq-aware witness. */
 function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId, precedence,
-                  shape, maxThin = Infinity }) {
-  if (!fitsCapacity(termOf, plans, terms, cap, shape, maxThin)) return false;
+                  shape, maxThin = Infinity, studentType = "undergraduate" }) {
+  if (!fitsCapacity(termOf, plans, terms, cap, shape, maxThin, studentType)) return false;
   // Cheapest first: a precedence check is a map lookup, the witness is a matching.
   if (precedence && precedenceViolations(precedence, termOf).length) return false;
   const cells = plans

@@ -64,7 +64,7 @@ import { witnessPlan, buildContention, bipartiteMatch } from "./witness.js";
 import {
   termCapacity, termSlotCap, coursesInCell,
   SAME_REQ_PER_TERM, SAME_REQ_PER_TERM_MAX, POOL_REACH_MIN,
-  FULL_TERM_MIN_COURSES, REAL_COURSE_SH,
+  FULL_TERM_MIN_COURSES, REAL_COURSE_SH, fullTermMinCourses,
 } from "./domains.js";
 import { chainHeight } from "./precedence.js";
 import { HALF_TERM_COURSES } from "./shape.js";
@@ -626,7 +626,7 @@ function attemptPlacement({
    */
   const underFilled = (ti) => {
     if ((terms[ti].weight ?? 1) < 1) return 1;      // a half term cannot satisfy the rule
-    return bigIn[ti] < FULL_TERM_MIN_COURSES ? 0 : 1;
+    return bigIn[ti] < minCourses ? 0 : 1;
   };
 
   /**
@@ -850,6 +850,10 @@ function attemptPlacement({
   // Precomputed once per attempt because domains do not move inside one, so maintaining it
   // costs nothing per node.
   const bigCell = (p) => (p.cell.sh ?? 0) >= REAL_COURSE_SH;
+  // Undergraduate only. A master's has no four-course convention — measured, 39% of published
+  // graduate full terms carry zero or one course, and four 4 SH courses is its ENTIRE 16 SH
+  // envelope — so enforcing it there imposes a habit those degrees do not have.
+  const minCourses = fullTermMinCourses(studentType);
 
   // ── The four-course rule has an UPPER bound too, and it is derivable ──
   //
@@ -883,13 +887,13 @@ function attemptPlacement({
   // The right statement: the full terms have a floor and the summers only get the SURPLUS.
   const fullCount = terms.filter(t => (t.weight ?? 1) >= 1).length;
   const realTotal = plans.filter(bigCell).length;
-  const surplus = realTotal - FULL_TERM_MIN_COURSES * fullCount;
+  const surplus = realTotal - minCourses * fullCount;
   const bigCap = terms.map((t) => {
     // Not enough courses to give every full term four: the rule is unsatisfiable for this
     // shape, so no ceiling is imposed and the relaxed tier plans anyway.
-    if (surplus < 0) return Infinity;
+    if (surplus < 0 || minCourses <= 0) return Infinity;
     return (t.weight ?? 1) >= 1
-      ? FULL_TERM_MIN_COURSES + surplus       // a full term may take extra, up to the surplus
+      ? minCourses + surplus                 // a full term may take extra, up to the surplus
       : Math.min(HALF_TERM_COURSES, surplus); // a summer gets only what is left over
   });
   const suffix = new Array(order.length + 1);
@@ -908,14 +912,14 @@ function attemptPlacement({
    * term holds one course it is committed to being used, and the bar applies.
    */
   const canStillFill = (nextIndex) => {
-    if (!enforceCardinality) return true;
+    if (!enforceCardinality || minCourses <= 0) return true;
     const possible = suffix[nextIndex];
     let totalNeed = 0;
     const needing = [];
     for (let t = 0; t < terms.length; t++) {
       if ((terms[t].weight ?? 1) < 1) continue;         // a half term holds two, not four
       if (bigIn[t] === 0) continue;                     // not in use; may stay that way
-      const need = FULL_TERM_MIN_COURSES - bigIn[t];
+      const need = minCourses - bigIn[t];
       if (need <= 0) continue;
       if (need > possible[t]) return false;
       totalNeed += need;

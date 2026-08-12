@@ -135,7 +135,7 @@ export function generatePlan({
   // fall and spring at four. Counted here because the shape does not know the cells.
   const realCourses = cells.filter(c => (c.sh ?? 0) >= REAL_COURSE_SH).length;
   const layout = (sh) => {
-    const ts = studyTerms({ ...sh, realCourses });
+    const ts = studyTerms({ ...sh, realCourses }, studentType);
     const { plans, impossible } = buildDomains(cells, ts, {
       courseMap, depthOf: depth.depthOf,
       planDepthOf: precedence.planDepthOf,

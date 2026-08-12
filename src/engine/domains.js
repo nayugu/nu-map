@@ -190,6 +190,34 @@ export const POOL_REACH_MIN = 0.69;
 export const FULL_TERM_MIN_COURSES = 4;
 
 /**
+ * The four-course bar is an UNDERGRADUATE convention. Graduate plans have none.
+ *
+ * MEASURED separately, and the two corpora are not comparable:
+ *
+ *                        undergrad          graduate
+ *   median courses >=3 SH        4                 2
+ *   share with >= 4          95.8%             16.4%
+ *   terms carrying ZERO    26 / 3941        129 / 329
+ *   median credits              17                 8
+ *
+ * 3,941 undergraduate full terms cluster hard on exactly four; 329 graduate ones do not
+ * cluster at all — 39% carry zero or one course, which is what a thesis or dissertation term
+ * looks like, and a master's 16 SH cap makes four 4 SH courses the ENTIRE envelope rather
+ * than a comfortable load.
+ *
+ * So applying it to a master's was simply wrong, and it showed: the hard-rule gate reported
+ * 20% of full terms "thin" until graduate programs were separated out, and every worst case
+ * it named was one — `biotechnology_ms`, `urban_studies_graduate_certificate`. The engine was
+ * enforcing an undergraduate habit on degrees that do not have it, which both forces a
+ * maximal load and makes CHART report a defect where the departments agree with it.
+ *
+ * Zero, not two. Two would cover 54.4% of graduate terms, which is not a convention; it is a
+ * coin flip with extra steps. Where the corpus has no rule, CHART should not invent one.
+ */
+export const fullTermMinCourses = (studentType) =>
+  (studentType === "graduate" ? 0 : FULL_TERM_MIN_COURSES);
+
+/**
  * The credit floor at which a cell counts as one of the four.
  *
  * A one-credit lab and a course are not two courses, and the corpus bar is explicitly

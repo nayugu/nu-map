@@ -65,7 +65,7 @@
  * @property {"published"|"derived"} source
  */
 
-import { FULL_TERM_MIN_COURSES } from "./domains.js";
+import { fullTermMinCourses } from "./domains.js";
 
 /** NU's calendar, as the default skeleton uses it. Injectable via `semTypes`. */
 const DEFAULT_SEM_TYPES = [
@@ -277,10 +277,14 @@ export function defaultShape({
  * one-credit lab riding along with a course is not a course, which is the same line the
  * corpus bar draws.
  */
-export function studyTerms(shape) {
+export function studyTerms(shape, studentType = "undergraduate") {
   const terms = (shape?.terms ?? []).filter(t => !t.work);
   const fullCount = terms.filter(t => (t.weight ?? 1) >= 1 && !t.unused).length;
-  const surplus = (shape?.realCourses ?? 0) - fullCount * FULL_TERM_MIN_COURSES;
+  // Undergraduate only: a graduate plan has no four-course bar, so there is no "surplus"
+  // to define and every half term it publishes is one the department meant to use.
+  const minCourses = fullTermMinCourses(studentType);
+  if (minCourses <= 0) return terms.map(t => (t.unused ? { ...t, optional: true } : t));
+  const surplus = (shape?.realCourses ?? 0) - fullCount * minCourses;
   const halvesNeeded = surplus > 0 ? Math.ceil(surplus / HALF_TERM_COURSES) : 0;
 
   let halvesUsed = 0;
