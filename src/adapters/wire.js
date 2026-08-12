@@ -59,6 +59,7 @@ const KNOWN_PORTS = new Set([
   "plannerAction",  // driving port — external actors propose and apply plan changes
   "aiAssistant",    // driven port  — app pushes plan context to an AI assistant
   "shareRelay",     // driven port  — one-shot share-by-code plan relay
+  "planGenerator",  // driven port  — generates a Sample Plan of Study (CHART)
 ]);
 
 /**

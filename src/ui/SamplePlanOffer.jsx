@@ -114,9 +114,17 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   // program that publishes nothing.
   const hasSamplePlan = !!path && !!majorRequirements.hasSamplePlan?.(path, isGrad);
 
+  // Its other half, and declared HERE for a reason: `offer` below reads it, and having
+  // it further down the file put it in the temporal dead zone. The component threw
+  // `Cannot access 'canGenerate' before initialization` on every render with a program
+  // selected — which the build cannot see and no test caught, because the page loads
+  // perfectly until something IS selected.
+  const canGenerate = !!path && !!planGenerator?.canGenerate?.(path, isGrad, programData);
+
   useEffect(() => {
     setPlans(null); setVariantIdx(0); setJustDid(null);
     setGen(null); setGenBusy(false); setShowWhy(false);
+    startedRef.current = null;
     // Back to the catalog when the program changes: a source choice is about the
     // program in front of you, not a standing preference, and silently generating
     // for the next program would spend work nobody asked for.
@@ -144,11 +152,28 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   const years = Math.round(((planGradYear * 2 + (planGradSem === "fall" ? 1 : 0)) -
                             (planEntYear  * 2 + (planEntSem  === "fall" ? 1 : 0)) + 1) / 2);
   const catalogVariants = useMemo(() => variantsFor(plans ?? [], { years }), [plans, years]);
-  const canGenerate = !!planGenerator?.canGenerate?.(path, isGrad, programData);
 
   // Generated on demand, once per program, and only for the source actually chosen.
+  //
+  // ── The guard is a REF, not the state it sets ─────────────────────
+  //
+  // The first version had `gen` and `genBusy` in this effect's dependency array and
+  // also set them, which deadlocks: the effect starts, sets `genBusy`, that change
+  // re-runs the effect, the CLEANUP fires and clears `live`, and when the generation
+  // finally resolves nothing is listening. The panel sat on "Working out an order…"
+  // for ever, with no error anywhere.
+  //
+  // So the "already started" flag lives in a ref keyed by what a generation is FOR.
+  // A ref does not re-run anything, and keying it means switching program or student
+  // type starts a new one while flipping the toggle back and forth does not.
+  const genKey = `${path}|${isGrad}|${studentType}`;
+  const startedRef = useRef(null);
+
   useEffect(() => {
-    if (source !== "chart" || gen || genBusy || !canGenerate) return;
+    if (source !== "chart" || !canGenerate) return;
+    if (startedRef.current === genKey) return;
+    startedRef.current = genKey;
+
     let live = true;
     setGenBusy(true);
     planGenerator.generate({
@@ -159,11 +184,17 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
       publishedPlan: catalogVariants[0] ?? null,
     })
       .then(r => { if (live) setGen(r); })
-      .catch(() => { if (live) setGen({ refused: { reason: "error", detail: t("chart.refused") } }); })
+      .catch(() => {
+        if (live) setGen({ refused: { reason: "error", detail: t("chart.refused") } });
+      })
       .finally(() => { if (live) setGenBusy(false); });
+
     return () => { live = false; };
-  }, [source, gen, genBusy, canGenerate, planGenerator, path, isGrad, programData,
-      courseMap, studentType, catalogVariants, t]);
+    // `catalogVariants` is deliberately absent: it settles asynchronously, and a
+    // change to it after generation has started would tear down the in-flight
+    // request and strand the panel exactly as the dependency bug did.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [source, genKey, canGenerate]);
 
   const usingChart = source === "chart";
   const chartPlan  = gen && !gen.refused ? gen.plan : null;
