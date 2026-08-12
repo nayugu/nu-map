@@ -16,6 +16,7 @@ import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import PlanTree, { FolderIcon } from "./PlanTree.jsx";
 import ContextMenu, { useLongPress } from "./ContextMenu.jsx";
+import ConfirmDialog from "./ConfirmDialog.jsx";
 import {
   flattenTree, buildSearchIndex, matchIds, moveTargets, planMove,
   topmostNodes, MAX_DEPTH,
@@ -95,6 +96,7 @@ export default function PlanLibrary() {
     moveNodesTo, deleteNodes, previewDelete,
     pushFolderHistory, undoFolders, redoFolders, folderCanUndo, folderCanRedo,
     setShowNewPlanModal, setNewPlanFolderId,
+    trashedPlans, restoreFromTrash, purgeFromTrash, trashTtlMs,
     isPhone,
   } = usePlanner();
   const { t, locale } = useLanguage();
@@ -109,6 +111,12 @@ export default function PlanLibrary() {
   const [moveMenu, setMoveMenu]     = useState(null);   // footer "Move to…"
   const [pending, setPending]       = useState(null);   // delete confirmation
   const [notice, setNotice]         = useState("");
+  // "plans" | "trash". The trash is a VIEW of this panel rather than a separate
+  // window: it holds plan rows, it is reached from the plan list, and a restore
+  // puts a row back into the very tree behind it.
+  const [view, setView]             = useState("plans");
+  const [trashSel, setTrashSel]     = useState(() => new Set());
+  const [pendingPurge, setPendingPurge] = useState(null); // { ids, name } | { all: true }
   const [drag, setDrag]             = useState(null);   // { ids }
   // Reordering is only offered under manual sort: name and recency derive
   // position from the records, so a stored order would be invisible there.
@@ -290,6 +298,50 @@ export default function PlanLibrary() {
     if (!res.ok) { setNotice(t("folders.delete.err.last")); return; }
     setSelectedIds(new Set());
     setFocusId(null);
+  };
+
+  // ── Trash ───────────────────────────────────────────────────────
+  const trashDays = Math.round(trashTtlMs / 86400000);
+
+  /**
+   * Days left, rounded UP.
+   *
+   * Rounding down would print "0 days left" for a plan that is still there for
+   * another 23 hours, and a countdown that reads zero while the row is still
+   * restorable teaches the user the number is decorative. The final day gets its
+   * own label instead of "1 days left", which is wrong in en/es/fr alike.
+   */
+  const daysLeftLabel = (ms) => {
+    const d = Math.ceil(ms / 86400000);
+    return d <= 1 ? t("trash.lastDay") : t("trash.days", { n: d });
+  };
+
+  const toggleTrashSel = (id) => setTrashSel(prev => {
+    const next = new Set(prev);
+    next.has(id) ? next.delete(id) : next.add(id);
+    return next;
+  });
+
+  const doRestore = (ids) => {
+    const res = restoreFromTrash(ids);
+    setTrashSel(new Set());
+    if (!res.ok) return;
+    const one = res.restored.length === 1
+      ? trashedPlans.find(e => e.id === res.restored[0])
+      : null;
+    setNotice(one
+      ? t("trash.restored", { name: one.name })
+      : t("trash.restoredN", { n: res.restored.length }));
+    // Drop back to the plan list so the restored row is actually visible —
+    // a restore that leaves you staring at the now-empty trash reads as a no-op.
+    setView("plans");
+  };
+
+  const confirmPurge = () => {
+    if (!pendingPurge) return;
+    purgeFromTrash(pendingPurge.ids);
+    setPendingPurge(null);
+    setTrashSel(new Set());
   };
 
   const commitName = (id, name) => {
@@ -725,13 +777,32 @@ export default function PlanLibrary() {
             <FolderIcon size={13} />
             <span aria-hidden="true" style={{ fontWeight: 700 }}>+</span>
           </button>
+          {/* Shown only when there IS something to recover. A permanently
+              visible empty bin is a standing invitation to wonder what is in it;
+              a bin that appears the moment you delete something is a signal
+              that the delete went somewhere. */}
+          {trashedPlans.length > 0 && (
+            <button
+              onClick={() => { setView(v => v === "trash" ? "plans" : "trash"); setTrashSel(new Set()); }}
+              style={{ ...iconBtn,
+                color: view === "trash" ? "var(--active)" : "var(--text-4)",
+                borderColor: view === "trash" ? "var(--active)" : "var(--border-2)" }}
+              title={t("trash.openN", { n: trashedPlans.length })}
+              aria-pressed={view === "trash"}>
+              <span aria-hidden="true">🗑</span>
+              <span style={{ fontSize: 9, fontWeight: 700 }}>{trashedPlans.length}</span>
+            </button>
+          )}
           <button onClick={close} title={t("folders.close")} style={{
             background: "none", border: "none", cursor: "pointer",
             color: "var(--text-4)", fontSize: 16, lineHeight: 1, padding: 3,
           }}>✕</button>
         </div>
 
-        {/* ── Search + sort ── */}
+        {/* ── Search + sort ── (plan list only: there is nothing to sort in a
+             bin of at most a few rows, and a search box that filtered the trash
+             would imply the trash is a place you keep things) */}
+        {view === "plans" && (
         <div style={{
           display: "flex", alignItems: "center", gap: 6, padding: "9px 15px",
           borderBottom: "1px solid var(--border-1)", flexShrink: 0,
@@ -767,6 +838,7 @@ export default function PlanLibrary() {
             ))}
           </div>
         </div>
+        )}
 
         {notice && (
           <div role="status" style={{
@@ -776,7 +848,52 @@ export default function PlanLibrary() {
           }}>{notice}</div>
         )}
 
-        {/* ── Tree ── */}
+        {/* ── Trash ── */}
+        {view === "trash" ? (
+          <div style={{ flex: 1, overflowY: "auto", padding: "8px 9px 14px", minHeight: 120 }}>
+            <div style={{
+              fontSize: 9.5, color: "var(--text-5)", padding: "2px 6px 9px",
+              lineHeight: "calc(1.6 * var(--lh-scale, 1))",
+            }}>
+              {t("trash.hint", { days: trashDays })}
+            </div>
+            {trashedPlans.length === 0 ? (
+              <div style={{ padding: "38px 22px", textAlign: "center", color: "var(--text-5)", fontSize: 12 }}>
+                {t("trash.empty")}
+              </div>
+            ) : trashedPlans.map(e => {
+              const sel = trashSel.has(e.id);
+              return (
+                <div key={e.id}
+                  onClick={() => toggleTrashSel(e.id)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 8,
+                    padding: "7px 8px", borderRadius: 6, cursor: "pointer",
+                    background: sel ? "var(--active-bg)" : "transparent",
+                    border: `1px solid ${sel ? "var(--active)" : "transparent"}`,
+                  }}>
+                  <input type="checkbox" checked={sel} tabIndex={-1} readOnly
+                    aria-label={e.name}
+                    style={{ flexShrink: 0, pointerEvents: "none", accentColor: "var(--active)" }} />
+                  <span style={{
+                    flex: 1, minWidth: 0, fontSize: 12, color: "var(--text-2)",
+                    overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                  }}>{e.name}</span>
+                  {/* The countdown is the whole point of showing a date at all:
+                      "deleted 3 days ago" does not tell anyone how long they
+                      have left to change their mind. */}
+                  <span style={{ fontSize: 9, color: "var(--text-5)", flexShrink: 0 }}>
+                    {daysLeftLabel(e.expiresInMs)}
+                  </span>
+                  <button onClick={ev => { ev.stopPropagation(); doRestore([e.id]); }}
+                    style={{ ...iconBtn, color: "var(--accent)", flexShrink: 0 }}>
+                    {t("trash.restore")}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        ) : (
         <div
           {...longPress}
           onDragOver={e => { if (drag) { e.preventDefault(); setDropTargetId(""); setDropVerdict("ok"); } }}
@@ -838,13 +955,41 @@ export default function PlanLibrary() {
             >{t("folders.dropRoot")}</div>
           )}
         </div>
+        )}
 
         {/* ── Footer ── */}
         <div style={{
           borderTop: "1px solid var(--border-1)", padding: "9px 15px",
           display: "flex", alignItems: "center", gap: 6, flexShrink: 0,
         }}>
-          {selectedIds.size > 0 ? (
+          {view === "trash" ? (
+            <>
+              <button onClick={() => { setView("plans"); setTrashSel(new Set()); }}
+                style={{ ...iconBtn, flex: 1, justifyContent: "center" }}>
+                {t("trash.back")}
+              </button>
+              {trashSel.size > 0 && (
+                <button onClick={() => doRestore([...trashSel])}
+                  style={{ ...iconBtn, color: "var(--accent)", flexShrink: 0 }}>
+                  {t("trash.restore")}
+                </button>
+              )}
+              {/* "Delete forever" is the only irreversible control left in the
+                  app, so it is never the default action: it needs a selection
+                  first, and then a confirmation that says so plainly. */}
+              {trashedPlans.length > 0 && (
+                <button
+                  onClick={() => {
+                    const ids = trashSel.size > 0 ? [...trashSel] : trashedPlans.map(e => e.id);
+                    const one = ids.length === 1 ? trashedPlans.find(e => e.id === ids[0]) : null;
+                    setPendingPurge({ ids, name: one?.name ?? "", all: trashSel.size === 0 });
+                  }}
+                  style={{ ...iconBtn, color: "var(--error)", borderColor: "var(--error-border, var(--border-2))", flexShrink: 0 }}>
+                  {trashSel.size > 0 ? t("trash.purge") : t("trash.emptyAll")}
+                </button>
+              )}
+            </>
+          ) : selectedIds.size > 0 ? (
             <>
               <span style={{ fontSize: 11, color: "var(--text-4)", flex: 1, minWidth: 0 }}>
                 {t("folders.selected", { n: selectedIds.size })}
@@ -880,46 +1025,41 @@ export default function PlanLibrary() {
 
       {/* ── Delete confirmation ── */}
       {pending && (
-        <div
-          onClick={e => { e.stopPropagation(); setPending(null); }}
-          style={{
-            position: "fixed", inset: 0, zIndex: 10100, background: "rgba(0,0,0,0.5)",
-            display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
-          }}
-        >
-          <div onClick={e => e.stopPropagation()} style={{
-            background: "var(--bg-surface)", border: "1px solid var(--border-2)",
-            borderRadius: 12, maxWidth: 330, width: "100%", padding: "15px 16px 13px",
-            boxShadow: "var(--shadow-modal)",
-          }}>
-            <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-1)", marginBottom: 7 }}>
-              {pending.name
-                ? t("folders.delete.question", { name: pending.name })
-                : t("folders.delete.questionN", { n: pending.targets.length })}
-            </div>
-            <div style={{ fontSize: 10.5, color: "var(--text-4)", lineHeight: "calc(1.6 * var(--lh-scale, 1))", marginBottom: 12 }}>
-              {(() => {
-                const inside = joinCounts(pending.contained.plans, pending.contained.folders);
-                return inside ? `${t("folders.delete.alsoRemoves", { items: inside })} ` : "";
-              })()}
-              {/* Reassurance, not a warning: the plan data survives a delete and
-                  ⌘Z puts it back, so this line is no longer red. */}
-              <span style={{ color: "var(--text-5)" }}>{t("folders.delete.undo")}</span>
-            </div>
-            <div style={{ display: "flex", gap: 7 }}>
-              <button onClick={() => setPending(null)} style={{
-                flex: 1, fontSize: 11, padding: "6px 10px", borderRadius: 6, cursor: "pointer",
-                background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
-                color: "var(--text-3)", fontFamily: "inherit",
-              }}>{t("folders.delete.cancel")}</button>
-              <button autoFocus onClick={confirmDelete} style={{
-                flex: 1, fontSize: 11, fontWeight: 700, padding: "6px 10px", borderRadius: 6,
-                cursor: "pointer", background: "var(--error-bg, rgba(239,68,68,0.12))",
-                border: "1px solid var(--error)", color: "var(--error)", fontFamily: "inherit",
-              }}>{t("folders.delete.confirm")}</button>
-            </div>
-          </div>
-        </div>
+        <ConfirmDialog
+          title={pending.name
+            ? t("folders.delete.question", { name: pending.name })
+            : t("folders.delete.questionN", { n: pending.targets.length })}
+          body={<>
+            {(() => {
+              const inside = joinCounts(pending.contained.plans, pending.contained.folders);
+              return inside ? `${t("folders.delete.alsoRemoves", { items: inside })} ` : "";
+            })()}
+            {/* Reassurance, not a warning: the plan data survives a delete and
+                the trash holds it for 30 days, so this line is not red. */}
+            <span style={{ color: "var(--text-5)" }}>{t("folders.delete.undo", { days: trashDays })}</span>
+          </>}
+          confirmLabel={t("folders.delete.confirm")}
+          onConfirm={confirmDelete}
+          onCancel={() => setPending(null)}
+        />
+      )}
+
+      {/* ── Permanent-delete confirmation (the one real point of no return) ── */}
+      {pendingPurge && (
+        <ConfirmDialog
+          danger
+          title={pendingPurge.all
+            ? t("trash.emptyAll.question")
+            : pendingPurge.name
+              ? t("trash.purge.question", { name: pendingPurge.name })
+              : t("trash.purge.questionN", { n: pendingPurge.ids.length })}
+          body={pendingPurge.all
+            ? t("trash.emptyAll.body", { items: nPlans(pendingPurge.ids.length) })
+            : t("trash.purge.body")}
+          confirmLabel={t("trash.purge")}
+          onConfirm={confirmPurge}
+          onCancel={() => setPendingPurge(null)}
+        />
       )}
     </div>
   );
