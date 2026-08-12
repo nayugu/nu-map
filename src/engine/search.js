@@ -1,0 +1,323 @@
+// ═══════════════════════════════════════════════════════════════════
+// CHART · SEARCH — placing cells in terms
+//
+// Phase 1 finds a plan that satisfies every hard constraint. It does not try to
+// find a GOOD one; that is phase 2's job (objective.js), and keeping them apart
+// is what makes "the plan is legal" testable independently of "the plan is well
+// sequenced".
+//
+// ── Most-constrained-first, with a correction ───────────────────────
+//
+// The standard MRV heuristic: assign the cell with the fewest legal terms first,
+// so the widest cells fall into whatever gaps remain. The design expected this to
+// make electives the filler rather than the front-loaded thing.
+//
+// Measured, it only half does. MRV needs domains of differing width, and the
+// prereq DAG barely narrows anything — 71% of the catalog is depth 0, so 52–65%
+// of a program's named courses have every term legal. Availability narrows more
+// (17.1% of courses admit one season of four) and pool size more still, but a
+// broad `General Elective` and a specific 4000-level course frequently have the
+// SAME domain. MRV cannot separate them, so it does not stop the elective landing
+// in year 1.
+//
+// The tie-break carries that weight instead, and it is stated rather than
+// emergent: among equally-constrained cells, place the one whose candidate set is
+// SMALLEST first. A cell with 2 candidates is a real commitment; a cell with the
+// whole catalog is filler by definition. This is `decide late` used as a search
+// order, and it is the honest version of what MRV was supposed to deliver.
+//
+// ── The witness is the propagator, not a verification pass ──────────
+//
+// Distinctness across cells — no two answered by the same course — is an
+// `alldifferent` constraint, whose standard propagator IS maximum matching. So
+// there is no propose → witness → repair loop to design; the matching runs inside
+// the search and a failure is a dead branch like any other.
+//
+// But only the part of it that is sound on a partial assignment: eligibility,
+// season and distinctness. Prereq-reachability is NOT sound to prune on, because
+// a cell needing CS 3000 fails while the cell that supplies CS 3000 is still
+// unplaced, and that cell might land earlier. Pruning on it would refuse
+// perfectly generatable programs, and refuse them silently — there would be no
+// output for a test to find fault with. So the search propagates with
+// `checkPrereqs: false` and the FINAL witness, over the complete assignment,
+// turns it on. See witness.js for the argument in full.
+//
+// ── Placing early is not the same as placing legally ────────────────
+//
+// Taking each cell's earliest legal term fills term 1 to the registration cap and
+// leaves the last year nearly empty. Legal, and a terrible plan — and a terrible
+// starting point for phase 2, which would have to undo all of it. So terms are
+// tried in order of how FULL they are relative to the shape's own target, which
+// costs nothing (branch order does not affect completeness) and lands phase 1 on
+// a balanced plan directly.
+//
+// ── Backtracking needs a bound ──────────────────────────────────────
+//
+// At ~40 cells and ~12 terms this should never thrash, but a pathological program
+// could. Phase 1 carries a node budget and a defined answer when it is spent:
+// refusal, reached for a different reason than pre-flight's but reported the same
+// way. A search that silently returned its best partial answer would emit a plan
+// missing requirements, which is the one thing generation must never do.
+// ═══════════════════════════════════════════════════════════════════
+
+import { witnessPlan } from "./witness.js";
+import { termCapacity } from "./domains.js";
+
+/**
+ * Nodes phase 1 may expand before refusing. Measured: a program that succeeds uses
+ * 34–36, so anything approaching this bound is not a slow success, it is a failure
+ * being discovered the expensive way.
+ */
+export const DEFAULT_NODE_BUDGET = 20000;
+
+/**
+ * And a wall-clock bound, because nodes are not a good proxy for time.
+ *
+ * A node's cost scales with the elective pool it has to match over, so 20,000
+ * nodes took 45 seconds on one program and 177 on another. A generate button that
+ * hangs for three minutes is broken however principled the reason, and the honest
+ * answer — refusal, naming what could not be placed — is available immediately.
+ */
+export const DEFAULT_TIME_BUDGET_MS = 5000;
+
+/**
+ * @typedef {Object} Assignment
+ * @property {Map<string, number>} termOf   cell id → study-term index
+ * @property {number} nodes
+ */
+
+/**
+ * Place every cell, honouring every hard constraint.
+ *
+ * @param {object} args
+ * @param {import("./domains.js").CellPlan[]} args.plans
+ * @param {object[]} args.terms          study terms in order
+ * @param {object} args.ports
+ * @param {string} args.studentType
+ * @param {Record<string,object>} args.courseMap
+ * @param {(id: string) => boolean} [args.repeatable]
+ * @param {number} [args.nodeBudget]
+ * @returns {{ok: boolean, termOf?: Map, failure?: object, nodes: number}}
+ */
+export function placeCells({
+  plans, terms, ports, studentType = "undergraduate", courseMap = {},
+  repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
+  timeBudgetMs = DEFAULT_TIME_BUDGET_MS, now = () => Date.now(),
+  precedence = null,
+}) {
+  const deadline = now() + timeBudgetMs;
+  const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
+  // Deterministic order before any heuristic reorders: two runs must agree.
+  const order = [...plans].sort((a, b) => byConstraint(a, b, terms.length));
+
+  const byId = new Map(plans.map(p => [p.cell.id, p]));
+  const termOf = new Map();
+  const loadSH = new Array(terms.length).fill(0);
+  let nodes = 0;
+  let worstFailure = null;
+
+  // How many cells each course could answer. Computed once over the BOUNDED cells
+  // only — an unbounded cell admits everything, so counting it would flatten the
+  // signal to a constant and tell the witness nothing.
+  const contentionOf = buildContention(plans);
+
+  const assignedCells = () => order
+    .filter(p => termOf.has(p.cell.id))
+    .map(p => ({ ...p.cell, term: termOf.get(p.cell.id),
+                 availabilityRelaxed: !!p.availabilityRelaxed }));
+
+  const runWitness = (checkPrereqs) => witnessPlan({
+    cells: assignedCells(),
+    // Season-prefiltered and truncated for the propagator; whole for the final,
+    // prereq-aware witness, where truncation could hide the one candidate whose
+    // prerequisites are actually met. domains.js `wideAtFor` has the argument.
+    candidatesOf: checkPrereqs
+      ? (c) => byId.get(c.id).candidates
+      : (c, season) => byId.get(c.id).seasonOk.get(season) ?? null,
+    terms, courseMap,
+    offeringProbability: ports.offeringProbability,
+    repeatable, checkPrereqs, contention: contentionOf,
+  });
+
+  // How full a term is relative to what the shape intends for it. `targetSH` is
+  // the department's own stated intent; where a shape does not state one, an
+  // equal share of total demand stands in, so a derived skeleton balances too.
+  const evenShare = plans.reduce((n, p) => n + (p.cell.sh ?? 0), 0) / (terms.length || 1);
+  const fill = (ti) => loadSH[ti] / (terms[ti]?.targetSH || evenShare || 1);
+
+  /** Which terms to try, for one cell: emptiest-relative-to-target first. */
+  const termPreference = (domain) =>
+    [...domain].sort((a, b) => fill(a) - fill(b) || a - b);
+
+  /**
+   * Would putting `cellId` in term `ti` break an edge with a cell already placed?
+   *
+   * Checked in both directions. A predecessor already placed later, or a successor
+   * already placed earlier, are equally fatal, and the search assigns in
+   * most-constrained order rather than topological order — so a successor is
+   * frequently placed before its predecessor.
+   */
+  const violatesPrecedence = (cellId, ti) => {
+    if (!precedence) return false;
+    for (const aId of precedence.before.get(cellId) ?? []) {
+      const at = termOf.get(aId);
+      if (at == null) continue;
+      const same = precedence.concurrentOk.has(`${aId}|${cellId}`);
+      if (same ? at <= ti : at < ti) continue;
+      return true;
+    }
+    for (const bId of precedence.after.get(cellId) ?? []) {
+      const bt = termOf.get(bId);
+      if (bt == null) continue;
+      const same = precedence.concurrentOk.has(`${cellId}|${bId}`);
+      if (same ? ti <= bt : ti < bt) continue;
+      return true;
+    }
+    return false;
+  };
+
+  function step(i) {
+    if (++nodes > nodeBudget) return "budget";
+    // Checked every 64 nodes rather than every one: a clock read per node is
+    // itself measurable at this node rate, and 64 nodes is well inside the budget.
+    if ((nodes & 63) === 0 && now() > deadline) return "time";
+    if (i >= order.length) {
+      // The one place prereq-reachability is checked: a complete assignment, where
+      // every cell that could supply a prerequisite has a term.
+      const w = runWitness(true);
+      if (!w.ok) { worstFailure = w.failure; return false; }
+      return true;
+    }
+
+    const plan = order[i];
+    const cell = plan.cell;
+    if (!plan.domain.length) {
+      worstFailure = { kind: "empty-domain", cell: cell.id, title: cell.title };
+      return false;
+    }
+
+    for (const ti of termPreference(plan.domain)) {
+      // Term credit envelope — the registration cap, which is hard.
+      if (loadSH[ti] + (cell.sh ?? 0) > cap[ti]) continue;
+      // Precedence, forward-checked against what is already placed. This is what
+      // turns discovering the prereq order from 20,000 nodes of backtracking into
+      // a few dozen: the witness would catch a violation eventually, but only
+      // after the whole plan was built on top of it.
+      if (violatesPrecedence(cell.id, ti)) continue;
+
+      termOf.set(cell.id, ti);
+      loadSH[ti] += cell.sh ?? 0;
+
+      // Propagate `alldifferent` over what is placed so far, plus named-course
+      // prereq order. Sound on a partial assignment: candidate prereqs are
+      // excluded, and a named prerequisite whose cell is not yet placed reads as
+      // absent rather than as late, so no branch is cut for a fixable violation.
+      const w = runWitness(false);
+      if (w.ok) {
+        const r = step(i + 1);
+        if (r === true) return true;
+        if (r === "budget" || r === "time") return r;
+      } else {
+        worstFailure = w.failure;
+      }
+
+      termOf.delete(cell.id);
+      loadSH[ti] -= cell.sh ?? 0;
+    }
+    return false;
+  }
+
+  const result = step(0);
+  if (result === true) return { ok: true, termOf, nodes };
+  if (result === "budget" || result === "time") {
+    return {
+      ok: false, nodes,
+      failure: {
+        kind: "search-budget-exhausted", nodes,
+        // The last obstruction the search hit is far more useful than the budget
+        // itself: it names a cell and a term the student can look at.
+        detail: worstFailure
+          ? `${describe(worstFailure)} (gave up after ${nodes} attempts)`
+          : `no legal placement found within ${result === "time" ? `${timeBudgetMs} ms` : `${nodeBudget} nodes`}`,
+        lastObstruction: worstFailure ?? null,
+      },
+    };
+  }
+  return {
+    ok: false, nodes,
+    failure: worstFailure ?? { kind: "infeasible", detail: "no legal placement exists" },
+  };
+}
+
+/** One sentence about a witness failure, in terms a person can act on. */
+export function describe(f) {
+  if (!f) return "no legal placement exists";
+  if (f.kind === "named-prereq") {
+    return `${f.course} cannot be taken in ${f.termLabel} — its prerequisites are not met by then`;
+  }
+  if (f.kind === "over-subscribed") {
+    return `${f.termLabel}: ${f.cells} cells there can only be answered by ${f.courses} distinct courses`;
+  }
+  if (f.kind === "no-candidate") {
+    return `no course can answer "${f.title}" in ${f.termLabel}`;
+  }
+  if (f.kind === "empty-domain") return `"${f.title}" has no legal term`;
+  return f.detail ?? "no legal placement exists";
+}
+
+/**
+ * How many cells each course could answer.
+ *
+ * Bounded cells only. An unbounded cell admits the whole catalog, so counting it
+ * would add 1 to every course and leave the ordering unchanged while costing a
+ * pass over 8,000 ids per cell.
+ */
+export function buildContention(plans) {
+  const counts = new Map();
+  for (const p of plans) {
+    for (const id of p.candidates ?? []) counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+  return (id) => counts.get(id) ?? 0;
+}
+
+/**
+ * Search order: fewest legal terms first, then fewest candidates.
+ *
+ * The second key is the one that does the work here — see the header. A cell that
+ * admits any course sorts last on BOTH keys, so it is placed into whatever room
+ * is left rather than claiming a term a specific course needed.
+ */
+function byConstraint(a, b, termCount) {
+  // Fillers last, unconditionally. This is the ordering the whole engine exists
+  // for, and it must not be left to emerge from a tie-break: the motivating
+  // complaint is that departments spend the general electives before the first
+  // co-op, so the courses with something to say about a degree claim their terms
+  // first and the electives take what is left.
+  //
+  // Most-constrained-first would NOT deliver this on its own. The prereq DAG gives
+  // 71% of the catalog depth 0, so a broad elective and a first-year requirement
+  // look equally unconstrained, and which goes first comes down to how the
+  // candidate counts happen to compare.
+  const fa = isFiller(a) ? 1 : 0, fb = isFiller(b) ? 1 : 0;
+  if (fa !== fb) return fa - fb;
+
+  const da = a.domain.length || termCount + 1;
+  const db = b.domain.length || termCount + 1;
+  if (da !== db) return da - db;
+  const ca = a.candidates === null ? Infinity : a.candidates.length;
+  const cb = b.candidates === null ? Infinity : b.candidates.length;
+  if (ca !== cb) return ca - cb;
+  // Deeper cells before shallower ones at equal width: a long chain has fewer
+  // places to go even when the bound has not noticed.
+  if (a.minDepth !== b.minDepth) return b.minDepth - a.minDepth;
+  return String(a.cell.id).localeCompare(String(b.cell.id));
+}
+
+/**
+ * A cell with nothing specific to say about where it belongs.
+ *
+ * `~general` admits the whole catalog. A concentration cell is unresolved until the
+ * student picks one. Both are placeholders the student will fill, and neither has a
+ * prerequisite structure that could justify an early term.
+ */
+const isFiller = (p) => p.candidates === null;

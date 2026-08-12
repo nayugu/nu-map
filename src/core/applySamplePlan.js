@@ -77,6 +77,16 @@ export function applySamplePlan(plan, {
   const held = new Set(Object.keys(placements).map(k => String(k).split("#")[0]));
   const sections = programData?.requirementSections ?? [];
 
+  // Which requirement a cell stands for, named so a re-scrape that reorders
+  // sections cannot silently repoint the card. Only a binding forced to a single
+  // SECTION is followed: a sentinel (`~general`, `~concentration`) is not a
+  // section index, and an ambiguous list is not an answer.
+  const requirementOf = (e) => {
+    const t = e.binding?.targets;
+    if (t?.length !== 1 || typeof t[0] !== "number") return null;
+    return sections[t[0]] ? { index: t[0], title: sections[t[0]].title ?? "" } : null;
+  };
+
   (plan?.years ?? []).forEach((gridYear, i) => {
     for (const term of gridYear.terms ?? []) {
       const sem = years[startYearIndex + i]?.find(s => s.semTypeId === term.type);
@@ -91,12 +101,7 @@ export function applySamplePlan(plan, {
           if (e.coop) { coopCells.push(sem); walk(e.children); continue; }
 
           if (isOpen(e)) {
-            // Which requirement it stands for, named so a re-scrape that
-            // reorders sections cannot silently repoint the card.
-            const idx = e.binding?.targets?.length === 1 && typeof e.binding.targets[0] === "number"
-              ? e.binding.targets[0] : null;
-            const requirement = idx != null && sections[idx]
-              ? { index: idx, title: sections[idx].title ?? "" } : null;
+            const requirement = requirementOf(e);
             const origin = originKey(planLabel, startYearIndex + i, term.type, ordinal++);
             if (seenOrigins.has(origin)) {
               notes.push({ kind: "already-reserved", origin });
@@ -117,7 +122,17 @@ export function applySamplePlan(plan, {
             if (seenOrigins.has(origin)) {
               notes.push({ kind: "already-reserved", origin });
             } else {
-              const r = createReservation({ semId: sem.id, label: e.text, sh: e.sh ?? null, origin });
+              // A named choice carries its requirement for the same reason an
+              // open cell does. No published plan supplies one — `bind-plans`
+              // only binds cells with no options, so all 1,386 multi-option
+              // cells in the corpus arrive with `binding` absent and this reads
+              // as null — but a CHART-generated plan constructs the binding
+              // rather than inferring it, and dropping it here would throw away
+              // the one thing generation knows for certain.
+              const r = createReservation({
+                semId: sem.id, label: e.text, sh: e.sh ?? null,
+                requirement: requirementOf(e), origin,
+              });
               r.options = e.options;
               nextReservations[r.id] = r;
               reserved.push(r);

@@ -1,0 +1,227 @@
+// ═══════════════════════════════════════════════════════════════════
+// CHART · SHAPE — the skeleton a generated plan is poured into
+//
+// A published plan encodes two different things, and only one of them is
+// defective. The SHAPE — how many years, which terms are used, where the co-ops
+// fall, roughly how loaded each term is — is real departmental intent, checked by
+// advisors and recognisable to them. The CONTENT and its ORDER are what testing
+// found wanting: general electives spent before the first co-op, prereq chains
+// with real errors, courses scheduled in seasons they are not offered.
+//
+// So CHART inherits the skeleton and regenerates what goes in it. Far less risky
+// than inventing a calendar, and the result stays legible to an advisor.
+//
+// ── Shape means exactly four things ────────────────────────────────
+//
+//   1. which terms exist and in what order
+//   2. which of them the plan USES, and of those which are WORK terms
+//   3. a per-term credit TARGET — soft, because whole cells rarely hit a number
+//   4. the variant's label, since the UI keys display on `pattern`
+//
+// It does NOT include per-term cell counts or per-term content. Inheriting those
+// would re-import the very sequencing this engine exists to replace, so the type
+// simply cannot express them.
+//
+// ── Three kinds of term, not two ───────────────────────────────────
+//
+// A term can be a study term, a work term, or UNUSED — a summer the department
+// deliberately left empty. Collapsing the third into the first is not a rounding
+// error: the first plan this engine generated scheduled 8 SH into a Summer 2 the
+// catalog prints as vacation, because "no co-op cells" was being read as "study
+// term". A published shape saying a term is empty is departmental intent, the
+// same kind of intent as where the co-ops fall, and CHART inherits it.
+//
+// ── Accepted consequence ───────────────────────────────────────────
+//
+// CHART cannot move a first co-op that is scheduled too early; it fixes what
+// PRECEDES the co-op, which is the reported complaint. Shape overrides (move a
+// co-op, add a summer, extend to five years) are deferred — but shape is an
+// explicit INPUT from the start, so adding them later is a new caller rather
+// than a rewrite.
+//
+// ── 385 programs publish a plan; 1,014 have requirements ───────────
+//
+// So a default skeleton is not an edge case, it is the majority path, and it has
+// to be derived rather than guessed: term count from the degree's own credit
+// total, at a load the credit envelope allows.
+// ═══════════════════════════════════════════════════════════════════
+
+/**
+ * @typedef {Object} ShapeTerm
+ * @property {string} semTypeId   "fall" | "spring" | "sumA" | "sumB"
+ * @property {number} yearIndex   0-based academic year
+ * @property {string} label       the year label the source plan used
+ * @property {string} termLabel   the term label the source plan used
+ * @property {boolean} work       a co-op term: no course credit, no cells
+ * @property {boolean} unused     the plan leaves it empty — vacation, not study
+ * @property {number} targetSH    soft target, 0 for a work or unused term
+ * @property {number} weight      1.0 full term, 0.5 summer half
+ */
+
+/**
+ * @typedef {Object} Shape
+ * @property {string} pattern     variant label, e.g. "Four Years, Two Co-ops…"
+ * @property {ShapeTerm[]} terms  in plan order, work terms included
+ * @property {"published"|"derived"} source
+ */
+
+/** NU's calendar, as the default skeleton uses it. Injectable via `semTypes`. */
+const DEFAULT_SEM_TYPES = [
+  { semTypeId: "fall",   termLabel: "Fall",     weight: 1.0 },
+  { semTypeId: "spring", termLabel: "Spring",   weight: 1.0 },
+  { semTypeId: "sumA",   termLabel: "Summer 1", weight: 0.5 },
+  { semTypeId: "sumB",   termLabel: "Summer 2", weight: 0.5 },
+];
+
+/**
+ * Read the shape out of one published plan variant.
+ *
+ * Credit targets come from the plan's own `hours` where it states them, because
+ * that is the department saying how loaded it intends each term to be. Where it
+ * does not, the cells' own credit is summed — the same number by a longer route.
+ *
+ * A term whose entries are ALL co-op is a work term. Mixed terms exist (a co-op
+ * cell beside a course cell) and are treated as study terms carrying a co-op,
+ * because the student is registered for the course either way.
+ *
+ * @param {object} plan  one entry of plan.json `plans[]`
+ * @returns {Shape}
+ */
+export function shapeFromPlan(plan) {
+  const terms = [];
+  (plan?.years ?? []).forEach((year, yearIndex) => {
+    for (const term of year.terms ?? []) {
+      const entries = flatten(term.entries);
+      const coopCells = entries.filter(e => e.coop).length;
+      // A heading, a vacation row and an `either` wrapper are labels, not work.
+      const courseCells = entries.filter(e =>
+        !e.coop && !e.vacation && !e.heading && !e.either).length;
+      // Mixed terms exist — a co-op cell beside a course cell — and are study
+      // terms carrying a co-op, because the student is registered either way.
+      const work = coopCells > 0 && courseCells === 0;
+      const unused = !work && courseCells === 0;
+      const stated = Number(term.hours);
+      const summed = entries.reduce((n, e) => n + (Number(e.sh) || 0), 0);
+      terms.push({
+        semTypeId: term.type ?? "",
+        yearIndex,
+        label: year.label ?? `Year ${yearIndex + 1}`,
+        termLabel: term.term ?? "",
+        work, unused,
+        targetSH: (work || unused) ? 0 : (Number.isFinite(stated) && stated > 0 ? stated : summed),
+        weight: weightOf(term.type),
+      });
+    }
+  });
+  return { pattern: plan?.label ?? "", terms, source: "published" };
+}
+
+/** Every entry, co-op and vacation rows included, with nesting flattened. */
+function flatten(entries) {
+  const out = [];
+  const walk = (list) => {
+    for (const e of list ?? []) { out.push(e); walk(e.children); }
+  };
+  walk(entries);
+  return out;
+}
+
+/** A summer half is half a term. Anything unrecognised is a full term. */
+const weightOf = (semTypeId) =>
+  (semTypeId === "sumA" || semTypeId === "sumB") ? 0.5 : 1.0;
+
+/**
+ * A skeleton for a program that publishes no plan — the majority.
+ *
+ * Derived, not guessed: enough fall/spring terms to carry the degree's credit at
+ * a load the envelope allows, then summers added only if fall and spring alone
+ * cannot hold it. Summers are a last resort because a plan that fills them when
+ * it does not have to has spent the student's co-op and earning time for nothing.
+ *
+ * @param {object} opts
+ * @param {number} opts.totalSH       credit the plan must carry
+ * @param {number} [opts.maxTermSH]   registration cap for a full term
+ * @param {number} [opts.targetTermSH] the load to aim for
+ * @param {number} [opts.maxYears]
+ * @param {object[]} [opts.semTypes]
+ * @returns {Shape}
+ */
+export function defaultShape({
+  totalSH, maxTermSH = 19, targetTermSH = 16, maxYears = 5,
+  semTypes = DEFAULT_SEM_TYPES,
+} = {}) {
+  const full = semTypes.filter(s => s.weight >= 1);
+  const halves = semTypes.filter(s => s.weight < 1);
+  const need = Math.max(0, Number(totalSH) || 0);
+  // Aim for the target rather than the cap: a plan generated at 19 SH every term
+  // leaves the student no room to drop a course, and `protect slack` is a
+  // threshold this design keeps.
+  const perYearFull = full.length * Math.min(maxTermSH, targetTermSH);
+
+  let years = Math.min(maxYears, Math.max(1, Math.ceil(need / (perYearFull || 1))));
+  const terms = [];
+  const push = (t, yearIndex, targetSH) => terms.push({
+    semTypeId: t.semTypeId, yearIndex,
+    label: `Year ${yearIndex + 1}`, termLabel: t.termLabel,
+    work: false, unused: false, targetSH, weight: t.weight,
+  });
+
+  // Spread the load evenly rather than filling terms to the cap and leaving the
+  // last one nearly empty — `load balance` is a stated objective, and starting
+  // from a lopsided skeleton would make it unreachable.
+  const fullSlots = years * full.length;
+  let perTerm = fullSlots ? Math.ceil(need / fullSlots) : 0;
+  const useSummer = perTerm > Math.min(maxTermSH, targetTermSH) && halves.length && years <= maxYears;
+  const summerSlots = useSummer ? years * halves.length : 0;
+  const weighted = fullSlots + summerSlots * 0.5;
+  perTerm = weighted ? need / weighted : 0;
+
+  for (let y = 0; y < years; y++) {
+    for (const t of full) push(t, y, Math.min(maxTermSH, Math.round(perTerm)));
+    if (useSummer) for (const t of halves) push(t, y, Math.round(perTerm * t.weight));
+  }
+  return { pattern: "", terms, source: "derived" };
+}
+
+// ── Reading a shape ────────────────────────────────────────────────
+
+/**
+ * The terms cells may be placed in, in order.
+ *
+ * Work terms carry no course credit; unused terms are ones the published plan
+ * leaves empty, and using them anyway would override departmental intent about
+ * which terms this degree occupies.
+ */
+export function studyTerms(shape) {
+  return (shape?.terms ?? []).filter(t => !t.work && !t.unused);
+}
+
+/** Credit the shape intends to carry across all study terms. */
+export function shapeCapacitySH(shape, { creditMax = () => Infinity, studentType = "undergraduate" } = {}) {
+  let n = 0;
+  for (const t of studyTerms(shape)) {
+    // The cap scales with the term's weight: a summer half is not expected to
+    // carry a full 16 SH, and treating it as though it could would let the
+    // engine schedule a plan nobody can register for.
+    n += Math.min(creditMax(studentType) * t.weight, Math.max(t.targetSH, 0) || Infinity);
+  }
+  return n;
+}
+
+/**
+ * Where the first work term begins, as an index into `studyTerms`.
+ *
+ * The `coop-depth` objective needs a boundary: what counts as "before the first
+ * co-op" is the set of study terms preceding it. Returns the study-term count
+ * when the plan has no co-op, so the objective degrades to "the whole plan"
+ * rather than dividing by zero.
+ */
+export function firstWorkBoundary(shape) {
+  const terms = shape?.terms ?? [];
+  let studied = 0;
+  for (const t of terms) {
+    if (t.work) return studied;
+    studied++;
+  }
+  return studied;
+}
