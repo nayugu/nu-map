@@ -43,11 +43,33 @@ test("coreq partners › excludes ids already claimed by another group", () => {
   assert.deepEqual(coreqPartnersOf(edges, "B", ["A", "LAB1"]), []);
 });
 
-test("coreq partners › a chain is NOT followed transitively", () => {
-  // A–B and B–C does not make C move with A. Nothing in the catalog asks for
-  // that, and a transitive walk on 505 edges could move an unbounded set.
+test("coreq partners › a chain IS followed to the end of the group", () => {
+  // This test previously asserted the opposite — that a chain is not followed
+  // — on the reasoning that nothing in the catalog needs it. That was wrong,
+  // and the drop fuzzer found it. The live catalog holds three chains where
+  // the two ends do not name each other (GSND 5110–5111–5112, NRSG
+  // 2220–2221–2222, NRSG 4889–4996–4995); carrying only the neighbours moved
+  // the middle and left the far end behind, splitting a group that has to be
+  // taken in one term. Groups are 3 courses at the largest, so the walk is
+  // bounded by the data.
   const edges = [coreq("B", "A"), coreq("C", "B")];
-  assert.deepEqual(coreqPartnersOf(edges, "A"), ["B"]);
+  assert.deepEqual(coreqPartnersOf(edges, "A").sort(), ["B", "C"]);
+  assert.deepEqual(coreqPartnersOf(edges, "C").sort(), ["A", "B"]);
+  assert.deepEqual(coreqPartnersOf(edges, "B").sort(), ["A", "C"]);
+});
+
+test("coreq partners › the walk does not pass THROUGH an excluded id", () => {
+  // Exclusion means "already moving with the other card". Walking through one
+  // would reach into that group and drag its members the wrong way.
+  const edges = [coreq("B", "A"), coreq("C", "B")];
+  assert.deepEqual(coreqPartnersOf(edges, "A", ["B"]), []);
+});
+
+test("coreq partners › a cycle terminates", () => {
+  // A triangle is the ordinary CHEM shape (lecture, lab, recitation each
+  // naming the other two): 20 of them in the corpus.
+  const edges = [coreq("A", "B"), coreq("B", "C"), coreq("C", "A")];
+  assert.deepEqual(coreqPartnersOf(edges, "A").sort(), ["B", "C"]);
 });
 
 test("coreq partners › survives junk input", () => {

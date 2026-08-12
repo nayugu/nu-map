@@ -1441,11 +1441,7 @@ export function PlannerProvider({ children }) {
         if (selId && pl[selId]) {
           pushUndo();
           const fromSem = pl[selId];
-          const coreqPartners = [...new Set(
-            allEdgesRef.current
-              .filter(e2 => e2.type === "corequisite" && (e2.from === selId || e2.to === selId))
-              .map(e2 => e2.from === selId ? e2.to : e2.from)
-          )];
+          const coreqPartners = coreqPartnersOf(allEdgesRef.current, selId);
           setPlacements(p => {
             const n = { ...p };
             delete n[selId];
@@ -2010,12 +2006,7 @@ export function PlannerProvider({ children }) {
       if (fromSem === semId) { setDragInfo(null); return; }
       // Always move ALL coreq partners together with the dragged course
       // (repeat instances have no edges of their own, so extra takes move alone)
-      const coreqPartners = [...new Set(
-        allEdges
-          .filter(edge => edge.type === "corequisite" && (edge.from === dropId || edge.to === dropId))
-          .map(edge => edge.from === dropId ? edge.to : edge.from)
-          .filter(cid => cid !== dropId)
-      )];
+      const coreqPartners = coreqPartnersOf(allEdges, dropId);
       const allMoving = [dropId, ...coreqPartners];
       setPlacements(p => {
         const n = { ...p, [dropId]: semId };
@@ -2066,11 +2057,7 @@ export function PlannerProvider({ children }) {
     if (type === "specialTerm") {
       if (id) setSpecialTermPl(p => { const n = { ...p }; delete n[id]; return n; });
     } else {
-      const coreqPartners = [...new Set(
-        allEdges
-          .filter(e2 => e2.type === "corequisite" && (e2.from === id || e2.to === id))
-          .map(e2 => e2.from === id ? e2.to : e2.from)
-      )];
+      const coreqPartners = coreqPartnersOf(allEdges, id);
       setPlacements(p => {
         const n = { ...p };
         delete n[id];
@@ -2094,44 +2081,35 @@ export function PlannerProvider({ children }) {
     // Placing out means "I already have credit for this course". There is no
     // course yet, so the gesture has no meaning — ignored rather than half-done.
     if (isReservationId(dragInfo?.id)) { setDragInfo(null); return; }
-    console.log('onDropPlacedOut called with:', dragInfo);
     try {
       if (!dragInfo || dragInfo.type !== "course") return;
       pushUndo();
       const { id, fromSem } = dragInfo;
-
-      console.log('onDropPlacedOut called with:', { id, fromSem });
 
       // Add to placedOut set
       setPlacedOut(prev => new Set([...prev, id]));
 
       // If the course was placed in a semester, remove it from placements
       if (placements[id]) {
-        const coreqPartners = [...new Set(
-          allEdges
-            .filter(edge => edge.type === "corequisite" && (edge.from === id || edge.to === id))
-            .map(edge => edge.from === id ? edge.to : edge.from)
-        )];
-        console.log('Coreq partners:', coreqPartners);
+        // Placing out a lecture unschedules its recitation: the pair is only
+        // meaningful as a pair, and leaving the partner alone on the board
+        // would be a card with nothing it belongs to.
+        const coreqPartners = coreqPartnersOf(allEdges, id);
 
         setPlacements(p => {
           const n = { ...p };
           delete n[id];
           coreqPartners.forEach(cid => delete n[cid]);
-          console.log('New placements:', n);
           return n;
         });
         setSemOrders(p => {
           const next = { ...p };
           const toClean = new Set([fromSem, ...coreqPartners.map(cid => placements[cid])].filter(Boolean));
-          console.log('Cleaning semesters:', toClean);
           toClean.forEach(sid => {
             next[sid] = (next[sid] || []).filter(cid => cid !== id && !coreqPartners.includes(cid));
           });
           return next;
         });
-      } else {
-        console.log('Course was not placed (from bank)');
       }
 
       setPalette(prev => prev.filter(cid => cid !== id));
@@ -2150,12 +2128,7 @@ export function PlannerProvider({ children }) {
     const { id, fromSem } = dragInfo;
     if (palette.includes(id)) { setDragInfo(null); return; }
     pushUndo();
-    const coreqPartners = [...new Set(
-      allEdges
-        .filter(e2 => e2.type === "corequisite" && (e2.from === id || e2.to === id))
-        .map(e2 => e2.from === id ? e2.to : e2.from)
-        .filter(cid => cid !== id)
-    )];
+    const coreqPartners = coreqPartnersOf(allEdges, id);
     const allMoving = [id, ...coreqPartners.filter(cid => !palette.includes(cid))];
     // Remove from semester placements & orders
     const toCleanSems = new Set([fromSem, ...allMoving.map(cid => placements[cid])].filter(Boolean));
@@ -2215,15 +2188,16 @@ export function PlannerProvider({ children }) {
     // half of the same family was a silent no-op. One rule now covers both.
     const noSeat = !isReservationId(dragId) && placements[dragId] == null;
     if (isReservationId(dragId) || isReservationId(targetId) || sameSemReorder || noSeat) {
-      const coreqPartners = [...new Set(
-        allEdges
-          .filter(e2 => e2.type === "corequisite" && (e2.from === dragId || e2.to === dragId))
-          .map(e2 => (e2.from === dragId ? e2.to : e2.from))
-      )];
       const next = resolveDropOnCard(
         { placements, reservations, semOrders },
         { dragId, targetId, targetSemId },
-        { gridPlacements, gridCourseMap, coreqPartners },
+        {
+          gridPlacements, gridCourseMap,
+          coreqPartners: coreqPartnersOf(allEdges, dragId),
+          // The resolver asks about the DISPLACED card too, so a swap through
+          // this door carries both sides' corequisites.
+          partnersOf: (id) => coreqPartnersOf(allEdges, id),
+        },
       );
       if (next) {
         setPlacements(next.placements);
