@@ -1,5 +1,47 @@
 {
  "generated": "2026-08-12",
+ "coopPrep": [
+  {
+   "course": "BIOL1000",
+   "observations": 6
+  },
+  {
+   "course": "BUSN1103",
+   "observations": 11
+  },
+  {
+   "course": "CS1210",
+   "observations": 84
+  },
+  {
+   "course": "EEAM2000",
+   "observations": 104
+  },
+  {
+   "course": "EESC2000",
+   "observations": 78
+  },
+  {
+   "course": "EESH2000",
+   "observations": 79
+  },
+  {
+   "course": "ENCP2000",
+   "observations": 141
+  },
+  {
+   "course": "ENVR1500",
+   "observations": 5
+  },
+  {
+   "course": "HSCI2000",
+   "observations": 29
+  },
+  {
+   "course": "MATH1000",
+   "observations": 9
+  }
+ ],
  "source": "published Sample Plans of Study",
  "plans": 678,
  "filters": {

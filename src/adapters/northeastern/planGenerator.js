@@ -44,8 +44,8 @@ function observedOrder() {
   if (!_orderPromise) {
     _orderPromise = fetch(PLAN_ORDER_URL)
       .then(r => (r.ok ? r.json() : null))
-      .then(d => d?.edges ?? [])
-      .catch(() => []);
+      .then(d => ({ edges: d?.edges ?? [], coopPrep: (d?.coopPrep ?? []).map(x => x.course) }))
+      .catch(() => ({ edges: [], coopPrep: [] }));
   }
   return _orderPromise;
 }
@@ -84,7 +84,8 @@ export default {
       courseMap,
       ports: enginePorts(courseMap),
       depthIndex: depthIndexFor(courseMap),
-      observedOrder: order,
+      observedOrder: order.edges,
+      coopPrep: order.coopPrep,
       studentType: type,
       preferences: preferences ?? DEFAULT_PREFERENCES,
       // A repeatable course legitimately answers two cells, and merging them would

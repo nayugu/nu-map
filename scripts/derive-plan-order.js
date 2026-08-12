@@ -87,9 +87,11 @@ function publishedPlans() {
           for (const year of plan.years ?? []) {
             for (const term of year.terms ?? []) {
               const named = [];
+              let coop = false;
               const walk = (entries) => {
                 for (const e of entries ?? []) {
-                  if (e.coop || e.vacation || e.heading || e.either) { walk(e.children); continue; }
+                  if (e.coop) { coop = true; walk(e.children); continue; }
+                  if (e.vacation || e.heading || e.either) { walk(e.children); continue; }
                   // Only cells the plan DECIDES. A choice tells us nothing about
                   // which course was actually placed.
                   if (e.options?.length === 1) named.push(...e.options[0]);
@@ -97,7 +99,7 @@ function publishedPlans() {
                 }
               };
               walk(term.entries);
-              terms.push(named);
+              terms.push({ named, coop });
             }
           }
           out.push({ program, terms });
@@ -116,7 +118,7 @@ function observe(plans) {
     // A course's FIRST appearance is its position; a repeated course would
     // otherwise order itself.
     const at = new Map();
-    plan.terms.forEach((ids, i) => { for (const id of ids) if (!at.has(id)) at.set(id, i); });
+    plan.terms.forEach((t, i) => { for (const id of t.named) if (!at.has(id)) at.set(id, i); });
     const ids = [...at.keys()].sort();
     for (let i = 0; i < ids.length; i++) {
       for (let j = i + 1; j < ids.length; j++) {
@@ -235,8 +237,49 @@ if (edges.length < 100) {
   process.exit(1);
 }
 
+// ── Co-op preparation: a requirement the catalog never states ───────
+//
+// Northeastern requires a professional-development course before a student may go on
+// co-op. `ENCP 2000`, `CS 1210`, `EEAM 2000`, `HSCI 2000` and their siblings are that
+// course for each college — and NOTHING in the catalog records the dependency, because
+// the co-op is not a course and cannot have a prerequisite.
+//
+// The plans record it unanimously. Measured: every one of these appears BEFORE the
+// first co-op in 100% of the plans that contain both, typically exactly two terms
+// before. CHART duly put CS 1210 after the co-op it is meant to prepare for.
+//
+// Identified by two things together, because neither alone is enough: the course text
+// mentions co-op or professional development, AND the plans never once place it after
+// the first work term. The text alone would catch `MEIE 4702`, a senior capstone that
+// discusses co-op experience and belongs at the END (measured 0% before).
+function coopPrep(plans) {
+  const seen = new Map();
+  for (const plan of plans) {
+    const first = plan.terms.findIndex(t => t.coop);
+    if (first < 0) continue;
+    plan.terms.forEach((t, i) => {
+      if (t.coop) return;
+      for (const id of t.named) {
+        const text = `${courseMap[id]?.title ?? ""} ${courseMap[id]?.desc ?? ""}`;
+        if (!/co-?op|cooperative education|professional development/i.test(text)) continue;
+        if (!seen.has(id)) seen.set(id, { before: 0, after: 0 });
+        seen.get(id)[i < first ? "before" : "after"] += 1;
+      }
+    });
+  }
+  return [...seen.entries()]
+    .filter(([, v]) => v.after === 0 && v.before >= MIN_PROGRAMS)
+    .map(([id, v]) => ({ course: id, observations: v.before }))
+    .sort((a, b) => a.course.localeCompare(b.course));
+}
+
+const prep = coopPrep(plans);
+console.log(`\nco-op preparation courses (always before the first co-op): ${prep.length}`);
+console.log("  " + prep.map(p => `${p.course}(${p.observations})`).join("  "));
+
 const doc = {
   generated: new Date().toISOString().slice(0, 10),
+  coopPrep: prep,
   source: "published Sample Plans of Study",
   plans: plans.length,
   filters: { minPrograms: MIN_PROGRAMS, maxSameTermShare: MAX_SAME_TERM_SHARE,
