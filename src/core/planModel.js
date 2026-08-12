@@ -4,6 +4,7 @@
 import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
 import { resolveTermByDuration, termSpans, computeGrantedAttrs, computeGrantedCourses } from "./specialTermUtils.js";
 import { dropVoidTakes, dropUnearnedTakes } from "./gradeSystem.js";
+import { resolveCompanyLogo } from "./companyLogo.js";
 
 
 /**
@@ -150,8 +151,6 @@ export function getConnectionsToDepth(id, edges, upDepth = Infinity, downDepth =
 }
 
 // ── PDF export ───────────────────────────────────────────────────
-
-const pdfFaviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
 
 // ── Requirement tree → HTML ───────────────────────────────────────
 
@@ -491,6 +490,22 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     </div>`;
   }).join("\n");
 
+  // ── Co-op logos ───────────────────────────────────────────────
+  // Resolved up front: the semester HTML below is built synchronously, and a
+  // printed page gets no second chance at a broken image. A domain with no
+  // logo good enough falls back to the same grey bar as a domainless term.
+  const coopLogos = new Map();
+  await Promise.all(
+    [...new Set(Object.values(specialTermPl).map(d => d?.companyDomain).filter(Boolean))]
+      .map(async domain => {
+        const url = await resolveCompanyLogo(domain).catch(() => null);
+        if (url) coopLogos.set(domain, url);
+      })
+  );
+  const coopIcon = domain => coopLogos.has(domain)
+    ? `<img class="coop-logo" src="${coopLogos.get(domain)}" />`
+    : `<div class="coop-bar"></div>`;
+
   // ── Semester blocks HTML ──────────────────────────────────────
   const semHtml = semRows.map(({ sem, ids, isDone, isCur, hasStart, hasCont }) => {
     const semSH = ids.reduce((s, id) => s + (courseMap[id]?.sh ?? 0), 0);
@@ -511,7 +526,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
           <div class="coop-row" style="border-color:#e0e0e0">
-            <div class="coop-icon">${contData.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(contData.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
+            <div class="coop-icon">${coopIcon(contData.companyDomain)}</div>
             <div style="flex:1">
               <div class="coop-title">${contType.label} CONTINUES${contCompany ? `<span style="text-transform:none"> \u00b7 ${contCompany}</span>` : ""}</div>
               ${contRole ? `<div class="coop-role">${contRole}</div>` : ""}
@@ -540,7 +555,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
           <div class="coop-row" style="border-color:#e0e0e0">
-            <div class="coop-icon">${startData.companyDomain ? `<img class="coop-logo" src="${pdfFaviconUrl(startData.companyDomain)}" onerror="this.style.display='none'" />` : `<div class="coop-bar"></div>`}</div>
+            <div class="coop-icon">${coopIcon(startData.companyDomain)}</div>
             <div style="flex:1">
               <div class="coop-title">${startType.label}${company ? `<span style="text-transform:none"> \u00b7 ${company}</span>` : ""}</div>
               ${role ? `<div class="coop-role">${role}</div>` : ""}

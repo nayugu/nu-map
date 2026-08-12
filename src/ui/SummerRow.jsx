@@ -140,7 +140,7 @@ export default function SummerRow({ semA, semB }) {
                   </>
                 )}
               </div>
-              <CompanyLogo key={termStartData.companyDomain || ""} domain={termStartData.companyDomain} size={isPhone ? 17 : 34} />
+              <CompanyLogo key={termStartData.companyDomain || ""} domain={termStartData.companyDomain} name={termStartData.company} size={isPhone ? 17 : 34} />
               <button onClick={e => { e.stopPropagation(); removeTerm(termStartId); }} onMouseDown={e => e.stopPropagation()} style={{ background: "none", border: "none", color: "var(--text-4)", cursor: "pointer", fontSize: 11, lineHeight: 1, padding: 0, flexShrink: 0 }} title={t("sem.term.remove", { type: termStartType.label.toLowerCase() })}>✕</button>
             </div>
           </div>
@@ -177,7 +177,7 @@ export default function SummerRow({ semA, semB }) {
               <div style={{ fontSize: isPhone ? 7 : 13, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termContData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termContData.typeId === "coop" ? "uppercase" : "none" }}><TText>{termContType?.label}</TText> {t("sem.cont.label")}</div>
               <div style={{ fontSize: isPhone ? 5 : 10, color: "var(--text-4)", marginTop: 2 }}>{termContData.duration}-month block</div>
             </div>
-            {showContLogo && <CompanyLogo key={termContData.companyDomain || ""} domain={termContData.companyDomain} size={isPhone ? 17 : 34} />}
+            {showContLogo && <CompanyLogo key={termContData.companyDomain || ""} domain={termContData.companyDomain} name={termContData.company} size={isPhone ? 17 : 34} />}
           </div>
         </div>
       );

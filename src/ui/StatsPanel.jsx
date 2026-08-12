@@ -28,7 +28,8 @@ import {
   levelDistribution, mergeLoadTimeline, longestPrereqChains, courseTier,
 } from "../core/planStats.js";
 import { SemLabel } from "./SemLabel.jsx";
-import CompanyLogo from "./CompanyLogo.jsx";
+import CompanyLogo, { useCompanyLogo } from "./CompanyLogo.jsx";
+import { resolveCompanyLogo, pixelReadableUrl } from "../core/companyLogo.js";
 
 // Palette (light/dark safe; drawn from SUBJECT_PALETTE hues).
 const UG_COLOR   = "#58a6ff";
@@ -39,8 +40,6 @@ const TIER_PALETTE = ["#ffd47e", "#ffb27d", "#ff9b59", "#ff9365", "#ff6b6b", "#f
 const tierColor = (tier) => TIER_PALETTE[Math.min(TIER_PALETTE.length - 1, Math.max(0, tier / 1000 - 1))];
 
 const yearOf = (sem) => (String(sem?.id ?? "").match(/\d{4}/) || [""])[0];
-const faviconUrl = (domain) =>
-  `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=64`;
 // Deterministic, distinct colour per company (stable across terms).
 const companyColor = (w) => subjectColor(String(w.company || w.companyDomain || w.id || "?").toUpperCase());
 
@@ -185,16 +184,32 @@ function StackBar({ segments, unit }) {
   );
 }
 
-// CORS-readable favicon proxy (wsrv.nl serves Access-Control-Allow-Origin:*),
-// so the logo can be drawn to a canvas and read pixel-by-pixel. The Google
-// favicon service itself doesn't send CORS headers, which taints the canvas.
-const colorSrcUrl = (domain) =>
-  `https://wsrv.nl/?url=${encodeURIComponent(`www.google.com/s2/favicons?domain=${domain}&sz=64`)}&w=32&h=32&output=png`;
+// A co-op run's logo on the load timeline. An SVG cannot host <CompanyLogo>,
+// so it shares the resolution hook instead — the same logo the cards show,
+// falling back to the neutral building mark when the company has none.
+function TimelineLogo({ domain, name, x, y, size = 18 }) {
+  const url = useCompanyLogo(domain, name);
+  if (url) return <image href={url} xlinkHref={url} x={x} y={y} width={size} height={size} />;
+  return (
+    <svg x={x} y={y} width={size} height={size} viewBox="0 0 24 24" fill="none"
+      stroke="var(--text-4)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 21h18" />
+      <path d="M6 21V5.5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1V21" />
+      <path d="M14 21V10a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1v11" />
+      <path d="M9 8.6h1.6M9 12h1.6M9 15.4h1.6" strokeWidth="1.5" />
+    </svg>
+  );
+}
 
 // Dominant (most-frequent) colour of a company logo, ignoring near-black /
 // near-white pixels — a systematic per-company accent. Falls back to a stable
 // hash colour if the image can't be read.
-function useDominantColor(domain, fallback) {
+//
+// It samples whatever resolveCompanyLogo picked, through the CORS proxy: this
+// used to hard-code Google at sz=64, which meant the glow was mixed from an
+// image the card never showed — and from the generic globe for any company
+// Google does not know, so those glowed identical grey.
+function useDominantColor(domain, name, fallback) {
   const [color, setColor] = useState(fallback);
   useEffect(() => {
     setColor(fallback);
@@ -228,9 +243,12 @@ function useDominantColor(domain, fallback) {
           setColor(`rgb(${Math.round(top.r / top.n)},${Math.round(top.g / top.n)},${Math.round(top.b / top.n)})`);
       } catch { /* tainted canvas — keep fallback */ }
     };
-    img.src = colorSrcUrl(domain);
+    resolveCompanyLogo(domain, name).then(url => {
+      if (cancelled || !url) return;   // no logo → keep the hashed fallback colour
+      img.src = pixelReadableUrl(url, 32);
+    });
     return () => { cancelled = true; };
-  }, [domain, fallback]);
+  }, [domain, name, fallback]);
   return color;
 }
 
@@ -574,13 +592,13 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
 // One work experience, wrapped in a glow band whose colour is taken from
 // the company logo's dominant colour (falling back to a stable hash).
 function WorkCard({ w }) {
-  const color = useDominantColor(w.companyDomain, companyColor(w));
+  const color = useDominantColor(w.companyDomain, w.company, companyColor(w));
   return (
     <GlowBox color={color} radius={8}>
       <div style={{ padding: "9px 10px", minWidth: 0 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5 }}>
-          {w.companyDomain
-            ? <CompanyLogo key={w.companyDomain} domain={w.companyDomain} size={26} />
+          {(w.companyDomain || w.company)
+            ? <CompanyLogo key={w.companyDomain || w.company} domain={w.companyDomain} name={w.company} size={26} />
             : <div style={{ width: 26, height: 26, flexShrink: 0, borderRadius: 6,
                 background: "var(--bg-surface)", border: "1px solid var(--border-1)",
                 display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -666,7 +684,7 @@ function LoadChart({ rows, fullTimeMin, semesterMax, shortSem }) {
       prev.spans.push(...spans);
       prev.endK = k;
     } else {
-      coopRuns.push({ workId: r.workId, domain: r.work?.companyDomain, spans, endK: k });
+      coopRuns.push({ workId: r.workId, domain: r.work?.companyDomain, name: r.work?.company, spans, endK: k });
     }
   });
 
@@ -707,15 +725,7 @@ function LoadChart({ rows, fullTimeMin, semesterMax, shortSem }) {
                 {touchesPrev && (
                   <line x1={x0} y1={padT} x2={x0} y2={padT + plotH} stroke="var(--bg-surface)" strokeWidth="2" strokeDasharray="6 4" strokeDashoffset="3" opacity="0.7" />
                 )}
-                {domain
-                  ? <image href={faviconUrl(domain)} xlinkHref={faviconUrl(domain)} x={logoX - 9} y={padT + 6} width="18" height="18" />
-                  : <svg x={logoX - 9} y={padT + 6} width="18" height="18" viewBox="0 0 24 24" fill="none"
-                      stroke="var(--text-4)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M3 21h18" />
-                      <path d="M6 21V5.5a1 1 0 0 1 1-1h5a1 1 0 0 1 1 1V21" />
-                      <path d="M14 21V10a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1v11" />
-                      <path d="M9 8.6h1.6M9 12h1.6M9 15.4h1.6" strokeWidth="1.5" />
-                    </svg>}
+                <TimelineLogo domain={domain} name={run.name} x={logoX - 9} y={padT + 6} />
               </g>
             );
           })}

@@ -91,7 +91,13 @@ export function FadeInput({ value, style, steps = GRADUAL_STEPS, onFocus, onBlur
   const { textAlign, width, ...textStyle } = style ?? {};
 
   return (
-    <div style={{ position: "relative", width: "100%", minWidth: 0 }}>
+    // display:flex, not the default block. An <input> is inline-block, so in a
+    // block wrapper it sits on a text baseline and the wrapper takes a line-box
+    // strut sized by the INHERITED font — which on a phone is several times the
+    // 5px the field itself uses, and showed up as a gap opening between the
+    // company and role lines. As a flex item the input's box is the wrapper's
+    // box, so wrapping a field costs no height at all.
+    <div style={{ position: "relative", width: "100%", minWidth: 0, display: "flex" }}>
       <input
         {...rest}
         value={value}

@@ -1,29 +1,16 @@
 # Nathan's ideas
 
+Main
+- Engine to create sample plans (especially since we have a lot more information and we can use information theory to build really good sample plans)
+- Mass import and export (Matthew is already working on this)
+- Search function on the data pages
+
+Optional
 - Ability to select intended instructor for a semester
 - Ability to compare courses side by side
 
-## UI queue (one at a time, in this order)
 
-1. **Search result title says "Plan 1 • NU Map".** The tab title follows the
-   active plan name, so a crawler loading the app cold sees the default plan
-   and indexes that instead of "Student-Built Northeastern Course Planner —
-   NU Map". Want the marketing title for anything that isn't a real session:
-   likely keep the static HTML title untouched and only take over the title
-   once a plan is actually chosen/renamed (and check og:/twitter: titles and
-   any per-page titles in the AI data surface at the same time).
-2. **Site-wide logo that links home.** The mark on every NU Map page except
-   the dev pages, clicking it goes to numap.app. Open question: mark alone, or
-   mark + "NU Map" wordmark.
-3. **Colour for a weekly-scheduled class.** The availability section sits right
-   above it and teaches green = open / red = closed, so a green or red subject
-   colour reading as "weekly" is confusing. Needs a different signal, and the
-   popup still has to be designed.
-4. **Subject pills should reveal the full subject name on hover** — both the
-   course-bank subject rows and the InfoPanel pills, in the same manner and
-   style as the availability section's hover today.
-
-## Next phase: run without us (2026-08-08)
+## Next phase big picture: run without us (2026-08-08)
 
 The goal for the next stretch is **autonomy over features**. NU Map should
 reach a state where it keeps itself correct with no one watching, and can then

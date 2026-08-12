@@ -45,8 +45,26 @@ import {
   sampleplanOffer, variantsFor, describeTemplate, isPlanEmpty,
 } from "../core/planTemplate.js";
 
-/** Namespaced like the other grad-panel collapse flags. */
-const COLLAPSE_KEY = "numap-grad-expand-sampleplan";
+/**
+ * Namespaced like the other grad-panel collapse flags, and kept separate per
+ * form factor — see where it is read for why a desktop choice must not follow
+ * the student onto a phone.
+ */
+const COLLAPSE_KEY = (isPhone) =>
+  `numap-grad-expand-sampleplan${isPhone ? "-phone" : ""}`;
+
+/**
+ * Type scale for this frame.
+ *
+ * Phone sizes are ~2/3 of what they were: the section read far larger than the
+ * panel around it. Two of the buttons were the reason it looked worst — they
+ * carried a hardcoded 10 and ignored `isPhone` entirely, so on a phone the
+ * actions were BIGGER than the body text describing them.
+ *
+ * One place, because five call sites drifting apart is how that happened.
+ */
+const PHONE_FZ  = (isPhone) => (isPhone ? 6 : 10);   // body, buttons, options
+const PHONE_FZL = (isPhone) => (isPhone ? 5.5 : 9);  // the section label
 
 export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) {
   const majorRequirements = usePort(IMajorRequirements);
@@ -70,14 +88,19 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   // Collapse is remembered ACROSS sessions but chosen BY STATE the first time.
   // An explicit preference outranks the state default, the same rule the other
   // credits toggle follows — someone who folded this away meant it.
+  //
+  // Remembered SEPARATELY per form factor. Expanding on a desktop is a
+  // reasonable thing to want and says nothing about a phone, where the same
+  // preference would put "Lay out" and "Replace my plan" back under the thumb.
+  const collapseKey = COLLAPSE_KEY(isPhone);
   const [openPref, setOpenPref] = useState(() => {
-    try { const v = localStorage.getItem(COLLAPSE_KEY); return v === null ? null : v === "true"; }
+    try { const v = localStorage.getItem(collapseKey); return v === null ? null : v === "true"; }
     catch { return null; }
   });
   const setOpen = (next) => {
     const val = typeof next === "function" ? next(openResolved) : next;
     setOpenPref(val);
-    try { localStorage.setItem(COLLAPSE_KEY, String(val)); } catch {}
+    try { localStorage.setItem(collapseKey, String(val)); } catch {}
   };
 
   // Question 1 of the rule, answered synchronously so nothing flickers in for a
@@ -179,28 +202,37 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   };
 
   const loaded = offer.state === "loaded";
-  // Collapsed once the plan IS the canvas — there is nothing to decide, so the
-  // row becomes a statement. Expanded whenever an action is available, because
-  // a collapsed offer is one nobody finds.
-  const openResolved = openPref ?? !loaded;
+  // On a desktop: collapsed once the plan IS the canvas — there is nothing to
+  // decide, so the row becomes a statement — and expanded whenever an action is
+  // available, because a collapsed offer is one nobody finds.
+  //
+  // On a phone: always collapsed. Expanded, this section puts "Lay out" and
+  // "Replace my plan" directly under the thumb in a list the student is
+  // scrolling, and one of those discards work. Discoverability is worth a
+  // mis-tap on a mouse; it is not worth one here, and the header still says the
+  // section exists.
+  const openResolved = openPref ?? (isPhone ? false : !loaded);
   const open = openResolved;
   const primary = offer.verbs[0] === "load" ? layOut : openAsNew;
   const primaryLabel = offer.verbs[0] === "load" ? t("grad.plan.load") : t("grad.plan.newplan");
-  const fz = isPhone ? 9 : 10;
+  const fz = PHONE_FZ(isPhone);
 
   return (
     <div style={{
-      margin: "8px 0 10px", padding: isPhone ? "7px 8px" : "9px 10px", borderRadius: 6,
+      // Padding tightened with the type, or 2/3-size text sits in a frame built
+      // for text half again as large and the box reads mostly as empty.
+      margin: isPhone ? "6px 0 7px" : "8px 0 10px",
+      padding: isPhone ? "5px 6px" : "9px 10px", borderRadius: 6,
       border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
     }}>
       {/* Header doubles as the collapse control, so the section is always in
           the same place whatever state it is in. */}
       <div
         onClick={() => setOpen(v => !v)}
-        style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer", userSelect: "none" }}
+        style={{ display: "flex", alignItems: "center", gap: isPhone ? 4 : 6, cursor: "pointer", userSelect: "none" }}
       >
         <span style={{
-          fontSize: isPhone ? 8 : 9, fontWeight: 700, letterSpacing: "0.06em", color: "var(--text-4)",
+          fontSize: PHONE_FZL(isPhone), fontWeight: 700, letterSpacing: "0.06em", color: "var(--text-4)",
         }}>{t("grad.plan.label")}</span>
         {/* Collapsed, the row still says something worth knowing: WHICH plan
             this canvas came from. Nothing else in the app surfaces that. */}
@@ -273,7 +305,7 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
               </div>
               {justDid && (
                 <div style={{ marginTop: 6 }}>
-                  <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn}>
+                  <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn(isPhone)}>
                     {t("grad.plan.undo")}
                   </button>
                 </div>
@@ -498,19 +530,23 @@ function ReplaceConfirm({ open, onCancel, onConfirm, onOpenAsNew, onPreview, lab
  * instead, which costs nothing in urgency and is what actually gets it seen.
  */
 function PreviewButton({ onClick, isPhone, t }) {
+  // Through PHONE_FZ like everything else in this frame. Written with its own
+  // sizes first, which is how the two buttons beside it ended up smaller than
+  // it on a phone — the exact drift the shared scale exists to stop.
+  const fz = PHONE_FZ(isPhone);
   return (
     <button
       onClick={onClick}
       style={{
-        display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-        width: "100%", marginBottom: 6,
-        fontSize: isPhone ? 10 : 11, fontWeight: 600,
-        padding: "6px 10px", borderRadius: 5, cursor: "pointer",
+        display: "flex", alignItems: "center", justifyContent: "center", gap: isPhone ? 4 : 6,
+        width: "100%", marginBottom: isPhone ? 5 : 6,
+        fontSize: fz, fontWeight: 600,
+        padding: isPhone ? "4px 8px" : "6px 10px", borderRadius: 5, cursor: "pointer",
         background: "var(--bg-2)", color: "var(--text-2)",
         border: "1px solid var(--border-1)",
       }}
     >
-      <span style={{ fontSize: isPhone ? 11 : 12, lineHeight: 1, color: "var(--text-4)" }}>⊞</span>
+      <span style={{ fontSize: fz + 1, lineHeight: 1, color: "var(--text-4)" }}>⊞</span>
       {t("grad.plan.preview")}
     </button>
   );
@@ -573,9 +609,9 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
     };
   }, [open]);
 
-  const fz = isPhone ? 9 : 10;
+  const fz = PHONE_FZ(isPhone);
   return (
-    <div ref={boxRef} style={{ position: "relative", marginBottom: 6 }}>
+    <div ref={boxRef} style={{ position: "relative", marginBottom: isPhone ? 5 : 6 }}>
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
@@ -671,23 +707,17 @@ function planNameFor(path, fmtProgramLabel, taken) {
   }
 }
 
-function Row({ children, isPhone }) {
-  return (
-    <div style={{
-      margin: "8px 0 10px", padding: isPhone ? "7px 8px" : "9px 10px", borderRadius: 6,
-      border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
-      display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
-      fontSize: isPhone ? 9 : 10,
-    }}>{children}</div>
-  );
-}
-
 const primaryBtn = (isPhone) => ({
-  fontSize: isPhone ? 9 : 10, fontWeight: 600, padding: "3px 10px", borderRadius: 5,
+  fontSize: PHONE_FZ(isPhone), fontWeight: 600,
+  padding: isPhone ? "2px 7px" : "3px 10px", borderRadius: 5,
   cursor: "pointer", border: "1px solid var(--border-1)",
   background: "var(--bg-2)", color: "var(--text-2)",
 });
-const linkBtn = {
-  fontSize: 10, background: "transparent", border: "none", color: "var(--link-1)",
-  cursor: "pointer", padding: 0,
-};
+const linkBtn = (isPhone) => ({
+  fontSize: PHONE_FZ(isPhone), background: "transparent", border: "none",
+  color: "var(--link-1)", cursor: "pointer", padding: 0,
+});
+// `dangerBtn` lived here. The inline red REPLACE it styled is gone — a
+// destructive action does not need advertising, it needs a confirmation that
+// says what it costs — so the helper has no caller left. The phone scale it
+// was taught is kept on everything that survives.

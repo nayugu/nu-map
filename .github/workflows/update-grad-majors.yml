@@ -32,11 +32,17 @@ concurrency:
 
 permissions:
   contents: write
+  issues: write        # the failure alert opens/closes an issue
 
 jobs:
   update:
     name: Scrape & commit graduate major requirements
     runs-on: ubuntu-latest
+
+    # Turns a hang into a failure that alerts. These share the
+    # nu-map-data concurrency group, so a wedged job blocks the others
+    # silently for up to GitHub\'s six-hour default.
+    timeout-minutes: 120
 
     steps:
       - name: Checkout repository
@@ -130,6 +136,38 @@ jobs:
         run: echo "✅  Graduate major requirements are already up-to-date — nothing to commit."
 
       # ── Write run summary ─────────────────────────────────────────────────
+      # ── Tell someone ──────────────────────────────────────────────────────────
+      - name: Report failure
+        if: failure()
+        uses: ./.github/actions/pipeline-alert
+        with:
+          pipeline: Graduate program requirements
+          key: grad-majors
+          state: failed
+          logs: |
+            /tmp/grad-majors-log.txt
+            /tmp/verify-log.txt
+            /tmp/equivalences-log.txt
+          data-paths: |
+            data/northeastern/programs/graduate
+          check-first: |
+            - Same parser and rails as the undergraduate pipeline — see the
+              `majors` alert for container ids, sitemap discovery and concentrations.
+              A break here usually breaks both; check whether the undergraduate run
+              failed too before assuming this is graduate-specific.
+            - Data fixes belong in the scrape scripts, on **both** the undergraduate and
+              graduate paths. A one-off migration is overwritten by the next run.
+
+      - name: Report recovery
+        if: success()
+        uses: ./.github/actions/pipeline-alert
+        with:
+          pipeline: Graduate program requirements
+          key: grad-majors
+          state: recovered
+          data-paths: |
+            data/northeastern/programs/graduate
+
       - name: Summary
         if: always()
         run: |

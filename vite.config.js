@@ -1,8 +1,8 @@
 import { defineConfig } from "vite";
+import net from "net";
 import react from "@vitejs/plugin-react";
 import { spawn, execSync } from "child_process";
 import fs from "fs";
-import net from "net";
 
 /**
  * Emits the AI-readable data export (dist/northeastern/ai/**, see
@@ -64,15 +64,19 @@ function aiDataDevPlugin() {
           res.end(`ai-data-dev: ${e}`);
           return;
         }
-        // No such page: hand it on, which is what production does. The SPA
-        // shell's inline check turns an unknown path into /404?p=… — that is
-        // precisely what superseded the old data-404.html stub when it was
-        // deleted (99ec1ab8), and this reader was left behind pointing at it.
+        // No such page: same not-found the production rewrite serves.
         //
-        // It mattered because the read sits OUTSIDE the try above: the ENOENT
-        // threw from a request handler with nothing to catch it, so a single
-        // mistyped /data URL took the whole dev server down.
-        return next();
+        // Read defensively, and note that this sits OUTSIDE the try above. An
+        // unguarded readFileSync on the fallback path turns "page not found"
+        // into "dev server dead" — the process exits on an unhandled ENOENT and
+        // takes the whole session with it. That is exactly what happened when
+        // 99ec1ab81c folded public/data-404.html into the site-wide
+        // public/404.html and left this line pointing at the deleted file.
+        res.statusCode = 404;
+        res.setHeader("Content-Type", "text/html; charset=utf-8");
+        let notFound = "<!doctype html><meta charset=utf-8><title>Not found</title><h1>404 — not found</h1>";
+        try { notFound = fs.readFileSync("./public/404.html", "utf8"); } catch { /* inline fallback */ }
+        res.end(notFound);
       });
     },
   };
@@ -154,61 +158,52 @@ function buildManifestPlugin() {
   };
 }
 
-/**
- * Spawns catalog-check-server alongside the dev server so no second terminal
- * is needed.
- *
- * Two things this has to get right, both learned the hard way:
- *
- *  1. **Do not spawn onto a taken port.** `child.on("error")` catches a failure
- *     to SPAWN, not the child's own `EADDRINUSE` exit — so a second dev server
- *     printed a full Node stack trace over the Vite banner and then sat in
- *     `node --watch`'s "waiting for file changes" state forever. The port is
- *     probed first instead, and a live server is left alone: one is all anyone
- *     needs, and it is already serving.
- *
- *  2. **Kill the child when the parent goes.** `buildEnd` does not fire when a
- *     dev server is stopped, so every run leaked a `node --watch` holding 3333
- *     — which is what made (1) fire on the next start. The child is killed on
- *     server close and on the signals that actually end a dev session.
- */
+/** Spawns catalog-check-server alongside the dev server so no second terminal is needed. */
 function catalogCheckPlugin() {
-  let child = null;
-  const stop = () => { if (child) { child.kill(); child = null; } };
+  let child;
+
+  // `node --watch` runs the server in a GRANDCHILD, so killing the supervisor
+  // alone leaves the process that actually holds the port running, reparented to
+  // init. detached:true makes the pair its own process group; a negative pid then
+  // kills the group rather than just the supervisor.
+  const stop = () => {
+    if (!child) return;
+    const pid = child.pid;
+    child = null;
+    try { process.kill(-pid, "SIGKILL"); } catch { /* already gone */ }
+  };
+
+  const portBusy = (port) => new Promise((resolve) => {
+    const probe = net.createConnection({ port, host: "127.0.0.1" });
+    probe.once("connect", () => { probe.destroy(); resolve(true); });
+    probe.once("error", () => resolve(false));
+    probe.setTimeout(300, () => { probe.destroy(); resolve(false); });
+  });
+
   return {
     name: "catalog-check-server",
     async configureServer(server) {
-      if (await portInUse(CATALOG_CHECK_PORT)) {
-        server.config.logger.info(
-          `catalog-check-server: port ${CATALOG_CHECK_PORT} already serving — reusing it`);
-        return;
+      // Two dev servers at once is normal here. Without this the second spawns a
+      // --watch supervisor that can never bind, and retries forever with its
+      // stdio inherited — which is what fills the terminal with EADDRINUSE.
+      if (await portBusy(3333)) return;
+
+      child = spawn("node", ["--watch", "scripts/catalog-check-server.js"],
+                    { stdio: "inherit", detached: true });
+      child.on("error", () => {});
+
+      // buildEnd alone was the bug: it is a BUILD hook and never fires when a dev
+      // server is interrupted, so every `npm run dev` leaked one supervisor and
+      // every Ctrl-C orphaned it. Sixteen had accumulated over nine days. Hook
+      // the events that actually end a dev session instead.
+      server.httpServer?.once("close", stop);
+      process.once("exit", stop);
+      for (const sig of ["SIGINT", "SIGTERM", "SIGHUP"]) {
+        process.once(sig, () => { stop(); process.exit(0); });
       }
-      child = spawn("node", ["--watch", "scripts/catalog-check-server.js"], { stdio: "inherit" });
-      child.on("error", () => { child = null; });
-      server.httpServer?.on("close", stop);
-      for (const sig of ["SIGINT", "SIGTERM", "exit"]) process.once(sig, stop);
     },
     buildEnd: stop,
   };
-}
-
-const CATALOG_CHECK_PORT = 3333;
-
-/**
- * Is something already listening? Resolves false on any error — never blocks a
- * build. Probes BOTH stacks: catalog-check-server binds `*:3333`, which macOS
- * reports as IPv6, so a 127.0.0.1-only probe would miss a live one and spawn a
- * duplicate that dies on EADDRINUSE — the exact thing this exists to prevent.
- */
-function portInUse(port) {
-  const probe = (host) => new Promise((resolve) => {
-    const s = net.createConnection({ port, host });
-    const done = (v) => { s.destroy(); resolve(v); };
-    s.once("connect", () => done(true));
-    s.once("error",   () => done(false));
-    s.setTimeout(400, () => done(false));
-  });
-  return Promise.all([probe("127.0.0.1"), probe("::1")]).then(r => r.some(Boolean));
 }
 
 export default defineConfig({

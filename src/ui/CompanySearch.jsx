@@ -1,13 +1,15 @@
 // ═══════════════════════════════════════════════════════════════════
 // COMPANY SEARCH  — autocomplete input backed by Clearbit suggest API
 // Dropdown rendered via portal so it escapes any overflow:hidden parent.
-// Logos use Google's favicon service (no API key, always works cross-origin).
+// Rows render <CompanyLogo>, the same component the plan and the stats panel
+// use, so the logo you pick in the dropdown is the logo you get on the card —
+// it used to build its own favicon URL, and the two drifted apart. Resolution
+// is cached per domain, so re-searching the same companies costs nothing.
 // ═══════════════════════════════════════════════════════════════════
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { FadeInput } from "./FadeText.jsx";
-
-const faviconUrl = domain => `https://www.google.com/s2/favicons?domain=${encodeURIComponent(domain)}&sz=128`;
+import CompanyLogo from "./CompanyLogo.jsx";
 
 
 export default function CompanySearch({ name, onChange, color, emptyColor, fontSize = 11, placeholder = "Company", phonePadding = false, align = "right" }) {
@@ -88,12 +90,7 @@ export default function CompanySearch({ name, onChange, color, emptyColor, fontS
           onMouseEnter={e => { e.currentTarget.style.background = "var(--card-bg-hov)"; }}
           onMouseLeave={e => { e.currentTarget.style.background = "transparent"; }}
         >
-          <img
-            src={faviconUrl(c.domain)}
-            alt=""
-            style={{ width: 20, height: 20, objectFit: "contain", flexShrink: 0 }}
-            onError={e => { e.target.style.display = "none"; }}
-          />
+          <CompanyLogo domain={c.domain} name={c.name} size={20} />
           <span style={{ fontWeight: 600, fontFamily: "'Inter', sans-serif" }}>{c.name}</span>
           <span style={{ fontSize: 10, color: "var(--text-4)", marginLeft: "auto" }}>{c.domain}</span>
         </div>

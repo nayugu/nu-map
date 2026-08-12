@@ -60,7 +60,9 @@
     "test:live": "cd test/live && node --test",
     "test:all": "npm test && npm run test:mcp && npm run test:split && npm run test:live",
     "test:baseline:update": "node test/invariant/regen-baselines.mjs",
-    "gen:donate-qr": "node scripts/gen-donate-qr.mjs"
+    "gen:donate-qr": "node scripts/gen-donate-qr.mjs",
+    "logos": "node scripts/build-logos.js",
+    "logos:check": "node scripts/build-logos.js --check"
   },
   "dependencies": {
     "@huggingface/transformers": "^4.2.0",

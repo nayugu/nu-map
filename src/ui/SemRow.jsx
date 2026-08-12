@@ -334,7 +334,7 @@ export default function SemRow({ sem }) {
                   </>
                 )}
               </div>
-              <CompanyLogo key={termStartData.companyDomain || ""} domain={termStartData.companyDomain} size={isPhone ? 20 : 40} />
+              <CompanyLogo key={termStartData.companyDomain || ""} domain={termStartData.companyDomain} name={termStartData.company} size={isPhone ? 20 : 40} />
               <button
                 onClick={e => { e.stopPropagation(); pushUndo(); setSpecialTermPl(p => { const n = { ...p }; delete n[termStartId]; return n; }); }}
                 onMouseDown={e => e.stopPropagation()}
@@ -387,7 +387,7 @@ export default function SemRow({ sem }) {
                 {termContData?.duration}-month block
               </div>
             </div>
-            {showContLogo && <CompanyLogo key={termContData?.companyDomain || ""} domain={termContData?.companyDomain} size={isPhone ? 20 : 40} />}
+            {showContLogo && <CompanyLogo key={termContData?.companyDomain || ""} domain={termContData?.companyDomain} name={termContData?.company} size={isPhone ? 20 : 40} />}
           </div>
 
         ) : mainSlots === null ? (

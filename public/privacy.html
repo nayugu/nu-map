@@ -22,6 +22,25 @@
     h2 { font-size: 1.1rem; margin-top: 2.2em; }
     code { background: #f0ede8; padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
     .updated { font-size: 0.85rem; opacity: 0.6; }
+    /* Availability note. Says a feature's front door is closed without implying
+       its terms have lapsed — the data commitments below it still bind. Muted,
+       not greyed out: greying reads as "does not apply to you", which would be
+       false for anyone already connected. */
+    .status {
+      font-size: 0.92rem; margin: 0.9em 0 0;
+      border-left: 3px solid #d8d2c8; padding: 0.1em 0 0.1em 0.9em;
+    }
+    @media (prefers-color-scheme: dark) { .status { border-left-color: #3a3f47; } }
+    /* Folded for length only. The status above the fold carries everything a
+       reader needs to know without clicking; the fold holds the detail that
+       currently applies to almost nobody. */
+    details.terms { margin-top: 0.6em; }
+    details.terms > summary {
+      cursor: pointer; font-size: 0.92rem; opacity: 0.75;
+      list-style: revert; padding: 0.1em 0;
+    }
+    details.terms > summary:hover { opacity: 1; }
+    details.terms[open] > summary { margin-bottom: 0.4em; }
     li { margin: 0.35em 0; }
     /* Site-wide home mark: the same affordance on every NU Map page. */
     .home { display: inline-block; line-height: 0; margin-bottom: 18px; }
@@ -33,7 +52,7 @@
 <body>
   <a class="home" href="/"><img src="/logo.png" alt="NU Map home" /></a>
   <h1>NU Map Privacy Policy</h1>
-  <p class="updated">Last updated: August 7, 2026</p>
+  <p class="updated">Last updated: August 9, 2026</p>
 
   <p>
     NU Map (<a href="https://numap.app">numap.app</a>) is an unofficial, open-source degree
@@ -65,6 +84,15 @@
   </ul>
 
   <h2>The optional Claude AI integration</h2>
+  <p class="status">
+    <strong>Status, August 2026:</strong> this is still in development. Setup instructions
+    are not currently shown in NU Map's settings, so if you are using NU Map today you do
+    not have this — nothing in this section applies to you, and nothing leaves your
+    browser. It is written out in full because the terms below bind us for the test
+    connections made while it was being built, and for whenever setup is offered again.
+  </p>
+  <details class="terms">
+  <summary>Read the full terms</summary>
   <p>
     NU Map can optionally connect to Claude (Anthropic's AI assistant) so it can help you plan.
     This is <strong>off by default</strong> and only activates after you explicitly approve the
@@ -97,6 +125,7 @@
         policy</a>. NU Map never sees your conversations — only the specific tool requests
         Claude makes on your behalf.</li>
   </ul>
+  </details>
 
   <h2>Course translation</h2>
   <p>
