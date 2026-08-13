@@ -120,6 +120,8 @@ export const strings = {
   "chart.source.catalog": "요람",
   "chart.source.chart": "CHART",
   "chart.source.catalog.none": "이 프로그램은 이수 계획을 공개하지 않습니다.",
+  "chart.source.catalog.tip": "이 프로그램에 대해 학과가 공개한 표준 이수 계획입니다.",
+  "chart.source.chart.tip": "NU Map이 학위 요건에서 직접 구성한 계획입니다. 선수과목, 학점 상한, 과목이 실제로 개설되는 계절을 확인합니다. 공식 계획은 아닙니다.",
   "chart.source.chart.none": "요건 데이터가 부족해 계획을 생성할 수 없습니다.",
   "chart.busy": "순서를 계산하는 중…",
   "chart.why": "어떻게 만들었는지",

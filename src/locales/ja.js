@@ -121,6 +121,8 @@ export const strings = {
   "chart.source.catalog": "カタログ",
   "chart.source.chart": "CHART",
   "chart.source.catalog.none": "このプログラムはプランを公開していません。",
+  "chart.source.catalog.tip": "このプログラムについて学科が公開している標準履修プランです。",
+  "chart.source.chart.tip": "NU Map が学位の要件から組み立てたプランです。前提科目・単位上限・実際に開講される季節を確認しています。公式のプランではありません。",
   "chart.source.chart.none": "要件データが不足しているためプランを生成できません。",
   "chart.busy": "順序を計算中…",
   "chart.why": "作成方法",

@@ -120,6 +120,8 @@ export const strings = {
   "chart.source.catalog": "الدليل",
   "chart.source.chart": "CHART",
   "chart.source.catalog.none": "هذا البرنامج لا ينشر خطة دراسية.",
+  "chart.source.catalog.tip": "الخطة الدراسية النموذجية التي ينشرها قسمك لهذا البرنامج.",
+  "chart.source.chart.tip": "يبني NU Map هذه الخطة من متطلبات درجتك، مع فحص المتطلبات السابقة وحدود الساعات والفصول التي تُطرح فيها المقررات فعلًا. وهي ليست خطة رسمية.",
   "chart.source.chart.none": "بيانات المتطلبات غير كافية لتوليد خطة.",
   "chart.busy": "جارٍ حساب الترتيب…",
   "chart.why": "كيف بُنيت",

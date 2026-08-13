@@ -123,6 +123,8 @@ export const strings = {
   "chart.source.catalog":     "Catalog",
   "chart.source.chart":       "CHART",
   "chart.source.catalog.none":"This program does not publish a plan.",
+  "chart.source.catalog.tip": "The sample plan your department publishes for this program.",
+  "chart.source.chart.tip":   "NU Map builds this one from your degree’s requirements, checking prerequisites, credit limits and when courses actually run. It is not an official plan.",
   "chart.source.chart.none":  "There is not enough requirement data to generate a plan.",
   "chart.busy":               "Working out an order…",
   "chart.why":                "How this was built",

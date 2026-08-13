@@ -365,11 +365,25 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
             />
             {/* Only offered once there is a plan to explain. An explainer that
                 describes the algorithm in general rather than THIS plan is a
-                brochure, and the panel is built to refuse being one. */}
+                brochure, and the panel is built to refuse being one.
+                *
+                * Under the toggle rather than beside it, and quiet. It was a blue link on the
+                * same row — the only blue in the panel, so it outranked the two buttons that
+                * actually do something, for a dialog that only explains. Now the toggle spans
+                * the panel like every other control, this sits beneath it as a secondary line,
+                * right-aligned and in body colour, with the underline carrying the affordance
+                * instead of a colour. */}
             {usingChart && gen?.report && (
-              <button onClick={() => setShowWhy(true)} style={linkBtn(isPhone)}>
-                {t("chart.why")}
-              </button>
+              <div style={{ width: "100%", textAlign: "end", marginTop: -2 }}>
+                <button
+                  onClick={() => setShowWhy(true)}
+                  style={{
+                    fontSize: PHONE_FZ(isPhone), background: "transparent", border: "none",
+                    color: "var(--text-3)", cursor: "pointer", padding: 0,
+                    textDecoration: "underline", textUnderlineOffset: 2,
+                  }}
+                >{t("chart.why")}</button>
+              </div>
             )}
           </div>
 
@@ -408,15 +422,18 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
             </div>
           )}
 
-          {/* What arrives, before deciding. */}
-          {!!chosen && (
-            <div style={{ fontSize: fz, color: "var(--text-3)", marginBottom: 6 }}>
-              {counts
-                ? t("onboard.sampleplan.counts", {
-                    courses: counts.courses, placeholders: counts.placeholders })
-                : "…"}
-            </div>
-          )}
+          {/* ── The two-number summary is gone ──────────────────────
+            *
+            * "adds 19 courses and 27 placeholders you'll choose later" was the best answer
+            * available to "what will this do" when it was written. It is not any more:
+            * `SamplePlanPreview` draws the actual plan, at the planner's own scale, from the
+            * same `applySamplePlan` output the buttons use. A picture of the plan beats two
+            * counts of it, and keeping both meant the weaker answer was the one shown by
+            * default while the stronger one hid behind a button.
+            *
+            * `counts` still feeds the replace confirmation, where a NUMBER is the right unit
+            * because the question there is what you lose, not what you get.
+            */}
 
           {/* The cost of REPLACING is deliberately not shown here.
               A warning box above the button row cannot say which button it is

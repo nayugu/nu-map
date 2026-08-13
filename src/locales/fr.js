@@ -120,6 +120,8 @@ export const strings = {
   "chart.source.catalog": "Catalogue",
   "chart.source.chart": "CHART",
   "chart.source.catalog.none": "Ce programme ne publie pas de plan.",
+  "chart.source.catalog.tip": "Le plan d’études que votre département publie pour ce programme.",
+  "chart.source.chart.tip": "NU Map construit celui-ci à partir des exigences de votre diplôme, en vérifiant les prérequis, les plafonds de crédits et les saisons où les cours sont réellement donnés. Ce n’est pas un plan officiel.",
   "chart.source.chart.none": "Les données de cursus sont insuffisantes pour générer un plan.",
   "chart.busy": "Recherche d’un ordre…",
   "chart.why": "Comment il a été construit",

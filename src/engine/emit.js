@@ -166,15 +166,44 @@ export function cellLabel(title) {
  * every option is a single course in the SAME subject — `PSYC 3200 or PT 5410 and
  * PT 5411` has to state both subjects and both halves.
  */
+/**
+ * How many options a title may name before it stops being a title.
+ *
+ * ── Measured against the published plans ────────────────────────────
+ *
+ * Over all 13,352 cells in the committed corpus that carry options:
+ *
+ *     1 option  11,966      4 options   24
+ *     2 options  1,111      5 options    2
+ *     3 options    222      6 options   26      7 options  1
+ *
+ * So 99% name three or fewer, and no department has ever printed more than seven. THREE
+ * is the bar: it is the p99 of what the catalog itself considers a printable choice.
+ *
+ * Without a bar, a "Computing and Social Issues" slot with twelve options rendered as
+ * "AFCS 2600 or CY 4170 or CY 5240 or DS 1300 or PHIL 1300 or HIST 2220 or INSH 2102 or
+ * JRNL 3700 or PHIL 1145 or SOCL 1280 or SOCL 2485 or SOCL 4528" — six lines that
+ * swallowed the term it sat in, and named twelve courses to answer a question the
+ * requirement's own title answers in three words.
+ */
+export const MAX_TITLED_OPTIONS = 3;
+
 function choiceText(groups, courseMap) {
   const singles = groups.every(g => g.length === 1 && courseMap[g[0]]);
   const subjects = new Set(groups.flat().map(id => courseMap[id]?.subject));
+  const shown = groups.slice(0, MAX_TITLED_OPTIONS);
+  // The count of what is NOT named, appended as a numeral. Deliberately not "+9 more":
+  // this string is the same in all eight locales, and every other word in it — the course
+  // codes — is language-neutral. `(+9)` after a list of three reads the same anywhere;
+  // English prose emitted from the engine would not localise at all.
+  const overflow = groups.length > shown.length ? ` (+${groups.length - shown.length})` : "";
+
   if (singles && subjects.size === 1) {
-    const [first, ...rest] = groups.map(g => courseMap[g[0]]);
-    return `${first.subject} ${first.number}` +
-      rest.map(c => ` or ${c.number}`).join("");
+    const [first, ...rest] = shown.map(g => courseMap[g[0]]);
+    return `${first.subject} ${first.number}`
+      + rest.map(c => ` or ${c.number}`).join("") + overflow;
   }
-  return groups.map(g => g.map(id => spaced(id, courseMap)).join(" and ")).join(" or ");
+  return shown.map(g => g.map(id => spaced(id, courseMap)).join(" and ")).join(" or ") + overflow;
 }
 
 /** One grid entry, in the catalog's own vocabulary. */

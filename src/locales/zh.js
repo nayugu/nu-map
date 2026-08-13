@@ -120,6 +120,8 @@ export const strings = {
   "chart.source.catalog": "课程目录",
   "chart.source.chart": "CHART",
   "chart.source.catalog.none": "该专业未发布学习方案。",
+  "chart.source.catalog.tip": "你所在系为该专业公布的示例学习方案。",
+  "chart.source.chart.tip": "这一份由 NU Map 依据你学位的要求生成，并检查先修条件、学分上限以及课程实际开设的季节。它不是官方方案。",
   "chart.source.chart.none": "课程要求数据不足，无法生成方案。",
   "chart.busy": "正在推算顺序…",
   "chart.why": "生成方式说明",
