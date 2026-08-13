@@ -83,6 +83,36 @@ test("plan deletion › no resurrected hard-delete helpers", () => {
   }
 });
 
+// ── 1b. Minted plan ids cannot collide ────────────────────────────────
+
+test("plan ids › are not minted from the clock alone", () => {
+  // `plan_${Date.now()}` was safe only while plans were created one gesture
+  // at a time. Duplicating a SELECTION runs synchronously, so every copy was
+  // minted inside the same millisecond and got the same id — measured, 5 of
+  // 5 identical. The second copy then overwrote the first's slot and the
+  // index carried duplicate ids, which buildTree collapses into one node.
+  //
+  // Checked structurally because the failure is a race: a behavioural test
+  // would have to lose it on purpose to see it.
+  const mint = CONTEXT.match(/const newPlanId = [^\n]*/)?.[0];
+  assert.ok(mint, "newPlanId is gone — plan ids are being minted somewhere else");
+  assert.match(mint, /planIdSeq/,
+    "newPlanId must mix in a monotonic counter; the clock alone repeats within a tick");
+
+  // And nothing may go back to minting them raw.
+  const raw = [...CONTEXT.matchAll(/(?:const|let)\s+\w*[Ii]d\w*\s*=\s*`plan_\$\{Date\.now\(\)\}`/g)];
+  assert.deepEqual(raw.map(m => m[0]), [],
+    "a plan id is being minted from Date.now() again — duplicates in one tick will collide");
+});
+
+test("plan ids › a synchronous burst of mints is unique", () => {
+  // The shape of the real minter, exercised the way doDuplicate exercises it.
+  let seq = 0;
+  const newPlanId = () => `plan_${Date.now().toString(36)}${(seq++).toString(36)}`;
+  const ids = Array.from({ length: 500 }, newPlanId);
+  assert.equal(new Set(ids).size, ids.length, "ids collided within one tick");
+});
+
 // ── 2. One list of sort modes ─────────────────────────────────────────
 
 test("sort modes › SORT_MODES is defined once, in core", () => {

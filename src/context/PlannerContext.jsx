@@ -763,6 +763,8 @@ const { locale, setLocale, locales, t } = useLanguage();
   const bankResizing  = useRef(null);
   const undoStack     = useRef([]);
   const redoStack     = useRef([]);
+  // Monotonic tail for minted plan ids — see `newPlanId`.
+  const planIdSeq     = useRef(0);
   // True while a directory picker is open. Only one may exist at a time, and
   // a dialog left open must never wedge export for the rest of the session.
   const exportBusy    = useRef(false);
@@ -2658,7 +2660,13 @@ const { locale, setLocale, locales, t } = useLanguage();
   const [plans, setPlans] = useState(() => {
     try {
       const raw = localStorage.getItem(key("plan-index"));
-      if (raw) return JSON.parse(raw);
+      const v = raw ? JSON.parse(raw) : null;
+      // Validated like `folders` is, and for the same reason: a key that
+      // parses to an object, or to [], reaches render as a non-array and the
+      // first `plans.map` throws — a blank app that reloads blank every time,
+      // because the bad value is still in storage. A truncated write, a hand
+      // edit or another tab can all produce one.
+      if (Array.isArray(v) && v.length && v.every(p => p && typeof p.id === "string")) return v;
     } catch {}
     return [{ id: "default", name: FIRST_PLAN_NAME }];
   });
@@ -2746,7 +2754,8 @@ const { locale, setLocale, locales, t } = useLanguage();
   // History is snapshots, not inverse commands: the plan index and folder list
   // hold only ids, names and parents, so a snapshot is a few hundred bytes and
   // cannot drift out of sync with the operation it is meant to reverse.
-  const TRASH_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+  const TRASH_TTL_DAYS = 30;
+  const TRASH_TTL_MS = TRASH_TTL_DAYS * 24 * 60 * 60 * 1000;
   const FOLDER_HISTORY_MAX = 50;
 
   const [planTrash, setPlanTrash] = useState(() => {
@@ -2825,12 +2834,35 @@ const { locale, setLocale, locales, t } = useLanguage();
 
     pushFolderHistory();
     setPlans(prev => [...prev, {
-      id, name: rec.name || "Plan", studentType,
+      // Deduplicated like every other name at root: a plan deleted because a
+      // replacement already exists would otherwise come back as its twin.
+      id, studentType,
+      name: uniqueName(siblingNames(planTree, null), rec.name || "Plan"),
       parentId: null, lastOpened: Date.now(),
     }]);
     setPlanTrash(prev => { const next = { ...prev }; delete next[id]; return next; });
     return { ok: true, id };
   };
+
+  /**
+   * `activePlanId` must always name a plan that exists.
+   *
+   * Nothing asserted it, and two routes break it. Under storage pressure the
+   * index write can fail (it is the large key) while the 12-byte active-plan
+   * write succeeds, so a reload names a plan the index never got. And with
+   * two tabs open, one tab deleting the plan the OTHER has active leaves
+   * `active-plan` pointing at it — `deleteNodes` only reseats the pointer
+   * when the plan it deleted was active in ITS tab.
+   *
+   * The symptom is quiet and permanent: no row is marked active, the header
+   * falls back to a default name, and the autosave keeps writing a slot no
+   * index lists. Reseating costs nothing when the pointer is already valid.
+   */
+  useEffect(() => {
+    if (!plans.length) return;
+    if (plans.some(p => p.id === activePlanId)) return;
+    setActivePlanId(plans[0].id);
+  }, [plans, activePlanId]);
 
   const folderSnapshot = () => ({ plans, folders, activePlanId });
 
@@ -3266,6 +3298,23 @@ const { locale, setLocale, locales, t } = useLanguage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePlanId]);
 
+  /**
+   * A plan id that cannot collide with one minted a moment ago.
+   *
+   * `plan_${Date.now()}` was fine while plans were created one gesture at a
+   * time, and stopped being fine the moment a SELECTION could be duplicated:
+   * that loop runs synchronously, so every copy was minted inside the same
+   * millisecond and got the same id. Measured: 5 of 5 identical. The second
+   * copy then overwrote the first's slot and the index carried duplicate ids,
+   * which `buildTree` collapses into one node — silent data loss.
+   *
+   * The counter, not the clock, is what guarantees it: `plans` is stale
+   * inside a synchronous loop (setPlans has not committed yet), so checking
+   * existing ids cannot help. The timestamp only keeps ids unique ACROSS
+   * sessions, where the counter restarts.
+   */
+  const newPlanId = () => `plan_${Date.now().toString(36)}${(planIdSeq.current++).toString(36)}`;
+
   // Save current plan to its localStorage slot
   const saveCurrentPlanToSlot = () => {
     try { localStorage.setItem(key(`plan-data-${activePlanId}`), JSON.stringify(captureCurrentPlan())); } catch {}
@@ -3297,7 +3346,7 @@ const { locale, setLocale, locales, t } = useLanguage();
    */
   const createPlan = (name, cohort = null, parentId = null, seed = null) => {
     saveCurrentPlanToSlot();
-    const id = `plan_${Date.now()}`;
+    const id = newPlanId();
     if (cohort) {
       // A failed write here USED to be swallowed, after which the plan was
       // added to the index and switched to anyway — so a full quota produced
@@ -3355,9 +3404,14 @@ const { locale, setLocale, locales, t } = useLanguage();
    * The slot is written BEFORE the index record and a failed write aborts, so
    * a copy can never exist in the index with no data behind it.
    *
+   * @param {boolean} [history=true] push an undo snapshot. Pass false when
+   *   duplicating a SELECTION: each copy would otherwise push its own
+   *   snapshot, and because they all read the same render's `plans` those
+   *   snapshots are identical — so one ⌘Z undid all three copies and the next
+   *   two did nothing at all.
    * @returns {{ok: true, id: string}|{ok: false, reason: 'read'|'quota'|'write'}}
    */
-  const duplicatePlan = (id) => {
+  const duplicatePlan = (id, history = true) => {
     const src = plans.find(p => p.id === id);
     if (!src) return { ok: false, reason: "read" };
     // Flush first: duplicating the plan you are editing must copy what is on
@@ -3366,13 +3420,13 @@ const { locale, setLocale, locales, t } = useLanguage();
     const snap = planSnapshot(id);
     if (!snap) return { ok: false, reason: "read" };
 
-    const newId = `plan_${Date.now()}`;
+    const newId = newPlanId();
     try {
       localStorage.setItem(key(`plan-data-${newId}`), JSON.stringify(snap));
     } catch (err) {
       return { ok: false, reason: /quota/i.test(String(err)) ? "quota" : "write" };
     }
-    pushFolderHistory();
+    if (history) pushFolderHistory();
     setPlans(prev => [...prev, {
       id: newId,
       name: uniqueName(siblingNames(planTree, src.parentId ?? null), src.name ?? "Plan"),
@@ -3767,7 +3821,14 @@ const { locale, setLocale, locales, t } = useLanguage();
       for (const f of got.folders) folders.push({ ...f, id: ns(f.id), parentId: f.parentId == null ? null : ns(f.parentId) });
       for (const p of got.plans)   plans.push({ ...p, id: ns(p.id), parentId: p.parentId == null ? null : ns(p.parentId) });
     }
-    if (!plans.length) return { ok: false, reason: lastReason };
+    // Folders with no plans is a VALID library — `parseLibraryFile` rejects
+    // only a document that is empty of both — so exporting one empty folder
+    // and importing it back used to fail with "Couldn't read that file",
+    // which is both wrong and alarming. Only report a read failure when
+    // something actually failed to read.
+    if (!plans.length && !folders.length) {
+      return { ok: false, reason: failed ? lastReason : "empty" };
+    }
 
     try {
       saveCurrentPlanToSlot();
@@ -3855,7 +3916,7 @@ const { locale, setLocale, locales, t } = useLanguage();
       if (d.version !== 1) { fail("version"); return; }
 
       saveCurrentPlanToSlot();
-      const id = `plan_${Date.now()}`;
+      const id = newPlanId();
       const base = d.planName || "Plan";
       const name = base.startsWith("+") ? base : `+ ${base}`;
       // The envelope is index data, not plan body — it must not be written
@@ -3939,12 +4000,26 @@ const { locale, setLocale, locales, t } = useLanguage();
   // Create a new plan slot pre-populated with shared data, then switch to it.
   const importSharedPlan = (d) => {
     saveCurrentPlanToSlot();
-    const id = `plan_${Date.now()}`;
+    const id = newPlanId();
     const base = d.planName || "Plan";
     const name = base.startsWith('/') ? '/' + base : '/ ' + base;
     // Pre-write so the activePlanId useEffect finds data and calls restorePlan.
-    try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d)); } catch {}
-    setPlans(prev => [...prev, { id, name, studentType: d.studentType ?? "undergrad" }]);
+    //
+    // A failed write here is the WORST of the three places this pattern
+    // appeared, and it used to be swallowed: a share code is burned
+    // server-side the moment it is claimed, so losing the payload loses the
+    // shared plan permanently — with no error, showing an empty canvas under
+    // the sender's plan name. Index and slot are two halves of one record.
+    try {
+      localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d));
+    } catch (err) {
+      alert(t(/quota/i.test(String(err)) ? "folders.io.err.quota" : "folders.io.err.write"));
+      return;
+    }
+    setPlans(prev => [...prev, {
+      id, name, studentType: d.studentType ?? "undergrad",
+      parentId: null, lastOpened: Date.now(),
+    }]);
     setActivePlanId(id);
     // restorePlan doesn't handle substitutions, so set them directly.
     setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
@@ -4552,7 +4627,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     folders, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort,
     createFolder, createFolderWithNodes, renameFolder, moveNodesTo, deleteNodes, previewDelete,
-    trashedPlans, restorePlanFromTrash,
+    trashedPlans, restorePlanFromTrash, TRASH_TTL_DAYS,
     reorderNodes, orderedSiblings,
     pushFolderHistory, undoFolders, redoFolders,
     folderCanUndo: folderPast.length > 0, folderCanRedo: folderFuture.length > 0,

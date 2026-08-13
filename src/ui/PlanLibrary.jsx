@@ -69,7 +69,9 @@ function UpIcon({ size = 12 }) {
  * next tick rather than immediately.
  */
 function setMinimalDragImage(e, row, count) {
-  const icon = row.item?.type === "folder" || row.children ? "\u{1F4C1}" : "\u{1F4C4}";
+  // `kind`, not `item.type`/`children` — a flattenTree row has neither of
+  // those, so a dragged FOLDER always showed the document glyph.
+  const icon = row.kind === "folder" ? "\u{1F4C1}" : "\u{1F4C4}";
   const el = document.createElement("div");
   el.textContent = count > 1 ? `${icon} ${count}` : icon;
   Object.assign(el.style, {
@@ -94,7 +96,7 @@ export default function PlanLibrary() {
     exportLibraryJSON, exportLibraryZip, exportPlansFlat, importLibraryFiles,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
-    trashedPlans, restorePlanFromTrash,
+    trashedPlans, restorePlanFromTrash, TRASH_TTL_DAYS,
     pushFolderHistory, undoFolders, redoFolders, folderCanUndo, folderCanRedo,
     setShowNewPlanModal, setNewPlanFolderId,
     isPhone,
@@ -385,8 +387,24 @@ export default function PlanLibrary() {
    */
   const doExport = async (ids, shape = "files") => {
     setExportMenu(null);
-    if (shape === "zip")    { setNotice(t("folders.io.exported", { n: exportLibraryZip(ids).plans }), false); return; }
-    if (shape === "bundle") { setNotice(t("folders.io.exported", { n: exportLibraryJSON(ids).plans }), false); return; }
+    // The bundle and zip routes are plain synchronous downloads with no error
+    // contract of their own, and `doExport` is async — so a throw from
+    // writeZip or createObjectURL became an unhandled rejection and the user
+    // saw NOTHING happen. They also used to report success for a selection of
+    // empty folders, downloading a file with no plans in it, while the
+    // default route called that same selection an error.
+    if (shape === "zip" || shape === "bundle") {
+      let res;
+      try {
+        res = shape === "zip" ? exportLibraryZip(ids) : exportLibraryJSON(ids);
+      } catch {
+        setNotice(t("folders.io.err.write"));
+        return;
+      }
+      if (!res?.plans) { setNotice(t("folders.io.err.noplans")); return; }
+      setNotice(t("folders.io.exported", { n: res.plans }), false);
+      return;
+    }
 
     const res = await exportPlansFlat(ids);
     if (!res.ok) {
@@ -434,8 +452,12 @@ export default function PlanLibrary() {
     const planIds = ids.filter(id => !planTree.folderIds.has(id) && planTree.byId.has(id));
     if (!planIds.length) return;
     const made = [];
+    // One snapshot for the whole act, taken BEFORE any copy exists — so ⌘Z
+    // undoes "duplicate these three" once, rather than needing three presses
+    // of which two are no-ops.
+    pushFolderHistory();
     for (const id of planIds) {
-      const res = duplicatePlan(id);
+      const res = duplicatePlan(id, false);
       if (!res.ok) { setNotice(t(`folders.io.err.${res.reason}`)); break; }
       made.push(res.id);
     }
@@ -565,6 +587,14 @@ export default function PlanLibrary() {
       // A context menu owns Escape while it is open, or dismissing the menu
       // would close the whole panel out from under it.
       if (menu || moveMenu || sortMenu || exportMenu) return;
+      // The trash sheet owns the keyboard while it is open, like every other
+      // overlay here. Without this, Escape closed the whole library behind it,
+      // Backspace opened the delete dialog UNDER it, and ⌘Z ran an invisible
+      // undo — all aimed at the selection the sheet was covering.
+      if (showTrash) {
+        if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); setShowTrash(false); }
+        return;
+      }
       if (pending) {
         if (e.key === "Escape") { e.preventDefault(); setPending(null); }
         if (e.key === "Enter")  { e.preventDefault(); confirmDelete(); }
@@ -656,7 +686,7 @@ export default function PlanLibrary() {
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showPlanLibrary, editingId, pending, menu, moveMenu, sortMenu, exportMenu, assigning, query, rows, focusId,
+  }, [showPlanLibrary, editingId, pending, menu, moveMenu, sortMenu, exportMenu, assigning, showTrash, query, rows, focusId,
       selectedIds, openFolders, folderCanUndo, folderCanRedo]);
 
   // ── Drag and drop ───────────────────────────────────────────────
@@ -1434,8 +1464,10 @@ export default function PlanLibrary() {
                   <span style={{ flex: 1, minWidth: 0, overflow: "hidden",
                     textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
                   <span style={{ flexShrink: 0, fontSize: 9, color: "var(--text-5)" }}>
+                    {/* The TTL comes from the context, not a second copy of
+                        "30" that could drift away from the sweep. */}
                     {t("folders.trash.daysLeft", {
-                      n: Math.max(0, 30 - Math.floor((Date.now() - p.deletedAt) / 86_400_000)),
+                      n: Math.max(0, TRASH_TTL_DAYS - Math.floor((Date.now() - p.deletedAt) / 86_400_000)),
                     })}
                   </span>
                   <button
