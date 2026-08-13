@@ -24,7 +24,37 @@
  * containing no course. The engine's witness proves reachability using courses it MATCHED
  * into pool cells, and those courses are not in the student's plan — reading the plan the
  * way the engine does would reproduce the same blind spot.
+ *
+ * ── The one place a reservation HAS to be reasoned about ────────────
+ *
+ * That stance had a hole in it. A reservation carries no course, so the prereq and
+ * availability checks above see nothing to check, and this gate printed "every generated
+ * plan passes every hard rule" over plans that put three `Concentration` cells in a term
+ * where the tightest concentration could offer none. The verdict was true and its SCOPE was
+ * named courses only, which is not what the sentence said.
+ *
+ * So `reservations` below asks the one question a placeholder can be wrong about: whichever
+ * concentration the student eventually picks, can the cells reserved for it be answered by
+ * DISTINCT courses from THAT option, each offered in its term's season and each prereq-clear
+ * by then? `∀ option, ∃ a filling` — never `∃ a course, ∀ options`, which is candidate-set
+ * intersection and is empty here.
+ *
+ * Two deliberate choices keep it an instrument rather than a second opinion from the engine:
+ *
+ *   The POOLS are data, read with core's `specForNode`/`materialize` — what the catalog says
+ *   an option contains. The VERDICT is this file's own, including its own matching, because a
+ *   gate that imported `witnessPlan` could not detect `witnessPlan` being wrong, which is the
+ *   defect it exists to catch.
+ *
+ *   It is NECESSARY, not sufficient. A candidate's prerequisites are read against the named
+ *   courses only, so a prereq that another reservation would have supplied reads as no-claim
+ *   and the candidate counts as available. That over-estimates what is reachable, which is the
+ *   safe direction: a violation reported here is real, and silence is not proof of feasibility.
  */
+
+// The sentinel the emitter writes into a concentration cell's binding. Core, not engine: it is
+// what a target IS, not how one gets scheduled.
+import { CONCENTRATION } from "../../src/core/requirementDemand.js";
 
 /**
  * @param {object} args
@@ -35,13 +65,19 @@
  * @param {number} args.creditCap     the registration cap for this student type
  * @param {number} args.minCourses    real courses a FULL term should carry; 0 disables
  * @param {number} args.realCourseSH  the credit floor at which a cell is a real course
+ * @param {{title: string, ids: string[]}[]} [args.concentrationOptions]
+ *   every concentration the student could still pick, already materialised to course ids.
+ *   Empty or omitted for a program with none, or for a plan generated against a PICK — with
+ *   one chosen there is no disjunction left to be wrong about.
  * @returns {{order: string[], availability: string[], overCap: string[], thin: string[],
- *            fullTerms: number, ok: boolean}}
+ *            reservations: string[], fullTerms: number, ok: boolean}}
  */
 export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
-                           creditCap, minCourses, realCourseSH }) {
+                           creditCap, minCourses, realCourseSH,
+                           concentrationOptions = [] }) {
   const placed = {};
   const rows = [];
+  const concCells = [];
   let ord = 0;
   for (const year of plan?.years ?? []) {
     for (const t of year.terms ?? []) {
@@ -58,6 +94,10 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
           cells++;
           sh += e.sh ?? 0;
           if ((e.sh ?? 0) >= realCourseSH) big++;
+          // A cell reserved for the concentration, by the binding the emitter writes. Read
+          // from the target sentinel rather than the title, because the title is the
+          // requirement's own wording and varies across 93 programs.
+          if (e.binding?.targets?.includes(CONCENTRATION)) concCells.push({ ord });
           // The requirement's own title is the cell's label by construction, so it identifies
           // the requirement without needing the binding solve a catalog plan would.
           const key = e.text ?? "";
@@ -94,6 +134,40 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
     if (evalPrereqTree(course.prereqs, placed, semIndex, at) === "order") {
       order.push(`${id} in ${rows[at].label}`);
     }
+  }
+
+  // ── Whichever concentration the student picks, can the reservations be answered? ──
+  //
+  // One independent matching per option, over this option's own courses. A cell reserved for
+  // the concentration is answerable here only by a course THIS option names — which is the
+  // whole point, because the pools are typically disjoint and the union proves a filling no
+  // single student can perform. See the header for why this is necessary and not sufficient.
+  const reservations = [];
+  for (const opt of concCells.length ? concentrationOptions : []) {
+    if (!opt?.ids?.length) continue;          // nothing enumerable: no claim to make
+    const adj = concCells.map(c => opt.ids.filter(id => {
+      const course = courseMap[id];
+      if (!course) return false;
+      if (!offered(id, rows[c.ord].season)) return false;
+      if (!course.prereqs?.length) return true;
+      return evalPrereqTree(course.prereqs, placed, semIndex, c.ord) !== "order";
+    }));
+    const matched = maxMatching(adj);
+    if (matched >= concCells.length) continue;
+    // Hall's condition over PREFIXES, to name the term that carries the shortfall: a course
+    // reachable by term t is reachable later too, so the cells up to t can never outnumber the
+    // distinct courses available by t. "Infeasible" is not something a reader can act on.
+    let worst = null;
+    for (const c of concCells) {
+      const upto = concCells.map((x, i) => [x, i]).filter(([x]) => x.ord <= c.ord);
+      const want = upto.length;
+      const have = new Set(upto.flatMap(([, i]) => adj[i])).size;
+      if (want > have && (!worst || want - have > worst.want - worst.have)) {
+        worst = { ord: c.ord, want, have };
+      }
+    }
+    reservations.push(`${opt.title}: ${concCells.length} cells, ${matched} fillable`
+      + (worst ? ` — by ${rows[worst.ord].label}, ${worst.want} reserved and ${worst.have} takeable` : ""));
   }
 
   const overCap = [], thin = [], emptyFull = [];
@@ -168,11 +242,37 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
   };
 
   return {
-    order, availability, overCap, thin, fullTerms, emptyFull, quality,
+    order, availability, overCap, thin, fullTerms, emptyFull, quality, reservations,
     // `thin` is deliberately NOT part of `ok`. It is a convention CHART relaxes where it is
     // unsatisfiable — 4.2% of published full terms miss it too, and they are architecture and
     // art where one studio course is 16 credits. The other three are rules a student cannot
     // work around: the registrar refuses the enrolment, so one instance is a bug.
-    ok: order.length === 0 && availability.length === 0 && overCap.length === 0,
+    ok: order.length === 0 && availability.length === 0 && overCap.length === 0
+      && reservations.length === 0,
   };
+}
+
+/**
+ * Maximum bipartite matching, cells to courses — Kuhn's, on adjacency lists.
+ *
+ * A SECOND implementation, next to the engine's `witnessPlan`, and deliberately so. This gate
+ * exists to contradict the engine when the engine is wrong, and a check that imported the
+ * engine's matching would agree with it by construction — including about the thing it is
+ * meant to catch. The rule this file must not duplicate is *what counts as a violation*;
+ * fifteen lines of textbook augmenting-path search is not that rule.
+ */
+function maxMatching(adj) {
+  const takenBy = new Map();
+  let size = 0;
+  const augment = (i, seen) => {
+    for (const id of adj[i]) {
+      if (seen.has(id)) continue;
+      seen.add(id);
+      const holder = takenBy.get(id);
+      if (holder === undefined || augment(holder, seen)) { takenBy.set(id, i); return true; }
+    }
+    return false;
+  };
+  for (let i = 0; i < adj.length; i++) if (augment(i, new Set())) size++;
+  return size;
 }

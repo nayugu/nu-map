@@ -70,7 +70,7 @@
 
 import { normalizePooledSection, courseKey } from "../core/gradRequirements.js";
 import { specForNode, specIsEmpty, emptySpec } from "../core/programEligibility.js";
-import { unionSpec } from "../core/candidateSpec.js";
+import { unionSpec, materialize } from "../core/candidateSpec.js";
 import {
   DEFAULT_UNIT_SH, GENERAL_ELECTIVE, CONCENTRATION, typicalSH,
 } from "../core/requirementDemand.js";
@@ -625,6 +625,21 @@ export function deriveCells(programData, {
         //
         // General electives keep `null`, correctly: they really do admit anything.
         spec: target === CONCENTRATION ? concentrationSpec(programData, concentration) : null,
+        // ── And the union is not, on its own, a legal answer ──────────
+        //
+        // The union says what MAY answer this cell before the student chooses. It does not say
+        // the cell is fillable, because the student does not get the union — they get one
+        // option. CS BSCS's five pools are pairwise disjoint, so a matching drawn from the
+        // union can answer three cells with three courses from three DIFFERENT concentrations,
+        // which no student can do.
+        //
+        // So the cell carries its options with it. The witness quantifies `∀ option, ∃ a
+        // filling` over exactly this list — and it travels ON THE CELL rather than through the
+        // search's arguments so that no call site can forget to ask. A guard that has to be
+        // passed down four layers is a guard the next caller omits.
+        ...(target === CONCENTRATION
+          ? { optionPools: concentrationOptionPools(programData, courseMap, concentration) }
+          : {}),
         // Marked when the bucket rests on OUR arithmetic rather than the catalog's
         // statement, because that is what pre-flight's "mostly unlabelled" gate is
         // entitled to refuse over. A bucket the catalog stated is evidence; one we
@@ -745,12 +760,14 @@ function mergeForcedCells(cells, notes, repeatable = () => false) {
  *   `minOptions` is 1, so no student can do that. Per option, the courses actually reachable in
  *   that term were 0, 1, 2, 0 and 1 — every one of them short of three.
  *
- * Corpus-wide that is 39 of 143 plans (27%) across 28 programs putting more concentration cells
- * in a term than the tightest concentration could fill, some of them 3 cells against 0.
+ * Corpus-wide that is 21 of 77 concentration plans (27%) across 20 of 64 programs putting more
+ * concentration cells in a term than the tightest concentration could fill — re-measured with an
+ * independent instrument over the emitted documents (`scripts/lib/chart-gate.js`), which
+ * corrected the first estimate's denominator without moving its rate.
  *
  * So resolving is not merely a nicety for better sequencing — it is what makes the cell's
- * candidate set true. The union path remains for a student who has not chosen, and
- * `concentrationCapacity` is what keeps that path honest.
+ * candidate set true. The union path remains for a student who has not chosen, and what keeps
+ * that path honest is the cell's `optionPools` plus the witness's `∀ option, ∃ a filling`.
  *
  * Null when the program has none, or when the options name nothing enumerable — an
  * unbounded concentration cell is honest, it just cannot be sequenced as depth.
@@ -769,53 +786,57 @@ function concentrationSpec(programData, chosen = null) {
 }
 
 /**
- * How many concentration cells may stand in the terms up to each index, for a student who has
- * NOT chosen a concentration yet.
+ * Every concentration the student could still pick, materialised to course ids.
  *
- * ── Why a cumulative bound, and why the min over options ────────────
+ * Null once a pick is resolved: the cell then carries that option's own pool and there is no
+ * disjunction left to quantify over. Null too when the program requires no concentration, or
+ * names fewer than two — `∀` over one option is what the spec already says.
  *
- * The plan has to hold whichever concentration the student eventually picks, so the constraint
- * is `∀ option, ∃ a filling` — not `∃ a course, ∀ options`. That distinction is the whole
- * problem: the second reading is what "intersect the candidate sets" means, and the
- * intersection here is EMPTY, so it would refuse all 93 programs that require a concentration.
- * This codebase has already paid for that lesson once — candidate-set intersection was measured
- * empty 86.7% of the time and dropped.
+ * An option naming nothing enumerable is DROPPED rather than treated as empty. Empty would
+ * refuse every plan for a program whose options we cannot read, which is a claim about our
+ * parser dressed as a claim about the degree. The consequence is stated honestly: the guarantee
+ * is `∀ option we can enumerate`, not `∀ option`, and a program whose options are all
+ * unreadable gets the old union behaviour because nothing better is available.
  *
- * Cumulative rather than per-term because prerequisites only accumulate: a course reachable by
- * term t is reachable in every later term too. So for one option the requirement is Hall's
- * condition over prefixes — the cells placed in terms ≤ t can never outnumber that option's
- * courses reachable by t — and over all options it is the same statement against the minimum.
- * The engine already reasons this way for the four-course rule, where per-term was the weak
- * relaxation and Hall's condition the real one.
+ * ── Exported, so the gate quantifies over the SAME options ──────────
  *
- * `earliest` is the static prereq-depth floor, not a fact about the arrangement, so this is
- * computed once and cannot make the search circular.
+ * `scripts/lib/chart-gate.js` checks this property independently and deliberately keeps its own
+ * matching — a gate that imported the engine's witness could not catch the engine's witness
+ * being wrong. But *which options a program has* is catalog data, not a verdict, and the two
+ * sides disagreeing about that would be a bug in both rather than a useful second opinion. So
+ * the data is shared and only the judgement is duplicated. Built from core's `specForNode` and
+ * `materialize`; nothing here is a scheduling decision.
  */
-export function concentrationCapacity(programData, courseMap, termCount, earliest) {
+export function concentrationOptionPools(programData, courseMap, chosen = null) {
   const options = programData?.concentrations?.concentrationOptions ?? [];
-  if (options.length < 2 || (programData.concentrations?.minOptions ?? 1) < 1) return null;
-  const caps = new Array(termCount).fill(Infinity);
+  if (options.length < 2) return null;
+  if ((programData.concentrations?.minOptions ?? 1) < 1) return null;
+  if (chosen && resolveConcentration(programData, chosen)) return null;
+  const pools = [];
   for (const o of options) {
-    let spec;
-    try { spec = specForNode(o); } catch { continue; }
-    const keys = [...(spec?.keys ?? [])];
-    if (!keys.length) continue;
-    // Reachable-by-t, accumulated. A course with no computable floor counts from term 0: the
-    // conservative direction here is to ALLOW, because an unknown depth must not manufacture an
-    // infeasibility the catalog does not assert.
-    const byTerm = new Array(termCount).fill(0);
-    for (const k of keys) {
-      const t = Math.max(0, Math.min(termCount - 1, earliest(k) ?? 0));
-      byTerm[t]++;
-    }
-    let run = 0;
-    for (let t = 0; t < termCount; t++) {
-      run += byTerm[t];
-      caps[t] = Math.min(caps[t], run);
-    }
+    let ids;
+    try { ids = [...materialize(specForNode(o), courseMap)]; } catch { continue; }
+    if (ids.length) pools.push({ title: o.title ?? "Concentration", ids });
   }
-  return caps.every(c => c === Infinity) ? null : caps;
+  return pools.length ? pools : null;
 }
+
+// ── `concentrationCapacity` was removed here, and the removal IS the fix ──
+//
+// It bounded how many concentration cells could stand in the terms up to each index, as the
+// minimum over options of their cumulative prereq-reachable course counts. The reasoning it
+// rested on was right and is kept, because the witness now does it exactly: the constraint is
+// `∀ option, ∃ a filling`, never `∃ course, ∀ options` — that second reading is candidate-set
+// intersection, measured EMPTY across these pools, and it would refuse all 93 programs that
+// require a concentration. This codebase has paid for that lesson once already, at 86.7%.
+//
+// What was wrong was everything between the reasoning and the effect. It counted, but was
+// applied as a unary domain filter that cannot express a count. It read STATIC prereq depth, so
+// for CS BSCS it permitted 8 cells at term 5 where the arrangement admits 0, while blocking
+// terms 1–2 that nothing wanted — 2 plans of cost for a bound that never bound. And the
+// dimension that actually failed hardest was seasonal availability, which no depth vector can
+// see. An approximation kept beside the exact rule is a second thing to get wrong, and an inert
+// guard reads as coverage. See `witnessPlan` and the `optionPools` on a concentration cell.
 
 /** The courses a cell can be answered by, as a spec, whichever shape it stores. */
 const specOfCell = (cell) =>

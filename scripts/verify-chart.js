@@ -50,6 +50,8 @@ import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { gatePlan } from "./lib/chart-gate.js";
 import { fingerprintPlan, canonicalPlan } from "./lib/chart-fingerprint.js";
+import { specForNode } from "../src/core/programEligibility.js";
+import { materialize } from "../src/core/candidateSpec.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 
@@ -131,6 +133,33 @@ const Q = {
   clumped: 0, studyTerms: 0, fillerCount: 0, fillerPositionSum: 0,
   loadSpreadSum: 0, longestEmptyRun: 0, plansWithGap: 0,
 };
+// Plans whose concentration reservations cannot be filled under some option, and the programs
+// they belong to. Counted separately from `violations` while the engine still emits them, so the
+// figure is legible on its own rather than folded into a hard-rule tally.
+const R = { plans: 0, programs: new Set(), concPlans: 0, concPrograms: new Set() };
+
+/**
+ * Every concentration a student of this program could still pick, as course ids.
+ *
+ * Read with core's spec reader, not the engine's: what an option CONTAINS is a fact about the
+ * catalog, and the gate has to be able to disagree with the engine about scheduling while
+ * agreeing with it about the data. Options naming nothing enumerable are dropped, because an
+ * unbounded pool supports no claim either way.
+ */
+const poolCache = new Map();
+function optionPools(programData) {
+  const options = programData?.concentrations?.concentrationOptions ?? [];
+  if (options.length < 2 || (programData.concentrations?.minOptions ?? 1) < 1) return [];
+  if (poolCache.has(programData)) return poolCache.get(programData);
+  const pools = [];
+  for (const o of options) {
+    let ids = [];
+    try { ids = [...materialize(specForNode(o), courseMap)]; } catch { continue; }
+    if (ids.length) pools.push({ title: o.title ?? "(untitled concentration)", ids });
+  }
+  poolCache.set(programData, pools);
+  return pools;
+}
 
 for (const d of degrees) {
   const variants = d.plan?.plans?.length ? d.plan.plans : [null];
@@ -183,6 +212,9 @@ for (const d of degrees) {
       creditCap: ports.creditMax(studentType),
       minCourses: minCoursesFor(chartCalibration, studentType),
       realCourseSH: chartCalibration.realCourseSH,
+      // Every concentration still open to this student. These plans are generated without a
+      // pick, so a cell reserved for the concentration has to be answerable under EVERY one.
+      concentrationOptions: optionPools(d.data),
     });
     thin += g.thin.length;
     fullTerms += g.fullTerms;
@@ -194,11 +226,13 @@ for (const d of degrees) {
     Q.loadSpreadSum += g.quality.loadSpread;
     Q.longestEmptyRun = Math.max(Q.longestEmptyRun, g.quality.longestEmptyRun);
     Q.plansWithGap += g.quality.longestEmptyRun > 0 ? 1 : 0;
+    if (optionPools(d.data).length) { R.concPlans++; R.concPrograms.add(label.split("#")[0]); }
+    if (g.reservations.length) { R.plans++; R.programs.add(label.split("#")[0]); }
     if (!g.ok) {
       violations.push({
         label, kind: "hard-rule",
         order: g.order.slice(0, 4), availability: g.availability.slice(0, 4),
-        overCap: g.overCap.slice(0, 4),
+        overCap: g.overCap.slice(0, 4), reservations: g.reservations.slice(0, 4),
       });
     }
   });
@@ -214,6 +248,11 @@ console.log(`  thin full terms ${thin} of ${fullTerms} (${(100 * thin / (fullTer
 // Counted separately because it is WORSE than thin and was previously invisible: `gatePlan`
 // skipped terms with no cells, so an empty fall or spring passed silently. See chart-gate.js.
 console.log(`  EMPTY full terms ${emptyFull}  — a semester the student is not enrolled in`);
+// The half of the gate that named courses cannot reach. Printed unconditionally, including the
+// denominator, because "0 unfillable" only means something beside how many plans were EXPOSED to
+// the question — the previous version of this gate scored zero here by not asking.
+console.log(`  concentration reservations UNFILLABLE under some option  ${R.plans} of `
+  + `${R.concPlans} plans (${R.programs.size} of ${R.concPrograms.size} programs)`);
 
 // ── Quality, with the corpus baseline beside each number ────────────
 //
@@ -265,6 +304,7 @@ if (hard.length) {
     if (v.order.length) parts.push(`ORDER ${v.order.join(", ")}`);
     if (v.availability.length) parts.push(`AVAILABILITY ${v.availability.join(", ")}`);
     if (v.overCap.length) parts.push(`OVER CAP ${v.overCap.join(", ")}`);
+    if (v.reservations?.length) parts.push(`UNFILLABLE ${v.reservations.join("; ")}`);
     console.error(`   ${v.label}\n     ${parts.join("\n     ")}`);
   }
   if (hard.length > 25) console.error(`   … and ${hard.length - 25} more`);

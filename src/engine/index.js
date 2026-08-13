@@ -28,9 +28,7 @@
 // outcome, and the official plan still loads beside it.
 // ═══════════════════════════════════════════════════════════════════
 
-import {
-  deriveCells, cellsSH, substitutePrereqs, concentrationCapacity, CONCENTRATION,
-} from "./demand.js";
+import { deriveCells, cellsSH, substitutePrereqs } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
 import { buildDomains, wideAtFor } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
@@ -112,10 +110,11 @@ export function generatePlan({
   //
   // 93 programs require a concentration and their pools are typically DISJOINT, so without the
   // pick a concentration cell can only carry the union of every option — which proves more than
-  // any single concentration can deliver and is why `concentrationCapacity` exists. With the
-  // pick the cell carries one real pool and needs no conservatism at all. Resolved by title
-  // through `concentrationResolve`, because the title is a concentration's only identity across
-  // saved plans, share links and MCP.
+  // any single concentration can deliver, and is why the cell also carries its options and the
+  // witness quantifies over them. With the pick the cell carries one real pool and there is no
+  // disjunction left, so the quantifier switches itself off. Resolved by title through
+  // `concentrationResolve`, because the title is a concentration's only identity across saved
+  // plans, share links and MCP.
   concentration = null,
   // The institution's measured conventions — four courses to a full term, where a
   // 3000-level course sits, what counts as a real course. Injected for the same reason
@@ -211,27 +210,30 @@ export function generatePlan({
     // Without a pick the cell's spec is the union of every option, and for a program whose
     // pools are disjoint the union proves far more than any one concentration can deliver:
     // CS BSCS matched three `Concentration` cells in one term with three courses drawn from
-    // three DIFFERENT concentrations, while per option the reachable counts there were
-    // 0, 1, 2, 0, 1. Corpus-wide, 39 of 143 plans across 28 programs did this.
+    // three DIFFERENT concentrations. Measured with an independent instrument over the emitted
+    // documents, 21 of 77 concentration plans across 20 of 64 programs did this.
     //
-    // So the domain floor is the earliest term at which the TIGHTEST option has anything
-    // takeable at all. A floor rather than a refusal, deliberately: nearly every one of those
-    // plans has later terms and general electives to trade with, and the standing instruction
-    // on this engine is that the answer to an ordering problem is a different ORDER. The
-    // cumulative form of the same bound is enforced for every arrangement in `isLegal`, which
-    // is where a rule has to live if no mutation is to erode it.
-    // Only needed where the pick is absent: with one resolved there is no disjunction left to
-    // be conservative about. Computed per layout, because the term count is the shape's.
-    const concCapacity = concentration
-      ? null
-      : concentrationCapacity(program, courseMap, ts.length, (id) => depth.depthOf(id));
-    if (concCapacity) {
-      for (const p of plans) {
-        if (p.cell.target !== CONCENTRATION) continue;
-        const narrowed = p.domain.filter(t => (concCapacity[Math.min(t, concCapacity.length - 1)] ?? 0) >= 1);
-        if (narrowed.length) p.domain = narrowed;
-      }
-    }
+    // ── Which is a QUANTIFIER defect, and was fixed as one ────────────
+    //
+    // A `concentrationCapacity` vector used to stand here, narrowing each cell's domain to the
+    // terms where the tightest option had anything takeable. It is gone, and deleting it is
+    // the fix rather than a regression, because three things were wrong with it at once:
+    //
+    //   it counted, and was applied as a UNARY domain filter, which cannot express "at most k
+    //   of these cells here" no matter how good the counts are;
+    //   its counts came from STATIC prereq depth, so it permitted 8 concentration cells at
+    //   term 5 for CS BSCS where the arrangement admits 0, and blocked terms 1–2 where nothing
+    //   wanted to go — measured cost, 2 plans, and it never bound where it mattered;
+    //   and the constraint that actually bit hardest was SEASON, not depth. The
+    //   architectural-studies plan put two cells in a summer half-term in which the Management
+    //   concentration runs exactly one course. No prereq-depth bound could ever see that.
+    //
+    // The real statement is `∀ option, ∃ a filling`, and the witness is where feasibility is
+    // defined, so that is where it now lives — checked over every arrangement `isLegal`
+    // considers, against courses from ONE option, with season, prerequisites and distinctness
+    // all quantified together. The pools travel on the cell (see `deriveCells`), so no call
+    // site can forget to ask. An approximation of a rule, kept beside the exact rule, is just
+    // a second thing to get wrong.
     return { terms: ts, plans, impossible, critical };
   };
 

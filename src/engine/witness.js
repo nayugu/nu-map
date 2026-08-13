@@ -199,9 +199,71 @@ export function prereqReachable(course, placements, semIndex, ti, courseMap) {
  *   how many other cells could be answered by this course. Wide cells pick the
  *   least-contended candidate, so an early elective does not spend a course a
  *   later, narrower cell has no alternative to.
+ * @param {boolean} [args.candidatesComplete]
+ *   whether `candidatesOf` returns a cell's WHOLE candidate list. See `witnessPlan` below:
+ *   an option pool may only be intersected with a complete list.
  * @returns {{ok: boolean, failure: object|null, witness: Map<string,string>}}
  */
-export function witnessPlan({
+export function witnessPlan(args) {
+  // ── The student gets ONE concentration, not the union of them ──────
+  //
+  // `∀ option, ∃ a filling`, which is the only reading a student can act on. The union is what
+  // the cell's spec says, and a matching over the union answered three cells in one term with
+  // courses from three different concentrations while the tightest option had one course
+  // running that season. The quantifier is the whole defect; everything else here was already
+  // right, which is why this is a loop around the existing matching rather than a new one.
+  //
+  // Never `∃ course, ∀ options` — that is candidate-set intersection, measured empty across
+  // these pools, and it would refuse all 93 programs that require a concentration.
+  //
+  // ── Only against COMPLETE candidate lists ─────────────────────────
+  //
+  // The propagator passes a TRUNCATED list, sound for the union because a cell with more
+  // candidates than the term has cells cannot be blocked at all. Intersecting a truncation with
+  // one option's pool is not sound: the fifty ids that survived truncation may contain none of
+  // Management's, and the witness would report a false infeasibility — silently pruning a
+  // feasible branch, the exact failure this file's soundness note exists to prevent. So the
+  // per-option pass runs only where the whole list is available.
+  const pools = args.candidatesComplete === false
+    ? null
+    : poolsOf(args.cells);
+  if (!pools) return witnessOnce(args);
+
+  let last = null;
+  for (const pool of pools) {
+    const ids = new Set(pool.ids);
+    last = witnessOnce({
+      ...args,
+      candidatesOf: (cell, season) => {
+        if (!cell.optionPools) return args.candidatesOf(cell, season);
+        const base = args.candidatesOf(cell, season);
+        // A null base means "admits anything", so this option's pool IS the candidate list.
+        return base === null ? [...pool.ids] : base.filter(id => ids.has(id));
+      },
+    });
+    if (!last.ok) {
+      return {
+        ...last,
+        failure: {
+          // A distinct kind, because the answer to it is different: the plan is legal for
+          // some concentrations and not others, so what has to move is where the
+          // concentration cells sit — not which courses exist.
+          ...last.failure, kind: "concentration-unfillable",
+          option: pool.title, via: last.failure?.kind,
+        },
+      };
+    }
+  }
+  return last;
+}
+
+/** The option pools this arrangement has to satisfy, or null when there is no disjunction. */
+function poolsOf(cells) {
+  for (const c of cells ?? []) if (c.optionPools?.length) return c.optionPools;
+  return null;
+}
+
+function witnessOnce({
   cells, candidatesOf, terms, courseMap,
   offeringProbability = () => null, offered = () => true, repeatable = () => false,
   checkPrereqs = true, contention = () => 0,

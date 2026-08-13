@@ -51,6 +51,18 @@ import { REAL_COURSE_SH, FULL_TERM_MIN_COURSES, fullTermMinCourses } from "../..
 import { buildDepthIndex } from "../../src/engine/prereqDepth.js";
 import { loadCatalog } from "../../src/adapters/northeastern/courseCatalog.node.js";
 import enginePorts from "../../src/adapters/northeastern/enginePorts.js";
+// ── The one rule below that this file does NOT re-implement ─────────
+//
+// Everything else here is written out inline, deliberately, so it is the APP's checkers rather
+// than the engine's. Reservation fillability is different: it needs a matching, and a fourth
+// hand-rolled matching would be a fourth thing to get wrong. `gatePlan` already owns it and
+// already keeps its own — the point of that duplication is that it is not the ENGINE's.
+//
+// It is wired here because CI runs `test:invariant` on every push while `verify-chart.js`, the
+// gate's only other caller, runs monthly in `update-courses.yml`. Without this the guard would
+// catch a regression a month after the commit that caused it.
+import { gatePlan } from "../../scripts/lib/chart-gate.js";
+import { concentrationOptionPools } from "../../src/engine/demand.js";
 
 // fileURLToPath, not .pathname: the latter is percent-encoded and breaks on a
 // checkout whose path contains a space.
@@ -101,7 +113,28 @@ function sample(list, n) {
 // Sized so this runs after every change. The cost is `refusals x budget` — a success takes a
 // median of 48 ms while a refusal spends its whole allowance by definition.
 const N = process.env.CHART_CORPUS === "all" ? Infinity : 45;
-const PROGRAMS = sample(degreePrograms(), N);
+const ALL_PROGRAMS = degreePrograms();
+
+// ── A uniform sample is the wrong instrument for a rare property ─────
+//
+// Only 64 of 748 programs have a concentration DISJUNCTION — two or more options the student
+// must choose between — so a uniform 45 carries about three of them, and the reservation rule is
+// violated by roughly a quarter of the plans that have one. A regression would therefore be
+// caught somewhere near half the time, and a guard that fails to fire half the time is not a
+// guard; it is a coin that reports "clean" on tails.
+//
+// So the disjunction programs are sampled SEPARATELY and appended. The uniform sample stays
+// exactly as it was — same seed, same 45, so every other assertion in this file is comparing
+// against the same corpus it always did — and the extra ones only add power to the rule they
+// were drawn for. This is the same reasoning as testing every variant rather than `plans[0]`.
+const CONC_N = process.env.CHART_CORPUS === "all" ? Infinity : 20;
+const uniform = sample(ALL_PROGRAMS, N);
+const chosen = new Set(uniform.map(p => `${p.lvl}/${p.key}`));
+const disjunctive = sample(
+  ALL_PROGRAMS.filter(p => !chosen.has(`${p.lvl}/${p.key}`)
+    && concentrationOptionPools(p.data, courseMap, null)),
+  CONC_N);
+const PROGRAMS = [...uniform, ...disjunctive];
 
 const checked = [];
 for (const p of PROGRAMS) {
@@ -160,8 +193,25 @@ for (const p of PROGRAMS) {
       const minCourses = fullTermMinCourses(p.lvl === "graduate" ? "graduate" : "undergraduate");
       if (!r.half && minCourses > 0 && r.big < minCourses) thin.push(`${r.label} (${r.big})`);
     }
+    // Whichever concentration this student picks, can the cells reserved for it be answered by
+    // distinct courses from THAT option? A placeholder carries no course, so every check above
+    // sees nothing to check and the plan passes them while being unfollowable — which is what
+    // 21 of 77 concentration plans were doing when nobody was asking.
+    const pools = concentrationOptionPools(p.data, courseMap, null) ?? [];
+    const reservations = pools.length
+      ? gatePlan({
+          plan: out.plan.plans[0], courseMap, evalPrereqTree,
+          offered: (id, season) => ports.offered(id, season),
+          creditCap: cap, minCourses: 0, realCourseSH: REAL_COURSE_SH,
+          concentrationOptions: pools,
+        }).reservations
+      : [];
+
     const barred = fullTermMinCourses(p.lvl === "graduate" ? "graduate" : "undergraduate") > 0;
-    checked.push({ key, order, avail, overCap, thin,
+    checked.push({ key, order, avail, overCap, thin, reservations,
+                   // How many plans faced the question at all. A zero here means nothing
+                   // without it — the previous gate scored zero by not asking.
+                   exposed: pools.length > 0,
                    // Only terms the rule applies to count toward the share, or graduate plans
                    // would dilute it into meaninglessness in both directions.
                    fullTerms: barred ? rows.filter(r => !r.coop && r.cells && !r.half).length : 0 });
@@ -194,6 +244,32 @@ test("hard rules › NO term exceeds the registration cap", () => {
   assert.deepEqual(bad.map(c => `${c.key}: ${c.overCap.slice(0, 3).join(", ")}`), [],
     `${bad.length} plans exceed the credit cap in some term — an overload petition the plan `
     + `does not mention.`);
+});
+
+test("hard rules › some plans are EXPOSED to the concentration question", () => {
+  // The assertion below passes trivially if no sampled program has a concentration, and the
+  // sample is random. This is the same guard as "there are plans to check", one level in: a
+  // check nothing reaches reports zero violations forever.
+  const exposed = checked.filter(c => c.exposed).length;
+  assert.ok(exposed >= 8,
+    `only ${exposed} generated plans have a concentration disjunction, so the next assertion has `
+    + `little power. About a quarter of such plans violated the rule before it was enforced, so `
+    + `a handful is the difference between a guard and a coin. See the sampling note above.`);
+});
+
+test("hard rules › EVERY concentration a student could pick can still be filled", () => {
+  // The union of every option is not an answer: the pools are typically disjoint, so a plan can
+  // reserve three cells in a term and satisfy them with courses from three DIFFERENT
+  // concentrations — a filling no single student can perform. Measured at 21 of 77 concentration
+  // plans before `witnessPlan` learned to quantify `∀ option, ∃ a filling`.
+  //
+  // Asserted at ZERO, beside order and availability, because it is the same kind of rule: a
+  // student who picks the wrong concentration cannot register for the term this plan gives them.
+  const bad = checked.filter(c => c.reservations.length);
+  assert.deepEqual(bad.map(c => `${c.key}: ${c.reservations.slice(0, 2).join("; ")}`), [],
+    `${bad.length} plans reserve more concentration cells in a term than the tightest `
+    + `concentration can fill. The union of the options proves a filling no student can perform `
+    + `— see witnessPlan's per-option pass and docs/chart-open-defects.md §2.`);
 });
 
 test("hard rules › nearly every full fall and spring carries four real courses", () => {

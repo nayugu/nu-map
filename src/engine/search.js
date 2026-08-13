@@ -778,6 +778,12 @@ function attemptPlacement({
     offeringProbability: ports.offeringProbability,
       offered: ports.offered,
     repeatable, checkPrereqs, contention: contentionOf,
+    // The propagator's lists are truncated, and a truncation may not be intersected with a
+    // concentration option's pool — see `witnessPlan`. Tied to `checkPrereqs` because the two
+    // callers are the same two, but stated separately: they are different claims, and a future
+    // caller passing complete lists with `checkPrereqs: false` must not silently lose the
+    // per-option check.
+    candidatesComplete: checkPrereqs,
   });
 
   // ── Room is RESERVED for the electives, not left over ─────────────

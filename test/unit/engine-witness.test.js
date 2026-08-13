@@ -304,3 +304,104 @@ test("witness › malformed cells do not throw", () => {
     assert.doesNotThrow(() => run(cells, { x: ["A100"] }, cm), JSON.stringify(cells));
   }
 });
+
+// ── ∀ option, ∃ a filling ──────────────────────────────────────────
+//
+// The student picks ONE concentration. A matching drawn from the union of every option proves
+// a filling nobody can perform, and that is what the corpus was doing in 21 of 77 plans: three
+// cells in a term answered by courses from three different, pairwise-disjoint concentrations.
+// Each test below is that defect or a way of over-correcting it.
+
+const CONC_CM = mapOf(
+  course("AAA1"), course("AAA2"), course("BBB1"), course("BBB2"), course("CCC1"),
+);
+// Two disjoint concentrations, exactly as the real pools are.
+const POOLS = [
+  { title: "Alpha", ids: ["AAA1", "AAA2"] },
+  { title: "Beta", ids: ["BBB1", "BBB2"] },
+];
+const conc = (id, term_, pools = POOLS) =>
+  ({ ...open(id, term_, "Concentration"), target: "~concentration", optionPools: pools });
+
+test("witness › THE BUG: two cells filled from two DIFFERENT concentrations is not a filling", () => {
+  // Union candidates offer AAA1 and BBB1 — a perfect matching, and useless: no student is in
+  // both concentrations. Per option only ONE course is available, so two cells cannot stand.
+  const cells = [conc("c0", 0), conc("c1", 0)];
+  const cands = { c0: ["AAA1", "BBB1"], c1: ["AAA1", "BBB1"] };
+  const r = run(cells, cands, CONC_CM);
+  assert.equal(r.ok, false, "the union matched two cells no single concentration can answer");
+  assert.equal(r.failure.kind, "concentration-unfillable");
+  assert.ok(["Alpha", "Beta"].includes(r.failure.option), "the failing option is named");
+  // The mechanism underneath is still reported, so the message can say WHY.
+  assert.ok(["over-subscribed", "no-candidate"].includes(r.failure.via));
+});
+
+test("witness › and it PASSES when every option really can answer both cells", () => {
+  const cells = [conc("c0", 0), conc("c1", 0)];
+  const cands = { c0: ["AAA1", "AAA2", "BBB1", "BBB2"], c1: ["AAA1", "AAA2", "BBB1", "BBB2"] };
+  assert.equal(run(cells, cands, CONC_CM).ok, true);
+});
+
+test("witness › distinctness is per option ACROSS terms, not just within one", () => {
+  // One cell in term 0 and one in term 2. Alpha has two courses and survives; Beta is given
+  // one, so its second cell has nothing left however far apart the terms are.
+  const pools = [{ title: "Alpha", ids: ["AAA1", "AAA2"] }, { title: "Beta", ids: ["BBB1"] }];
+  const cells = [conc("c0", 0, pools), conc("c1", 2, pools)];
+  const cands = { c0: ["AAA1", "AAA2", "BBB1"], c1: ["AAA1", "AAA2", "BBB1"] };
+  const r = run(cells, cands, CONC_CM);
+  assert.equal(r.ok, false);
+  assert.equal(r.failure.option, "Beta");
+});
+
+test("witness › SEASON is quantified too, which no prereq-depth bound could see", () => {
+  // The measured `architectural_studies_and_business_administration` case: two concentration
+  // cells in a summer half-term where the tightest option runs exactly one course that season.
+  // Nothing about prerequisites is wrong here, so a capacity vector read off prereq depth
+  // permits it — the constraint is availability, and only the witness checks all of them.
+  const cells = [conc("c0", 0), conc("c1", 0)];
+  const cands = { c0: ["AAA1", "AAA2", "BBB1", "BBB2"], c1: ["AAA1", "AAA2", "BBB1", "BBB2"] };
+  const offered = (id, season) => season !== "fall" || id === "AAA1" || id.startsWith("BBB");
+  const r = run(cells, cands, CONC_CM, { offered });     // TERMS[0] is fall
+  assert.equal(r.ok, false);
+  assert.equal(r.failure.option, "Alpha", "only AAA1 runs in the fall, so Alpha cannot fill two");
+});
+
+test("witness › a TRUNCATED candidate list is never intersected with an option pool", () => {
+  // The propagator passes a truncated list, and intersecting it with one option's pool would
+  // report a false infeasibility — pruning a feasible branch silently, which is the failure the
+  // soundness note in witness.js exists to prevent. Here the truncation happens to have kept
+  // only Alpha's courses; with `candidatesComplete: false` that must NOT condemn Beta.
+  const cells = [conc("c0", 0), conc("c1", 0)];
+  const cands = { c0: ["AAA1", "AAA2"], c1: ["AAA1", "AAA2"] };
+  assert.equal(run(cells, cands, CONC_CM, { candidatesComplete: false }).ok, true);
+  // …and with the complete list the same shape is condemned, so the flag is doing the work
+  // rather than the check being absent.
+  assert.equal(run(cells, cands, CONC_CM).ok, false);
+});
+
+test("witness › cells without option pools are untouched by the quantifier", () => {
+  // A general elective beside a concentration cell must not be restricted to the concentration.
+  const cells = [conc("c0", 0), open("g0", 0, "General Elective")];
+  const cands = { c0: ["AAA1", "AAA2", "BBB1", "BBB2"], g0: ["CCC1"] };
+  const r = run(cells, cands, CONC_CM);
+  assert.equal(r.ok, true);
+  assert.equal(r.witness.get("g0"), "CCC1");
+});
+
+test("witness › a resolved pick carries no pools, so nothing is over-constrained", () => {
+  // With a concentration chosen the cell's candidates ARE that option's courses and there is
+  // no disjunction left. `optionPools` is null then, and the witness must behave exactly as it
+  // did before — two cells over two courses is a perfect matching.
+  const cells = [{ ...open("c0", 0, "Concentration"), optionPools: null },
+                 { ...open("c1", 0, "Concentration"), optionPools: null }];
+  const cands = { c0: ["AAA1", "AAA2"], c1: ["AAA1", "AAA2"] };
+  assert.equal(run(cells, cands, CONC_CM).ok, true);
+});
+
+test("witness › an option that admits ANY course restricts to its own pool, not the catalog", () => {
+  const cells = [conc("c0", 0)];
+  const r = run(cells, () => null, CONC_CM);   // null = admits anything
+  assert.equal(r.ok, true);
+  assert.ok(["AAA1", "AAA2", "BBB1", "BBB2"].includes(r.witness.get("c0")),
+            "a concentration cell was answered from outside every concentration");
+});
