@@ -12,12 +12,15 @@ import { test, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, existsSync, readdirSync } from "node:fs";
 import { join, extname } from "node:path";
+import { fileURLToPath } from "node:url";
 import {
   normalizeCompanyName, normalizeLogoDomain, logoKeyForFile,
   curatedLogoFor, registerCompanyLogos, _resetLogoRegistry, LOGO_DIR,
 } from "../../src/core/companyLogoRegistry.js";
 
-const ROOT = new URL("../../", import.meta.url).pathname;
+// fileURLToPath, not .pathname: the latter is percent-encoded and breaks on a
+// checkout whose path contains a space.
+const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 
 /** Serve an index.json listing these filenames. */
 const serveFolder = (...files) => {

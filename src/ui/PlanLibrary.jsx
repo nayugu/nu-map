@@ -359,7 +359,8 @@ export default function PlanLibrary() {
     if (!assigning) return;
     const value = explicit !== undefined ? explicit : assigning.value;
     pushFolderHistory();          // one ⌘Z undoes the whole batch
-    for (const id of assigning.ids) setPlanStudent(id, value);
+    // One snapshot for the batch (pushed just above), not one per plan.
+    for (const id of assigning.ids) setPlanStudent(id, value, false);
     setAssigning(null);
   };
 
@@ -502,12 +503,10 @@ export default function PlanLibrary() {
     const clean = (name ?? "").trim();
     setEditingId(null);
     if (!clean || clean === planTree.byId.get(id)?.name) return;
-    if (planTree.folderIds.has(id)) {
-      renameFolder(id, clean);          // snapshots itself
-    } else {
-      pushFolderHistory();              // renamePlan is shared with the header
-      renamePlan(id, clean);
-    }
+    // Both snapshot themselves now, so neither needs a push here — doing it
+    // anyway would cost two ⌘Z to undo one rename.
+    if (planTree.folderIds.has(id)) renameFolder(id, clean);
+    else                            renamePlan(id, clean);
   };
 
   // ── Selection ───────────────────────────────────────────────────

@@ -44,6 +44,7 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { generatePlan } from "../../src/engine/index.js";
 import { evalPrereqTree } from "../../src/core/prereqEval.js";
 import { REAL_COURSE_SH, FULL_TERM_MIN_COURSES, fullTermMinCourses } from "../../src/engine/domains.js";
@@ -51,7 +52,9 @@ import { buildDepthIndex } from "../../src/engine/prereqDepth.js";
 import { loadCatalog } from "../../src/adapters/northeastern/courseCatalog.node.js";
 import enginePorts from "../../src/adapters/northeastern/enginePorts.js";
 
-const ROOT = new URL("../../", import.meta.url).pathname;
+// fileURLToPath, not .pathname: the latter is percent-encoded and breaks on a
+// checkout whose path contains a space.
+const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const { courseMap } = loadCatalog();
 const depthIndex = buildDepthIndex(courseMap);
 const ports = enginePorts(courseMap);

@@ -40,13 +40,16 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { LEVEL_POSITION, courseLevel } from "../../src/engine/prereqDepth.js";
 import {
   SAME_REQ_PER_TERM, FULL_TERM_MIN_COURSES, REAL_COURSE_SH,
 } from "../../src/engine/domains.js";
 import { loadCatalog } from "../../src/adapters/northeastern/courseCatalog.node.js";
 
-const ROOT = new URL("../../", import.meta.url).pathname;
+// fileURLToPath, not .pathname: the latter is percent-encoded and breaks on a
+// checkout whose path contains a space.
+const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const { courseMap } = loadCatalog();
 
 /** Every published plan variant, flattened to study terms. */

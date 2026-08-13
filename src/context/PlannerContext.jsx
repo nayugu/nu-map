@@ -2630,6 +2630,17 @@ const { locale, setLocale, locales, t } = useLanguage();
     setSpecialTermPl({});
     setSemOrders({});
     setOfferedOverrides({});
+    // These four drifted out of the reset while `restorePlan` kept handling
+    // them, so a plan created down the no-slot path inherited the PREVIOUS
+    // plan's credit-hour overrides and applied requirement substitutions —
+    // and `captureCurrentPlan` then wrote them into the new slot as though
+    // they had always belonged to it. Silently wrong numbers in a plan the
+    // advisor believes is empty, which is the worst shape a bug can take
+    // here.
+    setSubstitutions([]);
+    setShOverrides({});
+    setCollapsedSubs({});
+    setCurrentSemId(_defSemId);          // its own initial value, not null
     setBonusSH(0);
     setMajor("");
     setMajor2("");
@@ -2864,6 +2875,49 @@ const { locale, setLocale, locales, t } = useLanguage();
     setActivePlanId(plans[0].id);
   }, [plans, activePlanId]);
 
+  /**
+   * Adopt the plan index when ANOTHER TAB changes it.
+   *
+   * Without this, two tabs are last-writer-wins over the whole library, and
+   * the loser is whichever tab writes second — not whichever is stale. An
+   * advisor with the library open in one tab and a student's plan in another
+   * is the normal case, and the catastrophic version needs no delete at all:
+   * an old tab writes the index on ANY change to `plans`, including
+   * `switchPlan` stamping `lastOpened`. So merely clicking a plan in a
+   * morning tab could erase every plan created in the afternoon one.
+   *
+   * Adopting on the `storage` event keeps a tab from ever being stale enough
+   * to do that. `storage` fires only in OTHER tabs of the same origin, so
+   * this cannot loop against our own writes.
+   *
+   * Deliberately NOT adopted: `active-plan`. Which plan this tab is looking
+   * at is local to this tab, and yanking the canvas out from under someone
+   * because another window switched plans would be its own bug. The dangling
+   * guard below reseats it if the plan it names really is gone.
+   */
+  useEffect(() => {
+    const onStorage = (e) => {
+      if (e.storageArea && e.storageArea !== localStorage) return;
+      if (!e.key || e.newValue == null) return;
+      const parse = (fallback) => {
+        try { const v = JSON.parse(e.newValue); return v ?? fallback; } catch { return fallback; }
+      };
+      if (e.key === key("plan-index")) {
+        const v = parse(null);
+        if (Array.isArray(v) && v.length && v.every(p => p && typeof p.id === "string")) setPlans(v);
+      } else if (e.key === key("folder-index")) {
+        const v = parse(null);
+        if (Array.isArray(v)) setFolders(v);
+      } else if (e.key === key("plan-trash")) {
+        const v = parse(null);
+        if (v && typeof v === "object" && !Array.isArray(v)) setPlanTrash(v);
+      }
+    };
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [storagePrefix]);
+
   const folderSnapshot = () => ({ plans, folders, activePlanId });
 
   /** Record the pre-mutation state. Call immediately before mutating. */
@@ -3068,7 +3122,13 @@ const { locale, setLocale, locales, t } = useLanguage();
    * The plan-data slots are deliberately LEFT IN PLACE and tombstoned, which
    * is what makes this undoable; the TRASH_TTL sweep reclaims them later.
    */
-  const deleteNodes = (ids) => {
+  const deleteNodes = (rawIds) => {
+    // Ids that name nothing were passed straight through: classified as
+    // plans, tombstoned with an empty name, counted as casualties in the
+    // confirmation dialog, and reported as a successful delete. An MCP
+    // `DELETE_PLAN` for an id that does not exist is the obvious way in.
+    const ids = [...new Set(rawIds ?? [])].filter(id => planTree.byId.has(id));
+    if (!ids.length) return { ok: false, reason: "unknown", folderIds: [], planIds: [] };
     const scope = deleteScope(planTree, ids);
     const doomedPlans = new Set(scope.planIds);
     const remaining = plans.filter(p => !doomedPlans.has(p.id));
@@ -3453,9 +3513,26 @@ const { locale, setLocale, locales, t } = useLanguage();
   // erased, and the plan reopened empty. A second door that deletes differently
   // is how that happens, so the door is gone rather than merely aligned.
 
-  // Rename a plan
-  const renamePlan = (id, name) => {
-    setPlans(prev => prev.map(p => p.id === id ? { ...p, name } : p));
+  /**
+   * Rename a plan.
+   *
+   * Pushes history ITSELF, because not doing so was worse than "rename is not
+   * undoable": the next ⌘Z restored a snapshot carrying the OLD name, so an
+   * unrelated undo silently reverted a rename made minutes earlier. Only the
+   * library door compensated; the header's ✎ and MCP `RENAME_PLAN` did not.
+   *
+   * The name is trimmed and an empty one is refused here rather than at each
+   * door — both UI doors already guarded, MCP did not, so Claude could set a
+   * plan's name to "".
+   *
+   * @param {boolean} [history=true] pass false when batching under one snapshot
+   */
+  const renamePlan = (id, name, history = true) => {
+    const clean = String(name ?? "").trim();
+    if (!clean) return { ok: false, reason: "empty" };
+    if (history) pushFolderHistory();
+    setPlans(prev => prev.map(p => p.id === id ? { ...p, name: clean } : p));
+    return { ok: true };
   };
 
   // Associate a plan with a student (the advisee it belongs to), or clear the
@@ -3466,8 +3543,12 @@ const { locale, setLocale, locales, t } = useLanguage();
   // ride along by construction. An empty value drops the field entirely, so an
   // unassigned plan is a record with no `student` key (the same "absent, not
   // empty" shape `parentId` uses for "at root").
-  const setPlanStudent = (id, student) => {
+  const setPlanStudent = (id, student, history = true) => {
     const clean = (student ?? "").trim();
+    // Same reasoning as renamePlan: without a snapshot of its own, the next
+    // ⌘Z reverts an assignment nobody was undoing. `history: false` is for the
+    // bulk assign, which covers the whole batch with one snapshot.
+    if (history) pushFolderHistory();
     setPlans(prev => prev.map(p => {
       if (p.id !== id) return p;
       if (!clean) { const { student: _drop, ...rest } = p; return rest; }
@@ -3830,6 +3911,7 @@ const { locale, setLocale, locales, t } = useLanguage();
       return { ok: false, reason: failed ? lastReason : "empty" };
     }
 
+    let written = [];
     try {
       saveCurrentPlanToSlot();
       let n = 0;
@@ -3837,6 +3919,7 @@ const { locale, setLocale, locales, t } = useLanguage();
       const m = mergeLibrary({ folders, plans }, newId, folderName);
       for (const s of m.slots) {
         localStorage.setItem(key(`plan-data-${s.id}`), JSON.stringify(s.data));
+        written.push(s.id);
       }
       pushFolderHistory();
       setFolders(prev => [...prev, ...(m.folder ? [m.folder] : []), ...m.folders]);
@@ -3844,6 +3927,15 @@ const { locale, setLocale, locales, t } = useLanguage();
       if (m.folder) setFolderOpen(m.folder.id, true);
       return { ok: true, plans: m.plans.length, folders: m.folders.length, atRoot: m.atRoot, failed };
     } catch (err) {
+      // Roll the slots back. They were written one at a time, so a failure
+      // part-way (a full store — exactly when a big import fails) left the
+      // earlier ones with no index record and no tombstone: invisible to the
+      // Trash sheet AND to the TTL sweep, which only walks `planTrash`. They
+      // would have held quota for the life of the profile, which is the last
+      // thing a store that just ran out needs.
+      for (const id of written) {
+        try { localStorage.removeItem(key(`plan-data-${id}`)); } catch {}
+      }
       return { ok: false, reason: /quota/i.test(String(err)) ? "quota" : "write" };
     }
   };
@@ -3917,7 +4009,11 @@ const { locale, setLocale, locales, t } = useLanguage();
 
       saveCurrentPlanToSlot();
       const id = newPlanId();
-      const base = d.planName || "Plan";
+      // Coerced, not trusted: a file or share payload whose `planName` is a
+      // number threw a TypeError on `.startsWith` — which the hash path then
+      // reported as "Could not decode the shared plan link", the wrong
+      // diagnosis for a payload that decoded perfectly well.
+      const base = (typeof d.planName === "string" && d.planName.trim()) || "Plan";
       const name = base.startsWith("+") ? base : `+ ${base}`;
       // The envelope is index data, not plan body — it must not be written
       // into the slot, where it would ride along in every later export.
@@ -4001,7 +4097,7 @@ const { locale, setLocale, locales, t } = useLanguage();
   const importSharedPlan = (d) => {
     saveCurrentPlanToSlot();
     const id = newPlanId();
-    const base = d.planName || "Plan";
+    const base = (typeof d.planName === "string" && d.planName.trim()) || "Plan";
     const name = base.startsWith('/') ? '/' + base : '/ ' + base;
     // Pre-write so the activePlanId useEffect finds data and calls restorePlan.
     //
@@ -4439,6 +4535,33 @@ const { locale, setLocale, locales, t } = useLanguage();
     return d;
   };
 
+  /**
+   * The APPLY and COMMAND handlers, re-pointed every render.
+   *
+   * The subscription below is registered ONCE (`[aiAssistant]` is a stable
+   * port), so anything it calls directly is a mount-time closure. That is
+   * already known here — `readPlanContentsRef` exists for exactly this on the
+   * read path — but the WRITE path called `applyMCPActions` directly, and its
+   * damage is not a stale read:
+   *
+   *   `DELETE_PLAN` → `deleteNodes` computes the survivors from the mount-time
+   *   `plans` and calls `setPlans(remaining)` non-functionally. So every plan
+   *   created since page load vanished from the index and every plan deleted
+   *   since page load came back — and the vanished ones kept their slots with
+   *   no tombstone, invisible to both the Trash sheet and the TTL sweep, so
+   *   they held quota permanently.
+   *
+   *   `CREATE_PLAN`/`SWITCH_PLAN` → `saveCurrentPlanToSlot` wrote the
+   *   mount-time canvas into the mount-time plan's slot, so asking Claude to
+   *   switch plans after an afternoon of editing overwrote that plan with its
+   *   state as of page load.
+   *
+   * An advisor pairs a session once and works in it for hours, which is
+   * precisely the case where "mount-time" and "now" diverge most.
+   */
+  const mcpApplyRef = useRef(null);
+  mcpApplyRef.current = { applyMCPActions, executeMCPCommand, pushUndo };
+
   useEffect(() => {
     if (!aiAssistant?.onEvent) return;
     const unsubscribe = aiAssistant.onEvent((event) => {
@@ -4467,12 +4590,13 @@ const { locale, setLocale, locales, t } = useLanguage();
       if (event.type === "APPLY") {
         const { actions } = event.changeset ?? {};
         if (!Array.isArray(actions) || !actions.length) return;
-        pushUndo();
-        applyMCPActions(actions);
+        // Through the ref, never the closure — see mcpApplyRef above.
+        mcpApplyRef.current?.pushUndo();
+        mcpApplyRef.current?.applyMCPActions(actions);
         return;
       }
       if (event.type === "COMMAND") {
-        executeMCPCommand(event.command);
+        mcpApplyRef.current?.executeMCPCommand(event.command);
       }
     });
     return unsubscribe;

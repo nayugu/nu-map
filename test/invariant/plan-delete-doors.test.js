@@ -50,26 +50,45 @@ const FOLDERS = read("src/core/planFolders.js");
 
 // ── 1. One door out ───────────────────────────────────────────────────
 
-test("plan deletion › a plan slot is erased in exactly one place", () => {
+// A slot may be erased in exactly TWO circumstances, and they are not alike:
+//
+//   1. the TTL sweep, reclaiming a tombstoned plan after 30 days;
+//   2. rolling back an import that failed part-way, which removes slots that
+//      were written but never got an index record.
+//
+// The second was added later and it is NOT a weakening. What the invariant
+// actually protects is: never erase a slot that something can still point at.
+// A rolled-back import's slots are unreachable by construction — no index
+// record, no tombstone — so leaving them would be the bug, holding quota for
+// the life of the profile at the exact moment the store just ran out.
+//
+// So the test checks the CONTEXT of each erase rather than counting them,
+// which is the property that was meant all along; counting was a proxy that
+// happened to work while there was one caller.
+test("plan deletion › every plan-slot erase is a sweep or a rollback", () => {
   const hits = [...CONTEXT.matchAll(/removeItem\([^)]*plan-data-/g)];
-  assert.equal(
-    hits.length, 1,
-    `expected exactly one place to erase a plan slot, found ${hits.length}. ` +
-    "A second one means a delete door that skips the tombstone, so ⌘Z can " +
-    "restore an index record whose data is already gone."
-  );
+  assert.ok(hits.length >= 1, "no plan-slot erase found at all — this test needs updating");
+  for (const h of hits) {
+    const before = CONTEXT.slice(Math.max(0, h.index - 1200), h.index);
+    const isSweep    = /TRASH_TTL_MS/.test(before);
+    const isRollback = /Roll the slots back/.test(before);
+    assert.ok(
+      isSweep || isRollback,
+      "a plan slot is erased somewhere that is neither the TTL sweep nor an " +
+      "import rollback. If this is a delete path, it is destroying data that " +
+      "undo and the Trash still promise:\n  …" + before.slice(-220)
+    );
+  }
 });
 
-test("plan deletion › the one erase is the expiry sweep, not a delete path", () => {
-  const i = CONTEXT.search(/removeItem\([^)]*plan-data-/);
-  assert.notEqual(i, -1, "no plan-slot erase found at all — this test needs updating");
-  // The sweep is the only legitimate caller, and it is guarded by TRASH_TTL_MS.
-  const before = CONTEXT.slice(Math.max(0, i - 900), i);
-  assert.match(
-    before, /TRASH_TTL_MS/,
-    "the only place a plan slot may be erased is the trash TTL sweep; this " +
-    "call is not inside it, so it is deleting data that undo still promises."
-  );
+test("plan deletion › the rollback only erases slots it wrote itself", () => {
+  // The dangerous version of a rollback erases by scanning storage. This one
+  // may only remove ids it appended to `written` in the same call.
+  const i = CONTEXT.indexOf("Roll the slots back");
+  assert.notEqual(i, -1, "the import rollback is gone");
+  const block = CONTEXT.slice(i, i + 700);
+  assert.match(block, /for \(const id of written\)/,
+    "the rollback must iterate the ids it wrote, never storage at large");
 });
 
 test("plan deletion › no resurrected hard-delete helpers", () => {

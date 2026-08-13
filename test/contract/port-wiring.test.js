@@ -27,8 +27,12 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync, readdirSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
-const ROOT = new URL("../../", import.meta.url).pathname;
+// `new URL(...).pathname` is PERCENT-ENCODED, so a checkout under a directory
+// with a space in it resolved to ".../05%20Personal%20Projects/..." and every
+// readdir threw ENOENT. `fileURLToPath` is what the rest of the suite uses.
+const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 
 /** Every .js/.jsx file under a directory, recursively. */
 function sourceFiles(dir) {
