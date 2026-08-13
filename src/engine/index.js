@@ -403,6 +403,16 @@ export function generatePlan({
       // `canStillFill` never enforces it. A rule the reader can check has to be a rule that
       // applies to them.
       fullTermMinCourses: minCoursesFor(cal, studentType),
+      // ── Does the four-course bar apply to THIS degree at all? ──────
+      //
+      // The same `surplus >= 0` test `attemptPlacement` uses: a degree with fewer real courses
+      // than its full terms need cannot satisfy the bar however it is arranged, so the search
+      // does not enforce it. Exposed so the explainer can OMIT the rule rather than state it
+      // with an "unless" — a rule qualified into mush is worse than a rule left out, and 20
+      // shapes are in exactly this position.
+      fullTermBarApplies: minCoursesFor(cal, studentType) > 0
+        && cells.filter(c => (c.sh ?? 0) >= cal.realCourseSH).length
+           >= minCoursesFor(cal, studentType) * terms.filter(t => (t.weight ?? 1) >= 1).length,
       // ── Courses added that the degree never asked for ─────────────
       //
       // `substitutePrereqs` spends a free-elective slot on a prerequisite the degree lists

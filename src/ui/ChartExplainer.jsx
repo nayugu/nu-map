@@ -137,7 +137,12 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
               {t((report.unschedulable ?? []).length > 0
                 ? "chart.contract.hard.6.gap" : "chart.contract.hard.6")}
             </li>
-            {report.fullTermMinCourses > 0 && (
+            {/* Shown only where it genuinely holds. Both "unless" clauses are gone: the
+              * credit-limit one was never an exception — `termIsFull` DEFINES full as four
+              * courses OR no room for another — and the too-few-courses one is now an omission
+              * rather than a caveat, because a rule qualified into mush is worse than a rule
+              * left out. */}
+            {report.fullTermBarApplies && (
               <li style={{ marginBottom: 3 }}>
                 {t("chart.contract.hard.7", { n: report.fullTermMinCourses })}
               </li>
@@ -154,7 +159,7 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           * departure from the published plans, and the reason the engine exists. */}
         <Section title={t("chart.contract.soft.h")}>
           <ol style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
-            {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map(n => (
+            {["1", "2", "3", "4", "5", "6", "7", "8"].map(n => (
               <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.soft.${n}`)}</li>
             ))}
           </ol>
