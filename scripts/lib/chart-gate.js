@@ -200,9 +200,22 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
     // advice rather than an illegal registration, and the registrar refuses neither. But it is
     // counted now, because a metric that cannot observe a defect will report its absence.
     if (!r.coop && r.cells === 0 && !r.half) emptyFull.push(r.label);
-    if (r.coop || r.cells === 0) continue;
+    // A term with nothing placed has nothing to check. A pure work term lands here too:
+    // its only entry is the co-op marker, which `walk` does not count as a cell.
+    if (r.cells === 0) continue;
+    // ── The credit cap still applies while employed ──────────────────
+    //
+    // This check used to be skipped for any co-op term. That was harmless while a MIXED
+    // co-op term emitted no marker — it simply read as an ordinary term and was checked.
+    // Now that the marker is written for those 90 terms, skipping on `coop` would have
+    // quietly retired the registration-cap check on exactly the terms whose load this
+    // work just changed. Employment does not raise the registrar's limit, so the hard
+    // rule is checked here and only the CONVENTIONS below are waived.
     if (r.sh > creditCap * (r.half ? 0.5 : 1) + 0.01) overCap.push(`${r.label} ${r.sh} SH`);
-    if (r.half || minCourses <= 0) continue;
+    // The four-course bar is not a claim about someone on co-op — the departments
+    // themselves schedule one course beside one — so a co-op term is not counted toward
+    // it in either direction.
+    if (r.coop || r.half || minCourses <= 0) continue;
     fullTerms++;
     // Credit-aware, matching the engine: a term with no room for another real course is FULL,
     // whatever its course count. A 16 SH studio cannot reach four inside a 19 SH cap, and

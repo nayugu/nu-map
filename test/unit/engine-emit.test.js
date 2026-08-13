@@ -226,6 +226,10 @@ const shapeOf = (terms) => ({
     semTypeId: t.type, yearIndex: t.yearIndex ?? 0,
     label: `Year ${(t.yearIndex ?? 0) + 1}`, termLabel: t.term,
     work: !!t.work, unused: !!t.unused, targetSH: t.targetSH ?? 16, weight: t.weight ?? 1,
+    // Carried separately from `work`, exactly as `shapeFromPlan` does — a term can be
+    // studied in and employed at once, and a helper that dropped this silently made
+    // every mixed-co-op assertion below test a term with no co-op in it.
+    coop: !!t.coop || !!t.work,
   })),
 });
 const cellOf = (over) => ({ id: "c", target: 0, title: "T", sh: 4, kind: "open", groups: null, spec: null, ...over });
@@ -259,6 +263,28 @@ test("emit › a cross-subject or grouped choice states everything", () => {
 
 test("emit › a work term emits a co-op cell, or the plan loses it entirely", () => {
   const doc = emit([], [{ term: "Spring", type: "spring", work: true }], []);
+  const entries = doc.plans[0].years[0].terms[0].entries;
+  assert.equal(entries.length, 1);
+  assert.equal(entries[0].coop, true);
+});
+
+test("emit › a MIXED co-op term says so, and still emits its course", () => {
+  // The condition was `t.work`, so a term carrying a co-op AND a course emitted only
+  // the course: 90 terms across 42 programs where the plan never told the student they
+  // were employed. Worse, `gatePlan` reads employment from this entry, so such a term
+  // left empty was counted as "a semester the student is not enrolled in" — 38 of 398.
+  const doc = emit([cellOf({ title: "Advanced Writing" })],
+                   [{ term: "Fall", type: "fall", coop: true }], [["c", 0]]);
+  const entries = doc.plans[0].years[0].terms[0].entries;
+  assert.equal(entries[0].coop, true, "the co-op marker comes first, as the catalog prints it");
+  assert.equal(entries.length, 2, "and the course is still there — the marker does not replace it");
+  assert.equal(entries[1].text, "Advanced Writing");
+});
+
+test("emit › an EMPTY co-op term still says co-op rather than reading as vacation", () => {
+  // The case that corrupted the metric: the slot cap leaves these terms empty, and
+  // without a marker an employed semester is indistinguishable from an idle one.
+  const doc = emit([], [{ term: "Fall", type: "fall", coop: true }], []);
   const entries = doc.plans[0].years[0].terms[0].entries;
   assert.equal(entries.length, 1);
   assert.equal(entries[0].coop, true);

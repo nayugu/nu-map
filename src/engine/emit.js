@@ -81,12 +81,28 @@ export function emitPlan({
     }
 
     const entries = [];
-    if (t.work) {
-      // One cell per work term. Consecutive ones merge into a run on the other
-      // side, which is how a six-month co-op printed as two columns becomes one
-      // block rather than two co-ops.
+    // ── The co-op marker belongs to any EMPLOYED term, not just a pure one ──
+    //
+    // This used to be `if (t.work)`, so a term carrying a co-op AND a course emitted
+    // the course and no marker at all — and the artifact never told the student they
+    // were employed that semester. 90 terms across 42 programs are that shape.
+    //
+    // It was not only a missing label. `gatePlan` reads employment from this entry, so
+    // a co-op term CHART left empty was counted as "a semester the student is not
+    // enrolled in": 38 of the 398 such terms were students on co-op. That is a headline
+    // quality number miscounting the employed as the idle, and it is why an
+    // empty-semester regression looked real when the genuinely-empty count had not
+    // moved at all.
+    //
+    // Emitted FIRST, matching the published plans this mirrors — the catalog prints
+    // `Co-op | ENGW 3304`, co-op then coursework. Consecutive markers merge into a run
+    // on the other side, which is how a six-month co-op printed as two columns becomes
+    // one block; a work term followed by a mixed one is exactly that case, and merging
+    // them is correct rather than incidental.
+    if (t.work || t.coop) {
       entries.push({ text: "Co-op", coop: true });
-    } else {
+    }
+    if (!t.work) {
       // Unused terms are emitted too, now that a cell may legitimately land in one.
       // A term that stayed empty emits nothing and reads as vacation, exactly as
       // before — the difference is that CHART is allowed to use it when a course

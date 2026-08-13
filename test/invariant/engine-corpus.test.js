@@ -405,12 +405,17 @@ test("corpus › a co-op in the shape becomes a co-op cell in the grid", () => {
   // `applySamplePlan` builds work blocks from `{coop: true}` entries. A grid of
   // course cells alone produces NO co-op blocks: the work terms silently become
   // empty study terms and every credit and standing calculation downstream is wrong.
+  //
+  // Counted against EMPLOYED terms, not work terms. A term carrying a co-op and a course
+  // is not a work term, and it emits a co-op cell too — 90 such terms across 42 programs,
+  // which used to emit none at all, so the student was never told they were employed and
+  // an empty one was counted as a semester they were not enrolled in.
   const bad = [];
   for (const { p, out } of made) {
-    if (!out.report.workTerms) continue;
+    if (!out.report.coopTerms) continue;
     const coopTerms = readPlan(out.plan).filter(t => t.coop).length;
-    if (coopTerms !== out.report.workTerms) {
-      bad.push(`${p.key}: ${out.report.workTerms} work terms in the shape, ${coopTerms} co-op cells emitted`);
+    if (coopTerms !== out.report.coopTerms) {
+      bad.push(`${p.key}: ${out.report.coopTerms} employed terms in the shape, ${coopTerms} co-op cells emitted`);
     }
   }
   assert.deepEqual(bad.slice(0, 8), [], `${bad.length} plans that lost their co-ops`);

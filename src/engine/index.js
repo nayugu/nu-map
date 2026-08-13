@@ -440,6 +440,12 @@ export function generatePlan({
       years: shape.terms.length ? Math.max(...shape.terms.map(t => t.yearIndex)) + 1 : 0,
       studyTerms: terms.length,
       workTerms: shape.terms.filter(t => t.work).length,
+      // Terms the student is EMPLOYED in, which is not the same count: a term carrying a
+      // co-op and a course is not a work term and still emits a co-op cell. Reported so
+      // the "no co-op is lost" invariant can stay an equality — against `workTerms` it
+      // would have to weaken to `>=`, and a `>=` cannot notice a work term whose co-op
+      // vanished while a mixed term supplied one.
+      coopTerms: shape.terms.filter(t => t.work || t.coop).length,
       unusedTerms: shape.terms.filter(t => t.unused).length,
       shapeSource: shape.source,
       nodes: placed.nodes,
