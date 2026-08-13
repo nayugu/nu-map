@@ -593,25 +593,105 @@ department's published plan, which this file elsewhere measures as violating pre
 order in 7.7% of cases and season in 31.9%. So the fallback is a plan with a *higher*
 expected error rate than the one we declined to print.
 
-The machinery to do better already exists and is not wired to this: `generatePlan`
-takes a `concentration`, `concentrationResolve` resolves it by title, and MCP has
-`SET_CONCENTRATION`. **With a pick, the disjunction disappears and the constraint is
-exact rather than universal** — `optionPools` is `null` and the cell carries one real
-pool. The natural next step is therefore not another engine rule but a question to the
-student, asked only for the programs where no universal plan exists. Options, roughly
-in order of cost:
+**Planning against the chosen concentration is already built, and already wired.**
+A first draft of this section said the machinery "is not wired to this" and that was
+wrong — checked, and the whole path exists: `SamplePlanOffer.jsx` takes a
+`concentration` prop and passes it to `planGenerator.generate`, which forwards it to
+`generatePlan`, which hands it to `deriveCells`; the pick is part of `genKey`, so
+changing it regenerates the plan. With a pick, `optionPools` is `null`, the cell
+carries one real pool, and the universal constraint switches itself off. MCP's
+`SET_CONCENTRATION` drives the same path.
 
-1. **Ask when it matters.** Generate universally; where that refuses, generate
-   per-option and let the student pick. 8 shapes today.
-2. **Always ask**, for all 93 programs that require a concentration. Simpler to
-   explain, better plans throughout, and it forces a choice earlier than some students
-   are ready to make.
-3. **A declared relaxation rung.** Emit the union-based plan carrying an explicit
-   record of which options it does not satisfy. More information than a refusal, but
-   it puts a knowingly-wrong plan on screen, and the gate would have to be taught to
-   accept it — which this repo's own instruction (*"fix the engine or the data, do not
-   relax the gate"*) argues against.
+So `∀ option` governs **only the pre-pick preview**, and the 8 refusals describe a
+student who has not chosen yet. Measured — every refusing program × every one of its
+concentrations, generated with that pick:
 
-(1) is recommended. Do not implement any of them without first measuring how many
-students the 8 shapes actually represent — this file has a bad record with
-denominators.
+```
+107 of 126 (program, concentration) pairs generate once a pick is made   (85%)
+
+physics_ms                    0 with no pick  →  3/3        international_business  →  28/30
+business_administration_mba   0 with no pick  →  26/27      political_science_ma    →   4/5
+physical_therapy_dpt          0 with no pick  →  0/2        computer_science_bacs#1 →   1/5
+```
+
+That reframes the whole question. It is not "build per-option generation" — that
+exists and works for 85% of the pairs. It is only: **what should the screen say when
+no pick is set and no universal plan exists?** Today it refuses, and the student is
+handed the department's published plan, which this file measures at 31.9% season
+violations — a worse artifact than the one we declined to print.
+
+The cheap and honest answer is a prompt: *"These concentrations need different
+schedules — choose one to see your plan."* That is strictly more information than a
+refusal, requires no engine change, and is reachable from the refusal reason, which is
+why `concentration-unfillable` is a distinct `failure.kind` rather than folded into
+`over-subscribed`.
+
+Two genuine holes remain, and both are small:
+
+- **`physical_therapy_dpt` generates for 0 of its 2 options**, and
+  `computer_science_bacs#1` for 1 of 5. A prompt does not help those — they refuse
+  with a pick too, for ordinary reasons (`over-subscribed`, `no-candidate`). They are
+  separate defects and are not about concentrations at all.
+- **Do not add a relaxation rung** that emits the union plan with a caveat. It puts a
+  knowingly-unfollowable plan on screen and the gate would have to be taught to accept
+  it, against this repo's own instruction — *"fix the engine or the data, do not relax
+  the gate."* The prompt gets the same information across without printing a plan
+  nobody can follow.
+
+### 15. A reservation that is fillable but not CHOOSABLE
+
+Measured 2026-08-13, after the defect-2 fix. Not yet acted on; recorded so the numbers
+survive and nobody has to re-derive them.
+
+`minDepthOf` takes the **minimum** over a pool's candidates — "the cell needs only ONE
+of them to be takeable" — so one early outlier licenses a term for the whole pool. The
+witness then proves the cell *fillable*. But the card says "Concentration" and renders
+as a slot the student is invited to fill, which promises a **choice**. Those are two
+different claims and only the first is enforced.
+
+Per student — the plan generated **for their own concentration**, which is what they
+actually see:
+
+| | ≤1 takeable course | ≤2 |
+|---|---|---|
+| (plan, concentration) pairs, 690 | **23 (3.3%)** | 66 (9.6%) |
+| pre-pick plan, per option, 574 | 24 (4.2%) | 88 (15.3%) |
+
+The per-pair rate is 1.1% of 2,204 and **that is the wrong denominator** — nobody
+experiences pairs. It also hides that the failure is concentrated rather than spread:
+
+```
+political_science_and_business_administration · Identity, Culture and Politics · [1,2,2,2] of 6
+political_science_and_business_administration · Law and Legal Studies          · [1,3,3,1] of 7
+computer_science_bscs                         · Foundations                    · [2,1,3]   of 8
+```
+
+For those students the concentration is a forced sequence wearing the costume of a
+choice.
+
+**The cause is SEASON, not prerequisites** — and this is the part worth reading before
+designing anything, because the obvious fix is a dead end:
+
+| blocked by | all pairs | tight pairs (≤3 takeable) |
+|---|---|---|
+| season | **93.1%** | **86.0%** |
+| prerequisites | 5.3% | 9.2% |
+| both | 1.6% | 4.7% |
+
+Half-terms hold 11.5% of concentration cells and 24.5% of the collapsed ones. So
+replacing `minDepthOf`'s minimum with a *quantile of candidate depth* — the elegant fix,
+and the one that suggests itself — would address the 9% and leave the 86% untouched. It
+belongs in §Dead ends the moment anyone builds it.
+
+*If it is acted on,* the lever is a placement **preference** in `termPreference`, ranking
+terms by how many of the cell's candidates survive there. A preference rather than a
+constraint, so it yields where there is no alternative and cannot cost coverage by
+construction — which is what the four failed empty-semester attempts lacked. The signal
+needs no new machinery: `seasonOk` (`domains.js`) already holds the season-legal
+candidates per cell per season, truncation is harmless because only small counts matter,
+and for a chosen concentration `candidates` is already that option's pool.
+
+**Measure this first.** A 1-takeable cell is a misrepresentation but still followable —
+*unless the student has already taken that course*, in which case it is genuinely
+unregistrable and this is S1 rather than S3. CHART plans around completed courses, so
+that path exists. It is one probe and it decides the severity of the whole entry.
