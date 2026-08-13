@@ -1998,6 +1998,48 @@ const { locale, setLocale, locales, t } = useLanguage();
     return () => document.removeEventListener('dragend', clear);
   }, []);
 
+  /**
+   * Draw the drag image ourselves, from a copy parked on <body>.
+   *
+   * Safari renders NO drag image for an element inside a transformed
+   * ancestor, and on desktop this whole app lives inside
+   * `transform: scale(uiScale)` (App.jsx) for the zoom control. So a dragged
+   * course went invisible the moment it left the cursor and reappeared where
+   * it landed: the drop always worked, which is exactly why it read as a
+   * rendering glitch. Chrome and Firefox rasterise it regardless, so it
+   * looked correct everywhere else.
+   *
+   * The clone goes on <body>, OUTSIDE the scaled container, and re-applies
+   * the same scale itself — otherwise the ghost would be the layout size
+   * rather than the size actually on screen, and would not line up with the
+   * card the user grabbed. It has to be in the document for the browser to
+   * rasterise it, and has to survive the current frame, so it is parked
+   * offscreen and removed on the next tick.
+   *
+   * Best-effort: any failure leaves the browser's own default image, which is
+   * what every non-Safari browser was using anyway.
+   */
+  const setCardDragImage = (e) => {
+    try {
+      const el = e.currentTarget;
+      const rect = el?.getBoundingClientRect?.();
+      if (!rect?.width || !rect.height || !el.offsetWidth) return;
+      const scale = rect.width / el.offsetWidth;
+      const clone = el.cloneNode(true);
+      Object.assign(clone.style, {
+        position: "fixed", top: "-10000px", left: "-10000px", margin: "0",
+        width: `${el.offsetWidth}px`, height: `${el.offsetHeight}px`,
+        transformOrigin: "0 0", transform: `scale(${scale})`,
+        pointerEvents: "none", opacity: "1",
+      });
+      document.body.appendChild(clone);
+      // Grab point, in the ghost's own coordinates — so the card stays under
+      // the cursor exactly where it was picked up.
+      e.dataTransfer.setDragImage(clone, e.clientX - rect.left, e.clientY - rect.top);
+      setTimeout(() => clone.remove(), 0);
+    } catch { /* default drag image */ }
+  };
+
   const onDragStart = (e, id, type, fromSem, extra = {}) => {
     e.stopPropagation();
     e.dataTransfer.effectAllowed = "move";
@@ -2010,6 +2052,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     // this and has never had the problem; the canvas did not and always has.
     // Wrapped because a few browsers throw here when a drag is already active.
     try { e.dataTransfer.setData("text/plain", String(id)); } catch {}
+    setCardDragImage(e);
     // Defer the dragInfo state update by a frame. Setting it synchronously here
     // re-renders the source mid-`dragstart` — e.g. a grad summer session expands
     // its slot grid 1→2 columns, relaying out the very card being grabbed — which
