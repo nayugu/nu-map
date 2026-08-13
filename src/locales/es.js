@@ -409,6 +409,7 @@ export const strings = {
   "folders.io.err.unsafe":        "Ese .zip contiene rutas de archivo no seguras.",
   "folders.io.exported":          "Se exportaron {n} planes.",
   "folders.io.exportedFiles":     "Se exportaron {n} planes como archivos separados.",
+  "folders.io.exportedFolder":    "Se guardaron {n} planes en esa carpeta, con tu estructura de carpetas.",
   "folders.io.imported":          "Se importaron {n} planes. ⌘Z para deshacer.",
   "folders.io.importedRoot":      "Se importaron {n} planes en el nivel superior: están demasiado anidados para archivarlos en una sola carpeta.",
   "folders.io.importedFolder":    "Importado {date}",

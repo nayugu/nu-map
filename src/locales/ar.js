@@ -408,6 +408,7 @@ export const strings = {
   "folders.io.err.unsafe":        "يحتوي ملف ‎.zip‎ هذا على مسارات ملفات غير آمنة.",
   "folders.io.exported":          "تم تصدير {n} خطة.",
   "folders.io.exportedFiles":     "تم تصدير {n} خطة كملفات منفصلة.",
+  "folders.io.exportedFolder":    "تم حفظ {n} خطة في ذلك المجلد مع بنية مجلداتك.",
   "folders.io.imported":          "تم استيراد {n} خطة. اضغط ⌘Z للتراجع.",
   "folders.io.importedRoot":      "تم استيراد {n} خطة في المستوى الأعلى — متداخلة أكثر من أن تُحفظ داخل مجلد واحد.",
   "folders.io.importedFolder":    "مستورد في {date}",

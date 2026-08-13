@@ -426,6 +426,7 @@ export const strings = {
   "folders.io.err.unsafe":        "That .zip contains unsafe file paths.",
   "folders.io.exported":          "Exported {n} plans.",
   "folders.io.exportedFiles":     "Exported {n} plans as separate files.",
+  "folders.io.exportedFolder":    "Saved {n} plans into that folder, with your folder structure.",
   "folders.io.imported":          "Imported {n} plans. ⌘Z to undo.",
   "folders.io.importedRoot":      "Imported {n} plans at the top level — too deeply nested to file in one folder.",
   "folders.io.importedFolder":    "Imported {date}",

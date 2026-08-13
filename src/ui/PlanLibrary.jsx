@@ -91,7 +91,8 @@ export default function PlanLibrary() {
     plans, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort, reorderNodes, orderedSiblings,
     activePlanId, switchPlan, renamePlan, setPlanStudent, duplicatePlan,
-    exportLibraryJSON, exportLibraryZip, exportPlansIndividually, importLibraryFiles,
+    exportLibraryJSON, exportLibraryZip, exportPlansIndividually,
+    exportPlansToDirectory, importLibraryFiles,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
     pushFolderHistory, undoFolders, redoFolders, folderCanUndo, folderCanRedo,
@@ -371,12 +372,24 @@ export default function PlanLibrary() {
    * do, which is carry the folder tree.
    */
   const doExport = async (ids, shape = "files") => {
-    const res = shape === "zip"    ? exportLibraryZip(ids)
-              : shape === "bundle" ? exportLibraryJSON(ids)
-              : await exportPlansIndividually(ids);
-    setNotice(t(shape === "files" ? "folders.io.exportedFiles" : "folders.io.exported",
-      { n: res.plans }));
     setExportMenu(null);
+    if (shape === "zip")    { setNotice(t("folders.io.exported", { n: exportLibraryZip(ids).plans })); return; }
+    if (shape === "bundle") { setNotice(t("folders.io.exported", { n: exportLibraryJSON(ids).plans })); return; }
+
+    // Ask for a destination folder first. Not a nicety: N downloads trip the
+    // browser's "allow multiple downloads?" bubble and everything after the
+    // first is dropped in silence, so the flat path could report success
+    // having written one file out of forty.
+    const dir = await exportPlansToDirectory(ids);
+    if (dir.ok) { setNotice(t("folders.io.exportedFolder", { n: dir.plans })); return; }
+    if (dir.reason === "cancelled") return;                 // they closed the picker
+    if (dir.reason === "write") { setNotice(t("folders.io.err.write")); return; }
+
+    // Firefox and Safari have no directory picker; fall back to one download
+    // per plan and SAY that the structure is flattened, rather than letting
+    // the folders quietly disappear.
+    const res = await exportPlansIndividually(ids);
+    setNotice(t("folders.io.exportedFiles", { n: res.plans }));
   };
 
   const exportMenuItems = (ids) => [
@@ -570,6 +583,17 @@ export default function PlanLibrary() {
         e.preventDefault(); e.stopPropagation();
         if (query) { setQuery(""); return; }   // clear the filter before closing
         close();
+        return;
+      }
+      // Select all — the only way to act on the whole library now that Export
+      // is scoped to a selection. Takes the VISIBLE rows, so with a search
+      // live it selects the matches, which is what "all" means on a filtered
+      // list and makes "export everyone named Chen" two keystrokes.
+      if (mod && e.key.toLowerCase() === "a") {
+        e.preventDefault();
+        e.stopPropagation();
+        setSelectedIds(new Set(rows.map(r => r.id)));
+        anchorIdx.current = 0;
         return;
       }
       if (e.key === "Enter")      { e.preventDefault(); handleEnter(); return; }
@@ -840,15 +864,29 @@ export default function PlanLibrary() {
       if (matches) return t("folders.meta.matched", { n: row.matched ?? 0, total: row.counts.plans });
       return row.counts.plans > 0 ? String(row.counts.plans) : "";
     }
-    // Student first, program second: when a plan HAS an advisee, whose plan it
-    // is outranks what it studies — that is the question an advisor is scanning
-    // for. With no student the line is unchanged from before, so the ordinary
-    // student sees exactly what they saw.
-    const major = labels.get(row.id) ?? "";
-    const student = row.item.student ?? "";
-    if (!student) return major;
-    return major ? t("folders.meta.studentAnd", { student, major }) : student;
+    // Plan rows carry their major and student as COLUMNS (see `planCells`),
+    // so nothing is left for the single meta slot.
+    return "";
   };
+
+  /**
+   * The two trailing columns on a plan row: major, then student.
+   *
+   * They used to be one run of text — "Jane Doe · Computer Science" — appended
+   * after a name column that took whatever width was left, so both values
+   * started at a different x on every row and neither could be read DOWN the
+   * list. Scanning a caseload for one advisee is the thing an advisor does
+   * most, and a ragged column is the one layout that makes it impossible.
+   *
+   * The student is the stronger of the two because it answers "whose plan is
+   * this", which outranks "what do they study" the moment a plan has an
+   * advisee at all. Both columns disappear when no plan has a student, so a
+   * lone student never meets a half-empty roster layout.
+   */
+  const planCells = (row) => [
+    { text: labels.get(row.id) ?? "", share: "24%" },
+    { text: row.item.student ?? "", share: "22%", strong: true },
+  ];
 
   // Does any plan being assigned currently HAVE a student? An empty field means
   // "clear" only if there is something to clear; on a plan with no student yet
@@ -975,21 +1013,13 @@ export default function PlanLibrary() {
             title={t("folders.io.importTitle")}>
             {t("folders.io.import")}
           </button>
-          <button
-            // Primary click exports the whole library as individual plan
-            // files. The other two shapes are on the right-click menu: making
-            // the common act a menu first cost a click every single time.
-            onClick={e => { e.stopPropagation(); doExport(null, "files"); }}
-            onContextMenu={e => {
-              e.preventDefault(); e.stopPropagation();
-              const r = e.currentTarget.getBoundingClientRect();
-              setExportMenu({ x: Math.max(6, r.right - 190), y: r.bottom + 4, ids: null });
-            }}
-            style={iconBtn}
-            disabled={plans.length === 0}
-            title={t("folders.io.exportAll")}>
-            {t("folders.io.export")}
-          </button>
+          {/* No Export button up here. Import belongs in the header because
+              there is nothing to select before importing; Export always acts
+              on something, so it lives on the selection footer where the
+              thing it acts on is named. Two Exports meaning different scopes,
+              one of them permanently visible, is the redundancy. Exporting
+              everything is ⌘A then Export — the footer then says "N selected",
+              so the scope is stated rather than assumed. */}
           <button onClick={() => newFolderSmart(null)} style={iconBtn} title={t("folders.newFolder")}>
             <FolderIcon size={13} />
             <span aria-hidden="true" style={{ fontWeight: 700 }}>+</span>
@@ -1092,6 +1122,7 @@ export default function PlanLibrary() {
               onCancelEdit={() => setEditingId(null)}
               dnd={dnd}
               metaOf={metaOf}
+              cells={planCells}
               t={t}
             />
           )}

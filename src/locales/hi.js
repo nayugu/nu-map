@@ -409,6 +409,7 @@ export const strings = {
   "folders.io.err.unsafe":        "उस .zip में असुरक्षित फ़ाइल पथ हैं।",
   "folders.io.exported":          "{n} योजनाएँ निर्यात की गईं।",
   "folders.io.exportedFiles":     "{n} योजनाएँ अलग-अलग फ़ाइलों के रूप में निर्यात की गईं।",
+  "folders.io.exportedFolder":    "{n} योजनाएँ आपके फ़ोल्डर ढाँचे सहित उस फ़ोल्डर में सहेजी गईं।",
   "folders.io.imported":          "{n} योजनाएँ आयात की गईं। पूर्ववत करने के लिए ⌘Z।",
   "folders.io.importedRoot":      "{n} योजनाएँ शीर्ष स्तर पर आयात की गईं — एक ही फ़ोल्डर में रखने के लिए बहुत गहराई तक नेस्टेड।",
   "folders.io.importedFolder":    "{date} को आयात किया गया",

@@ -409,6 +409,7 @@ export const strings = {
   "folders.io.err.unsafe":        "그 .zip에는 안전하지 않은 파일 경로가 있습니다.",
   "folders.io.exported":          "계획 {n}개를 내보냈습니다.",
   "folders.io.exportedFiles":     "계획 {n}개를 개별 파일로 내보냈습니다.",
+  "folders.io.exportedFolder":    "계획 {n}개를 폴더 구조 그대로 해당 폴더에 저장했습니다.",
   "folders.io.imported":          "계획 {n}개를 가져왔습니다. ⌘Z로 실행 취소할 수 있습니다.",
   "folders.io.importedRoot":      "계획 {n}개를 최상위에 가져왔습니다 — 폴더 하나에 담기에는 너무 깊게 중첩되어 있습니다.",
   "folders.io.importedFolder":    "{date} 가져옴",

@@ -35,7 +35,8 @@ import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
          siblingsInOrder, SORT_MODES } from "../core/planFolders.js";
 import { buildLibraryFile, parseLibraryFile, mergeLibrary,
-         libraryToArchive, archiveToLibrary, flatFileNames } from "../core/planLibraryFile.js";
+         libraryToArchive, archiveToLibrary, flatFileNames,
+         archiveFolderPaths, LIBRARY_INDEX_PATH } from "../core/planLibraryFile.js";
 import { writeZip, readZip } from "../core/zipFile.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
@@ -3454,6 +3455,83 @@ const { locale, setLocale, locales, t } = useLanguage();
     return { plans: doc.plans.length, folders: doc.folders.length };
   };
 
+  /**
+   * Export a selection INTO A FOLDER THE USER PICKS, keeping the folder tree.
+   *
+   * This is the primary export path, and the reason is a hard browser limit
+   * rather than a preference: writing N files as N downloads trips the
+   * "allow multiple downloads?" permission bubble, and until it is answered
+   * every file after the first is silently dropped. So the honest-looking
+   * flat export quietly produced ONE file out of forty. A directory picker
+   * asks once, in the OS's own dialog, and then writes as many files as it
+   * likes.
+   *
+   * Structure survives because the paths are the same ones the archive
+   * already computes — `libraryToArchive` yields "Advisees/Jane Doe.json" —
+   * only written into real directories instead of into a zip. No new notion
+   * of structure, and no zip involved.
+   *
+   * What a selection means, which is the same rule delete and export already
+   * use (`deleteScope`):
+   *   - selecting a FOLDER takes everything inside it, and it lands as a
+   *     folder in the destination;
+   *   - a plan whose parent folder is NOT selected lands at the top of the
+   *     destination, because exporting one plan out of a folder should not
+   *     rebuild the chain of folders it happened to live under.
+   * Empty folders are created explicitly — they have no file to imply them,
+   * so nothing else would carry them across.
+   *
+   * Chromium-only (Firefox and Safari ship no File System Access API), so the
+   * caller falls back to individual downloads there.
+   *
+   * @returns {Promise<{ok: true, plans, folders}|{ok: false, reason: 'unsupported'|'cancelled'|'write'}>}
+   */
+  const exportPlansToDirectory = async (ids = null) => {
+    if (typeof window === "undefined" || typeof window.showDirectoryPicker !== "function") {
+      return { ok: false, reason: "unsupported" };
+    }
+    saveCurrentPlanToSlot();
+    const doc = buildLibraryFile(planTree, ids, planSnapshot, { redact: libraryRedact });
+
+    let root;
+    try {
+      // `id` makes the browser reopen the last place they exported to.
+      root = await window.showDirectoryPicker({ mode: "readwrite", id: "numap-export" });
+    } catch {
+      // AbortError is the ordinary "user pressed Cancel" — not a failure to
+      // report as one.
+      return { ok: false, reason: "cancelled" };
+    }
+
+    const dirs = new Map([["", root]]);
+    const dirFor = async (path) => {
+      if (dirs.has(path)) return dirs.get(path);
+      const cut = path.lastIndexOf("/");
+      const parent = await dirFor(cut === -1 ? "" : path.slice(0, cut));
+      const handle = await parent.getDirectoryHandle(path.slice(cut + 1), { create: true });
+      dirs.set(path, handle);
+      return handle;
+    };
+
+    try {
+      const entries = libraryToArchive(doc).filter(e => e.path !== LIBRARY_INDEX_PATH);
+      // Every folder, not just the ones containing a plan: an empty folder has
+      // no file to imply it and would otherwise be dropped in silence.
+      for (const dir of archiveFolderPaths(doc)) await dirFor(dir);
+      for (const e of entries) {
+        const cut = e.path.lastIndexOf("/");
+        const dir = cut === -1 ? "" : e.path.slice(0, cut);
+        const file = await (await dirFor(dir)).getFileHandle(e.path.slice(cut + 1), { create: true });
+        const w = await file.createWritable();
+        await w.write(JSON.stringify(e.json, null, 2));
+        await w.close();
+      }
+      return { ok: true, plans: doc.plans.length, folders: doc.folders.length };
+    } catch {
+      return { ok: false, reason: "write" };
+    }
+  };
+
   /** Read one dropped file into an incoming {folders, plans}, whatever it is. */
   const readOneImport = async (file) => {
     const isZip = /\.zip$/i.test(file.name) || file.type === "application/zip";
@@ -4288,7 +4366,8 @@ const { locale, setLocale, locales, t } = useLanguage();
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
-    exportLibraryJSON, exportLibraryZip, exportPlansIndividually, importLibraryFiles,
+    exportLibraryJSON, exportLibraryZip, exportPlansIndividually,
+    exportPlansToDirectory, importLibraryFiles,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, duplicatePlan, renamePlan, setPlanStudent,
     // Folders — structure, view state, and the mutations that respect both.

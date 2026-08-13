@@ -410,6 +410,7 @@ export const strings = {
   "folders.io.err.unsafe":        "その .zip には安全でないファイルパスが含まれています。",
   "folders.io.exported":          "{n} 件のプランを書き出しました。",
   "folders.io.exportedFiles":     "{n} 件のプランを個別ファイルとして書き出しました。",
+  "folders.io.exportedFolder":    "{n} 件のプランをフォルダ構成のままそのフォルダに保存しました。",
   "folders.io.imported":          "{n} 件のプランを読み込みました。⌘Z で取り消せます。",
   "folders.io.importedRoot":      "{n} 件のプランを最上位に読み込みました — 階層が深すぎて 1 つのフォルダにまとめられません。",
   "folders.io.importedFolder":    "{date} に読み込み",

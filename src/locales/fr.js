@@ -409,6 +409,7 @@ export const strings = {
   "folders.io.err.unsafe":        "Ce .zip contient des chemins de fichiers dangereux.",
   "folders.io.exported":          "{n} plans exportés.",
   "folders.io.exportedFiles":     "{n} plans exportés en fichiers séparés.",
+  "folders.io.exportedFolder":    "{n} plans enregistrés dans ce dossier, avec votre arborescence.",
   "folders.io.imported":          "{n} plans importés. ⌘Z pour annuler.",
   "folders.io.importedRoot":      "{n} plans importés au niveau supérieur — trop imbriqués pour tenir dans un seul dossier.",
   "folders.io.importedFolder":    "Importé le {date}",

@@ -159,6 +159,10 @@ function NameEditor({ value, onCommit, onCancel, density }) {
  * @param {(id, name) => void}   [p.onCommitName]
  * @param {object}   [p.dnd]           { onDragStart, onDragOver, onDragLeave, onDrop }
  * @param {(row) => string} [p.metaOf] right-aligned secondary text
+ * @param {(row) => Array<{text: string, share: string, strong?: boolean}>} [p.cells]
+ *   fixed-share trailing columns for PLAN rows (the library's major/student).
+ *   `share` is a flex-basis like "26%"; `strong` marks the one that should
+ *   read first. Omitted in the header dropdown, which has no room for columns.
  * @param {boolean}  [p.selectMode]    touch: show checkboxes
  */
 export default function PlanTree({
@@ -166,7 +170,7 @@ export default function PlanTree({
   selectedIds = null, editingId = null, focusId = null,
   dropTargetId = null, dropVerdict = "ok", insertAt = null,
   onRowClick, onRowDoubleClick, onRowContextMenu, onToggle, onCommitName, onCancelEdit,
-  dnd = null, metaOf = null, selectMode = false, t,
+  dnd = null, metaOf = null, cells = null, selectMode = false, t,
 }) {
   const compact = density === "compact";
   const iconSize = compact ? 12 : 17;
@@ -344,7 +348,12 @@ export default function PlanTree({
                 onCancel={() => onCancelEdit?.()} />
             ) : (
               <span style={{
-                flex: 1, minWidth: 0, overflow: "hidden",
+                // A BOUNDED share of the row, not "whatever is left". With a
+                // single flexible name column the trailing fields started at a
+                // different x on every row, so neither could be read down the
+                // list — which is exactly how you scan for an advisee.
+                ...(cells ? { flex: "1 1 0", minWidth: 0 } : { flex: 1, minWidth: 0 }),
+                overflow: "hidden",
                 textOverflow: "ellipsis", whiteSpace: "nowrap",
                 fontWeight: isActive || isFolder ? 700 : 400,
                 // The bar and the bold weight already say "you are here"; a
@@ -355,6 +364,20 @@ export default function PlanTree({
                 {row.item.name}
               </span>
             )}
+
+            {/* Fixed-share columns. Each takes the same fraction on every row,
+                so the values line up into readable columns instead of drifting
+                with the length of the name beside them. A folder gets none —
+                its counts still come through `metaOf`. */}
+            {cells && !isFolder && cells(row).map((c, ci) => (
+              <span key={ci} style={{
+                flex: `0 0 ${c.share}`, minWidth: 0,
+                fontSize: compact ? 7.5 : 10,
+                fontWeight: c.strong ? 700 : 400,
+                color: c.strong ? "var(--text-2)" : "var(--text-5)",
+                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+              }}>{c.text}</span>
+            ))}
 
             {meta && (
               <span style={{
