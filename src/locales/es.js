@@ -125,6 +125,7 @@ export const strings = {
   "plusone.campus":             "CAMPUS DE LA MAESTRÍA",
   "plusone.loading":            "Cargando…",
   "plusone.gone":               "Esta ruta PlusOne ya no se publica.",
+  "plusone.ineligible":         "Tu carrera actual no figura en esta ruta. Quítala o consulta a tu asesor.",
   "plusone.meter":              "compartidos entre ambos títulos",
   "plusone.meter.line":         "{courses} de {maxCourses} cursos · {sh} de {maxSH} SH compartidos",
   "plusone.sec.share":          "CURSOS QUE PUEDES COMPARTIR",

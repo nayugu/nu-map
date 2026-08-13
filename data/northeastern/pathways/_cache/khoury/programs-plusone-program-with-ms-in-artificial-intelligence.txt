@@ -1,36 +1,7 @@
 # https://www.khoury.northeastern.edu/programs/plusone-program-with-ms-in-artificial-intelligence/
 # fetched 2026-08-13
 
-PlusOne Program with MS in Artificial Intelligence - Khoury College of Computer Sciences Khoury College of Computer Sciences Open Search Modal &times;
-Close this dialog window Search What are you looking for?
-Search About Column one Mission and Vision Oath for Computing Professionals Belonging at Khoury College Global Campuses Khoury College Facilities Column two Life at Khoury College Khoury News Events History of Khoury College Awards Featured Dean’s Welcome To Our Community Join us in making a shared vision of computer science for everyone a powerful reality.
-Why are students choosing Khoury College?
-Nearly 100% of new Northeastern graduates are working or in master's programs within nine months.
-Here are five more reasons Khoury students pick us.
-Education Undergraduate Undergraduate Programs Combined Majors PlusOne Accelerated Master's Programs Co-ops and Internships Research Clubs and Organizations Graduate PhD Programs Master’s Programs and Graduate Certificates Align Programs Co-ops and Internships Research Clubs and Organizations Featured Khoury College:
-Leading in AI innovation and education In the age of AI, why pursue a CS degree?
-From our AI-forward educational ethos to cutting-edge AI research, there actually has never been a better time to join the field.
-Learn more.
-Experiential Learning It's the Northeastern advantage:
-Learn about the many experiential learning opportunities that set our students apart.
-Global Campus Experience Study, work, and research at one of our nine network campuses as well as at a wide range of locations on seven continents.
-Research Column one Research at Khoury College Research Areas Research Spaces Institutes and Centers Column two Labs and Groups Research Honors and Awards Research Impacts Khoury College at Conferences Featured The partnership that fuels America From our smartphones to the milk we drink, the partnership between government investment, academic research, and industry innovation has driven decades of technological progress and economic growth for the US.
-Learn how Khoury College is committed to playing a key role.
-CHI 2026:
-Khoury researchers set new publishing benchmark Khoury researchers are heading to this year's CHI conference in Barcelona with a college-record 41 accepted works, 53 contributors, and five best paper honorable mentions.
-Learn more from Khoury News.
-Partners Column one Partnering for Change Industry Partnerships:
-Engaging Students Industry Partnerships:
-Collaborating on Research Community Partnerships Featured Hiring a co-op student:
-What to know For more than 500 partners across our global network, co-op students bring fresh perspectives and make an immediate impact.
-Learn more.
-Co-op partners see strong demand for recent CS grads Companies like Dell, HubSpot, and Notability are leaning into early-career hiring — and seeing real results.
-With AI making engineers more productive than ever, new hires are contributing immediately, bringing fresh perspectives, and helping companies build better products.
-Verizon Smart Campus Competition Verizon partnered with Northeastern to challenge students to design real-world solutions using 5G and emerging technologies.
-Explore how the winning teams turned that challenge into feasible, engineering-driven innovations that drew on disciplines from across the campus.
-People Column one All People Leadership Tenured/Tenure-Track Faculty Teaching Faculty Affiliated Faculty Column two Research Faculty Co-op Faculty Staff Post Docs PhD Students Featured Careers at Khoury College View open roles across our global campuses.
-Resources For Prospective Undergraduate Students Master’s Students Align Students PhD Students Faculty Current Undergraduate Students Master’s and Certificate Students Align Students PhD Students Community Alumni Donors Federal Landscape:
-Frequently Asked Questions Contact Visit Apply Donate Instagram TikTok Reddit Linkedin YouTube Bluesky Khoury College X Page Threads Facebook Home | Undergraduate Programs | PlusOne Program with MS in Artificial Intelligence PlusOne Program with MS in Artificial Intelligence Our PlusOne Accelerated Master’s programs empower motivated students like you to start earning your master’s degree while pursuing your undergraduate education.
+PlusOne Program with MS in Artificial Intelligence Our PlusOne Accelerated Master’s programs empower motivated students like you to start earning your master’s degree while pursuing your undergraduate education.
 In the PlusOne Program with MS in Artificial Intelligence, you can take up to four graduate-level courses and apply them to both your undergraduate and graduate artificial intelligence degrees.
 Build the skills you need to design, develop, and apply intelligent systems across a range of real-world applications while reducing the time it takes to complete a master’s from two years to one.
 Program details:
@@ -103,4 +74,4 @@ If you’re in a Khoury combined major housed in a different college, reach out 
 Faculty spotlight Get to know the engaged, experienced professors who are here to support you every step of the way.
 View all faculty Rajagopal Venkatesaramani Rajagopal Venkatesaramani is an assistant teaching professor at Khoury College.
 He uses large-scale optimization, machine learning, and game-theoretic framework to enable privacy–utility trade-offs for genomic data sharing.
-Read bio Instagram TikTok Reddit Linkedin YouTube Bluesky Khoury College X Page Threads Facebook Contact Visit Apply Donate Contact 440 Huntington Avenue 202 West Village H Boston, MA 02115 Quick Links Home Khoury News All People Events Calendar Careers
+Read bio

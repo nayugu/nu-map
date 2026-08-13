@@ -203,30 +203,43 @@ export function activeShares({
   // the cap. Grouping by placement key is what keeps "credits counted once"
   // true — the alternatives ride along in `altTargets` so the UI can ask the
   // student which one they mean.
-  const byPlacement = new Map();
+  // Keyed by the BASE course, not the placement key. A retake is a second
+  // placement of the SAME course ("CS5800" and "CS5800#2"), and a course can only
+  // be shared once however many times it is attempted — keying by placement made
+  // a retake read as 2 courses / 8 SH against a 4-course / 16 SH cap, which could
+  // push a legal plan over the limit on the strength of one course.
+  const byCourse = new Map();
   for (const cand of candidates) {
     if (!cand.gradId) continue;
     for (const pid of placementsOf(placements, cand.gradId)) {
       claimed.add(pid);
-      const existing = byPlacement.get(pid);
+      const withdrawn = voided(grades[pid]);
+      const existing = byCourse.get(cand.gradId);
       if (existing) {
         if (cand.targetId && !existing.altTargets.includes(cand.targetId)) {
           existing.altTargets.push(cand.targetId);
         }
+        // Among several takes, the one that COUNTS is what the share reflects: a
+        // withdrawn first attempt plus a completed retake is one active share,
+        // sitting in the term the student actually earned it.
+        if (existing.withdrawn && !withdrawn) {
+          existing.withdrawn = false;
+          existing.semId = placements[pid] ?? null;
+        }
         continue;
       }
-      byPlacement.set(pid, {
+      byCourse.set(cand.gradId, {
         share: cand.share,
         gradId: cand.gradId,
         targetId: cand.targetId,
         altTargets: cand.targetId ? [cand.targetId] : [],
         sh: shOf(courseMap, cand.gradId),
         semId: placements[pid] ?? null,
-        withdrawn: voided(grades[pid]),
+        withdrawn,
       });
     }
   }
-  for (const s of byPlacement.values()) {
+  for (const s of byCourse.values()) {
     // `ambiguous` is the signal the panel needs: we know the course shares, we
     // do not know WHICH requirement it should cover.
     out.push({ ...s, ambiguous: s.altTargets.length > 1 });

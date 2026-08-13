@@ -125,6 +125,7 @@ export const strings = {
   "plusone.campus":             "स्नातकोत्तर कैंपस",
   "plusone.loading":            "लोड हो रहा है…",
   "plusone.gone":               "यह PlusOne रास्ता अब प्रकाशित नहीं है।",
+  "plusone.ineligible":         "इस रास्ते में आपका वर्तमान मुख्य विषय सूचीबद्ध नहीं है। इसे हटाएँ या सलाहकार से पूछें।",
   "plusone.meter":              "दोनों डिग्रियों में गिने जाते हैं",
   "plusone.meter.line":         "{maxCourses} में से {courses} कोर्स · {maxSH} SH में से {sh} SH साझा",
   "plusone.sec.share":          "जो कोर्स साझा हो सकते हैं",

@@ -163,10 +163,14 @@ function CandidateRow({ row, isPhone, t }) {
 /**
  * @param {Object}  props
  * @param {Object}  props.pathway    the declared pathway, from the port
+ * @param {boolean} [props.eligible] does the plan's major still appear in this
+ *                  pathway's eligibility list? False after a change of major, and
+ *                  worth saying rather than silently continuing to project a
+ *                  master's the student may no longer be able to enter.
  * @param {Function} props.onClear   remove the declaration
  * @param {string}  [props.nameColor] Claude-preview orange when pending
  */
-export default function PlusOneBlock({ pathway, onClear, nameColor }) {
+export default function PlusOneBlock({ pathway, eligible = true, onClear, nameColor }) {
   const { courseMap, majorRequirements, isPhone, isMobile } = useContext(GradCtx);
   const { t } = useLanguage();
   const { placements, placedOut, grades, SEM_INDEX, getSemStatus } = usePlannerBits();
@@ -281,7 +285,32 @@ export default function PlusOneBlock({ pathway, onClear, nameColor }) {
         })}
       </div>
 
-      {/* 2 · what is wrong. Only rendered when something actually is. */}
+      {/* 2a · the declaration no longer fits the plan. Above the rule
+             diagnostics because it invalidates all of them: there is no point
+             telling a student their GPA gate when the pathway is not open to
+             their major at all. `onClear` gives them the exit. */}
+      {!eligible && (
+        <div style={{
+          marginTop: 8, padding: "5px 7px", borderRadius: 4,
+          background: "var(--warn-bg)", border: "1px solid var(--warn-border)",
+          display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap",
+          fontSize: isPhone ? 8 : 9,
+        }}>
+          <span style={{ color: "var(--text-2)", flex: 1 }}>{t("plusone.ineligible")}</span>
+          {onClear && (
+            <button
+              onClick={e => { e.stopPropagation(); onClear(); }}
+              style={{
+                fontSize: isPhone ? 7 : 8, padding: "2px 7px", cursor: "pointer",
+                borderRadius: 3, border: "1px solid var(--border-3)",
+                background: "transparent", color: "var(--text-3)", fontWeight: 600,
+              }}
+            >{t("plusone.remove")}</button>
+          )}
+        </div>
+      )}
+
+      {/* 2b · what is wrong. Only rendered when something actually is. */}
       {byStatus.violated.length > 0 && (
         <Section title={t("plusone.group.violated")} color="var(--error-text)" isPhone={isPhone}>
           {byStatus.violated.map((d, i) => <DiagRow key={i} diag={d} isPhone={isPhone} t={t} />)}

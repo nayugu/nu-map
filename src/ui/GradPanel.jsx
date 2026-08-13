@@ -1948,7 +1948,13 @@ export default function GradPanel({ wideCatalog = false }) {
                   no college pairs with a master's, so the button simply is not
                   there — the same reason the attribute grid hides itself when
                   the adapter publishes no attributes. */}
-              {!isGrad && plusOneOptions.length > 0 && (
+              {/* Shown when a pathway is available OR already declared. The
+                  second half matters: the ✕ lives here, so gating purely on
+                  availability meant a student who declared a pathway and then
+                  changed to an ineligible major had a PlusOne card with no way to
+                  remove it. A selection must always be removable by whoever made
+                  it — the same reason a stale major keeps its Remove button. */}
+              {!isGrad && (plusOneOptions.length > 0 || plusOne) && (
                 plusOne ? (
                   <div data-claude-focus="plusOne" style={{ marginTop: 8, marginBottom: 8, ...(pvMark("plusOne", { inset: true }).style ?? {}) }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
@@ -2093,6 +2099,7 @@ export default function GradPanel({ wideCatalog = false }) {
           plusOnePathway
             ? <PlusOneBlock
                 pathway={plusOnePathway}
+                eligible={plusOneOptions.some(o => o.id === plusOne)}
                 onClear={() => setPlusOne("")}
                 nameColor={claudePreview?.changed?.has?.("plusOne") ? "#fb923c" : undefined}
               />

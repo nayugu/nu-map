@@ -109,6 +109,34 @@ function safeChar(code) {
 }
 
 /**
+ * The page's content region, or the whole document when it has none.
+ *
+ * Every college host checked exposes `<main>`, and it is 12–50% of the page —
+ * the rest is the site-wide header, mega-menu, footer and "Request Info / Apply"
+ * furniture. Scoping to it matters for THREE reasons, and only one is size:
+ *
+ *   1. DRIFT WOULD BE USELESS OTHERWISE. The hash is what tells us a page's rules
+ *      moved. Hash the whole document and the next time the university edits its
+ *      navigation — one template change — all 74 pages report drift at once, and
+ *      a signal that fires on everything is a signal about nothing.
+ *   2. The diff a reviewer reads becomes the part that can contain a rule.
+ *   3. It stops us copying a few thousand lines of unrelated marketing copy into
+ *      a public repository for no benefit.
+ *
+ * Classification deliberately still reads the WHOLE page (see classifyPage): its
+ * signals were calibrated against full pages on a real 75-page run, and narrowing
+ * them is a change that needs its own re-validation rather than a free ride here.
+ */
+function mainRegion(html) {
+  const s = String(html ?? "");
+  const m = /<main[^>]*>([\s\S]*?)<\/main>/i.exec(s)
+        ?? /<div[^>]*role=["']main["'][^>]*>([\s\S]*?)<\/div>\s*<footer/i.exec(s);
+  // Guard against a <main> that is empty or a stub: if it holds less than a
+  // tenth of the page it is probably a wrapper we mis-matched, so fall back.
+  return m && m[1].length > s.length * 0.02 ? m[1] : s;
+}
+
+/**
  * What we cache for a page: its visible text, one sentence-ish chunk per line.
  *
  * NOT the raw HTML, deliberately. The cache exists so a `source.url` claim stays
@@ -125,7 +153,7 @@ function safeChar(code) {
  * it a page is one enormous line and any change rewrites the whole file.
  */
 export function cacheableText(html) {
-  return stripHtml(html)
+  return stripHtml(mainRegion(html))
     .replace(/(?<=[.:;!?])\s+/g, "\n")
     .split("\n")
     .map(s => s.trim())
@@ -225,9 +253,12 @@ export function diffInventory(previous = [], current = []) {
   };
 }
 
-/** Stable content hash of a page's visible text, so markup churn is not drift. */
+/**
+ * Stable content hash of a page's CONTENT REGION, so neither markup churn nor a
+ * site-wide navigation change reads as a rules change. See mainRegion.
+ */
 export async function contentHash(html) {
-  const text = stripHtml(html).trim();
+  const text = stripHtml(mainRegion(html)).trim();
   const buf = new TextEncoder().encode(text);
   const digest = await crypto.subtle.digest("SHA-256", buf);
   return [...new Uint8Array(digest)].map(b => b.toString(16).padStart(2, "0")).join("").slice(0, 32);

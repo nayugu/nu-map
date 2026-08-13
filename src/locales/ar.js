@@ -125,6 +125,7 @@ export const strings = {
   "plusone.campus":             "حرم الماجستير",
   "plusone.loading":            "جارٍ التحميل…",
   "plusone.gone":               "لم يعد هذا المسار من PlusOne منشورًا.",
+  "plusone.ineligible":         "تخصصك الحالي غير مذكور في هذا المسار. أزِلْه أو راجِع مرشدك.",
   "plusone.meter":              "محسوبة للدرجتين معًا",
   "plusone.meter.line":         "{courses} من {maxCourses} مقررًا · {sh} من {maxSH} ساعة مشتركة",
   "plusone.sec.share":          "مقررات يمكن مشاركتها",

@@ -1,36 +1,7 @@
 # https://www.khoury.northeastern.edu/plusone-accelerated-masters-programs/
 # fetched 2026-08-13
 
-PlusOne BS + MS programs - Khoury College of Computer Sciences Khoury College of Computer Sciences Open Search Modal &times;
-Close this dialog window Search What are you looking for?
-Search About Column one Mission and Vision Oath for Computing Professionals Belonging at Khoury College Global Campuses Khoury College Facilities Column two Life at Khoury College Khoury News Events History of Khoury College Awards Featured Dean’s Welcome To Our Community Join us in making a shared vision of computer science for everyone a powerful reality.
-Why are students choosing Khoury College?
-Nearly 100% of new Northeastern graduates are working or in master's programs within nine months.
-Here are five more reasons Khoury students pick us.
-Education Undergraduate Undergraduate Programs Combined Majors PlusOne Accelerated Master's Programs Co-ops and Internships Research Clubs and Organizations Graduate PhD Programs Master’s Programs and Graduate Certificates Align Programs Co-ops and Internships Research Clubs and Organizations Featured Khoury College:
-Leading in AI innovation and education In the age of AI, why pursue a CS degree?
-From our AI-forward educational ethos to cutting-edge AI research, there actually has never been a better time to join the field.
-Learn more.
-Experiential Learning It's the Northeastern advantage:
-Learn about the many experiential learning opportunities that set our students apart.
-Global Campus Experience Study, work, and research at one of our nine network campuses as well as at a wide range of locations on seven continents.
-Research Column one Research at Khoury College Research Areas Research Spaces Institutes and Centers Column two Labs and Groups Research Honors and Awards Research Impacts Khoury College at Conferences Featured The partnership that fuels America From our smartphones to the milk we drink, the partnership between government investment, academic research, and industry innovation has driven decades of technological progress and economic growth for the US.
-Learn how Khoury College is committed to playing a key role.
-CHI 2026:
-Khoury researchers set new publishing benchmark Khoury researchers are heading to this year's CHI conference in Barcelona with a college-record 41 accepted works, 53 contributors, and five best paper honorable mentions.
-Learn more from Khoury News.
-Partners Column one Partnering for Change Industry Partnerships:
-Engaging Students Industry Partnerships:
-Collaborating on Research Community Partnerships Featured Hiring a co-op student:
-What to know For more than 500 partners across our global network, co-op students bring fresh perspectives and make an immediate impact.
-Learn more.
-Co-op partners see strong demand for recent CS grads Companies like Dell, HubSpot, and Notability are leaning into early-career hiring — and seeing real results.
-With AI making engineers more productive than ever, new hires are contributing immediately, bringing fresh perspectives, and helping companies build better products.
-Verizon Smart Campus Competition Verizon partnered with Northeastern to challenge students to design real-world solutions using 5G and emerging technologies.
-Explore how the winning teams turned that challenge into feasible, engineering-driven innovations that drew on disciplines from across the campus.
-People Column one All People Leadership Tenured/Tenure-Track Faculty Teaching Faculty Affiliated Faculty Column two Research Faculty Co-op Faculty Staff Post Docs PhD Students Featured Careers at Khoury College View open roles across our global campuses.
-Resources For Prospective Undergraduate Students Master’s Students Align Students PhD Students Faculty Current Undergraduate Students Master’s and Certificate Students Align Students PhD Students Community Alumni Donors Federal Landscape:
-Frequently Asked Questions Contact Visit Apply Donate Instagram TikTok Reddit Linkedin YouTube Bluesky Khoury College X Page Threads Facebook Home | PlusOne BS + MS programs PlusOne Accelerated Master’s Programs at Khoury College A faster pathway to your master’s degree If you’re a currently enrolled undergraduate student interested in getting your master’s degree, the PlusOne pathway is an ideal option for your educational journey.
+PlusOne Accelerated Master’s Programs at Khoury College A faster pathway to your master’s degree If you’re a currently enrolled undergraduate student interested in getting your master’s degree, the PlusOne pathway is an ideal option for your educational journey.
 Northeastern’s PlusOne programs allow you to start earning your master’s degree while pursuing your undergraduate degree.
 Undergraduate students in Khoury College are allowed to count up to 16 credits (four courses) toward both their bachelor’s and master’s degrees — integrating graduate-level coursework into your undergraduate plan of study.
 Benefits of the PlusOne program include:
@@ -53,4 +24,4 @@ Computer Engineering to MS in Computer Science In this program, you can take up 
 Locations Close this dialog window Boston PlusOne Program with MS in Health Informatics In this program (managed by Bouvé College of Health Sciences), you can start earning your MS in Health Informatics during your undergraduate studies.
 As you build your foundations, you can take up to four graduate-level courses and apply them to both your undergraduate and graduate degrees.
 Locations Close this dialog window Boston PlusOne Program with MS in Bioinformatics In this program (managed by the College of Science), you can start earning your MS in Bioinformatics during your undergraduate studies by taking up to four graduate-level courses that apply to both your undergraduate and graduate degrees.
-Locations Close this dialog window Boston Instagram TikTok Reddit Linkedin YouTube Bluesky Khoury College X Page Threads Facebook Contact Visit Apply Donate Contact 440 Huntington Avenue 202 West Village H Boston, MA 02115 Quick Links Home Khoury News All People Events Calendar Careers
+Locations Close this dialog window Boston

@@ -125,6 +125,7 @@ export const strings = {
   "plusone.campus":             "CAMPUS DU MASTER",
   "plusone.loading":            "Chargement…",
   "plusone.gone":               "Ce parcours PlusOne n'est plus publié.",
+  "plusone.ineligible":         "Votre majeure actuelle n\u2019est pas listée pour ce parcours. Retirez-le ou voyez votre conseiller.",
   "plusone.meter":              "partagés entre les deux diplômes",
   "plusone.meter.line":         "{courses} cours sur {maxCourses} · {sh} SH sur {maxSH} partagés",
   "plusone.sec.share":          "COURS PARTAGEABLES",

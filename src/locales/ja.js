@@ -126,6 +126,7 @@ export const strings = {
   "plusone.campus":             "修士のキャンパス",
   "plusone.loading":            "読み込み中…",
   "plusone.gone":               "この PlusOne 経路は現在公開されていません。",
+  "plusone.ineligible":         "この経路に現在の専攻は記載されていません。外すか、アドバイザーに確認してください。",
   "plusone.meter":              "両方の学位に共通",
   "plusone.meter.line":         "{maxCourses} 科目中 {courses} 科目・{maxSH} SH 中 {sh} SH を共通利用",
   "plusone.sec.share":          "共通利用できる科目",

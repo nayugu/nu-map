@@ -128,6 +128,7 @@ export const strings = {
   "plusone.campus":             "MASTER’S CAMPUS",
   "plusone.loading":            "Loading…",
   "plusone.gone":               "This PlusOne pathway is no longer published.",
+  "plusone.ineligible":         "Your current major is not listed for this pathway. Remove it, or check with your advisor.",
   "plusone.meter":              "shared toward both degrees",
   "plusone.meter.line":         "{courses} of {maxCourses} courses · {sh} of {maxSH} SH shared",
   "plusone.sec.share":          "COURSES YOU CAN SHARE",

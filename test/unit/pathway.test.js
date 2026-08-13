@@ -972,3 +972,66 @@ describe("the candidate list — what a student should take", () => {
     }
   });
 });
+
+// ═══════════════════════════════════════════════════════════════════
+describe("a course is shared once however many times it is attempted", () => {
+  // Found by probing before a push. Keying shares by PLACEMENT rather than by
+  // course made a retake ("CS5800" + "CS5800#2") read as 2 courses / 8 SH, which
+  // can push a legal plan over a 4-course / 16 SH cap on the strength of one
+  // course. Same family as the CS 5500 alternation bug: the cap counts COURSES.
+  const p = () => byId(MSCS);
+  const sharesFor = (placements, grades = {}) => activeShares({
+    pathway: p(), placements, courseMap, grades, isVoid: g => g === "W",
+  });
+
+  test("a retake counts once", () => {
+    const s = sharesFor({ CS5800: "fall2026", "CS5800#2": "spring2027" });
+    assert.equal(s.length, 1);
+    assert.equal(shareTotals(s).courses, 1);
+    assert.equal(shareTotals(s).semesterHours, 4);
+  });
+
+  test("three attempts still count once", () => {
+    const s = sharesFor({ CS5800: "f1", "CS5800#2": "f2", "CS5800#3": "f3" });
+    assert.equal(shareTotals(s).courses, 1);
+  });
+
+  test("a withdrawn first attempt plus a passed retake is ONE active share", () => {
+    const s = sharesFor({ CS5800: "fall2026", "CS5800#2": "spring2027" }, { CS5800: "W" });
+    assert.equal(s.length, 1);
+    assert.equal(s[0].withdrawn, false, "the take that counts is the one that stuck");
+    assert.equal(s[0].semId, "spring2027", "and it sits in the term it was earned");
+    assert.equal(shareTotals(s, { includeWithdrawn: true }).courses, 1);
+  });
+
+  test("a single withdrawn attempt stays withdrawn", () => {
+    const s = sharesFor({ CS5800: "fall2026" }, { CS5800: "W" });
+    assert.equal(s[0].withdrawn, true);
+    assert.equal(shareTotals(s).courses, 0, "not carried");
+    assert.equal(shareTotals(s, { includeWithdrawn: true }).courses, 1, "but Khoury counts it");
+  });
+
+  test("distinct courses still count separately", () => {
+    const s = sharesFor({ CS5800: "f1", CS5200: "f2" });
+    assert.equal(shareTotals(s).courses, 2);
+  });
+
+  // Transfer credit may not apply to a PlusOne master's (university policy), so
+  // a graduate course placed out must not appear as a share.
+  test("a graduate course placed out is not a share", () => {
+    const s = activeShares({
+      pathway: p(), placements: {}, courseMap, placedOut: new Set(["CS5800"]),
+    });
+    assert.equal(s.length, 0);
+  });
+
+  test("but a placed-out UNDERGRADUATE target still forecloses its share", () => {
+    const placedOut = new Set(["CS3000"]);
+    const subs = pathwaySubstitutions({ pathway: p(), placements: {}, placedOut });
+    assert.ok(!subs.some(s => s.to === "CS3000"));
+    const row = shareCandidates({ pathway: p(), placements: {}, placedOut, courseMap })
+      .find(r => r.gradId === "CS5800");
+    assert.equal(row.state, "blocked");
+    assert.deepEqual(row.blockedBy, ["CS3000"]);
+  });
+});

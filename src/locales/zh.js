@@ -125,6 +125,7 @@ export const strings = {
   "plusone.campus":             "\u7855\u58eb\u6821\u533a",
   "plusone.loading":            "\u52a0\u8f7d\u4e2d\u2026",
   "plusone.gone":               "\u8be5 PlusOne \u8def\u5f84\u5df2\u4e0d\u518d\u516c\u5e03\u3002",
+  "plusone.ineligible":         "该路径未列出你当前的专业。请移除，或与导师确认。",
   "plusone.meter":              "\u8ba1\u5165\u4e24\u4e2a\u5b66\u4f4d",
   "plusone.meter.line":         "已共享 {maxCourses} 门中的 {courses} 门 · {maxSH} SH 中的 {sh} SH",
   "plusone.sec.share":          "可共享的课程",

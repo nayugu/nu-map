@@ -125,6 +125,7 @@ export const strings = {
   "plusone.campus":             "석사 캠퍼스",
   "plusone.loading":            "불러오는 중…",
   "plusone.gone":               "이 PlusOne 경로는 더 이상 공개되지 않습니다.",
+  "plusone.ineligible":         "이 경로에는 현재 전공이 없습니다. 제거하거나 지도교수에게 확인하세요.",
   "plusone.meter":              "두 학위에 공통 인정",
   "plusone.meter.line":         "{maxCourses}과목 중 {courses}과목 · {maxSH} SH 중 {sh} SH 공통 인정",
   "plusone.sec.share":          "공통 인정 가능 과목",

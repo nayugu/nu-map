@@ -365,3 +365,39 @@ describe("the cached text is what makes drift reviewable", () => {
     }
   });
 });
+
+// ═══════════════════════════════════════════════════════════════════
+describe("drift is measured on the content region, not the whole page", () => {
+  const page = (nav, main) =>
+    `<header><nav>${nav}</nav></header><main><p>${main}</p></main><footer>© NU</footer>`;
+
+  // The property that makes the drift check usable: one template change at the
+  // university must not flag all 74 pages at once.
+  test("a navigation change does NOT change the hash", async () => {
+    const a = await contentHash(page("Home Apply Give", "Requires a 3.0 GPA."));
+    const b = await contentHash(page("Home Apply Give Alumni News Events", "Requires a 3.0 GPA."));
+    assert.equal(a, b);
+  });
+
+  test("a change inside the content DOES change the hash", async () => {
+    const a = await contentHash(page("Home", "Requires a 3.0 GPA."));
+    const b = await contentHash(page("Home", "Requires a 3.5 GPA."));
+    assert.notEqual(a, b);
+  });
+
+  test("the cached text drops the chrome and keeps the substance", () => {
+    const t = cacheableText(page("Home Apply Give Alumni", "CS 5800 replaces CS 3000."));
+    assert.match(t, /CS 5800 replaces CS 3000\./);
+    assert.ok(!/Alumni|© NU/.test(t), "header and footer are not cached");
+  });
+
+  test("a page with no <main> falls back to the whole document", () => {
+    const t = cacheableText("<div><p>Requires a 3.0 GPA.</p></div>");
+    assert.match(t, /Requires a 3\.0 GPA\./);
+  });
+
+  test("a stub <main> falls back rather than caching almost nothing", () => {
+    const html = "<main></main>" + "<p>Requires a 3.0 GPA.</p>".padEnd(4000, " ");
+    assert.match(cacheableText(html), /Requires a 3\.0 GPA\./);
+  });
+});

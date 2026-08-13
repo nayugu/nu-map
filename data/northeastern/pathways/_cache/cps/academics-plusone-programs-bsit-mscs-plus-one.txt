@@ -1,10 +1,7 @@
 # https://cps.northeastern.edu/academics/plusone-programs/bsit-mscs-plus-one/
 # fetched 2026-08-13
 
-BSIT-MSCS Plus One | Northeastern University College of Professional Studies Skip to main content Menu Close Programs Programs Programs Program finder Program Levels Program Levels Bachelor's Master's Professional Doctorate Undergraduate Certificate Graduate Certificate Post-Baccalaureate Locations Locations Arlington, VA Boston, MA Miami, FL Oakland, CA Online Portland, ME Seattle, WA Silicon Valley, CA Toronto, ON Vancouver, BC Apply now Check application status Recently Visited Master of Arts in National Security and Intelligence — Online Master of Education in Learning Bachelor of Science in Digital Communication and Media — Online Master of Science in Organizational Leadership – Boston Admissions AI at CPS Current Students About About About Why CPS Schools & Centers News Faces of CPS Graduates and Alumni of CPS Experiential Learning Student Research Thought Leadership Events College Leadership Academic Resources Featured stories CPS’s Senior Associate Dean of Academic Affairs, Joseph Griffin, Named 2026 PMI David I.
-Cleland Project Management Literature Award Honoree CPS Faculty Expert Steve Kates Warns of Safety Gaps in Booming Peptide Industry The Pulse:
-July 2026 Research Search for:
-Search Jumpstart Your Graduate Education Accelerate your IT education with the Bachelor of Science in Information Technology/Master of Science in Computer Science PlusOne program.
+Jumpstart Your Graduate Education Accelerate your IT education with the Bachelor of Science in Information Technology/Master of Science in Computer Science PlusOne program.
 Work towards a master’s degree while still completing your bachelor’s degree and earn up to 16 credits that count towards both degrees.
 Hone your IT skills with in-demand specializations Take the skills you learn from our information technology programs and specialize in one of 11 computer science concentrations so you’re inspired and career-ready.
 Move one step closer to your future Earn your master’s degree only one year after earning your bachelor’s degree – that’s one year sooner than traditional master’s degree programs.
@@ -12,5 +9,4 @@ Advance your career and gain seniority According to Burning Glass Labor Insights
 Earn 18% more over your lifetime A Master of Science degree in Computer Science is a strong investment in your future – and it leads to higher salaries .
 We move at your pace Our programs are flexible, so you can study however and whenever you like – online, in person, or a combination of both.
 They’re also available year-round, so you can jump in and study full-time or part-time whenever you’re ready.
-PlusOne Programs BS in Information Technology MS in Computer Science (Align) MS in Computer Science Back to top Northeastern University College of Professional Studies Apply now Call:
-877.668.7727 50 Nightingale Hall 360 Huntington Ave Boston, MA 02115-9959 ACADEMICS Academic Leadership Accreditations Explore Programs Faculty Global Pathways Program Learning Outcomes ADMISSIONS & AID Application FAQ CPS Admissions Policies Financial Aid Graduate Admissions International Admissions Military Applicants Undergraduate Admissions CURRENT STUDENTS Academic Resources Co-op and Experiential Learning Enrolling at CPS Graduation Registering for Classes Take A Course RESOURCES Calendar College Leadership Giving to the College Latest News Our Impact Schools & Centers Why CPS
+PlusOne Programs BS in Information Technology MS in Computer Science (Align) MS in Computer Science
