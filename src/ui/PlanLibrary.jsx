@@ -112,7 +112,14 @@ export default function PlanLibrary() {
   const [exportMenu, setExportMenu] = useState(null);   // { x, y, ids }
   const [assigning, setAssigning]   = useState(null);   // { ids, value } assign student
   const [pending, setPending]       = useState(null);   // delete confirmation
-  const [notice, setNotice]         = useState("");
+  const [notice, setNoticeRaw]      = useState("");
+  const [noticeBad, setNoticeBad]   = useState(true);
+  /**
+   * Say something in the notice strip. Defaults to the ERROR tone, because
+   * all but a handful of these are failures and a wrong default should be the
+   * loud one, not the silent one.
+   */
+  const setNotice = (msg, bad = true) => { setNoticeRaw(msg); setNoticeBad(bad); };
   const [drag, setDrag]             = useState(null);   // { ids }
   // Reordering is only offered under manual sort: name and recency derive
   // position from the records, so a stored order would be invisible there.
@@ -372,20 +379,23 @@ export default function PlanLibrary() {
    */
   const doExport = async (ids, shape = "files") => {
     setExportMenu(null);
-    if (shape === "zip")    { setNotice(t("folders.io.exported", { n: exportLibraryZip(ids).plans })); return; }
-    if (shape === "bundle") { setNotice(t("folders.io.exported", { n: exportLibraryJSON(ids).plans })); return; }
+    if (shape === "zip")    { setNotice(t("folders.io.exported", { n: exportLibraryZip(ids).plans }), false); return; }
+    if (shape === "bundle") { setNotice(t("folders.io.exported", { n: exportLibraryJSON(ids).plans }), false); return; }
 
     const res = await exportPlansFlat(ids);
     if (!res.ok) {
-      if (res.reason === "cancelled") return;               // they closed the picker
+      // Dismissing the folder picker is not a failure and says nothing. Nor is
+      // a double-click landing while the picker is already open.
+      if (res.reason === "cancelled" || res.reason === "busy") return;
       setNotice(t(res.reason === "empty" ? "folders.io.err.noplans" : "folders.io.err.write"));
       return;
     }
-    // Which path ran is worth saying. The download path is the one a browser
-    // can still throttle behind an "allow multiple downloads?" prompt, so it
-    // says how many files to expect rather than implying they all arrived.
-    setNotice(t(res.via === "folder" ? "folders.io.exportedFolder" : "folders.io.exportedFiles",
-      { n: res.plans }));
+    // Name the route, because the three land in different places: a folder you
+    // chose, your Downloads, or a single .zip to expand.
+    setNotice(t(
+      res.via === "folder" ? "folders.io.exportedFolder"
+      : res.via === "zip"  ? "folders.io.exportedZip"
+      : "folders.io.exportedOne", { n: res.plans }), false);
   };
 
   const exportMenuItems = (ids) => [
@@ -405,7 +415,8 @@ export default function PlanLibrary() {
     const base = res.atRoot
       ? t("folders.io.importedRoot", { n: res.plans })
       : t("folders.io.imported", { n: res.plans });
-    setNotice(res.failed ? `${base} ${t("folders.io.someFailed", { n: res.failed })}` : base);
+    setNotice(res.failed ? `${base} ${t("folders.io.someFailed", { n: res.failed })}` : base,
+      !!res.failed);
   };
 
   /**
@@ -1075,9 +1086,14 @@ export default function PlanLibrary() {
         </div>
 
         {notice && (
+          // Every notice used to render RED — including "Exported 4 plans",
+          // which made a success indistinguishable from a failure and is why
+          // a working export read as a broken one. Errors stay red; anything
+          // that went fine is quiet.
           <div role="status" style={{
-            padding: "5px 13px", fontSize: 10, color: "var(--error)",
-            background: "var(--error-bg, rgba(239,68,68,0.1))",
+            padding: "5px 13px", fontSize: 10,
+            color: noticeBad ? "var(--error)" : "var(--text-3)",
+            background: noticeBad ? "var(--error-bg, rgba(239,68,68,0.1))" : "var(--bg-surface-2)",
             borderBottom: "1px solid var(--border-1)", flexShrink: 0,
           }}>{notice}</div>
         )}
