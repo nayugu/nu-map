@@ -91,8 +91,7 @@ export default function PlanLibrary() {
     plans, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort, reorderNodes, orderedSiblings,
     activePlanId, switchPlan, renamePlan, setPlanStudent, duplicatePlan,
-    exportLibraryJSON, exportLibraryZip, exportPlansIndividually,
-    exportPlansToDirectory, importLibraryFiles,
+    exportLibraryJSON, exportLibraryZip, exportPlansFlat, importLibraryFiles,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
     pushFolderHistory, undoFolders, redoFolders, folderCanUndo, folderCanRedo,
@@ -376,20 +375,17 @@ export default function PlanLibrary() {
     if (shape === "zip")    { setNotice(t("folders.io.exported", { n: exportLibraryZip(ids).plans })); return; }
     if (shape === "bundle") { setNotice(t("folders.io.exported", { n: exportLibraryJSON(ids).plans })); return; }
 
-    // Ask for a destination folder first. Not a nicety: N downloads trip the
-    // browser's "allow multiple downloads?" bubble and everything after the
-    // first is dropped in silence, so the flat path could report success
-    // having written one file out of forty.
-    const dir = await exportPlansToDirectory(ids);
-    if (dir.ok) { setNotice(t("folders.io.exportedFolder", { n: dir.plans })); return; }
-    if (dir.reason === "cancelled") return;                 // they closed the picker
-    if (dir.reason === "write") { setNotice(t("folders.io.err.write")); return; }
-
-    // Firefox and Safari have no directory picker; fall back to one download
-    // per plan and SAY that the structure is flattened, rather than letting
-    // the folders quietly disappear.
-    const res = await exportPlansIndividually(ids);
-    setNotice(t("folders.io.exportedFiles", { n: res.plans }));
+    const res = await exportPlansFlat(ids);
+    if (!res.ok) {
+      if (res.reason === "cancelled") return;               // they closed the picker
+      setNotice(t(res.reason === "empty" ? "folders.io.err.noplans" : "folders.io.err.write"));
+      return;
+    }
+    // Which path ran is worth saying. The download path is the one a browser
+    // can still throttle behind an "allow multiple downloads?" prompt, so it
+    // says how many files to expect rather than implying they all arrived.
+    setNotice(t(res.via === "folder" ? "folders.io.exportedFolder" : "folders.io.exportedFiles",
+      { n: res.plans }));
   };
 
   const exportMenuItems = (ids) => [
@@ -884,8 +880,14 @@ export default function PlanLibrary() {
    * lone student never meets a half-empty roster layout.
    */
   const planCells = (row) => [
-    { text: labels.get(row.id) ?? "", share: "24%" },
+    // Student first, then major on the far right. The major is the column
+    // that is ALWAYS populated, so putting it at the edge gives the row a
+    // straight right margin down the whole list; the student, which is often
+    // blank, sits inboard where a gap does not leave a ragged edge. Reversing
+    // these two put the ragged column on the outside, which is what makes a
+    // list look broken.
     { text: row.item.student ?? "", share: "22%", strong: true },
+    { text: labels.get(row.id) ?? "", share: "24%" },
   ];
 
   // Does any plan being assigned currently HAVE a student? An empty field means

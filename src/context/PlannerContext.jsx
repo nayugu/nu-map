@@ -35,8 +35,7 @@ import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
          siblingsInOrder, SORT_MODES } from "../core/planFolders.js";
 import { buildLibraryFile, parseLibraryFile, mergeLibrary,
-         libraryToArchive, archiveToLibrary, flatFileNames,
-         archiveFolderPaths, LIBRARY_INDEX_PATH } from "../core/planLibraryFile.js";
+         libraryToArchive, archiveToLibrary, flatFileNames } from "../core/planLibraryFile.js";
 import { writeZip, readZip } from "../core/zipFile.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
@@ -3413,49 +3412,6 @@ const { locale, setLocale, locales, t } = useLanguage();
   };
 
   /**
-   * The same export as ONE ORDINARY PLAN FILE PER PLAN — the default, because
-   * it is the exact inverse of how plans come back in: an advisor selects
-   * several files in the file dialog and Import loads them all. A bundle has
-   * to be understood before it can be used; a folder of plan files does not,
-   * and every one of them opens with the ordinary Load JSON on its own.
-   *
-   * The cost is structure: flat files have no folders, so `flatFileNames`
-   * folds the folder trail into the name ("Advisees · Jane") and makes the
-   * names unique across the WHOLE selection rather than per directory. The
-   * zip remains for the case where the folder tree itself must round-trip.
-   *
-   * Downloads are spaced out: browsers treat a burst of anchor clicks as one
-   * gesture and silently drop all but the first few. Even spaced, the first
-   * multi-file export raises the browser's own "allow multiple downloads?"
-   * prompt once per site — unavoidable from a web page, and the reason the
-   * caller reports how many files were written.
-   *
-   * @param {string[]|null} ids
-   */
-  const exportPlansIndividually = async (ids = null) => {
-    saveCurrentPlanToSlot();
-    const doc = buildLibraryFile(planTree, ids, planSnapshot, { redact: libraryRedact });
-    const names = flatFileNames(doc.plans, doc.folders);
-    const suffix = `${institution.shortName ?? institution.name} Map`;
-    const dateStr = new Date().toISOString().slice(0, 10);
-    for (const p of doc.plans) {
-      // `planName` is what the single-plan importer reads, so each file is an
-      // ordinary plan file and needs no library-aware path to open.
-      const blob = new Blob([JSON.stringify({ ...p.data, planName: p.name }, null, 2)],
-        { type: "application/json" });
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(blob);
-      a.download = `${names.get(p.id)} - ${suffix} - ${dateStr}.json`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-      await new Promise(r => setTimeout(r, 120));
-    }
-    return { plans: doc.plans.length, folders: doc.folders.length };
-  };
-
-  /**
    * Export a selection INTO A FOLDER THE USER PICKS, keeping the folder tree.
    *
    * This is the primary export path, and the reason is a hard browser limit
@@ -3486,50 +3442,118 @@ const { locale, setLocale, locales, t } = useLanguage();
    *
    * @returns {Promise<{ok: true, plans, folders}|{ok: false, reason: 'unsupported'|'cancelled'|'write'}>}
    */
-  const exportPlansToDirectory = async (ids = null) => {
-    if (typeof window === "undefined" || typeof window.showDirectoryPicker !== "function") {
-      return { ok: false, reason: "unsupported" };
-    }
-    saveCurrentPlanToSlot();
-    const doc = buildLibraryFile(planTree, ids, planSnapshot, { redact: libraryRedact });
-
-    let root;
+  /**
+   * THE export. A selection becomes one ordinary plan file per plan, flat.
+   *
+   * Three rules, all deliberate:
+   *
+   *   1. PLANS ONLY. A folder is never exported as a thing; selecting one
+   *      contributes the plans inside it. `buildLibraryFile` already computes
+   *      that closure (the same one delete uses), so a mixed selection of
+   *      folders and plans at any depth resolves to a plain set of plans.
+   *   2. FLAT. The folder tree is how the library is organised in the app, not
+   *      how files should be arranged on disk. Names are deduplicated globally
+   *      because flat files share one directory — two advisees' "Current"
+   *      would otherwise overwrite each other, which is silent loss at the
+   *      exact moment the user believes they are taking a backup.
+   *   3. NEVER ONE AGGREGATE FILE. N plans is N files.
+   *
+   * Getting N files out of a browser is the hard part, and the reason this
+   * has two paths:
+   *
+   *   - A directory picker (File System Access) asks for permission ONCE and
+   *     then writes as many files as it likes. Used whenever it exists.
+   *   - Otherwise, N downloads. This is what was silently failing before: a
+   *     browser treats a burst of downloads as one suspicious act and drops
+   *     everything after the first until the user answers a permission bubble,
+   *     so an export of forty plans wrote one file and said it wrote forty.
+   *     Now the caller is told which path ran, so the UI can warn instead of
+   *     claiming success.
+   *
+   * A single plan always takes the download path: one download needs no
+   * permission anywhere, so the commonest export cannot fail.
+   *
+   * Never throws. Every failure comes back as a reason the UI can name.
+   *
+   * @param {string[]|null} ids  selected nodes, or null for the whole library
+   * @returns {Promise<{ok: true, plans: number, via: 'folder'|'downloads'}
+   *                  |{ok: false, reason: 'empty'|'cancelled'|'write'}>}
+   */
+  const exportPlansFlat = async (ids = null) => {
+    let doc;
     try {
-      // `id` makes the browser reopen the last place they exported to.
-      root = await window.showDirectoryPicker({ mode: "readwrite", id: "numap-export" });
-    } catch {
-      // AbortError is the ordinary "user pressed Cancel" — not a failure to
-      // report as one.
-      return { ok: false, reason: "cancelled" };
-    }
-
-    const dirs = new Map([["", root]]);
-    const dirFor = async (path) => {
-      if (dirs.has(path)) return dirs.get(path);
-      const cut = path.lastIndexOf("/");
-      const parent = await dirFor(cut === -1 ? "" : path.slice(0, cut));
-      const handle = await parent.getDirectoryHandle(path.slice(cut + 1), { create: true });
-      dirs.set(path, handle);
-      return handle;
-    };
-
-    try {
-      const entries = libraryToArchive(doc).filter(e => e.path !== LIBRARY_INDEX_PATH);
-      // Every folder, not just the ones containing a plan: an empty folder has
-      // no file to imply it and would otherwise be dropped in silence.
-      for (const dir of archiveFolderPaths(doc)) await dirFor(dir);
-      for (const e of entries) {
-        const cut = e.path.lastIndexOf("/");
-        const dir = cut === -1 ? "" : e.path.slice(0, cut);
-        const file = await (await dirFor(dir)).getFileHandle(e.path.slice(cut + 1), { create: true });
-        const w = await file.createWritable();
-        await w.write(JSON.stringify(e.json, null, 2));
-        await w.close();
-      }
-      return { ok: true, plans: doc.plans.length, folders: doc.folders.length };
+      saveCurrentPlanToSlot();
+      doc = buildLibraryFile(planTree, ids, planSnapshot, { redact: libraryRedact });
     } catch {
       return { ok: false, reason: "write" };
     }
+    if (!doc.plans.length) return { ok: false, reason: "empty" };
+
+    const names = flatFileNames(doc.plans);
+    const suffix = `${institution.shortName ?? institution.name} Map`;
+    const dateStr = new Date().toISOString().slice(0, 10);
+    // `planName` is what the single-plan importer reads, so every file here is
+    // an ordinary plan file that opens with Load JSON on its own.
+    const fileOf = (p) => ({
+      name: `${names.get(p.id)} - ${suffix} - ${dateStr}.json`,
+      text: JSON.stringify({ ...p.data, planName: p.name }, null, 2),
+    });
+
+    const download = (file) => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([file.text], { type: "application/json" }));
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    };
+
+    const files = doc.plans.map(fileOf);
+
+    // One file: a plain download, always permitted, no picker in the way.
+    if (files.length === 1) {
+      try { download(files[0]); return { ok: true, plans: 1, via: "downloads" }; }
+      catch { return { ok: false, reason: "write" }; }
+    }
+
+    if (typeof window !== "undefined" && typeof window.showDirectoryPicker === "function") {
+      let dir = null;
+      try {
+        dir = await window.showDirectoryPicker({ mode: "readwrite", id: "numap-export" });
+      } catch (err) {
+        // AbortError is "they pressed Cancel" and is not a failure. Anything
+        // else (a SecurityError from a lost user gesture, a policy block) is
+        // not worth surfacing either — fall through to downloads, which work
+        // without any of that.
+        if (err && err.name === "AbortError") return { ok: false, reason: "cancelled" };
+        dir = null;
+      }
+      if (dir) {
+        try {
+          for (const f of files) {
+            const handle = await dir.getFileHandle(f.name, { create: true });
+            const w = await handle.createWritable();
+            await w.write(f.text);
+            await w.close();
+          }
+          return { ok: true, plans: files.length, via: "folder" };
+        } catch {
+          return { ok: false, reason: "write" };
+        }
+      }
+    }
+
+    // Spaced, because a tight burst is exactly what browsers collapse.
+    try {
+      for (const f of files) {
+        download(f);
+        await new Promise(r => setTimeout(r, 150));
+      }
+    } catch {
+      return { ok: false, reason: "write" };
+    }
+    return { ok: true, plans: files.length, via: "downloads" };
   };
 
   /** Read one dropped file into an incoming {folders, plans}, whatever it is. */
@@ -4366,8 +4390,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
-    exportLibraryJSON, exportLibraryZip, exportPlansIndividually,
-    exportPlansToDirectory, importLibraryFiles,
+    exportLibraryJSON, exportLibraryZip, exportPlansFlat, importLibraryFiles,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, duplicatePlan, renamePlan, setPlanStudent,
     // Folders — structure, view state, and the mutations that respect both.
