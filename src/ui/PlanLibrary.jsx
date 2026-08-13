@@ -378,23 +378,26 @@ export default function PlanLibrary() {
    * do, which is carry the folder tree.
    */
   /**
-   * SYNCHRONOUS on purpose — see `exportPlansFlat`. Any `await` before the
-   * downloads spends the click's user activation and the browser then drops
-   * them, which is the bug that made exporting several plans fail while Save
-   * JSON always worked.
+   * Nothing may be awaited before `exportPlansFlat` — it reaches for the
+   * directory picker, which needs the click's user activation still intact.
    */
-  const doExport = (ids, shape = "files") => {
+  const doExport = async (ids, shape = "files") => {
     setExportMenu(null);
     if (shape === "zip")    { setNotice(t("folders.io.exported", { n: exportLibraryZip(ids).plans }), false); return; }
     if (shape === "bundle") { setNotice(t("folders.io.exported", { n: exportLibraryJSON(ids).plans }), false); return; }
 
-    const res = exportPlansFlat(ids);
+    const res = await exportPlansFlat(ids);
     if (!res.ok) {
+      // Dismissing the picker, or clicking Export while it is already open,
+      // are both non-events and say nothing.
+      if (res.reason === "cancelled" || res.reason === "busy") return;
       setNotice(t(res.reason === "empty" ? "folders.io.err.noplans" : "folders.io.err.write"));
       return;
     }
-    setNotice(t(res.plans === 1 ? "folders.io.exportedOne" : "folders.io.exportedFiles",
-      { n: res.plans }), false);
+    setNotice(t(
+      res.via === "folder" ? "folders.io.exportedFolder"
+      : res.via === "zip"  ? "folders.io.exportedZip"
+      : "folders.io.exportedOne", { n: res.plans }), false);
   };
 
   const exportMenuItems = (ids) => [
