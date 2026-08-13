@@ -123,9 +123,16 @@ export const RULE_KINDS = Object.freeze({
          "globally would invent errors for most of the university.",
   },
   earliestTerm: {
-    cls: COMPUTABLE,
+    // INFORMATIONAL, not computable — deliberately demoted after driving the
+    // real app showed the ordinal comparison was wrong for every cohort. Summer
+    // terms occupy ordinals (fall of year two is the 5th term, not the 3rd) and
+    // the mapping shifts for a spring entrant, so no single threshold is right.
+    // Doing this properly needs the term's season and academic year, which is
+    // ICalendar's knowledge rather than a pure evaluator's. See rules/earliestTerm.js.
+    cls: INFORMATIONAL,
     doc: "§2.3 #34. Khoury: a first-year student may not take a graduate course " +
-         "in the summer, so the earliest is the fall of year two.",
+         "in the summer, so the earliest is the fall of year two. Stated, not " +
+         "checked — re-promote to COMPUTABLE once ctx carries term season/year.",
   },
 
   // ── Gates on facts only the student holds ───────────────────────

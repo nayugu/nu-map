@@ -68,11 +68,28 @@ import { plannerId, isGradCode, isUgCode, inDomain } from "./ids.js";
  * @property {boolean} withdrawn      placed but the grade voids the take
  */
 
-/** Semester hours of a placed course, 0 when we cannot tell. */
+/**
+ * Semester hours of a placed course, 0 when we cannot tell.
+ *
+ * TWO course shapes reach this function and they name the field differently:
+ *
+ *   `sh`      the RUNTIME course, normalised by adapters/northeastern/courseNorm.js
+ *             — this is what the app's courseMap holds
+ *   `credits` the RAW catalog record in public/northeastern/catalog-courses.json
+ *             — this is what scripts, the verifier and tests build maps from
+ *
+ * Reading only `credits` is a bug that green tests cannot catch, because the
+ * tests build their courseMap from the raw file: every share reported 0 SH in
+ * the browser while the suite passed. `sh` is checked first because the runtime
+ * shape is the one a student sees.
+ */
 function shOf(courseMap, id) {
   const c = courseMap?.[id] ?? courseMap?.[baseId(id)];
-  const n = Number(c?.credits);
-  return Number.isFinite(n) ? n : 0;
+  for (const v of [c?.sh, c?.credits]) {
+    const n = Number(v);
+    if (Number.isFinite(n)) return n;
+  }
+  return 0;
 }
 
 /**

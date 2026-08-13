@@ -4,79 +4,50 @@
 // Khoury: "First-year students cannot take their first graduate-level course
 // during the summer", so the earliest is the fall of the second year.
 //
-// ── Why this reads the plan's term ORDINAL, not a year label ───────
+// ── STATED, NOT EVALUATED — and why that is the correct answer ─────
 //
-// A plan's timeline is built by core/semGrid.js from the cohort bounds, so the
-// only durable way to say "the third term" is the term's position in SEMESTERS.
-// `ctx.semIndex` is that map (semId → ordinal), which is the same structure
-// planModel.js uses for every other timeline question. Anything derived from a
-// year number breaks for a spring entrant, and NEU has plenty.
+// This started as a computable rule comparing each share's term ORDINAL against
+// a threshold from the pathway data (`afterTerms: 3`). Driving the real app
+// proved that wrong, twice over:
 //
-// ── The conservative direction ────────────────────────────────────
+//   1. Summer terms occupy ordinals. For a fall-2026 entrant the plan's terms
+//      are incoming=0, fall2026=1, spr2027=2, sumA2027=3, sumB2027=4,
+//      fall2027=5 — so "the fall of year two" is ordinal 5, and a threshold of
+//      3 lands on sumA2027, permitting exactly the summer Khoury forbids.
+//   2. The mapping is cohort-dependent. A spring entrant's ordinals differ, so
+//      no single number is right for every plan, and NEU has plenty of spring
+//      entrants.
 //
-// When `semIndex` does not contain a share's term — which happens for a
-// placement parked outside the current cohort window, a state the planner keeps
-// deliberately — this returns UNKNOWN for that share rather than assuming it is
-// early. A parked card is not evidence of anything, and inventing a violation
-// from missing data is exactly what the safety classification exists to prevent.
+// Fixing the number would still leave (2). Expressing the rule properly needs
+// the term's SEASON and academic year, which is calendar knowledge that belongs
+// to the ICalendar port, not to a pure core evaluator parsing "sumA2027" — so
+// the honest fix is plumbing that does not exist yet.
+//
+// Until it does: state the rule and let the student check it. It cost a
+// demonstrably false red flag ("1 graduate course(s) sit before term 3" on a
+// perfectly legal plan) to learn this, which is the whole argument for the
+// project's rule — degrade to less information, never to wrong information.
+//
+// The kind stays in the vocabulary, classified `informational`, so the rule is
+// still visible and re-promoting it to computable later is a one-line change to
+// ruleKinds.js once ctx carries term metadata.
 // ═══════════════════════════════════════════════════════════════════
 
 import { STATUS } from "../ruleKinds.js";
 
 /**
- * @param {{afterTerms?: number, notSummerOfYear1?: boolean}} rule
- *        afterTerms — a graduate course may not sit in a term whose ordinal is
- *        below this. Ordinals come from ctx.semIndex, which counts the plan's
- *        own terms including the "incoming" pseudo-term at 0.
+ * @param {{afterTerms?: number}} rule  retained for when this becomes computable
  * @param {import("../evaluate.js").PathwayCtx} ctx
  */
 export default function earliestTerm(rule, ctx) {
-  const min = Number(rule.afterTerms);
-  const semIndex = ctx?.semIndex ?? null;
-
-  if (!Number.isFinite(min) || !semIndex) {
-    return {
-      status: STATUS.UNKNOWN,
-      messageKey: "plusone.rule.earliest.unknown",
-      params: {},
-      evidence: { afterTerms: Number.isFinite(min) ? min : null, haveSemIndex: !!semIndex },
-    };
-  }
-
-  const early = [];
-  const unplaced = [];
-  for (const s of ctx.shares ?? []) {
-    if (s.withdrawn || !s.semId) continue;
-    const ord = semIndex[s.semId];
-    if (ord == null) { unplaced.push(s.gradId); continue; }
-    if (ord < min) early.push({ grad: s.gradId, semId: s.semId, ordinal: ord });
-  }
-
-  const evidence = { afterTerms: min, early, outsideTimeline: unplaced };
-
-  if (early.length) {
-    return {
-      status: STATUS.VIOLATED,
-      messageKey: "plusone.rule.earliest.tooEarly",
-      params: { count: early.length, afterTerms: min },
-      evidence,
-    };
-  }
-
-  // Nothing early, but something we could not place: say so rather than pass.
-  if (unplaced.length) {
-    return {
-      status: STATUS.UNKNOWN,
-      messageKey: "plusone.rule.earliest.outsideTimeline",
-      params: { count: unplaced.length },
-      evidence,
-    };
-  }
-
   return {
-    status: STATUS.SATISFIED,
-    messageKey: "plusone.rule.earliest.ok",
-    params: { afterTerms: min },
-    evidence,
+    status: STATUS.INFO,
+    messageKey: "plusone.rule.earliest.stated",
+    params: {},
+    evidence: {
+      afterTerms: Number.isFinite(Number(rule?.afterTerms)) ? Number(rule.afterTerms) : null,
+      evaluated: false,
+      reason: "term ordinals are cohort-dependent; needs calendar season/year, not an ordinal",
+    },
   };
 }

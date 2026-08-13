@@ -53,12 +53,27 @@ export function gpaMin(rule) {
       ? "plusone.rule.gpa.minAndPreferred"
       : "plusone.rule.gpa.min",
     params: {
-      min: rule.min ?? null,
-      preferred: rule.preferred ?? null,
+      min: gpaText(rule.min),
+      preferred: gpaText(rule.preferred),
       scopes: (rule.scopes ?? ["cumulative"]).join(", "),
     },
+    // Evidence keeps the NUMBER; only the display form is padded.
     evidence: { min: rule.min ?? null, preferred: rule.preferred ?? null, scopes: rule.scopes ?? ["cumulative"] },
   };
+}
+
+/**
+ * A GPA the way a registrar writes one: never a bare integer.
+ *
+ * `3.0` in JSON is the JavaScript number 3, which stringifies to "3" — and
+ * "Requires a 3 GPA" reads like a typo for a threshold students care about to
+ * the hundredth. Padding to one decimal fixes that without touching 3.25, and
+ * without the rounding a blanket toFixed(1) would do to it.
+ */
+function gpaText(n) {
+  if (n == null || !Number.isFinite(Number(n))) return null;
+  const s = String(Number(n));
+  return s.includes(".") ? s : `${s}.0`;
 }
 
 /**

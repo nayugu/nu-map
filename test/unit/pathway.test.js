@@ -363,32 +363,32 @@ describe("per-term rate limit, and the counting conventions that differ", () => 
 });
 
 // ═══════════════════════════════════════════════════════════════════
-describe("earliestTerm is conservative about what it cannot see", () => {
-  const semIndex = { incoming: 0, fall2025: 1, spring2026: 2, fall2026: 3, spring2027: 4 };
+describe("earliestTerm is stated, never evaluated", () => {
+  // Demoted from computable after driving the real app: summers occupy term
+  // ordinals, so "the fall of year two" is the 5th term for a fall entrant and
+  // a different one for a spring entrant. An ordinal threshold produced a false
+  // violation on a legal plan. See rules/earliestTerm.js.
+  const semIndex = { incoming: 0, fall2026: 1, spr2027: 2, sumA2027: 3, sumB2027: 4, fall2027: 5 };
 
-  test("a graduate course before the third term is flagged", () => {
-    const d = evaluateRule({ kind: "earliestTerm", afterTerms: 3 },
-      ctxFor(byId(MSCS), { placements: { CS5800: "spring2026" }, semIndex }));
-    assert.equal(d.status, STATUS.VIOLATED);
+  test("it never reports a violation, whatever the placement", () => {
+    for (const semId of ["fall2026", "sumA2027", "fall2027", "fall2099"]) {
+      const d = evaluateRule({ kind: "earliestTerm", afterTerms: 3 },
+        ctxFor(byId(MSCS), { placements: { CS5800: semId }, semIndex }));
+      assert.equal(d.status, STATUS.INFO, semId);
+      assert.equal(d.evidence.evaluated, false);
+    }
   });
 
-  test("at or after the third term is fine", () => {
-    const d = evaluateRule({ kind: "earliestTerm", afterTerms: 3 },
-      ctxFor(byId(MSCS), { placements: { CS5800: "fall2026" }, semIndex }));
-    assert.equal(d.status, STATUS.SATISFIED);
+  test("the class prevents it violating even if the evaluator regresses", () => {
+    assert.equal(ruleClass("earliestTerm"), RULE_CLASS.INFORMATIONAL);
+    assert.equal(mayViolate("earliestTerm"), false);
   });
 
-  test("a term outside the timeline is UNKNOWN, never a violation", () => {
-    const d = evaluateRule({ kind: "earliestTerm", afterTerms: 3 },
-      ctxFor(byId(MSCS), { placements: { CS5800: "fall2099" }, semIndex }));
-    assert.equal(d.status, STATUS.UNKNOWN,
-      "a parked card is not evidence of being early");
-  });
-
-  test("with no semIndex at all nothing is asserted", () => {
-    const d = evaluateRule({ kind: "earliestTerm", afterTerms: 3 },
-      ctxFor(byId(MSCS), { placements: { CS5800: "fall2026" } }));
-    assert.equal(d.status, STATUS.UNKNOWN);
+  // The measurement that forced the demotion, pinned so a future "fix" that
+  // reinstates an ordinal threshold has to confront it.
+  test("summer terms occupy ordinals, so fall of year two is NOT the third term", () => {
+    assert.equal(semIndex.sumA2027, 3, "the 3rd term is a summer");
+    assert.equal(semIndex.fall2027, 5, "the fall of year two is the 5th");
   });
 });
 
@@ -640,6 +640,45 @@ describe("a PlusOne plan asserts graduate admission", () => {
       assert.match(JSON.stringify(c.prereqs ?? []), /admission/i,
         `${id} no longer states graduate program admission — re-measure`);
     }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════
+describe("semester hours are read from BOTH course shapes", () => {
+  // The bug this pins shipped and was invisible to the suite: shOf read only
+  // `credits`, which is the RAW catalog field, while the app's courseMap holds
+  // courses normalised by courseNorm.js where the field is `sh`. Every share
+  // reported 0 SH in the browser and every test passed, because the tests build
+  // their map from catalog-courses.json.
+  const pathway = {
+    id: "t",
+    shares: [{ grad: "CS 5800", target: { kind: "course", ref: "CS 3000" } }],
+    rules: [],
+  };
+  const shares = map => activeShares({ pathway, placements: { CS5800: "fall2026" }, courseMap: map });
+
+  test("the RUNTIME shape (`sh`) is counted", () => {
+    assert.equal(shares({ CS5800: { sh: 4 } })[0].sh, 4);
+  });
+
+  test("the RAW catalog shape (`credits`) is counted", () => {
+    assert.equal(shares({ CS5800: { credits: 4 } })[0].sh, 4);
+  });
+
+  test("`sh` wins when both are present, since that is the runtime truth", () => {
+    assert.equal(shares({ CS5800: { sh: 4, credits: 99 } })[0].sh, 4);
+  });
+
+  test("a course we cannot resolve contributes 0, never NaN", () => {
+    const s = shares({})[0];
+    assert.equal(s.sh, 0);
+    assert.equal(Number.isFinite(shareTotals([s]).semesterHours), true);
+  });
+
+  test("the real corpus map yields a non-zero total for a real share", () => {
+    const s = shares(courseMap);
+    assert.ok(s[0].sh > 0, "CS 5800 must have credit hours in the shipped corpus");
+    assert.equal(shareTotals(s).semesterHours, 4);
   });
 });
 

@@ -47,9 +47,15 @@ import { ICourseCatalog } from "../ports/ICourseCatalog.js";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { IAIAssistant }   from "../ports/IAIAssistant.js";
 import { IShareRelay }    from "../ports/IShareRelay.js";
+import { IAcceleratedPathway } from "../ports/IAcceleratedPathway.js";
+import { pathwaySubstitutions, mergeSubstitutions } from "../core/pathway/shareSet.js";
 // Shared pure dry-run — the same applier the MCP server validates with,
 // reused here for the proposal ghost preview.
 import { applyChangeset as dryRunChangeset } from "../adapters/mcp/plannerActionAdapter.js";
+
+// A shared frozen empty list, so the no-pathway case keeps a stable identity and
+// every memo downstream of it skips recomputing.
+const EMPTY_SUBS = Object.freeze([]);
 
 const PlannerContext = createContext(null);
 
@@ -98,6 +104,7 @@ const { locale, setLocale, locales, t } = useLanguage();
   const specialTerms   = usePort(ISpecialTerms);
   const aiAssistant    = usePort(IAIAssistant);
   const shareRelay     = usePort(IShareRelay);
+  const acceleratedPathway = usePort(IAcceleratedPathway);
 
   // ── Claude access (pairing + kill switch) ──────────────────────
   // DEFAULT OFF: no sync and no plan access until the user pairs — Claude
@@ -249,6 +256,10 @@ const { locale, setLocale, locales, t } = useLanguage();
   const [minor1,      setMinor1]         = useState("");
   const [minor2,      setMinor2]         = useState("");
   const [major2,      setMajor2]         = useState("");
+  // Declared accelerated BS/MS pathway id (Northeastern: "PlusOne"), or "".
+  // Undergraduate plans only. One field: the shares are DERIVED from the
+  // pathway plus what is placed, never stored — see core/pathway/shareSet.js.
+  const [plusOne,     setPlusOne]        = useState("");
   const [studentType, setStudentTypeRaw] = useState(() => {
     try { return localStorage.getItem(key("student-type")) || "undergrad"; } catch { return "undergrad"; }
   });
@@ -952,9 +963,43 @@ const { locale, setLocale, locales, t } = useLanguage();
   // effectivePlacements: real placements + virtual entries for substitution targets.
   // When CS3500 → CS4400 substitution exists and CS3500 is placed in fall2024,
   // CS4400 is added as if placed in fall2024. Credits use only real `placements`.
+  // ── Accelerated-pathway (PlusOne) substitutions ─────────────────
+  //
+  // A declared pathway contributes its published graduate→undergraduate swaps.
+  // They are DERIVED here, never stored: `noGradIfUgDone` requires a share to
+  // disappear once the undergraduate version is in the plan, which a saved copy
+  // could not do without a sync step, and deriving keeps one source of truth
+  // when the pathway data is next updated.
+  //
+  // Pre-arming every candidate is inert by construction: applySubstitutions
+  // fires only `if (placements[from])`, so declaring a pathway changes nothing
+  // until a graduate course is actually placed.
+  const pathwayForPlan = useMemo(
+    () => (plusOne && studentType !== "graduate"
+      ? acceleratedPathway.getPathway(plusOne)
+      : null),
+    [plusOne, studentType, acceleratedPathway]
+  );
+
+  const pathwaySubs = useMemo(
+    () => (pathwayForPlan
+      ? pathwaySubstitutions({ pathway: pathwayForPlan, placements: pvPlacements, placedOut: pvPlacedOut })
+      : EMPTY_SUBS),
+    [pathwayForPlan, pvPlacements, pvPlacedOut]
+  );
+
+  // What satisfaction is computed against. The student's own list stays separate
+  // (and is what persists, shares and appears in the substitutions editor) so
+  // derived entries can never be "removed" into a saved state that contradicts
+  // the pathway.
+  const effectiveSubstitutions = useMemo(
+    () => mergeSubstitutions(pvSubstitutions, pathwaySubs),
+    [pvSubstitutions, pathwaySubs]
+  );
+
   const effectivePlacements = useMemo(
-    () => applySubstitutions(pvPlacements, pvSubstitutions),
-    [pvPlacements, pvSubstitutions]
+    () => applySubstitutions(pvPlacements, effectiveSubstitutions),
+    [pvPlacements, effectiveSubstitutions]
   );
 
   // takesOf: base course id → every take of it in the plan, with semester
@@ -3214,7 +3259,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     // later years.
     placements, reservations, specialTermPl, semOrders, shOverrides, bonusSH, currentSemId,
     offeredOverrides, collapsedSubs,
-    major, major2, conc, conc2, minor1, minor2, studentType,
+    major, major2, conc, conc2, minor1, minor2, plusOne, studentType,
     placedOut: [...placedOut],
     // restorePlan reads `substitutions`, but capture never wrote it, so the
     // slot — which is what a reload restores from — always came back without
@@ -3291,6 +3336,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     setConc(d.conc ?? ""); setConc2(d.conc2 ?? "");
     setMinor1(d.minor1 ?? "");
     setMinor2(d.minor2 ?? "");
+    setPlusOne(d.plusOne ?? "");
     const st = d.studentType ?? "undergrad";
     setStudentTypeRaw(st);
     try { localStorage.setItem(key("student-type"), st); } catch {}
@@ -3427,7 +3473,7 @@ const { locale, setLocale, locales, t } = useLanguage();
           placements: {}, specialTermPl: {}, semOrders: {},
           shOverrides: {}, offeredOverrides: {}, collapsedSubs: {},
           bonusSH: 0, major: "", major2: "", conc: "", conc2: "",
-          minor1: "", minor2: "", placedOut: [],
+          minor1: "", minor2: "", plusOne: "", placedOut: [],
           ...(seed ?? {}),
         }));
       } catch (err) {
@@ -3569,7 +3615,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     // saved to state-v2, never mirrored to the slot, and then overwritten
     // by the stale slot on the next reload — silent data loss that looks
     // like "it didn't save". That was live for grades and placedOut.
-  }, [placements, reservations, appliedTemplate, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [placements, reservations, appliedTemplate, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, plusOne, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
   const exportPlanJSON = () => {
@@ -3979,6 +4025,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     setConc(d.conc ?? ""); setConc2(d.conc2 ?? "");
     setMinor1(d.minor1 ?? "");
     setMinor2(d.minor2 ?? "");
+    setPlusOne(d.plusOne ?? "");
     const st = d.studentType ?? "undergrad";
     setStudentTypeRaw(st);
     try { localStorage.setItem(key("student-type"), st); } catch {}
@@ -4352,7 +4399,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     return () => clearTimeout(timer);
   }, [ // eslint-disable-line react-hooks/exhaustive-deps
     aiAssistant, placements, specialTermPl, placedOut, substitutions,
-    major, major2, conc, conc2, minor1, minor2, studentType, currentSemId, bonusSH, shOverrides,
+    major, major2, conc, conc2, minor1, minor2, plusOne, studentType, currentSemId, bonusSH, shOverrides,
     offeredOverrides, semOrders, planEntSem, planEntYear, planGradSem, planGradYear,
     selectedId, activePlanId, plans, starredIds, palette, locale,
     prereqViolations, coreqViolations, coopGradConflicts, claudeAccessRev,
@@ -4436,10 +4483,10 @@ const { locale, setLocale, locales, t } = useLanguage();
 
     // Where to send the user's attention: programs → grad panel; a placed
     // course → focus it; cohort/credits → header; star/palette → bank.
-    const programChanged = ["major", "major2", "conc", "minor1", "minor2", "studentType"].some(k => changed.has(k));
+    const programChanged = ["major", "major2", "conc", "minor1", "minor2", "plusOne", "studentType"].some(k => changed.has(k));
     const firstCourse = Object.keys(added)[0] ?? Object.keys(moved)[0] ?? [...removed][0] ?? null;
     let focus = null;
-    if (programChanged)                              focus = { kind: "grad", field: [...changed].find(k => ["major","major2","conc","minor1","minor2","studentType"].includes(k)) };
+    if (programChanged)                              focus = { kind: "grad", field: [...changed].find(k => ["major","major2","conc","minor1","minor2","plusOne","studentType"].includes(k)) };
     else if (firstCourse)                            focus = { kind: "course", courseId: firstCourse };
     else if (changed.has("bonusSH") || [...changed].some(k => k.startsWith("ent") || k.startsWith("grad") || k === "currentSemId" || k === "planName")) focus = { kind: "header" };
     else if (starDiff.added.length || starDiff.removed.length || palDiff.added.length || palDiff.removed.length ||
@@ -4624,6 +4671,11 @@ const { locale, setLocale, locales, t } = useLanguage();
     placements: claudePreview ? claudePreview.placements : placements,
     effectivePlacements,
     substitutions: pvSubstitutions,
+    // What satisfaction is computed against: the student's own swaps plus the
+    // ones a declared accelerated pathway contributes. `substitutions` above
+    // stays the EDITABLE list — the substitutions editor and every persistence
+    // door read that one, so a derived entry can never be saved or removed.
+    effectiveSubstitutions,
     specialTermPl: specialTermPlSafe,
     currentSemId: pv?.currentSemId ?? currentSemId,
     persistEnabled,
@@ -4680,6 +4732,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     conc2:  pv?.concentration2 ?? conc2, setConc2,
     minor1: pv?.minor1 ?? minor1, setMinor1,
     minor2: pv?.minor2 ?? minor2, setMinor2,
+    plusOne: pv?.plusOne ?? plusOne, setPlusOne,
     studentType: pv?.studentType ?? studentType,
     setStudentType,
     showNewPlanModal, setShowNewPlanModal,
@@ -4760,6 +4813,11 @@ const { locale, setLocale, locales, t } = useLanguage();
     toggleStar, toggleOffered,
     getSemStatus,
     substitutions: pvSubstitutions,
+    // What satisfaction is computed against: the student's own swaps plus the
+    // ones a declared accelerated pathway contributes. `substitutions` above
+    // stays the EDITABLE list — the substitutions editor and every persistence
+    // door read that one, so a derived entry can never be saved or removed.
+    effectiveSubstitutions,
     addSubstitution: (fromId, toId) => setSubstitutions(prev =>
       prev.some(s => s.from === fromId && s.to === toId) ? prev : [...prev, { from: fromId, to: toId }]
     ),

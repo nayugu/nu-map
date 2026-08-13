@@ -12,15 +12,17 @@ import { createPortal } from "react-dom";
 import VerificationPopover from "./VerificationPopover.jsx";
 import { usePlanner }         from "../context/PlannerContext.jsx";
 import SamplePlanOffer       from "./SamplePlanOffer.jsx";
+import PlusOneBlock          from "./PlusOneBlock.jsx";
 import { usePort }             from "../context/InstitutionContext.jsx";
 import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
+import { IAcceleratedPathway } from "../ports/IAcceleratedPathway.js";
 import { computeGrantedAttrs, computeGrantedCourses } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
-import { cohortCatalogYear } from "../data/programPaths.js";
+import { cohortCatalogYear, programIdFromPath } from "../data/programPaths.js";
 import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
 import { setConstraintStatus, effectiveGradeOfTakes, enteredGPA, countsInGPA, dropVoidTakes, dropUnearnedTakes, COOP_GPA } from "../core/gradeSystem.js";
 import { baseId } from "../core/repeatInstances.js";
@@ -38,7 +40,7 @@ import { rankOptions } from "../core/searchRank.js";
 
 // ── GradCtx (avoids deep prop-drilling through requirement tree) ─────────
 // isPhone is included so child nodes (NuPathGrid, ReqNode) can adapt.
-const GradCtx = createContext(null);
+export const GradCtx = createContext(null);
 
 // ── Shared atoms ─────────────────────────────────────────────────
 
@@ -1201,7 +1203,7 @@ function ProgramNameLink({ name, href, nameColor, isPhone }) {
 // BOTTOM of the expanded content, so a long list can be closed without
 // scrolling back up to the header. The header caret is kept as the compact
 // affordance alongside it.
-function ExpandToggleBar({ expanded, onToggle }) {
+export function ExpandToggleBar({ expanded, onToggle }) {
   const [hov, setHov] = useState(false);
   return (
     <button
@@ -1240,7 +1242,7 @@ function ExpandToggleBar({ expanded, onToggle }) {
 
 // ── MajorCard: framed collapsible card for a major's requirements ─
 // Frame is a subtle background tint (no border line) matching MinorBlock.
-function MajorCard({ label, name, subtitle, verified, verification, progress, expanded, onToggle, isPhone, isMobile, loading, loadingLabel, children, nameColor, subtitleColor }) {
+export function MajorCard({ label, name, subtitle, verified, verification, progress, expanded, onToggle, isPhone, isMobile, loading, loadingLabel, children, nameColor, subtitleColor }) {
   const { t } = useLanguage();
   return (
     <div style={{ border: "1px solid var(--border-1)", borderRadius: 6, marginBottom: 10 }}>
@@ -1312,7 +1314,7 @@ function MajorCard({ label, name, subtitle, verified, verification, progress, ex
 // ── Stale-selection notice ───────────────────────────────────────
 // Shown when a saved program path can no longer be resolved to any current
 // catalog entry. The selection is preserved until the user removes it.
-function StaleNotice({ message, onRemove, isPhone, removeLabel = "Remove" }) {
+export function StaleNotice({ message, onRemove, isPhone, removeLabel = "Remove" }) {
   return (
     <div style={{
       marginTop: 4, padding: "5px 7px", borderRadius: 4,
@@ -1346,10 +1348,11 @@ export default function GradPanel({ wideCatalog = false }) {
     try { const v = localStorage.getItem(`${pfx}-grad-show-program`); return v === null ? true : v !== "false"; } catch { return true; }
   });
   const {
-    placements, placedOut, effectivePlacements, substitutions, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile,
+    placements, placedOut, effectivePlacements, substitutions, effectiveSubstitutions, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile,
     specialTermPl, SEM_INDEX,
     major: majorPath, setMajor: setMajorPath,
     major2: major2Path, setMajor2: setMajor2Path,
+    plusOne, setPlusOne,
     conc: selConc, setConc: setSelConc,
     conc2: selConc2, setConc2: setSelConc2,
     minor1, setMinor1,
@@ -1388,6 +1391,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const majorRequirements = usePort(IMajorRequirements);
   const specialTerms      = usePort(ISpecialTerms);
   const creditSystem      = usePort(ICreditSystem);
+  const acceleratedPathway = usePort(IAcceleratedPathway);
   const unitName          = creditSystem.getUnitName();
   const { t } = useLanguage();
 
@@ -1402,6 +1406,43 @@ export default function GradPanel({ wideCatalog = false }) {
 
   // Translated major name + concentration (no-ops when translation disabled or in source locale).
   const minorGroups  = useMemo(() => majorRequirements.getMinorOptionGroups(cohortYear), [majorRequirements, cohortYear]);
+
+  // ── Accelerated pathways (Northeastern: "PlusOne") ──────────────
+  // Scoped to the plan's declared major(s): the port returns only pathways an
+  // eligible undergraduate could actually enter, and [] for a graduate plan.
+  // Both majors are passed because a second major can be the eligible one —
+  // Computer Engineering reaches the MS in Computer Science, for instance.
+  const plusOneOptions = useMemo(
+    () => acceleratedPathway.listPathways({
+      // The plan stores a glob module path; the pathway data and the bundle key
+      // on the registry id. Comparing the two forms directly matches nothing,
+      // silently — see programIdFromPath.
+      ugProgramIds: [major2Path, majorPath].map(programIdFromPath).filter(Boolean),
+      studentType,
+    }),
+    [acceleratedPathway, majorPath, major2Path, studentType]
+  );
+
+  // SearchCombo keys options on `path`, so the pathway id goes there. Grouped by
+  // the master's degree so a student with several options sees what they lead to
+  // rather than a flat list of near-identical labels.
+  const plusOneGroups = useMemo(() => {
+    const map = new Map();
+    for (const p of plusOneOptions) {
+      const key = p.brand ?? "PlusOne";
+      if (!map.has(key)) map.set(key, []);
+      map.get(key).push({ path: p.id, label: p.label ?? p.id, name: p.label ?? p.id });
+    }
+    return map;
+  }, [plusOneOptions]);
+
+  // A saved pathway that no longer resolves (the college stopped publishing it,
+  // or the id changed) must not vanish silently — the block renders a notice and
+  // the student removes it deliberately, matching how a stale major behaves.
+  const plusOnePathway = useMemo(
+    () => (plusOne ? acceleratedPathway.getPathway(plusOne) : null),
+    [acceleratedPathway, plusOne]
+  );
 
   const [major,          setMajor]          = useState(null);
   const [loadErr,        setLoadErr]        = useState(null);
@@ -1491,11 +1532,11 @@ export default function GradPanel({ wideCatalog = false }) {
   // below feeds General Electives and must stay what the student placed.
   const placedSet = useMemo(
     () => {
-      const set = buildPlacedKeySet(filterInTimeline(applySubstitutions(dropVoidTakes(placements, grades), substitutions), SEM_INDEX), placedOut, courseMap);
+      const set = buildPlacedKeySet(filterInTimeline(applySubstitutions(dropVoidTakes(placements, grades), effectiveSubstitutions), SEM_INDEX), placedOut, courseMap);
       for (const k of computeGrantedCourses(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX)) set.add(k);
       return set;
     },
-    [placements, substitutions, placedOut, courseMap, SEM_INDEX, grades, specialTermPl, specialTerms]
+    [placements, effectiveSubstitutions, placedOut, courseMap, SEM_INDEX, grades, specialTermPl, specialTerms]
   );
 
   // Real-only placed set: excludes virtual substitution-target entries from effectivePlacements.
@@ -1511,7 +1552,7 @@ export default function GradPanel({ wideCatalog = false }) {
     // entered grade yields credit, or no grade is entered (assumed).
     // Same order as placedSet: voids drop before substitutions re-apply.
     const donePlacements = Object.fromEntries(
-      Object.entries(applySubstitutions(dropUnearnedTakes(placements, grades), substitutions))
+      Object.entries(applySubstitutions(dropUnearnedTakes(placements, grades), effectiveSubstitutions))
         .filter(([, semId]) => getSemStatus(semId) === "completed")
     );
     const set = buildPlacedKeySet(donePlacements, placedOut, courseMap);
@@ -1523,7 +1564,7 @@ export default function GradPanel({ wideCatalog = false }) {
     );
     for (const k of computeGrantedCourses(finished, specialTerms?.getTypes() ?? [], SEM_INDEX)) set.add(k);
     return set;
-  }, [placements, substitutions, placedOut, courseMap, getSemStatus, grades, specialTermPl, specialTerms, SEM_INDEX]);
+  }, [placements, effectiveSubstitutions, placedOut, courseMap, getSemStatus, grades, specialTermPl, specialTerms, SEM_INDEX]);
 
   const concGroups = useMemo(() => {
     const opts = (major?.concentrations?.concentrationOptions ?? []).map(c => ({ path: c.title, label: c.title }));
@@ -1897,6 +1938,45 @@ export default function GradPanel({ wideCatalog = false }) {
                 ))}
               </div>
               )}
+
+              {/* PlusOne selector — undergrad only, and only when this major
+                  actually has a published pathway.
+
+                  The emptiness check matters: `+ Add PlusOne` on a plan with no
+                  eligible pathway is a dead affordance that teaches the student
+                  the feature is broken. `selectPathways` returns [] for a major
+                  no college pairs with a master's, so the button simply is not
+                  there — the same reason the attribute grid hides itself when
+                  the adapter publishes no attributes. */}
+              {!isGrad && plusOneOptions.length > 0 && (
+                plusOne ? (
+                  <div data-claude-focus="plusOne" style={{ marginTop: 8, marginBottom: 8, ...(pvMark("plusOne", { inset: true }).style ?? {}) }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
+                      <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", flex: 1 }}>
+                        {t("plusone.label")}
+                      </div>
+                      <button
+                        onClick={() => setPlusOne("")}
+                        style={{ background: "transparent", border: "none", color: "var(--text-5)", fontSize: 12, cursor: "pointer", lineHeight: 1, padding: "0 2px" }}
+                        title={t("plusone.remove")}
+                      >✕</button>
+                    </div>
+                    <SearchCombo value={plusOne} onChange={setPlusOne} groups={plusOneGroups}
+                                 placeholder={isPhone ? t("grad.major.search.short") : t("plusone.search")} />
+                  </div>
+                ) : (
+                  <button
+                    onClick={() => setPlusOne(plusOneOptions[0].id)}
+                    style={{
+                      display: "block", width: "100%", marginTop: 6, marginBottom: 8,
+                      padding: "4px 0", background: "transparent",
+                      border: "1px dashed var(--border-3)", borderRadius: 4,
+                      color: "var(--text-5)", fontSize: isPhone ? 8 : 9,
+                      cursor: "pointer", textAlign: "center",
+                    }}
+                  >{t("plusone.add")}</button>
+                )
+              )}
             </>
           )}
         </div>
@@ -2005,6 +2085,24 @@ export default function GradPanel({ wideCatalog = false }) {
         {/* ── Minor requirement sections — undergrad only ─────── */}
         {!isGrad && <MinorBlock path={minor1} onClear={() => setMinor1("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor1.label")} nameColor={claudePreview?.changed?.has?.("minor1") ? "#fb923c" : undefined} />}
         {!isGrad && <MinorBlock path={minor2} onClear={() => setMinor2("")} placedSet={placedSet} doneSet={doneSet} label={t("grad.minor2.label")} nameColor={claudePreview?.changed?.has?.("minor2") ? "#fb923c" : undefined} />}
+
+        {/* ── PlusOne — after the minors, matching the selector order above.
+               Last of the program cards because it is the only one that is
+               about a SECOND degree: everything above it is the bachelor's. ── */}
+        {!isGrad && plusOne && (
+          plusOnePathway
+            ? <PlusOneBlock
+                pathway={plusOnePathway}
+                onClear={() => setPlusOne("")}
+                nameColor={claudePreview?.changed?.has?.("plusOne") ? "#fb923c" : undefined}
+              />
+            : <StaleNotice
+                isPhone={isPhone}
+                message={t("plusone.gone")}
+                removeLabel={t("grad.stale.remove")}
+                onRemove={() => setPlusOne("")}
+              />
+        )}
 
         {/* ── GPA so far — always BELOW every major/minor card; renders
                only once a letter grade is entered ── */}

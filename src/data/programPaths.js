@@ -22,6 +22,43 @@ export function parseMajorPathParts(path) {
 }
 
 /**
+ * The canonical program id for a program referred to by EITHER spelling.
+ *
+ * Two forms of the same reference exist in this app and both are load-bearing:
+ *
+ *   glob module path  "../../data/northeastern/programs/undergraduate/2026/
+ *                      computer-information-science/computer_science_bscs_(boston)/
+ *                      requirements.json"     ← what a saved plan's `major` holds
+ *   registry id       "2026/computer-information-science/computer_science_bscs_(boston)"
+ *                                             ← what programs-bundle.json keys on,
+ *                                               and what MCP `programId` uses
+ *
+ * Anything that has to compare a plan's declared program against bundle data —
+ * accelerated pathway eligibility is the first such thing — needs them in one
+ * form, and guessing which one a caller holds is how a comparison silently never
+ * matches. This is that conversion, and it is IDEMPOTENT: given a registry id it
+ * returns it unchanged, so a caller never has to know which it was handed.
+ *
+ * Mirrors the id construction in programRegistry.node.js (graduate ids carry a
+ * "grad/" prefix so the two PharmD programs cannot collide); the two must not
+ * drift, which is why both derive their segments from parseMajorPathParts.
+ *
+ * @param {string} pathOrId
+ * @returns {string|null} canonical id, or null when no year segment is present
+ */
+export function programIdFromPath(pathOrId) {
+  const raw = String(pathOrId ?? '');
+  if (!raw) return null;
+  const parts = parseMajorPathParts(raw);
+  if (!parts || !parts.college || !parts.folder) return null;
+  // A path under .../programs/graduate/ is graduate; so is an id that already
+  // carries the prefix (the idempotent case, where no directory segment exists).
+  const isGrad = /\/graduate\//.test(raw) || /^grad\//.test(raw);
+  const { year, college, folder } = parts;
+  return isGrad ? `grad/${year}/${college}/${folder}` : `${year}/${college}/${folder}`;
+}
+
+/**
  * The catalog edition a cohort follows, as its ENDING year — the same
  * label the program directories use ("2025-2026 Edition" → 2026).
  *
