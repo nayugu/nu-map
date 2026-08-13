@@ -435,6 +435,7 @@ export const strings = {
   "folders.assign.short":         "割り当て…",
   "folders.menu.open":            "開く",
   "folders.menu.rename":          "名前を変更",
+  "folders.menu.duplicate":       "複製",
   "folders.menu.assignStudent":   "学生を割り当て…",
   "folders.menu.newFolder":       "新規フォルダ",
   "folders.menu.newFolderWithSel": "選択項目で新規フォルダ",

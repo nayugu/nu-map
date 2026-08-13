@@ -86,7 +86,10 @@ function redactCoopDetails(stp) {
 }
 
 export function PlannerProvider({ children }) {
-  const { locale, setLocale, locales } = useLanguage();
+  // `t` is memoized on locale in LanguageContext, so taking it here adds no
+// render churn; importPlanJSON needs it to report failures in the user's
+// language instead of the raw English it used to alert().
+const { locale, setLocale, locales, t } = useLanguage();
   const institution    = usePort(IInstitution);
   const calendar       = usePort(ICalendar);
   const clock          = usePort(IClock);
@@ -3214,6 +3217,53 @@ export function PlannerProvider({ children }) {
     setActivePlanId(id);
   };
 
+  /**
+   * Copy a plan, beside the original, with everything in it.
+   *
+   * This is the advisor's most-repeated act and it had no verb: "keep what you
+   * have, and let's see what a different major looks like". Without it the
+   * only way to branch a plan was to export it and import it back, which
+   * renames it, drops it at the root, and loses the advisee it was filed to.
+   *
+   * Deliberately does NOT switch to the copy. Duplicating is a filing act, not
+   * a navigation one — the same reason Finder leaves you where you are — and
+   * an advisor mid-conversation should not have the canvas change under them.
+   *
+   * The slot is written BEFORE the index record and a failed write aborts, so
+   * a copy can never exist in the index with no data behind it.
+   *
+   * @returns {{ok: true, id: string}|{ok: false, reason: 'read'|'quota'|'write'}}
+   */
+  const duplicatePlan = (id) => {
+    const src = plans.find(p => p.id === id);
+    if (!src) return { ok: false, reason: "read" };
+    // Flush first: duplicating the plan you are editing must copy what is on
+    // screen, not the last thing written to its slot.
+    saveCurrentPlanToSlot();
+    const snap = planSnapshot(id);
+    if (!snap) return { ok: false, reason: "read" };
+
+    const newId = `plan_${Date.now()}`;
+    try {
+      localStorage.setItem(key(`plan-data-${newId}`), JSON.stringify(snap));
+    } catch (err) {
+      return { ok: false, reason: /quota/i.test(String(err)) ? "quota" : "write" };
+    }
+    pushFolderHistory();
+    setPlans(prev => [...prev, {
+      id: newId,
+      name: uniqueName(siblingNames(planTree, src.parentId ?? null), src.name ?? "Plan"),
+      studentType: src.studentType ?? "undergrad",
+      parentId: src.parentId ?? null,
+      lastOpened: Date.now(),
+      // The copy belongs to the same advisee — that is the whole point of
+      // duplicating it, and re-filing it by hand every time is the friction
+      // this verb exists to remove.
+      ...(src.student ? { student: src.student } : {}),
+    }]);
+    return { ok: true, id: newId };
+  };
+
   // Deleting a plan has exactly ONE implementation — `deleteNodes` above.
   //
   // There used to be two more here, `deletePlan` and `bulkDeletePlans`, and the
@@ -3530,24 +3580,50 @@ export function PlannerProvider({ children }) {
     try { localStorage.setItem(key("student-type"), st); } catch {}
   };
 
+  /**
+   * Open a single saved plan file as a new plan.
+   *
+   * The slot is written BEFORE the index gains a record, and a failed write
+   * aborts instead of being swallowed. It used to be
+   * `try { setItem(...) } catch {}` followed unconditionally by the index push
+   * and a switch, so a full quota produced a plan that the index insisted
+   * existed and whose data had never been written — the app then switched to
+   * it and showed an empty canvas with no error at all. Index and slot are the
+   * two halves of one record; nothing may create one without the other.
+   *
+   * Errors are localized and reported by reason, like every other import door;
+   * `err.message` used to be shown to the user raw.
+   */
   const importPlanJSON = (file) => {
+    const fail = (reason) => { alert(t(`folders.io.err.${reason}`)); return { ok: false, reason }; };
     const reader = new FileReader();
     reader.onload = () => {
+      let d;
+      try { d = JSON.parse(reader.result); } catch { fail("json"); return; }
+      if (!d || typeof d !== "object" || Array.isArray(d)) { fail("json"); return; }
+      if (d.version !== 1) { fail("version"); return; }
+
+      saveCurrentPlanToSlot();
+      const id = `plan_${Date.now()}`;
+      const base = d.planName || "Plan";
+      const name = base.startsWith("+") ? base : `+ ${base}`;
       try {
-        const d = JSON.parse(reader.result);
-        if (d.version !== 1) { alert("Unrecognized plan file format."); return; }
-        saveCurrentPlanToSlot();
-        const id = `plan_${Date.now()}`;
-        const base = d.planName || "Plan";
-        const name = base.startsWith('+') ? base : `+ ${base}`;
-        try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d)); } catch {}
-        setPlans(prev => [...prev, { id, name, studentType: d.studentType ?? "undergrad" }]);
-        setActivePlanId(id);
-        if (Array.isArray(d.substitutions)) setSubstitutions(d.substitutions);
+        localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d));
       } catch (err) {
-        alert("Could not read plan file: " + err.message);
+        fail(/quota/i.test(String(err)) ? "quota" : "write");
+        return;
       }
+      // Undoable, exactly as a library import is: opening the wrong file is
+      // the same mistake whichever door it came through.
+      pushFolderHistory();
+      setPlans(prev => [...prev, {
+        id, name, studentType: d.studentType ?? "undergrad",
+        parentId: null, lastOpened: Date.now(),
+      }]);
+      setActivePlanId(id);
+      if (Array.isArray(d.substitutions)) setSubstitutions(d.substitutions);
     };
+    reader.onerror = () => fail("read");
     reader.readAsText(file);
   };
 
@@ -4214,7 +4290,7 @@ export function PlannerProvider({ children }) {
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
     exportLibraryJSON, exportLibraryZip, exportPlansIndividually, importLibraryFiles,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
-    plans, activePlanId, switchPlan, createPlan, renamePlan, setPlanStudent,
+    plans, activePlanId, switchPlan, createPlan, duplicatePlan, renamePlan, setPlanStudent,
     // Folders — structure, view state, and the mutations that respect both.
     folders, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort,

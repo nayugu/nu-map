@@ -90,7 +90,7 @@ export default function PlanLibrary() {
     showPlanLibrary, setShowPlanLibrary,
     plans, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort, reorderNodes, orderedSiblings,
-    activePlanId, switchPlan, renamePlan, setPlanStudent,
+    activePlanId, switchPlan, renamePlan, setPlanStudent, duplicatePlan,
     exportLibraryJSON, exportLibraryZip, exportPlansIndividually, importLibraryFiles,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
@@ -397,6 +397,30 @@ export default function PlanLibrary() {
       ? t("folders.io.importedRoot", { n: res.plans })
       : t("folders.io.imported", { n: res.plans });
     setNotice(res.failed ? `${base} ${t("folders.io.someFailed", { n: res.failed })}` : base);
+  };
+
+  /**
+   * Copy every plan in the selection. Folders are skipped rather than
+   * refused — a mixed selection is ordinary, and duplicating a whole folder
+   * tree is a different act with different questions (does it copy the
+   * folder too? where does it go?) that this menu item should not silently
+   * decide.
+   */
+  const doDuplicate = (ids) => {
+    const planIds = ids.filter(id => !planTree.folderIds.has(id) && planTree.byId.has(id));
+    if (!planIds.length) return;
+    const made = [];
+    for (const id of planIds) {
+      const res = duplicatePlan(id);
+      if (!res.ok) { setNotice(t(`folders.io.err.${res.reason}`)); break; }
+      made.push(res.id);
+    }
+    if (!made.length) return;
+    // Land on the copies, so the next act (rename, drag, open) needs no
+    // hunting for where they went.
+    setSelectedIds(new Set(made));
+    setFocusId(made[0]);
+    if (made.length === 1) setEditingId(made[0]);
   };
 
   const requestDelete = (ids) => {
@@ -717,6 +741,13 @@ export default function PlanLibrary() {
       },
       { key: "rename", label: t("folders.menu.rename"), hint: "↵ / F2", disabled: n > 1,
         onSelect: () => setEditingId(row.id) },
+      // Only where there is a plan to copy — a folder has no duplicate verb
+      // here, so on a pure-folder selection this would be a dead item.
+      ...(ids.some(id => !planTree.folderIds.has(id)) ? [{
+        key: "duplicate",
+        label: t("folders.menu.duplicate"),
+        onSelect: () => doDuplicate(ids),
+      }] : []),
       // Only where there is a plan to assign — a folder has no advisee of its
       // own, so offering it on a pure-folder selection would be a dead item.
       ...(ids.some(id => !planTree.folderIds.has(id)) ? [{

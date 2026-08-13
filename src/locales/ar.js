@@ -433,6 +433,7 @@ export const strings = {
   "folders.assign.short":         "إسناد…",
   "folders.menu.open":            "فتح",
   "folders.menu.rename":          "إعادة تسمية",
+  "folders.menu.duplicate":       "تكرار",
   "folders.menu.assignStudent":   "إسناد إلى طالب…",
   "folders.menu.newFolder":       "مجلد جديد",
   "folders.menu.newFolderWithSel": "مجلد جديد يضم التحديد",

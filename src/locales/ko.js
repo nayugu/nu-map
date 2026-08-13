@@ -434,6 +434,7 @@ export const strings = {
   "folders.assign.short":         "지정…",
   "folders.menu.open":            "열기",
   "folders.menu.rename":          "이름 변경",
+  "folders.menu.duplicate":       "복제",
   "folders.menu.assignStudent":   "학생 지정…",
   "folders.menu.newFolder":       "새 폴더",
   "folders.menu.newFolderWithSel": "선택 항목으로 새 폴더",

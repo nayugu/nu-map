@@ -434,6 +434,7 @@ export const strings = {
   "folders.assign.short":         "असाइन…",
   "folders.menu.open":            "खोलें",
   "folders.menu.rename":          "नाम बदलें",
+  "folders.menu.duplicate":       "प्रतिलिपि बनाएँ",
   "folders.menu.assignStudent":   "छात्र असाइन करें…",
   "folders.menu.newFolder":       "नया फ़ोल्डर",
   "folders.menu.newFolderWithSel": "चयन के साथ नया फ़ोल्डर",

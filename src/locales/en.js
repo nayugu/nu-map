@@ -451,6 +451,7 @@ export const strings = {
   "folders.assign.short":         "Assign…",
   "folders.menu.open":            "Open",
   "folders.menu.rename":          "Rename",
+  "folders.menu.duplicate":       "Duplicate",
   "folders.menu.assignStudent":   "Assign student…",
   "folders.menu.newFolder":       "New folder",
   "folders.menu.newFolderWithSel": "New folder with selection",

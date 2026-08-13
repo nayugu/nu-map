@@ -327,6 +327,7 @@ export const strings = {
   "folders.assign.short":         "\u6307\u5b9a\u2026",
   "folders.menu.open":            "\u6253\u5f00",
   "folders.menu.rename":          "\u91cd\u547d\u540d",
+  "folders.menu.duplicate":       "\u590d\u5236",
   "folders.menu.assignStudent":   "\u6307\u5b9a\u5b66\u751f\u2026",
   "folders.menu.newFolder":       "\u65b0\u5efa\u6587\u4ef6\u5939",
   "folders.menu.newFolderWithSel": "\u7528\u6240\u9009\u9879\u65b0\u5efa\u6587\u4ef6\u5939",
