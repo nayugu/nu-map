@@ -130,6 +130,7 @@ export const strings = {
   "plusone.shares.none":        "ضَع مقررًا للدراسات العليا لتبدأ مشاركة الساعات.",
   "plusone.shares.withdrawn":   "منسحب",
   "plusone.shares.fills":       "يُغطّي {label}",
+  "plusone.shares.choose":      "يمكنه أن يحل محل {options} — اختر واحدًا من الاستبدالات",
   "plusone.projection":         "ستبدأ الماجستير وقد أنجزت {sh} من {total} ساعة معتمدة.",
   "plusone.projection.caveat":  "هذا تقدير لا وعد؛ القبول يُقرَّر على حدة.",
   "plusone.source":             "تم التحقق في {date}",

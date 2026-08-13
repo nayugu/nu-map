@@ -130,6 +130,7 @@ export const strings = {
   "plusone.shares.none":        "Placez un cours de master pour commencer à partager des crédits.",
   "plusone.shares.withdrawn":   "abandonné",
   "plusone.shares.fills":       "remplit {label}",
+  "plusone.shares.choose":      "peut remplacer {options} — choisissez-en un dans Substitutions",
   "plusone.projection":         "Vous commenceriez le master avec {sh} SH sur {total} déjà faits.",
   "plusone.projection.caveat":  "Une projection, pas une promesse : l'admission se décide à part.",
   "plusone.source":             "vérifié le {date}",

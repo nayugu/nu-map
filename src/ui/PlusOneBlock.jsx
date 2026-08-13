@@ -101,24 +101,30 @@ function ShareList({ shares, isPhone, t }) {
       {shares.map((s, i) => {
         const dim = s.withdrawn;
         return (
-          <div key={`${s.gradId}-${i}`} style={{
-            display: "flex", alignItems: "baseline", gap: 4, flexWrap: "wrap",
-            fontSize: isPhone ? 8 : 9.5, marginBottom: 2,
-            opacity: dim ? 0.5 : 1,
-          }}>
-            <span style={{
-              color: "var(--text-2)", fontWeight: 600,
-              textDecoration: dim ? "line-through" : "none",
-            }}>{displayCode(s.gradId)}</span>
-            <span style={{ color: "var(--text-5)" }}>→</span>
-            <span style={{ color: "var(--text-3)" }}>
-              {s.targetId
-                ? displayCode(s.targetId)
-                : t("plusone.shares.fills", { label: s.share?.target?.label ?? "" })}
-            </span>
-            <span style={{ color: "var(--text-5)", fontSize: isPhone ? 7 : 8.5 }}>
-              {s.sh} SH{dim ? ` · ${t("plusone.shares.withdrawn")}` : ""}
-            </span>
+          <div key={`${s.gradId}-${i}`} style={{ marginBottom: 2, opacity: dim ? 0.5 : 1 }}>
+            <div style={{
+              display: "flex", alignItems: "baseline", gap: 4, flexWrap: "wrap",
+              fontSize: isPhone ? 8 : 9.5,
+            }}>
+              <span style={{
+                color: "var(--text-2)", fontWeight: 600,
+                textDecoration: dim ? "line-through" : "none",
+              }}>{displayCode(s.gradId)}</span>
+              <span style={{ color: "var(--text-5)" }}>→</span>
+              <span style={{ color: "var(--text-3)" }}>
+                {/* An ambiguous share deliberately has no arrow target chosen —
+                    the published table lists several alternatives and picking
+                    one for the student would be a guess about their degree. */}
+                {s.ambiguous
+                  ? t("plusone.shares.choose", { options: s.altTargets.map(displayCode).join(" / ") })
+                  : s.targetId
+                    ? displayCode(s.targetId)
+                    : t("plusone.shares.fills", { label: s.share?.target?.label ?? "" })}
+              </span>
+              <span style={{ color: "var(--text-5)", fontSize: isPhone ? 7 : 8.5 }}>
+                {s.sh} SH{dim ? ` · ${t("plusone.shares.withdrawn")}` : ""}
+              </span>
+            </div>
           </div>
         );
       })}

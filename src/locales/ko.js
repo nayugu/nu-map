@@ -130,6 +130,7 @@ export const strings = {
   "plusone.shares.none":        "대학원 과목을 배치하면 학점 공통 인정이 시작됩니다.",
   "plusone.shares.withdrawn":   "수강 철회",
   "plusone.shares.fills":       "{label} 충족",
+  "plusone.shares.choose":      "{options} 중 하나를 대체할 수 있습니다 — 대체 과목에서 선택하세요",
   "plusone.projection":         "석사를 시작할 때 {total} SH 중 {sh} SH를 마친 상태가 됩니다.",
   "plusone.projection.caveat":  "예상치이며 약속이 아닙니다. 합격은 별도로 결정됩니다.",
   "plusone.source":             "{date} 확인",

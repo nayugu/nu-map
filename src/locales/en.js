@@ -133,6 +133,7 @@ export const strings = {
   "plusone.shares.none":        "Place a graduate course to start sharing credit.",
   "plusone.shares.withdrawn":   "withdrawn",
   "plusone.shares.fills":       "fills {label}",
+  "plusone.shares.choose":      "could replace {options} — pick one in Substitutions",
   "plusone.projection":         "You would start the master’s with {sh} of {total} SH done.",
   "plusone.projection.caveat":  "A projection, not a promise — admission is decided separately.",
   "plusone.source":             "checked {date}",

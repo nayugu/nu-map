@@ -130,6 +130,7 @@ export const strings = {
   "plusone.shares.none":        "Coloca un curso de posgrado para empezar a compartir créditos.",
   "plusone.shares.withdrawn":   "retirado",
   "plusone.shares.fills":       "cubre {label}",
+  "plusone.shares.choose":      "podría cubrir {options}: elige uno en Sustituciones",
   "plusone.projection":         "Empezarías la maestría con {sh} de {total} SH hechos.",
   "plusone.projection.caveat":  "Es una proyección, no una promesa: la admisión se decide aparte.",
   "plusone.source":             "verificado el {date}",

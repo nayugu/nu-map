@@ -130,6 +130,7 @@ export const strings = {
   "plusone.shares.none":        "श्रेय साझा करना शुरू करने के लिए एक स्नातकोत्तर कोर्स रखें।",
   "plusone.shares.withdrawn":   "छोड़ा गया",
   "plusone.shares.fills":       "{label} पूरा करता है",
+  "plusone.shares.choose":      "{options} में से किसी एक की जगह ले सकता है — प्रतिस्थापन में चुनें",
   "plusone.projection":         "स्नातकोत्तर शुरू करते समय आपके {total} SH में से {sh} SH पूरे होंगे।",
   "plusone.projection.caveat":  "यह अनुमान है, वादा नहीं — प्रवेश अलग से तय होता है।",
   "plusone.source":             "{date} को जाँचा गया",

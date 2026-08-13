@@ -131,6 +131,7 @@ export const strings = {
   "plusone.shares.none":        "大学院科目を置くと単位の共通利用が始まります。",
   "plusone.shares.withdrawn":   "履修中止",
   "plusone.shares.fills":       "{label} に充当",
+  "plusone.shares.choose":      "{options} のいずれかに充当できます。「代替科目」で選んでください",
   "plusone.projection":         "修士開始時に {total} SH のうち {sh} SH を修了済みの見込みです。",
   "plusone.projection.caveat":  "これは見込みであり確約ではありません。合格は別に判断されます。",
   "plusone.source":             "{date} に確認",

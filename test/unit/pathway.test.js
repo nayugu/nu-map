@@ -19,7 +19,7 @@ import { EVALUATORS } from "../../src/core/pathway/rules/index.js";
 import { evaluateRule, evaluatePathway, summarise } from "../../src/core/pathway/evaluate.js";
 import {
   activeShares, pathwaySubstitutions, mergeSubstitutions, assertOneWay,
-  shareTotals, excludedIds, resolveCandidates,
+  shareTotals, excludedIds, resolveCandidates, ambiguousShares,
 } from "../../src/core/pathway/shareSet.js";
 import { selectPathways, msProgramFor, isStale } from "../../src/core/pathway/select.js";
 import { plannerId, displayCode, inDomain, isGradCode, isUgCode } from "../../src/core/pathway/ids.js";
@@ -639,6 +639,101 @@ describe("a PlusOne plan asserts graduate admission", () => {
       assert.ok(c, `${id} missing from the corpus`);
       assert.match(JSON.stringify(c.prereqs ?? []), /admission/i,
         `${id} no longer states graduate program admission — re-measure`);
+    }
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════
+describe("one graduate course can never satisfy two undergraduate courses", () => {
+  // The bug this pins SHIPPED. Khoury's table maps CS 5500 to both CS 4500 and
+  // CS 4530 (alternatives a student picks between), and emitting a substitution
+  // per matching ROW meant one 4 SH placement satisfied BOTH requirements and
+  // counted as 2 courses / 8 SH against the cap. "Credits counted once" broken
+  // in the most expensive direction. The pathway file even carried a note saying
+  // only one could be shared — the note was there and the guard was not.
+  const p = () => byId(MSCS);
+
+  test("a doubled graduate course yields NO automatic substitution", () => {
+    const subs = pathwaySubstitutions({ pathway: p(), placements: { CS5500: "fall2027" } });
+    assert.deepEqual(subs.filter(s => s.from === "CS5500"), []);
+  });
+
+  test("and satisfies neither alternative", () => {
+    const placements = { CS5500: "fall2027" };
+    const ep = applySubstitutions(placements, pathwaySubstitutions({ pathway: p(), placements }));
+    assert.equal(ep.CS4500, undefined);
+    assert.equal(ep.CS4530, undefined);
+  });
+
+  test("it counts ONCE against the cap, at its real credit value", () => {
+    const ctx = ctxFor(p(), { placements: { CS5500: "fall2027" } });
+    assert.equal(ctx.totals.courses, 1);
+    assert.equal(ctx.totals.semesterHours, 4);
+  });
+
+  test("the alternatives are reported so the student can choose", () => {
+    const amb = ambiguousShares({ pathway: p(), placements: { CS5500: "fall2027" } });
+    assert.deepEqual(amb, [{ gradId: "CS5500", targets: ["CS4500", "CS4530"] }]);
+    const ctx = ctxFor(p(), { placements: { CS5500: "fall2027" } });
+    assert.equal(ctx.shares[0].ambiguous, true);
+    assert.deepEqual(ctx.shares[0].altTargets, ["CS4500", "CS4530"]);
+  });
+
+  test("taking one alternative collapses the choice and arms the other", () => {
+    const placements = { CS5500: "fall2027", CS4500: "fall2025" };
+    assert.deepEqual(ambiguousShares({ pathway: p(), placements }), []);
+    const subs = pathwaySubstitutions({ pathway: p(), placements });
+    assert.deepEqual(subs.filter(s => s.from === "CS5500"), [{ from: "CS5500", to: "CS4530" }]);
+  });
+
+  test("an unambiguous course is unaffected", () => {
+    const subs = pathwaySubstitutions({ pathway: p(), placements: { CS5800: "fall2027" } });
+    assert.deepEqual(subs.filter(s => s.from === "CS5800"), [{ from: "CS5800", to: "CS3000" }]);
+    assert.equal(ctxFor(p(), { placements: { CS5800: "f" } }).totals.courses, 1);
+  });
+
+  // The same shape exists in the cybersecurity pathway, TWICE — CS 5500 covers
+  // CS 4500/CS 4530 and CS 5700 covers CS 3700/CS 4700 — so the guard is checked
+  // there too rather than only where it was found.
+  //
+  // Note the scope: `ambiguousShares` is a PATHWAY-level query ("which rows of
+  // this table are alternations?"), not a placement-level one, so it lists both
+  // regardless of what is placed. The panel renders ambiguity per ACTIVE share
+  // via activeShares().ambiguous, which is placement-scoped.
+  test("the cybersecurity pathway has two alternations, and neither auto-substitutes", () => {
+    const cy = byId("khoury/to-ms-cybersecurity");
+    assert.deepEqual(ambiguousShares({ pathway: cy, placements: {} }), [
+      { gradId: "CS5500", targets: ["CS4500", "CS4530"] },
+      { gradId: "CS5700", targets: ["CS3700", "CS4700"] },
+    ]);
+    for (const id of ["CS5500", "CS5700"]) {
+      const subs = pathwaySubstitutions({ pathway: cy, placements: { [id]: "f" } });
+      assert.deepEqual(subs.filter(s => s.from === id), [], id);
+    }
+  });
+
+  // Corpus-wide guard: no shipped pathway may ever let one placement satisfy
+  // more than one undergraduate course.
+  test("no shipped pathway emits two substitutions from one graduate course", () => {
+    for (const pw of PATHWAYS) {
+      const placements = Object.fromEntries(
+        (pw.shares ?? []).filter(s => s.grad).map(s => [plannerId(s.grad), "fall2027"]));
+      const subs = pathwaySubstitutions({ pathway: pw, placements });
+      const perFrom = new Map();
+      for (const s of subs) perFrom.set(s.from, (perFrom.get(s.from) ?? 0) + 1);
+      for (const [from, n] of perFrom) {
+        assert.equal(n, 1, `${pw.id}: ${from} produced ${n} substitutions`);
+      }
+    }
+  });
+
+  test("and every placement counts exactly once toward the totals", () => {
+    for (const pw of PATHWAYS) {
+      const named = [...new Set((pw.shares ?? []).filter(s => s.grad).map(s => plannerId(s.grad)))];
+      const placements = Object.fromEntries(named.map(id => [id, "fall2027"]));
+      const ctx = ctxFor(pw, { placements });
+      assert.equal(ctx.totals.courses, named.length,
+        `${pw.id}: ${named.length} distinct courses placed but ${ctx.totals.courses} counted`);
     }
   });
 });

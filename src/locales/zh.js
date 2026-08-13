@@ -130,6 +130,7 @@ export const strings = {
   "plusone.shares.none":        "\u653e\u5165\u4e00\u95e8\u7814\u7a76\u751f\u8bfe\u7a0b\u5373\u53ef\u5f00\u59cb\u5171\u4eab\u5b66\u5206\u3002",
   "plusone.shares.withdrawn":   "\u5df2\u9000\u8bfe",
   "plusone.shares.fills":       "\u62b5\u5145{label}",
+  "plusone.shares.choose":      "可抵充 {options}——请在“替代课程”中选择一门",
   "plusone.projection":         "\u5165\u8bfb\u7855\u58eb\u65f6\u4f60\u5c06\u5df2\u5b8c\u6210 {total} SH \u4e2d\u7684 {sh} SH\u3002",
   "plusone.projection.caveat":  "\u8fd9\u662f\u9884\u4f30\uff0c\u4e0d\u662f\u627f\u8bfa\u2014\u2014\u5f55\u53d6\u53e6\u884c\u51b3\u5b9a\u3002",
   "plusone.source":             "\u6838\u5bf9\u4e8e {date}",

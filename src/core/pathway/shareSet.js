@@ -63,6 +63,12 @@ import { plannerId, isGradCode, isUgCode, inDomain } from "./ids.js";
  * @property {Share}   share
  * @property {string}  gradId         planner id, e.g. "CS5800"
  * @property {?string} targetId       planner id of a course target, else null
+ * @property {string[]} altTargets    every undergraduate course this graduate
+ *                                    course could replace. More than one means
+ *                                    the published table lists ALTERNATIVES.
+ * @property {boolean} ambiguous      altTargets.length > 1 — the course shares,
+ *                                    but which requirement it covers is the
+ *                                    student's choice, not ours to guess.
  * @property {number}  sh             semester hours, from courseMap
  * @property {?string} semId          term it sits in
  * @property {boolean} withdrawn      placed but the grade voids the take
@@ -186,19 +192,44 @@ export function activeShares({
 
   // Named shares first, so a domain share never steals a course that a named
   // row already accounts for.
+  //
+  // ── ONE PLACEMENT IS ONE SHARE ────────────────────────────────────
+  //
+  // A published table can list the same graduate course against SEVERAL
+  // undergraduate targets, because they are alternatives the student picks
+  // between: Khoury maps `CS 5500` to both `CS 4500` and `CS 4530`, and
+  // `CS 5700` to both `CS 3700` and `CS 4700`. Emitting one ActiveShare per
+  // MATCHING ROW counted a single 4 SH placement as 2 courses / 8 SH against
+  // the cap. Grouping by placement key is what keeps "credits counted once"
+  // true — the alternatives ride along in `altTargets` so the UI can ask the
+  // student which one they mean.
+  const byPlacement = new Map();
   for (const cand of candidates) {
     if (!cand.gradId) continue;
     for (const pid of placementsOf(placements, cand.gradId)) {
       claimed.add(pid);
-      out.push({
+      const existing = byPlacement.get(pid);
+      if (existing) {
+        if (cand.targetId && !existing.altTargets.includes(cand.targetId)) {
+          existing.altTargets.push(cand.targetId);
+        }
+        continue;
+      }
+      byPlacement.set(pid, {
         share: cand.share,
         gradId: cand.gradId,
         targetId: cand.targetId,
+        altTargets: cand.targetId ? [cand.targetId] : [],
         sh: shOf(courseMap, cand.gradId),
         semId: placements[pid] ?? null,
         withdrawn: voided(grades[pid]),
       });
     }
+  }
+  for (const s of byPlacement.values()) {
+    // `ambiguous` is the signal the panel needs: we know the course shares, we
+    // do not know WHICH requirement it should cover.
+    out.push({ ...s, ambiguous: s.altTargets.length > 1 });
   }
 
   // Then anonymous domain shares, each consuming at most `count` placements.
@@ -245,19 +276,63 @@ export function pathwaySubstitutions({
 }) {
   if (!pathway) return [];
   const excluded = excludedIds(pathway);
-  const out = [];
-  const seen = new Set();
 
-  for (const { share, gradId, targetId } of resolveCandidates(pathway, { excluded })) {
+  // Group viable targets BY graduate course first. A course with more than one
+  // is an alternation the student chooses between, not a licence to satisfy all
+  // of them — emitting a pair per row let one 4 SH placement of `CS 5500`
+  // satisfy `CS 4500` AND `CS 4530`, which is the "credits counted once"
+  // invariant broken in the most expensive direction: two undergraduate
+  // requirements ticked off by one course.
+  const targetsOf = new Map();
+  for (const { gradId, targetId } of resolveCandidates(pathway, { excluded })) {
     if (!gradId || !targetId) continue;
+    // `noGradIfUgDone`: a target already in the plan is not viable, so it also
+    // does not make the remaining choice ambiguous.
     if (ugVersionTaken(targetId, placements, placedOut)) continue;
-    const key = `${gradId}|${targetId}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    out.push({ from: gradId, to: targetId });
+    if (!targetsOf.has(gradId)) targetsOf.set(gradId, []);
+    const list = targetsOf.get(gradId);
+    if (!list.includes(targetId)) list.push(targetId);
   }
 
+  const out = [];
+  for (const [from, targets] of targetsOf) {
+    // Exactly one viable target — unambiguous, so pre-arm it.
+    if (targets.length === 1) { out.push({ from, to: targets[0] }); continue; }
+    // Several — we cannot know which requirement the student wants covered, and
+    // picking one silently would be a confident guess about their degree. Emit
+    // nothing: `ambiguousShares` reports it, and the student's own manual
+    // substitution wins in mergeSubstitutions once they decide.
+  }
   return out;
+}
+
+/**
+ * Graduate courses whose share target is ambiguous, with the alternatives.
+ *
+ * Reported rather than resolved. Deliberately computed from the same grouping
+ * `pathwaySubstitutions` uses, so the thing we decline to guess and the thing we
+ * tell the student about can never disagree.
+ *
+ * SCOPE: pathway-level, not placement-level — it answers "which rows of this
+ * table are alternations?" and so lists a course whether or not it is placed.
+ * The panel renders ambiguity per ACTIVE share via activeShares().ambiguous.
+ *
+ * @returns {{gradId: string, targets: string[]}[]}
+ */
+export function ambiguousShares({ pathway, placements = {}, placedOut = new Set() }) {
+  if (!pathway) return [];
+  const excluded = excludedIds(pathway);
+  const targetsOf = new Map();
+  for (const { gradId, targetId } of resolveCandidates(pathway, { excluded })) {
+    if (!gradId || !targetId) continue;
+    if (ugVersionTaken(targetId, placements, placedOut)) continue;
+    if (!targetsOf.has(gradId)) targetsOf.set(gradId, []);
+    const list = targetsOf.get(gradId);
+    if (!list.includes(targetId)) list.push(targetId);
+  }
+  return [...targetsOf.entries()]
+    .filter(([, t]) => t.length > 1)
+    .map(([gradId, targets]) => ({ gradId, targets }));
 }
 
 /**
