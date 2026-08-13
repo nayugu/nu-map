@@ -37,7 +37,7 @@ import { fileURLToPath, pathToFileURL } from "node:url";
 import {
   classifyPair, comparePairs, pairKey, parseStatedEquivalences,
   jaccard, stemContainment, companionParent, courseRole, roleSlot,
-  MAX_CROSSLIST_CLUSTER, TIER_C_MIN_EVIDENCE,
+  MAX_CROSSLIST_CLUSTER, TIER_C_MIN_EVIDENCE, TIERS,
 } from "./lib/equivalence.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -355,10 +355,22 @@ function build() {
         derivedFrom: `${row.a}|${row.b}`, derivedRole: slotA,
       };
       // Inherit the parent's tier — the bundle is not a weaker claim than the
-      // lecture it belongs to — but never let a derived row outrank tier B,
-      // since the parent's own evidence is what is really being cited.
+      // lecture it belongs to, and no stronger either. `res` is discarded for
+      // tiering because the parent's evidence is what is really being cited.
+      //
+      // The inheritance must be TOTAL. It used to read
+      //     row.tier === "A" ? "A" : row.tier === "B" ? "B" : "C"
+      // whose last branch covered D as well as C, so a tier-D parent that got
+      // past the programBacked check on the loop guard above handed its
+      // children tier C — and, with `offer` hardcoded true, made them
+      // offerable. Measured effect: `ARCH 3210 ⇄ ARCH 5210` (Environmental
+      // Systems, 4 SH, program-backed) is correctly D because it crosses the
+      // 5000 boundary, while its two 0 SH RECITATIONS were emitted at tier C,
+      // score 48.5 = 48.6 − 0.1, and offered to the student as
+      // "often interchangeable". A vetoed pair cannot be laundered through its
+      // own components.
       const res = classifyPair({ a: ka, b: kb }, ev, ctx);
-      const tier = row.tier === "A" ? "A" : row.tier === "B" ? "B" : "C";
+      const tier = TIERS[row.tier] ? row.tier : "D";
       // Emitted as a STANDALONE pair, not a component. Grouping these was 30 of
       // the 31 bundle links in the index and bought nothing the catalog asks
       // for: a lab and its lecture are separate registrations at NEU, so
@@ -370,8 +382,10 @@ function build() {
       derived.push({
         a: ka, b: kb, ...res, tier,
         score: Math.round(Math.max(0, row.score - 0.1) * 10) / 10,
-        offer: true,
-        approval: tier === "C",
+        // Derived from the tier, never asserted. Hardcoding `offer: true` is
+        // what turned the tier bug above into something a student could see.
+        offer: TIERS[tier].offer,
+        approval: TIERS[tier].approval,
         programBacked: row.programBacked,
         reasons: [`follows ${row.a} ⇄ ${row.b} (${slotA})`],
         ev: { ...ev, derivedFrom: null, derivedRole: null,
