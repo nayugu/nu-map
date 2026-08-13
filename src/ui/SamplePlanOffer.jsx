@@ -47,6 +47,7 @@ import { refusalMessage }     from "../core/refusalMessage.js";
 import SamplePlanPreview      from "./SamplePlanPreview.jsx";
 import {
   sampleplanOffer, variantsFor, describeTemplate, isPlanEmpty, isGeneratedPlanLabel,
+  shortVariantLabel,
 } from "../core/planTemplate.js";
 
 /**
@@ -467,17 +468,36 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
               co-ops and five years with three are different plans, not different views.
               Hiding it meant the student's selection was silently ignored. The list is
               always the CATALOG's variants, because that is what is being chosen. */}
-          {catalogVariants.length > 1 && (
-            <VariantPicker
-              variants={catalogVariants}
-              value={Math.min(variantIdx, catalogVariants.length - 1)}
-              onChange={setVariantIdx} isPhone={isPhone}
-            />
+          {/* One row: which variant on the left, look at it on the right.
+              Preview used to be a full-width button on its own line under the
+              picker, which gave equal weight to "choose the plan" and "look at
+              the plan" and cost a whole row of a panel that has none to spare.
+              It is a small trailing control now — the picker keeps the width,
+              because reading the co-op pattern is the harder job of the two. */}
+          {(catalogVariants.length > 1 || chosen) && (
+            <div style={{
+              display: "flex", alignItems: "stretch", gap: 6,
+              marginBottom: isPhone ? 5 : 6,
+            }}>
+              {catalogVariants.length > 1 ? (
+                <VariantPicker
+                  variants={catalogVariants}
+                  value={Math.min(variantIdx, catalogVariants.length - 1)}
+                  onChange={setVariantIdx} isPhone={isPhone}
+                />
+              ) : (
+                // Nothing to choose, but Preview still belongs on the right
+                // rather than stretched across a row of its own.
+                <span style={{ flex: 1, minWidth: 0 }} />
+              )}
+              {chosen && (
+                <PreviewButton onClick={() => setPreviewing(true)} isPhone={isPhone} t={t} />
+              )}
+            </div>
           )}
 
           {chosen ? (
             <>
-              <PreviewButton onClick={() => setPreviewing(true)} isPhone={isPhone} t={t} />
 
               {/* One row, two equal halves. These are the two answers to the
                   same question — "where does this plan go?" — so they are
@@ -702,7 +722,7 @@ function ReplaceConfirm({ open, onCancel, onConfirm, onOpenAsNew, onPreview, lab
             Same button as the panel's, at full width — this is the moment it
             matters most, so it stops being a 9px link here. */}
         {onPreview && <div style={{ marginTop: 2 }}>
-          <PreviewButton onClick={onPreview} isPhone={false} t={t} />
+          <PreviewButton onClick={onPreview} isPhone={false} t={t} fullWidth />
         </div>}
 
         <div style={{
@@ -767,7 +787,18 @@ function ReplaceConfirm({ open, onCancel, onConfirm, onOpenAsNew, onPreview, lab
  * eager to be pressed. Its prominence comes from full width and position
  * instead, which costs nothing in urgency and is what actually gets it seen.
  */
-function PreviewButton({ onClick, isPhone, t }) {
+/**
+ * Look at the plan. A SMALL trailing control beside the variant picker.
+ *
+ * `flexShrink: 0` and `whiteSpace: nowrap` are the load-bearing pair: in the
+ * row it shares with the picker it must keep its own label intact and let the
+ * picker's much longer one do the ellipsizing. Without them the two fought for
+ * the same pixels and "Preview" was the one that lost, leaving a button
+ * reading "Prev…".
+ *
+ * `fullWidth` is for the collapsed row, which has no picker to sit beside.
+ */
+function PreviewButton({ onClick, isPhone, t, fullWidth = false }) {
   // Through PHONE_FZ like everything else in this frame. Written with its own
   // sizes first, which is how the two buttons beside it ended up smaller than
   // it on a phone — the exact drift the shared scale exists to stop.
@@ -776,10 +807,10 @@ function PreviewButton({ onClick, isPhone, t }) {
     <button
       onClick={onClick}
       style={{
-        display: "flex", alignItems: "center", justifyContent: "center", gap: isPhone ? 4 : 6,
-        width: "100%", marginBottom: isPhone ? 5 : 6,
+        display: "flex", alignItems: "center", justifyContent: "center", gap: isPhone ? 3 : 5,
+        ...(fullWidth ? { width: "100%" } : { flexShrink: 0, whiteSpace: "nowrap" }),
         fontSize: fz, fontWeight: 600,
-        padding: isPhone ? "4px 8px" : "6px 10px", borderRadius: 5, cursor: "pointer",
+        padding: isPhone ? "3px 7px" : "4px 9px", borderRadius: 4, cursor: "pointer",
         background: "var(--bg-2)", color: "var(--text-2)",
         border: "1px solid var(--border-1)",
       }}
@@ -849,7 +880,9 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
 
   const fz = PHONE_FZ(isPhone);
   return (
-    <div ref={boxRef} style={{ position: "relative", marginBottom: isPhone ? 5 : 6 }}>
+    // `flex: 1, minWidth: 0` so the picker takes the row's spare width and its
+    // long label ellipsizes, rather than pushing Preview off the end.
+    <div ref={boxRef} style={{ position: "relative", flex: 1, minWidth: 0 }}>
       <button
         type="button"
         onClick={() => setOpen(v => !v)}
@@ -862,8 +895,8 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
           border: "1px solid var(--border-1)", borderRadius: 4, padding: "3px 6px",
         }}
       >
-        <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-          {variants[value]?.label ?? ""}
+        <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+          {shortVariantLabel(variants[value]?.label)}
         </span>
         <span style={{ color: "var(--text-5)", fontSize: fz - 1 }}>{open ? "▴" : "▾"}</span>
       </button>
@@ -893,7 +926,7 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
                 fontWeight: i === value ? 600 : 400,
               }}
             >
-              {p.label}
+              {shortVariantLabel(p.label)}
             </button>
           ))}
         </div>
