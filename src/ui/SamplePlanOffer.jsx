@@ -357,9 +357,9 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
             generated plan says so for itself, with its explainer. */}
         {showPlanLabel && (
           <span style={{
-            flex: 1, fontSize: fz, color: "var(--text-3)", minWidth: 0,
+            flex: 1, fontSize: fz, fontWeight: 700, color: "var(--text-3)", minWidth: 0,
             overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-          }}>{appliedTemplate.planLabel}</span>
+          }}>{shortVariantLabel(appliedTemplate.planLabel)}</span>
         )}
         {/* The label takes the slack when it is there; when it is not, the
             spacer does, so the state badge stays pinned right either way. */}
@@ -379,11 +379,12 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
 
       {open && (
         <div style={{ marginTop: 6 }}>
-          {/* Whose plan this is. First, because it changes everything below it. */}
-          <div style={{
-            display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap",
-            marginBottom: 7,
-          }}>
+          {/* Whose plan this is. First, because it changes everything below it.
+              No margin of its own here: `PlanSourceToggle` already carries the
+              same bottom margin the variant-picker/Preview row carries, and
+              adding a second one on top of it here was stacking two margins
+              into a gap nearly twice the size of the one below it. */}
+          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
             <PlanSourceToggle
               value={source} onChange={setSource}
               hasCatalog={hasSamplePlan} canGenerate={canGenerate}
@@ -892,10 +893,21 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
           display: "flex", alignItems: "center", gap: 6, width: "100%",
           fontSize: fz, textAlign: "left", cursor: "pointer",
           background: "var(--bg-2)", color: "var(--text-2)",
-          border: "1px solid var(--border-1)", borderRadius: 4, padding: "3px 6px",
+          border: "1px solid var(--border-1)", borderRadius: 4,
+          // Same padding as PreviewButton beside it, so the two match height
+          // instead of the picker's tighter box sitting shorter under the
+          // same font size.
+          padding: isPhone ? "3px 7px" : "4px 9px",
         }}
       >
-        <span style={{ flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+        {/* 700: the same weight the toggle above gives its selected half, and the
+            dropdown below gives its selected row — this text IS the current
+            selection, just collapsed. One weight for "selected" throughout the
+            panel, rather than this being the one spot left unstyled. */}
+        <span style={{
+          flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis",
+          whiteSpace: "nowrap", fontWeight: 700,
+        }}>
           {shortVariantLabel(variants[value]?.label)}
         </span>
         <span style={{ color: "var(--text-5)", fontSize: fz - 1 }}>{open ? "▴" : "▾"}</span>
@@ -923,7 +935,9 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
                 textAlign: "left", fontSize: fz, cursor: "pointer", border: "none",
                 padding: "4px 8px", background: i === value ? "var(--card-bg-hov)" : "transparent",
                 color: i === value ? "var(--text-1)" : "var(--text-2)",
-                fontWeight: i === value ? 600 : 400,
+                // 700/500: the same selected/unselected pair the toggle and the
+                // collapsed label use, not this list's own 600/400.
+                fontWeight: i === value ? 700 : 500,
               }}
             >
               {shortVariantLabel(p.label)}

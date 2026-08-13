@@ -119,14 +119,12 @@ export default function PlanSourceToggle({
   return (
     <div
       role="radiogroup" aria-label={t("chart.source.label")}
-      // Full width, and the same border, radius and rhythm as the variant picker, Preview
-      // and the button row beneath it. It was `inline-flex`, so it sat as a short tab strip
-      // above four controls that all span the panel — the one element out of alignment reads
-      // as unfinished rather than as emphasis.
+      // Full width, with the same 6px gap between its two halves as the variant-picker/Preview
+      // row and the Lay-out/Replace row beneath it — this used to be ONE merged, bordered strip
+      // with no gap at all, which read as a different kind of control from its neighbours
+      // rather than as the same rhythm repeated three times down the panel.
       style={{
-        display: "flex", width: "100%", marginBottom: isPhone ? 5 : 6,
-        borderRadius: 5, overflow: "hidden",
-        border: "1px solid var(--border-1)",
+        display: "flex", width: "100%", gap: 6, marginBottom: isPhone ? 5 : 6,
       }}
     >
       {options.map((o) => {
@@ -153,7 +151,10 @@ export default function PlanSourceToggle({
                 width: "100%",
                 fontSize: fz, fontWeight: on ? 700 : 500,
                 padding: isPhone ? "4px 8px" : "6px 10px",
-                border: "none", cursor: o.enabled && !busy ? "pointer" : "default",
+                // Its own border and radius, same as every other button in this panel, now that
+                // the two halves are separate pieces rather than one box divided by fill alone.
+                border: "1px solid var(--border-1)", borderRadius: 5,
+                cursor: o.enabled && !busy ? "pointer" : "default",
                 // ── No colour, on either side ──────────────────────────
                 //
                 // `--bg-2` is the fill the variant picker and Preview already use, so the
