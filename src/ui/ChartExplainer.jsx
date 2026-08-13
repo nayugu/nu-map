@@ -208,6 +208,13 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
                 {t("chart.limits.extended", { n: report.extendedBy })}
               </li>
             )}
+            {(report.substituted ?? []).length > 0 && (
+              <li style={{ marginBottom: 2 }}>
+                {t("chart.limits.substituted", {
+                  courses: report.substituted.map(s => s.course).join(", "),
+                })}
+              </li>
+            )}
             {(report.optionalTermsUsed ?? []).length > 0 && (
               <li style={{ marginBottom: 2 }}>
                 {t("chart.limits.optional", { terms: report.optionalTermsUsed.join(", ") })}

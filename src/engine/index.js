@@ -410,6 +410,18 @@ export function generatePlan({
       // is ever built.
       searchSpaceLog10: plans.reduce(
         (n, p) => n + Math.log10(Math.max(1, p.domain.length)), 0),
+      // ── Courses added that the degree never asked for ─────────────
+      //
+      // `substitutePrereqs` spends a free-elective slot on a prerequisite the degree lists
+      // nowhere, because otherwise the plan meets every requirement and the student still
+      // cannot register. That is the right call and it was entirely UNREPORTED: a course
+      // appeared in the plan, the degree does not name it, and nothing said why.
+      //
+      // A decision the engine makes on the student's behalf has to be visible, which is the
+      // same principle as `unschedulable` — silence about a choice is worse than the choice.
+      substituted: subbed.substituted.map(x => ({
+        course: x.course, forCourse: x.forCourse, sh: x.sh,
+      })),
       // Which tier produced this plan. `true` means the four-courses-per-full-term bound
       // could not be met and was dropped — a fact about the degree's arithmetic against
       // this shape, and the difference between "thin term" and "thin term for a reason".
