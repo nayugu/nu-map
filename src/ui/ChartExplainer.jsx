@@ -23,11 +23,25 @@
 // requirement cannot be invisible — dropping it with the rest would have quietly
 // recreated the defect it exists to prevent.
 // ═══════════════════════════════════════════════════════════════════
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useLanguage } from "../context/LanguageContext.jsx";
 
-/** The four questions, as headings. Body copy is per-plan and built below. */
 export default function ChartExplainer({ report, program, onClose, isPhone }) {
   const { t } = useLanguage();
+
+  // ── Escape closes ONE layer ───────────────────────────────────────
+  //
+  // Matching `SamplePlanPreview`, which this panel now sits beside: the handler stops
+  // propagation so a dialog opened over another closes only itself. Registered before the
+  // `report` guard below, because a hook cannot run conditionally.
+  useEffect(() => {
+    if (!report) return undefined;
+    const onKey = (e) => { if (e.key === "Escape") { e.stopPropagation(); onClose?.(); } };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [report, onClose]);
+
   if (!report) return null;
 
   const fz  = isPhone ? 9 : 12;
@@ -61,7 +75,15 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
     </div>
   );
 
-  return (
+  // ── Portalled to the body, like every other dialog here now ───────
+  //
+  // `position: fixed` is only fixed to the VIEWPORT while no ancestor has a `transform`,
+  // `filter` or `contain` — any of those makes it a containing block and the overlay is
+  // clipped to whatever panel it was declared in. This dialog is rendered from deep inside
+  // the grad panel, so it was one CSS property away from being trapped there, and upstream
+  // has already paid for that class of bug once ("confirm the shared plan in-app, above
+  // everything, so a phone can accept it").
+  return createPortal(
     <div
       role="dialog" aria-modal="true" aria-label={t("chart.explain.title")}
       onClick={onClose}
@@ -303,6 +325,7 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           >{t("chart.explain.close")}</button>
         </footer>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
