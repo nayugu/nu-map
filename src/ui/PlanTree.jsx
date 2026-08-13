@@ -174,7 +174,7 @@ export default function PlanTree({
 
   return (
     <div role="tree" style={{ position: "relative" }}>
-      {rows.map(row => {
+      {rows.map((row, i) => {
         const isFolder = row.kind === "folder";
         const isActive = !isFolder && row.id === activePlanId;
         const isSelected = selectedIds?.has(row.id) ?? false;
@@ -182,6 +182,37 @@ export default function PlanTree({
         const isDropTarget = isFolder && dropTargetId === row.id;
         const dropOk = dropVerdict === "ok";
         const meta = metaOf?.(row) ?? "";
+
+        // A RUN of adjacent selected rows draws as ONE block, the way every
+        // file manager does it. Ringing each row separately put two 2px edges
+        // a hairline apart between neighbours, which reads as one fat smudged
+        // divider rather than as two selected items.
+        //
+        // Runs are same-DEPTH only: merging a selected folder with a selected
+        // child would jog the left edge inward mid-block, so the shape would
+        // no longer be a rectangle and would look broken rather than joined.
+        const joins = (other) =>
+          isSelected && other && (selectedIds?.has(other.id) ?? false) && other.depth === row.depth;
+        const runAbove = joins(rows[i - 1]);
+        const runBelow = joins(rows[i + 1]);
+
+        // Per-side, so the inner edges can be dropped. `outline` cannot do
+        // that — it is all four sides or none — which is why selection moved
+        // to inset shadows and `outline` is left to the drop target, where
+        // only ever one row is highlighted at a time.
+        const ring = "var(--active)";
+        const selShadow = isSelected ? [
+          `inset 2px 0 0 ${ring}`,
+          `inset -2px 0 0 ${ring}`,
+          ...(runAbove ? [] : [`inset 0 2px 0 ${ring}`]),
+          ...(runBelow ? [] : [`inset 0 -2px 0 ${ring}`]),
+        ].join(", ") : null;
+
+        const R = compact ? 3 : 6;
+        // Square off the joined end so the block has one continuous side.
+        const radius = isSelected
+          ? `${runAbove ? 0 : R}px ${runAbove ? 0 : R}px ${runBelow ? 0 : R}px ${runBelow ? 0 : R}px`
+          : `${R}px`;
         // Manual-order insertion line. Drawn on the row itself rather than as a
         // separate element so it cannot desync from the list it describes.
         // One boundary, ONE line. edgeZone names a gap from both sides —
@@ -225,9 +256,10 @@ export default function PlanTree({
               //
               //   ACTIVE      — a solid bar down the left edge (below). No
               //     fill and no ring, so it never looks picked.
-              //   SELECTED    — a BOLD 2px ring around the whole row plus a
-              //     faint tint. An edge is the thing you can see at a glance
-              //     across a list of forty rows.
+              //   SELECTED    — a BOLD 2px edge plus a faint tint, drawn once
+              //     around a whole RUN of adjacent selected rows rather than
+              //     around each one. An edge is the thing you can see at a
+              //     glance across a list of forty rows.
               //   drop target — a DASHED ring, matching the dashed-ghost motif
               //     the canvas already uses for "this is where it would land",
               //     so it cannot be mistaken for a selection even when the
@@ -241,13 +273,16 @@ export default function PlanTree({
                 : "transparent",
               outline: isDropTarget
                 ? `2px dashed ${dropOk ? "var(--active)" : "var(--error)"}`
-                : isSelected ? "2px solid var(--active)"
-                : isFocused  ? "1px solid var(--border-2)"
+                : isFocused && !isSelected ? "1px solid var(--border-2)"
                 : "none",
               // Drawn inside the row's own box so the ring never overlaps the
               // row above; `outline` alone straddles the border edge.
               outlineOffset: -2,
-              borderRadius: compact ? 3 : 6,
+              // Left undefined (not "none") when nothing is selected, so React
+              // omits the property and the stylesheet's hover shadow still
+              // applies — an inline "none" would outrank it and kill hover.
+              boxShadow: selShadow ?? undefined,
+              borderRadius: radius,
             }}
           >
             {/* Manual-order insertion line, drawn ON the boundary between two

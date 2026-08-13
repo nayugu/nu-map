@@ -1837,14 +1837,16 @@ export default function Header() {
                 {t("header.io.copy")}
               </button>
               </HoverTip>
-              <HoverTip tip={t("header.io.export.pdf.title")} placement="side">
+              {/* No hover card: `header.io.export.pdf.title` is the string
+                  "Export PDF", identical to the label, so the tip repeated the
+                  button back at you. A tip that adds nothing trains people to
+                  ignore the ones that do. */}
               <button className="hdr-btn-dd" onClick={handleExport}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 {t("header.io.export.pdf")}
               </button>
-              </HoverTip>
               </div>
               {/* ── File: save / load JSON backups ── */}
               <div style={IO_GROUP_RULED}>

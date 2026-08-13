@@ -129,11 +129,16 @@
          blends into the panel; hover swaps it for the subtle control border. */
       .set-row { transition: border-color 110ms ease; }
       .set-row:hover { border-color: var(--border-2, #d9d9d9) !important; }
-      /* Plan-library / plan-dropdown tree rows: same borderless-until-hover
-         treatment as .set-row. The row's selected + active states use INSET
-         rings and backgrounds, so an outer hover border never fights them. */
-      .plan-row { border: 1px solid transparent; transition: border-color 110ms ease; }
-      .plan-row:hover { border-color: var(--border-2, #d9d9d9) !important; }
+      /* Plan-library / plan-dropdown tree rows: borderless until hover.
+         Hover is an INSET shadow rather than a transparent border, because the
+         border reserved 1px on every side and adjacent rows therefore sat 2px
+         apart — enough to break the side edges of a multi-row selection into
+         dashes, since a run of selected rows is drawn as one continuous block.
+         With no border the rows touch exactly and the block closes up.
+         A selected row sets box-shadow inline, which outranks this rule; that
+         is intended, as it already carries a much stronger edge. */
+      .plan-row { transition: box-shadow 110ms ease; }
+      .plan-row:hover { box-shadow: inset 0 0 0 1px var(--border-2, #d9d9d9); }
       input::placeholder { font-size: inherit; opacity: 0.45; }
       .work-input::placeholder { opacity: 1; color: inherit; }
       /* Prevent browser text-selection on draggable cards (fixes serif font flash on touch) */
