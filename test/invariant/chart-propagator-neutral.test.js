@@ -89,6 +89,18 @@ const generate = (p, variant, propagateChains) => generatePlan({
   observedOrder: observed.edges, coopPrep: (observed.coopPrep ?? []).map(x => x.course),
   studentType: p.lvl === "graduate" ? "graduate" : "undergraduate",
   timeBudgetMs: 1200, propagateChains,
+  // ── A FROZEN clock, because otherwise this test races the machine ──
+  //
+  // Each program is generated twice, and the wall clock may turn an answer into a refusal —
+  // that is the engine's documented behaviour, not a bug. With a live clock one side of the
+  // pair can therefore refuse on time while the other succeeds, which this test counted as a
+  // LOST plan and reported as the propagator being unsound. It duly failed once on a run that
+  // touched nothing but locale files.
+  //
+  // Frozen, the deadline can never fire and the search is bounded by NODES alone, which is
+  // what the invariant is actually about: same input, same traversal, same plan. The engine
+  // exposes `now` for precisely this.
+  now: () => 0,
 });
 
 /** The plan as a student sees it: every term in order, every cell in order. */

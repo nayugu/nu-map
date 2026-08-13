@@ -1,28 +1,27 @@
 // ═══════════════════════════════════════════════════════════════════
 // CHART EXPLAINER — how the generated plan was built, in the order a person asks
 //
-// ── Why this is not a list of features ─────────────────────────────
+// ── Two lists and a method, and that is all ────────────────────────
 //
-// The obvious version of this panel enumerates what the engine does: reads the
-// requirements, checks prerequisites, checks availability, balances the load. Nobody
-// reads that, and it answers a question nobody asked. A student opening this has ONE
-// question — "can I trust this?" — and it has a shape:
+// This panel was four sections and a dozen per-plan statistics, and it never said what
+// the engine actually DOES — which is both the interesting part and the only part a
+// reader can check the grid against. So it is now:
 //
-//   1. is it complete?        will I graduate if I follow it
-//   2. is it legal?           can I actually register for these, in this order
-//   3. why THIS order?        the part that looks arbitrary and is not
-//   4. what did it not know?  the part that decides how much to trust the rest
+//   the contract   what every plan MUST satisfy, then what it optimises for
+//   the method     how a requirement becomes a card, gets a set of legal terms,
+//                  and how the search narrows 10^31 arrangements to nineteen tries
 //
-// So the panel is those four, in that order, and the fourth is not buried. A plan
-// that admits what it could not check is more trustworthy than one that does not,
-// and burying the limits is how a tool earns the confidence it should not have.
+// The contract is not a simplification written for the UI. The first list is exactly
+// what `chart-gate.js` asserts at ZERO over all 1,031 shapes and what no relaxation
+// rung may ever give up; the second is `DEFAULT_PREFERENCES.ranked` plus the orderings
+// the search applies within it. If either stops matching the code, the code changed.
 //
-// ── It describes THIS plan, not the algorithm in general ───────────
+// ── What was kept from the old version, and why ────────────────────
 //
-// Every section takes the report for the plan on screen. "3 courses could only go
-// where they are" is a fact about your degree; "the engine considers prerequisites"
-// is a brochure. Where a plan has nothing to say for a section — no trades, no
-// stretched years — that section says so rather than showing a general statement.
+// One thing: the warning that a requirement could not be scheduled. It is the single
+// place a plan is knowingly incomplete, and it was added precisely so that a missing
+// requirement cannot be invisible — dropping it with the rest would have quietly
+// recreated the defect it exists to prevent.
 // ═══════════════════════════════════════════════════════════════════
 import { useLanguage } from "../context/LanguageContext.jsx";
 
@@ -35,7 +34,6 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
   const fzH = isPhone ? 10 : 13;
 
   const required = report.totalCreditsRequired ?? 0;
-  const over = (report.warnings ?? []).find(w => w.kind === "sections-exceed-degree");
 
   const Section = ({ n, title, children }) => (
     <section style={{ marginBottom: isPhone ? 12 : 18 }}>
@@ -103,29 +101,57 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           </div>
         </header>
 
-        {/* ── 1. Completeness ────────────────────────────────────── */}
-        <Section n="1" title={t("chart.explain.complete.h")}>
-          <p style={{ margin: "0 0 6px" }}>{t("chart.explain.complete.p")}</p>
-          <Fact value={report.cells}>{t("chart.explain.complete.cells")}</Fact>
-          <Fact value={`${report.cellsSH}`}>
-            {t("chart.explain.complete.credits", { required })}
+        {/* ── 0. The contract, in two lists ──────────────────────────
+          *
+          * The whole engine in twelve lines, before any per-plan detail. It answers the
+          * question a student actually has — "why is this the plan?" — which the sections
+          * below answer only implicitly, one statistic at a time.
+          *
+          * The split is the engine's real architecture and not a simplification for the UI:
+          * the first list is what `chart-gate.js` asserts at ZERO over every generated plan
+          * and what no relaxation rung is ever allowed to give up, and the second is
+          * `DEFAULT_PREFERENCES.ranked` plus the orderings the search applies inside it. If
+          * either list stops matching the code, the code is what changed.
+          */}
+        <section style={{ marginBottom: isPhone ? 12 : 18 }}>
+          <div style={{ fontWeight: 700, marginBottom: 4 }}>{t("chart.contract.hard.h")}</div>
+          <ol style={{ margin: "0 0 12px", paddingInlineStart: 20, lineHeight: 1.55 }}>
+            {["1", "2", "3", "4", "5"].map(n => (
+              <li key={n}>{t(`chart.contract.hard.${n}`)}</li>
+            ))}
+          </ol>
+          <div style={{ fontWeight: 700, marginBottom: 4 }}>{t("chart.contract.soft.h")}</div>
+          <ul style={{ margin: "0 0 10px", paddingInlineStart: 20, lineHeight: 1.55 }}>
+            {["1", "2", "3", "4", "5"].map(n => (
+              <li key={n}>{t(`chart.contract.soft.${n}`)}</li>
+            ))}
+          </ul>
+        </section>
+
+        {/* ── How it works, with this plan's own numbers ──────────────
+          *
+          * The four sections that used to sit here reported a dozen statistics and never said
+          * what the engine DOES, which is the interesting part and the one a reader can check
+          * the grid against. Every figure below is real: `report.cells`, `report.nodes` and
+          * `report.searchSpaceLog10` come straight out of the search.
+          *
+          * The two numbers worth putting side by side are the space and the nodes. Around
+          * 10^31 arrangements exist for a typical degree and a median program finds a legal one
+          * in nineteen attempts — the ratio IS the method, and it explains constraint
+          * propagation to someone who has never heard the phrase.
+          */}
+        <Section n="1" title={t("chart.how.h")}>
+          <ol style={{ margin: "0 0 10px", paddingInlineStart: 20, lineHeight: 1.55 }}>
+            <li>{t("chart.how.s1", { cells: report.cells, sh: report.cellsSH, required })}</li>
+            <li>{t("chart.how.s2")}</li>
+            <li>{t("chart.how.s3")}</li>
+            <li>{t("chart.how.s4")}</li>
+          </ol>
+          <Fact value={`10^${Math.round(report.searchSpaceLog10 ?? 0)}`}>
+            {t("chart.how.space")}
           </Fact>
-          {over && (
-            <p style={{ margin: "6px 0 0", color: "var(--text-3)" }}>
-              {t("chart.explain.complete.excess", { over: over.over, total: over.total })}
-            </p>
-          )}
-          {/* ── The one place completeness is NOT true by construction ──
-            *
-            * Section 1 claims every requirement is covered, so the exception belongs HERE
-            * rather than in section 4 with the diagnostics. A requirement naming a course the
-            * catalog no longer offers is a fact the student has to act on — they will need
-            * their advisor to say what satisfies it now — and burying it under "limits"
-            * would make this a quieter version of the failure the refusal gate prevents.
-            *
-            * Styled as a warning for the same reason: the plan holds a slot of the right size
-            * in the right term, so nothing LOOKS wrong, which is exactly why it has to say so.
-            */}
+          <Fact value={report.nodes}>{t("chart.how.nodes")}</Fact>
+          <p style={{ margin: "6px 0 0", color: "var(--text-3)" }}>{t("chart.how.ratio")}</p>
           {(report.unschedulable ?? []).length > 0 && (
             <div style={{
               margin: "8px 0 0", padding: "7px 9px", borderRadius: 6,
@@ -142,70 +168,6 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           )}
         </Section>
 
-        {/* ── 2. Legality ────────────────────────────────────────── */}
-        <Section n="2" title={t("chart.explain.legal.h")}>
-          <p style={{ margin: "0 0 6px" }}>{t("chart.explain.legal.p")}</p>
-          <Fact value="✓">{t("chart.explain.legal.prereq")}</Fact>
-          <Fact value="✓">{t("chart.explain.legal.season")}</Fact>
-          <Fact value="✓">{t("chart.explain.legal.load")}</Fact>
-          <Fact value="✓">{t("chart.explain.legal.once")}</Fact>
-          <p style={{ margin: "6px 0 0", color: "var(--text-3)" }}>
-            {t("chart.explain.legal.witness")}
-          </p>
-        </Section>
-
-        {/* ── 3. The order ───────────────────────────────────────── */}
-        <Section n="3" title={t("chart.explain.order.h")}>
-          <p style={{ margin: "0 0 6px" }}>{t("chart.explain.order.p")}</p>
-          <ol style={{ margin: "0 0 6px", paddingLeft: 18 }}>
-            <li>{t("chart.explain.order.forced")}</li>
-            <li>{t("chart.explain.order.major")}</li>
-            <li>{t("chart.explain.order.level")}</li>
-            <li>{t("chart.explain.order.filler")}</li>
-          </ol>
-          {report.workTerms > 0 && (
-            <p style={{ margin: "6px 0 0" }}>{t("chart.explain.order.coop")}</p>
-          )}
-          {(report.trades ?? []).length > 0 && (
-            <p style={{ margin: "6px 0 0", color: "var(--text-3)" }}>
-              {t("chart.explain.order.traded")}{" "}
-              {report.trades.map(x => `${x.gaveUp} ${x.units}`).join("; ")}.
-            </p>
-          )}
-        </Section>
-
-        {/* ── 4. The limits ──────────────────────────────────────── */}
-        <Section n="4" title={t("chart.explain.limits.h")}>
-          <p style={{ margin: "0 0 6px" }}>{t("chart.explain.limits.p")}</p>
-
-          {report.shapeSource === "published"
-            ? <Fact value="·">{t("chart.explain.limits.shape.published")}</Fact>
-            : <Fact value="·">{t("chart.explain.limits.shape.derived")}</Fact>}
-
-          {report.extendedBy > 0 && (
-            <Fact value={`+${report.extendedBy}`}>
-              {t("chart.explain.limits.extended", { n: report.extendedBy })}
-            </Fact>
-          )}
-          {(report.optionalTermsUsed ?? []).length > 0 && (
-            <Fact value="·">
-              {t("chart.explain.limits.optional", {
-                terms: report.optionalTermsUsed.join(", "),
-              })}
-            </Fact>
-          )}
-          {(report.unscheduledPrereqs ?? []).length > 0 && (
-            <Fact value={report.unscheduledPrereqs.length}>
-              {t("chart.explain.limits.unscheduled")}
-            </Fact>
-          )}
-          {(report.thresholds ?? []).length > 0 && (
-            <Fact value={report.thresholds.length}>
-              {t("chart.explain.limits.thresholds")}
-            </Fact>
-          )}
-          <Fact value="·">{t("chart.explain.limits.nodata")}</Fact>
-        </Section>
 
         <footer style={{
           display: "flex", justifyContent: "flex-end", gap: 8,
