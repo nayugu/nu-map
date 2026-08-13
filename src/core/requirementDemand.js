@@ -33,15 +33,77 @@ export const DEFAULT_UNIT_SH = 4;
 export const GENERAL_ELECTIVE = "~general";
 export const CONCENTRATION = "~concentration";
 
-/** The credit value one course answering this requirement usually carries. */
-export function typicalSH(spec, courseMap, fallback = DEFAULT_UNIT_SH) {
+/**
+ * The smallest credit value that can stand alone as somebody's course choice.
+ *
+ * A one-credit lab is not a thing a student picks FROM a pool — it arrives attached to the
+ * lecture it belongs to, and the corequisite machinery is what puts it in the plan. So it is
+ * not a candidate for "the typical unit of this pool", however many of them the pool lists.
+ *
+ * Three, matching the credit floor the rest of the app uses for "a real course". Stated here
+ * as its own constant rather than imported, because `src/core/` must not depend on the engine's
+ * calibration — the direction is engine → core.
+ */
+const STANDALONE_SH = 3;
+
+/**
+ * The credit value one course answering this requirement usually carries.
+ *
+ * ── Why sub-3 credit courses are excluded from the mode ─────────────
+ *
+ * Science pools are lecture/lab PAIRS, so the counts tie exactly and the tie-break decided
+ * everything — in the wrong direction, since it sorted credits ascending. Computer Science
+ * BSCS's science pool, measured:
+ *
+ *     44 courses · {0 SH: 4, 1 SH: 19, 3 SH: 2, 4 SH: 19}
+ *     BIOL 1111 (4) BIOL 1112 (1) BIOL 1113 (4) BIOL 1114 (1) CHEM 1161 (4) CHEM 1162 (1) …
+ *
+ * Nineteen 4 SH lectures against nineteen 1 SH labs, so `typicalSH` returned 1 and an 8 SH
+ * requirement became EIGHT one-credit slots titled "Science Requirement" instead of two
+ * lecture-and-lab pairs. The tie is structural, not a coincidence: every lecture in such a
+ * pool has a lab partner, so the counts are always equal and the tie-break always decides.
+ *
+ * Excluding the labs is more robust than reversing the tie-break, which would still fail a
+ * pool listing two labs per lecture. The mode over the standalone courses is the lecture, and
+ * the lab follows it in as a corequisite — which is what `coreqAdded` already exists to record.
+ *
+ * The full-pool mode remains the fallback, so a pool of genuinely small courses — a
+ * one-credit seminar requirement, of which the corpus has several — still sizes itself
+ * correctly rather than being rounded up to a course it does not contain.
+ *
+ * ── Why the filter is OPT-IN, and only CHART opts in ────────────────
+ *
+ * It is off by default because the two callers are asking different questions, which is this
+ * codebase's own key inversion: the catalog binding INFERS what a published cell meant, and a
+ * department really can print a one-credit lab as its own cell, so there the widest reading is
+ * the right one. CHART CONSTRUCTS cells, and a constructed standalone 1 SH slot is meaningless
+ * — nobody picks a lab out of a pool as their choice.
+ *
+ * Measured, which is why this is a flag rather than a change of behaviour: applying the filter
+ * to the catalog path moved the binding's over-subscription ratchet from 34 to 40. Not through
+ * the named pools — "Khoury Approved Electives" has no sub-3 SH course in it at all — but
+ * through the concentration floor at `requirementBinding.js`, a `min` over options that feeds
+ * total demand and therefore the derived general-elective budget. Perturbing that is a
+ * different subsystem's quality metric, and nothing here argues the new value is better.
+ */
+export function typicalSH(spec, courseMap, fallback = DEFAULT_UNIT_SH,
+                          { standaloneOnly = false } = {}) {
   const counts = new Map();
+  const standalone = new Map();
   for (const key of spec?.keys ?? []) {
     const sh = courseMap[key]?.sh;
-    if (sh) counts.set(sh, (counts.get(sh) ?? 0) + 1);
+    if (!sh) continue;
+    counts.set(sh, (counts.get(sh) ?? 0) + 1);
+    if (sh >= STANDALONE_SH) standalone.set(sh, (standalone.get(sh) ?? 0) + 1);
   }
-  if (!counts.size) return fallback;
-  return [...counts.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0][0];
+  const pick = standaloneOnly && standalone.size ? standalone : counts;
+  if (!pick.size) return fallback;
+  // The tie-break stays ASCENDING. Reversing it looks like it would help — a bigger unit means
+  // fewer, larger cells — but it was measured to cost 6 sections: the catalog binding's
+  // over-subscription ratchet went 34 → 40, because pools with equal counts of 4 and 5 SH
+  // courses started picking 5 and `room = demand / typicalSH` shrank. The filter above is what
+  // fixes the lab case, and it fixes it without a tie: {3 SH: 2, 4 SH: 19} picks 4 on count.
+  return [...pick.entries()].sort((a, b) => b[1] - a[1] || a[0] - b[0])[0][0];
 }
 
 /**

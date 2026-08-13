@@ -75,6 +75,7 @@ import {
   DEFAULT_UNIT_SH, GENERAL_ELECTIVE, CONCENTRATION, typicalSH,
 } from "../core/requirementDemand.js";
 import { obligationsOf } from "../core/requirementBinding.js";
+import { resolveConcentration } from "../core/concentrationResolve.js";
 
 export { GENERAL_ELECTIVE, CONCENTRATION };
 
@@ -163,7 +164,10 @@ function cellsForSection(section, target, courseMap) {
   const reqs = norm.requirements ?? [];
   const sectionTitle = (norm.title ?? "").trim();
   const sectionSpec = specForNode(norm);
-  const unit = typicalSH(sectionSpec, courseMap);
+  // `standaloneOnly`: CHART constructs cells, so a one-credit lab is not a unit anybody would
+  // pick out of a pool. Opt-in, because the catalog binding is inferring rather than
+  // constructing and must keep the widest reading — see `typicalSH`.
+  const unit = typicalSH(sectionSpec, courseMap, undefined, { standaloneOnly: true });
   const cells = [];
   const notes = [];
   let ordinal = 0;
@@ -207,7 +211,7 @@ function cellsForSection(section, target, courseMap) {
   // COUNT comes from arithmetic.
   const emitPool = (nodes, { credits = null, count = null, node = null }) => {
     const spec = nodes.reduce((acc, n) => unionSpec(acc, specForNode(n)), emptySpec());
-    const poolUnit = typicalSH(spec, courseMap) || unit;
+    const poolUnit = typicalSH(spec, courseMap, undefined, { standaloneOnly: true }) || unit;
     // Credit-shaped pools divide; count-shaped ones do not, and rounding a count
     // through credit and back is how a 3-course pool becomes 2 or 4 cells.
     // Rounded UP, never down. A section demanding 5 SH answered by 4 SH courses
@@ -491,7 +495,9 @@ export function specLabel(spec) {
  *   demands for `MUS 1990` collapsing into one registration
  * @returns {{cells: Cell[], notes: object[], reconciliation: object[]}}
  */
-export function deriveCells(programData, { courseMap = {}, repeatable = () => false } = {}) {
+export function deriveCells(programData, {
+  courseMap = {}, repeatable = () => false, concentration = null,
+} = {}) {
   const sections = programData?.requirementSections ?? [];
   const cells = [];
   const notes = [];
@@ -595,7 +601,13 @@ export function deriveCells(programData, { courseMap = {}, repeatable = () => fa
       merged.push({
         id: `${target}#${i}`,
         target,
-        title: target === CONCENTRATION ? "Concentration" : "General Elective",
+        // Titled with the concentration once one is picked, because the cell's candidates ARE
+        // that concentration's courses at that point and a card reading "Concentration" would
+        // hide the difference between a plan built for one option and a plan built for the
+        // union of five. Unchosen it keeps the generic title, which is then the honest one.
+        title: target === CONCENTRATION
+          ? (resolveConcentration(programData, concentration)?.title ?? "Concentration")
+          : "General Elective",
         sh: unit,
         kind: "open",
         groups: null,
@@ -612,7 +624,7 @@ export function deriveCells(programData, { courseMap = {}, repeatable = () => fa
         // choose, which is what a candidate set means everywhere else here.
         //
         // General electives keep `null`, correctly: they really do admit anything.
-        spec: target === CONCENTRATION ? concentrationSpec(programData) : null,
+        spec: target === CONCENTRATION ? concentrationSpec(programData, concentration) : null,
         // Marked when the bucket rests on OUR arithmetic rather than the catalog's
         // statement, because that is what pre-flight's "mostly unlabelled" gate is
         // entitled to refuse over. A bucket the catalog stated is evidence; one we
@@ -719,16 +731,90 @@ function mergeForcedCells(cells, notes, repeatable = () => false) {
 }
 
 /**
- * Every course any of a program's concentrations admits.
+ * The courses a concentration cell can be answered by.
+ *
+ * ── Resolved beats the union, and the union is UNSOUND ───────────────
+ *
+ * With a concentration chosen, this is that option's pool and nothing else. Without one it
+ * falls back to the union of every option, which is what shipped first and which is an
+ * over-approximation rather than a candidate set:
+ *
+ *   Computer Science BSCS — the five concentration pools are pairwise DISJOINT (measured:
+ *   intersection 0, union 36). Three `Concentration` cells sat in one term, and the witness
+ *   proved them fillable by matching three courses drawn from three DIFFERENT concentrations.
+ *   `minOptions` is 1, so no student can do that. Per option, the courses actually reachable in
+ *   that term were 0, 1, 2, 0 and 1 — every one of them short of three.
+ *
+ * Corpus-wide that is 39 of 143 plans (27%) across 28 programs putting more concentration cells
+ * in a term than the tightest concentration could fill, some of them 3 cells against 0.
+ *
+ * So resolving is not merely a nicety for better sequencing — it is what makes the cell's
+ * candidate set true. The union path remains for a student who has not chosen, and
+ * `concentrationCapacity` is what keeps that path honest.
  *
  * Null when the program has none, or when the options name nothing enumerable — an
  * unbounded concentration cell is honest, it just cannot be sequenced as depth.
  */
-function concentrationSpec(programData) {
+function concentrationSpec(programData, chosen = null) {
   const options = programData?.concentrations?.concentrationOptions ?? [];
   if (!options.length) return null;
-  const spec = options.reduce((acc, o) => unionSpec(acc, specForNode(o)), emptySpec());
+  // Titles are the only identity a concentration has across saved plans, share links and MCP
+  // `SET_CONCENTRATION`, so the lookup goes through the one resolver rather than comparing
+  // strings here — a stale or differently-punctuated title must degrade to the union, never
+  // throw and never silently match the wrong option.
+  const picked = chosen ? resolveConcentration(programData, chosen) : null;
+  const from = picked ? [picked] : options;
+  const spec = from.reduce((acc, o) => unionSpec(acc, specForNode(o)), emptySpec());
   return specIsEmpty(spec) ? null : spec;
+}
+
+/**
+ * How many concentration cells may stand in the terms up to each index, for a student who has
+ * NOT chosen a concentration yet.
+ *
+ * ── Why a cumulative bound, and why the min over options ────────────
+ *
+ * The plan has to hold whichever concentration the student eventually picks, so the constraint
+ * is `∀ option, ∃ a filling` — not `∃ a course, ∀ options`. That distinction is the whole
+ * problem: the second reading is what "intersect the candidate sets" means, and the
+ * intersection here is EMPTY, so it would refuse all 93 programs that require a concentration.
+ * This codebase has already paid for that lesson once — candidate-set intersection was measured
+ * empty 86.7% of the time and dropped.
+ *
+ * Cumulative rather than per-term because prerequisites only accumulate: a course reachable by
+ * term t is reachable in every later term too. So for one option the requirement is Hall's
+ * condition over prefixes — the cells placed in terms ≤ t can never outnumber that option's
+ * courses reachable by t — and over all options it is the same statement against the minimum.
+ * The engine already reasons this way for the four-course rule, where per-term was the weak
+ * relaxation and Hall's condition the real one.
+ *
+ * `earliest` is the static prereq-depth floor, not a fact about the arrangement, so this is
+ * computed once and cannot make the search circular.
+ */
+export function concentrationCapacity(programData, courseMap, termCount, earliest) {
+  const options = programData?.concentrations?.concentrationOptions ?? [];
+  if (options.length < 2 || (programData.concentrations?.minOptions ?? 1) < 1) return null;
+  const caps = new Array(termCount).fill(Infinity);
+  for (const o of options) {
+    let spec;
+    try { spec = specForNode(o); } catch { continue; }
+    const keys = [...(spec?.keys ?? [])];
+    if (!keys.length) continue;
+    // Reachable-by-t, accumulated. A course with no computable floor counts from term 0: the
+    // conservative direction here is to ALLOW, because an unknown depth must not manufacture an
+    // infeasibility the catalog does not assert.
+    const byTerm = new Array(termCount).fill(0);
+    for (const k of keys) {
+      const t = Math.max(0, Math.min(termCount - 1, earliest(k) ?? 0));
+      byTerm[t]++;
+    }
+    let run = 0;
+    for (let t = 0; t < termCount; t++) {
+      run += byTerm[t];
+      caps[t] = Math.min(caps[t], run);
+    }
+  }
+  return caps.every(c => c === Infinity) ? null : caps;
 }
 
 /** The courses a cell can be answered by, as a spec, whichever shape it stores. */
