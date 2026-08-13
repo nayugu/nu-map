@@ -116,11 +116,34 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           * co-requisites sharing a term (`checkViolations`), no course used twice (the
           * distinctness matching that every node runs), and co-op length and start season
           * (`validateDrop`). A list of rules that leaves rules out is worse than no list. */}
+        {/* ── Only rules that apply to THIS reader ──────────────────
+          *
+          * Two of these were false for some plans, which is worse than omitting them.
+          *
+          * The four-course bar does not exist for graduate degrees — `graduateFullTermMinCourses`
+          * is 0 and `canStillFill` never enforces it — so a master's student was being told a
+          * rule about their plan that the engine does not apply. It now renders only when the
+          * bar is real, and states the number it actually uses.
+          *
+          * "Every requirement covered" contradicts the unschedulable warning further down the
+          * same panel. When the catalog has made a requirement impossible, the claim is stated
+          * with its exception instead of being quietly contradicted two sections later.
+          */}
         <Section title={t("chart.contract.hard.h")}>
           <ol style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
-            {["1", "2", "3", "4", "5", "6", "7", "8"].map(n => (
+            {["1", "2", "3", "4", "5"].map(n => (
               <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.hard.${n}`)}</li>
             ))}
+            <li style={{ marginBottom: 3 }}>
+              {t((report.unschedulable ?? []).length > 0
+                ? "chart.contract.hard.6.gap" : "chart.contract.hard.6")}
+            </li>
+            {report.fullTermMinCourses > 0 && (
+              <li style={{ marginBottom: 3 }}>
+                {t("chart.contract.hard.7", { n: report.fullTermMinCourses })}
+              </li>
+            )}
+            <li>{t("chart.contract.hard.8")}</li>
           </ol>
         </Section>
 
@@ -185,8 +208,12 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
             padding: "10px 0",
           }}>
             <Stat
-              value={<>10<sup>{Math.round(report.searchSpaceLog10 ?? 0)}</sup></>}
-              label={t("chart.how.stat.space")}
+              value={(report.nodes ?? 0).toLocaleString()}
+              label={t("chart.how.stat.tried")}
+            />
+            <Stat
+              value={(report.moves ?? 0).toLocaleString()}
+              label={t("chart.how.stat.moves")}
             />
           </div>
           <ul style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>

@@ -42,7 +42,7 @@ import { improve, DEFAULT_PREFERENCES } from "./objective.js";
 import { emitPlan } from "./emit.js";
 import { buildDepthIndex } from "./prereqDepth.js";
 import { withDefaults } from "./ports.js";
-import { withCalibration } from "./calibration.js";
+import { withCalibration, minCoursesFor } from "./calibration.js";
 
 /**
  * The most a prerequisite chain may stretch a plan, in terms.
@@ -397,19 +397,12 @@ export function generatePlan({
       unusedTerms: shape.terms.filter(t => t.unused).length,
       shapeSource: shape.source,
       nodes: placed.nodes,
-      // ── How big the space was, as a power of ten ──────────────────
-      //
-      // The product of every cell's legal-term count: how many ways the cells could be arranged
-      // before any constraint is applied. Reported as a log because it overflows a double almost
-      // immediately — 35 cells with 8 legal terms each is 8^35, about 10^31.
-      //
-      // Worth surfacing beside `nodes`, because the pair is the honest explanation of the whole
-      // engine: around 10^31 arrangements exist, and a median program finds a legal one in
-      // NINETEEN attempts. That ratio is not luck — it is what checking each placement the
-      // moment it is made buys, since an arrangement that breaks a rule is abandoned before it
-      // is ever built.
-      searchSpaceLog10: plans.reduce(
-        (n, p) => n + Math.log10(Math.max(1, p.domain.length)), 0),
+      // The four-course bar that ACTUALLY applies, after student type. Zero for a graduate
+      // degree, which is the whole point of exposing it: the explainer stated "four courses in
+      // every full fall and spring" to master's and PhD students, for whom it is false and
+      // `canStillFill` never enforces it. A rule the reader can check has to be a rule that
+      // applies to them.
+      fullTermMinCourses: minCoursesFor(cal, studentType),
       // ── Courses added that the degree never asked for ─────────────
       //
       // `substitutePrereqs` spends a free-elective slot on a prerequisite the degree lists
