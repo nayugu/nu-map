@@ -377,25 +377,24 @@ export default function PlanLibrary() {
    * loads the lot. The other two exist for the one thing flat files cannot
    * do, which is carry the folder tree.
    */
-  const doExport = async (ids, shape = "files") => {
+  /**
+   * SYNCHRONOUS on purpose — see `exportPlansFlat`. Any `await` before the
+   * downloads spends the click's user activation and the browser then drops
+   * them, which is the bug that made exporting several plans fail while Save
+   * JSON always worked.
+   */
+  const doExport = (ids, shape = "files") => {
     setExportMenu(null);
     if (shape === "zip")    { setNotice(t("folders.io.exported", { n: exportLibraryZip(ids).plans }), false); return; }
     if (shape === "bundle") { setNotice(t("folders.io.exported", { n: exportLibraryJSON(ids).plans }), false); return; }
 
-    const res = await exportPlansFlat(ids);
+    const res = exportPlansFlat(ids);
     if (!res.ok) {
-      // Dismissing the folder picker is not a failure and says nothing. Nor is
-      // a double-click landing while the picker is already open.
-      if (res.reason === "cancelled" || res.reason === "busy") return;
       setNotice(t(res.reason === "empty" ? "folders.io.err.noplans" : "folders.io.err.write"));
       return;
     }
-    // Name the route, because the three land in different places: a folder you
-    // chose, your Downloads, or a single .zip to expand.
-    setNotice(t(
-      res.via === "folder" ? "folders.io.exportedFolder"
-      : res.via === "zip"  ? "folders.io.exportedZip"
-      : "folders.io.exportedOne", { n: res.plans }), false);
+    setNotice(t(res.plans === 1 ? "folders.io.exportedOne" : "folders.io.exportedFiles",
+      { n: res.plans }), false);
   };
 
   const exportMenuItems = (ids) => [

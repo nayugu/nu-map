@@ -762,10 +762,6 @@ const { locale, setLocale, locales, t } = useLanguage();
   const bankResizing  = useRef(null);
   const undoStack     = useRef([]);
   const redoStack     = useRef([]);
-  // True while a directory picker is open. The browser allows only one at a
-  // time, and a second call while one is up rejects — which used to be read
-  // as "this browser has no picker" and silently downgrade the export.
-  const exportBusy    = useRef(false);
   // Stale-closure escape hatches for keyboard handler
   const stateRef      = useRef({ placements: {}, specialTermPl: {}, semOrders: {}, placedOut: new Set() });
   const buildPlanContextRef = useRef(() => ({})); // sync-payload builder, refreshed each render
@@ -3462,34 +3458,33 @@ const { locale, setLocale, locales, t } = useLanguage();
    *      exact moment the user believes they are taking a backup.
    *   3. NEVER ONE AGGREGATE FILE. N plans is N files.
    *
-   * Getting N files out of a browser is the hard part. There is exactly one
-   * primitive that always works — a SINGLE download — so every path below
-   * reduces to either that or to a folder the user explicitly granted:
+   * It is literally `exportPlanJSON` — the Save JSON button — run once per
+   * selected plan, and it is SYNCHRONOUS for that reason.
    *
-   *   - 1 plan → one download. Needs no permission in any browser.
-   *   - N plans, directory picker available (Chromium) → one permission
-   *     prompt, then N files written flat into the folder they chose.
-   *   - N plans, no picker (Safari, Firefox) → ONE .zip containing the same
-   *     N flat files.
+   * That matters more than it looks. A browser only honours a download that
+   * happens while the click that asked for it is still "live" (transient user
+   * activation). Earlier versions awaited a directory picker before writing
+   * anything, and every download after that await ran with the activation
+   * already spent, so the browser dropped them — which is why Save JSON always
+   * worked and exporting several plans did not. Issuing all N clicks in the
+   * same synchronous turn puts them under one activation, which is also what
+   * makes a browser treat them as ONE "allow multiple downloads?" question
+   * instead of N.
    *
-   * What is deliberately gone is "N plans → N downloads". A browser treats a
-   * burst of downloads as one suspicious act and drops everything after the
-   * first until a permission bubble is answered, so that path exported one
-   * file out of forty and reported forty. Measured: the code issues all N
-   * correctly (4/4 across three consecutive runs under a harness that
-   * auto-accepts downloads) — which is precisely why it could not be fixed in
-   * JS. The browser, not the app, was refusing. A zip is one download, so it
-   * cannot be throttled, and unzipping yields exactly the individual plan
-   * files the flat export promises. That is the only reason a zip appears
-   * here; it is a transport, not a format anyone has to deal with.
+   * So: no picker, no zip, no await, no fallbacks to get wrong. The folder
+   * tree is not preserved because the export is flat by design, and a plan is
+   * named what the user named it, deduplicated globally so two advisees'
+   * "Current" cannot overwrite each other.
    *
-   * Never throws. Every failure comes back as a reason the UI can name.
+   * The .zip and single-bundle shapes still exist on the right-click menu for
+   * anyone who wants one file, but they are choices now, not fallbacks.
+   *
+   * Never throws. Failure comes back as a reason the UI can name.
    *
    * @param {string[]|null} ids  selected nodes, or null for the whole library
-   * @returns {Promise<{ok: true, plans: number, via: 'folder'|'download'|'zip'}
-   *                  |{ok: false, reason: 'empty'|'cancelled'|'write'}>}
+   * @returns {{ok: true, plans: number}|{ok: false, reason: 'empty'|'write'}}
    */
-  const exportPlansFlat = async (ids = null) => {
+  const exportPlansFlat = (ids = null) => {
     let doc;
     try {
       saveCurrentPlanToSlot();
@@ -3511,75 +3506,24 @@ const { locale, setLocale, locales, t } = useLanguage();
 
     const download = (file) => {
       const a = document.createElement("a");
-      a.href = URL.createObjectURL(
-        file.blob ?? new Blob([file.text], { type: "application/json" }));
+      a.href = URL.createObjectURL(new Blob([file.text], { type: "application/json" }));
       a.download = file.name;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
-      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      // Held far longer than the single-plan export's 1 s. Forty downloads
+      // queue behind one another, and revoking a blob the browser has not
+      // started reading yet cancels that download — which would look exactly
+      // like the bug this whole function exists to fix.
+      setTimeout(() => URL.revokeObjectURL(a.href), 120_000);
     };
 
-    const files = doc.plans.map(fileOf);
-
-    // One file: a plain download, always permitted, no picker in the way.
-    if (files.length === 1) {
-      try { download(files[0]); return { ok: true, plans: 1, via: "download" }; }
-      catch { return { ok: false, reason: "write" }; }
+    try {
+      for (const p of doc.plans) download(fileOf(p));
+    } catch {
+      return { ok: false, reason: "write" };
     }
-
-    /** Every file in one download. Cannot be throttled; unzips to the same files. */
-    const asZip = () => {
-      try {
-        const enc = new TextEncoder();
-        const bytes = writeZip(files.map(f => ({ path: f.name, data: enc.encode(f.text) })));
-        download({
-          name: `${doc.plans.length} plans - ${suffix} - ${dateStr}.zip`,
-          text: null, blob: new Blob([bytes], { type: "application/zip" }),
-        });
-        return { ok: true, plans: files.length, via: "zip" };
-      } catch {
-        return { ok: false, reason: "write" };
-      }
-    };
-
-    if (typeof window !== "undefined" && typeof window.showDirectoryPicker === "function") {
-      // Only ONE picker may be open at a time. A second call while one is
-      // still up rejects, and the old code read that rejection as "no picker
-      // here" and fell back to N downloads — which the browser then throttled.
-      // That is the whole "it only works the first time" bug: dismiss the
-      // dialog by clicking away rather than cancelling, and every later export
-      // took the broken path. The guard is a plain ref because it must survive
-      // re-renders and must never be left set.
-      if (exportBusy.current) return { ok: false, reason: "busy" };
-      exportBusy.current = true;
-      let dir = null;
-      try {
-        dir = await window.showDirectoryPicker({ mode: "readwrite", id: "numap-export" });
-      } catch (err) {
-        // Dismissing the dialog — by Cancel, Escape or clicking away — is an
-        // AbortError and is not a failure to report.
-        if (err && err.name === "AbortError") return { ok: false, reason: "cancelled" };
-        dir = null;                       // policy block, lost gesture: use the zip
-      } finally {
-        exportBusy.current = false;       // ALWAYS, or one dismissal wedges export forever
-      }
-      if (dir) {
-        try {
-          for (const f of files) {
-            const handle = await dir.getFileHandle(f.name, { create: true });
-            const w = await handle.createWritable();
-            await w.write(f.text);
-            await w.close();
-          }
-          return { ok: true, plans: files.length, via: "folder" };
-        } catch {
-          return { ok: false, reason: "write" };
-        }
-      }
-    }
-
-    return asZip();
+    return { ok: true, plans: doc.plans.length };
   };
 
   /** Read one dropped file into an incoming {folders, plans}, whatever it is. */
