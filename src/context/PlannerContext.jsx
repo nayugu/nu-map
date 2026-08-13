@@ -35,7 +35,8 @@ import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
          siblingsInOrder, SORT_MODES } from "../core/planFolders.js";
 import { buildLibraryFile, parseLibraryFile, mergeLibrary,
-         libraryToArchive, archiveToLibrary, flatPlanFiles } from "../core/planLibraryFile.js";
+         libraryToArchive, archiveToLibrary, flatPlanFiles,
+         FILE_ENVELOPE_KEYS } from "../core/planLibraryFile.js";
 import { writeZip, readZip } from "../core/zipFile.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
@@ -2000,6 +2001,15 @@ const { locale, setLocale, locales, t } = useLanguage();
   const onDragStart = (e, id, type, fromSem, extra = {}) => {
     e.stopPropagation();
     e.dataTransfer.effectAllowed = "move";
+    // Safari will not render a drag image unless the drag carries DATA. Chrome
+    // and Firefox are lenient and synthesise a ghost from the source element
+    // anyway, so for years this looked fine everywhere except Safari, where a
+    // dragged course went invisible mid-flight and only reappeared once it
+    // landed — the drop itself always worked, which is why it read as a
+    // rendering glitch rather than a missing call. The plan-library tree sets
+    // this and has never had the problem; the canvas did not and always has.
+    // Wrapped because a few browsers throw here when a drag is already active.
+    try { e.dataTransfer.setData("text/plain", String(id)); } catch {}
     // Defer the dragInfo state update by a frame. Setting it synchronously here
     // re-renders the source mid-`dragstart` — e.g. a grad summer session expands
     // its slot grid 1→2 columns, relaying out the very card being grabbed — which
@@ -3602,10 +3612,16 @@ const { locale, setLocale, locales, t } = useLanguage();
       try {
         const d = JSON.parse(text);
         if (d && typeof d === "object" && d.version === 1) {
-          const { planName, ...rest } = d;
+          const { planName, planStudent, ...rest } = d;
           return { ok: true, folders: [], plans: [{
             id: "single", name: planName || file.name.replace(/\.json$/i, "") || "Plan",
-            parentId: null, studentType: d.studentType === "graduate" ? "graduate" : "undergrad",
+            parentId: null,
+            // The advisee a plan is filed to is index-only, so a per-plan file
+            // carries it in the envelope or loses it entirely — which is what
+            // used to happen to a whole roster on export → import.
+            ...(typeof planStudent === "string" && planStudent.trim()
+              ? { student: planStudent.trim() } : {}),
+            studentType: d.studentType === "graduate" ? "graduate" : "undergrad",
             data: rest,
           }] };
         }
@@ -3732,8 +3748,12 @@ const { locale, setLocale, locales, t } = useLanguage();
       const id = `plan_${Date.now()}`;
       const base = d.planName || "Plan";
       const name = base.startsWith("+") ? base : `+ ${base}`;
+      // The envelope is index data, not plan body — it must not be written
+      // into the slot, where it would ride along in every later export.
+      const body = { ...d };
+      for (const k of FILE_ENVELOPE_KEYS) delete body[k];
       try {
-        localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d));
+        localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(body));
       } catch (err) {
         fail(/quota/i.test(String(err)) ? "quota" : "write");
         return;
@@ -3744,6 +3764,8 @@ const { locale, setLocale, locales, t } = useLanguage();
       setPlans(prev => [...prev, {
         id, name, studentType: d.studentType ?? "undergrad",
         parentId: null, lastOpened: Date.now(),
+        ...(typeof d.planStudent === "string" && d.planStudent.trim()
+          ? { student: d.planStudent.trim() } : {}),
       }]);
       setActivePlanId(id);
       if (Array.isArray(d.substitutions)) setSubstitutions(d.substitutions);

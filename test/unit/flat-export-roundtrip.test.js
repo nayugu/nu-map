@@ -15,8 +15,10 @@ import assert from "node:assert/strict";
 
 import {
   buildLibraryFile, flatPlanFiles, parseLibraryFile, mergeLibrary,
+  libraryToArchive, archiveToLibrary, LIBRARY_INDEX_PATH, FILE_ENVELOPE_KEYS,
 } from "../../src/core/planLibraryFile.js";
 import { buildTree } from "../../src/core/planFolders.js";
+import { SHARE_KEYS } from "../../src/core/planSchema.js";
 
 // ── Fixture ───────────────────────────────────────────────────────────
 
@@ -88,6 +90,48 @@ test("flat export › the whole library survives export → import unchanged", (
   // Ids are re-minted, so importing a file exported from THIS browser cannot
   // overwrite the plans it came from.
   for (const p of merged.plans) assert.ok(!PLANS.some(o => o.id === p.id), "id reused");
+});
+
+// ── The advisee survives the round trip ───────────────────────────────
+
+test("flat export › a file remembers whose plan it is", () => {
+  // `student` is index-only — deliberately kept out of the plan snapshot so it
+  // can never ride a share link — which means a per-plan file had nowhere to
+  // put it and an advisor's entire roster evaporated on export → import.
+  const files = flatPlanFiles(docFor(null));
+  const byName = new Map(files.map(f => [f.json.planName + "|" + (f.json.planStudent ?? ""), f]));
+  assert.ok(byName.has("Current|Jane Doe"), "Jane's plan lost its advisee");
+  assert.ok(byName.has("Four-year|Priya Raman"), "Priya's plan lost its advisee");
+});
+
+test("flat export › a plan filed to nobody carries no advisee key at all", () => {
+  const [loose] = flatPlanFiles(docFor(["p0"]));
+  assert.equal("planStudent" in loose.json, false);
+});
+
+test("flat export › the advisee comes back through the archive's own files", () => {
+  // A hand-edited zip loses the index and falls back to the entries; the
+  // advisee has to survive that route too.
+  const doc = docFor(null);
+  const entries = libraryToArchive(doc).filter(e => e.path !== LIBRARY_INDEX_PATH);
+  const rebuilt = archiveToLibrary(entries.map(e => ({ path: e.path, text: JSON.stringify(e.json) })));
+  assert.ok(rebuilt.ok, `archive rebuild failed: ${rebuilt.reason}`);
+  const students = rebuilt.plans.map(p => p.student ?? "").filter(Boolean).sort();
+  assert.deepEqual(students, ["Jane Doe", "Marcus Lee", "Priya Raman"]);
+});
+
+test("flat export › the ADVISEE never enters a share link", () => {
+  // The two envelope fields are not alike, and the difference is the whole
+  // reason `student` was index-only to begin with:
+  //   planName    — deliberately shared, so a recipient sees what the plan is
+  //                 called. It has a share key (`pn`).
+  //   planStudent — the name of the person whose plan it is. It exists in a
+  //                 FILE, which already carries grades, and must never reach a
+  //                 link, which goes to someone else.
+  assert.ok(SHARE_KEYS.planName, "planName is expected to be shareable");
+  assert.equal(SHARE_KEYS.planStudent, undefined,
+    "the advisee's name is encodable into a share link — it must not be");
+  assert.deepEqual([...FILE_ENVELOPE_KEYS].sort(), ["planName", "planStudent"]);
 });
 
 // ── Scope: plans only, folders contribute their contents ──────────────
