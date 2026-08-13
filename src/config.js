@@ -40,3 +40,25 @@ export const institutionAdapter = wire({
   // UI) pointing at localhost.
   ...(import.meta.env.DEV || import.meta.env.VITE_MCP_SERVER_URL ? { aiAssistant, shareRelay } : {}),
 });
+
+/**
+ * Whether NU Map may offer to CONTRIBUTE course ratings.
+ *
+ * Recording your own hours and difficulty works regardless — that half is
+ * local, complete, and useful on its own. This flag governs only the
+ * pooling: the settings toggle and the consent sheet.
+ *
+ * It is false in production until the collector exists, on the same
+ * principle as the Claude integration above: a feature may be built and
+ * documented before its front door opens, but an app must never offer a
+ * switch that promises something it cannot do. Someone flipping
+ * "Contribute course ratings" and reading a sheet about pooling their
+ * answers has been told a thing that is not true, even though nothing is
+ * actually sent.
+ *
+ * Flip by setting VITE_RATINGS_SERVER_URL at build time, once there is a
+ * server to point it at.
+ */
+export const ratingSharingAvailable = Boolean(
+  import.meta.env.DEV || import.meta.env.VITE_RATINGS_SERVER_URL,
+);

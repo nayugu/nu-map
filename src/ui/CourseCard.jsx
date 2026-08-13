@@ -9,7 +9,7 @@ import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { REL_STYLE } from "../core/constants.js";
 import { baseId, takesUsed } from "../core/repeatInstances.js";
-import GradePopover from "./GradePopover.jsx";
+import CourseReviewPopover from "./CourseReviewPopover.jsx";
 import { takeConsumesSlot } from "../core/gradeSystem.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTheme }    from "../context/ThemeContext.jsx";
@@ -46,7 +46,7 @@ function fadeSubjectColor(hex, k, isDark) {
   return `rgb(${Math.round((rr + m) * 255)},${Math.round((gg + m) * 255)},${Math.round((bb + m) * 255)})`;
 }
 
-// Optional grade entry — a badge chip that opens the dedicated GradePopover
+// Optional grade entry — a badge chip that opens the course review popover
 // (the schedule-popover shape) on click. Rendered only on courses in
 // COMPLETED semesters: grades are facts about the past. The rect is
 // captured eagerly at click time — reading it inside a state updater from
@@ -57,7 +57,13 @@ function fadeSubjectColor(hex, k, isDark) {
 // hover-state and open-state fight — the chip lingered after dismissing,
 // and a mouse-out could kill an open popover. The card keeps the chip
 // mounted exactly while (hovered || graded || open).
-function GradeChip({ pid, grade, setGrade, t, pop, setPop, compact = false }) {
+// The chip opens grade AND rating together: they are the same question
+// ("you took this — how did it go?") and splitting them across two
+// surfaces would leave the second one undiscovered. `pid` carries the
+// grade (per placement, so a retake keeps its own); `courseId` carries the
+// rating (per catalog course + term, so a retake in another term is a
+// separate report rather than an average of two different experiences).
+function GradeChip({ pid, courseId, semId, grade, setGrade, t, pop, setPop, compact = false }) {
   return (
     <>
       <span
@@ -84,8 +90,9 @@ function GradeChip({ pid, grade, setGrade, t, pop, setPop, compact = false }) {
         {grade ?? "–"}
       </span>
       {pop && (
-        <GradePopover pid={pid} grade={grade} rect={pop}
-                      setGrade={setGrade} onDismiss={() => setPop(null)} />
+        <CourseReviewPopover pid={pid} courseId={courseId} semId={semId}
+                             grade={grade} rect={pop}
+                             setGrade={setGrade} onDismiss={() => setPop(null)} />
       )}
     </>
   );
@@ -368,7 +375,8 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
             selected or already graded — the 17px card row has no room for
             a resting affordance on every card */}
         {canEditGrades && isDone && (isSel || grades[course.id] != null || gradePop) && (
-          <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t}
+          <GradeChip pid={course.id} courseId={baseId(course.id)} semId={semId}
+            grade={grades[course.id]} setGrade={setGrade} t={t}
                      pop={gradePop} setPop={closeGradePop} compact />
         )}
         {(isViolated || notOffered || coreqViol) && (
@@ -534,7 +542,8 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
             stays mounted while its popover is open so the popover survives
             the pointer leaving the card — and vanishes with the dismiss. */}
         {canEditGrades && inSem && isDone && (grades[course.id] != null || isMouseHov || gradePop) && (
-          <GradeChip pid={course.id} grade={grades[course.id]} setGrade={setGrade} t={t}
+          <GradeChip pid={course.id} courseId={baseId(course.id)} semId={semId}
+            grade={grades[course.id]} setGrade={setGrade} t={t}
                      pop={gradePop} setPop={closeGradePop} />
         )}
         {isViolated && violationType === "order" && (

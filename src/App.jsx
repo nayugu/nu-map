@@ -3,6 +3,7 @@
 // AGPL-3.0-only + attribution term under §7(b); see LICENSING.md and NOTICE.
 //
 // APP  -- composition root (hexagonal architecture)
+import { useState }                    from 'react';
 import { PlannerProvider, usePlanner } from './context/PlannerContext.jsx';
 import { RelevanceProvider }           from './context/RelevanceContext.jsx';
 import { CandidatesProvider }          from './context/CandidatesContext.jsx';
@@ -28,6 +29,8 @@ import PlanLibrary      from './ui/PlanLibrary.jsx';
 import PalettePanel     from './ui/PalettePanel.jsx';
 import MigrationBanner  from './ui/MigrationBanner.jsx';
 import DevClockPanel    from './ui/DevClockPanel.jsx';
+import TermReviewPrompt from './ui/TermReviewPrompt.jsx';
+import PastClassRater   from './ui/PastClassRater.jsx';
 
 // Main planner layout -- consumes PlannerContext
 function PlannerApp() {
@@ -119,8 +122,66 @@ function PlannerApp() {
       <StatsPanel />
       <PlanLibrary />
       <MigrationBanner />
+      <TermReviewPreview />
       {/* {import.meta.env.DEV && <DevClockPanel />} */}
     </div>
+  );
+}
+
+// ── Dev-only preview of the term review sheet ──────────────────────
+// `?preview=review`, following the same convention RecoveryBoundary uses
+// for `?preview=crash`. The real trigger (a completed term, some weeks
+// after its end date) is not wired yet, and this exists so the sheet can
+// be looked at without faking a system clock. DEV-gated, so it cannot
+// reach a production bundle.
+function TermReviewPreview() {
+  const { SEMESTERS, placements, courseMap } = usePlanner();
+  const search = window.location.search;
+  const past = import.meta.env.DEV && /[?&]preview=past\b/.test(search);
+  const on   = past || (import.meta.env.DEV && /[?&]preview=review\b/.test(search));
+  const [open, setOpen] = useState(on);
+  if (!on || !open) return null;
+
+  // ?preview=past — the retrospective entry point, which owns its own term
+  // selection, so it needs nothing assembled here.
+  if (past) {
+    return (
+      <PastClassRater
+        onSubmitOne={one => console.log("[preview] submit one", one)}
+        onDismiss={() => setOpen(false)}
+      />
+    );
+  }
+
+  // Take whichever semester actually holds courses, so the sheet has rows
+  // to draw against a real plan rather than a fixture.
+  const bySem = {};
+  for (const [pid, p] of Object.entries(placements ?? {})) {
+    if (p?.semId) (bySem[p.semId] ??= []).push([pid, p]);
+  }
+  const semId = Object.keys(bySem).sort(
+    (a, b) => bySem[b].length - bySem[a].length,
+  )[0];
+  const sem = SEMESTERS.find(s => s.id === semId);
+  const rows = (bySem[semId] ?? []).map(([pid, p]) => {
+    const c = courseMap?.[p.courseId] ?? {};
+    return {
+      pid,
+      courseId: p.courseId,
+      code:  c.code  ?? p.courseId,
+      title: c.title ?? "",
+      instructors: [],   // real instructors come from Banner once wired
+    };
+  });
+
+  return (
+    <TermReviewPrompt
+      termLabel={sem?.label ?? sem?.id ?? "Term"}
+      termCode={sem?.id ?? "preview"}
+      rows={rows}
+      onSubmit={(termCode, drafts) => console.log("[preview] submit", termCode, drafts)}
+      onDismiss={() => setOpen(false)}
+    />
   );
 }
 

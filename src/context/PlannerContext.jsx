@@ -15,6 +15,7 @@ import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges, coreqPartnersOf } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { pruneSemOrders } from "../core/planSchema.js";
+import { RATINGS_KEY, readRatings, setRatingField, getRating } from "../core/ratingStore.js";
 import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
@@ -382,6 +383,52 @@ export function PlannerProvider({ children }) {
     setCollapseOtherCredits(val);
     try { localStorage.setItem(key("collapse-other-credits"), String(val)); } catch {}
   };
+
+  // ── Your own course ratings (hours / difficulty) ──
+  // Deliberately NOT part of the plan, and not in a plan slot. A grade
+  // belongs to a scenario — it moves the GPA, gates prereqs, decides
+  // whether a requirement is met. A rating belongs to you: you sat in that
+  // course once, whichever plan you happen to be looking at. Keeping it
+  // out of the plan means it survives switching, deleting and importing
+  // plans, and — the part that matters — it cannot ride into an export or
+  // a share link at all, structurally rather than by remembering a flag at
+  // each of the four doors. See src/core/ratingStore.js.
+  const [ratings, setRatings] = useState(() => {
+    try { return readRatings(localStorage.getItem(key(RATINGS_KEY))); }
+    catch { return {}; }
+  });
+  const setRating = useCallback((courseId, semId, field, value) => {
+    setRatings(prev => {
+      const next = setRatingField(prev, courseId, semId, field, value);
+      try { localStorage.setItem(key(RATINGS_KEY), JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const ratingFor = useCallback(
+    (courseId, semId) => getRating(ratings, courseId, semId), [ratings]);
+
+  // ── Consent to contribute ratings ──
+  // Three states, not a boolean: "unasked" is not "no", and treating it as
+  // one would either nag someone who declined or, worse, let a first
+  // submission slip out from a default. Nothing may ever leave the device
+  // while this is anything other than "on".
+  //
+  // Per-device rather than per-plan, and never part of a plan slot: a
+  // consent decision must not ride into a share link or an exported file,
+  // where it would silently become someone else's answer.
+  const [ratingConsent, setRatingConsentRaw] = useState(() => {
+    try {
+      const v = localStorage.getItem(key("rating-consent"));
+      return v === "on" || v === "off" ? v : "unasked";
+    } catch { return "unasked"; }
+  });
+  const setRatingConsent = useCallback((val) => {
+    const v = val === "on" || val === "off" ? val : "unasked";
+    setRatingConsentRaw(v);
+    try { localStorage.setItem(key("rating-consent"), v); } catch {}
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  /** The single gate every submission path must pass through. */
+  const mayShareRatings = ratingConsent === "on";
 
   // ── Privacy: hide grades ──
   // A presentation switch for showing the plan to someone else. OFF by
@@ -4058,6 +4105,8 @@ export function PlannerProvider({ children }) {
     isGraduated, setIsGraduated,
     prereqViolations, coreqViolations, connectedIds, prereqConditions,
     grades, setGrade, enteredGpaStat,
+    ratings, setRating, ratingFor,
+    ratingConsent, setRatingConsent, mayShareRatings,
     totalSHPlaced, totalSHDone,
     bonusSH: pvBonusSH, setBonusSH,
     major:  pv?.major  ?? major,  setMajor,

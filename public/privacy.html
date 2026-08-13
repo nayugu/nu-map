@@ -127,6 +127,61 @@
   </ul>
   </details>
 
+  <h2>Course ratings you contribute</h2>
+  <p class="status">
+    <strong>Status, August 2026:</strong> this is still being built. Nothing is sent
+    anywhere today — if you enter hours or a difficulty now, it stays in your browser like
+    a grade does. It is written out in full because these terms bind us for whenever
+    sharing is switched on, and because you should be able to read them before deciding,
+    not after.
+  </p>
+  <details class="terms">
+  <summary>Read the full terms</summary>
+  <p>
+    NU Map can ask what a course actually cost you — roughly how many hours a week it took,
+    and how hard it felt — so that the next student can see it before they register. This is
+    the only part of NU Map where something you write is pooled with other people's answers
+    rather than sent somewhere you chose. It is <strong>off until you turn it on</strong>,
+    you are asked once before anything is ever sent, and you can stop at any time in
+    settings.
+  </p>
+  <ul>
+    <li><strong>Grades are never part of this.</strong> The review panel shows your grade
+        beside the two rating questions because it is convenient to fill in together, but
+        the grade goes only to your own plan, in your browser. It is not transmitted with a
+        rating, and there is no code path that could send it.</li>
+    <li><strong>A rating carries three things and nothing else:</strong> the course, the
+        hours figure, and the difficulty figure — plus the instructor and term if you
+        supply them. There is no name, no email, no account (NU Map has none), and no
+        device or session identifier.</li>
+    <li><strong>No clock.</strong> The finest time information stored is which term the
+        course was taken in. Nothing records when you filled the form in.</li>
+    <li><strong>Your ratings are not linked to each other.</strong> Each one is sent
+        separately, in a shuffled order, with a token derived per course from a secret that
+        never leaves your device. Two ratings from the same person cannot be joined back
+        together into that person's course history — by anyone, including us. This matters
+        more than it sounds: a full list of the courses somebody took identifies them far
+        better than a name does.</li>
+    <li><strong>Only aggregates are ever published.</strong> Individual answers are never
+        shown. A course's figures appear only once at least five people have answered, and
+        below ten responses only a coarse band is shown, never a number — because an
+        average and a spread published together for a very small group can be solved
+        backwards into the individual answers.</li>
+    <li><strong>Published figures are frozen between updates.</strong> A course's number
+        does not move until at least five further responses have arrived. Without this,
+        comparing two updates would reveal a single new person's exact answer by
+        subtraction.</li>
+    <li><strong>You can change your mind.</strong> Clearing a rating in NU Map removes it
+        from your device, and the per-course token lets that withdrawal be honoured in the
+        pooled data.</li>
+  </ul>
+  <p>
+    Every claim above is a property of code you can read: the rules live in
+    <code>src/core/courseRatings.js</code> and <code>src/core/ratingStore.js</code>, and
+    they are enforced by tests that deliberately try to break them.
+  </p>
+  </details>
+
   <h2>Course translation</h2>
   <p>
     NU Map's interface is translated into eight languages, and those translations ship with the
@@ -147,6 +202,9 @@
     <li>We do not use advertising or tracking networks.</li>
     <li>We do not store plan data server-side except as described above for the
         opt-in Claude integration, for as long as the link exists.</li>
+    <li>We do not attach your identity, your device, or a clock reading to a course
+        rating, and we do not keep anything that would let two of your ratings be
+        recognised as coming from the same person.</li>
   </ul>
 
   <h2>Retention</h2>

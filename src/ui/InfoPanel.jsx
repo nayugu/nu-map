@@ -18,6 +18,7 @@ import { baseId } from "../core/repeatInstances.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTranslation, useCourseTranslation, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { SemLabel } from "./SemLabel.jsx";
+import CourseReviewButton from "./CourseReviewButton.jsx";
 
 export default function InfoPanel() {
   const {
@@ -260,6 +261,9 @@ function CourseInfo({ selCourse, navTo }) {
             <TText>{selCourse.scheduleType}</TText>
           </span>
         )}
+        {/* Renders itself only when the plan says this course is already
+            behind the student — see CourseReviewButton. */}
+        <CourseReviewButton courseId={selCourse.id} />
         {selCourse.repeatable && (() => {
           const overTakes = selCourse.repeatMax != null && takes.length > selCourse.repeatMax;
           return (

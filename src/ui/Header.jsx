@@ -12,6 +12,7 @@ import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
 import { donateEnabled } from "../core/donate.js";
+import { ratingSharingAvailable } from "../config.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslation, useTranslatedText, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -423,6 +424,7 @@ export default function Header() {
     major, major2, conc, minor1, minor2,
     placedOut, substitutions, studentType,
     grades, privateGrades, setPrivateGrades, privateCoop, setPrivateCoop,
+    mayShareRatings, setRatingConsent,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -1815,13 +1817,13 @@ export default function Header() {
               <div style={IO_GROUP_RULED}>
               <div style={IO_GROUP_LABEL}>{t("header.io.group.export")}</div>
               <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title={t("header.io.copy.title")}
-                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 {t("header.io.copy")}
               </button>
               <button className="hdr-btn-dd" onClick={handleExport} title={t("header.io.export.pdf.title")}
-                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 {t("header.io.export.pdf")}
@@ -1832,7 +1834,7 @@ export default function Header() {
               <div style={IO_GROUP_LABEL}>{t("header.io.group.file")}</div>
               <HoverTip tip={t("tip.export.json")}>
               <button className="hdr-btn-dd" onClick={exportPlanJSON}
-                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                   {t("header.io.export.json")}
@@ -1842,7 +1844,7 @@ export default function Header() {
                 onChange={e => { if (e.target.files[0]) { importPlanJSON(e.target.files[0]); e.target.value = ""; } }} />
               <HoverTip tip={t("tip.import.json")}>
               <button className="hdr-btn-dd" onClick={() => document.getElementById("plan-import-input").click()}
-                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                   {t("header.io.import.json")}
@@ -2058,6 +2060,23 @@ export default function Header() {
                   label={t("header.settings.privategrades.name")}
                   aria={privateGrades ? t("header.settings.privategrades.on") : t("header.settings.privategrades.off")}
                   onClick={() => setPrivateGrades(!privateGrades)} />
+
+                {/* Contribute course ratings — the one thing NU Map pools with
+                    other people's answers rather than sending somewhere you
+                    chose, so it is off until asked and reversible here at any
+                    time. Turning it off stops sharing only: your own hours and
+                    difficulty entries stay, and keep showing on your plan.
+
+                    Hidden entirely until there is a collector to contribute
+                    TO (see ratingSharingAvailable): a switch that promises
+                    pooling it cannot perform is worse than no switch. */}
+                {ratingSharingAvailable && (
+                <SettingsToggle on={mayShareRatings} tone="success"
+                  tip={t("tip.shareratings")}
+                  label={t("header.settings.shareratings.name")}
+                  aria={mayShareRatings ? t("header.settings.shareratings.on") : t("header.settings.shareratings.off")}
+                  onClick={() => setRatingConsent(mayShareRatings ? "off" : "on")} />
+                )}
 
                 {/* Hide co-op details — company + role, for showing the plan
                     to someone. Hides the identity everywhere the plan is shown
