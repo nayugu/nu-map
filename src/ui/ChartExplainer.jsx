@@ -112,17 +112,27 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           * `DEFAULT_PREFERENCES.ranked` plus the orderings the search applies inside it. If
           * either list stops matching the code, the code is what changed.
           */}
+        {/* Eight. The first draft had five and quietly omitted three real hard rules:
+          * co-requisites sharing a term (`checkViolations`), no course used twice (the
+          * distinctness matching that every node runs), and co-op length and start season
+          * (`validateDrop`). A list of rules that leaves rules out is worse than no list. */}
         <Section title={t("chart.contract.hard.h")}>
           <ol style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
-            {["1", "2", "3", "4", "5"].map(n => (
+            {["1", "2", "3", "4", "5", "6", "7", "8"].map(n => (
               <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.hard.${n}`)}</li>
             ))}
           </ol>
         </Section>
 
+        {/* Eight, not five. The first draft collapsed these into "major depth before the first
+          * co-op" and "1000-level early, 4000-level late", which lost the two behaviours a
+          * student is most likely to query: a major course that unlocks little of the degree is
+          * pushed LATER (`generatorBar`, measured against this program's own median), and major
+          * electives are pulled EARLIER than terminal requirements — the one deliberate
+          * departure from the published plans, and the reason the engine exists. */}
         <Section title={t("chart.contract.soft.h")}>
           <ol style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
-            {["1", "2", "3", "4", "5"].map(n => (
+            {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map(n => (
               <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.soft.${n}`)}</li>
             ))}
           </ol>
@@ -173,6 +183,37 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
             {["b1", "b2", "b3", "b4", "b5", "b6"].map(k => (
               <li key={k} style={{ marginBottom: 2 }}>{t(`chart.how.${k}`)}</li>
             ))}
+          </ul>
+        </Section>
+
+        {/* ── What it takes as given, and what it cannot know ─────────
+          *
+          * This category was dropped in the rewrite and had to come back. It answers the
+          * questions the other three lists cannot: why does this plan have a fifth year, why is
+          * Summer 1 in use when my department leaves it blank, and was difficulty considered.
+          *
+          * The two per-plan items are rendered only when they are TRUE, so the list stays four
+          * lines for a typical plan instead of stating conditions that do not apply. The last
+          * one is the honest disclosure and is never conditional: a tool that admits what it did
+          * not look at is more trustworthy than one that does not.
+          */}
+        <Section title={t("chart.limits.h")}>
+          <ul style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
+            <li style={{ marginBottom: 2 }}>
+              {t(report.shapeSource === "published"
+                ? "chart.limits.shape.published" : "chart.limits.shape.derived")}
+            </li>
+            {report.extendedBy > 0 && (
+              <li style={{ marginBottom: 2 }}>
+                {t("chart.limits.extended", { n: report.extendedBy })}
+              </li>
+            )}
+            {(report.optionalTermsUsed ?? []).length > 0 && (
+              <li style={{ marginBottom: 2 }}>
+                {t("chart.limits.optional", { terms: report.optionalTermsUsed.join(", ") })}
+              </li>
+            )}
+            <li>{t("chart.limits.nodata")}</li>
           </ul>
           {(report.unschedulable ?? []).length > 0 && (
             <p style={{ margin: "9px 0 0", color: "var(--warn)" }}>
