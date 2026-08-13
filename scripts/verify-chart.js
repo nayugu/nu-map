@@ -120,6 +120,18 @@ const gave = new Map();
 let shapes = 0, made = 0, threw = 0, relaxed = 0;
 let thin = 0, fullTerms = 0, emptyFull = 0;
 
+/**
+ * The quality vector, accumulated over every plan produced.
+ *
+ * Reported and not gated. Its purpose is that a property expressed only as branch ORDER in the
+ * search — which can guarantee nothing — cannot regress silently. Two days of work found these
+ * defects one at a time by accident; a number printed every run finds them the run they appear.
+ */
+const Q = {
+  clumped: 0, studyTerms: 0, fillerCount: 0, fillerPositionSum: 0,
+  loadSpreadSum: 0, longestEmptyRun: 0, plansWithGap: 0,
+};
+
 for (const d of degrees) {
   const variants = d.plan?.plans?.length ? d.plan.plans : [null];
   variants.forEach((variant, vi) => {
@@ -175,6 +187,13 @@ for (const d of degrees) {
     thin += g.thin.length;
     fullTerms += g.fullTerms;
     emptyFull += g.emptyFull.length;
+    Q.clumped += g.quality.clumped;
+    Q.studyTerms += g.quality.studyTerms;
+    Q.fillerCount += g.quality.fillerCount;
+    Q.fillerPositionSum += g.quality.fillerPositionSum;
+    Q.loadSpreadSum += g.quality.loadSpread;
+    Q.longestEmptyRun = Math.max(Q.longestEmptyRun, g.quality.longestEmptyRun);
+    Q.plansWithGap += g.quality.longestEmptyRun > 0 ? 1 : 0;
     if (!g.ok) {
       violations.push({
         label, kind: "hard-rule",
@@ -195,6 +214,24 @@ console.log(`  thin full terms ${thin} of ${fullTerms} (${(100 * thin / (fullTer
 // Counted separately because it is WORSE than thin and was previously invisible: `gatePlan`
 // skipped terms with no cells, so an empty fall or spring passed silently. See chart-gate.js.
 console.log(`  EMPTY full terms ${emptyFull}  — a semester the student is not enrolled in`);
+
+// ── Quality, with the corpus baseline beside each number ────────────
+//
+// A bare figure is not reviewable: "14.3% of terms are clumped" only means something next to
+// the departments' 0.7%. Every baseline here is measured over the published plans and recorded
+// in domains.js or calibration.js — this prints ours against theirs so a regression is obvious
+// without anyone having to remember what good looks like.
+const pct = (n, d) => `${(100 * n / Math.max(1, d)).toFixed(1)}%`;
+console.log(`\n  ── quality (reported, never gated) ──`);
+console.log(`  3+ cells of one requirement in a term   ${Q.clumped} of ${Q.studyTerms} `
+  + `(${pct(Q.clumped, Q.studyTerms)})    departments: 0.7%`);
+console.log(`  mean placeholder position                `
+  + `${(Q.fillerPositionSum / Math.max(1, Q.fillerCount)).toFixed(3)}`
+  + `                    departments: 0.601`);
+console.log(`  mean credit spread within a plan         `
+  + `${(Q.loadSpreadSum / Math.max(1, made)).toFixed(1)} SH`);
+console.log(`  plans with an empty-semester GAP         ${Q.plansWithGap} of ${made} `
+  + `(${pct(Q.plansWithGap, made)})   longest run ${Q.longestEmptyRun} terms`);
 if (refusals.size) {
   console.log(`  refusals: ${[...refusals.entries()].sort((a, b) => b[1] - a[1])
     .map(([k, n]) => `${k} ${n}`).join(", ")}`);
