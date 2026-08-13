@@ -517,9 +517,20 @@ export function improve({
   current = packed.termOf;
   moves += packed.moves;
 
+  // ── Then take the early terms back from the fillers ─────────────
+  //
+  // After the fill, because a fill moves cells between terms and would undo a swap; before
+  // availability, because a course actually running in a season is closer to a hard fact than
+  // earliness is, so it gets the last word between the two swaps. See `reclaimFromFiller`.
+  const reclaimed = reclaimFromFiller(current, {
+    plans, terms, cap, fullLegal, courseMap, studentType, cal,
+  });
+  current = reclaimed.termOf;
+  moves += reclaimed.moves;
+
   // ── Then spend the electives to settle availability ─────────────
   //
-  // Last of the three, and the order is the argument: a swap preserves each term's course
+  // Last of the swaps, and the order is the argument: a swap preserves each term's course
   // count exactly, so it cannot undo the fill above, while a fill moves cells between
   // terms and would undo a swap. See `swapForAvailability`.
   const settled = swapForAvailability(current, { plans, terms, cap, ports, fullLegal, cal });
@@ -564,6 +575,10 @@ export function improve({
     // where. Reported because it is the one place CHART deliberately departs from the
     // published plans, and a departure a student cannot see is one they cannot judge.
     depthTrades: traded.applied,
+    // Which requirements took an early term back from a general elective. Reported for the
+    // same reason: this is the pass that answers the complaint CHART exists for, so its
+    // effect has to be countable rather than asserted.
+    reclaimed: reclaimed.applied,
     reasons: reasonsFor({ plans, terms, termOf: repaired, byId, depthOf, ports, trades }),
   };
 }
@@ -867,6 +882,197 @@ export function tradeDepth(termOf, { plans, terms, cap, courseMap, fullLegal, ca
     current = trial;
     moves++;
     applied.push({ pool: pool.cell.title ?? "", flat: flat.cell.title ?? "", from: j, to: i });
+  }
+  return { termOf: current, moves, applied };
+}
+
+/**
+ * A requirement takes an early term back from a filler.
+ *
+ * ── The defect, measured ────────────────────────────────────────────
+ *
+ * Computer Science BSCS, as generated before this existed: SIX general electives in the three
+ * terms before the first co-op (one whole 8 SH summer half was nothing else), and the 8 SH
+ * `Science Requirement` in term 13, after both co-ops. That is the exact complaint CHART was
+ * built to fix — "departments spend the general electives before the first co-op" — committed
+ * by CHART.
+ *
+ * ── Why no existing mechanism reaches it ────────────────────────────
+ *
+ * Not for want of trying, and the three near-misses are the argument for this one:
+ *
+ * 1. `byConstraint` already puts fillers last, "unconditionally", as its FIRST key. But branch
+ *    order is not plan position: fillers are placed last into whatever gaps remain, and a
+ *    bounded cell that chose a late term while an early one was still open is never revisited.
+ * 2. The elective RESERVE actively causes it. `fill()` charges a non-filler `target - reserve`
+ *    and a filler the full `target`, so every early term looks fuller than it is to the very
+ *    cells that have a claim on it. The mechanism built so electives would not be squeezed into
+ *    year 4 is what puts a real requirement there and hands the elective the early slot.
+ * 3. `tradeDepth` cannot see either end of this swap. Its backward candidates need
+ *    `cell.groups`, and a general elective's groups are `null`; its forward candidates must be
+ *    a MAJOR-subject pool, and `Science Requirement` is BIOL/CHEM. Both ends invisible.
+ *
+ * And the one-cell hill climber cannot reach it either, for the same reason `tradeDepth` is a
+ * swap: pulling Science into term 2 alone overflows a term already at 17 SH with four entries,
+ * so every intermediate single move is illegal even though the endpoint is fine.
+ *
+ * ── Why it is a dominance rule and not a preference ─────────────────
+ *
+ * A filler admits the whole catalog: no pool, no prerequisites of its own, no season it must
+ * run in. It is therefore STRICTLY the most flexible cell in the plan — any term it can
+ * occupy, it can also occupy later. A bounded cell has candidates carrying their own
+ * prerequisites and seasons, so deferring it accumulates real risk: fewer remaining terms in
+ * which its candidates are offered, and less room to reschedule if one is not.
+ *
+ * So this is least-slack-first, and the exchange is dominated rather than merely preferred:
+ * giving the strictly-more-flexible cell the earlier slot is never the better plan. It needs no
+ * weights, no aggregate over a pool's candidates, and no institution knowledge — which is what
+ * makes it survive where unlock value did not. Measured on this program, the science pool gates
+ * 5 in-plan candidates against CS Fundamentals' 39, and 40 of its 44 candidates gate nothing,
+ * so no aggregate of unlock value would have moved it: mean 0.3, min 0.
+ *
+ * ── Termination ─────────────────────────────────────────────────────
+ *
+ * Σ(term index) over bounded cells is a non-negative integer and each accepted swap decreases
+ * it by exactly `gain > 0`, so the pass cannot cycle. Every swap is verified by the same
+ * `fullLegal` every other mutation uses, so the witness, precedence, availability and the thin
+ * -term budget all still hold — and because it only ever transforms a plan that was already
+ * accepted, and keeps the original when a swap does not verify, it cannot turn a plan into a
+ * refusal.
+ */
+export function reclaimFromFiller(termOf, {
+  plans, terms, cap, fullLegal, courseMap, studentType = "undergraduate",
+  cal = DEFAULT_CALIBRATION,
+}) {
+  const fillers = plans.filter(p => p.candidates === null);
+  const bounded = plans.filter(p => p.candidates !== null);
+  if (!fillers.length || !bounded.length) return { termOf, moves: 0, applied: [] };
+
+  let current = new Map(termOf);
+  const applied = [];
+  let moves = 0;
+
+  // ── Evicting a filler must not pile them up somewhere else ─────────
+  //
+  // The pass takes early terms from fillers, so the fillers have to land later, and left
+  // unchecked they land TOGETHER: Computer Science BSCS came out with four general electives
+  // in one spring term, and corpus-wide "3+ cells of one requirement in a term" went from 6.4%
+  // to 11.1% against the departments' 0.7%. A final term that is nothing but placeholders is
+  // not an improvement on a plan that spread them out, whatever the mean position says.
+  //
+  // So the incoming plan sets the ceiling and this pass may not exceed it — the same
+  // non-erosion shape as `maxThin`, and for the same reason: phase 1 handed over a plan whose
+  // filler spread was acceptable, so acceptable is defined as "no worse than that".
+  const fillerIds = new Set(fillers.map(p => p.cell.id));
+  const fillersIn = (assignment, ti) => {
+    let n = 0;
+    for (const id of fillerIds) if (assignment.get(id) === ti) n++;
+    return n;
+  };
+  let maxFillers = 0;
+  for (let ti = 0; ti < terms.length; ti++) maxFillers = Math.max(maxFillers, fillersIn(termOf, ti));
+
+  // ── The convention is a FLOOR, and the asymmetry is the whole point ──
+  //
+  // Two wrong versions preceded this one, both instructive:
+  //
+  // 1. Distance from home, truncated to whole terms the way `termPreference` does it. The
+  //    truncation is deliberate THERE — it manufactures the ties the elective reserve needs to
+  //    bite at all — and it silently disabled the guard here: `Advanced Writing in the
+  //    Disciplines` (home 0.64) sat 3.76 terms from home at study term 2 and 3.24 at study
+  //    term 9, and `Math.floor` made both 3, so eroding the convention read as "no worse".
+  // 2. Exact distance from home. Correct arithmetic, wrong question: home 0.64 of ten study
+  //    terms is term 5.8, so term 3 genuinely IS closer than term 9 — and the pass moved a
+  //    3000-level writing course into the summer of year one on that reasoning.
+  //
+  // Late and early are not symmetric. A course sitting LATER than convention is harmless: the
+  // student has more standing and more prerequisites behind them than the course expects.
+  // Sitting EARLIER is the failure, because that is precisely when the gates nobody recorded
+  // bite — "junior standing or above" lives in prose that `RESTRICTION_ONLY` discards. So the
+  // convention bounds this pass from below and says nothing from above.
+  //
+  // One term of slack, because `LEVEL_POSITION` is a median over 12,848 placements and ±1 term
+  // is inside its own noise — and because a strict floor would refuse the case this pass exists
+  // for, a 1000-level science pool whose home is 1.17 arriving at term 1.
+  const span = Math.max(1, terms.length - 1);
+  const beforeConvention = (ti, want) => ti < want * span - 1;
+
+  // ── Who wins a scarce early slot: convention, not distance travelled ──
+  //
+  // The first version ranked by earliness GAIN, and that ranks by where a cell happens to have
+  // been put rather than by where it belongs. Measured on Computer Science BSCS, the four
+  // reclaimed slots went to `Presentation Requirement`, `Computing and Social Issues`,
+  // `Advanced Writing in the Disciplines` and `Electrical Engineering` — every one of them
+  // sitting in the last study term, so every one of them scoring a gain of 8 or 9 — while the
+  // 8 SH `Science Requirement`, a 1000-level pool that belongs in year one, got nothing because
+  // its gain was merely 7. The scarce resource is the early slot, and gain does not measure who
+  // has a claim on it.
+  //
+  // So the ordering is the cell's conventional home, earliest first. Same quantity as the floor
+  // below, used for a different job: the floor says how early a cell MAY go, this says who gets
+  // there first when they compete. A 1000-level science pool outranks `AFCS 2600 or CY 4170`,
+  // whose group maximum is 4000-level and whose home is therefore late.
+  const homeOf = new Map(bounded.map(p =>
+    [p.cell.id, cellLevelTarget(p, courseMap, studentType) ?? 1]));
+  const pairs = [];
+  for (const want of bounded) {
+    for (const filler of fillers) {
+      const j = current.get(want.cell.id), i = current.get(filler.cell.id);
+      if (i == null || j == null || i >= j) continue;
+      pairs.push({ want, filler, gain: j - i, home: homeOf.get(want.cell.id) });
+    }
+  }
+  pairs.sort((a, b) => a.home - b.home
+    || b.gain - a.gain
+    || String(a.want.cell.id).localeCompare(String(b.want.cell.id))
+    || String(a.filler.cell.id).localeCompare(String(b.filler.cell.id)));
+
+  for (const { want, filler } of pairs) {
+    const j = current.get(want.cell.id), i = current.get(filler.cell.id);
+    if (i == null || j == null || i >= j) continue;            // moved by an earlier swap
+    if (!want.domain.includes(i) || !filler.domain.includes(j)) continue;
+    // The same reachability bar `tradeDepth` uses, so the two operators cannot disagree about
+    // when "earlier" is real: a pool with one reachable candidate at term i has not gained
+    // anything by sitting there.
+    if (isPoolCell(want) && want.reachAt && (want.reachAt[i] ?? 1) < cal.poolReachMin) continue;
+    const trial = new Map(current);
+    trial.set(want.cell.id, i);
+    trial.set(filler.cell.id, j);
+    if (fillersIn(trial, j) > maxFillers) continue;
+    if (!fitsCapacity(trial, plans, terms, cap)) continue;
+    // ── The level convention is a FLOOR here, not something to spend ──
+    //
+    // The first version of this pass ignored it and produced exactly the plan you would
+    // predict: `ENGW 3302 or 3315` — Advanced Writing in the Disciplines, whose conventional
+    // position `cellLevelTarget` puts at 0.64 through the plan — in the summer of year ONE,
+    // and `CS 4530 or 4535` beside it. Both were prerequisite-legal, which is the whole
+    // problem: ENGW 3302's real gate is "junior standing or above", and CS 4530's is CS 3100,
+    // reachable only because its sibling CS 4535 has no prerequisites and the cell needs just
+    // one viable option.
+    //
+    // So the convention is not decoration to be traded for a better placeholder position. It
+    // is the PROXY for every constraint the catalog never recorded — class standing, major
+    // gates, the prerequisite edges nobody wrote down — and `RESTRICTION_ONLY` throws that
+    // prose away, so nothing else in the engine is holding a 3000-level course out of year 1.
+    // Corpus effect of leaving it out: cells of one requirement clumping 3-to-a-term went from
+    // 6.4% to 11.1% against the departments' 0.7%.
+    //
+    // ── And the check is PER CELL, because an aggregate is gameable ────
+    //
+    // The first attempt at this guard compared the plan-wide `level-order` score before and
+    // after, and changed nothing at all: a swap moves TWO cells, and the filler travelling
+    // later improves its own level fit by about as much as the requirement travelling earlier
+    // worsens its. The aggregate stayed flat while the individual placement it existed to
+    // prevent went through. So the rule is stated about the cell being pulled forward, where
+    // the erosion actually happens.
+    //
+    // Earliness is only worth having where it is also conventional.
+    const home = cellLevelTarget(want, courseMap, studentType);
+    if (home != null && beforeConvention(i, home)) continue;
+    if (!fullLegal(trial)) continue;
+    current = trial;
+    moves++;
+    applied.push({ requirement: want.cell.title ?? "", from: j, to: i });
   }
   return { termOf: current, moves, applied };
 }
