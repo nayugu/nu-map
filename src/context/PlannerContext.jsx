@@ -35,7 +35,7 @@ import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
          siblingsInOrder, SORT_MODES } from "../core/planFolders.js";
 import { buildLibraryFile, parseLibraryFile, mergeLibrary,
-         libraryToArchive, archiveToLibrary, flatFileNames } from "../core/planLibraryFile.js";
+         libraryToArchive, archiveToLibrary, flatPlanFiles } from "../core/planLibraryFile.js";
 import { writeZip, readZip } from "../core/zipFile.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
@@ -3505,14 +3505,13 @@ const { locale, setLocale, locales, t } = useLanguage();
     }
     if (!doc.plans.length) return { ok: false, reason: "empty" };
 
-    const names = flatFileNames(doc.plans);
     const suffix = `${institution.shortName ?? institution.name} Map`;
     const dateStr = new Date().toISOString().slice(0, 10);
-    // `planName` is what the single-plan importer reads, so every file here is
-    // an ordinary plan file that opens with Load JSON on its own.
-    const fileOf = (p) => ({
-      name: `${names.get(p.id)} - ${suffix} - ${dateStr}.json`,
-      text: JSON.stringify({ ...p.data, planName: p.name }, null, 2),
+    // The bodies come from core so they can be tested: every one must be a
+    // file the ordinary single-plan Load can open by itself.
+    const fileOf = (f) => ({
+      name: `${f.name} - ${suffix} - ${dateStr}.json`,
+      text: JSON.stringify(f.json, null, 2),
     });
 
     const download = (file) => {
@@ -3530,7 +3529,7 @@ const { locale, setLocale, locales, t } = useLanguage();
       setTimeout(() => URL.revokeObjectURL(a.href), 120_000);
     };
 
-    const files = doc.plans.map(fileOf);
+    const files = flatPlanFiles(doc).map(fileOf);
 
     // One plan: a plain download. No permission involved anywhere.
     if (files.length === 1) {
