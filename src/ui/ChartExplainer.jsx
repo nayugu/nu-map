@@ -153,17 +153,31 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           * "arrangements examined", overstating it by orders of magnitude.
           */}
         <Section title={t("chart.how.h")}>
-          {/* ── The two figures, isolated ─────────────────────────────
+          {/* ── One figure, and why the second one went ───────────────
             *
-            * These were a sentence, and a sentence hides them. The whole point is the RATIO
-            * between an astronomical space and a few thousand placements, and mid-paragraph a
-            * reader has to spot two numerals to see it. Side by side, at size, the comparison
-            * is the first thing read.
+            * The node count was here and has been removed: it measures OUR SEARCH, not the
+            * degree. "5,041 placements" is a fact about the strategy in search.js, and nobody
+            * reading a plan for their own degree has a use for it.
+            *
+            * What survives is a fact about the degree and the catalog — how many ways these
+            * cards fit inside the terms their prerequisites and offering history allow. Each
+            * card's window comes from `criticalPath` earliest/latest, so this is prerequisite
+            * -derived; it does NOT enforce pairwise order between cards, so it is an upper
+            * bound and the label says "allow" rather than claiming every one is valid.
+            *
+            * The exact count of prerequisite-respecting layouts was considered and dropped.
+            * Counting order-preserving maps over a poset is #P-complete in general, and while
+            * it IS tractable here — measured, the median program's largest precedence component
+            * is 3 cells and 77% of cells have no edge at all, so it factorises — the exactness
+            * buys an exponent, not a message. A 3-chain over 12 terms is 1,320 by windows
+            * against 220 exactly, so with a median of 3 edges per program the whole correction
+            * is one or two orders of magnitude out of 10^33. Roughly 150 lines and a
+            * hardness cap to move 33 to 31, inside a sentence that means "astronomically
+            * many": not worth it.
             *
             * A real <sup>, since 10^33 is not how anyone writes a number. It cannot go through
-            * `t()` — that returns a string — nor be concatenated, because the exponent does not
-            * sit in the same place in every language. So the VALUE is composed in JSX and only
-            * the label is translated.
+            * `t()` — that returns a string — so the VALUE is composed in JSX and only the label
+            * is translated.
             */}
           <div style={{
             display: "flex", gap: isPhone ? 16 : 28, margin: "0 0 12px",
@@ -173,10 +187,6 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
             <Stat
               value={<>10<sup>{Math.round(report.searchSpaceLog10 ?? 0)}</sup></>}
               label={t("chart.how.stat.space")}
-            />
-            <Stat
-              value={(report.nodes ?? 0).toLocaleString()}
-              label={t("chart.how.stat.nodes")}
             />
           </div>
           <ul style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
