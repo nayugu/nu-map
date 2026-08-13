@@ -35,30 +35,29 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
 
   const required = report.totalCreditsRequired ?? 0;
 
-  const Section = ({ n, title, children }) => (
-    <section style={{ marginBottom: isPhone ? 12 : 18 }}>
-      <h4 style={{
-        margin: "0 0 6px", fontSize: fzH, fontWeight: 700, letterSpacing: ".01em",
-        display: "flex", alignItems: "baseline", gap: 8,
-      }}>
-        <span style={{
-          fontSize: fz, fontWeight: 700, color: "var(--accent, #fb923c)",
-          fontVariantNumeric: "tabular-nums",
-        }}>{n}</span>
-        {title}
-      </h4>
-      <div style={{ fontSize: fz, lineHeight: 1.55, color: "var(--text-2)" }}>{children}</div>
+  // ── One weight, one colour, no ornament ───────────────────────────
+  //
+  // This had three bold treatments — an accent-coloured section number, a bold heading, and a
+  // bold leading figure on every statistic — which read as emphasis on everything and therefore
+  // emphasis on nothing. A heading is already distinguishable by being a heading.
+  //
+  // The section numbers went entirely: they were decoration, and with only three sections a
+  // large orange "1" beside the first one carried no information at all.
+  const Section = ({ title, children }) => (
+    <section style={{ marginBottom: isPhone ? 14 : 20 }}>
+      <h4 style={{ margin: "0 0 5px", fontSize: fzH, fontWeight: 600 }}>{title}</h4>
+      <div style={{ fontSize: fz, lineHeight: 1.6, color: "var(--text-2)" }}>{children}</div>
     </section>
   );
 
-  /** A fact worth its own line, with the number leading. */
-  const Fact = ({ value, children }) => (
-    <div style={{ display: "flex", gap: 8, alignItems: "baseline", margin: "3px 0" }}>
-      <span style={{
-        minWidth: isPhone ? 26 : 34, textAlign: "right", fontWeight: 700,
-        fontVariantNumeric: "tabular-nums", color: "var(--text-1)",
-      }}>{value}</span>
-      <span>{children}</span>
+  /** One figure, at size, with a quiet label under it. No bold, no accent. */
+  const Stat = ({ value, label }) => (
+    <div style={{ flex: "1 1 0", minWidth: 0 }}>
+      <div style={{
+        fontSize: fzH + 7, lineHeight: 1.15, fontVariantNumeric: "tabular-nums",
+        color: "var(--text-1)",
+      }}>{value}</div>
+      <div style={{ fontSize: fz, color: "var(--text-3)", marginTop: 3 }}>{label}</div>
     </div>
   );
 
@@ -113,58 +112,77 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           * `DEFAULT_PREFERENCES.ranked` plus the orderings the search applies inside it. If
           * either list stops matching the code, the code is what changed.
           */}
-        <section style={{ marginBottom: isPhone ? 12 : 18 }}>
-          <div style={{ fontWeight: 700, marginBottom: 4 }}>{t("chart.contract.hard.h")}</div>
-          <ol style={{ margin: "0 0 12px", paddingInlineStart: 20, lineHeight: 1.55 }}>
+        <Section title={t("chart.contract.hard.h")}>
+          <ol style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
             {["1", "2", "3", "4", "5"].map(n => (
-              <li key={n}>{t(`chart.contract.hard.${n}`)}</li>
+              <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.hard.${n}`)}</li>
             ))}
           </ol>
-          <div style={{ fontWeight: 700, marginBottom: 4 }}>{t("chart.contract.soft.h")}</div>
-          <ul style={{ margin: "0 0 10px", paddingInlineStart: 20, lineHeight: 1.55 }}>
+        </Section>
+
+        <Section title={t("chart.contract.soft.h")}>
+          <ol style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
             {["1", "2", "3", "4", "5"].map(n => (
-              <li key={n}>{t(`chart.contract.soft.${n}`)}</li>
+              <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.soft.${n}`)}</li>
+            ))}
+          </ol>
+        </Section>
+
+        {/* ── How it works ───────────────────────────────────────────
+          *
+          * Six short steps, and deliberately NOT a restatement of the two lists above — the
+          * draft that repeated them is what made this unreadable.
+          *
+          * Two things were cut for being interesting to an engineer and useless to a student:
+          * that 71% of the catalog has no prerequisites, and a description of pruning "whole
+          * regions rather than one arrangement at a time". A student opening this wants to know
+          * whether to trust the plan and why one course sits where it does, and neither fact
+          * helps with either.
+          *
+          * `nodes` is a PLACEMENT, not a complete arrangement — an earlier draft labelled it
+          * "arrangements examined", overstating it by orders of magnitude.
+          */}
+        <Section title={t("chart.how.h")}>
+          {/* ── The two figures, isolated ─────────────────────────────
+            *
+            * These were a sentence, and a sentence hides them. The whole point is the RATIO
+            * between an astronomical space and a few thousand placements, and mid-paragraph a
+            * reader has to spot two numerals to see it. Side by side, at size, the comparison
+            * is the first thing read.
+            *
+            * A real <sup>, since 10^33 is not how anyone writes a number. It cannot go through
+            * `t()` — that returns a string — nor be concatenated, because the exponent does not
+            * sit in the same place in every language. So the VALUE is composed in JSX and only
+            * the label is translated.
+            */}
+          <div style={{
+            display: "flex", gap: isPhone ? 16 : 28, margin: "0 0 12px",
+            borderTop: "1px solid var(--border-2)", borderBottom: "1px solid var(--border-2)",
+            padding: "10px 0",
+          }}>
+            <Stat
+              value={<>10<sup>{Math.round(report.searchSpaceLog10 ?? 0)}</sup></>}
+              label={t("chart.how.stat.space")}
+            />
+            <Stat
+              value={(report.nodes ?? 0).toLocaleString()}
+              label={t("chart.how.stat.nodes")}
+            />
+          </div>
+          <ul style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
+            {["b1", "b2", "b3", "b4", "b5", "b6"].map(k => (
+              <li key={k} style={{ marginBottom: 2 }}>{t(`chart.how.${k}`)}</li>
             ))}
           </ul>
-        </section>
-
-        {/* ── How it works, with this plan's own numbers ──────────────
-          *
-          * The four sections that used to sit here reported a dozen statistics and never said
-          * what the engine DOES, which is the interesting part and the one a reader can check
-          * the grid against. Every figure below is real: `report.cells`, `report.nodes` and
-          * `report.searchSpaceLog10` come straight out of the search.
-          *
-          * The two numbers worth putting side by side are the space and the nodes. Around
-          * 10^31 arrangements exist for a typical degree and a median program finds a legal one
-          * in nineteen attempts — the ratio IS the method, and it explains constraint
-          * propagation to someone who has never heard the phrase.
-          */}
-        <Section n="1" title={t("chart.how.h")}>
-          <ol style={{ margin: "0 0 10px", paddingInlineStart: 20, lineHeight: 1.55 }}>
-            <li>{t("chart.how.s1", { cells: report.cells, sh: report.cellsSH, required })}</li>
-            <li>{t("chart.how.s2")}</li>
-            <li>{t("chart.how.s3")}</li>
-            <li>{t("chart.how.s4")}</li>
-          </ol>
-          <Fact value={`10^${Math.round(report.searchSpaceLog10 ?? 0)}`}>
-            {t("chart.how.space")}
-          </Fact>
-          <Fact value={report.nodes}>{t("chart.how.nodes")}</Fact>
-          <p style={{ margin: "6px 0 0", color: "var(--text-3)" }}>{t("chart.how.ratio")}</p>
           {(report.unschedulable ?? []).length > 0 && (
-            <div style={{
-              margin: "8px 0 0", padding: "7px 9px", borderRadius: 6,
-              background: "var(--warn-bg)", border: "1px solid var(--warn-border)",
-              color: "var(--warn)", fontWeight: 600,
-            }}>
+            <p style={{ margin: "9px 0 0", color: "var(--warn)" }}>
               {t("chart.explain.complete.unschedulable", {
                 n: report.unschedulable.length,
                 courses: report.unschedulable
                   .map(u => (u.courses ?? []).join(" / ") || u.title)
                   .filter(Boolean).join(", "),
               })}
-            </div>
+            </p>
           )}
         </Section>
 
