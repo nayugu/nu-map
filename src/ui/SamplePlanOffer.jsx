@@ -610,6 +610,10 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
           : null}
         plan={chosen}
         programData={programData}
+        // So the preview measures a term against the right registration cap — 16 for a
+        // master's, 19 for an undergraduate. Without it every plan is judged by the
+        // undergraduate ceiling and a graduate term reads as having room it does not have.
+        studentType={studentType}
         programLabel={programLabelOf(path, majorRequirements.fmtProgramLabel)}
       />
     </div>

@@ -100,7 +100,46 @@ export { permissivePorts } from "./ports.js";
  * @param {number} [args.nodeBudget]
  * @returns {{plan: object, report: object} | {refused: {reason, detail, data?}}}
  */
-export function generatePlan({
+export function generatePlan(args = {}) {
+  const first = generateOnce(args);
+  // ── Breadth guidance is a PREFERENCE, and this is what makes it one ──
+  //
+  // Binding an elective to an unmet competency gives it a real candidate set, which is the
+  // whole point — an unbounded cell is invisible to every ordering signal. But a candidate
+  // set is also a CONSTRAINT: the bound course has prerequisites, a season, and has to be
+  // distinct from what the other bound cells take. Left hard it cost 12 plans, and a
+  // guidance feature that refuses a program is strictly worse than no guidance at all.
+  //
+  // So a refusal is not the answer. It is the signal to try again without the guidance,
+  // which is the same ladder logic `attemptPlacement` already uses one level down — and the
+  // same instruction the audit that proposed this gave: never refuse a program over breadth.
+  //
+  // Skipped where it cannot help: a pre-flight refusal is about the requirement data, not
+  // about where courses go, so re-deriving cells would produce the identical verdict at
+  // twice the cost. `mostly-unlabelled` alone is 105 of the corpus's refusals.
+  if (!first.refused || !first.refused.data?.breadthBound) return first;
+  if (PREFLIGHT_REASONS.has(first.refused.reason)) return first;
+
+  const again = generateOnce({ ...args, breadthGuidance: false });
+  // The FIRST refusal is the one reported if both fail: it describes the degree, while the
+  // retry's describes a degree we deliberately handicapped.
+  if (again.refused) return first;
+  return {
+    ...again,
+    report: {
+      ...again.report,
+      relaxed: [...(again.report?.relaxed ?? []), "breadth-guidance"],
+    },
+  };
+}
+
+/** Refusals decided before any course is placed, which breadth binding cannot have caused. */
+const PREFLIGHT_REASONS = new Set([
+  "no-requirements", "no-total-credits", "no-cells", "mostly-unlabelled",
+  "no-study-terms", "does-not-fit", "sections-exceed-degree",
+]);
+
+function generateOnce({
   program, publishedPlan = null, courseMap = {}, ports: rawPorts = {},
   studentType = "undergraduate", preferences = DEFAULT_PREFERENCES,
   depthIndex = null, repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
@@ -124,6 +163,9 @@ export function generatePlan({
   calibration = {},
   // See the call site below. A test-only escape hatch for one propagator, not a tuning knob.
   propagateChains = true,
+  // Set false by the retry in `generatePlan` when binding electives to unmet competencies is
+  // what made the degree unplannable. Not a caller-facing option.
+  breadthGuidance = true,
 } = {}) {
   const cal = withCalibration(calibration);
   const prepSet = new Set(coopPrep);
@@ -135,8 +177,21 @@ export function generatePlan({
   // `concentration` is the student's pick, by title. With one, the concentration cells carry
   // that option's pool and every downstream reader — the prereq floor, the witness, the
   // reachable share, the depth scoring — becomes exact instead of averaged over five pools.
+  // What a co-op earns the student without spending an elective on it. Read from the
+  // PUBLISHED plan, because that is the only evidence this program has a co-op at all —
+  // a derived shape carries none, so a program with no published plan credits nothing and
+  // reserves one more breadth cell than it may need. Conservative in the safe direction:
+  // an extra competency on the plan costs a slot, a missing one costs a graduation.
+  const hasCoop = (publishedPlan?.years ?? []).some(y => (y?.terms ?? [])
+    .some(t => JSON.stringify(t?.entries ?? []).includes("\"coop\":true")));
+  const grantedAttributes = hasCoop ? (ports.coopGrantedAttrs?.({}) ?? []) : [];
+
   let { cells, notes, reconciliation } =
-    deriveCells(program, { courseMap, repeatable, concentration });
+    deriveCells(program, { courseMap, repeatable, concentration, grantedAttributes,
+                           breadthGuidance });
+  // Reported on every refusal so `generatePlan` can tell a program that was handicapped by
+  // breadth binding from one that was never bound at all, without re-deriving to find out.
+  const breadthBound = cells.filter(c => c.nupath).length;
 
 
   // ── 2. The skeleton ─────────────────────────────────────────────
@@ -352,7 +407,7 @@ export function generatePlan({
           detail: `${Math.round(100 * share)}% of this degree's credits are requirements naming `
             + `courses that are no longer offered, so a generated plan would be mostly `
             + `placeholder. The catalog's own requirement list needs updating.`,
-          data: { share, cells: strandedInfo.slice(0, 5) },
+          data: { share, cells: strandedInfo.slice(0, 5), breadthBound },
         },
       };
     }
@@ -408,6 +463,7 @@ export function generatePlan({
           ...placed.failure, tightestTerms: tight.slice(0, 3),
           nodes: placed.nodes, restarts: placed.restarts,
           exhaustedSpace: placed.exhaustedSpace ?? false,
+          breadthBound,
         },
       },
     };

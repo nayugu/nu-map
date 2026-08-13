@@ -194,11 +194,30 @@ export const minCoursesFor = (cal, studentType) =>
  * @param {number} loadSH      credits already in the term
  * @param {number} capSH       the registration cap for this term
  */
-export function termIsFull(bigCourses, loadSH, capSH, cal, studentType) {
+export function termIsFull(bigCourses, loadSH, capSH, cal, studentType, bigSH = null) {
   const min = minCoursesFor(cal, studentType);
   if (min <= 0) return true;                       // no convention here — graduate plans
   if (bigCourses >= min) return true;
-  // Room for one more REAL course means room the student is not using. A fraction of a credit
-  // of slack is not room, hence the tolerance.
-  return loadSH + cal.realCourseSH > capSH + 0.01;
+  // ── Measured against REAL courses, not against everything present ──
+  //
+  // Room for one more real course means room the student is not using — but the room has to
+  // be judged by what is occupying it. Read against the TOTAL load, this clause could not
+  // tell a term that is genuinely full of substantial work from one padded with labs:
+  //
+  //   three 6 SH courses, 18 SH          full — the registrar would refuse a fourth
+  //   three 4 SH courses + 5 SH of labs  NOT full — the labs belong in a term that has
+  //   and seminars, 17 SH                its four already, and the fourth course fits
+  //                                      once they move
+  //
+  // Both read as 17–18 SH with three real courses, and the second is International Business
+  // Spring 2027: `BUSN 1103`, `INTB 2205` and `INTB 2206` take five credits and the fourth
+  // real course no longer fits. The credit ceiling was excusing a shortfall the small courses
+  // had caused, and `gatePlan` inherited the excuse — 53 full terms corpus-wide were reported
+  // as fine on exactly this basis.
+  //
+  // So the slack is measured against the credit held by REAL courses. This changes nothing
+  // for a term with no small courses, which is why Architecture is unaffected: a 16 SH studio
+  // is 16 SH of real course either way. It only bites where padding created the fullness.
+  const substantial = bigSH == null ? loadSH : bigSH;
+  return substantial + cal.realCourseSH > capSH + 0.01;
 }

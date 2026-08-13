@@ -146,6 +146,7 @@ export function generatorBar(plans, courseMap, unlockValue, majorSubjects) {
   return vals[Math.floor(vals.length / 2)];
 }
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
+import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
 
 /**
  * Nodes phase 1 may expand before refusing.
@@ -305,8 +306,21 @@ export const STRICT_TIER_SHARE = 0.4;
  *
  * Rung 2 rises from 3,750 to 7,000, which is the whole point: it is the tier with nothing behind
  * it, and it was the one being starved.
+ *
+ * ── The shares must leave room for the LAST rung to exist ───────────
+ *
+ * `0.25 + 0.40 + 0.35` is exactly 1.00, and the ladder breaks on
+ * `totalNodes >= nodeBudget` before each rung. So a third rung could be added, be correct,
+ * and never execute once — which is precisely what happened to the four-course rung: it was
+ * on the ladder, `canStillFill` honoured its `enforceCardinality: false`, and International
+ * Business still refused with `full-term-cannot-reach-four` at twelve times the clock,
+ * because the loop had already broken.
+ *
+ * A budget that sums to the whole is not a set of reservations; it is a set of claims on the
+ * same nodes, and the last one loses silently. So the shares sum to less than 1 with every
+ * rung named, and adding a rung now means editing this line — which is the point.
  */
-export const TIER_SHARES = Object.freeze({ strict: 0.25, rungs: [0.40, 0.35] });
+export const TIER_SHARES = Object.freeze({ strict: 0.20, rungs: [0.35, 0.28, 0.15] });
 
 /**
  * How close the remaining problem must be to tight before the exact Hall check runs.
@@ -599,6 +613,24 @@ export function placeCells({
     // limit anyone enforces, and `shape: null` swaps this program's own worst published term
     // for the corpus-wide 9 and 5.
     { gave: "term-width", shape: null, wideTerms: true, preferenceFree: true },
+    // ── Last: the four-course bar itself ────────────────────────────
+    //
+    // It is a CONVENTION, and the rest of the system already says so — `gatePlan` keeps
+    // `thin` out of `ok` precisely because "CHART relaxes it where it is unsatisfiable", and
+    // 4.2% of published full terms miss it too. But nothing on this ladder relaxed it: a
+    // four-course rung came off and was never replaced, so a degree that could not satisfy
+    // the convention got no plan at all.
+    //
+    // That is the wrong trade by a distance. A plan with one full term at three courses is
+    // legal, followable, and reported as `thin` — a student can read it and register from
+    // it. A refusal hands them the department's published plan instead, which this corpus
+    // measures at 31.9% season violations. Refusing to print a slightly light term while
+    // recommending a wrong one is not conservatism.
+    //
+    // Last on the ladder, so it is only ever reached once arrangement and width have both
+    // failed: the bar still shapes every plan that can satisfy it.
+    { gave: "four-course-bar", shape: null, wideTerms: true,
+      enforceCardinality: false, preferenceFree: true },
   ];
   const given = [];
   for (let ri = 0; ri < RUNGS.length; ri++) {
@@ -740,6 +772,10 @@ function attemptPlacement({
   // Courses of at least 3 SH per term, which is a different count from the cells above:
   // a one-credit lab and a course are not two courses. See `underFilled`.
   const bigIn = new Array(terms.length).fill(0);
+  // Credits held by REAL courses, tracked beside their count. `termIsFull` measures its slack
+  // against this rather than the total load, so a term padded with labs is not mistaken for
+  // one that is genuinely full — see `termIsFull`.
+  const bigSH = new Array(terms.length).fill(0);
   // Tracked separately from the course count, and PER REQUIREMENT: a term at its
   // elective cap can still take a real course, and stacking four cells of one
   // requirement — four "General Elective" cards, or three "Mathematics Elective" — is
@@ -750,8 +786,53 @@ function attemptPlacement({
   // in 0.7% of terms, against CHART's 14.3%. A cell with no target is its own key, so
   // an unlabelled cell never crowds out anything but itself.
   const reqIn = terms.map(() => new Map());
-  const reqKey = (cell) => cell.target ?? `#${cell.id}`;
+  // ── An UNGUIDED cell is its own requirement, and a scarcer one ──────
+  //
+  // Every general elective shares one key, so `sameReqMax` already caps them at 4 a term —
+  // and 4 is right, because departments do put 4 elective-bucket cells in a term. What they
+  // almost never do is leave four of them UNGUIDED. Measured over 5,978 published study
+  // terms: cells labelled only "Elective" or "General Elective" number ≤2 in 98.8% of terms,
+  // 3 in 55, 4 in 14. Past two they buy the headroom by NAMING — "PSYC elective",
+  // "Upper-division elective", "Foreign language core course".
+  //
+  // So the convention is not a limit on electives, it is a limit on how many cells a term
+  // may leave unsaid. A cell bound to an unmet competency is named and counts under the
+  // ordinary elective key; one that stands for nothing gets this stricter key, which is what
+  // stops International Business printing four identical cards in a term three times over.
+  //
+  // Keyed rather than special-cased, so it rides the machinery that already exists — the
+  // per-term count, the crowding comparator and the relaxation rung all treat it as one more
+  // requirement, and `wideTerms` still lifts it when nothing else will fit.
+  const UNGUIDED = "~general:unguided";
+  const UNGUIDED_PER_TERM_MAX = 3;
+  // What the loosest rung allows: the corpus maximum, reached in 14 of 5,978 terms.
+  const UNGUIDED_RELAXED_MAX = 4;
+  const reqKey = (cell) =>
+    (cell.target === GENERAL_ELECTIVE && !cell.nupath && !cell.spec)
+      ? UNGUIDED
+      : (cell.target ?? `#${cell.id}`);
   const reqCount = (ti, cell) => reqIn[ti].get(reqKey(cell)) ?? 0;
+  /**
+   * The per-term ceiling for THIS cell's requirement.
+   *
+   * `sameReqMax` is 4, the corpus maximum for cells of one requirement, and it stays 4 for
+   * anything the plan can name. An unguided elective gets 3 instead: departments reach 3 in
+   * 55 of 5,978 terms and 4 in 14, so 3 is inside what they do and 4 is the 0.2% tail CHART
+   * was living in.
+   *
+   * The `wideTerms` rung lifts `sameReqMax` to Infinity, and this must NOT lift with it. A
+   * first version tied the two and the cap silently vanished for every program that reached
+   * that rung — International Business among them, which is how it went on printing four
+   * identical cards in a term after the cap was added. Relaxed by ONE step instead, to the
+   * corpus maximum: even at the loosest rung there is no evidence for a fifth unguided cell
+   * in a term, so there is no reading of the corpus that licenses one.
+   */
+  const maxPerTerm = (cell) => {
+    if (reqKey(cell) !== UNGUIDED) return sameReqMax;
+    return Number.isFinite(sameReqMax)
+      ? Math.min(sameReqMax, UNGUIDED_PER_TERM_MAX)
+      : UNGUIDED_RELAXED_MAX;
+  };
   let nodes = 0;
   let worstFailure = null;
   // Reporting only — never fed to nogood learning. See the `block` calls in `step`.
@@ -887,7 +968,7 @@ function attemptPlacement({
    */
   const underFilled = (ti) => {
     if ((terms[ti].weight ?? 1) < 1) return 1;      // a half term cannot satisfy the rule
-    return termIsFull(bigIn[ti], loadSH[ti], cap[ti], cal, studentType) ? 1 : 0;
+    return termIsFull(bigIn[ti], loadSH[ti], cap[ti], cal, studentType, bigSH[ti]) ? 1 : 0;
   };
 
   /**
@@ -1234,7 +1315,7 @@ function attemptPlacement({
       if (bigIn[t] === 0) continue;                     // not in use; may stay that way
       // A term with no ROOM for another real course is already full, however few courses it
       // holds — a 16 SH studio term cannot reach four and needs nothing. See `termIsFull`.
-      if (termIsFull(bigIn[t], loadSH[t], cap[t], cal, studentType)) continue;
+      if (termIsFull(bigIn[t], loadSH[t], cap[t], cal, studentType, bigSH[t])) continue;
       const need = minCourses - bigIn[t];
       if (need <= 0) continue;
       if (need > possible[t]) return false;
@@ -1499,14 +1580,14 @@ function attemptPlacement({
     termOf.set(c.id, ti);
     loadSH[ti] += c.sh ?? 0;
     countIn[ti] += coursesInCell(c);
-    if ((c.sh ?? 0) >= cal.realCourseSH) bigIn[ti] += 1;
+    if ((c.sh ?? 0) >= cal.realCourseSH) { bigIn[ti] += 1; bigSH[ti] += c.sh ?? 0; }
     reqIn[ti].set(reqKey(c), reqCount(ti, c) + 1);
   };
   const unplace = (c, ti) => {
     termOf.delete(c.id);
     loadSH[ti] -= c.sh ?? 0;
     countIn[ti] -= coursesInCell(c);
-    if ((c.sh ?? 0) >= cal.realCourseSH) bigIn[ti] -= 1;
+    if ((c.sh ?? 0) >= cal.realCourseSH) { bigIn[ti] -= 1; bigSH[ti] -= c.sh ?? 0; }
     reqIn[ti].set(reqKey(c), reqCount(ti, c) - 1);
   };
 
@@ -1565,12 +1646,26 @@ function attemptPlacement({
       // Eleven courses in one term fits inside 19 credits and is not a plan anyone
       // would follow. Bounded by the worst any published plan does.
       if (countIn[ti] + coursesInCell(cell) > slotCap[ti]) { block("term-at-slot-cap"); continue; }
-      if (reqCount(ti, cell) + 1 > sameReqMax) { block("too-many-of-one-requirement"); continue; }
+      if (reqCount(ti, cell) + 1 > maxPerTerm(cell)) {
+        block("too-many-of-one-requirement"); continue;
+      }
       // The derived per-term ceiling on real courses. See `bigCap`: where the arithmetic
       // is exactly tight this forbids the five-in-a-term branches that are provably dead.
       if (enforceCardinality && bigCell(plan) && bigIn[ti] + 1 > bigCap[ti]) {
         block("term-at-its-course-ceiling"); continue;
       }
+      // ── A small cell PREFERS a term that has its four already ────────
+      //
+      // Written first as a veto — "this 1 SH course may not go here" — and that was the wrong
+      // shape entirely. Removing options does not help a search find an arrangement; it makes
+      // it fail, and International Business went from a plan with a short spring to no plan at
+      // all. A rule that turns a flawed plan into a refusal has made things worse, because the
+      // fallback is the department's own plan and this corpus measures those at 31.9% season
+      // violations.
+      //
+      // The same rule as a PREFERENCE lives in `termPreference` instead, where it steers
+      // without forbidding: see `crowdsOutAReal`. Kept here as a comment because the veto is
+      // an obvious idea and the next reader deserves to know it was tried and why it lost.
       // Precedence, forward-checked against what is already placed. This is what
       // turns discovering the prereq order from 20,000 nodes of backtracking into
       // a few dozen: the witness would catch a violation eventually, but only
@@ -1695,8 +1790,13 @@ export function describe(f) {
       ? `this degree names ${f.realCourses} courses of ${f.minCourses}+ credits, but `
         + `${f.fullTerms} full terms need ${need} to hold ${f.minCourses} each — `
         + `${need - f.realCourses} short, so some full term must run light`
+      // Not "no arrangement exists" — that is a proof the search does not have. With
+      // `surplus >= 0` the courses plainly COUNT, so the honest statement is that this
+      // search did not find an arrangement, which is a different claim and the one the
+      // evidence supports. Saying otherwise told readers a satisfiable degree was
+      // impossible.
       : `${f.realCourses} courses across ${f.fullTerms} full terms leaves only `
-        + `${f.surplus} spare, and no arrangement of them fills every full term`;
+        + `${f.surplus} spare, and none of the arrangements tried filled every full term`;
   }
   if (f.kind === "prereq-order-with-what-is-placed") {
     return `"${f.title}" cannot sit in any term that agrees with the courses already placed`;

@@ -96,7 +96,7 @@ const TYPE = {
 };
 
 export default function SamplePlanPreview({
-  open, onClose, onReplace, plan, programData, programLabel,
+  open, onClose, onReplace, plan, programData, programLabel, studentType,
 }) {
   const {
     SEMESTERS, courseMap, isPhone,
@@ -184,7 +184,11 @@ export default function SamplePlanPreview({
 
   const unit  = credit.getUnitName();
   const types = special.getTypes?.() ?? [];
-  const ctx   = { view, startMap, contMap, laid, types, unit, isPhone, t };
+  // The registration ceiling and the size of a standard course, so an empty slot is only
+  // drawn where a course could actually go. See `TermBody`.
+  const termMax  = credit.getSemesterMax?.(studentType) ?? Infinity;
+  const oneCourse = credit.getStandardValue?.() ?? 4;
+  const ctx   = { view, startMap, contMap, laid, types, unit, isPhone, t, termMax, oneCourse };
 
   return createPortal(
     <div
@@ -301,7 +305,8 @@ export default function SamplePlanPreview({
 }
 
 /** A fall/spring row: label column, then the term's cards. */
-function MiniTermRow({ sem, view, startMap, contMap, laid, types, unit, isPhone, t }) {
+function MiniTermRow({ sem, view, startMap, contMap, laid, types, unit, isPhone, t,
+                       termMax, oneCourse }) {
   const tb    = TYPE_BG[sem.type] ?? TYPE_BG.special;
   const cards = cardsIn(sem.id, view);
   const run   = runFor(sem.id, laid, startMap, contMap);
@@ -313,7 +318,8 @@ function MiniTermRow({ sem, view, startMap, contMap, laid, types, unit, isPhone,
       padding: "7px 8px", marginBottom: 4, minHeight: 58,
     }}>
       <SemLabelCol sem={sem} sh={loadIn(sem.id, view, startMap, contMap)} unit={unit} isPhone={isPhone} t={t} />
-      <TermBody cards={cards} sem={sem} tb={tb} run={run} types={types} t={t} />
+      <TermBody cards={cards} sem={sem} tb={tb} run={run} types={types} t={t}
+                termMax={termMax} oneCourse={oneCourse} />
     </div>
   );
 }
@@ -337,10 +343,33 @@ function MiniTermRow({ sem, view, startMap, contMap, laid, types, unit, isPhone,
  * the same term — and an earlier draft of this rendered only the block, which
  * would have hidden a course the apply really does place.
  */
-function TermBody({ cards, sem, tb, run, types, t }) {
+function TermBody({ cards, sem, tb, run, types, t, termMax = Infinity, oneCourse = 4 }) {
   const main   = cards.filter(c => c.sh >= 3 || c.shVoided);
   const others = cards.filter(c => c.sh <= 2 && !c.shVoided);
-  const empties = run ? 0 : Math.max(0, (sem.maxSlots ?? 4) - main.length);
+  // ── An empty slot is a claim about ROOM, and `maxSlots` cannot make it ──
+  //
+  // `maxSlots` is a layout constant from `semGrid.js` — 4 for spring, 5 for fall, 2 for a
+  // summer half — describing how many boxes the editable grid draws. It is not a fact about
+  // the degree or the student, so `maxSlots - main.length` rendered a UI constant as a
+  // statement that another course fits.
+  //
+  // It was wrong twice over. The second line is invisible to it, so a term with six courses
+  // read as three: International Business Spring 2027 holds FINA 2201 and two concentration
+  // cells on the main line and BUSN 1103, INTB 2205 and INTB 2206 beneath, and was drawn
+  // with a free slot. And credits were ignored — at 17 of 19 SH no 4 SH course fits however
+  // many boxes are free.
+  //
+  // So the slot is drawn only where a standard course could actually be added. That is the
+  // same credit-aware test the engine and `gatePlan` already use for "is this term full",
+  // rather than a fourth notion of fullness.
+  // Scaled by the term's own weight, so a summer half is measured against half the cap —
+  // the same scaling `termCapacity` applies in the engine.
+  const load = cards.reduce((n, c) => n + (c.sh ?? 0), 0);
+  const cap = termMax * (sem.weight ?? 1);
+  const roomForOne = load + oneCourse <= cap + 0.01;
+  const empties = (run || !roomForOne)
+    ? 0
+    : Math.max(0, (sem.maxSlots ?? 4) - main.length - others.length);
 
   return (
     <div style={{ flex: 1, minWidth: 0 }}>
@@ -378,7 +407,8 @@ function TermBody({ cards, sem, tb, run, types, t }) {
  * carry only what distinguishes them (A/B and their own months) — which is how
  * SummerRow reads.
  */
-function MiniSummerRow({ sems, view, startMap, contMap, laid, types, unit, isPhone, t }) {
+function MiniSummerRow({ sems, view, startMap, contMap, laid, types, unit, isPhone, t,
+                         termMax, oneCourse }) {
   const tb   = TYPE_BG.summer;
   const year = sems[0].label.match(/\d{4}/)?.[0] ?? "";
   const sh   = sems.reduce((sum, s) => sum + loadIn(s.id, view, startMap, contMap), 0);
@@ -401,7 +431,8 @@ function MiniSummerRow({ sems, view, startMap, contMap, laid, types, unit, isPho
             <SemLabelCol sem={sem} sh={loadIn(sem.id, view, startMap, contMap)}
                          unit={unit} isPhone={isPhone} t={t} inline />
             <div style={{ marginTop: 3 }}>
-              <TermBody cards={cards} sem={sem} tb={tb} run={run} types={types} t={t} />
+              <TermBody cards={cards} sem={sem} tb={tb} run={run} types={types} t={t}
+                termMax={termMax} oneCourse={oneCourse} />
             </div>
           </div>
         );

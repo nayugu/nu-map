@@ -497,6 +497,15 @@ export function specLabel(spec) {
  */
 export function deriveCells(programData, {
   courseMap = {}, repeatable = () => false, concentration = null,
+  // Competencies the student earns WITHOUT spending an elective on them — in practice the
+  // ones a co-op grants. `EX` is the most-unmet code in the corpus (244 of 349 programs) and
+  // co-op carries it, so not crediting it would spend a free elective on something the plan
+  // already delivers, in about 70% of programs. Injected rather than read here: which term
+  // is a co-op is a property of the SHAPE, and this function does not have one.
+  grantedAttributes = [],
+  // Dropped by `generatePlan`'s retry when binding electives to competencies is what made
+  // the degree unplannable — the guidance is a preference and this is where it yields.
+  breadthGuidance = true,
 } = {}) {
   const sections = programData?.requirementSections ?? [];
   const cells = [];
@@ -584,6 +593,11 @@ export function deriveCells(programData, {
                          `states ${totalRequired}` });
   }
 
+  // The competencies this degree does not already guarantee, rarest first. Computed once,
+  // from the cells built above, so it sees every named course the program commits to.
+  const breadth = breadthGuidance ? breadthCodes(merged, courseMap, grantedAttributes) : [];
+  let breadthAt = 0;
+
   for (const target of [CONCENTRATION, GENERAL_ELECTIVE]) {
     const ob = byTarget.get(target);
     const wanted = target === GENERAL_ELECTIVE ? geSH : (ob?.shortfallSH ?? 0);
@@ -598,6 +612,16 @@ export function deriveCells(programData, {
                    unit, emitting: n * unit });
     }
     for (let i = 0; i < n; i++) {
+      // ── The breadth tier ────────────────────────────────────────
+      //
+      // The first general-elective cells take an unmet competency each, while there are
+      // unmet codes left to take. Bounded at the number of cells the degree actually has,
+      // never the other way round: in 6.9% of programs the unmet codes outnumber the free
+      // electives, and a degree whose breadth cannot fit in its electives is a fact about
+      // the degree — refusing over it would turn a real constraint into a missing plan.
+      const bind = target === GENERAL_ELECTIVE && breadthAt < breadth.length
+        ? breadth[breadthAt++]
+        : null;
       merged.push({
         id: `${target}#${i}`,
         target,
@@ -605,9 +629,12 @@ export function deriveCells(programData, {
         // that concentration's courses at that point and a card reading "Concentration" would
         // hide the difference between a plan built for one option and a plan built for the
         // union of five. Unchosen it keeps the generic title, which is then the honest one.
+        // The code goes in the title, because the cell now stands for something the student
+        // has to satisfy and a card reading "General Elective" would hide which. The code
+        // itself is not translated — it is the registrar's own label, like "CLAUDE".
         title: target === CONCENTRATION
           ? (resolveConcentration(programData, concentration)?.title ?? "Concentration")
-          : "General Elective",
+          : (bind ? `General Elective (${bind.code})` : "General Elective"),
         sh: unit,
         kind: "open",
         groups: null,
@@ -623,8 +650,13 @@ export function deriveCells(programData, {
         // It is exactly the set of courses that can answer the cell BEFORE they
         // choose, which is what a candidate set means everywhere else here.
         //
-        // General electives keep `null`, correctly: they really do admit anything.
-        spec: target === CONCENTRATION ? concentrationSpec(programData, concentration) : null,
+        // A general elective keeps `null` only while it stands for nothing in particular.
+        // Bound to a competency it is a real candidate set, which is what lets every
+        // ordering signal in the engine see it at all — see `breadthCodes`.
+        spec: target === CONCENTRATION ? concentrationSpec(programData, concentration)
+            : bind ? { keys: new Set(bind.ids), ranges: [] }
+            : null,
+        ...(bind ? { nupath: bind.code } : {}),
         // ── And the union is not, on its own, a legal answer ──────────
         //
         // The union says what MAY answer this cell before the student chooses. It does not say
@@ -783,6 +815,72 @@ function concentrationSpec(programData, chosen = null) {
   const from = picked ? [picked] : options;
   const spec = from.reduce((acc, o) => unionSpec(acc, specForNode(o)), emptySpec());
   return specIsEmpty(spec) ? null : spec;
+}
+
+/**
+ * The NUPath codes a degree still needs, and the courses that carry each.
+ *
+ * ── Why a free elective is the least free cell in the plan ──────────
+ *
+ * A general-elective cell carries `spec: null`, which reads as "admits anything" and is
+ * therefore treated as maximal freedom. It is the opposite. Every ordering signal in this
+ * engine — prereq depth, season, contention, chain height, the witness — is defined over a
+ * CANDIDATE SET, and a cell with none is not ordered badly, it is outside the model. So it
+ * sorts as filler and lands wherever room is left, which is the end. Measured: CHART leaves
+ * 4 unguided cells in a term where departments do that in 0.2% of theirs, and the
+ * International Business plan ends with two consecutive terms of nothing else.
+ *
+ * The departments do not solve this with a cap. They solve it by NAMING: 43% of their
+ * elective-bucket cells say "PSYC elective", "Upper-division elective", "Foreign language
+ * core course". Naming is how a term buys the right to hold more than two of them.
+ *
+ * ── NUPath is the naming the catalog already justifies ──────────────
+ *
+ * The degree genuinely requires the 11 competencies, awarded as 13 codes, and a student who
+ * picks electives at random can miss one and not graduate. So the codes the program's own
+ * coded courses do NOT guarantee have to come from the electives, and a cell bound to one is
+ * not an invented requirement — it is a real one, made visible. That is the difference
+ * between this and preferring, say, the major's own subject: the degree does not require a
+ * free elective to be in your major, and a card claiming so would be wrong information.
+ *
+ * The data has been in the engine all along under a different name: the adapter maps
+ * `nuPath` onto `courseMap[id].attributes`, so `grep nuPath src/engine/` finds nothing while
+ * 1,516 of 7,966 courses carry a code.
+ *
+ * ── Only NAMED cells count as covered ───────────────────────────────
+ *
+ * A `choice` cell is one course OR another, and the two may carry different codes, so it
+ * guarantees neither. Counting it would let a program read as covered by a code no student is
+ * obliged to take. Named cells are the only guarantee, which makes the unmet set an
+ * OVER-estimate — some codes will in practice be covered by whatever fills a pool. That is
+ * the conservative direction: it binds a cell we might not have needed, and a student who
+ * takes an extra course carrying a real competency has lost nothing.
+ *
+ * @returns {{code: string, ids: string[]}[]} unmet codes, rarest first
+ */
+export function breadthCodes(cells, courseMap, granted = []) {
+  const byCode = new Map();
+  for (const id in courseMap) {
+    for (const a of courseMap[id]?.attributes ?? []) {
+      if (!byCode.has(a)) byCode.set(a, []);
+      byCode.get(a).push(id);
+    }
+  }
+  if (!byCode.size) return [];                 // no attribute data: make no claim
+
+  const covered = new Set(granted);
+  for (const c of cells) {
+    if (c.kind !== "named" || !c.groups?.[0]) continue;
+    for (const id of c.groups[0]) {
+      for (const a of courseMap[id]?.attributes ?? []) covered.add(a);
+    }
+  }
+  return [...byCode.entries()]
+    .filter(([code]) => !covered.has(code))
+    // Rarest first, so the scarcest competency gets a cell before the plentiful ones do.
+    // It is also what the search's own MRV tie-break would do with these cells anyway.
+    .sort((a, b) => a[1].length - b[1].length || a[0].localeCompare(b[0]))
+    .map(([code, ids]) => ({ code, ids }));
 }
 
 /**

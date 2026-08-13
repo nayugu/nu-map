@@ -311,11 +311,13 @@ export function checkThresholds({ plans, terms, termOf, ports, studentType, thre
   // Courses of at least 3 SH, counted separately from credit: "four courses" and
   // "sixteen credits" are different claims and only the first is the rule below.
   const big = terms.map(() => 0);
+  // Credit held by real courses — what `termIsFull` measures its slack against.
+  const bigSH = terms.map(() => 0);
   for (const p of plans) {
     const ti = termOf.get(p.cell.id);
     if (ti == null) continue;
     load[ti] += p.cell.sh ?? 0;
-    if ((p.cell.sh ?? 0) >= cal.realCourseSH) big[ti] += 1;
+    if ((p.cell.sh ?? 0) >= cal.realCourseSH) { big[ti] += 1; bigSH[ti] += p.cell.sh ?? 0; }
   }
   const failures = [];
   terms.forEach((t, ti) => {
@@ -366,7 +368,7 @@ export function checkThresholds({ plans, terms, termOf, ports, studentType, thre
     const minCourses = minCoursesFor(cal, studentType);
     // Credit-aware: a term with no room for another real course is full, whatever its count.
     if (w >= 1 && load[ti] > 0 && minCourses > 0
-        && !termIsFull(big[ti], load[ti], bar, cal, studentType)) {
+        && !termIsFull(big[ti], load[ti], bar, cal, studentType, bigSH[ti])) {
       failures.push({ kind: "full-term-under-four", term: ti,
                       label: label(t), courses: big[ti], need: minCourses });
     }
@@ -777,11 +779,12 @@ export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses 
   const isBig = (p) => (p.cell.sh ?? 0) >= cal.realCourseSH;
   const big = terms.map(() => 0);
   const load = terms.map(() => 0);
+  const bigSH = terms.map(() => 0);
   for (const p of plans) {
     const ti = current.get(p.cell.id);
     if (ti == null) continue;
     load[ti] += p.cell.sh ?? 0;
-    if (isBig(p)) big[ti] += 1;
+    if (isBig(p)) { big[ti] += 1; bigSH[ti] += p.cell.sh ?? 0; }
   }
 
   const filled = [];
@@ -795,7 +798,7 @@ export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses 
       // is not enrolled in, which is a different thing and not this rule's business.
       if (w < 1 || load[t] === 0) continue;
 
-      while (!termIsFull(big[t], load[t], cap[t], cal, studentType)) {
+      while (!termIsFull(big[t], load[t], cap[t], cal, studentType, bigSH[t])) {
         let donor = null;
         // `plans` order is deterministic, so the same input yields the same plan.
         for (const p of plans) {
@@ -815,7 +818,7 @@ export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses 
         if (!donor) break;                     // nothing can legally move; report it
         const sh = donor.p.cell.sh ?? 0;
         current = donor.trial;
-        big[t] += 1; load[t] += sh;
+        big[t] += 1; load[t] += sh; bigSH[t] += sh;
         big[donor.from] -= 1; load[donor.from] -= sh;
         moves += 1;
         changed = true;
@@ -1111,13 +1114,14 @@ export function thinFullTerms(assignment, plans, terms, studentType = "undergrad
   if (minCourses <= 0) return 0;
   const big = terms.map(() => 0);
   const load = terms.map(() => 0);
+  const bigSH = terms.map(() => 0);
   const any = terms.map(() => false);
   for (const p of plans) {
     const ti = assignment.get(p.cell.id);
     if (ti == null) continue;
     any[ti] = true;
     load[ti] += p.cell.sh ?? 0;
-    if ((p.cell.sh ?? 0) >= cal.realCourseSH) big[ti] += 1;
+    if ((p.cell.sh ?? 0) >= cal.realCourseSH) { big[ti] += 1; bigSH[ti] += p.cell.sh ?? 0; }
   }
   let n = 0;
   for (let t = 0; t < terms.length; t++) {
@@ -1125,7 +1129,7 @@ export function thinFullTerms(assignment, plans, terms, studentType = "undergrad
     // Without a cap to compare against, fall back to the count — the caller that has one
     // passes it, and a missing cap must not silently make every term look full.
     const full = cap
-      ? termIsFull(big[t], load[t], cap[t], cal, studentType)
+      ? termIsFull(big[t], load[t], cap[t], cal, studentType, bigSH[t])
       : big[t] >= minCourses;
     if (!full) n += 1;
   }
