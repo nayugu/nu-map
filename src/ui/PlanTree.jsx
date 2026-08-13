@@ -86,8 +86,10 @@ export function FolderIcon({ open, size = 14 }) {
  */
 export function PlanIcon({ size = 14, active, studentType }) {
   const isGrad = studentType === "graduate";
-  // Green when this is the plan you're inside — same signal as the row.
-  const tint = active ? "var(--success)" : isGrad ? "var(--planned)" : "var(--text-4)";
+  // The accent when this is the plan you're inside — the same one the row's
+  // left bar uses, so "where I am" is one colour everywhere instead of green
+  // here and something else there.
+  const tint = active ? "var(--active)" : isGrad ? "var(--planned)" : "var(--text-4)";
   return (
     <svg width={size * 1.15} height={size} viewBox="0 0 22 18" aria-hidden="true"
       style={{ flexShrink: 0, display: "block" }}>
@@ -157,6 +159,10 @@ function NameEditor({ value, onCommit, onCancel, density }) {
  * @param {(id, name) => void}   [p.onCommitName]
  * @param {object}   [p.dnd]           { onDragStart, onDragOver, onDragLeave, onDrop }
  * @param {(row) => string} [p.metaOf] right-aligned secondary text
+ * @param {(row) => Array<{text: string, share: string, strong?: boolean}>} [p.cells]
+ *   fixed-share trailing columns for PLAN rows (the library's major/student).
+ *   `share` is a flex-basis like "26%"; `strong` marks the one that should
+ *   read first. Omitted in the header dropdown, which has no room for columns.
  * @param {boolean}  [p.selectMode]    touch: show checkboxes
  */
 export default function PlanTree({
@@ -164,7 +170,7 @@ export default function PlanTree({
   selectedIds = null, editingId = null, focusId = null,
   dropTargetId = null, dropVerdict = "ok", insertAt = null,
   onRowClick, onRowDoubleClick, onRowContextMenu, onToggle, onCommitName, onCancelEdit,
-  dnd = null, metaOf = null, selectMode = false, t,
+  dnd = null, metaOf = null, cells = null, selectMode = false, t,
 }) {
   const compact = density === "compact";
   const iconSize = compact ? 12 : 17;
@@ -172,7 +178,7 @@ export default function PlanTree({
 
   return (
     <div role="tree" style={{ position: "relative" }}>
-      {rows.map(row => {
+      {rows.map((row, i) => {
         const isFolder = row.kind === "folder";
         const isActive = !isFolder && row.id === activePlanId;
         const isSelected = selectedIds?.has(row.id) ?? false;
@@ -180,6 +186,37 @@ export default function PlanTree({
         const isDropTarget = isFolder && dropTargetId === row.id;
         const dropOk = dropVerdict === "ok";
         const meta = metaOf?.(row) ?? "";
+
+        // A RUN of adjacent selected rows draws as ONE block, the way every
+        // file manager does it. Ringing each row separately put two 2px edges
+        // a hairline apart between neighbours, which reads as one fat smudged
+        // divider rather than as two selected items.
+        //
+        // Runs are same-DEPTH only: merging a selected folder with a selected
+        // child would jog the left edge inward mid-block, so the shape would
+        // no longer be a rectangle and would look broken rather than joined.
+        const joins = (other) =>
+          isSelected && other && (selectedIds?.has(other.id) ?? false) && other.depth === row.depth;
+        const runAbove = joins(rows[i - 1]);
+        const runBelow = joins(rows[i + 1]);
+
+        // Per-side, so the inner edges can be dropped. `outline` cannot do
+        // that — it is all four sides or none — which is why selection moved
+        // to inset shadows and `outline` is left to the drop target, where
+        // only ever one row is highlighted at a time.
+        const ring = "var(--active)";
+        const selShadow = isSelected ? [
+          `inset 2px 0 0 ${ring}`,
+          `inset -2px 0 0 ${ring}`,
+          ...(runAbove ? [] : [`inset 0 2px 0 ${ring}`]),
+          ...(runBelow ? [] : [`inset 0 -2px 0 ${ring}`]),
+        ].join(", ") : null;
+
+        const R = compact ? 3 : 6;
+        // Square off the joined end so the block has one continuous side.
+        const radius = isSelected
+          ? `${runAbove ? 0 : R}px ${runAbove ? 0 : R}px ${runBelow ? 0 : R}px ${runBelow ? 0 : R}px`
+          : `${R}px`;
         // Manual-order insertion line. Drawn on the row itself rather than as a
         // separate element so it cannot desync from the list it describes.
         // One boundary, ONE line. edgeZone names a gap from both sides —
@@ -214,25 +251,42 @@ export default function PlanTree({
               padding: compact ? "3px 8px" : "7px 11px",
               paddingLeft: (compact ? 8 : 11) + rowIndent(row.depth),
               fontSize, cursor: "pointer", userSelect: "none",
-              // Three states that must never be confusable:
-              //   drop target — wins over everything, because a drag that
-              //     silently snaps back reads as a bug;
-              //   SELECTED    — a neutral slab, the thing you're about to act on;
-              //   ACTIVE      — the plan you are actually inside. GREEN, not the
-              //     accent: selection and "where I am" are different questions,
-              //     and a shared colour made them indistinguishable the moment
-              //     the active plan was also selected. The left bar keeps it
-              //     readable even then, when the slab underneath is selection.
+              // Three states that must never be confusable — told apart by
+              // SHAPE, not by hue. Colour was doing the work before: selection
+              // was a grey slab and "the plan you're inside" was green, which
+              // read as a second kind of selection and left three colours
+              // competing in one 12px row. Now there is one accent, and the
+              // form says which state it is:
+              //
+              //   ACTIVE      — a solid bar down the left edge (below). No
+              //     fill and no ring, so it never looks picked.
+              //   SELECTED    — a BOLD 2px edge plus a faint tint, drawn once
+              //     around a whole RUN of adjacent selected rows rather than
+              //     around each one. An edge is the thing you can see at a
+              //     glance across a list of forty rows.
+              //   drop target — a DASHED ring, matching the dashed-ghost motif
+              //     the canvas already uses for "this is where it would land",
+              //     so it cannot be mistaken for a selection even when the
+              //     folder under the cursor happens to be selected.
+              //
+              // Only the rejecting drop target introduces a second colour, and
+              // it has to: it is the one state that means "this will not work".
               background: isDropTarget
                 ? (dropOk ? "var(--active-bg)" : "var(--error-bg)")
-                : isSelected ? "var(--card-bg-sel)"
-                : isActive   ? "var(--success-bg)"
+                : isSelected ? "var(--active-bg)"
                 : "transparent",
-              boxShadow: isDropTarget
-                ? `inset 0 0 0 1px ${dropOk ? "var(--active)" : "var(--error)"}`
-                : isSelected ? "inset 0 0 0 1px var(--border-slot)"
-                : isFocused  ? "inset 0 0 0 1px var(--border-2)" : "none",
-              borderRadius: compact ? 3 : 6,
+              outline: isDropTarget
+                ? `2px dashed ${dropOk ? "var(--active)" : "var(--error)"}`
+                : isFocused && !isSelected ? "1px solid var(--border-2)"
+                : "none",
+              // Drawn inside the row's own box so the ring never overlaps the
+              // row above; `outline` alone straddles the border edge.
+              outlineOffset: -2,
+              // Left undefined (not "none") when nothing is selected, so React
+              // omits the property and the stylesheet's hover shadow still
+              // applies — an inline "none" would outrank it and kill hover.
+              boxShadow: selShadow ?? undefined,
+              borderRadius: radius,
             }}
           >
             {/* Manual-order insertion line, drawn ON the boundary between two
@@ -257,12 +311,15 @@ export default function PlanTree({
               }} />
             )}
 
-            {/* The active plan's left bar reads even when it is also selected. */}
+            {/* "The plan you are inside", and the ONLY signal for it. A bar is
+                readable next to a selection ring because the two occupy
+                different edges — the bar cannot be mistaken for part of a
+                rectangle drawn around the whole row. */}
             {isActive && (
               <span aria-hidden="true" style={{
                 position: "absolute", left: Math.max(1, rowIndent(row.depth) - 1), top: compact ? 2 : 4,
-                bottom: compact ? 2 : 4, width: compact ? 2 : 2.5,
-                borderRadius: 2, background: "var(--success)",
+                bottom: compact ? 2 : 4, width: compact ? 2.5 : 3,
+                borderRadius: 2, background: "var(--active)",
               }} />
             )}
             <Guides depth={row.depth} density={density} />
@@ -291,14 +348,36 @@ export default function PlanTree({
                 onCancel={() => onCancelEdit?.()} />
             ) : (
               <span style={{
-                flex: 1, minWidth: 0, overflow: "hidden",
+                // A BOUNDED share of the row, not "whatever is left". With a
+                // single flexible name column the trailing fields started at a
+                // different x on every row, so neither could be read down the
+                // list — which is exactly how you scan for an advisee.
+                ...(cells ? { flex: "1 1 0", minWidth: 0 } : { flex: 1, minWidth: 0 }),
+                overflow: "hidden",
                 textOverflow: "ellipsis", whiteSpace: "nowrap",
                 fontWeight: isActive || isFolder ? 700 : 400,
-                color: isActive ? "var(--success)" : isFolder ? "var(--text-2)" : "var(--text-3)",
+                // The bar and the bold weight already say "you are here"; a
+                // third signal in a fourth colour was the thing making this
+                // row hard to read.
+                color: isActive ? "var(--text-1)" : isFolder ? "var(--text-2)" : "var(--text-3)",
               }}>
                 {row.item.name}
               </span>
             )}
+
+            {/* Fixed-share columns. Each takes the same fraction on every row,
+                so the values line up into readable columns instead of drifting
+                with the length of the name beside them. A folder gets none —
+                its counts still come through `metaOf`. */}
+            {cells && !isFolder && cells(row).map((c, ci) => (
+              <span key={ci} style={{
+                flex: `0 0 ${c.share}`, minWidth: 0,
+                fontSize: compact ? 7.5 : 10,
+                fontWeight: c.strong ? 700 : 400,
+                color: c.strong ? "var(--text-2)" : "var(--text-5)",
+                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+              }}>{c.text}</span>
+            ))}
 
             {meta && (
               <span style={{

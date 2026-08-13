@@ -15,6 +15,7 @@ import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
 import { extractEdges, coreqPartnersOf } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
 import { pruneSemOrders } from "../core/planSchema.js";
+import { RATINGS_KEY, readRatings, setRatingField, getRating } from "../core/ratingStore.js";
 import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
@@ -27,16 +28,15 @@ import { baseId, isInstanceId, takesUsed, resolveAddId, resolveDropId, retakeUnl
 import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
          effectiveGradeOfTakes } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
-import { loadSaved, saveState, writeKey } from "../data/persistence.js";
+import { loadSaved, saveState } from "../data/persistence.js";
 import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam, getHashCodeParam } from "../core/planShare.js";
-import { LIBRARY_BUNDLE_KIND } from "../core/planSchema.js";
-import { buildLibraryBundle, parseLibraryBundle } from "../core/libraryBackup.js";
 import { tabTitle, FIRST_PLAN_NAME } from "../core/tabTitle.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
-         siblingsInOrder } from "../core/planFolders.js";
+         siblingsInOrder, SORT_MODES } from "../core/planFolders.js";
 import { buildLibraryFile, parseLibraryFile, mergeLibrary,
-         libraryToArchive, archiveToLibrary } from "../core/planLibraryFile.js";
+         libraryToArchive, archiveToLibrary, flatPlanFiles,
+         FILE_ENVELOPE_KEYS } from "../core/planLibraryFile.js";
 import { writeZip, readZip } from "../core/zipFile.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
@@ -87,7 +87,10 @@ function redactCoopDetails(stp) {
 }
 
 export function PlannerProvider({ children }) {
-  const { locale, setLocale, locales, t } = useLanguage();
+  // `t` is memoized on locale in LanguageContext, so taking it here adds no
+// render churn; importPlanJSON needs it to report failures in the user's
+// language instead of the raw English it used to alert().
+const { locale, setLocale, locales, t } = useLanguage();
   const institution    = usePort(IInstitution);
   const calendar       = usePort(ICalendar);
   const clock          = usePort(IClock);
@@ -384,6 +387,52 @@ export function PlannerProvider({ children }) {
     setCollapseOtherCredits(val);
     try { localStorage.setItem(key("collapse-other-credits"), String(val)); } catch {}
   };
+
+  // ── Your own course ratings (hours / difficulty) ──
+  // Deliberately NOT part of the plan, and not in a plan slot. A grade
+  // belongs to a scenario — it moves the GPA, gates prereqs, decides
+  // whether a requirement is met. A rating belongs to you: you sat in that
+  // course once, whichever plan you happen to be looking at. Keeping it
+  // out of the plan means it survives switching, deleting and importing
+  // plans, and — the part that matters — it cannot ride into an export or
+  // a share link at all, structurally rather than by remembering a flag at
+  // each of the four doors. See src/core/ratingStore.js.
+  const [ratings, setRatings] = useState(() => {
+    try { return readRatings(localStorage.getItem(key(RATINGS_KEY))); }
+    catch { return {}; }
+  });
+  const setRating = useCallback((courseId, semId, field, value) => {
+    setRatings(prev => {
+      const next = setRatingField(prev, courseId, semId, field, value);
+      try { localStorage.setItem(key(RATINGS_KEY), JSON.stringify(next)); } catch {}
+      return next;
+    });
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const ratingFor = useCallback(
+    (courseId, semId) => getRating(ratings, courseId, semId), [ratings]);
+
+  // ── Consent to contribute ratings ──
+  // Three states, not a boolean: "unasked" is not "no", and treating it as
+  // one would either nag someone who declined or, worse, let a first
+  // submission slip out from a default. Nothing may ever leave the device
+  // while this is anything other than "on".
+  //
+  // Per-device rather than per-plan, and never part of a plan slot: a
+  // consent decision must not ride into a share link or an exported file,
+  // where it would silently become someone else's answer.
+  const [ratingConsent, setRatingConsentRaw] = useState(() => {
+    try {
+      const v = localStorage.getItem(key("rating-consent"));
+      return v === "on" || v === "off" ? v : "unasked";
+    } catch { return "unasked"; }
+  });
+  const setRatingConsent = useCallback((val) => {
+    const v = val === "on" || val === "off" ? val : "unasked";
+    setRatingConsentRaw(v);
+    try { localStorage.setItem(key("rating-consent"), v); } catch {}
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  /** The single gate every submission path must pass through. */
+  const mayShareRatings = ratingConsent === "on";
 
   // ── Privacy: hide grades ──
   // A presentation switch for showing the plan to someone else. OFF by
@@ -714,6 +763,11 @@ export function PlannerProvider({ children }) {
   const bankResizing  = useRef(null);
   const undoStack     = useRef([]);
   const redoStack     = useRef([]);
+  // Monotonic tail for minted plan ids — see `newPlanId`.
+  const planIdSeq     = useRef(0);
+  // True while a directory picker is open. Only one may exist at a time, and
+  // a dialog left open must never wedge export for the rest of the session.
+  const exportBusy    = useRef(false);
   // Stale-closure escape hatches for keyboard handler
   const stateRef      = useRef({ placements: {}, specialTermPl: {}, semOrders: {}, placedOut: new Set() });
   const buildPlanContextRef = useRef(() => ({})); // sync-payload builder, refreshed each render
@@ -763,47 +817,9 @@ export function PlannerProvider({ children }) {
     return () => { mounted = false; };
   }, []);
 
-  // ── Storage alarm ─────────────────────────────────────────────
-  //
-  // A failed write is recovered from silently (the render must not die over a
-  // mirror) but it is no longer SILENT to the user. Without this, a full store
-  // is indistinguishable from a healthy one: edits keep appearing, nothing is
-  // being saved, and the loss only surfaces on the next reload — by which point
-  // the user cannot tell which edits were real.
-  //
-  // Held in a ref as well as state because the reporter is called from write
-  // paths that run inside effects and event handlers; the ref makes "have we
-  // already alarmed" readable without adding the alarm to every dep array, and
-  // keeps a failing autosave from re-rendering on every keystroke.
-  const [storageAlarm, setStorageAlarm] = useState(null); // { kind, at } | null
-  const storageAlarmRef = useRef(null);
-
-  /**
-   * Record a failed write. First failure wins: 'quota' and 'unavailable' need
-   * different advice, and a quota failure that later degrades into a different
-   * error should not relabel the message the user is already reading.
-   * @param {{ok: boolean, kind?: 'quota'|'unavailable'}} res
-   */
-  const reportWrite = (res) => {
-    if (!res || res.ok) return res;
-    if (storageAlarmRef.current) return res;
-    const alarm = { kind: res.kind ?? "unavailable", at: Date.now() };
-    storageAlarmRef.current = alarm;
-    setStorageAlarm(alarm);
-    return res;
-  };
-
-  // Dismissing clears the ref too, so a LATER failure can raise the alarm
-  // again. Anything else would show the warning once per session and then hide
-  // permanent, ongoing data loss.
-  const dismissStorageAlarm = () => {
-    storageAlarmRef.current = null;
-    setStorageAlarm(null);
-  };
-
   // ── Effects: persistence ──────────────────────────────────────
   useEffect(() => {
-    reportWrite(saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, appliedTemplate, planId: activePlanId }));
+    saveState(storagePrefix, persistEnabled, { placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, placedOut: [...placedOut], substitutions, grades: gradesRaw, appliedTemplate, planId: activePlanId });
   }, [persistEnabled, placements, reservations, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, substitutions, gradesRaw]);
 
   useEffect(() => {
@@ -1282,7 +1298,10 @@ export function PlannerProvider({ children }) {
         case "CREATE_PLAN":    createPlan(action.name, action.cohort ?? null);      break;
         case "RENAME_PLAN":    renamePlan(action.planId, action.name);             break;
         case "SWITCH_PLAN":    switchPlan(action.planId);                          break;
-        case "DELETE_PLAN":    deletePlan(action.planId);                          break;
+        // Recoverable for 30 days, and one ⌘Z in the library puts it back. That
+        // matters most on THIS door: a delete Claude performed is the one the
+        // user is least likely to have meant.
+        case "DELETE_PLAN":    deleteNodes([action.planId]);                      break;
       }
     }
 
@@ -1981,9 +2000,61 @@ export function PlannerProvider({ children }) {
     return () => document.removeEventListener('dragend', clear);
   }, []);
 
+  /**
+   * Draw the drag image ourselves, from a copy parked on <body>.
+   *
+   * Safari renders NO drag image for an element inside a transformed
+   * ancestor, and on desktop this whole app lives inside
+   * `transform: scale(uiScale)` (App.jsx) for the zoom control. So a dragged
+   * course went invisible the moment it left the cursor and reappeared where
+   * it landed: the drop always worked, which is exactly why it read as a
+   * rendering glitch. Chrome and Firefox rasterise it regardless, so it
+   * looked correct everywhere else.
+   *
+   * The clone goes on <body>, OUTSIDE the scaled container, and re-applies
+   * the same scale itself — otherwise the ghost would be the layout size
+   * rather than the size actually on screen, and would not line up with the
+   * card the user grabbed. It has to be in the document for the browser to
+   * rasterise it, and has to survive the current frame, so it is parked
+   * offscreen and removed on the next tick.
+   *
+   * Best-effort: any failure leaves the browser's own default image, which is
+   * what every non-Safari browser was using anyway.
+   */
+  const setCardDragImage = (e) => {
+    try {
+      const el = e.currentTarget;
+      const rect = el?.getBoundingClientRect?.();
+      if (!rect?.width || !rect.height || !el.offsetWidth) return;
+      const scale = rect.width / el.offsetWidth;
+      const clone = el.cloneNode(true);
+      Object.assign(clone.style, {
+        position: "fixed", top: "-10000px", left: "-10000px", margin: "0",
+        width: `${el.offsetWidth}px`, height: `${el.offsetHeight}px`,
+        transformOrigin: "0 0", transform: `scale(${scale})`,
+        pointerEvents: "none", opacity: "1",
+      });
+      document.body.appendChild(clone);
+      // Grab point, in the ghost's own coordinates — so the card stays under
+      // the cursor exactly where it was picked up.
+      e.dataTransfer.setDragImage(clone, e.clientX - rect.left, e.clientY - rect.top);
+      setTimeout(() => clone.remove(), 0);
+    } catch { /* default drag image */ }
+  };
+
   const onDragStart = (e, id, type, fromSem, extra = {}) => {
     e.stopPropagation();
     e.dataTransfer.effectAllowed = "move";
+    // Safari will not render a drag image unless the drag carries DATA. Chrome
+    // and Firefox are lenient and synthesise a ghost from the source element
+    // anyway, so for years this looked fine everywhere except Safari, where a
+    // dragged course went invisible mid-flight and only reappeared once it
+    // landed — the drop itself always worked, which is why it read as a
+    // rendering glitch rather than a missing call. The plan-library tree sets
+    // this and has never had the problem; the canvas did not and always has.
+    // Wrapped because a few browsers throw here when a drag is already active.
+    try { e.dataTransfer.setData("text/plain", String(id)); } catch {}
+    setCardDragImage(e);
     // Defer the dragInfo state update by a frame. Setting it synchronously here
     // re-renders the source mid-`dragstart` — e.g. a grad summer session expands
     // its slot grid 1→2 columns, relaying out the very card being grabbed — which
@@ -2589,7 +2660,13 @@ export function PlannerProvider({ children }) {
   const [plans, setPlans] = useState(() => {
     try {
       const raw = localStorage.getItem(key("plan-index"));
-      if (raw) return JSON.parse(raw);
+      const v = raw ? JSON.parse(raw) : null;
+      // Validated like `folders` is, and for the same reason: a key that
+      // parses to an object, or to [], reaches render as a non-array and the
+      // first `plans.map` throws — a blank app that reloads blank every time,
+      // because the bad value is still in storage. A truncated write, a hand
+      // edit or another tab can all produce one.
+      if (Array.isArray(v) && v.length && v.every(p => p && typeof p.id === "string")) return v;
     } catch {}
     return [{ id: "default", name: FIRST_PLAN_NAME }];
   });
@@ -2604,12 +2681,9 @@ export function PlannerProvider({ children }) {
     try { return localStorage.getItem(key("active-plan")) || "default"; } catch { return "default"; }
   });
 
-  // Persist plan index whenever it changes.
-  // Reported for the same reason as the slot write: the index is the LIST of
-  // plans, so losing it orphans every slot — the data is all still there and
-  // nothing can reach it.
+  // Persist plan index whenever it changes
   useEffect(() => {
-    reportWrite(writeKey(key("plan-index"), JSON.stringify(plans)));
+    try { localStorage.setItem(key("plan-index"), JSON.stringify(plans)); } catch {}
   }, [plans]);
   useEffect(() => {
     try { localStorage.setItem(key("active-plan"), activePlanId); } catch {}
@@ -2649,7 +2723,6 @@ export function PlannerProvider({ children }) {
   // An unrecognised stored value falls back to 'name' rather than being
   // trusted: this key predates 'manual', and a future mode removed in a later
   // version must not leave the library sorting by a rule that no longer exists.
-  const SORT_MODES = ["name", "recent", "manual"];
   const [folderSort, setFolderSort] = useState(() => {
     try {
       const v = localStorage.getItem(key("folder-sort"));
@@ -2681,27 +2754,9 @@ export function PlannerProvider({ children }) {
   // History is snapshots, not inverse commands: the plan index and folder list
   // hold only ids, names and parents, so a snapshot is a few hundred bytes and
   // cannot drift out of sync with the operation it is meant to reverse.
-  const TRASH_TTL_MS = 30 * 24 * 60 * 60 * 1000;
+  const TRASH_TTL_DAYS = 30;
+  const TRASH_TTL_MS = TRASH_TTL_DAYS * 24 * 60 * 60 * 1000;
   const FOLDER_HISTORY_MAX = 50;
-
-  /**
-   * The tombstone a delete leaves behind.
-   *
-   * It carries enough of the INDEX entry to put the row back where it was —
-   * parentId and studentType, not just the name. Restoring to the root would
-   * work, but a user who deletes one plan out of a folder and immediately
-   * restores it expects it back in that folder, and the plan's own data slot
-   * has never held its folder (folder membership lives on the index by design,
-   * see the folders block above), so if the tombstone doesn't record it nothing
-   * does. `parentId` is re-validated at restore time — the folder may itself
-   * have been deleted in the meantime.
-   */
-  const tombstoneFor = (plan, at) => ({
-    name: plan?.name ?? "",
-    deletedAt: at,
-    parentId: plan?.parentId ?? null,
-    studentType: plan?.studentType ?? "undergrad",
-  });
 
   const [planTrash, setPlanTrash] = useState(() => {
     try {
@@ -2735,6 +2790,80 @@ export function PlannerProvider({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Deleted plans that can still be brought back, newest first.
+   *
+   * A tombstone is only honest if its slot is still there, so this checks.
+   * The sweep runs once per session; a tombstone whose slot went missing some
+   * other way (a cleared origin, a hand-edited store) must not be offered as
+   * restorable and then restore an empty plan.
+   */
+  const trashedPlans = useMemo(() => {
+    const out = [];
+    for (const [id, rec] of Object.entries(planTrash)) {
+      let alive = false;
+      try { alive = localStorage.getItem(key(`plan-data-${id}`)) != null; } catch {}
+      if (!alive) continue;
+      out.push({ id, name: rec?.name || "Plan", deletedAt: rec?.deletedAt ?? 0 });
+    }
+    return out.sort((a, b) => b.deletedAt - a.deletedAt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planTrash, storagePrefix]);
+
+  /**
+   * Put a deleted plan back at the top level.
+   *
+   * Its slot never went anywhere — deleting only removed the index record —
+   * so this is a pure index restore, the same thing undo does. It returns to
+   * ROOT rather than to the folder it came from: that folder may itself have
+   * been deleted, and re-creating a chain of folders to hold one restored
+   * plan invents structure the user did not ask for. Undo is the way back to
+   * exactly where it was; this is the way back from a reload, where the undo
+   * history is gone and the plan is otherwise unreachable.
+   */
+  const restorePlanFromTrash = (id) => {
+    const rec = planTrash[id];
+    if (!rec) return { ok: false, reason: "gone" };
+    let raw = null;
+    try { raw = localStorage.getItem(key(`plan-data-${id}`)); } catch {}
+    if (raw == null) return { ok: false, reason: "gone" };
+    if (plans.some(p => p.id === id)) return { ok: false, reason: "gone" };
+
+    let studentType = "undergrad";
+    try { studentType = JSON.parse(raw).studentType === "graduate" ? "graduate" : "undergrad"; } catch {}
+
+    pushFolderHistory();
+    setPlans(prev => [...prev, {
+      // Deduplicated like every other name at root: a plan deleted because a
+      // replacement already exists would otherwise come back as its twin.
+      id, studentType,
+      name: uniqueName(siblingNames(planTree, null), rec.name || "Plan"),
+      parentId: null, lastOpened: Date.now(),
+    }]);
+    setPlanTrash(prev => { const next = { ...prev }; delete next[id]; return next; });
+    return { ok: true, id };
+  };
+
+  /**
+   * `activePlanId` must always name a plan that exists.
+   *
+   * Nothing asserted it, and two routes break it. Under storage pressure the
+   * index write can fail (it is the large key) while the 12-byte active-plan
+   * write succeeds, so a reload names a plan the index never got. And with
+   * two tabs open, one tab deleting the plan the OTHER has active leaves
+   * `active-plan` pointing at it — `deleteNodes` only reseats the pointer
+   * when the plan it deleted was active in ITS tab.
+   *
+   * The symptom is quiet and permanent: no row is marked active, the header
+   * falls back to a default name, and the autosave keeps writing a slot no
+   * index lists. Reseating costs nothing when the pointer is already valid.
+   */
+  useEffect(() => {
+    if (!plans.length) return;
+    if (plans.some(p => p.id === activePlanId)) return;
+    setActivePlanId(plans[0].id);
+  }, [plans, activePlanId]);
+
   const folderSnapshot = () => ({ plans, folders, activePlanId });
 
   /** Record the pre-mutation state. Call immediately before mutating. */
@@ -2750,9 +2879,8 @@ export function PlannerProvider({ children }) {
     setPlanTrash(prev => {
       const next = { ...prev };
       for (const id of alive) delete next[id];
-      const now = Date.now();
       for (const p of plans) {
-        if (!alive.has(p.id)) next[p.id] = tombstoneFor(p, now);
+        if (!alive.has(p.id)) next[p.id] = { name: p.name, deletedAt: Date.now() };
       }
       return next;
     });
@@ -2933,7 +3061,7 @@ export function PlannerProvider({ children }) {
    *
    * `deleteScope` normalizes first, so a selection holding both a folder and
    * something inside it counts that child once. At least one plan must always
-   * survive — the same invariant `deletePlan` enforces — and the replacement
+   * survive — this is the only place that invariant lives — and the replacement
    * active plan is chosen from the survivors, so the slot-load effect can
    * never read a key this delete dropped from the index.
    *
@@ -2951,7 +3079,7 @@ export function PlannerProvider({ children }) {
     setPlanTrash(prev => {
       const next = { ...prev };
       for (const id of scope.planIds) {
-        next[id] = tombstoneFor(plans.find(p => p.id === id), now);
+        next[id] = { name: plans.find(p => p.id === id)?.name ?? "", deletedAt: now };
       }
       return next;
     });
@@ -2968,108 +3096,6 @@ export function PlannerProvider({ children }) {
     if (doomedPlans.has(activePlanId)) setActivePlanId(remaining[0].id);
     return { ok: true, ...scope };
   };
-
-  // ── Trash (browsable, survives a reload) ─────────────────────────
-  //
-  // Undo already reversed a delete, but the undo stack is IN MEMORY: reload the
-  // tab and a mistaken delete became unrecoverable even though its data was
-  // still sitting in localStorage under a tombstone. The trash makes that
-  // recoverable through the whole TRASH_TTL window instead of until the next
-  // refresh, which is what "deleting a plan is safe" has to mean for someone
-  // who closes the tab before noticing.
-  //
-  // A tombstoned id whose slot has already been reclaimed is NOT listed:
-  // offering a restore that silently produces an empty plan would be worse than
-  // not offering it. This is also the self-heal for a trash entry that outlived
-  // its data for any reason.
-  const trashedPlans = useMemo(() => {
-    const now = Date.now();
-    return Object.entries(planTrash)
-      .map(([id, meta]) => ({
-        id,
-        name: meta?.name ?? "",
-        deletedAt: meta?.deletedAt ?? 0,
-        parentId: meta?.parentId ?? null,
-        studentType: meta?.studentType ?? "undergrad",
-        expiresAt: (meta?.deletedAt ?? 0) + TRASH_TTL_MS,
-        expiresInMs: Math.max(0, (meta?.deletedAt ?? 0) + TRASH_TTL_MS - now),
-        hasData: (() => {
-          try { return localStorage.getItem(key(`plan-data-${id}`)) != null; }
-          catch { return false; }
-        })(),
-      }))
-      .filter(e => e.hasData)
-      .sort((a, b) => b.deletedAt - a.deletedAt);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [planTrash]);
-
-  /**
-   * Put trashed plans back on the index.
-   *
-   * The data slot was never removed, so this is a pure index restore — there is
-   * nothing to reconstruct and nothing that can half-succeed. Two things are
-   * re-validated rather than trusted: the recorded parentId (the folder may have
-   * been deleted since, in which case the plan lands at the root instead of
-   * pointing at a folder that no longer exists, which would hide it from the
-   * tree entirely) and the id (an entry already back on the index is skipped,
-   * so a double-click cannot duplicate a row).
-   */
-  const restoreFromTrash = (ids) => {
-    const wanted = (Array.isArray(ids) ? ids : [ids]).filter(id => planTrash[id]);
-    if (wanted.length === 0) return { ok: false, reason: "none", restored: [] };
-
-    const live = new Set(plans.map(p => p.id));
-    const fresh = wanted.filter(id => !live.has(id));
-    if (fresh.length === 0) return { ok: false, reason: "already-live", restored: [] };
-
-    pushFolderHistory();
-    const folderIds = new Set(folders.map(f => f.id));
-    const now = Date.now();
-    const revived = fresh.map(id => {
-      const meta = planTrash[id];
-      const parentId = meta?.parentId && folderIds.has(meta.parentId) ? meta.parentId : null;
-      return {
-        id,
-        name: meta?.name || FIRST_PLAN_NAME,
-        studentType: meta?.studentType ?? "undergrad",
-        parentId,
-        lastOpened: now,
-      };
-    });
-    setPlans(prev => [...prev, ...revived]);
-    setPlanTrash(prev => {
-      const next = { ...prev };
-      for (const id of fresh) delete next[id];
-      return next;
-    });
-    for (const p of revived) if (p.parentId) setFolderOpen(p.parentId, true);
-    return { ok: true, restored: revived.map(p => p.id) };
-  };
-
-  /**
-   * Permanently drop trashed plans — the ONLY user-reachable hard delete left.
-   *
-   * Everything else in the app now tombstones, so this function is where the
-   * irreversible step is concentrated on purpose: one place to guard in the UI
-   * rather than three paths that each destroy a slot. Deliberately does NOT
-   * push folder history — undoing to a state whose data slot is gone would
-   * restore an index row pointing at nothing.
-   */
-  const purgeFromTrash = (ids) => {
-    const wanted = (Array.isArray(ids) ? ids : [ids]).filter(id => planTrash[id]);
-    if (wanted.length === 0) return { ok: false, purged: 0 };
-    for (const id of wanted) {
-      try { localStorage.removeItem(key(`plan-data-${id}`)); } catch {}
-    }
-    setPlanTrash(prev => {
-      const next = { ...prev };
-      for (const id of wanted) delete next[id];
-      return next;
-    });
-    return { ok: true, purged: wanted.length };
-  };
-
-  const emptyTrash = () => purgeFromTrash(Object.keys(planTrash));
 
   // Browser tab title = "✎ <active plan> · <app>", but only once the tab is
   // actually the user's document — a crawler renders the app with empty
@@ -3272,16 +3298,26 @@ export function PlannerProvider({ children }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activePlanId]);
 
-  // Save current plan to its localStorage slot.
-  //
-  // This is the write that matters most: the slot is what the activePlanId
-  // effect RELOADS from, so a silent failure here is the case where the user
-  // keeps working, sees every edit on screen, and loses all of it on refresh.
-  // It is therefore the one write that must always be reported.
+  /**
+   * A plan id that cannot collide with one minted a moment ago.
+   *
+   * `plan_${Date.now()}` was fine while plans were created one gesture at a
+   * time, and stopped being fine the moment a SELECTION could be duplicated:
+   * that loop runs synchronously, so every copy was minted inside the same
+   * millisecond and got the same id. Measured: 5 of 5 identical. The second
+   * copy then overwrote the first's slot and the index carried duplicate ids,
+   * which `buildTree` collapses into one node — silent data loss.
+   *
+   * The counter, not the clock, is what guarantees it: `plans` is stale
+   * inside a synchronous loop (setPlans has not committed yet), so checking
+   * existing ids cannot help. The timestamp only keeps ids unique ACROSS
+   * sessions, where the counter restarts.
+   */
+  const newPlanId = () => `plan_${Date.now().toString(36)}${(planIdSeq.current++).toString(36)}`;
+
+  // Save current plan to its localStorage slot
   const saveCurrentPlanToSlot = () => {
-    return reportWrite(
-      writeKey(key(`plan-data-${activePlanId}`), JSON.stringify(captureCurrentPlan()))
-    );
+    try { localStorage.setItem(key(`plan-data-${activePlanId}`), JSON.stringify(captureCurrentPlan())); } catch {}
   };
 
   // Switch to a different plan
@@ -3310,8 +3346,15 @@ export function PlannerProvider({ children }) {
    */
   const createPlan = (name, cohort = null, parentId = null, seed = null) => {
     saveCurrentPlanToSlot();
-    const id = `plan_${Date.now()}`;
+    const id = newPlanId();
     if (cohort) {
+      // A failed write here USED to be swallowed, after which the plan was
+      // added to the index and switched to anyway — so a full quota produced
+      // a plan whose slot had never been written. For a bare new plan that is
+      // survivable (a new plan is empty), but with a `seed` — the sample-plan
+      // "open as new plan" and the duplicate path — the user asked for
+      // content and would have got an empty canvas with no error. Index and
+      // slot are two halves of one record; refuse to create half of one.
       try {
         localStorage.setItem(key(`plan-data-${id}`), JSON.stringify({
           version: 1,
@@ -3327,7 +3370,15 @@ export function PlannerProvider({ children }) {
           minor1: "", minor2: "", placedOut: [],
           ...(seed ?? {}),
         }));
-      } catch {}
+      } catch (err) {
+        // Only a SEEDED plan aborts. An unseeded one is meant to be empty, so
+        // a lost slot costs nothing the autosave will not rewrite; a seeded
+        // one that arrives empty is a silent lie about what was created.
+        if (seed) {
+          alert(t(/quota/i.test(String(err)) ? "folders.io.err.quota" : "folders.io.err.write"));
+          return null;
+        }
+      }
     }
     setPlans(prev => [...prev, {
       id, name, studentType: cohort?.studentType ?? "undergrad",
@@ -3335,23 +3386,72 @@ export function PlannerProvider({ children }) {
     }]);
     if (parentId) setFolderOpen(parentId, true);
     setActivePlanId(id);
+    return id;
   };
 
-  // Delete a plan.
-  //
-  // Both of these used to localStorage.removeItem the plan's data slot outright,
-  // which made the header's ✕ button — one native confirm() away from a click —
-  // the single most destructive control in the app, while the library's delete of
-  // the very same plan was undoable. Two paths, two different meanings of
-  // "delete", and the dangerous one was the easier to reach.
-  //
-  // They now delegate to deleteNodes, so there is exactly ONE delete in the
-  // codebase: it tombstones, keeps the data slot, records folder history, and
-  // enforces the surviving-plan invariant. Only purgeFromTrash destroys data.
-  const deletePlan = (id) => { deleteNodes([id]); };
+  /**
+   * Copy a plan, beside the original, with everything in it.
+   *
+   * This is the advisor's most-repeated act and it had no verb: "keep what you
+   * have, and let's see what a different major looks like". Without it the
+   * only way to branch a plan was to export it and import it back, which
+   * renames it, drops it at the root, and loses the advisee it was filed to.
+   *
+   * Deliberately does NOT switch to the copy. Duplicating is a filing act, not
+   * a navigation one — the same reason Finder leaves you where you are — and
+   * an advisor mid-conversation should not have the canvas change under them.
+   *
+   * The slot is written BEFORE the index record and a failed write aborts, so
+   * a copy can never exist in the index with no data behind it.
+   *
+   * @param {boolean} [history=true] push an undo snapshot. Pass false when
+   *   duplicating a SELECTION: each copy would otherwise push its own
+   *   snapshot, and because they all read the same render's `plans` those
+   *   snapshots are identical — so one ⌘Z undid all three copies and the next
+   *   two did nothing at all.
+   * @returns {{ok: true, id: string}|{ok: false, reason: 'read'|'quota'|'write'}}
+   */
+  const duplicatePlan = (id, history = true) => {
+    const src = plans.find(p => p.id === id);
+    if (!src) return { ok: false, reason: "read" };
+    // Flush first: duplicating the plan you are editing must copy what is on
+    // screen, not the last thing written to its slot.
+    saveCurrentPlanToSlot();
+    const snap = planSnapshot(id);
+    if (!snap) return { ok: false, reason: "read" };
 
-  // Delete multiple plans at once — avoids stale-closure issue of calling deletePlan in a loop
-  const bulkDeletePlans = (ids) => { deleteNodes(ids); };
+    const newId = newPlanId();
+    try {
+      localStorage.setItem(key(`plan-data-${newId}`), JSON.stringify(snap));
+    } catch (err) {
+      return { ok: false, reason: /quota/i.test(String(err)) ? "quota" : "write" };
+    }
+    if (history) pushFolderHistory();
+    setPlans(prev => [...prev, {
+      id: newId,
+      name: uniqueName(siblingNames(planTree, src.parentId ?? null), src.name ?? "Plan"),
+      studentType: src.studentType ?? "undergrad",
+      parentId: src.parentId ?? null,
+      lastOpened: Date.now(),
+      // The copy belongs to the same advisee — that is the whole point of
+      // duplicating it, and re-filing it by hand every time is the friction
+      // this verb exists to remove.
+      ...(src.student ? { student: src.student } : {}),
+    }]);
+    return { ok: true, id: newId };
+  };
+
+  // Deleting a plan has exactly ONE implementation — `deleteNodes` above.
+  //
+  // There used to be two more here, `deletePlan` and `bulkDeletePlans`, and the
+  // difference was not cosmetic: they called `localStorage.removeItem` on the
+  // slot straight away, so the same plan was recoverable for 30 days when
+  // deleted in the library and gone forever when deleted from the header
+  // dropdown or by an MCP `DELETE_PLAN`. Worse, they never called
+  // `pushFolderHistory`, so an OLDER history entry still listed the plan: one
+  // ⌘Z in the library put the index record back while its slot was already
+  // erased, and the plan reopened empty. A second door that deletes differently
+  // is how that happens, so the door is gone rather than merely aligned.
 
   // Rename a plan
   const renamePlan = (id, name) => {
@@ -3391,23 +3491,6 @@ export function PlannerProvider({ children }) {
   }, [placements, reservations, appliedTemplate, specialTermPl, currentSemId, collapsedSubs, semOrders, offeredOverrides, shOverrides, bonusSH, major, major2, conc, conc2, minor1, minor2, studentType, activePlanId, planEntSem, planEntYear, planGradSem, planGradYear, gradesRaw, placedOut, substitutions]); // eslint-disable-line react-hooks/exhaustive-deps
   
   // ── Plan JSON export / import ────────────────────────────────
-
-  /** Trigger a file download. Shared so the two exports cannot drift. */
-  const downloadJSON = (data, filename) => {
-    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
-    const a = document.createElement("a");
-    a.href = URL.createObjectURL(blob);
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
-  };
-
-  /** `A/B: c` is illegal or awkward in a filename on some platform or other. */
-  const safeFilePart = (s, fallback) =>
-    (s || "").replace(/[^a-z0-9]/gi, "_").replace(/_+/g, "_").replace(/^_|_$/g, "") || fallback;
-
   const exportPlanJSON = () => {
     // ONE builder for the plan artifact: hand-building a second object here
     // is how grades were silently missing from JSON backups (round-trip
@@ -3424,57 +3507,17 @@ export function PlannerProvider({ children }) {
     };
     if (privateGrades) delete data.grades;
     if (privateCoop) data.specialTermPl = redactCoopDetails(data.specialTermPl);
+    const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
     const planName = plans.find(p => p.id === activePlanId)?.name || 'Untitled';
+    const sanitizedPlanName = planName.replace(/[^a-z0-9]/gi, '_').replace(/_+/g, '_').replace(/^_|_$/g, '');
     const dateStr = new Date().toISOString().slice(0, 10);
-    downloadJSON(
-      data,
-      `${safeFilePart(planName, 'Plan')} - ${institution.shortName ?? institution.name} Map - ${dateStr}.json`
-    );
-  };
-
-  /**
-   * Export the WHOLE library — every plan, plus the folder tree — as one file.
-   *
-   * Why this exists: nothing in the browser can stop a user clearing site data,
-   * and there is no server copy of a plan (share links and share codes are
-   * transfers, not backups — the code relay is client-encrypted and one-shot).
-   * So a file is the only real backup, and until now the only export was the
-   * ACTIVE plan. A user with eleven plans had to open and export each one, in
-   * order, without missing any, and no folder structure came with it — which
-   * means in practice nobody had a backup of their library.
-   *
-   * The live plan is captured fresh rather than read from its slot, so an
-   * export taken mid-edit includes the edit instead of the last autosave.
-   *
-   * `privateGrades`/`privateCoop` are honoured exactly as the single-plan export
-   * honours them. That is the conservative reading: this file is far more likely
-   * to be handed to an advisor than a single plan is, so the toggle that exists
-   * to stop a leak has to hold across every plan in the bundle, not just the
-   * open one.
-   */
-  const exportLibraryBackupJSON = () => {
-    saveCurrentPlanToSlot();
-    // The ACTIVE plan is read from live state, not from its slot, so an export
-    // taken mid-edit contains the edit rather than the last autosave.
-    const live = captureCurrentPlan();
-    const { bundle, skipped } = buildLibraryBundle({
-      plans, folders, activePlanId,
-      institution: institution.id ?? institution.shortName ?? null,
-      privateGrades, privateCoop, redactCoop: redactCoopDetails,
-      readSlot: (id) => {
-        if (id === activePlanId) return live;
-        try {
-          const raw = localStorage.getItem(key(`plan-data-${id}`));
-          return raw ? JSON.parse(raw) : null;
-        } catch { return null; }
-      },
-    });
-    const dateStr = new Date().toISOString().slice(0, 10);
-    downloadJSON(
-      bundle,
-      `${safeFilePart(institution.shortName ?? institution.name, 'Map')} Map Library - ${dateStr}.json`
-    );
-    return { plans: bundle.plans.length, folders: bundle.folders.length, skipped: skipped.length };
+    a.download = `${sanitizedPlanName || 'Plan'} - ${institution.shortName ?? institution.name} Map - ${dateStr}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
   };
 
   // ── Library (multi-plan) export / import ─────────────────────
@@ -3545,6 +3588,171 @@ export function PlannerProvider({ children }) {
     return { plans: doc.plans.length, folders: doc.folders.length };
   };
 
+  /**
+   * Export a selection INTO A FOLDER THE USER PICKS, keeping the folder tree.
+   *
+   * This is the primary export path, and the reason is a hard browser limit
+   * rather than a preference: writing N files as N downloads trips the
+   * "allow multiple downloads?" permission bubble, and until it is answered
+   * every file after the first is silently dropped. So the honest-looking
+   * flat export quietly produced ONE file out of forty. A directory picker
+   * asks once, in the OS's own dialog, and then writes as many files as it
+   * likes.
+   *
+   * Structure survives because the paths are the same ones the archive
+   * already computes — `libraryToArchive` yields "Advisees/Jane Doe.json" —
+   * only written into real directories instead of into a zip. No new notion
+   * of structure, and no zip involved.
+   *
+   * What a selection means, which is the same rule delete and export already
+   * use (`deleteScope`):
+   *   - selecting a FOLDER takes everything inside it, and it lands as a
+   *     folder in the destination;
+   *   - a plan whose parent folder is NOT selected lands at the top of the
+   *     destination, because exporting one plan out of a folder should not
+   *     rebuild the chain of folders it happened to live under.
+   * Empty folders are created explicitly — they have no file to imply them,
+   * so nothing else would carry them across.
+   *
+   * Chromium-only (Firefox and Safari ship no File System Access API), so the
+   * caller falls back to individual downloads there.
+   *
+   * @returns {Promise<{ok: true, plans, folders}|{ok: false, reason: 'unsupported'|'cancelled'|'write'}>}
+   */
+  /**
+   * THE export. A selection becomes one ordinary plan file per plan, flat.
+   *
+   * Three rules, all deliberate:
+   *
+   *   1. PLANS ONLY. A folder is never exported as a thing; selecting one
+   *      contributes the plans inside it. `buildLibraryFile` already computes
+   *      that closure (the same one delete uses), so a mixed selection of
+   *      folders and plans at any depth resolves to a plain set of plans.
+   *   2. FLAT. The folder tree is how the library is organised in the app, not
+   *      how files should be arranged on disk. Names are deduplicated globally
+   *      because flat files share one directory — two advisees' "Current"
+   *      would otherwise overwrite each other, which is silent loss at the
+   *      exact moment the user believes they are taking a backup.
+   *   3. NEVER ONE AGGREGATE FILE. N plans is N files.
+   *
+   * MANY PLANS ARE NEVER MANY DOWNLOADS. That is the whole design, and it is
+   * forced by a browser rule no amount of JavaScript can talk its way around:
+   *
+   *   Chrome (and Edge) gate a SECOND download from the same page behind a
+   *   per-site "Automatic downloads" permission. The first file of a burst
+   *   always lands; the rest wait on a prompt. If that prompt is ever
+   *   dismissed or blocked — and dismissing it is the easy accident — the
+   *   origin is remembered as BLOCKED and every later multi-file export
+   *   silently yields exactly one file. Forever. Nothing in the page can
+   *   detect it, re-ask, or work around it.
+   *
+   * "Repeat Save JSON N times" is therefore not implementable, however
+   * reasonable it sounds: Save JSON works precisely because it is ONE
+   * download, which is the only kind that needs no permission.
+   *
+   * So each route below issues at most one download, or none:
+   *
+   *   1 plan                        → one download. Always allowed, everywhere.
+   *   N plans, directory picker     → files written straight into a folder the
+   *     (Chrome, Edge)                user picks. NO downloads at all, so the
+   *                                   blocked permission is irrelevant.
+   *   N plans, no picker            → one .zip. One download, so it cannot be
+   *     (Safari, Firefox)             throttled; it expands to the same
+   *                                   individual plan files.
+   *
+   * The picker must be reached with the click's user activation still intact,
+   * so everything before it here is synchronous.
+   *
+   * Never throws. Failure comes back as a reason the UI can name.
+   *
+   * @param {string[]|null} ids  selected nodes, or null for the whole library
+   * @returns {Promise<{ok: true, plans: number, via: 'download'|'folder'|'zip'}
+   *                  |{ok: false, reason: 'empty'|'cancelled'|'busy'|'write'}>}
+   */
+  const exportPlansFlat = async (ids = null) => {
+    let doc;
+    try {
+      saveCurrentPlanToSlot();
+      doc = buildLibraryFile(planTree, ids, planSnapshot, { redact: libraryRedact });
+    } catch {
+      return { ok: false, reason: "write" };
+    }
+    if (!doc.plans.length) return { ok: false, reason: "empty" };
+
+    const suffix = `${institution.shortName ?? institution.name} Map`;
+    const dateStr = new Date().toISOString().slice(0, 10);
+    // The bodies come from core so they can be tested: every one must be a
+    // file the ordinary single-plan Load can open by itself.
+    const fileOf = (f) => ({
+      name: `${f.name} - ${suffix} - ${dateStr}.json`,
+      text: JSON.stringify(f.json, null, 2),
+    });
+
+    const download = (file) => {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(
+        file.blob ?? new Blob([file.text], { type: "application/json" }));
+      a.download = file.name;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      // Held far longer than the single-plan export's 1 s. Forty downloads
+      // queue behind one another, and revoking a blob the browser has not
+      // started reading yet cancels that download — which would look exactly
+      // like the bug this whole function exists to fix.
+      setTimeout(() => URL.revokeObjectURL(a.href), 120_000);
+    };
+
+    const files = flatPlanFiles(doc).map(fileOf);
+
+    // One plan: a plain download. No permission involved anywhere.
+    if (files.length === 1) {
+      try { download(files[0]); return { ok: true, plans: 1, via: "download" }; }
+      catch { return { ok: false, reason: "write" }; }
+    }
+
+    /** All of them, as ONE download. Cannot be gated; unzips to the same files. */
+    const asZip = () => {
+      try {
+        const enc = new TextEncoder();
+        const bytes = writeZip(files.map(f => ({ path: f.name, data: enc.encode(f.text) })));
+        download({ name: `${files.length} plans - ${suffix} - ${dateStr}.zip`,
+                   blob: new Blob([bytes], { type: "application/zip" }) });
+        return { ok: true, plans: files.length, via: "zip" };
+      } catch { return { ok: false, reason: "write" }; }
+    };
+
+    if (typeof window !== "undefined" && typeof window.showDirectoryPicker === "function") {
+      // Only one picker may be open at a time; a second call while one is up
+      // rejects. Guarded by a ref so a dialog left open cannot wedge export,
+      // and cleared in `finally` so a dismissal cannot either.
+      if (exportBusy.current) return { ok: false, reason: "busy" };
+      exportBusy.current = true;
+      let dir = null;
+      try {
+        dir = await window.showDirectoryPicker({ mode: "readwrite", id: "numap-export" });
+      } catch (err) {
+        if (err && err.name === "AbortError") return { ok: false, reason: "cancelled" };
+        dir = null;                        // policy block or lost gesture → zip
+      } finally {
+        exportBusy.current = false;
+      }
+      if (dir) {
+        try {
+          for (const f of files) {
+            const handle = await dir.getFileHandle(f.name, { create: true });
+            const w = await handle.createWritable();
+            await w.write(f.text);
+            await w.close();
+          }
+          return { ok: true, plans: files.length, via: "folder" };
+        } catch { return { ok: false, reason: "write" }; }
+      }
+    }
+
+    return asZip();
+  };
+
   /** Read one dropped file into an incoming {folders, plans}, whatever it is. */
   const readOneImport = async (file) => {
     const isZip = /\.zip$/i.test(file.name) || file.type === "application/zip";
@@ -3568,10 +3776,16 @@ export function PlannerProvider({ children }) {
       try {
         const d = JSON.parse(text);
         if (d && typeof d === "object" && d.version === 1) {
-          const { planName, ...rest } = d;
+          const { planName, planStudent, ...rest } = d;
           return { ok: true, folders: [], plans: [{
             id: "single", name: planName || file.name.replace(/\.json$/i, "") || "Plan",
-            parentId: null, studentType: d.studentType === "graduate" ? "graduate" : "undergrad",
+            parentId: null,
+            // The advisee a plan is filed to is index-only, so a per-plan file
+            // carries it in the envelope or loses it entirely — which is what
+            // used to happen to a whole roster on export → import.
+            ...(typeof planStudent === "string" && planStudent.trim()
+              ? { student: planStudent.trim() } : {}),
+            studentType: d.studentType === "graduate" ? "graduate" : "undergrad",
             data: rest,
           }] };
         }
@@ -3607,7 +3821,14 @@ export function PlannerProvider({ children }) {
       for (const f of got.folders) folders.push({ ...f, id: ns(f.id), parentId: f.parentId == null ? null : ns(f.parentId) });
       for (const p of got.plans)   plans.push({ ...p, id: ns(p.id), parentId: p.parentId == null ? null : ns(p.parentId) });
     }
-    if (!plans.length) return { ok: false, reason: lastReason };
+    // Folders with no plans is a VALID library — `parseLibraryFile` rejects
+    // only a document that is empty of both — so exporting one empty folder
+    // and importing it back used to fail with "Couldn't read that file",
+    // which is both wrong and alarming. Only report a read failure when
+    // something actually failed to read.
+    if (!plans.length && !folders.length) {
+      return { ok: false, reason: failed ? lastReason : "empty" };
+    }
 
     try {
       saveCurrentPlanToSlot();
@@ -3672,84 +3893,55 @@ export function PlannerProvider({ children }) {
   };
 
   /**
-   * Restore a whole-library backup — ADDITIVELY.
+   * Open a single saved plan file as a new plan.
    *
-   * Every id is remapped rather than reused. Reusing the exported ids would be
-   * the obvious implementation and it is destructive: a user restoring a backup
-   * into a browser that still has plans would silently overwrite same-id slots,
-   * so the recovery tool would itself be capable of losing work. Remapping means
-   * the worst case of an unnecessary restore is duplicate plans, which the user
-   * can delete — and deleting is now undoable.
+   * The slot is written BEFORE the index gains a record, and a failed write
+   * aborts instead of being swallowed. It used to be
+   * `try { setItem(...) } catch {}` followed unconditionally by the index push
+   * and a switch, so a full quota produced a plan that the index insisted
+   * existed and whose data had never been written — the app then switched to
+   * it and showed an empty canvas with no error at all. Index and slot are the
+   * two halves of one record; nothing may create one without the other.
    *
-   * Folder ids are remapped through the same table, so the tree comes back
-   * intact without colliding with existing folders of the same name.
-   *
-   * @returns {{ok: true, plans: number, folders: number}|{ok: false, reason: string}}
+   * Errors are localized and reported by reason, like every other import door;
+   * `err.message` used to be shown to the user raw.
    */
-  const importLibraryJSON = (file) => new Promise((resolve) => {
+  const importPlanJSON = (file) => {
+    const fail = (reason) => { alert(t(`folders.io.err.${reason}`)); return { ok: false, reason }; };
     const reader = new FileReader();
-    reader.onerror = () => resolve({ ok: false, reason: "parse" });
     reader.onload = () => {
-      let raw;
-      try { raw = JSON.parse(reader.result); }
-      catch { resolve({ ok: false, reason: "parse" }); return; }
-
-      const stamp = Date.now();
-      const parsed = parseLibraryBundle(raw, { stamp, fallbackName: FIRST_PLAN_NAME });
-      if (!parsed.ok) { resolve(parsed); return; }
+      let d;
+      try { d = JSON.parse(reader.result); } catch { fail("json"); return; }
+      if (!d || typeof d !== "object" || Array.isArray(d)) { fail("json"); return; }
+      if (d.version !== 1) { fail("version"); return; }
 
       saveCurrentPlanToSlot();
-
-      // Slots FIRST: a plan must never appear on the index before its data
-      // exists, or the activePlanId effect can read a missing slot and reset the
-      // plan to defaults — an import that blanks the very plan it restored.
-      const rows = [];
-      let failed = parsed.failed;
-      for (const p of parsed.plans) {
-        const res = writeKey(key(`plan-data-${p.id}`), JSON.stringify(p.data));
-        if (!res.ok) { reportWrite(res); failed++; continue; }
-        rows.push({
-          id: p.id, name: p.name, studentType: p.studentType,
-          parentId: p.parentId, lastOpened: stamp,
-        });
-      }
-      if (rows.length === 0) { resolve({ ok: false, reason: "write-failed" }); return; }
-
-      pushFolderHistory();
-      // EVERY folder is restored, including empty ones. Pruning them would cost
-      // a few bytes less and silently flatten a tree the user built on purpose,
-      // and an empty folder in a backup is evidence they wanted it.
-      const newFolders = parsed.folders;
-      if (newFolders.length) setFolders(prev => [...prev, ...newFolders]);
-      setPlans(prev => [...prev, ...rows]);
-      resolve({ ok: true, plans: rows.length, folders: newFolders.length, failed });
-    };
-    reader.readAsText(file);
-  });
-
-  const importPlanJSON = (file) => {
-    const reader = new FileReader();
-    reader.onload = () => {
+      const id = newPlanId();
+      const base = d.planName || "Plan";
+      const name = base.startsWith("+") ? base : `+ ${base}`;
+      // The envelope is index data, not plan body — it must not be written
+      // into the slot, where it would ride along in every later export.
+      const body = { ...d };
+      for (const k of FILE_ENVELOPE_KEYS) delete body[k];
       try {
-        const d = JSON.parse(reader.result);
-        // A library bundle also has version 1, so without this guard the
-        // single-plan door would happily create one plan whose slot is a
-        // `plans` array — an import that appears to succeed and restores
-        // nothing. Route it to the importer that understands it.
-        if (d?.kind === LIBRARY_BUNDLE_KIND) { alert(t("backup.import.wrongDoor")); return; }
-        if (d.version !== 1) { alert("Unrecognized plan file format."); return; }
-        saveCurrentPlanToSlot();
-        const id = `plan_${Date.now()}`;
-        const base = d.planName || "Plan";
-        const name = base.startsWith('+') ? base : `+ ${base}`;
-        try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d)); } catch {}
-        setPlans(prev => [...prev, { id, name, studentType: d.studentType ?? "undergrad" }]);
-        setActivePlanId(id);
-        if (Array.isArray(d.substitutions)) setSubstitutions(d.substitutions);
+        localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(body));
       } catch (err) {
-        alert("Could not read plan file: " + err.message);
+        fail(/quota/i.test(String(err)) ? "quota" : "write");
+        return;
       }
+      // Undoable, exactly as a library import is: opening the wrong file is
+      // the same mistake whichever door it came through.
+      pushFolderHistory();
+      setPlans(prev => [...prev, {
+        id, name, studentType: d.studentType ?? "undergrad",
+        parentId: null, lastOpened: Date.now(),
+        ...(typeof d.planStudent === "string" && d.planStudent.trim()
+          ? { student: d.planStudent.trim() } : {}),
+      }]);
+      setActivePlanId(id);
+      if (Array.isArray(d.substitutions)) setSubstitutions(d.substitutions);
     };
+    reader.onerror = () => fail("read");
     reader.readAsText(file);
   };
 
@@ -3808,12 +4000,26 @@ export function PlannerProvider({ children }) {
   // Create a new plan slot pre-populated with shared data, then switch to it.
   const importSharedPlan = (d) => {
     saveCurrentPlanToSlot();
-    const id = `plan_${Date.now()}`;
+    const id = newPlanId();
     const base = d.planName || "Plan";
     const name = base.startsWith('/') ? '/' + base : '/ ' + base;
     // Pre-write so the activePlanId useEffect finds data and calls restorePlan.
-    try { localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d)); } catch {}
-    setPlans(prev => [...prev, { id, name, studentType: d.studentType ?? "undergrad" }]);
+    //
+    // A failed write here is the WORST of the three places this pattern
+    // appeared, and it used to be swallowed: a share code is burned
+    // server-side the moment it is claimed, so losing the payload loses the
+    // shared plan permanently — with no error, showing an empty canvas under
+    // the sender's plan name. Index and slot are two halves of one record.
+    try {
+      localStorage.setItem(key(`plan-data-${id}`), JSON.stringify(d));
+    } catch (err) {
+      alert(t(/quota/i.test(String(err)) ? "folders.io.err.quota" : "folders.io.err.write"));
+      return;
+    }
+    setPlans(prev => [...prev, {
+      id, name, studentType: d.studentType ?? "undergrad",
+      parentId: null, lastOpened: Date.now(),
+    }]);
     setActivePlanId(id);
     // restorePlan doesn't handle substitutions, so set them directly.
     setSubstitutions(Array.isArray(d.substitutions) ? d.substitutions : []);
@@ -4340,6 +4546,8 @@ export function PlannerProvider({ children }) {
     isGraduated, setIsGraduated,
     prereqViolations, coreqViolations, connectedIds, prereqConditions,
     grades, setGrade, enteredGpaStat,
+    ratings, setRating, ratingFor,
+    ratingConsent, setRatingConsent, mayShareRatings,
     totalSHPlaced, totalSHDone,
     bonusSH: pvBonusSH, setBonusSH,
     major:  pv?.major  ?? major,  setMajor,
@@ -4412,29 +4620,14 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
-    // ── Two library exports, deliberately distinct ────────────────
-    //
-    // These arrived from two directions and collided on one name. `exportLibraryJSON`
-    // (selective, `ids`-driven, returns `{plans, folders}`) is the one on main and keeps the
-    // name; the whole-library BACKUP is `exportLibraryBackupJSON` — it honours
-    // `privateGrades`/`privateCoop`, reports a `skipped` count, and is the only defence
-    // against cleared site data, since nothing server-side holds a copy of a plan.
-    //
-    // Renamed rather than resolved by picking a winner: both have live callers reading
-    // different return shapes, so choosing one would have silently deleted a feature.
-    exportLibraryJSON, exportLibraryZip, importLibraryFiles,
-    exportLibraryBackupJSON, importLibraryJSON,
-    // Trash: a delete is recoverable for TRASH_TTL, across reloads.
-    trashedPlans, restoreFromTrash, purgeFromTrash, emptyTrash,
-    trashTtlMs: TRASH_TTL_MS,
-    // Storage alarm: a write that failed, so the user learns before a reload.
-    storageAlarm, dismissStorageAlarm,
+    exportLibraryJSON, exportLibraryZip, exportPlansFlat, importLibraryFiles,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
-    plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan, setPlanStudent,
+    plans, activePlanId, switchPlan, createPlan, duplicatePlan, renamePlan, setPlanStudent,
     // Folders — structure, view state, and the mutations that respect both.
     folders, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort,
     createFolder, createFolderWithNodes, renameFolder, moveNodesTo, deleteNodes, previewDelete,
+    trashedPlans, restorePlanFromTrash, TRASH_TTL_DAYS,
     reorderNodes, orderedSiblings,
     pushFolderHistory, undoFolders, redoFolders,
     folderCanUndo: folderPast.length > 0, folderCanRedo: folderFuture.length > 0,

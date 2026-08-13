@@ -294,14 +294,17 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
     setConfirming(false);
     const r = applySamplePlan(chosen, { semesters: SEMESTERS, courseMap, programData, coopDurations });
     const name = planNameFor(path, majorRequirements.fmtProgramLabel, (planSlots ?? []).map(p => p.name));
-    createPlan(name, {
+    const id = createPlan(name, {
       entSem: planEntSem, entYear: planEntYear,
       gradSem: planGradSem, gradYear: planGradYear, studentType,
     }, null, {
       placements: r.placements, reservations: r.reservations, specialTermPl: r.specialTermPl,
       major: path, appliedTemplate: { programKey: path, planLabel: chosen.label ?? "" },
     });
-    setJustDid("opened");
+    // A SEEDED create aborts and returns null when its slot cannot be written
+    // (a full store), having already said so. Announcing "opened" on top of
+    // that would claim a plan exists that does not.
+    if (id) setJustDid("opened");
   };
 
   const loaded = offer.state === "loaded";

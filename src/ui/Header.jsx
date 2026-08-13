@@ -12,6 +12,7 @@ import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { THEME_LABELS } from "../core/themes.js";
 import { storageKey } from "../data/persistence.js";
 import { donateEnabled } from "../core/donate.js";
+import { ratingSharingAvailable } from "../config.js";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useTranslation, useTranslatedText, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -23,7 +24,6 @@ import NewPlanModal   from "./NewPlanModal.jsx";
 import PlanTree, { PlanIcon } from "./PlanTree.jsx";
 import { flattenTree, buildSearchIndex, matchIds } from "../core/planFolders.js";
 import HoverTip       from "./InfoTip.jsx";
-import ConfirmDialog  from "./ConfirmDialog.jsx";
 import FadeText       from "./FadeText.jsx";
 import { generateQr } from "../core/qrEncode.js";
 import { getHashCodeParam, buildCodeUrl } from "../core/planShare.js";
@@ -416,16 +416,15 @@ export default function Header() {
     semAdvanceToast, setSemAdvanceToast,
     stickyCourses, setStickyCourses,
     exportPlanJSON, importPlanJSON, copyPlanLink,
-    exportLibraryBackupJSON, importLibraryJSON,
-    storageAlarm, dismissStorageAlarm, previewDelete, trashTtlMs,
     shareRelayAvailable, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     onboardingDeferredForShare, setShowCohortSetup,
     aiAssistantAvailable, claudePreview, claudePaired,
-    plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
+    plans, activePlanId, switchPlan, createPlan, deleteNodes, renamePlan,
     folders, planTree, openFolders, toggleFolder, folderSort, setShowPlanLibrary,
     major, major2, conc, minor1, minor2,
     placedOut, substitutions, studentType,
     grades, privateGrades, setPrivateGrades, privateCoop, setPrivateCoop,
+    mayShareRatings, setRatingConsent,
   } = usePlanner();
 
   const { themeName, setThemeName, themeNames } = useTheme();
@@ -753,57 +752,6 @@ export default function Header() {
   const [selectMode, setSelectMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState(new Set());
   const lastClickedIdx = useRef(-1);
-  // Delete confirmation for the dropdown's own delete controls. These used to
-  // call window.confirm(), which could not be localized — the bulk delete asked
-  // "Delete 3 plans?" in hardcoded English, English plural rule included, in
-  // every one of the 8 locales.
-  const [pendingDelete, setPendingDelete] = useState(null); // { ids, name } | null
-  // Inline status line for the plan/backup controls. A file import has no other
-  // way to report that it worked, and "nothing visibly happened" is the failure
-  // mode a backup tool can least afford. It also carries the "keep at least one
-  // plan" refusal, which used to be a hardcoded-English alert().
-  const [notice, setNotice] = useState("");
-  const trashDays = Math.round((trashTtlMs ?? 30 * 86400000) / 86400000);
-
-  const requestPlanDelete = (ids) => {
-    const list = ids.filter(Boolean);
-    if (list.length === 0) return;
-    const pv = previewDelete?.(list);
-    if (pv?.blocked) { setNotice(t("folders.delete.err.last")); return; }
-    const one = list.length === 1 ? plans.find(p => p.id === list[0]) : null;
-    setPendingDelete({ ids: list, name: one?.name ?? "" });
-  };
-
-  const confirmPlanDelete = () => {
-    if (!pendingDelete) return;
-    bulkDeletePlans(pendingDelete.ids);
-    setPendingDelete(null);
-    setSelectMode(false);
-    setSelectedIds(new Set());
-    if (plans.length - pendingDelete.ids.length <= 1) setShowPlanMenu(false);
-  };
-
-  /** Restore a whole-library backup, reporting the outcome either way. */
-  const onLibraryFile = async (file) => {
-    const res = await importLibraryJSON(file);
-    if (res.ok) {
-      setNotice(res.folders > 0
-        ? t("backup.import.ok", {
-            plans: t(res.plans === 1 ? "folders.n.plan" : "folders.n.plans", { n: res.plans }),
-            folders: t(res.folders === 1 ? "folders.n.folder" : "folders.n.folders", { n: res.folders }),
-          })
-        : t("backup.import.okPlans", {
-            plans: t(res.plans === 1 ? "folders.n.plan" : "folders.n.plans", { n: res.plans }),
-          }));
-      return;
-    }
-    setNotice(t(
-      res.reason === "not-a-bundle" ? "backup.import.err.notBundle"
-      : res.reason === "write-failed" ? "backup.import.err.write"
-      : res.reason === "empty" ? "backup.import.err.empty"
-      : "backup.import.err.parse"
-    ));
-  };
   const { showNewPlanModal, setShowNewPlanModal } = usePlanner();
 
   // ── Plan dropdown: flat list vs folder tree ──
@@ -1229,9 +1177,9 @@ export default function Header() {
         {plans.length > 1 && (
           <button onClick={e => {
             e.stopPropagation();
-            requestPlanDelete([p.id]);
+            if (confirm(t("header.plan.delete.confirm", { name: p.name }))) { deleteNodes([p.id]); if (plans.length <= 2) setShowPlanMenu(false); }
           }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px", flexShrink: 0 }}
-            title="Delete">✕</button>
+            title={t("folders.menu.delete")}>✕</button>
         )}
       </div>
     );
@@ -1568,8 +1516,14 @@ export default function Header() {
                 {selectMode ? (
                   <button onClick={e => {
                     e.stopPropagation();
-                    if (selectedIds.size === 0) return;
-                    requestPlanDelete(Array.from(selectedIds));
+                    const count = selectedIds.size;
+                    if (count === 0) return;
+                    if (count >= plans.length) { alert(t("folders.delete.err.last")); return; }
+                    if (confirm(t("folders.delete.questionN", { n: count }))) {
+                      deleteNodes(Array.from(selectedIds));
+                      setSelectMode(false);
+                      setSelectedIds(new Set());
+                    }
                   }} style={{
                     width: "100%", fontSize: isPhone ? 9 : 10, fontWeight: 700,
                     cursor: selectedIds.size === 0 ? "default" : "pointer",
@@ -1579,7 +1533,9 @@ export default function Header() {
                     border: `1px solid ${selectedIds.size > 0 ? "var(--red, #ef4444)" : "var(--border-2)"}`,
                     color: selectedIds.size > 0 ? "var(--red, #ef4444)" : "var(--text-5)",
                   }}>
-                    {selectedIds.size === 0 ? "Select plans to delete" : `Delete ${selectedIds.size} plan${selectedIds.size > 1 ? "s" : ""}`}
+                    {selectedIds.size === 0
+                      ? t("folders.menu.delete")
+                      : t("folders.menu.deleteN", { n: selectedIds.size })}
                   </button>
                 ) : (
                   <div style={{ display: "flex", gap: 4 }}>
@@ -1646,8 +1602,9 @@ export default function Header() {
               <div style={IO_GROUP}>
               <div style={IO_GROUP_LABEL}>{t("header.io.group.share")}</div>
               <div style={{ display: "flex", gap: 4 }}>
+                <HoverTip tip={t("header.io.share.title")} placement="side"
+                  display="inline-flex" style={{ flex: 1, minWidth: 0 }}>
                 <button className="hdr-btn-dd"
-                  title={t("header.io.share.title")}
                   onClick={async () => {
                     try {
                       await copyPlanLink(shareLinkLocale);
@@ -1657,7 +1614,7 @@ export default function Header() {
                       alert(t("header.io.share.error") ?? "Could not copy link.");
                     }
                   }}
-                  style={{ flex: 1, textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                     background: shareLinkCopied ? "var(--active)" : "var(--bg-surface)",
                     padding: "4px 8px", borderRadius: 5,
                     border: `1px solid ${shareLinkCopied ? "var(--active)" : "var(--border-2)"}`,
@@ -1665,6 +1622,7 @@ export default function Header() {
                     transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
                   {shareLinkCopied ? (t("header.io.share.done") ?? "Link copied!") : (t("header.io.share") ?? "Snapshot link")}
                 </button>
+                </HoverTip>
                 <select
                   value={shareLinkLocale}
                   onChange={e => setShareLinkLocale(e.target.value)}
@@ -1689,10 +1647,16 @@ export default function Header() {
                       auto column still exists for the Load button below,
                       so the two rows stay width-matched in every locale. */}
                   {!shareCode ? (
+                    // The tip is a HoverTip card placed to the SIDE, not a
+                    // native `title=`: this panel is pinned to the right edge,
+                    // so a card above the button covers the rest of the sheet
+                    // while you read it. `gridColumn` moves to the wrapper —
+                    // the span is the grid item once the button is wrapped.
+                    <HoverTip tip={t("header.io.code.send.title")} placement="side"
+                      style={{ gridColumn: "1 / -1" }}>
                     <button className="hdr-btn-dd" onClick={handleShare}
-                      title={t("header.io.code.send.title")}
                       disabled={shareCodeBusy}
-                      style={{ gridColumn: "1 / -1", fontSize: 10, fontWeight: 700,
+                      style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700,
                         cursor: shareCodeBusy ? "default" : "pointer",
                         background: shareCodePickedUp ? "#22c55e" : "var(--bg-surface)",
                         padding: "4px 8px", borderRadius: 5,
@@ -1705,6 +1669,7 @@ export default function Header() {
                           gone and the bar is otherwise back to Share. */}
                       {shareCodePickedUp ? t("header.io.code.pickedup") : t("header.io.code.share")}
                     </button>
+                    </HoverTip>
                   ) : (
                     <>
                       {/* Once a code exists the bar IS the code. Clicking
@@ -1813,15 +1778,17 @@ export default function Header() {
                           border: "1px solid var(--border-2)", borderRadius: 5, padding: "4px 6px",
                           opacity: claimBusy ? 0.6 : 1 }} />
                     ) : (
+                      <HoverTip tip={t("header.io.code.load.title")} placement="side"
+                        display="inline-flex" style={{ flex: 1, minWidth: 0 }}>
                       <button className="hdr-btn-dd"
                         onClick={() => setClaimOpen(true)}
                         onFocus={() => setClaimOpen(true)}
-                        title={t("header.io.code.load.title")}
-                        style={{ flex: 1, fontSize: 10, fontWeight: 700, cursor: "text",
+                        style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "text",
                           background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                           border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                         {t("header.io.code.load")}
                       </button>
+                      </HoverTip>
                     )}
                   </div>
                   {/* Redeeming derives an AES key with 300k PBKDF2 rounds —
@@ -1862,13 +1829,19 @@ export default function Header() {
               {/* ── Export: human-readable summary + PDF ── */}
               <div style={IO_GROUP_RULED}>
               <div style={IO_GROUP_LABEL}>{t("header.io.group.export")}</div>
-              <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title={t("header.io.copy.title")}
+              <HoverTip tip={t("header.io.copy.title")} placement="side">
+              <button className="hdr-btn-dd" onClick={handleCopyHumanReadable}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 {t("header.io.copy")}
               </button>
-              <button className="hdr-btn-dd" onClick={handleExport} title={t("header.io.export.pdf.title")}
+              </HoverTip>
+              {/* No hover card: `header.io.export.pdf.title` is the string
+                  "Export PDF", identical to the label, so the tip repeated the
+                  button back at you. A tip that adds nothing trains people to
+                  ignore the ones that do. */}
+              <button className="hdr-btn-dd" onClick={handleExport}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
@@ -1878,7 +1851,7 @@ export default function Header() {
               {/* ── File: save / load JSON backups ── */}
               <div style={IO_GROUP_RULED}>
               <div style={IO_GROUP_LABEL}>{t("header.io.group.file")}</div>
-              <HoverTip tip={t("tip.export.json")}>
+              <HoverTip tip={t("tip.export.json")} placement="side">
               <button className="hdr-btn-dd" onClick={exportPlanJSON}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
@@ -1888,7 +1861,7 @@ export default function Header() {
               </HoverTip>
               <input type="file" id="plan-import-input" accept=".json" style={{ display: "none" }}
                 onChange={e => { if (e.target.files[0]) { importPlanJSON(e.target.files[0]); e.target.value = ""; } }} />
-              <HoverTip tip={t("tip.import.json")}>
+              <HoverTip tip={t("tip.import.json")} placement="side">
               <button className="hdr-btn-dd" onClick={() => document.getElementById("plan-import-input").click()}
                 style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
@@ -1897,40 +1870,6 @@ export default function Header() {
               </button>
               </HoverTip>
               </div>
-              {/* ── Backup: the WHOLE library, not just the open plan ──
-                   Its own group on purpose. Filed next to "Save" it reads as a
-                   variant of the same action, when it is the only one of the two
-                   that actually protects a user against losing everything. */}
-              <div style={IO_GROUP_RULED}>
-              <div style={IO_GROUP_LABEL}>{t("backup.group")}</div>
-              <HoverTip tip={t("backup.export.library.tip")}>
-              <button className="hdr-btn-dd" onClick={() => {
-                const r = exportLibraryBackupJSON();
-                if (r?.skipped > 0) setNotice(t("backup.export.skipped", { n: r.skipped }));
-              }}
-                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                  {t("backup.export.library")}
-              </button>
-              </HoverTip>
-              <input type="file" id="library-import-input" accept=".json" style={{ display: "none" }}
-                onChange={e => { if (e.target.files[0]) { onLibraryFile(e.target.files[0]); e.target.value = ""; } }} />
-              <HoverTip tip={t("backup.import.library.tip")}>
-              <button className="hdr-btn-dd" onClick={() => document.getElementById("library-import-input").click()}
-                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
-                  background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
-                  border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
-                  {t("backup.import.library")}
-              </button>
-              </HoverTip>
-              </div>
-              {notice && (
-                <div role="status" style={{
-                  fontSize: 9.5, color: "var(--text-4)", padding: "5px 2px 1px",
-                  lineHeight: "calc(1.5 * var(--lh-scale, 1))",
-                }}>{notice}</div>
-              )}
               {/* The QR closes the panel out, below every group, because it
                   is the one thing here aimed at a second device rather than
                   at this one. It exists only while a code does. */}
@@ -2140,6 +2079,23 @@ export default function Header() {
                   label={t("header.settings.privategrades.name")}
                   aria={privateGrades ? t("header.settings.privategrades.on") : t("header.settings.privategrades.off")}
                   onClick={() => setPrivateGrades(!privateGrades)} />
+
+                {/* Contribute course ratings — the one thing NU Map pools with
+                    other people's answers rather than sending somewhere you
+                    chose, so it is off until asked and reversible here at any
+                    time. Turning it off stops sharing only: your own hours and
+                    difficulty entries stay, and keep showing on your plan.
+
+                    Hidden entirely until there is a collector to contribute
+                    TO (see ratingSharingAvailable): a switch that promises
+                    pooling it cannot perform is worse than no switch. */}
+                {ratingSharingAvailable && (
+                <SettingsToggle on={mayShareRatings} tone="success"
+                  tip={t("tip.shareratings")}
+                  label={t("header.settings.shareratings.name")}
+                  aria={mayShareRatings ? t("header.settings.shareratings.on") : t("header.settings.shareratings.off")}
+                  onClick={() => setRatingConsent(mayShareRatings ? "off" : "on")} />
+                )}
 
                 {/* Hide co-op details — company + role, for showing the plan
                     to someone. Hides the identity everywhere the plan is shown
@@ -2477,58 +2433,6 @@ export default function Header() {
       <ClaudeConnectModal open={showClaudeConnect} onClose={() => setShowClaudeConnect(false)} />
       <ClaudeOAuthModal />
       <ClaudeProposalCard />
-
-      {/* ── Plan delete confirmation ── */}
-      {pendingDelete && (
-        <ConfirmDialog
-          title={pendingDelete.name
-            ? t("folders.delete.question", { name: pendingDelete.name })
-            : t("folders.delete.questionN", { n: pendingDelete.ids.length })}
-          body={<span style={{ color: "var(--text-5)" }}>
-            {t("folders.delete.undo", { days: trashDays })}
-          </span>}
-          confirmLabel={t("folders.delete.confirm")}
-          onConfirm={confirmPlanDelete}
-          onCancel={() => setPendingDelete(null)}
-        />
-      )}
-
-      {/* ── Storage alarm ──
-           A banner, not a toast: this says the app has stopped saving, so it
-           must not time out on its own while the user keeps typing into a plan
-           that is no longer being written anywhere. It offers the one action
-           that actually rescues the work — take a file copy — rather than only
-           reporting the problem. */}
-      {storageAlarm && (
-        <div role="alert" style={{
-          position: "fixed", bottom: 0, left: 0, right: 0, zIndex: 10200,
-          background: "var(--error-bg, rgba(239,68,68,0.12))",
-          borderTop: "1px solid var(--error)",
-          padding: "10px 14px", display: "flex", alignItems: "center",
-          gap: 12, flexWrap: "wrap",
-        }}>
-          <div style={{ flex: 1, minWidth: 200 }}>
-            <div style={{ fontSize: 11.5, fontWeight: 800, color: "var(--error)" }}>
-              {t(storageAlarm.kind === "quota"
-                ? "storage.alarm.quota.title" : "storage.alarm.unavail.title")}
-            </div>
-            <div style={{ fontSize: 10, color: "var(--text-3)", lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>
-              {t(storageAlarm.kind === "quota"
-                ? "storage.alarm.quota.body" : "storage.alarm.unavail.body")}
-            </div>
-          </div>
-          <button onClick={() => exportLibraryBackupJSON()} style={{
-            fontSize: 10.5, fontWeight: 700, padding: "6px 11px", borderRadius: 6,
-            cursor: "pointer", background: "var(--bg-surface)",
-            border: "1px solid var(--error)", color: "var(--error)", fontFamily: "inherit",
-          }}>{t("storage.alarm.export")}</button>
-          <button onClick={dismissStorageAlarm} style={{
-            fontSize: 10.5, padding: "6px 11px", borderRadius: 6, cursor: "pointer",
-            background: "transparent", border: "1px solid var(--border-2)",
-            color: "var(--text-4)", fontFamily: "inherit",
-          }}>{t("storage.alarm.dismiss")}</button>
-        </div>
-      )}
 
       {/* ── Auto-advance toast ── */}
       {semAdvanceToast && (

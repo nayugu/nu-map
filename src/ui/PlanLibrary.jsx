@@ -16,10 +16,9 @@ import { useLanguage }    from "../context/LanguageContext.jsx";
 import { useInstitution } from "../context/InstitutionContext.jsx";
 import PlanTree, { FolderIcon } from "./PlanTree.jsx";
 import ContextMenu, { useLongPress } from "./ContextMenu.jsx";
-import ConfirmDialog from "./ConfirmDialog.jsx";
 import {
   flattenTree, buildSearchIndex, matchIds, moveTargets, planMove,
-  topmostNodes, normalizeSearchText, MAX_DEPTH,
+  topmostNodes, normalizeSearchText, MAX_DEPTH, SORT_MODES,
 } from "../core/planFolders.js";
 
 /** Spring-loaded folders: hover a closed folder mid-drag and it opens. */
@@ -70,7 +69,9 @@ function UpIcon({ size = 12 }) {
  * next tick rather than immediately.
  */
 function setMinimalDragImage(e, row, count) {
-  const icon = row.item?.type === "folder" || row.children ? "\u{1F4C1}" : "\u{1F4C4}";
+  // `kind`, not `item.type`/`children` — a flattenTree row has neither of
+  // those, so a dragged FOLDER always showed the document glyph.
+  const icon = row.kind === "folder" ? "\u{1F4C1}" : "\u{1F4C4}";
   const el = document.createElement("div");
   el.textContent = count > 1 ? `${icon} ${count}` : icon;
   Object.assign(el.style, {
@@ -91,13 +92,13 @@ export default function PlanLibrary() {
     showPlanLibrary, setShowPlanLibrary,
     plans, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort, reorderNodes, orderedSiblings,
-    activePlanId, switchPlan, renamePlan, setPlanStudent,
-    exportLibraryJSON, exportLibraryZip, importLibraryFiles,
+    activePlanId, switchPlan, renamePlan, setPlanStudent, duplicatePlan,
+    exportLibraryJSON, exportLibraryZip, exportPlansFlat, importLibraryFiles,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
+    trashedPlans, restorePlanFromTrash, TRASH_TTL_DAYS,
     pushFolderHistory, undoFolders, redoFolders, folderCanUndo, folderCanRedo,
     setShowNewPlanModal, setNewPlanFolderId,
-    trashedPlans, restoreFromTrash, purgeFromTrash, trashTtlMs,
     isPhone,
   } = usePlanner();
   const { t, locale } = useLanguage();
@@ -114,14 +115,16 @@ export default function PlanLibrary() {
   const [exportMenu, setExportMenu] = useState(null);   // { x, y, ids }
   const [assigning, setAssigning]   = useState(null);   // { ids, value } assign student
   const [pending, setPending]       = useState(null);   // delete confirmation
-  const [notice, setNotice]         = useState("");
-  // "plans" | "trash". The trash is a VIEW of this panel rather than a separate
-  // window: it holds plan rows, it is reached from the plan list, and a restore
-  // puts a row back into the very tree behind it.
-  const [view, setView]             = useState("plans");
-  const [trashSel, setTrashSel]     = useState(() => new Set());
-  const [pendingPurge, setPendingPurge] = useState(null); // { ids, name } | { all: true }
+  const [notice, setNoticeRaw]      = useState("");
+  const [noticeBad, setNoticeBad]   = useState(true);
+  /**
+   * Say something in the notice strip. Defaults to the ERROR tone, because
+   * all but a handful of these are failures and a wrong default should be the
+   * loud one, not the silent one.
+   */
+  const setNotice = (msg, bad = true) => { setNoticeRaw(msg); setNoticeBad(bad); };
   const [drag, setDrag]             = useState(null);   // { ids }
+  const [showTrash, setShowTrash]   = useState(false);  // recently-deleted sheet
   // Reordering is only offered under manual sort: name and recency derive
   // position from the records, so a stored order would be invisible there.
   const manualOrder = folderSort === "manual";
@@ -218,7 +221,7 @@ export default function PlanLibrary() {
     }
     setQuery(""); setSelectedIds(new Set()); setFocusId(null); setEditingId(null);
     setMenu(null); setMoveMenu(null); setSortMenu(null); setExportMenu(null); setAssigning(null);
-    setPending(null); setNotice(""); setSelectMode(false);
+    setPending(null); setNotice(""); setSelectMode(false); setShowTrash(false);
     clearDrag();
     anchorIdx.current = -1;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -305,6 +308,17 @@ export default function PlanLibrary() {
     setEditingId(id);
   };
 
+  /**
+   * The one rule every "new folder" entry point uses: several rows selected
+   * means "put these inside a new folder", anything else means "make an empty
+   * folder here". Shared so the ⇧⌘N shortcut, the header + button and the
+   * context menu cannot disagree about it.
+   */
+  const newFolderSmart = (parentId = null) => {
+    if (selectedIds.size > 1) { newFolderWith([...selectedIds]); return; }
+    newFolder(parentId);
+  };
+
   const newFolderWith = (ids) => {
     const res = createFolderWithNodes(ids, t("folders.newName"));
     if (!res.ok) { setNotice(t(`folders.move.err.${res.reason}`, { max: MAX_DEPTH })); return; }
@@ -359,15 +373,57 @@ export default function PlanLibrary() {
    * BROWSABLE: folders become directories and every entry opens with the
    * ordinary Load, at the cost of names being bent into filenames.
    */
-  const doExport = (ids, asZip) => {
-    const res = asZip ? exportLibraryZip(ids) : exportLibraryJSON(ids);
-    setNotice(t("folders.io.exported", { n: res.plans }));
+  /**
+   * `shape` is 'files' (default), 'zip', or 'bundle'.
+   *
+   * 'files' writes one ordinary plan file per plan, which is the inverse of
+   * how they come back in — select them all in the file dialog and Import
+   * loads the lot. The other two exist for the one thing flat files cannot
+   * do, which is carry the folder tree.
+   */
+  /**
+   * Nothing may be awaited before `exportPlansFlat` — it reaches for the
+   * directory picker, which needs the click's user activation still intact.
+   */
+  const doExport = async (ids, shape = "files") => {
     setExportMenu(null);
+    // The bundle and zip routes are plain synchronous downloads with no error
+    // contract of their own, and `doExport` is async — so a throw from
+    // writeZip or createObjectURL became an unhandled rejection and the user
+    // saw NOTHING happen. They also used to report success for a selection of
+    // empty folders, downloading a file with no plans in it, while the
+    // default route called that same selection an error.
+    if (shape === "zip" || shape === "bundle") {
+      let res;
+      try {
+        res = shape === "zip" ? exportLibraryZip(ids) : exportLibraryJSON(ids);
+      } catch {
+        setNotice(t("folders.io.err.write"));
+        return;
+      }
+      if (!res?.plans) { setNotice(t("folders.io.err.noplans")); return; }
+      setNotice(t("folders.io.exported", { n: res.plans }), false);
+      return;
+    }
+
+    const res = await exportPlansFlat(ids);
+    if (!res.ok) {
+      // Dismissing the picker, or clicking Export while it is already open,
+      // are both non-events and say nothing.
+      if (res.reason === "cancelled" || res.reason === "busy") return;
+      setNotice(t(res.reason === "empty" ? "folders.io.err.noplans" : "folders.io.err.write"));
+      return;
+    }
+    setNotice(t(
+      res.via === "folder" ? "folders.io.exportedFolder"
+      : res.via === "zip"  ? "folders.io.exportedZip"
+      : "folders.io.exportedOne", { n: res.plans }), false);
   };
 
   const exportMenuItems = (ids) => [
-    { key: "zip",  label: t("folders.io.asZip"),  onSelect: () => doExport(ids, true) },
-    { key: "json", label: t("folders.io.asJson"), onSelect: () => doExport(ids, false) },
+    { key: "files",  label: t("folders.io.asFiles"),  onSelect: () => doExport(ids, "files") },
+    { key: "zip",    label: t("folders.io.asZip"),    onSelect: () => doExport(ids, "zip") },
+    { key: "bundle", label: t("folders.io.asJson"),   onSelect: () => doExport(ids, "bundle") },
   ];
 
   const doImport = async (files) => {
@@ -381,7 +437,36 @@ export default function PlanLibrary() {
     const base = res.atRoot
       ? t("folders.io.importedRoot", { n: res.plans })
       : t("folders.io.imported", { n: res.plans });
-    setNotice(res.failed ? `${base} ${t("folders.io.someFailed", { n: res.failed })}` : base);
+    setNotice(res.failed ? `${base} ${t("folders.io.someFailed", { n: res.failed })}` : base,
+      !!res.failed);
+  };
+
+  /**
+   * Copy every plan in the selection. Folders are skipped rather than
+   * refused — a mixed selection is ordinary, and duplicating a whole folder
+   * tree is a different act with different questions (does it copy the
+   * folder too? where does it go?) that this menu item should not silently
+   * decide.
+   */
+  const doDuplicate = (ids) => {
+    const planIds = ids.filter(id => !planTree.folderIds.has(id) && planTree.byId.has(id));
+    if (!planIds.length) return;
+    const made = [];
+    // One snapshot for the whole act, taken BEFORE any copy exists — so ⌘Z
+    // undoes "duplicate these three" once, rather than needing three presses
+    // of which two are no-ops.
+    pushFolderHistory();
+    for (const id of planIds) {
+      const res = duplicatePlan(id, false);
+      if (!res.ok) { setNotice(t(`folders.io.err.${res.reason}`)); break; }
+      made.push(res.id);
+    }
+    if (!made.length) return;
+    // Land on the copies, so the next act (rename, drag, open) needs no
+    // hunting for where they went.
+    setSelectedIds(new Set(made));
+    setFocusId(made[0]);
+    if (made.length === 1) setEditingId(made[0]);
   };
 
   const requestDelete = (ids) => {
@@ -411,50 +496,6 @@ export default function PlanLibrary() {
     if (!res.ok) { setNotice(t("folders.delete.err.last")); return; }
     setSelectedIds(new Set());
     setFocusId(null);
-  };
-
-  // ── Trash ───────────────────────────────────────────────────────
-  const trashDays = Math.round(trashTtlMs / 86400000);
-
-  /**
-   * Days left, rounded UP.
-   *
-   * Rounding down would print "0 days left" for a plan that is still there for
-   * another 23 hours, and a countdown that reads zero while the row is still
-   * restorable teaches the user the number is decorative. The final day gets its
-   * own label instead of "1 days left", which is wrong in en/es/fr alike.
-   */
-  const daysLeftLabel = (ms) => {
-    const d = Math.ceil(ms / 86400000);
-    return d <= 1 ? t("trash.lastDay") : t("trash.days", { n: d });
-  };
-
-  const toggleTrashSel = (id) => setTrashSel(prev => {
-    const next = new Set(prev);
-    next.has(id) ? next.delete(id) : next.add(id);
-    return next;
-  });
-
-  const doRestore = (ids) => {
-    const res = restoreFromTrash(ids);
-    setTrashSel(new Set());
-    if (!res.ok) return;
-    const one = res.restored.length === 1
-      ? trashedPlans.find(e => e.id === res.restored[0])
-      : null;
-    setNotice(one
-      ? t("trash.restored", { name: one.name })
-      : t("trash.restoredN", { n: res.restored.length }));
-    // Drop back to the plan list so the restored row is actually visible —
-    // a restore that leaves you staring at the now-empty trash reads as a no-op.
-    setView("plans");
-  };
-
-  const confirmPurge = () => {
-    if (!pendingPurge) return;
-    purgeFromTrash(pendingPurge.ids);
-    setPendingPurge(null);
-    setTrashSel(new Set());
   };
 
   const commitName = (id, name) => {
@@ -546,6 +587,14 @@ export default function PlanLibrary() {
       // A context menu owns Escape while it is open, or dismissing the menu
       // would close the whole panel out from under it.
       if (menu || moveMenu || sortMenu || exportMenu) return;
+      // The trash sheet owns the keyboard while it is open, like every other
+      // overlay here. Without this, Escape closed the whole library behind it,
+      // Backspace opened the delete dialog UNDER it, and ⌘Z ran an invisible
+      // undo — all aimed at the selection the sheet was covering.
+      if (showTrash) {
+        if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); setShowTrash(false); }
+        return;
+      }
       if (pending) {
         if (e.key === "Escape") { e.preventDefault(); setPending(null); }
         if (e.key === "Enter")  { e.preventDefault(); confirmDelete(); }
@@ -577,13 +626,33 @@ export default function PlanLibrary() {
         close();
         return;
       }
+      // Select all — the only way to act on the whole library now that Export
+      // is scoped to a selection. Takes the VISIBLE rows, so with a search
+      // live it selects the matches, which is what "all" means on a filtered
+      // list and makes "export everyone named Chen" two keystrokes.
+      if (mod && e.key.toLowerCase() === "a") {
+        e.preventDefault();
+        e.stopPropagation();
+        setSelectedIds(new Set(rows.map(r => r.id)));
+        anchorIdx.current = 0;
+        return;
+      }
       if (e.key === "Enter")      { e.preventDefault(); handleEnter(); return; }
+      // F2 is rename everywhere outside macOS, and unlike Enter it means only
+      // that — Enter has to double as "open the search hit", so on a filtered
+      // list it is not available for renaming at all.
+      if (e.key === "F2") {
+        e.preventDefault();
+        const id = selectedIds.size === 1 ? [...selectedIds][0] : focusId;
+        if (id && planTree.byId.has(id)) { setSelectedIds(new Set([id])); setEditingId(id); }
+        return;
+      }
       if (e.key === "ArrowDown")  { e.preventDefault(); moveFocus(1, e.shiftKey); return; }
       if (e.key === "ArrowUp")    { e.preventDefault(); moveFocus(-1, e.shiftKey); return; }
       if (e.key.toLowerCase() === "n" && e.shiftKey && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         const sel = focusId ? rows.find(r => r.id === focusId) : null;
-        newFolder(sel ? parentFor(sel) : null);
+        newFolderSmart(sel ? parentFor(sel) : null);
         return;
       }
       if (inSearch) return;               // every remaining key is typing
@@ -617,7 +686,7 @@ export default function PlanLibrary() {
     window.addEventListener("keydown", onKey, true);
     return () => window.removeEventListener("keydown", onKey, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showPlanLibrary, editingId, pending, menu, moveMenu, sortMenu, exportMenu, assigning, query, rows, focusId,
+  }, [showPlanLibrary, editingId, pending, menu, moveMenu, sortMenu, exportMenu, assigning, showTrash, query, rows, focusId,
       selectedIds, openFolders, folderCanUndo, folderCanRedo]);
 
   // ── Drag and drop ───────────────────────────────────────────────
@@ -735,8 +804,15 @@ export default function PlanLibrary() {
           : t("folders.menu.open"),
         onSelect: () => openRow(row),
       },
-      { key: "rename", label: t("folders.menu.rename"), hint: "↵", disabled: n > 1,
+      { key: "rename", label: t("folders.menu.rename"), hint: "↵ / F2", disabled: n > 1,
         onSelect: () => setEditingId(row.id) },
+      // Only where there is a plan to copy — a folder has no duplicate verb
+      // here, so on a pure-folder selection this would be a dead item.
+      ...(ids.some(id => !planTree.folderIds.has(id)) ? [{
+        key: "duplicate",
+        label: t("folders.menu.duplicate"),
+        onSelect: () => doDuplicate(ids),
+      }] : []),
       // Only where there is a plan to assign — a folder has no advisee of its
       // own, so offering it on a pure-folder selection would be a dead item.
       ...(ids.some(id => !planTree.folderIds.has(id)) ? [{
@@ -745,12 +821,22 @@ export default function PlanLibrary() {
         onSelect: () => requestAssign(ids),
       }] : []),
       { divider: true },
-      { key: "newFolder", label: t("folders.menu.newFolder"), hint: "⇧⌘N",
-        onSelect: () => newFolder(parentFor(row)) },
-      { key: "newWith", label: t("folders.menu.newFolderWithSel"), hint: joinCounts(
-          ids.filter(id => !planTree.folderIds.has(id)).length,
-          ids.filter(id => planTree.folderIds.has(id)).length),
-        onSelect: () => newFolderWith(ids) },
+      // ONE item, not two. "New folder" and "New folder with selection" sat
+      // next to each other and the difference was invisible: with something
+      // selected, the first silently made an EMPTY folder beside it, which is
+      // never what was meant. So the selection decides — with rows selected it
+      // wraps them, and the hint says which, so nothing is hidden.
+      // `ids` always holds at least the right-clicked row, so the test is
+      // whether it is a real MULTI-selection — one row is "put a folder here",
+      // several is "put these in a folder".
+      { key: "newFolder",
+        label: t("folders.menu.newFolder"),
+        hint: ids.length > 1
+          ? joinCounts(
+              ids.filter(id => !planTree.folderIds.has(id)).length,
+              ids.filter(id => planTree.folderIds.has(id)).length)
+          : "⇧⌘N",
+        onSelect: () => (ids.length > 1 ? newFolderWith(ids) : newFolder(parentFor(row))) },
       { key: "newPlan", label: t("folders.menu.newPlanHere"),
         onSelect: () => newPlanIn(parentFor(row)) },
       { divider: true },
@@ -785,20 +871,18 @@ export default function PlanLibrary() {
 
   // "By student" appears only once some plan HAS a student — an ordinary
   // student never sees a sort mode that would do nothing for them.
-  const sortMenuItems = () => {
-    const modes = [
-      ["manual", "folders.sort.manual"],
-      ["name",   "folders.sort.name"],
-      ["recent", "folders.sort.recent"],
-      ...(hasStudents ? [["student", "folders.sort.student"]] : []),
-    ];
-    return modes.map(([mode, key]) => ({
-      key: mode,
-      label: t(key),
-      hint: folderSort === mode ? "✓" : undefined,
-      onSelect: () => setFolderSort(mode),
-    }));
-  };
+  const sortMenuItems = () =>
+    // Derived from core's SORT_MODES rather than relisted here: a mode this
+    // menu offers but PlannerContext won't persist is chosen, used, and then
+    // silently lost on reload, which is exactly what happened to 'student'.
+    SORT_MODES
+      .filter(mode => mode !== "student" || hasStudents)
+      .map(mode => ({
+        key: mode,
+        label: t(`folders.sort.${mode}`),
+        hint: folderSort === mode ? "✓" : undefined,
+        onSelect: () => setFolderSort(mode),
+      }));
 
   const footerMoveItems = () => {
     const ids = [...selectedIds];
@@ -821,15 +905,35 @@ export default function PlanLibrary() {
       if (matches) return t("folders.meta.matched", { n: row.matched ?? 0, total: row.counts.plans });
       return row.counts.plans > 0 ? String(row.counts.plans) : "";
     }
-    // Student first, program second: when a plan HAS an advisee, whose plan it
-    // is outranks what it studies — that is the question an advisor is scanning
-    // for. With no student the line is unchanged from before, so the ordinary
-    // student sees exactly what they saw.
-    const major = labels.get(row.id) ?? "";
-    const student = row.item.student ?? "";
-    if (!student) return major;
-    return major ? t("folders.meta.studentAnd", { student, major }) : student;
+    // Plan rows carry their major and student as COLUMNS (see `planCells`),
+    // so nothing is left for the single meta slot.
+    return "";
   };
+
+  /**
+   * The two trailing columns on a plan row: major, then student.
+   *
+   * They used to be one run of text — "Jane Doe · Computer Science" — appended
+   * after a name column that took whatever width was left, so both values
+   * started at a different x on every row and neither could be read DOWN the
+   * list. Scanning a caseload for one advisee is the thing an advisor does
+   * most, and a ragged column is the one layout that makes it impossible.
+   *
+   * The student is the stronger of the two because it answers "whose plan is
+   * this", which outranks "what do they study" the moment a plan has an
+   * advisee at all. Both columns disappear when no plan has a student, so a
+   * lone student never meets a half-empty roster layout.
+   */
+  const planCells = (row) => [
+    // Student first, then major on the far right. The major is the column
+    // that is ALWAYS populated, so putting it at the edge gives the row a
+    // straight right margin down the whole list; the student, which is often
+    // blank, sits inboard where a gap does not leave a ragged edge. Reversing
+    // these two put the ragged column on the outside, which is what makes a
+    // list look broken.
+    { text: row.item.student ?? "", share: "22%", strong: true },
+    { text: labels.get(row.id) ?? "", share: "24%" },
+  ];
 
   // Does any plan being assigned currently HAVE a student? An empty field means
   // "clear" only if there is something to clear; on a plan with no student yet
@@ -947,52 +1051,44 @@ export default function PlanLibrary() {
               doImport(files);
             }}
           />
+          {/* Named, not ↓/↑. The arrows were unreadable in both directions —
+              nothing says whether ↑ means "send my plans out" or "the file
+              goes up into the app" — and this is the one pair of controls an
+              advisor reaches for by name. The title beside them is the flex
+              item that shrinks, so the labels survive on a narrow phone. */}
           <button onClick={() => fileRef.current?.click()} style={iconBtn}
-            title={t("folders.io.import")} aria-label={t("folders.io.import")}>
-            <span aria-hidden="true">↓</span>
+            title={t("folders.io.importTitle")}>
+            {t("folders.io.import")}
           </button>
-          <button
-            onClick={e => {
-              e.stopPropagation();
-              const r = e.currentTarget.getBoundingClientRect();
-              setExportMenu({ x: Math.max(6, r.right - 190), y: r.bottom + 4, ids: null });
-            }}
-            style={iconBtn}
-            disabled={plans.length === 0}
-            aria-haspopup="menu"
-            title={t("folders.io.exportAll")} aria-label={t("folders.io.exportAll")}>
-            <span aria-hidden="true">↑</span>
-          </button>
-          <button onClick={() => newFolder(null)} style={iconBtn} title={t("folders.newFolder")}>
+          {/* No Export button up here. Import belongs in the header because
+              there is nothing to select before importing; Export always acts
+              on something, so it lives on the selection footer where the
+              thing it acts on is named. Two Exports meaning different scopes,
+              one of them permanently visible, is the redundancy. Exporting
+              everything is ⌘A then Export — the footer then says "N selected",
+              so the scope is stated rather than assumed. */}
+          {/* Shown only when something is actually recoverable, so the
+              ordinary user never meets a permanently empty Trash. Deleted
+              plans keep their data for 30 days, but ⌘Z is the only thing that
+              reached them and that history dies on reload — after which a
+              plan that still exists on disk was simply unreachable. */}
+          {trashedPlans.length > 0 && (
+            <button onClick={e => { e.stopPropagation(); setShowTrash(true); }}
+              style={iconBtn} title={t("folders.trash.title")}>
+              {t("folders.trash")} {trashedPlans.length}
+            </button>
+          )}
+          <button onClick={() => newFolderSmart(null)} style={iconBtn} title={t("folders.newFolder")}>
             <FolderIcon size={13} />
             <span aria-hidden="true" style={{ fontWeight: 700 }}>+</span>
           </button>
-          {/* Shown only when there IS something to recover. A permanently
-              visible empty bin is a standing invitation to wonder what is in it;
-              a bin that appears the moment you delete something is a signal
-              that the delete went somewhere. */}
-          {trashedPlans.length > 0 && (
-            <button
-              onClick={() => { setView(v => v === "trash" ? "plans" : "trash"); setTrashSel(new Set()); }}
-              style={{ ...iconBtn,
-                color: view === "trash" ? "var(--active)" : "var(--text-4)",
-                borderColor: view === "trash" ? "var(--active)" : "var(--border-2)" }}
-              title={t("trash.openN", { n: trashedPlans.length })}
-              aria-pressed={view === "trash"}>
-              <span aria-hidden="true">🗑</span>
-              <span style={{ fontSize: 9, fontWeight: 700 }}>{trashedPlans.length}</span>
-            </button>
-          )}
           <button onClick={close} title={t("folders.close")} style={{
             background: "none", border: "none", cursor: "pointer",
             color: "var(--text-4)", fontSize: 16, lineHeight: 1, padding: 3,
           }}>✕</button>
         </div>
 
-        {/* ── Search + sort ── (plan list only: there is nothing to sort in a
-             bin of at most a few rows, and a search box that filtered the trash
-             would imply the trash is a place you keep things) */}
-        {view === "plans" && (
+        {/* ── Search + sort ── */}
         <div style={{
           display: "flex", alignItems: "center", gap: 6, padding: "9px 15px",
           borderBottom: "1px solid var(--border-1)", flexShrink: 0,
@@ -1033,62 +1129,21 @@ export default function PlanLibrary() {
             <span aria-hidden="true" style={{ color: "var(--text-5)", fontSize: 7 }}>▼</span>
           </button>
         </div>
-        )}
 
         {notice && (
+          // Every notice used to render RED — including "Exported 4 plans",
+          // which made a success indistinguishable from a failure and is why
+          // a working export read as a broken one. Errors stay red; anything
+          // that went fine is quiet.
           <div role="status" style={{
-            padding: "5px 13px", fontSize: 10, color: "var(--error)",
-            background: "var(--error-bg, rgba(239,68,68,0.1))",
+            padding: "5px 13px", fontSize: 10,
+            color: noticeBad ? "var(--error)" : "var(--text-3)",
+            background: noticeBad ? "var(--error-bg, rgba(239,68,68,0.1))" : "var(--bg-surface-2)",
             borderBottom: "1px solid var(--border-1)", flexShrink: 0,
           }}>{notice}</div>
         )}
 
-        {/* ── Trash ── */}
-        {view === "trash" ? (
-          <div style={{ flex: 1, overflowY: "auto", padding: "8px 9px 14px", minHeight: 120 }}>
-            <div style={{
-              fontSize: 9.5, color: "var(--text-5)", padding: "2px 6px 9px",
-              lineHeight: "calc(1.6 * var(--lh-scale, 1))",
-            }}>
-              {t("trash.hint", { days: trashDays })}
-            </div>
-            {trashedPlans.length === 0 ? (
-              <div style={{ padding: "38px 22px", textAlign: "center", color: "var(--text-5)", fontSize: 12 }}>
-                {t("trash.empty")}
-              </div>
-            ) : trashedPlans.map(e => {
-              const sel = trashSel.has(e.id);
-              return (
-                <div key={e.id}
-                  onClick={() => toggleTrashSel(e.id)}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 8,
-                    padding: "7px 8px", borderRadius: 6, cursor: "pointer",
-                    background: sel ? "var(--active-bg)" : "transparent",
-                    border: `1px solid ${sel ? "var(--active)" : "transparent"}`,
-                  }}>
-                  <input type="checkbox" checked={sel} tabIndex={-1} readOnly
-                    aria-label={e.name}
-                    style={{ flexShrink: 0, pointerEvents: "none", accentColor: "var(--active)" }} />
-                  <span style={{
-                    flex: 1, minWidth: 0, fontSize: 12, color: "var(--text-2)",
-                    overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                  }}>{e.name}</span>
-                  {/* The countdown is the whole point of showing a date at all:
-                      "deleted 3 days ago" does not tell anyone how long they
-                      have left to change their mind. */}
-                  <span style={{ fontSize: 9, color: "var(--text-5)", flexShrink: 0 }}>
-                    {daysLeftLabel(e.expiresInMs)}
-                  </span>
-                  <button onClick={ev => { ev.stopPropagation(); doRestore([e.id]); }}
-                    style={{ ...iconBtn, color: "var(--accent)", flexShrink: 0 }}>
-                    {t("trash.restore")}
-                  </button>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
+        {/* ── Tree ── */}
         <div
           {...longPress}
           onDragOver={e => { if (drag) { e.preventDefault(); setDropTargetId(""); setDropVerdict("ok"); } }}
@@ -1130,6 +1185,7 @@ export default function PlanLibrary() {
               onCancelEdit={() => setEditingId(null)}
               dnd={dnd}
               metaOf={metaOf}
+              cells={planCells}
               t={t}
             />
           )}
@@ -1150,41 +1206,13 @@ export default function PlanLibrary() {
             >{t("folders.dropRoot")}</div>
           )}
         </div>
-        )}
 
         {/* ── Footer ── */}
         <div style={{
           borderTop: "1px solid var(--border-1)", padding: "9px 15px",
           display: "flex", alignItems: "center", gap: 6, flexShrink: 0,
         }}>
-          {view === "trash" ? (
-            <>
-              <button onClick={() => { setView("plans"); setTrashSel(new Set()); }}
-                style={{ ...iconBtn, flex: 1, justifyContent: "center" }}>
-                {t("trash.back")}
-              </button>
-              {trashSel.size > 0 && (
-                <button onClick={() => doRestore([...trashSel])}
-                  style={{ ...iconBtn, color: "var(--accent)", flexShrink: 0 }}>
-                  {t("trash.restore")}
-                </button>
-              )}
-              {/* "Delete forever" is the only irreversible control left in the
-                  app, so it is never the default action: it needs a selection
-                  first, and then a confirmation that says so plainly. */}
-              {trashedPlans.length > 0 && (
-                <button
-                  onClick={() => {
-                    const ids = trashSel.size > 0 ? [...trashSel] : trashedPlans.map(e => e.id);
-                    const one = ids.length === 1 ? trashedPlans.find(e => e.id === ids[0]) : null;
-                    setPendingPurge({ ids, name: one?.name ?? "", all: trashSel.size === 0 });
-                  }}
-                  style={{ ...iconBtn, color: "var(--error)", borderColor: "var(--error-border, var(--border-2))", flexShrink: 0 }}>
-                  {trashSel.size > 0 ? t("trash.purge") : t("trash.emptyAll")}
-                </button>
-              )}
-            </>
-          ) : selectedIds.size > 0 ? (
+          {selectedIds.size > 0 ? (
             <>
               <span style={{ fontSize: 11, color: "var(--text-4)", flex: 1, minWidth: 0 }}>
                 {t("folders.selected", { n: selectedIds.size })}
@@ -1198,8 +1226,9 @@ export default function PlanLibrary() {
                 </button>
               )}
               <button
-                onClick={e => {
-                  e.stopPropagation();
+                onClick={e => { e.stopPropagation(); doExport([...selectedIds], "files"); }}
+                onContextMenu={e => {
+                  e.preventDefault(); e.stopPropagation();
                   const r = e.currentTarget.getBoundingClientRect();
                   setExportMenu({ x: r.left, y: r.bottom + 4, ids: [...selectedIds] });
                 }}
@@ -1397,43 +1426,116 @@ export default function PlanLibrary() {
         </div>
       )}
 
-      {/* ── Delete confirmation ── */}
-      {pending && (
-        <ConfirmDialog
-          title={pending.name
-            ? t("folders.delete.question", { name: pending.name })
-            : t("folders.delete.questionN", { n: pending.targets.length })}
-          body={<>
-            {(() => {
-              const inside = joinCounts(pending.contained.plans, pending.contained.folders);
-              return inside ? `${t("folders.delete.alsoRemoves", { items: inside })} ` : "";
-            })()}
-            {/* Reassurance, not a warning: the plan data survives a delete and
-                the trash holds it for 30 days, so this line is not red. */}
-            <span style={{ color: "var(--text-5)" }}>{t("folders.delete.undo", { days: trashDays })}</span>
-          </>}
-          confirmLabel={t("folders.delete.confirm")}
-          onConfirm={confirmDelete}
-          onCancel={() => setPending(null)}
-        />
+      {/* ── Recently deleted ──
+          Restores to the TOP LEVEL, not to where the plan came from: that
+          folder may itself have been deleted, and rebuilding a chain of
+          folders to hold one plan invents structure nobody asked for. ⌘Z is
+          the way back to the exact spot; this is the way back after a reload,
+          when the undo history is gone. */}
+      {showTrash && (
+        <div
+          onClick={e => { e.stopPropagation(); setShowTrash(false); }}
+          style={{
+            position: "fixed", inset: 0, zIndex: 10100, background: "rgba(0,0,0,0.5)",
+            display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
+          }}
+        >
+          <div onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" style={{
+            background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+            borderRadius: 12, maxWidth: 380, width: "100%", padding: "15px 16px 13px",
+            boxShadow: "var(--shadow-modal)",
+          }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-1)", marginBottom: 4 }}>
+              {t("folders.trash.heading")}
+            </div>
+            <div style={{ fontSize: 10, color: "var(--text-5)", marginBottom: 9,
+              lineHeight: "calc(1.6 * var(--lh-scale, 1))" }}>
+              {t("folders.trash.note")}
+            </div>
+            <div style={{
+              maxHeight: 260, overflowY: "auto", border: "1px solid var(--border-1)",
+              borderRadius: 6, background: "var(--bg-surface-2)",
+            }}>
+              {trashedPlans.map(p => (
+                <div key={p.id} style={{
+                  display: "flex", alignItems: "center", gap: 8,
+                  padding: "6px 9px", fontSize: 11.5, color: "var(--text-2)",
+                }}>
+                  <span style={{ flex: 1, minWidth: 0, overflow: "hidden",
+                    textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
+                  <span style={{ flexShrink: 0, fontSize: 9, color: "var(--text-5)" }}>
+                    {/* The TTL comes from the context, not a second copy of
+                        "30" that could drift away from the sweep. */}
+                    {t("folders.trash.daysLeft", {
+                      n: Math.max(0, TRASH_TTL_DAYS - Math.floor((Date.now() - p.deletedAt) / 86_400_000)),
+                    })}
+                  </span>
+                  <button
+                    onClick={() => {
+                      const res = restorePlanFromTrash(p.id);
+                      if (!res.ok) { setNotice(t("folders.trash.err")); return; }
+                      setNotice(t("folders.trash.restored", { name: p.name }), false);
+                      setSelectedIds(new Set([res.id]));
+                      setFocusId(res.id);
+                      if (trashedPlans.length === 1) setShowTrash(false);
+                    }}
+                    style={{ ...iconBtn, fontSize: 10, padding: "3px 8px" }}>
+                    {t("folders.trash.restore")}
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => setShowTrash(false)} style={{
+              width: "100%", marginTop: 11, fontSize: 11, padding: "6px 10px",
+              borderRadius: 6, cursor: "pointer", background: "var(--bg-surface-2)",
+              border: "1px solid var(--border-2)", color: "var(--text-3)", fontFamily: "inherit",
+            }}>{t("folders.close")}</button>
+          </div>
+        </div>
       )}
 
-      {/* ── Permanent-delete confirmation (the one real point of no return) ── */}
-      {pendingPurge && (
-        <ConfirmDialog
-          danger
-          title={pendingPurge.all
-            ? t("trash.emptyAll.question")
-            : pendingPurge.name
-              ? t("trash.purge.question", { name: pendingPurge.name })
-              : t("trash.purge.questionN", { n: pendingPurge.ids.length })}
-          body={pendingPurge.all
-            ? t("trash.emptyAll.body", { items: nPlans(pendingPurge.ids.length) })
-            : t("trash.purge.body")}
-          confirmLabel={t("trash.purge")}
-          onConfirm={confirmPurge}
-          onCancel={() => setPendingPurge(null)}
-        />
+      {/* ── Delete confirmation ── */}
+      {pending && (
+        <div
+          onClick={e => { e.stopPropagation(); setPending(null); }}
+          style={{
+            position: "fixed", inset: 0, zIndex: 10100, background: "rgba(0,0,0,0.5)",
+            display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
+          }}
+        >
+          <div onClick={e => e.stopPropagation()} style={{
+            background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+            borderRadius: 12, maxWidth: 330, width: "100%", padding: "15px 16px 13px",
+            boxShadow: "var(--shadow-modal)",
+          }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-1)", marginBottom: 7 }}>
+              {pending.name
+                ? t("folders.delete.question", { name: pending.name })
+                : t("folders.delete.questionN", { n: pending.targets.length })}
+            </div>
+            <div style={{ fontSize: 10.5, color: "var(--text-4)", lineHeight: "calc(1.6 * var(--lh-scale, 1))", marginBottom: 12 }}>
+              {(() => {
+                const inside = joinCounts(pending.contained.plans, pending.contained.folders);
+                return inside ? `${t("folders.delete.alsoRemoves", { items: inside })} ` : "";
+              })()}
+              {/* Reassurance, not a warning: the plan data survives a delete and
+                  ⌘Z puts it back, so this line is no longer red. */}
+              <span style={{ color: "var(--text-5)" }}>{t("folders.delete.undo")}</span>
+            </div>
+            <div style={{ display: "flex", gap: 7 }}>
+              <button onClick={() => setPending(null)} style={{
+                flex: 1, fontSize: 11, padding: "6px 10px", borderRadius: 6, cursor: "pointer",
+                background: "var(--bg-surface-2)", border: "1px solid var(--border-2)",
+                color: "var(--text-3)", fontFamily: "inherit",
+              }}>{t("folders.delete.cancel")}</button>
+              <button autoFocus onClick={confirmDelete} style={{
+                flex: 1, fontSize: 11, fontWeight: 700, padding: "6px 10px", borderRadius: 6,
+                cursor: "pointer", background: "var(--error-bg, rgba(239,68,68,0.12))",
+                border: "1px solid var(--error)", color: "var(--error)", fontFamily: "inherit",
+              }}>{t("folders.delete.confirm")}</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
