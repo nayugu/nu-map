@@ -97,7 +97,17 @@ export function classifyCondition(note) {
  */
 export function planConditions(plan) {
   const met = new Set();
-  if (plan?.studentType === "graduate") met.add("grad-admission");
+  // A declared accelerated pathway (NEU: "PlusOne") IS admission to a graduate
+  // program — that is what the student was admitted to — so an undergraduate
+  // plan carrying one asserts the same condition a graduate plan does.
+  //
+  // Measured: of 56 shareable graduate courses across six colleges' published
+  // PlusOne tables, 7 carry "graduate program admission" in their prereq tree
+  // (CS 5310, CY 5200, CY 5210, CY 5240, CHEM 5628, CHEM 5676, ME 5250) out of
+  // 209 such courses corpus-wide. Without this, placing one of those shows a
+  // missing undergraduate prereq — exactly the red card invariant 1 above
+  // forbids, and for exactly the student the comment there describes.
+  if (plan?.studentType === "graduate" || plan?.plusOne) met.add("grad-admission");
   return met;
 }
 

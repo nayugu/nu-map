@@ -1,0 +1,76 @@
+{
+  "id": "khoury/bscmpe-to-mscs",
+  "brand": "PlusOne",
+  "college": "computer-information-science",
+  "label": "Computer Engineering, BSCmpE → Computer Science, MSCS",
+  "eligibility": [
+    { "ugProgram": "2026/engineering/computer_engineering_bscmpe_(boston)" },
+    { "ugProgram": "2026/engineering/computer_engineering_and_computer_science_bscmpe_(boston)" },
+    { "ugProgram": "2026/engineering/computer_engineering_and_physics_bscmpe_(boston)" }
+  ],
+  "msPrograms": [
+    "grad/2026/computer-information-science/computer_science_mscs_(boston)",
+    "grad/2026/computer-information-science/computer_science_mscs_(oakland)",
+    "grad/2026/computer-information-science/computer_science_mscs_(silicon_valley)",
+    "grad/2026/computer-information-science/computer_science_mscs_(seattle)"
+  ],
+  "counting": {
+    "includeWithdrawn": true,
+    "note": "Khoury: 'maximum 4 graduate courses total during undergraduate degree (including withdrawals)'."
+  },
+  "shares": [
+    {
+      "grad": "CS 5010",
+      "target": { "kind": "slot", "label": "General Elective" },
+      "mandatory": true
+    },
+    {
+      "grad": "CS 5800",
+      "target": { "kind": "course", "ref": "CS 3000" },
+      "mandatoryUnless": { "completed": "CS 3000" }
+    },
+    { "grad": "CS 5200", "target": { "kind": "course", "ref": "CS 3200" } },
+    { "grad": "CS 5600", "target": { "kind": "course", "ref": "CS 3650" } },
+    { "grad": "CS 5700", "target": { "kind": "course", "ref": "CS 4700" } },
+    { "grad": "CS 5100", "target": { "kind": "course", "ref": "CS 4100" } },
+    { "grad": "CS 5500", "target": { "kind": "course", "ref": "CS 4500" } },
+    { "grad": "CS 5500", "target": { "kind": "course", "ref": "CS 4530" } },
+    { "grad": "CS 5610", "target": { "kind": "course", "ref": "CS 4550" } }
+  ],
+  "rules": [
+    { "kind": "shareCap", "courses": 4, "semesterHours": 16 },
+    { "kind": "mandatoryShares" },
+    { "kind": "chooseK", "k": 2, "counts": "unknown" },
+    { "kind": "noGradIfUgDone" },
+    { "kind": "maxGradCoursesPerTerm", "max": 1 },
+    { "kind": "earliestTerm", "afterTerms": 3 },
+    { "kind": "gpaMin", "min": 3.0, "scopes": ["cumulative", "major"] },
+    { "kind": "gradCourseCompletedFirst", "count": 1 },
+    { "kind": "admissionNotGuaranteed" },
+    { "kind": "advisorApproval", "form": "PlusOne Application" },
+    { "kind": "noDeferral" },
+    { "kind": "fullTimeGradMin", "sh": 8 },
+    { "kind": "noTransferCredit" },
+    { "kind": "scholarshipIneligible", "names": ["Double Husky"] }
+  ],
+  "notes": [
+    {
+      "text": "The source says all students take CS 5010, must take CS 5800 unless CS 3000 is already complete, and then 'choose two' from the replacement table. It does NOT say whether the two are in addition to the mandatory courses (total four, matching the university cap) or inclusive of them. `chooseK.counts` is therefore \"unknown\", so the rule reports that it cannot be decided rather than picking a reading. The university cap of four courses / 16 SH still applies and is still checked.",
+      "reason": "open question — docs/plusone-design.md §13.5; ask an advisor"
+    },
+    {
+      "text": "Computer Engineering is housed in the College of Engineering, not Khoury. Khoury directs students in combined majors housed in another college to their Khoury Secondary Advisor rather than their primary advisor.",
+      "reason": "cross-college advising; informational only"
+    },
+    {
+      "text": "'Placement is not guaranteed' appears on this pathway in addition to the usual admission caveat.",
+      "reason": "source wording behind admissionNotGuaranteed"
+    }
+  ],
+  "source": {
+    "url": "https://www.khoury.northeastern.edu/programs/computer-engineering-to-ms-in-computer-science-plusone/",
+    "kind": "html",
+    "retrievedAt": "2026-08-13"
+  },
+  "confidence": "published"
+}

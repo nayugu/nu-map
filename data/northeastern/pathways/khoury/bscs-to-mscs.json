@@ -1,0 +1,64 @@
+{
+  "id": "khoury/bscs-to-mscs",
+  "brand": "PlusOne",
+  "college": "computer-information-science",
+  "label": "Computer Science, BSCS → Computer Science, MSCS",
+  "eligibility": [
+    { "ugProgram": "2026/computer-information-science/computer_science_bscs_(boston)" }
+  ],
+  "msPrograms": [
+    "grad/2026/computer-information-science/computer_science_mscs_(boston)",
+    "grad/2026/computer-information-science/computer_science_mscs_(oakland)",
+    "grad/2026/computer-information-science/computer_science_mscs_(silicon_valley)",
+    "grad/2026/computer-information-science/computer_science_mscs_(seattle)"
+  ],
+  "counting": {
+    "includeWithdrawn": true,
+    "note": "Khoury: 'four graduate courses total allowed (including withdrawals)'."
+  },
+  "shares": [
+    { "grad": "CS 5340", "target": { "kind": "course", "ref": "CS 2484" } },
+    { "grad": "CS 5800", "target": { "kind": "course", "ref": "CS 3000" } },
+    { "grad": "CS 5200", "target": { "kind": "course", "ref": "CS 3200" } },
+    { "grad": "CS 5600", "target": { "kind": "course", "ref": "CS 3650" } },
+    { "grad": "CS 5700", "target": { "kind": "course", "ref": "CS 4700" } },
+    { "grad": "CS 5100", "target": { "kind": "course", "ref": "CS 4100" } },
+    { "grad": "CS 5150", "target": { "kind": "course", "ref": "CS 4150" } },
+    { "grad": "CS 5310", "target": { "kind": "course", "ref": "CS 4300" } },
+    { "grad": "CS 5400", "target": { "kind": "course", "ref": "CS 4400" } },
+    { "grad": "CS 5500", "target": { "kind": "course", "ref": "CS 4500" } },
+    { "grad": "CS 5500", "target": { "kind": "course", "ref": "CS 4530" } },
+    { "grad": "CS 5520", "target": { "kind": "course", "ref": "CS 4520" } },
+    { "grad": "CS 5610", "target": { "kind": "course", "ref": "CS 4550" } }
+  ],
+  "rules": [
+    { "kind": "shareCap", "courses": 4, "semesterHours": 16 },
+    { "kind": "chooseK", "k": 4, "counts": "allShares" },
+    { "kind": "noGradIfUgDone" },
+    { "kind": "maxGradCoursesPerTerm", "max": 1 },
+    { "kind": "earliestTerm", "afterTerms": 3 },
+    { "kind": "gpaMin", "min": 3.0, "scopes": ["cumulative", "major"] },
+    { "kind": "gradCourseCompletedFirst", "count": 1 },
+    { "kind": "admissionNotGuaranteed" },
+    { "kind": "noDeferral" },
+    { "kind": "fullTimeGradMin", "sh": 8 },
+    { "kind": "noTransferCredit" },
+    { "kind": "scholarshipIneligible", "names": ["Double Husky"] }
+  ],
+  "notes": [
+    {
+      "text": "CS 4500 and CS 4530 both map to CS 5500; only one of the two can be shared, since sharing consumes the graduate course once.",
+      "reason": "two rows, one graduate course"
+    },
+    {
+      "text": "'Only one graduate course may be completed per semester' and 'first-year students cannot take their first graduate-level course during the summer' — so the earliest is the fall of year two.",
+      "reason": "source wording behind earliestTerm"
+    }
+  ],
+  "source": {
+    "url": "https://www.khoury.northeastern.edu/programs/plusone-program-with-ms-in-cs/",
+    "kind": "html",
+    "retrievedAt": "2026-08-13"
+  },
+  "confidence": "published"
+}

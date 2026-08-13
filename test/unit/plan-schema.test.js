@@ -26,7 +26,24 @@ const FROZEN_SHARE_KEYS = {
   placedOut: "po", planName: "pn",
   locale: "lc", substitutions: "su",
   studentType: "st",
+  // APPENDED 2026-08-13 with the accelerated-pathway (PlusOne) field. Adding a
+  // key is backward compatible — an old share link simply has no `p1` and
+  // decodes exactly as before — but it is still recorded here deliberately, so
+  // that a new field is a conscious act rather than a silent one.
+  plusOne: "p1",
 };
+
+// The invariant that actually protects old links: every key that has ever
+// shipped must still mean the same thing. Stated separately from the deepEqual
+// below because the two catch different mistakes — this one catches RENAMING or
+// REMOVING a key (which breaks saved URLs), the other catches adding one
+// without recording it here.
+test("schema › no shipped share key has changed meaning", () => {
+  for (const [name, short] of Object.entries(FROZEN_SHARE_KEYS)) {
+    assert.equal(SHARE_KEYS[name], short,
+      `${name} was "${short}" in a shipped share link and must stay "${short}"`);
+  }
+});
 
 test("schema › the derived share key map matches the frozen wire format", () => {
   assert.deepEqual(SHARE_KEYS, FROZEN_SHARE_KEYS);

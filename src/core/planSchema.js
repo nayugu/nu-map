@@ -66,6 +66,16 @@ export const PLAN_FIELDS = [
   { name: 'conc2',  share: 'cn2' },
   { name: 'minor1', share: 'm1'  },
   { name: 'minor2', share: 'm2'  },
+  // An accelerated BS/MS pathway (Northeastern brands it "PlusOne"): the id of
+  // the pathway the student has declared. Undergraduate plans only — sharing
+  // happens while in undergraduate status, which is the whole mechanism.
+  //
+  // Deliberately ONE field. The shares themselves are not stored: they are
+  // derived from the pathway plus what is placed (core/pathway/shareSet.js), so
+  // there is one source of truth and a share can DISAPPEAR when the student
+  // takes the undergraduate version — which Khoury's rules require and a stored
+  // copy could not do without a sync step.
+  { name: 'plusOne', share: 'p1' },
   { name: 'studentType', share: 'st' },
 
   // ── Sensitive / local-only — deliberately NOT shared ──────────────────

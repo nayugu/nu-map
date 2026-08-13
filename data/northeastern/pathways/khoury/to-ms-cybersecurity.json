@@ -1,0 +1,61 @@
+{
+  "id": "khoury/to-ms-cybersecurity",
+  "brand": "PlusOne",
+  "college": "computer-information-science",
+  "label": "Cybersecurity / Computer Science, BS → Cybersecurity, MS",
+  "eligibility": [
+    { "ugProgram": "2026/computer-information-science/cybersecurity_bs_(boston)" },
+    { "ugProgram": "2026/computer-information-science/computer_science_bscs_(boston)" }
+  ],
+  "msPrograms": [
+    "grad/2026/computer-information-science/cybersecurity_ms_(boston)"
+  ],
+  "counting": {
+    "includeWithdrawn": true,
+    "note": "Khoury: 'up to four graduate courses ... including withdrawals'."
+  },
+  "shares": [
+    { "grad": "CY 6740", "target": { "kind": "course", "ref": "CY 4740" } },
+    { "grad": "CY 5120", "target": { "kind": "course", "ref": "CY 4770" } },
+    { "grad": "CS 5600", "target": { "kind": "course", "ref": "CS 3650" } },
+    { "grad": "CS 5500", "target": { "kind": "course", "ref": "CS 4500" } },
+    { "grad": "CS 5500", "target": { "kind": "course", "ref": "CS 4530" } },
+    { "grad": "CS 5700", "target": { "kind": "course", "ref": "CS 3700" } },
+    { "grad": "CS 5700", "target": { "kind": "course", "ref": "CS 4700" } },
+    { "grad": "CY 6760", "target": { "kind": "course", "ref": "CY 4760" } },
+    { "grad": "CY 5240", "target": { "kind": "course", "ref": "CY 4170" } },
+    { "grad": "CY 5010", "target": { "kind": "requirement", "label": "Cybersecurity Elective" } },
+    { "grad": "CY 5200", "target": { "kind": "requirement", "label": "Cybersecurity Elective" } },
+    { "grad": "CY 5210", "target": { "kind": "requirement", "label": "Cybersecurity Elective" } }
+  ],
+  "rules": [
+    { "kind": "shareCap", "courses": 4, "semesterHours": 16 },
+    { "kind": "chooseK", "k": 4, "counts": "allShares" },
+    { "kind": "noGradIfUgDone" },
+    { "kind": "maxGradCoursesPerTerm", "max": 1 },
+    { "kind": "earliestTerm", "afterTerms": 3 },
+    { "kind": "gpaMin", "min": 3.0, "scopes": ["cumulative", "major"] },
+    { "kind": "gradCourseCompletedFirst", "count": 1 },
+    { "kind": "admissionNotGuaranteed" },
+    { "kind": "noDeferral" },
+    { "kind": "fullTimeGradMin", "sh": 8 },
+    { "kind": "noTransferCredit" },
+    { "kind": "scholarshipIneligible", "names": ["Double Husky"] }
+  ],
+  "notes": [
+    {
+      "text": "Three rows of the published table have 'Cybersecurity Elective' on the left rather than a course — CY 5010, CY 5200 and CY 5210 fill an elective requirement, not a specific undergraduate course. They therefore produce no substitution and are reported for the requirement allocator instead.",
+      "reason": "target.kind = requirement, not course"
+    },
+    {
+      "text": "Both CS 3700 and CS 4700 map to CS 5700; only one can be shared.",
+      "reason": "two rows, one graduate course"
+    }
+  ],
+  "source": {
+    "url": "https://www.khoury.northeastern.edu/plusone-with-ms-in-cybersecurity-program-details/",
+    "kind": "html",
+    "retrievedAt": "2026-08-13"
+  },
+  "confidence": "published"
+}

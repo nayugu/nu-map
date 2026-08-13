@@ -1,0 +1,57 @@
+{
+  "id": "khoury/bscs-to-msds",
+  "brand": "PlusOne",
+  "college": "computer-information-science",
+  "label": "Computer Science / Data Science, BS → Data Science, MS",
+  "eligibility": [
+    { "ugProgram": "2026/computer-information-science/computer_science_bscs_(boston)" },
+    { "ugProgram": "2026/computer-information-science/data_science_bs_(boston)" }
+  ],
+  "msPrograms": [
+    "grad/2026/university-interdisciplinary-programs/data_science_ms_(boston)"
+  ],
+  "counting": {
+    "includeWithdrawn": true,
+    "note": "Khoury: 'maximum four graduate courses total (including withdrawals)'."
+  },
+  "shares": [
+    { "grad": "CS 5800", "target": { "kind": "course", "ref": "CS 3000" }, "recommended": true },
+    { "grad": "DS 5110", "target": { "kind": "course", "ref": "DS 3500" }, "recommended": true },
+    { "grad": "CS 6140", "target": { "kind": "course", "ref": "DS 4400" } },
+    { "grad": "CS 6220", "target": { "kind": "course", "ref": "DS 4420" } },
+    { "grad": "CS 5340", "target": { "kind": "course", "ref": "CS 2484" } },
+    { "grad": "CS 6120", "target": { "kind": "course", "ref": "CS 4120" } },
+    { "grad": "CS 6350", "target": { "kind": "course", "ref": "CS 4350" } },
+    { "grad": "CS 5180", "target": { "kind": "course", "ref": "CS 4180" } },
+    { "grad": "CS 5100", "target": { "kind": "course", "ref": "CS 4100" } },
+    { "grad": "CS 5200", "target": { "kind": "course", "ref": "CS 3200" } },
+    { "grad": "CS 5610", "target": { "kind": "course", "ref": "CS 4550" } },
+    { "grad": "CS 6200", "target": { "kind": "course", "ref": "CS 4220" } }
+  ],
+  "rules": [
+    { "kind": "shareCap", "courses": 4, "semesterHours": 16 },
+    { "kind": "chooseK", "k": 4, "counts": "allShares" },
+    { "kind": "noGradIfUgDone" },
+    { "kind": "maxGradCoursesPerTerm", "max": 1 },
+    { "kind": "earliestTerm", "afterTerms": 3 },
+    { "kind": "gpaMin", "min": 3.0, "scopes": ["cumulative", "major"] },
+    { "kind": "gradCourseCompletedFirst", "count": 1 },
+    { "kind": "admissionNotGuaranteed" },
+    { "kind": "noDeferral" },
+    { "kind": "fullTimeGradMin", "sh": 8 },
+    { "kind": "noTransferCredit" },
+    { "kind": "scholarshipIneligible", "names": ["Double Husky"] }
+  ],
+  "notes": [
+    {
+      "text": "CS 5800 and DS 5110 are marked 'strongly recommended' for Data Science PlusOne students. A recommendation is not a requirement and is never enforced.",
+      "reason": "soft preference, carried as `recommended` on the share"
+    }
+  ],
+  "source": {
+    "url": "https://www.khoury.northeastern.edu/programs/plusone-program-with-ms-in-data-science/",
+    "kind": "html",
+    "retrievedAt": "2026-08-13"
+  },
+  "confidence": "published"
+}

@@ -19,4 +19,5 @@
  * @property {import('./ICourseCatalog.js').ICourseCatalog}       [courseCatalog]
  * @property {import('./ILocalization.js').ILocalization}         [localization]
  * @property {import('./IPlanGenerator.js').IPlanGenerator}       [planGenerator]
+ * @property {import('./IAcceleratedPathway.js').IAcceleratedPathwayPort} [acceleratedPathway]
  */

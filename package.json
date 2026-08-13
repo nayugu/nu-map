@@ -42,6 +42,7 @@
     "data:grad-majors": "node scripts/scrape-grad-majors.js",
     "data:grad-majors:write": "node scripts/scrape-grad-majors.js --write",
     "data:grad-majors:dry": "node scripts/scrape-grad-majors.js --dry-run",
+    "data:pathways:verify": "node scripts/verify-pathways.js",
     "data:equivalences": "node scripts/build-equivalences.js",
     "data:equivalences:write": "node scripts/build-equivalences.js --write",
     "data:term-windows": "node scripts/derive-term-windows.js",

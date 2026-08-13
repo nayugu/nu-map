@@ -26,6 +26,7 @@
 //   specialTerms      — co-op, internship, and other non-course blocks
 //   majorRequirements — path-parsing helpers for major/minor data
 //   courseCatalog     — local JSON path and optional live API URL
+//   acceleratedPathway— BS/MS credit-sharing pathways (Northeastern: "PlusOne")
 //   localization      — disclaimer text and other institution copy
 //   aiAssistant       — push plan context to an AI assistant (e.g. MCP server)
 //
@@ -61,6 +62,7 @@ const KNOWN_PORTS = new Set([
   "shareRelay",     // driven port  — one-shot share-by-code plan relay
   "planGenerator",  // driven port  — generates a Sample Plan of Study (CHART)
   "courseOffering", // when a course runs — ONE rule, shared by the UI and CHART
+  "acceleratedPathway", // driven port — BS/MS credit-sharing pathways (NEU: "PlusOne")
 ]);
 
 /**

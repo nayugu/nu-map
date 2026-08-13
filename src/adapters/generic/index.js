@@ -29,6 +29,7 @@ import attributeSystem   from "./attributeSystem.js";
 import localization      from "./localization.js";
 import majorRequirements from "./majorRequirements.js";
 import courseCatalog     from "./courseCatalog.js";
+import acceleratedPathway from "./acceleratedPathway.js";
 
 // Named re-exports — import individual sub-adapters without the bundle
 export { default as institution }       from "./institution.js";
@@ -40,6 +41,7 @@ export { default as attributeSystem }   from "./attributeSystem.js";
 export { default as localization }      from "./localization.js";
 export { default as majorRequirements } from "./majorRequirements.js";
 export { default as courseCatalog }     from "./courseCatalog.js";
+export { default as acceleratedPathway } from "./acceleratedPathway.js";
 
 export default {
   institution,
@@ -51,4 +53,5 @@ export default {
   localization,
   majorRequirements,
   courseCatalog,
+  acceleratedPathway,
 };
