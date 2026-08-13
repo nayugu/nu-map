@@ -124,3 +124,40 @@ export function buildCohortSemesters(planEntSem, planEntYear, planGradSem, planG
   const gi = tmpIdx[gradId] ?? (all.length - 1);
   return [all[0], ...all.slice(ei, Math.min(gi + 1, all.length))];
 }
+
+/**
+ * ── "<season> <year>", one composition for the whole app ────────────
+ *
+ * There used to be two. The planner rows and the sample-plan preview built
+ * `t(key) + " " + year` and read season-first ("春季 2028"); the header toast,
+ * the availability popover and the summer row handed the whole phrase to the
+ * translation engine and got back year-first ("2028 年春季"). Either is fine.
+ * Both, a few pixels apart, naming the same semester, is not.
+ *
+ * Unified on the written path, because the engine's cannot be reviewed: it is a
+ * network call, it is not stable across releases, and it is what once turned
+ * "Fall" into 落下 ("falling"). But written season keys alone would have forced
+ * season-first on every language, and CJK genuinely wants the year in front — a
+ * Chinese reader says 2028年春季, never 春季 2028. So the ORDER is its own locale
+ * string, `sem.name.format`, filled with the hand-written season name:
+ * deterministic AND idiomatic, which neither old path managed alone.
+ *
+ * Lives in core, not beside the component that first needed it, so the four
+ * surfaces that draw a semester's name cannot drift apart again — and so it is
+ * testable without a DOM.
+ *
+ * A term with no year (Incoming Credit) is its season alone: sending it through
+ * the format would leave whatever the format wraps the year in — a stray 年, a
+ * trailing space — around nothing.
+ *
+ * @param {(key: string, vars?: object) => string} t  the locale lookup
+ * @param {string} seasonKey  a written `claude.sem.*` key
+ * @param {string|number} [year]
+ * @param {string} [fallback] returned when there is no season key to compose
+ */
+export function semName(t, seasonKey, year, fallback = "") {
+  if (!seasonKey) return fallback;
+  const season = t(seasonKey);
+  if (!year) return season;
+  return t("sem.name.format", { season, year });
+}

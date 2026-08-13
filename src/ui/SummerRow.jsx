@@ -11,6 +11,7 @@ import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
+import { semName } from "../core/semGrid.js";
 import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
@@ -329,7 +330,10 @@ export default function SummerRow({ semA, semB }) {
               {combinedDone   && <span style={{ fontSize: 9, color: "var(--success)", fontWeight: 900 }}>✓</span>}
               {combinedActive && <span style={{ fontSize: 9, color: "var(--active)",  fontWeight: 900 }}>▶</span>}
             </span>
-            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}><TText tight>{`Summer ${year}`}</TText></span>
+            {/* The written summer name in the locale's word order — the engine's
+                "Summer 2029" came back year-first in CJK and season-first in the
+                preview's copy of this row, for the same term. */}
+            <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}>{scaleLatinRuns(semName(t, "claude.sem.summer", year), { tight: true })}</span>
             {combinedActive && (
               <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700, marginLeft: 3 }}>NOW</span>
             )}

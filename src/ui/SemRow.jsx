@@ -13,7 +13,7 @@ import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { ICalendar }      from "../ports/ICalendar.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { TText, useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
-import { SEM_NAME_KEY } from "./SemLabel.jsx";
+import { SEM_NAME_KEY, useSemName } from "./SemLabel.jsx";
 import CourseCard from "./CourseCard.jsx";
 
 // Phone semester label: the label stacks in a 34px column — season name on
@@ -29,6 +29,9 @@ function StackedSemLabel({ sem }) {
   const as    = st?.translateAs ? `${st.translateAs} ${year}` : undefined;
   const key   = SEM_NAME_KEY[sem.semTypeId];
   const translated = useTranslatedText(key ? null : sem.label, { as }); // hook must run unconditionally
+  // Deliberately NOT `semName`: this label is stacked in a 34px column, so the
+  // season and the year are separate lines and `sem.name.format`'s inline order
+  // has nothing to arrange. Same written keys, so the two agree on the words.
   const parts = key
     ? [...t(key).split(" "), ...(year ? [year] : [])]
     : (translated ?? sem.label).split(" ");
@@ -68,6 +71,9 @@ export default function SemRow({ sem }) {
   const creditSystem = usePort(ICreditSystem);
   const unitName     = creditSystem.getUnitName();
   const { t } = useLanguage();
+  // One composition of "<season> <year>", shared with the phone label, the
+  // header toast, the popover and the sample-plan preview.
+  const semNameText      = useSemName(sem);
   const companyColor     = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
   const placeholderColor = themeName === "dark" ? "#3e4856" : "#e4e4e4";
 
@@ -219,7 +225,10 @@ export default function SemRow({ sem }) {
             {/* Row titles use the gentler InterTight scale — a tight, prominent
                 block where the full CJK enlargement reads oversized. */}
             <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-2)", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}>
-              <TText tight>{sem.label}</TText>
+              {/* The written season name in the locale's own word order, not the
+                  engine's rendering of "Fall 2028" — which came back year-first
+                  and disagreed with the phone label and the preview. */}
+              {scaleLatinRuns(semNameText, { tight: true })}
             </span>
             {isActive && (
               <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 3, padding: "1px 4px", fontWeight: 700 }}>
@@ -403,7 +412,7 @@ export default function SemRow({ sem }) {
             >
               {isIncomingCollapsed
                 ? <>► <TText>general {unitName}</TText>: {bonusSH || 0}{crs.length > 0 ? ' | ' : ''}{crs.map(c => c.code || (c.subject + ' ' + c.number)).join(", ")}</>
-                : <>▼ <TText>{sem.label}</TText></>
+                : <>▼ {semNameText}</>
               }
             </button>
             {!isIncomingCollapsed && (

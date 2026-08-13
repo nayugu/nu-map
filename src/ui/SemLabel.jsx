@@ -1,6 +1,8 @@
 import { usePort } from "../context/InstitutionContext.jsx";
 import { ICalendar } from "../ports/ICalendar.js";
-import { TText } from "../context/TranslationContext.jsx";
+import { TText, useTranslatedText } from "../context/TranslationContext.jsx";
+import { useLanguage } from "../context/LanguageContext.jsx";
+import { semName } from "../core/semGrid.js";
 
 // Single source of truth for a translated "<semester> <year>" label.
 //
@@ -31,6 +33,25 @@ export const SEM_NAME_KEY = {
   incoming: "claude.sem.incoming",
 };
 
+/**
+ * The composed name for a semester row, translated.
+ *
+ * Every caller that draws a semester's name uses this, so none of them can
+ * re-decide the question. A calendar term type with no written key falls back to
+ * whole-phrase engine translation with the adapter's `translateAs` hint — the
+ * hook therefore runs unconditionally and is simply passed null when unused.
+ */
+export function useSemName(sem) {
+  const cal   = usePort(ICalendar);
+  const { t } = useLanguage();
+  const st    = cal.getSemesterTypes().find(s => s.id === sem?.semTypeId);
+  const year  = sem?.label?.match(/\d{4}/)?.[0] ?? "";
+  const key   = SEM_NAME_KEY[sem?.semTypeId];
+  const translated = useTranslatedText(key ? null : (sem?.label ?? null),
+    { as: st?.translateAs ? `${st.translateAs} ${year}` : undefined });
+  return key ? semName(t, key, year) : (translated ?? sem?.label ?? "");
+}
+
 export function semLabelPhrases(typeId, year, calendar) {
   const st = calendar.getSemesterTypes().find(s => s.id === typeId);
   const base = st?.altLabel ?? st?.label ?? typeId;   // display text (source locale)
@@ -41,9 +62,19 @@ export function semLabelPhrases(typeId, year, calendar) {
   };
 }
 
-/** Renders a semester's "<name> <year>" translated identically to the planner rows. */
+/**
+ * Renders a semester's "<name> <year>" identically to the planner rows.
+ *
+ * Written keys where we have them, `semLabelPhrases` only as the fallback for a
+ * term type we know no name for. It used to be the whole-phrase path always,
+ * which is why the header toast said 2028 年春季 while the row it referred to
+ * said 春季 2028; the order now comes from `sem.name.format` for both.
+ */
 export function SemLabel({ typeId, year }) {
-  const cal = usePort(ICalendar);
+  const cal   = usePort(ICalendar);
+  const { t } = useLanguage();
+  const key   = SEM_NAME_KEY[typeId];
   const { display, as } = semLabelPhrases(typeId, year, cal);
-  return <TText as={as}>{display}</TText>;
+  const translated = useTranslatedText(key ? null : display, { as });
+  return key ? <>{semName(t, key, year)}</> : <>{translated ?? display}</>;
 }

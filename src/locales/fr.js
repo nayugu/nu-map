@@ -820,6 +820,7 @@ export const strings = {
   "claude.sem.sum1": "Été A",
   "claude.sem.sum2": "Été B",
   "claude.sem.summer": "Été",
+  "sem.name.format": "{season} {year}",
   "claude.sem.incoming": "Crédits d'entrée",
   "claude.act.add": "Ajouter {code} à {sem}",
   "claude.act.remove": "Retirer {code}",

@@ -821,6 +821,7 @@ export const strings = {
   "claude.sem.sum1": "夏 A",
   "claude.sem.sum2": "夏 B",
   "claude.sem.summer": "夏",
+  "sem.name.format": "{year}年{season}",
   "claude.sem.incoming": "認定単位",
   "claude.act.add": "{code} を {sem} に追加",
   "claude.act.remove": "{code} を削除",

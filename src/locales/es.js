@@ -821,6 +821,7 @@ export const strings = {
   "claude.sem.sum1": "Verano A",
   "claude.sem.sum2": "Verano B",
   "claude.sem.summer": "Verano",
+  "sem.name.format": "{season} {year}",
   "claude.sem.incoming": "Créditos de entrada",
   "claude.act.add": "Añadir {code} a {sem}",
   "claude.act.remove": "Quitar {code}",

@@ -820,6 +820,7 @@ export const strings = {
   "claude.sem.sum1": "여름 A",
   "claude.sem.sum2": "여름 B",
   "claude.sem.summer": "여름",
+  "sem.name.format": "{year}년 {season}",
   "claude.sem.incoming": "인정 학점",
   "claude.act.add": "{code}을(를) {sem}에 추가",
   "claude.act.remove": "{code} 제거",

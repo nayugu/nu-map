@@ -55,6 +55,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { TText, useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { SEM_NAME_KEY }       from "./SemLabel.jsx";
+import { semName }            from "../core/semGrid.js";
 import { TYPE_BG }            from "../core/constants.js";
 import { buildSemesterView, cardsIn, loadIn } from "../core/semesterView.js";
 import { reservationNameSource, reservationSubline } from "../core/reservations.js";
@@ -442,7 +443,7 @@ function SummerLabelCol({ sems, year, sh, unit, isPhone, t }) {
         fontFamily: "'InterTight', 'Inter', system-ui, sans-serif",
         lineHeight: "calc(1.2 * var(--lh-scale, 1))",
         overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-      }}>{scaleLatinRuns(`${t("claude.sem.summer")}${year ? ` ${year}` : ""}`, { tight: true })}</div>
+      }}>{scaleLatinRuns(semName(t, "claude.sem.summer", year), { tight: true })}</div>
       <div style={{
         fontSize: TYPE.meta, color: "var(--text-5)", marginTop: 2,
         lineHeight: "calc(1.35 * var(--lh-scale, 1))",
@@ -475,8 +476,9 @@ function SemLabelCol({ sem, sh, unit, isPhone, t, inline = false }) {
   const key  = SEM_NAME_KEY[sem.semTypeId];
   const translated = useTranslatedText(key ? null : sem.label,
     { as: st?.translateAs ? `${st.translateAs} ${year}` : undefined });
-  const withYear = !inline && !!year;
-  const name = key ? `${t(key)}${withYear ? ` ${year}` : ""}` : (translated ?? sem.label);
+  // `semName` composes the year in the locale's own order; the summer half asks
+  // for none, because the row's shared column in front of it already carries one.
+  const name = key ? semName(t, key, inline ? "" : year) : (translated ?? sem.label);
 
   if (inline) {
     return (

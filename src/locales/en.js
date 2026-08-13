@@ -780,6 +780,8 @@ export const strings = {
   "claude.sem.sum1":     "Summer A",
   "claude.sem.sum2":     "Summer B",
   "claude.sem.summer":   "Summer",
+  // Word order for "<season> <year>", per locale — see SemLabel.jsx.
+  "sem.name.format":     "{season} {year}",
   "claude.sem.incoming": "Incoming Credit",
   "claude.act.add":            "Add {code} to {sem}",
   "claude.act.remove":         "Remove {code}",
