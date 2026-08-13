@@ -132,7 +132,30 @@ export const strings = {
   "chart.source.chart.none":  "There is not enough requirement data to generate a plan.",
   "chart.busy":               "Working out an order…",
   "chart.why":                "How this was built",
+  // ── Storage: the one loss in this app that cannot be undone ──────
+  // Shown only when a write has actually been rejected, or the browser reports the store
+  // near its quota. Never merely because storage is evictable — that is true for most
+  // browsers most of the time, and a warning everyone sees forever is one nobody reads.
+  "storage.alarm.title":      "Your plans are running out of room",
+  "storage.alarm.full":       "This browser has stopped saving changes. Your plans are stored here and nowhere else — delete a few plans to make room, and reload to check that recent edits were kept.",
+  "storage.alarm.pressure":   "This browser is nearly out of storage, and your plans are saved here and nowhere else. Deleting a few plans now will keep new edits from being lost.",
+  "storage.alarm.dismiss":    "Got it",
+
   "chart.refused":            "No generated plan for this program.",
+  // Not a failure, and worded so: the concentrations genuinely need different schedules, and
+  // the plan can be built as soon as one is chosen. Shown only before a pick is made.
+  "chart.refused.conc":       "No single plan fits every concentration here. Choose one and this will build around it.",
+  // Keyed by the engine's refusal `reason`, rendered from its `data`. See
+  // core/refusalMessage.js — the engine is pure and has no locale, so the numbers cross
+  // the boundary and the sentence is built here. A reason with no key falls back to the
+  // engine's English detail, so this list can grow one reason at a time.
+  "chart.refused.mostly-unlabelled":      "We can only account for {pct}% of this degree's {total} credits; the rest would be unlabelled placeholders.",
+  "chart.refused.no-requirements":        "This program has no parsed requirement sections, so there is nothing to build a plan from.",
+  "chart.refused.no-total-credits":       "This program does not state a total credit requirement, so a plan cannot be sized against it.",
+  "chart.refused.no-cells":               "The requirement sections yielded nothing to schedule.",
+  "chart.refused.no-study-terms":         "The plan shape has no term that could hold a course.",
+  "chart.refused.does-not-fit":           "This program's requirements come to {need} credits, and its {terms} study terms hold {room}.",
+  "chart.refused.cell-has-no-legal-term": "“{title}” cannot be placed in any term of this plan.",
   "chart.badge":              "Generated",
 
   "chart.explain.title":      "How this plan was built",

@@ -43,6 +43,7 @@ import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import PlanSourceToggle       from "./PlanSourceToggle.jsx";
 import ChartExplainer         from "./ChartExplainer.jsx";
 import { applySamplePlan }    from "../core/applySamplePlan.js";
+import { refusalMessage }     from "../core/refusalMessage.js";
 import SamplePlanPreview      from "./SamplePlanPreview.jsx";
 import {
   sampleplanOffer, variantsFor, describeTemplate, isPlanEmpty, isGeneratedPlanLabel,
@@ -413,14 +414,29 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
 
           {/* A refusal is an ANSWER, and it names something actionable. Shown as
               prose rather than an error, because "this program cannot be planned
-              from what the catalog states" is a fact about the program. */}
+              from what the catalog states" is a fact about the program.
+
+              ── One refusal is a QUESTION, not a dead end ──────────────
+
+              `concentration-unfillable` means no single schedule serves every
+              concentration — measured on 8 shapes, and confirmed to be the degree
+              rather than the search: re-run at 12x the time budget, 0 of 8 were
+              rescued. But 107 of 126 (program, concentration) pairs DO generate once
+              a pick is made, so the honest response is to ask rather than to report
+              nothing. Only before a pick: with one chosen this reason cannot occur,
+              because there is no disjunction left to be universal about.
+
+              The engine's own `detail` is suppressed here on purpose — "no legal
+              placement exists" is true and is not something a student can act on. */}
           {usingChart && gen?.refused && (
             <div style={{
               fontSize: fz, color: "var(--text-3)", marginBottom: 6,
               padding: isPhone ? "5px 7px" : "7px 9px", borderRadius: 5,
               background: "var(--bg-surface-1)", border: "1px solid var(--border-2)",
             }}>
-              {gen.refused.detail || t("chart.refused")}
+              {gen.refused.reason === "concentration-unfillable" && !concentration
+                ? t("chart.refused.conc")
+                : refusalMessage(gen.refused, t)}
             </div>
           )}
 

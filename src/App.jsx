@@ -28,6 +28,7 @@ import StatsPanel       from './ui/StatsPanel.jsx';
 import PlanLibrary      from './ui/PlanLibrary.jsx';
 import PalettePanel     from './ui/PalettePanel.jsx';
 import MigrationBanner  from './ui/MigrationBanner.jsx';
+import StorageAlarm     from './ui/StorageAlarm.jsx';
 import DevClockPanel    from './ui/DevClockPanel.jsx';
 import TermReviewPrompt from './ui/TermReviewPrompt.jsx';
 import PastClassRater   from './ui/PastClassRater.jsx';
@@ -122,6 +123,9 @@ function PlannerApp() {
       <StatsPanel />
       <PlanLibrary />
       <MigrationBanner />
+      {/* Non-modal, and below the content it is warning about: the useful response is
+          to export or delete a plan, which needs the app rather than a dialog over it. */}
+      <StorageAlarm />
       <TermReviewPreview />
       {/* {import.meta.env.DEV && <DevClockPanel />} */}
     </div>

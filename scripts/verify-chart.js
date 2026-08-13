@@ -132,6 +132,8 @@ let thin = 0, fullTerms = 0, emptyFull = 0;
 const Q = {
   clumped: 0, studyTerms: 0, fillerCount: 0, fillerPositionSum: 0,
   loadSpreadSum: 0, longestEmptyRun: 0, plansWithGap: 0,
+  choicePairs: 0, choiceCollapsed: 0, choiceTight: 0, plansWithForcedChoice: 0,
+  choiceP10s: [],
 };
 // Plans whose concentration reservations cannot be filled under some option, and the programs
 // they belong to. Counted separately from `violations` while the engine still emits them, so the
@@ -226,6 +228,11 @@ for (const d of degrees) {
     Q.loadSpreadSum += g.quality.loadSpread;
     Q.longestEmptyRun = Math.max(Q.longestEmptyRun, g.quality.longestEmptyRun);
     Q.plansWithGap += g.quality.longestEmptyRun > 0 ? 1 : 0;
+    Q.choicePairs += g.quality.choicePairs;
+    Q.choiceCollapsed += g.quality.choiceCollapsed;
+    Q.choiceTight += g.quality.choiceTight;
+    Q.plansWithForcedChoice += g.quality.choiceCollapsedHere ? 1 : 0;
+    if (g.quality.choiceP10 != null) Q.choiceP10s.push(g.quality.choiceP10);
     if (optionPools(d.data).length) { R.concPlans++; R.concPrograms.add(label.split("#")[0]); }
     if (g.reservations.length) { R.plans++; R.programs.add(label.split("#")[0]); }
     if (!g.ok) {
@@ -271,6 +278,19 @@ console.log(`  mean credit spread within a plan         `
   + `${(Q.loadSpreadSum / Math.max(1, made)).toFixed(1)} SH`);
 console.log(`  plans with an empty-semester GAP         ${Q.plansWithGap} of ${made} `
   + `(${pct(Q.plansWithGap, made)})   longest run ${Q.longestEmptyRun} terms`);
+// ── A reservation that is fillable but not choosable ────────────────
+//
+// Reported per PLAN as well as per pair, because the per-pair rate is not one anybody
+// experiences: 1.1% of (cell, option) pairs was 3.3% of students, and quoting only the first is
+// the denominator error this corpus has now made three times. See docs/chart-open-defects.md §15.
+if (Q.choicePairs) {
+  const p10s = [...Q.choiceP10s].sort((a, b) => a - b);
+  console.log(`  reservations that are a FORCED pick      ${Q.choiceCollapsed} of ${Q.choicePairs} `
+    + `(cell, option) pairs offer <=1 course; ${Q.choiceTight} offer <=2`);
+  console.log(`  plans containing a forced reservation    ${Q.plansWithForcedChoice} of ${made} `
+    + `(${pct(Q.plansWithForcedChoice, made)})   median plan p10 choice `
+    + `${p10s.length ? p10s[Math.floor(p10s.length / 2)] : "—"} courses`);
+}
 if (refusals.size) {
   console.log(`  refusals: ${[...refusals.entries()].sort((a, b) => b[1] - a[1])
     .map(([k, n]) => `${k} ${n}`).join(", ")}`);

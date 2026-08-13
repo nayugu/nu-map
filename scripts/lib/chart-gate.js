@@ -143,6 +143,18 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
   // whole point, because the pools are typically disjoint and the union proves a filling no
   // single student can perform. See the header for why this is necessary and not sufficient.
   const reservations = [];
+  // ── FILLABLE and CHOOSABLE are different promises ────────────────
+  //
+  // The matching below proves the cells can be filled. The card says "Concentration" and
+  // renders as a slot the student is invited to fill, which promises a CHOICE. A cell where
+  // one course works satisfies the first and breaks the second — and `minDepthOf` places pool
+  // cells on exactly that basis, taking the MINIMUM over candidates, so a single early outlier
+  // licenses the term for the whole pool.
+  //
+  // Counted, never gated, like the rest of the quality vector: a forced reservation is still a
+  // followable plan, so it is bad advice rather than an illegal enrolment. It is counted
+  // because nothing counted it, and 23 of 690 (plan, concentration) pairs had one.
+  const choice = [];
   for (const opt of concCells.length ? concentrationOptions : []) {
     if (!opt?.ids?.length) continue;          // nothing enumerable: no claim to make
     const adj = concCells.map(c => opt.ids.filter(id => {
@@ -152,6 +164,8 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
       if (!course.prereqs?.length) return true;
       return evalPrereqTree(course.prereqs, placed, semIndex, c.ord) !== "order";
     }));
+    // How much of the promised choice survives, per cell, for this option.
+    for (const legal of adj) choice.push(legal.length);
     const matched = maxMatching(adj);
     if (matched >= concCells.length) continue;
     // Hall's condition over PREFIXES, to name the term that carries the shortfall: a course
@@ -229,6 +243,24 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
     // legal on every term cap can still be 19 SH then 8 SH, which no student would choose.
     loadSpread: studyRows.length
       ? Math.max(...studyRows.map(r => r.sh)) - Math.min(...studyRows.map(r => r.sh)) : 0,
+    // ── Surviving choice, for a reservation that promises one ────────
+    //
+    // `choicePairs` is the denominator and is reported with the rest: a zero collapse count
+    // means nothing beside how many reservations were EXPOSED to the question, which is the
+    // error the previous version of this gate made about its own scope.
+    //
+    // The p10 rather than the mean, and for the reason `domains.js` gives for its own p10: the
+    // mean of a pool that is 100% available in eight terms and 1 course in a ninth is a healthy
+    // number describing a plan with a dead term in it. The tail IS the defect here.
+    choicePairs: choice.length,
+    choiceCollapsed: choice.filter(n => n <= 1).length,
+    choiceTight: choice.filter(n => n <= 2).length,
+    choiceP10: choice.length
+      ? [...choice].sort((a, b) => a - b)[Math.floor(0.10 * choice.length)] : null,
+    // Does THIS plan contain a forced reservation? The per-student unit, kept separate because
+    // the per-pair rate is not one anybody experiences — 1.1% of pairs was 3.3% of students,
+    // and reporting only the first is how the size of this was missed.
+    choiceCollapsedHere: choice.some(n => n <= 1),
     // The longest RUN of consecutive empty full terms. Three scattered gaps and one three-term
     // gap are very different plans, and a count alone cannot tell them apart.
     longestEmptyRun: (() => {
