@@ -158,7 +158,7 @@ export const strings = {
   "chart.how.b1": "Transforme chaque exigence en une carte",
   "chart.how.b2": "Compte les prérequis empilés sous chaque cours, et les cours empilés au-dessus",
   "chart.how.b3": "Réduit chaque carte à une fenêtre : pas plus tôt que ses prérequis ne le permettent, pas plus tard que les cours qui en dépendent",
-  "chart.how.b4": "Place d’abord la carte à laquelle il reste le moins de semestres, car elle a le moins de marge",
+  "chart.how.b4": "Place d’abord la carte la plus contrainte : celle qui n’a que deux semestres possibles passe avant un électif libre qui tient partout, afin que les cartes souples ne prennent pas les places dont elle avait besoin",
   "chart.how.b5": "Revérifie chaque exigence stricte à chaque étape, et revient en arrière dès qu’une est enfreinte",
   "chart.how.b6": "Améliore ensuite l’ordre un mouvement à la fois, et s’arrête quand aucun mouvement n’aide plus",
   "chart.limits.h": "Ce qu’il prend pour acquis, et ce qu’il ne peut pas savoir",

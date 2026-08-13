@@ -158,7 +158,7 @@ export const strings = {
   "chart.how.b1": "Convierte cada requisito en una tarjeta",
   "chart.how.b2": "Cuenta los requisitos previos apilados debajo de cada curso, y los cursos apilados encima",
   "chart.how.b3": "Reduce cada tarjeta a una ventana: no antes de lo que permiten sus requisitos previos, no después que los cursos que dependen de ella",
-  "chart.how.b4": "Coloca primero la tarjeta con menos semestres disponibles, porque tiene menos margen",
+  "chart.how.b4": "Coloca primero la tarjeta más ajustada: una con solo dos semestres posibles va antes que una electiva libre que cabe en cualquiera, para que las flexibles no ocupen los huecos que aquella necesitaba",
   "chart.how.b5": "Vuelve a comprobar cada requisito estricto en cada paso, y retrocede en cuanto uno se incumple",
   "chart.how.b6": "Después mejora el orden de a un movimiento, y se detiene cuando ningún movimiento más ayuda",
   "chart.limits.h": "Qué da por sentado y qué no puede saber",

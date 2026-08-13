@@ -217,10 +217,17 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           </div>
           {/* Each step says WHAT is counted and WHAT that decides. The previous wording —
             * "measures how deep each course sits and how much it unlocks above" — named two
-            * quantities and neither of their consequences, so it read as jargon. And "places the
-            * most constrained card first" gave a term of art with no explanation; it now says
-            * which card that is and why it goes first. The last step says where it STOPS,
-            * because "improves the order" with no end condition invites the obvious question. */}
+            * quantities and neither of their consequences, so it read as jargon.
+            *
+            * The ordering step took two attempts. "Places the most constrained card first" was a
+            * term of art; "the card with the fewest terms left, since it has the least room to
+            * move" then said the same thing twice and still gave no reason. What it needs is the
+            * CONSEQUENCE: place the flexible cards first and they sit in the two slots the tight
+            * one needed, and the plan has to be torn up. Tight first, and the flexible ones fill
+            * in around the fixed points.
+            *
+            * The last step says where it STOPS, because "improves the order" with no end
+            * condition invites exactly the question it got. */}
           <ul style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
             {["b1", "b2", "b3", "b4", "b5", "b6"].map(k => (
               <li key={k} style={{ marginBottom: 2 }}>{t(`chart.how.${k}`)}</li>

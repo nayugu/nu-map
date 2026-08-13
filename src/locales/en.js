@@ -163,7 +163,7 @@ export const strings = {
   "chart.how.b1": "Turns each requirement into a card",
   "chart.how.b2": "Counts the prerequisites stacked beneath each course, and the courses stacked above it",
   "chart.how.b3": "Narrows each card to a window — no earlier than its prerequisites allow, no later than the courses that depend on it",
-  "chart.how.b4": "Places the card with the fewest terms left first, since it has the least room to move",
+  "chart.how.b4": "Places the tightest card first — one with only two possible terms goes before a free elective that fits anywhere, so the flexible cards cannot take the slots it needed",
   "chart.how.b5": "Re-checks every hard requirement at each step, and backs out as soon as one breaks",
   "chart.how.b6": "Then improves the order one move at a time, stopping when no further move helps",
   "chart.limits.h": "What it takes as given, and what it cannot know",
