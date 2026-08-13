@@ -67,7 +67,7 @@ export default {
 
   async generate({
     programKey, isGrad = false, programData, publishedPlan = null,
-    studentType, preferences, courseMap,
+    studentType, preferences, courseMap, concentration = null,
   }) {
     if (!courseMap) {
       return { refused: { reason: "no-catalog", detail: "The course catalog has not loaded yet." } };
@@ -88,6 +88,10 @@ export default {
       observedOrder: order.edges,
       coopPrep: order.coopPrep,
       studentType: type,
+      // Resolved by title inside the engine, through `concentrationResolve` — the title is a
+      // concentration's only identity across saved plans, share links and MCP, and a stale one
+      // must degrade to the union rather than match the wrong option.
+      concentration,
       // Northeastern's measured conventions, OWNED by the adapter. The engine ships the same
       // values as a fallback so it works unwired, but they are institution facts and this is
       // where they belong — see chartCalibration.js.

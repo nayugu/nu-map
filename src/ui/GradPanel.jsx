@@ -1957,7 +1957,11 @@ export default function GradPanel({ wideCatalog = false }) {
           {/* Belongs to the program you have CHOSEN, so it sits inside the
               card rather than beside the picker. Silent unless it would help —
               see src/core/planTemplate.js for when. */}
-          <SamplePlanOffer path={selPath} isGrad={isGrad} programData={major} isPhone={isPhone} />
+          {/* The concentration is part of what the plan IS, not decoration: 93 programs
+              require one, their option pools are typically disjoint, and without the pick
+              CHART can only plan against the union of all of them. */}
+          <SamplePlanOffer path={selPath} isGrad={isGrad} programData={major}
+                           concentration={selConc} isPhone={isPhone} />
           {majorSections.map((sec, i) => <SectionBlock key={i} sec={sec} />)}
           {concSection && (
             <>

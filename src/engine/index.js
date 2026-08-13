@@ -28,7 +28,9 @@
 // outcome, and the official plan still loads beside it.
 // ═══════════════════════════════════════════════════════════════════
 
-import { deriveCells, cellsSH, substitutePrereqs } from "./demand.js";
+import {
+  deriveCells, cellsSH, substitutePrereqs, concentrationCapacity, CONCENTRATION,
+} from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
 import { buildDomains, wideAtFor } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
@@ -106,6 +108,15 @@ export function generatePlan({
   depthIndex = null, repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, observedOrder = [], coopPrep = [],
   now = () => Date.now(),
+  // The student's concentration, by title, when they have picked one.
+  //
+  // 93 programs require a concentration and their pools are typically DISJOINT, so without the
+  // pick a concentration cell can only carry the union of every option — which proves more than
+  // any single concentration can deliver and is why `concentrationCapacity` exists. With the
+  // pick the cell carries one real pool and needs no conservatism at all. Resolved by title
+  // through `concentrationResolve`, because the title is a concentration's only identity across
+  // saved plans, share links and MCP.
+  concentration = null,
   // The institution's measured conventions — four courses to a full term, where a
   // 3000-level course sits, what counts as a real course. Injected for the same reason
   // availability and co-op legality are: they are facts about Northeastern, not about
@@ -121,7 +132,13 @@ export function generatePlan({
   const depth = depthIndex ?? buildDepthIndex(courseMap);
 
   // ── 1. What the degree demands ──────────────────────────────────
-  let { cells, notes, reconciliation } = deriveCells(program, { courseMap, repeatable });
+  //
+  // `concentration` is the student's pick, by title. With one, the concentration cells carry
+  // that option's pool and every downstream reader — the prereq floor, the witness, the
+  // reachable share, the depth scoring — becomes exact instead of averaged over five pools.
+  let { cells, notes, reconciliation } =
+    deriveCells(program, { courseMap, repeatable, concentration });
+
 
   // ── 2. The skeleton ─────────────────────────────────────────────
   const baseShape = publishedPlan
@@ -187,6 +204,33 @@ export function generatePlan({
       if (lo == null || hi == null) continue;
       const narrowed = p.domain.filter(t => t >= lo && t <= hi);
       if (narrowed.length) p.domain = narrowed;
+    }
+
+    // ── An unchosen concentration cannot be planned against the union ──
+    //
+    // Without a pick the cell's spec is the union of every option, and for a program whose
+    // pools are disjoint the union proves far more than any one concentration can deliver:
+    // CS BSCS matched three `Concentration` cells in one term with three courses drawn from
+    // three DIFFERENT concentrations, while per option the reachable counts there were
+    // 0, 1, 2, 0, 1. Corpus-wide, 39 of 143 plans across 28 programs did this.
+    //
+    // So the domain floor is the earliest term at which the TIGHTEST option has anything
+    // takeable at all. A floor rather than a refusal, deliberately: nearly every one of those
+    // plans has later terms and general electives to trade with, and the standing instruction
+    // on this engine is that the answer to an ordering problem is a different ORDER. The
+    // cumulative form of the same bound is enforced for every arrangement in `isLegal`, which
+    // is where a rule has to live if no mutation is to erode it.
+    // Only needed where the pick is absent: with one resolved there is no disjunction left to
+    // be conservative about. Computed per layout, because the term count is the shape's.
+    const concCapacity = concentration
+      ? null
+      : concentrationCapacity(program, courseMap, ts.length, (id) => depth.depthOf(id));
+    if (concCapacity) {
+      for (const p of plans) {
+        if (p.cell.target !== CONCENTRATION) continue;
+        const narrowed = p.domain.filter(t => (concCapacity[Math.min(t, concCapacity.length - 1)] ?? 0) >= 1);
+        if (narrowed.length) p.domain = narrowed;
+      }
     }
     return { terms: ts, plans, impossible, critical };
   };
@@ -482,6 +526,10 @@ export function generatePlan({
       )].length,
       // Major electives actually pulled ahead of a low-unlock requirement.
       depthTrades: improved.depthTrades ?? [],
+      // Requirements that took an early term back from a general elective, and from where.
+      // Countable for the same reason: this pass answers the complaint CHART exists for, so
+      // its effect has to be auditable rather than asserted.
+      reclaimed: improved.reclaimed ?? [],
       // ── Is any major depth being left on the table? ───────────────
       //
       // The question a student cares about is not where a pool sits in the abstract, it

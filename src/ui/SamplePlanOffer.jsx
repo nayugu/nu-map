@@ -69,7 +69,7 @@ const COLLAPSE_KEY = (isPhone) =>
 const PHONE_FZ  = (isPhone) => (isPhone ? 6 : 10);   // body, buttons, options
 const PHONE_FZL = (isPhone) => (isPhone ? 5.5 : 9);  // the section label
 
-export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) {
+export default function SamplePlanOffer({ path, isGrad, programData, concentration, isPhone }) {
   const majorRequirements = usePort(IMajorRequirements);
   const planGenerator     = usePort(IPlanGenerator);
   const specialTerms      = usePort(ISpecialTerms);
@@ -184,7 +184,10 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
   // different view of one. Measured, the difference is not cosmetic: the five-year
   // Industrial Engineering and Computer Science patterns exercise a shape the four-year
   // ones never do, and they were the two that failed the four-course rule.
-  const genKey = `${path}|${isGrad}|${studentType}|${variantIdx}`;
+  // The concentration is IN the key. Without it, picking a concentration after the plan had
+  // already been generated left the old plan on screen — built against the union of every
+  // option — and nothing said so, which is the worst of the three possible behaviours.
+  const genKey = `${path}|${isGrad}|${studentType}|${variantIdx}|${concentration ?? ""}`;
   const startedRef = useRef(null);
 
   useEffect(() => {
@@ -196,6 +199,11 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
     setGenBusy(true);
     planGenerator.generate({
       programKey: path, isGrad, programData, courseMap, studentType,
+      // Without this the concentration cells can only draw on the UNION of every option, and
+      // the pools are typically disjoint — so the plan gets proved feasible by courses from
+      // three different concentrations, which no student can take. With it, the cells are that
+      // one concentration's courses and are sequenced as the major depth they actually are.
+      concentration,
       // The catalog's own SHAPE — years, terms, where the co-ops fall — is real
       // departmental intent and worth inheriting even when its CONTENT is not.
       //
@@ -363,28 +371,6 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
               hasCatalog={hasSamplePlan} canGenerate={canGenerate}
               busy={genBusy} isPhone={isPhone}
             />
-            {/* Only offered once there is a plan to explain. An explainer that
-                describes the algorithm in general rather than THIS plan is a
-                brochure, and the panel is built to refuse being one.
-                *
-                * Under the toggle rather than beside it, and quiet. It was a blue link on the
-                * same row — the only blue in the panel, so it outranked the two buttons that
-                * actually do something, for a dialog that only explains. Now the toggle spans
-                * the panel like every other control, this sits beneath it as a secondary line,
-                * right-aligned and in body colour, with the underline carrying the affordance
-                * instead of a colour. */}
-            {usingChart && gen?.report && (
-              <div style={{ width: "100%", textAlign: "end", marginTop: -2 }}>
-                <button
-                  onClick={() => setShowWhy(true)}
-                  style={{
-                    fontSize: PHONE_FZ(isPhone), background: "transparent", border: "none",
-                    color: "var(--text-3)", cursor: "pointer", padding: 0,
-                    textDecoration: "underline", textUnderlineOffset: 2,
-                  }}
-                >{t("chart.why")}</button>
-              </div>
-            )}
           </div>
 
           {/* Generation is the one thing here that takes visible time. */}
@@ -491,6 +477,32 @@ export default function SamplePlanOffer({ path, isGrad, programData, isPhone }) 
                   <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn(isPhone)}>
                     {t("grad.plan.undo")}
                   </button>
+                </div>
+              )}
+              {/* ── Last, because it is the least urgent thing here ──────
+                *
+                * Twice mis-placed before this. Beside the toggle it was a blue link outranking
+                * the two buttons that actually act; directly under the toggle it sat between
+                * two full-width controls and read as an orphan interrupting the stack.
+                *
+                * The panel is a sequence — pick a source, pick a variant, look at it, act — and
+                * "how was this built" is the question that arrives AFTER all of those, if at
+                * all. So it goes at the end, quiet and right-aligned, where a curious reader
+                * looks and nobody else has to step over it.
+                *
+                * Only when there is a generated plan to explain: an explainer describing the
+                * algorithm in general rather than THIS plan is a brochure.
+                */}
+              {usingChart && gen?.report && (
+                <div style={{ marginTop: 7, textAlign: "end" }}>
+                  <button
+                    onClick={() => setShowWhy(true)}
+                    style={{
+                      fontSize: PHONE_FZ(isPhone), background: "transparent", border: "none",
+                      color: "var(--text-3)", cursor: "pointer", padding: 0,
+                      textDecoration: "underline", textUnderlineOffset: 2,
+                    }}
+                  >{t("chart.why")}</button>
                 </div>
               )}
             </>
