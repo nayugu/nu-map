@@ -159,7 +159,7 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           * departure from the published plans, and the reason the engine exists. */}
         <Section title={t("chart.contract.soft.h")}>
           <ol style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
-            {["1", "2", "3", "4", "5", "6", "7", "8"].map(n => (
+            {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map(n => (
               <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.soft.${n}`)}</li>
             ))}
           </ol>
