@@ -151,7 +151,7 @@ export const strings = {
   "chart.contract.soft.6": "자유 선택을 계획 전체에 퍼뜨리고, 각 학기에 자리를 남겨 두어 끝으로 미루지 않습니다",
   "chart.contract.soft.7": "자유 선택을 계획의 완충 장치로 씁니다 — 과목을 실제 개설되는 계절로 옮기거나, 학위에 없는 선수과목을 담도록 바꿉니다",
   "chart.contract.soft.8": "그 과목의 개설 이력이 가장 튼튼한 계절을 선호합니다",
-  "chart.contract.soft.9": "모든 학기를 전일제 이수량으로 유지하고, 상한보다 2학점쯤 남겨 과목을 더 넣을 수 있게 합니다",
+  "chart.contract.soft.9": "정규 학기는 전일제 이수량으로 유지하고, 상한보다 2학점쯤 아래로 둡니다",
   "chart.how.h": "작동 방식",
   "chart.how.stat.tried": "모든 카드가 유효한 학기를 얻기까지 시도한 배치",
   "chart.how.stat.moves": "그 후 순서에 적용한 개선",

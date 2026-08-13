@@ -156,7 +156,7 @@ export const strings = {
   "chart.contract.soft.6": "Spreads free electives across the plan, reserving room in each term rather than leaving them for the end",
   "chart.contract.soft.7": "Spends a free elective as a buffer — to shift a course into a season it runs in, or to carry a prerequisite your degree never lists",
   "chart.contract.soft.8": "Prefers the season where a course’s offering history is strongest",
-  "chart.contract.soft.9": "Keeps each term inside its credit range — full-time in a full term, less in a summer half — and a couple below the cap, leaving room to add a course",
+  "chart.contract.soft.9": "Keeps every full term at a full-time load, and a couple of credits below the cap",
   "chart.how.h": "How it works",
   "chart.how.stat.tried": "placements tried before every card had a legal term",
   "chart.how.stat.moves": "improvements made to the order afterwards",

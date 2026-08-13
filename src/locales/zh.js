@@ -151,7 +151,7 @@ export const strings = {
   "chart.contract.soft.6": "把自由选修分散到整个方案，并在每个学期为它们预留位置，而不是留到最后",
   "chart.contract.soft.7": "把自由选修当作方案的缓冲：调换它来把某门课移到确实开设的季节，或承接你的学位并未列出的先修课",
   "chart.contract.soft.8": "优先选择该课程开设记录最稳的季节",
-  "chart.contract.soft.9": "让每个学期保持全日制学分量，并比上限少留两个学分，方便你再加一门课",
+  "chart.contract.soft.9": "让每个完整学期保持全日制学分量，并比上限少留两个学分",
   "chart.how.h": "它如何运作",
   "chart.how.stat.tried": "在每张卡片都有合法学期之前尝试的放置次数",
   "chart.how.stat.moves": "之后对顺序所做的改进",

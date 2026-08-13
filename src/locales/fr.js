@@ -151,7 +151,7 @@ export const strings = {
   "chart.contract.soft.6": "Répartit les électifs libres sur le plan, en réservant de la place dans chaque semestre au lieu de les garder pour la fin",
   "chart.contract.soft.7": "Utilise un électif libre comme tampon du plan : il l’échange pour déplacer un cours vers une saison où il est donné, ou pour porter un prérequis que votre diplôme ne mentionne pas",
   "chart.contract.soft.8": "Préfère la saison où l’historique d’ouverture du cours est le plus solide",
-  "chart.contract.soft.9": "Garde chaque semestre dans sa fourchette de crédits — à temps plein pour un semestre complet, proportionnellement moins pour une demi-session d’été — et quelques crédits sous le plafond pour que vous puissiez encore ajouter un cours",
+  "chart.contract.soft.9": "Garde chaque semestre complet à charge complète, et quelques crédits sous le plafond",
   "chart.how.h": "Comment cela fonctionne",
   "chart.how.stat.tried": "placements essayés avant que chaque carte ait un semestre valide",
   "chart.how.stat.moves": "améliorations apportées ensuite à l’ordre",

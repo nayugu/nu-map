@@ -152,7 +152,7 @@ export const strings = {
   "chart.contract.soft.6": "自由選択をプラン全体に散らし、各学期に場所を確保して、最後に回さない",
   "chart.contract.soft.7": "自由選択をプランの緩衝材として使う——科目を実際に開講される季節へ移すため、または学位に載っていない前提科目を担うために振り替える",
   "chart.contract.soft.8": "科目の開講実績が最も安定している季節を選ぶ",
-  "chart.contract.soft.9": "各学期をフルタイムの履修量に保ち、上限より 2 単位ほど余らせて科目を追加できるようにする",
+  "chart.contract.soft.9": "通常の学期はフルタイムの履修量に保ち、上限より 2 単位ほど余らせる",
   "chart.how.h": "仕組み",
   "chart.how.stat.tried": "すべてのカードに有効な学期が見つかるまでに試した配置",
   "chart.how.stat.moves": "その後に順序へ加えた改善",

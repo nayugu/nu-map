@@ -151,7 +151,7 @@ export const strings = {
   "chart.contract.soft.6": "Reparte las electivas libres por el plan, reservando espacio en cada semestre en vez de dejarlas para el final",
   "chart.contract.soft.7": "Usa una electiva libre como colchón del plan: la cambia para mover un curso a una temporada en la que se imparte, o para cubrir un requisito previo que tu titulación no menciona",
   "chart.contract.soft.8": "Prefiere la temporada en la que el historial de oferta del curso es más sólido",
-  "chart.contract.soft.9": "Mantiene cada semestre dentro de su rango de créditos —tiempo completo en un semestre completo, proporcionalmente menos en una mitad de verano— y un par por debajo del límite para que aún puedas añadir un curso",
+  "chart.contract.soft.9": "Mantiene cada semestre completo con carga de tiempo completo, y un par de créditos por debajo del límite",
   "chart.how.h": "Cómo funciona",
   "chart.how.stat.tried": "colocaciones probadas hasta que cada tarjeta tuvo un semestre válido",
   "chart.how.stat.moves": "mejoras aplicadas al orden después",
