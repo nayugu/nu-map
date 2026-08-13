@@ -336,6 +336,88 @@ export function ambiguousShares({ pathway, placements = {}, placedOut = new Set(
 }
 
 /**
+ * Every course the pathway says could be shared, with what the plan makes of it.
+ *
+ * This is the panel's most actionable list and the reason it exists: a student
+ * who has just declared a pathway wants to know WHAT TO TAKE, and until now the
+ * card only showed what they had already taken. The published table is the answer
+ * the college gives, so it is the answer we show.
+ *
+ * One row per graduate course, not per table row — Khoury lists `CS 5500` twice
+ * (against `CS 4500` and `CS 4530`) and that is one choice, not two options.
+ *
+ * `state` is per row:
+ *   "taken"    the graduate course is in the plan — this share is active
+ *   "choose"   available, but the table offers several targets (see `ambiguous`)
+ *   "blocked"  every target is already taken, so sharing it would double-count.
+ *              Shown rather than hidden: a silently vanishing option reads as a
+ *              bug, and "you already took CS 3650" is the explanation.
+ *   "open"     available
+ *
+ * @returns {{gradId, targets, state, sh, blockedBy, mandatory, recommended}[]}
+ */
+export function shareCandidates({
+  pathway, placements = {}, placedOut = new Set(), courseMap = {},
+}) {
+  if (!pathway) return [];
+  const excluded = excludedIds(pathway);
+
+  const rows = new Map();
+  for (const { share, gradId, targetId } of resolveCandidates(pathway, { excluded })) {
+    if (!gradId) continue;                      // domain shares are reported separately
+    if (!rows.has(gradId)) {
+      rows.set(gradId, {
+        gradId, targets: [], blockedBy: [],
+        sh: shOf(courseMap, gradId),
+        mandatory: !!share.mandatory,
+        recommended: !!share.recommended,
+        slotLabel: share.target?.kind !== "course" ? (share.target?.label ?? null) : null,
+      });
+    }
+    const row = rows.get(gradId);
+    row.mandatory ||= !!share.mandatory;
+    row.recommended ||= !!share.recommended;
+    if (!targetId) continue;
+    if (ugVersionTaken(targetId, placements, placedOut)) {
+      if (!row.blockedBy.includes(targetId)) row.blockedBy.push(targetId);
+    } else if (!row.targets.includes(targetId)) {
+      row.targets.push(targetId);
+    }
+  }
+
+  const out = [];
+  for (const row of rows.values()) {
+    const taken = placementsOf(placements, row.gradId).length > 0;
+    // A row with no viable target left, but blocked ones, is foreclosed. A row
+    // with neither is a slot-filler (CS 5010 → "General Elective") and stays open.
+    const state = taken ? "taken"
+      : (!row.targets.length && row.blockedBy.length) ? "blocked"
+      : row.targets.length > 1 ? "choose"
+      : "open";
+    out.push({ ...row, state, ambiguous: row.targets.length > 1 });
+  }
+
+  // Mandatory first, then what the student is already doing, then recommended,
+  // then the rest alphabetically — foreclosed rows last, since they are context
+  // rather than choices.
+  const rank = r => (r.state === "blocked" ? 4 : r.mandatory ? 0 : r.state === "taken" ? 1 : r.recommended ? 2 : 3);
+  return out.sort((a, b) => rank(a) - rank(b) || a.gradId.localeCompare(b.gradId));
+}
+
+/**
+ * Does this pathway allow sharing BEYOND its named table?
+ *
+ * Some colleges publish an open rule rather than a list — CEE states "any
+ * graduate course that contributes to the MS degree requirements may be shared",
+ * and COE's curriculum sheets carry anonymous "Graduate Course #1–#4" slots. For
+ * those, a table is a starting point and not the limit, and saying so is the
+ * difference between a helpful list and a misleading one.
+ */
+export function hasOpenShareDomain(pathway) {
+  return (pathway?.shares ?? []).some(s => !s.grad && s.gradDomain);
+}
+
+/**
  * Merge derived pathway substitutions with the student's own.
  *
  * The student's list wins on collision: a manual substitution is an explicit

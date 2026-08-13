@@ -20,6 +20,7 @@ import { evaluateRule, evaluatePathway, summarise } from "../../src/core/pathway
 import {
   activeShares, pathwaySubstitutions, mergeSubstitutions, assertOneWay,
   shareTotals, excludedIds, resolveCandidates, ambiguousShares,
+  shareCandidates, hasOpenShareDomain,
 } from "../../src/core/pathway/shareSet.js";
 import { selectPathways, msProgramFor, isStale } from "../../src/core/pathway/select.js";
 import { plannerId, displayCode, inDomain, isGradCode, isUgCode } from "../../src/core/pathway/ids.js";
@@ -872,5 +873,102 @@ describe("every shipped pathway is coherent", () => {
     assert.equal(s.ok, false);
     assert.equal(summarise([{ status: STATUS.UNKNOWN }]).ok, true,
       "unknown alone must not read as a failure");
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════
+describe("the candidate list — what a student should take", () => {
+  const p = () => byId(MSCS);
+  const cands = (placements = {}) =>
+    shareCandidates({ pathway: p(), placements, courseMap });
+
+  test("one row per GRADUATE course, not per table row", () => {
+    const rows = cands();
+    // CS 5500 appears twice in the published table (CS 4500 / CS 4530).
+    assert.equal(rows.filter(r => r.gradId === "CS5500").length, 1);
+    assert.equal(new Set(rows.map(r => r.gradId)).size, rows.length);
+  });
+
+  test("an unstarted plan shows every course as available, with real credits", () => {
+    const rows = cands();
+    for (const r of rows) {
+      // "open" or "choose" — both are available; nothing is taken or foreclosed
+      // in a plan with no placements. CS 5500 is `choose` because the published
+      // table gives it two targets.
+      assert.ok(["open", "choose"].includes(r.state), `${r.gradId} is ${r.state}`);
+      assert.ok(r.sh > 0, `${r.gradId} has no credits`);
+    }
+    assert.equal(rows.filter(r => r.state === "choose").length, 1, "only CS 5500 alternates");
+  });
+
+  test("a placed course becomes `taken`", () => {
+    const r = cands({ CS5800: "fall2027" }).find(x => x.gradId === "CS5800");
+    assert.equal(r.state, "taken");
+  });
+
+  test("an alternation is `choose` and carries both targets", () => {
+    const r = cands().find(x => x.gradId === "CS5500");
+    assert.equal(r.state, "choose");
+    assert.equal(r.ambiguous, true);
+    assert.deepEqual(r.targets, ["CS4500", "CS4530"]);
+  });
+
+  // The row that must NOT silently disappear: an option foreclosed by the
+  // student's own undergraduate coursework needs its explanation.
+  test("taking the undergraduate version marks the row `blocked`, not absent", () => {
+    const rows = cands({ CS3000: "fall2025" });
+    const r = rows.find(x => x.gradId === "CS5800");
+    assert.ok(r, "the row must still be listed");
+    assert.equal(r.state, "blocked");
+    assert.deepEqual(r.blockedBy, ["CS3000"]);
+    assert.deepEqual(r.targets, []);
+  });
+
+  test("an alternation with one target taken stays open on the other", () => {
+    const r = cands({ CS4500: "fall2025" }).find(x => x.gradId === "CS5500");
+    assert.equal(r.state, "open");
+    assert.deepEqual(r.targets, ["CS4530"]);
+    assert.deepEqual(r.blockedBy, ["CS4500"]);
+  });
+
+  test("a slot-filler with no course target stays open and keeps its label", () => {
+    const r = shareCandidates({ pathway: byId(CMPE), placements: {}, courseMap })
+      .find(x => x.gradId === "CS5010");
+    assert.equal(r.state, "open");
+    assert.equal(r.mandatory, true);
+    assert.equal(r.slotLabel, "General Elective");
+  });
+
+  test("mandatory rows sort first, foreclosed rows last", () => {
+    const rows = shareCandidates({
+      pathway: byId(CMPE), placements: { CS3200: "fall2025" }, courseMap,
+    });
+    assert.equal(rows[0].gradId, "CS5010", "the required course leads");
+    assert.equal(rows[rows.length - 1].state, "blocked", "foreclosed rows trail");
+  });
+
+  test("open-ended pathways are flagged so the table is not read as the limit", () => {
+    assert.equal(hasOpenShareDomain(byId(MSCS)), false, "Khoury publishes a closed table");
+    assert.equal(hasOpenShareDomain({
+      shares: [{ grad: null, gradDomain: { subject: "CS", min: 5000 }, target: { kind: "slot", label: "x" } }],
+    }), true);
+  });
+
+  test("every shipped pathway produces a usable list", () => {
+    for (const pw of PATHWAYS) {
+      const rows = shareCandidates({ pathway: pw, placements: {}, courseMap });
+      assert.ok(rows.length >= 3, `${pw.id} offers only ${rows.length} courses`);
+      for (const r of rows) {
+        assert.ok(r.sh > 0, `${pw.id}: ${r.gradId} has no credits`);
+        assert.ok(r.targets.length || r.slotLabel,
+          `${pw.id}: ${r.gradId} has neither a target nor a slot label`);
+      }
+    }
+  });
+
+  test("a junk pathway yields an empty list rather than throwing", () => {
+    for (const bad of [null, undefined, {}, { shares: null }]) {
+      assert.deepEqual(shareCandidates({ pathway: bad, courseMap }), []);
+    }
   });
 });
