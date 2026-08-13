@@ -91,7 +91,7 @@ export default function PlanLibrary() {
     plans, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort, reorderNodes, orderedSiblings,
     activePlanId, switchPlan, renamePlan, setPlanStudent,
-    exportLibraryJSON, exportLibraryZip, importLibraryFiles,
+    exportLibraryJSON, exportLibraryZip, exportPlansIndividually, importLibraryFiles,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
     pushFolderHistory, undoFolders, redoFolders, folderCanUndo, folderCanRedo,
@@ -297,6 +297,17 @@ export default function PlanLibrary() {
     setEditingId(id);
   };
 
+  /**
+   * The one rule every "new folder" entry point uses: several rows selected
+   * means "put these inside a new folder", anything else means "make an empty
+   * folder here". Shared so the ⇧⌘N shortcut, the header + button and the
+   * context menu cannot disagree about it.
+   */
+  const newFolderSmart = (parentId = null) => {
+    if (selectedIds.size > 1) { newFolderWith([...selectedIds]); return; }
+    newFolder(parentId);
+  };
+
   const newFolderWith = (ids) => {
     const res = createFolderWithNodes(ids, t("folders.newName"));
     if (!res.ok) { setNotice(t(`folders.move.err.${res.reason}`, { max: MAX_DEPTH })); return; }
@@ -351,15 +362,27 @@ export default function PlanLibrary() {
    * BROWSABLE: folders become directories and every entry opens with the
    * ordinary Load, at the cost of names being bent into filenames.
    */
-  const doExport = (ids, asZip) => {
-    const res = asZip ? exportLibraryZip(ids) : exportLibraryJSON(ids);
-    setNotice(t("folders.io.exported", { n: res.plans }));
+  /**
+   * `shape` is 'files' (default), 'zip', or 'bundle'.
+   *
+   * 'files' writes one ordinary plan file per plan, which is the inverse of
+   * how they come back in — select them all in the file dialog and Import
+   * loads the lot. The other two exist for the one thing flat files cannot
+   * do, which is carry the folder tree.
+   */
+  const doExport = async (ids, shape = "files") => {
+    const res = shape === "zip"    ? exportLibraryZip(ids)
+              : shape === "bundle" ? exportLibraryJSON(ids)
+              : await exportPlansIndividually(ids);
+    setNotice(t(shape === "files" ? "folders.io.exportedFiles" : "folders.io.exported",
+      { n: res.plans }));
     setExportMenu(null);
   };
 
   const exportMenuItems = (ids) => [
-    { key: "zip",  label: t("folders.io.asZip"),  onSelect: () => doExport(ids, true) },
-    { key: "json", label: t("folders.io.asJson"), onSelect: () => doExport(ids, false) },
+    { key: "files",  label: t("folders.io.asFiles"),  onSelect: () => doExport(ids, "files") },
+    { key: "zip",    label: t("folders.io.asZip"),    onSelect: () => doExport(ids, "zip") },
+    { key: "bundle", label: t("folders.io.asJson"),   onSelect: () => doExport(ids, "bundle") },
   ];
 
   const doImport = async (files) => {
@@ -526,12 +549,21 @@ export default function PlanLibrary() {
         return;
       }
       if (e.key === "Enter")      { e.preventDefault(); handleEnter(); return; }
+      // F2 is rename everywhere outside macOS, and unlike Enter it means only
+      // that — Enter has to double as "open the search hit", so on a filtered
+      // list it is not available for renaming at all.
+      if (e.key === "F2") {
+        e.preventDefault();
+        const id = selectedIds.size === 1 ? [...selectedIds][0] : focusId;
+        if (id && planTree.byId.has(id)) { setSelectedIds(new Set([id])); setEditingId(id); }
+        return;
+      }
       if (e.key === "ArrowDown")  { e.preventDefault(); moveFocus(1, e.shiftKey); return; }
       if (e.key === "ArrowUp")    { e.preventDefault(); moveFocus(-1, e.shiftKey); return; }
       if (e.key.toLowerCase() === "n" && e.shiftKey && (e.metaKey || e.ctrlKey)) {
         e.preventDefault();
         const sel = focusId ? rows.find(r => r.id === focusId) : null;
-        newFolder(sel ? parentFor(sel) : null);
+        newFolderSmart(sel ? parentFor(sel) : null);
         return;
       }
       if (inSearch) return;               // every remaining key is typing
@@ -683,7 +715,7 @@ export default function PlanLibrary() {
           : t("folders.menu.open"),
         onSelect: () => openRow(row),
       },
-      { key: "rename", label: t("folders.menu.rename"), hint: "↵", disabled: n > 1,
+      { key: "rename", label: t("folders.menu.rename"), hint: "↵ / F2", disabled: n > 1,
         onSelect: () => setEditingId(row.id) },
       // Only where there is a plan to assign — a folder has no advisee of its
       // own, so offering it on a pure-folder selection would be a dead item.
@@ -693,12 +725,22 @@ export default function PlanLibrary() {
         onSelect: () => requestAssign(ids),
       }] : []),
       { divider: true },
-      { key: "newFolder", label: t("folders.menu.newFolder"), hint: "⇧⌘N",
-        onSelect: () => newFolder(parentFor(row)) },
-      { key: "newWith", label: t("folders.menu.newFolderWithSel"), hint: joinCounts(
-          ids.filter(id => !planTree.folderIds.has(id)).length,
-          ids.filter(id => planTree.folderIds.has(id)).length),
-        onSelect: () => newFolderWith(ids) },
+      // ONE item, not two. "New folder" and "New folder with selection" sat
+      // next to each other and the difference was invisible: with something
+      // selected, the first silently made an EMPTY folder beside it, which is
+      // never what was meant. So the selection decides — with rows selected it
+      // wraps them, and the hint says which, so nothing is hidden.
+      // `ids` always holds at least the right-clicked row, so the test is
+      // whether it is a real MULTI-selection — one row is "put a folder here",
+      // several is "put these in a folder".
+      { key: "newFolder",
+        label: t("folders.menu.newFolder"),
+        hint: ids.length > 1
+          ? joinCounts(
+              ids.filter(id => !planTree.folderIds.has(id)).length,
+              ids.filter(id => planTree.folderIds.has(id)).length)
+          : "⇧⌘N",
+        onSelect: () => (ids.length > 1 ? newFolderWith(ids) : newFolder(parentFor(row))) },
       { key: "newPlan", label: t("folders.menu.newPlanHere"),
         onSelect: () => newPlanIn(parentFor(row)) },
       { divider: true },
@@ -893,23 +935,31 @@ export default function PlanLibrary() {
               doImport(files);
             }}
           />
+          {/* Named, not ↓/↑. The arrows were unreadable in both directions —
+              nothing says whether ↑ means "send my plans out" or "the file
+              goes up into the app" — and this is the one pair of controls an
+              advisor reaches for by name. The title beside them is the flex
+              item that shrinks, so the labels survive on a narrow phone. */}
           <button onClick={() => fileRef.current?.click()} style={iconBtn}
-            title={t("folders.io.import")} aria-label={t("folders.io.import")}>
-            <span aria-hidden="true">↓</span>
+            title={t("folders.io.importTitle")}>
+            {t("folders.io.import")}
           </button>
           <button
-            onClick={e => {
-              e.stopPropagation();
+            // Primary click exports the whole library as individual plan
+            // files. The other two shapes are on the right-click menu: making
+            // the common act a menu first cost a click every single time.
+            onClick={e => { e.stopPropagation(); doExport(null, "files"); }}
+            onContextMenu={e => {
+              e.preventDefault(); e.stopPropagation();
               const r = e.currentTarget.getBoundingClientRect();
               setExportMenu({ x: Math.max(6, r.right - 190), y: r.bottom + 4, ids: null });
             }}
             style={iconBtn}
             disabled={plans.length === 0}
-            aria-haspopup="menu"
-            title={t("folders.io.exportAll")} aria-label={t("folders.io.exportAll")}>
-            <span aria-hidden="true">↑</span>
+            title={t("folders.io.exportAll")}>
+            {t("folders.io.export")}
           </button>
-          <button onClick={() => newFolder(null)} style={iconBtn} title={t("folders.newFolder")}>
+          <button onClick={() => newFolderSmart(null)} style={iconBtn} title={t("folders.newFolder")}>
             <FolderIcon size={13} />
             <span aria-hidden="true" style={{ fontWeight: 700 }}>+</span>
           </button>
@@ -1051,8 +1101,9 @@ export default function PlanLibrary() {
                 </button>
               )}
               <button
-                onClick={e => {
-                  e.stopPropagation();
+                onClick={e => { e.stopPropagation(); doExport([...selectedIds], "files"); }}
+                onContextMenu={e => {
+                  e.preventDefault(); e.stopPropagation();
                   const r = e.currentTarget.getBoundingClientRect();
                   setExportMenu({ x: r.left, y: r.bottom + 4, ids: [...selectedIds] });
                 }}

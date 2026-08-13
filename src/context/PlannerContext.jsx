@@ -35,7 +35,7 @@ import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
          siblingsInOrder, SORT_MODES } from "../core/planFolders.js";
 import { buildLibraryFile, parseLibraryFile, mergeLibrary,
-         libraryToArchive, archiveToLibrary } from "../core/planLibraryFile.js";
+         libraryToArchive, archiveToLibrary, flatFileNames } from "../core/planLibraryFile.js";
 import { writeZip, readZip } from "../core/zipFile.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
@@ -3361,6 +3361,49 @@ export function PlannerProvider({ children }) {
     return { plans: doc.plans.length, folders: doc.folders.length };
   };
 
+  /**
+   * The same export as ONE ORDINARY PLAN FILE PER PLAN — the default, because
+   * it is the exact inverse of how plans come back in: an advisor selects
+   * several files in the file dialog and Import loads them all. A bundle has
+   * to be understood before it can be used; a folder of plan files does not,
+   * and every one of them opens with the ordinary Load JSON on its own.
+   *
+   * The cost is structure: flat files have no folders, so `flatFileNames`
+   * folds the folder trail into the name ("Advisees · Jane") and makes the
+   * names unique across the WHOLE selection rather than per directory. The
+   * zip remains for the case where the folder tree itself must round-trip.
+   *
+   * Downloads are spaced out: browsers treat a burst of anchor clicks as one
+   * gesture and silently drop all but the first few. Even spaced, the first
+   * multi-file export raises the browser's own "allow multiple downloads?"
+   * prompt once per site — unavoidable from a web page, and the reason the
+   * caller reports how many files were written.
+   *
+   * @param {string[]|null} ids
+   */
+  const exportPlansIndividually = async (ids = null) => {
+    saveCurrentPlanToSlot();
+    const doc = buildLibraryFile(planTree, ids, planSnapshot, { redact: libraryRedact });
+    const names = flatFileNames(doc.plans, doc.folders);
+    const suffix = `${institution.shortName ?? institution.name} Map`;
+    const dateStr = new Date().toISOString().slice(0, 10);
+    for (const p of doc.plans) {
+      // `planName` is what the single-plan importer reads, so each file is an
+      // ordinary plan file and needs no library-aware path to open.
+      const blob = new Blob([JSON.stringify({ ...p.data, planName: p.name }, null, 2)],
+        { type: "application/json" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob);
+      a.download = `${names.get(p.id)} - ${suffix} - ${dateStr}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      await new Promise(r => setTimeout(r, 120));
+    }
+    return { plans: doc.plans.length, folders: doc.folders.length };
+  };
+
   /** Read one dropped file into an incoming {folders, plans}, whatever it is. */
   const readOneImport = async (file) => {
     const isZip = /\.zip$/i.test(file.name) || file.type === "application/zip";
@@ -4169,7 +4212,7 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
-    exportLibraryJSON, exportLibraryZip, importLibraryFiles,
+    exportLibraryJSON, exportLibraryZip, exportPlansIndividually, importLibraryFiles,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     plans, activePlanId, switchPlan, createPlan, renamePlan, setPlanStudent,
     // Folders — structure, view state, and the mutations that respect both.

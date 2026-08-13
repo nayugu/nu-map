@@ -1602,8 +1602,9 @@ export default function Header() {
               <div style={IO_GROUP}>
               <div style={IO_GROUP_LABEL}>{t("header.io.group.share")}</div>
               <div style={{ display: "flex", gap: 4 }}>
+                <HoverTip tip={t("header.io.share.title")} placement="side"
+                  display="inline-flex" style={{ flex: 1, minWidth: 0 }}>
                 <button className="hdr-btn-dd"
-                  title={t("header.io.share.title")}
                   onClick={async () => {
                     try {
                       await copyPlanLink(shareLinkLocale);
@@ -1613,7 +1614,7 @@ export default function Header() {
                       alert(t("header.io.share.error") ?? "Could not copy link.");
                     }
                   }}
-                  style={{ flex: 1, textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                  style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                     background: shareLinkCopied ? "var(--active)" : "var(--bg-surface)",
                     padding: "4px 8px", borderRadius: 5,
                     border: `1px solid ${shareLinkCopied ? "var(--active)" : "var(--border-2)"}`,
@@ -1621,6 +1622,7 @@ export default function Header() {
                     transition: "background 0.2s, color 0.2s, border-color 0.2s" }}>
                   {shareLinkCopied ? (t("header.io.share.done") ?? "Link copied!") : (t("header.io.share") ?? "Snapshot link")}
                 </button>
+                </HoverTip>
                 <select
                   value={shareLinkLocale}
                   onChange={e => setShareLinkLocale(e.target.value)}
@@ -1645,10 +1647,16 @@ export default function Header() {
                       auto column still exists for the Load button below,
                       so the two rows stay width-matched in every locale. */}
                   {!shareCode ? (
+                    // The tip is a HoverTip card placed to the SIDE, not a
+                    // native `title=`: this panel is pinned to the right edge,
+                    // so a card above the button covers the rest of the sheet
+                    // while you read it. `gridColumn` moves to the wrapper —
+                    // the span is the grid item once the button is wrapped.
+                    <HoverTip tip={t("header.io.code.send.title")} placement="side"
+                      style={{ gridColumn: "1 / -1" }}>
                     <button className="hdr-btn-dd" onClick={handleShare}
-                      title={t("header.io.code.send.title")}
                       disabled={shareCodeBusy}
-                      style={{ gridColumn: "1 / -1", fontSize: 10, fontWeight: 700,
+                      style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700,
                         cursor: shareCodeBusy ? "default" : "pointer",
                         background: shareCodePickedUp ? "#22c55e" : "var(--bg-surface)",
                         padding: "4px 8px", borderRadius: 5,
@@ -1661,6 +1669,7 @@ export default function Header() {
                           gone and the bar is otherwise back to Share. */}
                       {shareCodePickedUp ? t("header.io.code.pickedup") : t("header.io.code.share")}
                     </button>
+                    </HoverTip>
                   ) : (
                     <>
                       {/* Once a code exists the bar IS the code. Clicking
@@ -1769,15 +1778,17 @@ export default function Header() {
                           border: "1px solid var(--border-2)", borderRadius: 5, padding: "4px 6px",
                           opacity: claimBusy ? 0.6 : 1 }} />
                     ) : (
+                      <HoverTip tip={t("header.io.code.load.title")} placement="side"
+                        display="inline-flex" style={{ flex: 1, minWidth: 0 }}>
                       <button className="hdr-btn-dd"
                         onClick={() => setClaimOpen(true)}
                         onFocus={() => setClaimOpen(true)}
-                        title={t("header.io.code.load.title")}
-                        style={{ flex: 1, fontSize: 10, fontWeight: 700, cursor: "text",
+                        style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "text",
                           background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                           border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                         {t("header.io.code.load")}
                       </button>
+                      </HoverTip>
                     )}
                   </div>
                   {/* Redeeming derives an AES key with 300k PBKDF2 rounds —
@@ -1818,25 +1829,29 @@ export default function Header() {
               {/* ── Export: human-readable summary + PDF ── */}
               <div style={IO_GROUP_RULED}>
               <div style={IO_GROUP_LABEL}>{t("header.io.group.export")}</div>
-              <button className="hdr-btn-dd" onClick={handleCopyHumanReadable} title={t("header.io.copy.title")}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+              <HoverTip tip={t("header.io.copy.title")} placement="side">
+              <button className="hdr-btn-dd" onClick={handleCopyHumanReadable}
+                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 {t("header.io.copy")}
               </button>
-              <button className="hdr-btn-dd" onClick={handleExport} title={t("header.io.export.pdf.title")}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+              </HoverTip>
+              <HoverTip tip={t("header.io.export.pdf.title")} placement="side">
+              <button className="hdr-btn-dd" onClick={handleExport}
+                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                 {t("header.io.export.pdf")}
               </button>
+              </HoverTip>
               </div>
               {/* ── File: save / load JSON backups ── */}
               <div style={IO_GROUP_RULED}>
               <div style={IO_GROUP_LABEL}>{t("header.io.group.file")}</div>
-              <HoverTip tip={t("tip.export.json")}>
+              <HoverTip tip={t("tip.export.json")} placement="side">
               <button className="hdr-btn-dd" onClick={exportPlanJSON}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                   {t("header.io.export.json")}
@@ -1844,9 +1859,9 @@ export default function Header() {
               </HoverTip>
               <input type="file" id="plan-import-input" accept=".json" style={{ display: "none" }}
                 onChange={e => { if (e.target.files[0]) { importPlanJSON(e.target.files[0]); e.target.value = ""; } }} />
-              <HoverTip tip={t("tip.import.json")}>
+              <HoverTip tip={t("tip.import.json")} placement="side">
               <button className="hdr-btn-dd" onClick={() => document.getElementById("plan-import-input").click()}
-                style={{ width: "100%", textAlign: "left", fontSize: 10, fontWeight: 700, cursor: "pointer",
+                style={{ width: "100%", textAlign: "center", fontSize: 10, fontWeight: 700, cursor: "pointer",
                   background: "var(--bg-surface)", padding: "4px 8px", borderRadius: 5,
                   border: "1px solid var(--border-2)", color: "var(--text-4)" }}>
                   {t("header.io.import.json")}

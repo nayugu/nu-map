@@ -86,8 +86,10 @@ export function FolderIcon({ open, size = 14 }) {
  */
 export function PlanIcon({ size = 14, active, studentType }) {
   const isGrad = studentType === "graduate";
-  // Green when this is the plan you're inside — same signal as the row.
-  const tint = active ? "var(--success)" : isGrad ? "var(--planned)" : "var(--text-4)";
+  // The accent when this is the plan you're inside — the same one the row's
+  // left bar uses, so "where I am" is one colour everywhere instead of green
+  // here and something else there.
+  const tint = active ? "var(--active)" : isGrad ? "var(--planned)" : "var(--text-4)";
   return (
     <svg width={size * 1.15} height={size} viewBox="0 0 22 18" aria-hidden="true"
       style={{ flexShrink: 0, display: "block" }}>
@@ -214,24 +216,37 @@ export default function PlanTree({
               padding: compact ? "3px 8px" : "7px 11px",
               paddingLeft: (compact ? 8 : 11) + rowIndent(row.depth),
               fontSize, cursor: "pointer", userSelect: "none",
-              // Three states that must never be confusable:
-              //   drop target — wins over everything, because a drag that
-              //     silently snaps back reads as a bug;
-              //   SELECTED    — a neutral slab, the thing you're about to act on;
-              //   ACTIVE      — the plan you are actually inside. GREEN, not the
-              //     accent: selection and "where I am" are different questions,
-              //     and a shared colour made them indistinguishable the moment
-              //     the active plan was also selected. The left bar keeps it
-              //     readable even then, when the slab underneath is selection.
+              // Three states that must never be confusable — told apart by
+              // SHAPE, not by hue. Colour was doing the work before: selection
+              // was a grey slab and "the plan you're inside" was green, which
+              // read as a second kind of selection and left three colours
+              // competing in one 12px row. Now there is one accent, and the
+              // form says which state it is:
+              //
+              //   ACTIVE      — a solid bar down the left edge (below). No
+              //     fill and no ring, so it never looks picked.
+              //   SELECTED    — a BOLD 2px ring around the whole row plus a
+              //     faint tint. An edge is the thing you can see at a glance
+              //     across a list of forty rows.
+              //   drop target — a DASHED ring, matching the dashed-ghost motif
+              //     the canvas already uses for "this is where it would land",
+              //     so it cannot be mistaken for a selection even when the
+              //     folder under the cursor happens to be selected.
+              //
+              // Only the rejecting drop target introduces a second colour, and
+              // it has to: it is the one state that means "this will not work".
               background: isDropTarget
                 ? (dropOk ? "var(--active-bg)" : "var(--error-bg)")
-                : isSelected ? "var(--card-bg-sel)"
-                : isActive   ? "var(--success-bg)"
+                : isSelected ? "var(--active-bg)"
                 : "transparent",
-              boxShadow: isDropTarget
-                ? `inset 0 0 0 1px ${dropOk ? "var(--active)" : "var(--error)"}`
-                : isSelected ? "inset 0 0 0 1px var(--border-slot)"
-                : isFocused  ? "inset 0 0 0 1px var(--border-2)" : "none",
+              outline: isDropTarget
+                ? `2px dashed ${dropOk ? "var(--active)" : "var(--error)"}`
+                : isSelected ? "2px solid var(--active)"
+                : isFocused  ? "1px solid var(--border-2)"
+                : "none",
+              // Drawn inside the row's own box so the ring never overlaps the
+              // row above; `outline` alone straddles the border edge.
+              outlineOffset: -2,
               borderRadius: compact ? 3 : 6,
             }}
           >
@@ -257,12 +272,15 @@ export default function PlanTree({
               }} />
             )}
 
-            {/* The active plan's left bar reads even when it is also selected. */}
+            {/* "The plan you are inside", and the ONLY signal for it. A bar is
+                readable next to a selection ring because the two occupy
+                different edges — the bar cannot be mistaken for part of a
+                rectangle drawn around the whole row. */}
             {isActive && (
               <span aria-hidden="true" style={{
                 position: "absolute", left: Math.max(1, rowIndent(row.depth) - 1), top: compact ? 2 : 4,
-                bottom: compact ? 2 : 4, width: compact ? 2 : 2.5,
-                borderRadius: 2, background: "var(--success)",
+                bottom: compact ? 2 : 4, width: compact ? 2.5 : 3,
+                borderRadius: 2, background: "var(--active)",
               }} />
             )}
             <Guides depth={row.depth} density={density} />
@@ -294,7 +312,10 @@ export default function PlanTree({
                 flex: 1, minWidth: 0, overflow: "hidden",
                 textOverflow: "ellipsis", whiteSpace: "nowrap",
                 fontWeight: isActive || isFolder ? 700 : 400,
-                color: isActive ? "var(--success)" : isFolder ? "var(--text-2)" : "var(--text-3)",
+                // The bar and the bold weight already say "you are here"; a
+                // third signal in a fourth colour was the thing making this
+                // row hard to read.
+                color: isActive ? "var(--text-1)" : isFolder ? "var(--text-2)" : "var(--text-3)",
               }}>
                 {row.item.name}
               </span>
