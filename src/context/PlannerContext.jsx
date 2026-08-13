@@ -2781,6 +2781,57 @@ const { locale, setLocale, locales, t } = useLanguage();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  /**
+   * Deleted plans that can still be brought back, newest first.
+   *
+   * A tombstone is only honest if its slot is still there, so this checks.
+   * The sweep runs once per session; a tombstone whose slot went missing some
+   * other way (a cleared origin, a hand-edited store) must not be offered as
+   * restorable and then restore an empty plan.
+   */
+  const trashedPlans = useMemo(() => {
+    const out = [];
+    for (const [id, rec] of Object.entries(planTrash)) {
+      let alive = false;
+      try { alive = localStorage.getItem(key(`plan-data-${id}`)) != null; } catch {}
+      if (!alive) continue;
+      out.push({ id, name: rec?.name || "Plan", deletedAt: rec?.deletedAt ?? 0 });
+    }
+    return out.sort((a, b) => b.deletedAt - a.deletedAt);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [planTrash, storagePrefix]);
+
+  /**
+   * Put a deleted plan back at the top level.
+   *
+   * Its slot never went anywhere — deleting only removed the index record —
+   * so this is a pure index restore, the same thing undo does. It returns to
+   * ROOT rather than to the folder it came from: that folder may itself have
+   * been deleted, and re-creating a chain of folders to hold one restored
+   * plan invents structure the user did not ask for. Undo is the way back to
+   * exactly where it was; this is the way back from a reload, where the undo
+   * history is gone and the plan is otherwise unreachable.
+   */
+  const restorePlanFromTrash = (id) => {
+    const rec = planTrash[id];
+    if (!rec) return { ok: false, reason: "gone" };
+    let raw = null;
+    try { raw = localStorage.getItem(key(`plan-data-${id}`)); } catch {}
+    if (raw == null) return { ok: false, reason: "gone" };
+    if (plans.some(p => p.id === id)) return { ok: false, reason: "gone" };
+
+    let studentType = "undergrad";
+    try { studentType = JSON.parse(raw).studentType === "graduate" ? "graduate" : "undergrad"; } catch {}
+
+    pushFolderHistory();
+    setPlans(prev => [...prev, {
+      id, name: rec.name || "Plan", studentType,
+      parentId: null, lastOpened: Date.now(),
+    }]);
+    setPlanTrash(prev => { const next = { ...prev }; delete next[id]; return next; });
+    return { ok: true, id };
+  };
+
   const folderSnapshot = () => ({ plans, folders, activePlanId });
 
   /** Record the pre-mutation state. Call immediately before mutating. */
@@ -3248,6 +3299,13 @@ const { locale, setLocale, locales, t } = useLanguage();
     saveCurrentPlanToSlot();
     const id = `plan_${Date.now()}`;
     if (cohort) {
+      // A failed write here USED to be swallowed, after which the plan was
+      // added to the index and switched to anyway — so a full quota produced
+      // a plan whose slot had never been written. For a bare new plan that is
+      // survivable (a new plan is empty), but with a `seed` — the sample-plan
+      // "open as new plan" and the duplicate path — the user asked for
+      // content and would have got an empty canvas with no error. Index and
+      // slot are two halves of one record; refuse to create half of one.
       try {
         localStorage.setItem(key(`plan-data-${id}`), JSON.stringify({
           version: 1,
@@ -3263,7 +3321,15 @@ const { locale, setLocale, locales, t } = useLanguage();
           minor1: "", minor2: "", placedOut: [],
           ...(seed ?? {}),
         }));
-      } catch {}
+      } catch (err) {
+        // Only a SEEDED plan aborts. An unseeded one is meant to be empty, so
+        // a lost slot costs nothing the autosave will not rewrite; a seeded
+        // one that arrives empty is a silent lie about what was created.
+        if (seed) {
+          alert(t(/quota/i.test(String(err)) ? "folders.io.err.quota" : "folders.io.err.write"));
+          return null;
+        }
+      }
     }
     setPlans(prev => [...prev, {
       id, name, studentType: cohort?.studentType ?? "undergrad",
@@ -3271,6 +3337,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     }]);
     if (parentId) setFolderOpen(parentId, true);
     setActivePlanId(id);
+    return id;
   };
 
   /**
@@ -4485,6 +4552,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     folders, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort,
     createFolder, createFolderWithNodes, renameFolder, moveNodesTo, deleteNodes, previewDelete,
+    trashedPlans, restorePlanFromTrash,
     reorderNodes, orderedSiblings,
     pushFolderHistory, undoFolders, redoFolders,
     folderCanUndo: folderPast.length > 0, folderCanRedo: folderFuture.length > 0,

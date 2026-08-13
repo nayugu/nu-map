@@ -94,6 +94,7 @@ export default function PlanLibrary() {
     exportLibraryJSON, exportLibraryZip, exportPlansFlat, importLibraryFiles,
     createFolder, renameFolder, createFolderWithNodes,
     moveNodesTo, deleteNodes, previewDelete,
+    trashedPlans, restorePlanFromTrash,
     pushFolderHistory, undoFolders, redoFolders, folderCanUndo, folderCanRedo,
     setShowNewPlanModal, setNewPlanFolderId,
     isPhone,
@@ -121,6 +122,7 @@ export default function PlanLibrary() {
    */
   const setNotice = (msg, bad = true) => { setNoticeRaw(msg); setNoticeBad(bad); };
   const [drag, setDrag]             = useState(null);   // { ids }
+  const [showTrash, setShowTrash]   = useState(false);  // recently-deleted sheet
   // Reordering is only offered under manual sort: name and recency derive
   // position from the records, so a stored order would be invisible there.
   const manualOrder = folderSort === "manual";
@@ -217,7 +219,7 @@ export default function PlanLibrary() {
     }
     setQuery(""); setSelectedIds(new Set()); setFocusId(null); setEditingId(null);
     setMenu(null); setMoveMenu(null); setSortMenu(null); setExportMenu(null); setAssigning(null);
-    setPending(null); setNotice(""); setSelectMode(false);
+    setPending(null); setNotice(""); setSelectMode(false); setShowTrash(false);
     clearDrag();
     anchorIdx.current = -1;
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -1035,6 +1037,17 @@ export default function PlanLibrary() {
               one of them permanently visible, is the redundancy. Exporting
               everything is ⌘A then Export — the footer then says "N selected",
               so the scope is stated rather than assumed. */}
+          {/* Shown only when something is actually recoverable, so the
+              ordinary user never meets a permanently empty Trash. Deleted
+              plans keep their data for 30 days, but ⌘Z is the only thing that
+              reached them and that history dies on reload — after which a
+              plan that still exists on disk was simply unreachable. */}
+          {trashedPlans.length > 0 && (
+            <button onClick={e => { e.stopPropagation(); setShowTrash(true); }}
+              style={iconBtn} title={t("folders.trash.title")}>
+              {t("folders.trash")} {trashedPlans.length}
+            </button>
+          )}
           <button onClick={() => newFolderSmart(null)} style={iconBtn} title={t("folders.newFolder")}>
             <FolderIcon size={13} />
             <span aria-hidden="true" style={{ fontWeight: 700 }}>+</span>
@@ -1379,6 +1392,72 @@ export default function PlanLibrary() {
                 );
               })()}
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Recently deleted ──
+          Restores to the TOP LEVEL, not to where the plan came from: that
+          folder may itself have been deleted, and rebuilding a chain of
+          folders to hold one plan invents structure nobody asked for. ⌘Z is
+          the way back to the exact spot; this is the way back after a reload,
+          when the undo history is gone. */}
+      {showTrash && (
+        <div
+          onClick={e => { e.stopPropagation(); setShowTrash(false); }}
+          style={{
+            position: "fixed", inset: 0, zIndex: 10100, background: "rgba(0,0,0,0.5)",
+            display: "flex", alignItems: "center", justifyContent: "center", padding: 16,
+          }}
+        >
+          <div onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" style={{
+            background: "var(--bg-surface)", border: "1px solid var(--border-2)",
+            borderRadius: 12, maxWidth: 380, width: "100%", padding: "15px 16px 13px",
+            boxShadow: "var(--shadow-modal)",
+          }}>
+            <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-1)", marginBottom: 4 }}>
+              {t("folders.trash.heading")}
+            </div>
+            <div style={{ fontSize: 10, color: "var(--text-5)", marginBottom: 9,
+              lineHeight: "calc(1.6 * var(--lh-scale, 1))" }}>
+              {t("folders.trash.note")}
+            </div>
+            <div style={{
+              maxHeight: 260, overflowY: "auto", border: "1px solid var(--border-1)",
+              borderRadius: 6, background: "var(--bg-surface-2)",
+            }}>
+              {trashedPlans.map(p => (
+                <div key={p.id} style={{
+                  display: "flex", alignItems: "center", gap: 8,
+                  padding: "6px 9px", fontSize: 11.5, color: "var(--text-2)",
+                }}>
+                  <span style={{ flex: 1, minWidth: 0, overflow: "hidden",
+                    textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</span>
+                  <span style={{ flexShrink: 0, fontSize: 9, color: "var(--text-5)" }}>
+                    {t("folders.trash.daysLeft", {
+                      n: Math.max(0, 30 - Math.floor((Date.now() - p.deletedAt) / 86_400_000)),
+                    })}
+                  </span>
+                  <button
+                    onClick={() => {
+                      const res = restorePlanFromTrash(p.id);
+                      if (!res.ok) { setNotice(t("folders.trash.err")); return; }
+                      setNotice(t("folders.trash.restored", { name: p.name }), false);
+                      setSelectedIds(new Set([res.id]));
+                      setFocusId(res.id);
+                      if (trashedPlans.length === 1) setShowTrash(false);
+                    }}
+                    style={{ ...iconBtn, fontSize: 10, padding: "3px 8px" }}>
+                    {t("folders.trash.restore")}
+                  </button>
+                </div>
+              ))}
+            </div>
+            <button onClick={() => setShowTrash(false)} style={{
+              width: "100%", marginTop: 11, fontSize: 11, padding: "6px 10px",
+              borderRadius: 6, cursor: "pointer", background: "var(--bg-surface-2)",
+              border: "1px solid var(--border-2)", color: "var(--text-3)", fontFamily: "inherit",
+            }}>{t("folders.close")}</button>
           </div>
         </div>
       )}
