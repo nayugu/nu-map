@@ -240,6 +240,80 @@ and it is not obvious whether a human should ever commit it.
 
 ---
 
+## To revisit — learn from the catalog, and question our own output
+
+Deliberately not a defect list. These are open questions to work through later, and
+they split into two directions that are easy to conflate.
+
+### What the catalog's sample plan might still teach us
+
+CHART inherits the published plan's **shape** and replaces its **content**, on the
+grounds that the shape is real departmental intent and the ordering is not. That
+judgement was made once and has not been re-examined against the corpus since.
+Worth asking:
+
+- **Which of their conventions are signal and which are habit?** The level
+  convention already earns its place — it turned out to be the only thing holding a
+  3000-level writing course out of year one, because "junior standing or above"
+  lives in prose that `RESTRICTION_ONLY` discards. That was discovered by breaking
+  it. **How many more unrecorded constraints are we currently respecting by
+  accident, and would only notice the same way?** This is the highest-value question
+  on the page.
+- **Their electives appear in 56% of terms against our 34%** (the figure the
+  elective reserve was built from). They spread placeholders and we bunch them. Our
+  mean placeholder position is now *later* than theirs — 0.645 against 0.601 — which
+  we call an improvement. Both cannot be straightforwardly good; what exactly are we
+  claiming is better, and does the reserve still do what it was sized to do now that
+  `reclaimFromFiller` pulls against it?
+- **They clump 0.7% of terms and we clump 7.1%.** Ten times. We have never
+  established what makes their number so low — whether it is a rule they follow, a
+  by-product of hand-authoring, or an artifact of how we count.
+- **The Sample Plan of Study remains a witness, not a source** (§Major/minor
+  requirements in CLAUDE.md) — it takes one branch of every choice, so it can prove
+  we dropped a requirement and can never prove we have them all. Any comparison
+  below has to respect that asymmetry. 62% of programs publish none at all.
+- **Their prereq and availability error rates are the bar we cleared**: 7.7% of
+  published plans violate prereq order, 31.9% schedule a course in a season it does
+  not run, 35.5% do one or the other — 241 of 678. That is the thing CHART is *for*,
+  and it should be re-measured whenever either side's data refreshes rather than
+  quoted from memory.
+
+### Things in our own generator that do not obviously make sense
+
+- **Placeholder position is our headline quality number and it may be measuring the
+  wrong thing.** Later is not self-evidently better; it was chosen because
+  front-loaded electives were the motivating complaint. A metric that rewards
+  pushing every placeholder to the final term is satisfied by a plan whose last year
+  is nothing but placeholders, which is exactly the failure the pile-up ceiling had
+  to be added to prevent. The ceiling caps at *the incoming plan's own maximum*,
+  which is a value with no justification behind it beyond "no worse than before".
+- **`reclaimFromFiller` fights the elective reserve by construction.** The reserve
+  exists so specific courses cannot crowd electives out of early terms; the reclaim
+  pass exists to take those terms back. Both are defensible in isolation and nobody
+  has written down what the resolution between them should be.
+- **Three tiers of relaxation, and we do not know which ones earn their keep.**
+  `sequencing-preferences` fires 67 times and `term-width` 37. Whether a plan that
+  needed a fallback rung is meaningfully worse than one that did not has never been
+  measured.
+- **`mostly-unlabelled` refuses 105 shapes**, the largest single refusal class, on a
+  threshold picked from a corpus distribution. It is a pre-flight verdict about thin
+  requirement data rather than a search failure, and it may be refusing programs a
+  student would still find useful.
+- **The four-course bar is a convention we enforce as a near-constraint.**
+  `barSatisfiable` already concedes it cannot apply when a degree has too few
+  courses. It does not apply to graduates at all. It is worth asking why a measured
+  corpus *maximum* is enforced anywhere.
+- **Graduate plans are the weak half and we treat them as the same problem.** The
+  empty-semester defect is overwhelmingly graduate, two fixes aimed at it failed,
+  and `docs/plan-engine-design.md` §12f already argues graduate plans are a
+  different problem. They may need a different shape derivation rather than a patch
+  to this one.
+- **We inherit the shape and cannot move a co-op that is scheduled too early.** An
+  accepted consequence, recorded in the design, and never revisited against how
+  often it actually bites.
+
+---
+
 ## Order of work
 
 1. **Defect 1** — one function, and it unblocks 2. Fingerprint-diff it.

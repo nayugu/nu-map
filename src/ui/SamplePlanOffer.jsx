@@ -475,37 +475,48 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
                   >{t("grad.plan.replace")}</button>
                 )}
               </div>
-              {justDid && (
-                <div style={{ marginTop: 6 }}>
-                  <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn(isPhone)}>
-                    {t("grad.plan.undo")}
-                  </button>
-                </div>
-              )}
-              {/* ── Last, because it is the least urgent thing here ──────
+              {/* ── The two quiet links share one row ────────────────────
                 *
-                * Twice mis-placed before this. Beside the toggle it was a blue link outranking
-                * the two buttons that actually act; directly under the toggle it sat between
-                * two full-width controls and read as an orphan interrupting the stack.
+                * Both are secondary to the buttons above, and stacked on separate lines they
+                * read as two unrelated afterthoughts while costing a row of height each. So
+                * they sit on one line: undo at the start, where the eye already is after
+                * acting, and "how was this built" pushed to the end.
                 *
-                * The panel is a sequence — pick a source, pick a variant, look at it, act — and
-                * "how was this built" is the question that arrives AFTER all of those, if at
-                * all. So it goes at the end, quiet and right-aligned, where a curious reader
-                * looks and nobody else has to step over it.
+                * That end position was twice mis-placed before this. Beside the toggle it was a
+                * link outranking the two buttons that actually act; directly under the toggle it
+                * sat between two full-width controls and read as an orphan interrupting the
+                * stack. The panel is a sequence — pick a source, pick a variant, look at it, act
+                * — and "how was this built" is the question that arrives after all of those, if
+                * at all. Quiet and right-aligned is where a curious reader looks and nobody
+                * else has to step over it.
+                *
+                * The row renders when EITHER exists, and the explainer is pushed to the end by
+                * `marginInlineStart: auto` rather than by `space-between` against a filler
+                * element — so it stays right-aligned when undo is absent, without an empty span
+                * whose baseline would participate in the row's alignment. `Inline` rather than
+                * `left`, so the Arabic locale flips it with everything else.
                 *
                 * Only when there is a generated plan to explain: an explainer describing the
                 * algorithm in general rather than THIS plan is a brochure.
                 */}
-              {usingChart && gen?.report && (
-                <div style={{ marginTop: 7, textAlign: "end" }}>
-                  <button
-                    onClick={() => setShowWhy(true)}
-                    style={{
-                      fontSize: PHONE_FZ(isPhone), background: "transparent", border: "none",
-                      color: "var(--text-3)", cursor: "pointer", padding: 0,
-                      textDecoration: "underline", textUnderlineOffset: 2,
-                    }}
-                  >{t("chart.why")}</button>
+              {(justDid || (usingChart && gen?.report)) && (
+                <div style={{ marginTop: 6, display: "flex", alignItems: "center", gap: 8 }}>
+                  {justDid && (
+                    <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn(isPhone)}>
+                      {t("grad.plan.undo")}
+                    </button>
+                  )}
+                  {usingChart && gen?.report && (
+                    <button
+                      onClick={() => setShowWhy(true)}
+                      style={{
+                        fontSize: PHONE_FZ(isPhone), background: "transparent", border: "none",
+                        color: "var(--text-3)", cursor: "pointer", padding: 0,
+                        textDecoration: "underline", textUnderlineOffset: 2,
+                        marginInlineStart: "auto",
+                      }}
+                    >{t("chart.why")}</button>
+                  )}
                 </div>
               )}
             </>

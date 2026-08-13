@@ -108,6 +108,14 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           // text sat on top of a course card.
           background: "var(--bg-solid, var(--bg-1, #ffffff))",
           color: "var(--text-1)",
+          // STATED, because a portal to `document.body` inherits from nothing.
+          //
+          // `index.html` sets the type stack on `button, input, select, textarea` and never on
+          // `body`, so prose rendered outside the app tree falls through to the browser default
+          // serif. That is why the buttons in here looked right while every explanatory line
+          // did not. `ReplaceConfirm` in `SamplePlanOffer.jsx` already carries this for the
+          // same reason; it is a property of portalling, not of either component.
+          fontFamily: "'Inter', system-ui, sans-serif",
           border: "1px solid var(--border-2)",
           borderRadius: 10, padding: isPhone ? 14 : 22,
           boxShadow: "0 18px 48px rgba(0,0,0,.45)",
