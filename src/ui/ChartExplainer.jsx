@@ -93,11 +93,10 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           // card is as tall as it needs to be and nothing is unreachable.
         }}
       >
+        {/* No subtitle. It restated the section headings immediately above the section
+          * headings, which is the definition of filler. */}
         <header style={{ marginBottom: isPhone ? 10 : 16 }}>
           <div style={{ fontSize: fzH + 2, fontWeight: 800 }}>{t("chart.explain.title")}</div>
-          <div style={{ fontSize: fz, color: "var(--text-3)", marginTop: 3 }}>
-            {t("chart.explain.sub")}
-          </div>
         </header>
 
         {/* ── 0. The contract, in two lists ──────────────────────────
@@ -216,6 +215,12 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
               label={t("chart.how.stat.moves")}
             />
           </div>
+          {/* Each step says WHAT is counted and WHAT that decides. The previous wording —
+            * "measures how deep each course sits and how much it unlocks above" — named two
+            * quantities and neither of their consequences, so it read as jargon. And "places the
+            * most constrained card first" gave a term of art with no explanation; it now says
+            * which card that is and why it goes first. The last step says where it STOPS,
+            * because "improves the order" with no end condition invites the obvious question. */}
           <ul style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
             {["b1", "b2", "b3", "b4", "b5", "b6"].map(k => (
               <li key={k} style={{ marginBottom: 2 }}>{t(`chart.how.${k}`)}</li>
