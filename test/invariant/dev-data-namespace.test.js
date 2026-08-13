@@ -30,11 +30,21 @@ import { ROOT } from "../helpers/paths.js";
 const DATA_DIR = join(ROOT, "data");
 const DIST_DATA = join(ROOT, "dist", "data");
 
-/** Pull the dev middleware out of vite.config.js by driving its plugin hook. */
+/**
+ * Drive the dev plugin's own hook to get at its middleware.
+ *
+ * Imported from `build/aiDataDevPlugin.js` rather than from `vite.config.js`. Going
+ * through the config pulled in `vite` and `@vitejs/plugin-react`, which are
+ * devDependencies — so this passed locally and failed on CI with ERR_MODULE_NOT_FOUND,
+ * because `.github/workflows/test.yml` deliberately omits `npm ci` from the invariant
+ * job to keep this suite dependency-free. The plugin now lives in a module that imports
+ * Node builtins only.
+ */
 async function devMiddleware() {
-  const config = (await import(`${ROOT}/vite.config.js`)).default;
-  const plugin = (config.plugins ?? []).flat().find(p => p?.name === "ai-data-dev");
-  assert.ok(plugin, "aiDataDevPlugin is gone — this invariant needs rewriting, not deleting");
+  const mod = await import(`${ROOT}/build/aiDataDevPlugin.js`);
+  const plugin = mod.default(ROOT);
+  assert.equal(plugin?.name, "ai-data-dev",
+    "aiDataDevPlugin is gone — this invariant needs rewriting, not deleting");
   let fn = null;
   plugin.configureServer({ middlewares: { use: (handler) => { fn = handler; } } });
   assert.ok(fn, "the plugin registered no middleware");

@@ -5,6 +5,10 @@ import { spawn, execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+// Node builtins only, so `test/invariant/dev-data-namespace.test.js` can drive its
+// middleware without importing THIS file — which would pull in `vite` and
+// `@vitejs/plugin-react`, neither of which the dependency-free invariant job installs.
+import aiDataDevPlugin from "./build/aiDataDevPlugin.js";
 
 /** The repo root, resolved from this file rather than from cwd. */
 const ROOT = path.dirname(fileURLToPath(import.meta.url));
@@ -23,85 +27,6 @@ function aiDataPlugin() {
     async closeBundle() {
       const { buildAiData } = await import("./scripts/build-ai-data.js");
       buildAiData();
-    },
-  };
-}
-
-/**
- * Dev-only twin of aiDataPlugin: the /data surface is generated at build
- * time, so the plain dev server has nothing to serve there and every link
- * 404s into the SPA shell. On the first /data* request this builds the
- * surface into dist/ (once, ~15s), then serves it with the same pretty-URL
- * resolution Cloudflare Pages applies — and rewrites the pages' absolute
- * https://numap.app/data links to local paths so navigation stays on
- * localhost.
- */
-function aiDataDevPlugin() {
-  let building = null;
-  return {
-    name: "ai-data-dev",
-    apply: "serve",
-    configureServer(server) {
-      server.middlewares.use(async (req, res, next) => {
-        const url = (req.url || "").split("?")[0];
-        if (url !== "/data" && url !== "/data.html" && !url.startsWith("/data/")) return next();
-        if (url.includes("..")) return next();
-        // Two different things claim /data in dev, and only one of them is
-        // this surface. The repo's own `data/` directory sits at the project
-        // root, so Vite serves the planner's requirement files as module URLs
-        // under /data/northeastern/programs/**/requirements.json — the lazy
-        // import.meta.glob in src/data/majorLoader.js. Swallowing those and
-        // answering with the not-found page breaks every major in dev with
-        // "Failed to fetch dynamically imported module", because the AI
-        // surface has no such file to serve and never will.
-        //
-        // So: a Vite module request, or any /data path that is a real file on
-        // disk, belongs to the app and goes back to Vite.
-        if (/[?&](import|t=|v=)/.test(req.url || "")) return next();
-        try {
-          // Resolved from the repo root, not cwd: a middleware that answers
-          // differently depending on where the process was started is a bug
-          // waiting for the one caller that starts it elsewhere.
-          const onDisk = path.join(ROOT, decodeURIComponent(url));
-          if (fs.existsSync(onDisk) && fs.statSync(onDisk).isFile()) return next();
-        } catch { /* undecodable URL — let the surface handle it */ }
-        try {
-          if (!fs.existsSync("./dist/data.html")) {
-            building ??= import("./scripts/build-ai-data.js").then((m) => m.buildAiData());
-            await building;
-          }
-          const rel = url === "/data" || url === "/data.html" ? "data.html" : decodeURIComponent(url.slice(1));
-          for (const c of [rel, `${rel}.html`, `${rel}/index.html`]) {
-            const p = `./dist/${c}`;
-            if (fs.existsSync(p) && fs.statSync(p).isFile()) {
-              const type = c.endsWith(".json") ? "application/json"
-                : c.endsWith(".xml") ? "application/xml" : "text/html";
-              res.setHeader("Content-Type", `${type}; charset=utf-8`);
-              let body = fs.readFileSync(p, "utf8");
-              if (type === "text/html") body = body.replaceAll("https://numap.app/data", "/data");
-              res.end(body);
-              return;
-            }
-          }
-        } catch (e) {
-          res.statusCode = 500;
-          res.end(`ai-data-dev: ${e}`);
-          return;
-        }
-        // No such page: same not-found the production rewrite serves.
-        //
-        // Read defensively, and note that this sits OUTSIDE the try above. An
-        // unguarded readFileSync on the fallback path turns "page not found"
-        // into "dev server dead" — the process exits on an unhandled ENOENT and
-        // takes the whole session with it. That is exactly what happened when
-        // 99ec1ab81c folded public/data-404.html into the site-wide
-        // public/404.html and left this line pointing at the deleted file.
-        res.statusCode = 404;
-        res.setHeader("Content-Type", "text/html; charset=utf-8");
-        let notFound = "<!doctype html><meta charset=utf-8><title>Not found</title><h1>404 — not found</h1>";
-        try { notFound = fs.readFileSync("./public/404.html", "utf8"); } catch { /* inline fallback */ }
-        res.end(notFound);
-      });
     },
   };
 }
@@ -231,7 +156,7 @@ function catalogCheckPlugin() {
 }
 
 export default defineConfig({
-  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), buildManifestPlugin(), aiDataPlugin(), aiDataDevPlugin()],
+  plugins: [react(), catalogCheckPlugin(), dataMetaPlugin(), buildManifestPlugin(), aiDataPlugin(), aiDataDevPlugin(ROOT)],
   base: "./",
   define: { __COMMIT_DATE__: JSON.stringify(commitDate) },
   optimizeDeps: { exclude: ["@huggingface/transformers"] },
