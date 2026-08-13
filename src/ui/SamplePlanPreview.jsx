@@ -53,10 +53,11 @@ import { useLanguage }        from "../context/LanguageContext.jsx";
 import { ICalendar }          from "../ports/ICalendar.js";
 import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
-import { TText, useTranslatedText } from "../context/TranslationContext.jsx";
+import { TText, useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { SEM_NAME_KEY }       from "./SemLabel.jsx";
 import { TYPE_BG }            from "../core/constants.js";
 import { buildSemesterView, cardsIn, loadIn } from "../core/semesterView.js";
+import { reservationNameSource, reservationSubline } from "../core/reservations.js";
 import { applySamplePlan }    from "../core/applySamplePlan.js";
 
 /**
@@ -364,15 +365,30 @@ function TermBody({ cards, sem, tb, run, types, t }) {
   );
 }
 
-/** A summer row: the two halves side by side, as the planner splits them. */
+/**
+ * A summer row: the two halves side by side, as the planner splits them —
+ * behind the same shared label column the planner puts in front of them.
+ *
+ * Without that column the row was the one place in the dialog that named itself
+ * differently from the board: fall and spring led with "Spring 2028 / Jan – Apr"
+ * in a fixed-width gutter, and summer led with nothing, so the two halves
+ * started where the other rows' cards did and the year was repeated inside each
+ * half instead. Now the year and the span sit once, at the front, and the halves
+ * carry only what distinguishes them (A/B and their own months) — which is how
+ * SummerRow reads.
+ */
 function MiniSummerRow({ sems, view, startMap, contMap, laid, types, unit, isPhone, t }) {
-  const tb = TYPE_BG.summer;
+  const tb   = TYPE_BG.summer;
+  const year = sems[0].label.match(/\d{4}/)?.[0] ?? "";
+  const sh   = sems.reduce((sum, s) => sum + loadIn(s.id, view, startMap, contMap), 0);
   return (
     <div style={{
-      display: "flex", alignItems: "stretch", gap: 6,
+      display: "flex", alignItems: "flex-start", gap: 8,
       background: tb.bg, border: `1px solid ${tb.border}`, borderRadius: 6,
       padding: "7px 8px", marginBottom: 4, minHeight: 58,
     }}>
+      <SummerLabelCol sems={sems} year={year} sh={sh} unit={unit} isPhone={isPhone} t={t} />
+      <div style={{ display: "flex", alignItems: "stretch", gap: 6, flex: 1, minWidth: 0 }}>
       {sems.map(sem => {
         const cards = cardsIn(sem.id, view);
         const run   = runFor(sem.id, laid, startMap, contMap);
@@ -389,6 +405,50 @@ function MiniSummerRow({ sems, view, startMap, contMap, laid, types, unit, isPho
           </div>
         );
       })}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * "Summer 2028 / May – Aug", the heading the two halves share.
+ *
+ * The span is READ off the halves' own sub-labels (`May – Jun` + `Jul – Aug` →
+ * `May – Aug`) rather than written here as a constant: the calendar adapter owns
+ * when a term runs, and a hard-coded pair of months in a preview is one more
+ * place to forget when it changes. A half whose sub carries no dash falls back
+ * to the sub verbatim, and a lone half (no B) simply reports its own months.
+ *
+ * The season uses the written `claude.sem.summer` key with the year appended,
+ * NOT whole-phrase translation of "Summer 2028". Whole-phrase output reorders
+ * per locale — the engine returns "2028 年夏季" — and the fall and spring rows
+ * beside it compose `t(key) + year` and stay season-first ("春季 2028"). Both
+ * orders are defensible; two of them in one column is not. (SummerRow on the
+ * live grid does translate the phrase, so its summer heading reads year-first in
+ * CJK while this one reads season-first. That is a bug on the row, not here, and
+ * fixing it there is a one-line swap to this same key.)
+ */
+function SummerLabelCol({ sems, year, sh, unit, isPhone, t }) {
+  const first = sems[0].sub ?? "";
+  const last  = sems[sems.length - 1].sub ?? "";
+  const from  = first.split("–")[0].trim();
+  const to    = last.split("–").pop().trim();
+  const span  = from && to && from !== to ? `${from} – ${to}` : (last || first);
+
+  return (
+    <div style={{ width: isPhone ? 76 : 116, flexShrink: 0, minWidth: 0 }}>
+      <div style={{
+        fontSize: TYPE.lead, fontWeight: 700, color: "var(--text-2)",
+        fontFamily: "'InterTight', 'Inter', system-ui, sans-serif",
+        lineHeight: "calc(1.2 * var(--lh-scale, 1))",
+        overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+      }}>{scaleLatinRuns(`${t("claude.sem.summer")}${year ? ` ${year}` : ""}`, { tight: true })}</div>
+      <div style={{
+        fontSize: TYPE.meta, color: "var(--text-5)", marginTop: 2,
+        lineHeight: "calc(1.35 * var(--lh-scale, 1))",
+      }}>
+        <TText>{span}</TText>{!!sh && <> · {sh} {unit}</>}
+      </div>
     </div>
   );
 }
@@ -401,6 +461,12 @@ function MiniSummerRow({ sems, view, startMap, contMap, laid, types, unit, isPho
  * "falling". A calendar term type we have no key for falls back to
  * whole-phrase translation, hint included — hence the hook, which must run
  * whether or not that branch is taken.
+ *
+ * `inline` is the summer half: it drops the year, because the row's shared
+ * column in front of it already carries one and "Summer A 2028 / Summer B 2028"
+ * spent the two halves' scarce width saying the same year twice. The half keeps
+ * its own months for the same reason the planner's halves do — the split is the
+ * only thing the row cannot say for both at once.
  */
 function SemLabelCol({ sem, sh, unit, isPhone, t, inline = false }) {
   const cal  = usePort(ICalendar);
@@ -409,7 +475,8 @@ function SemLabelCol({ sem, sh, unit, isPhone, t, inline = false }) {
   const key  = SEM_NAME_KEY[sem.semTypeId];
   const translated = useTranslatedText(key ? null : sem.label,
     { as: st?.translateAs ? `${st.translateAs} ${year}` : undefined });
-  const name = key ? `${t(key)}${year ? ` ${year}` : ""}` : (translated ?? sem.label);
+  const withYear = !inline && !!year;
+  const name = key ? `${t(key)}${withYear ? ` ${year}` : ""}` : (translated ?? sem.label);
 
   if (inline) {
     return (
@@ -419,8 +486,12 @@ function SemLabelCol({ sem, sh, unit, isPhone, t, inline = false }) {
           fontFamily: "'InterTight', 'Inter', system-ui, sans-serif",
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
         }}>{name}</span>
+        <span style={{
+          fontSize: TYPE.meta, color: "var(--text-5)", whiteSpace: "nowrap",
+          overflow: "hidden", textOverflow: "ellipsis",
+        }}><TText>{sem.sub}</TText></span>
         <span style={{ flex: 1 }} />
-        {!!sh && <span style={{ fontSize: TYPE.meta, color: "var(--text-5)" }}>{sh} {unit}</span>}
+        {!!sh && <span style={{ fontSize: TYPE.meta, color: "var(--text-5)", whiteSpace: "nowrap" }}>{sh} {unit}</span>}
       </div>
     );
   }
@@ -448,9 +519,33 @@ function SemLabelCol({ sem, sh, unit, isPhone, t, inline = false }) {
  * requirement as the title. The only thing this adds is the dashed border: on
  * the real grid a placeholder is a card you can drop onto, and here it is a
  * decision still to make, which is worth saying at a glance.
+ *
+ * ── Which of a placeholder's two strings gets translated ───────────
+ *
+ * A reservation carries two names for one thing: the plan's own wording
+ * (`code`, from plan.json) and the requirement it stands for (`title`, from the
+ * catalog). Both are English prose, and the first draft here sent the FIRST
+ * through the engine and printed the second raw. That produced the two faults
+ * this dialog was reported for:
+ *
+ *   - a card reading "库里选修课 / Khoury Approved Electives" — one line
+ *     translated, the next not, on the same card;
+ *   - and worse, the *same* requirement named two different things in two
+ *     places: 保安课程 here ("security guard course") against 安全必修课程 in
+ *     the requirements tree. Not a worse engine — a different SOURCE STRING.
+ *     The tree translates `r.title`; this translated the plan's label.
+ *
+ * So: the requirement's title is the name, translated, and it is the SAME string
+ * the tree translates, which is what makes the two agree. The plan's own wording
+ * is kept as the quiet second line, in the catalog's English — a placeholder has
+ * no course code to search Banner by, and that phrase is the only handle a
+ * student has when they ask an advisor what fills this slot. It is dropped when
+ * it says nothing the first line did not.
  */
 function MiniCard({ card, small = false }) {
   const held = !card.isReservation;
+  // Unconditional, as hooks must be: null asks for no translation.
+  const name = useTranslatedText(held ? null : reservationNameSource(card));
   return (
     <div style={{
       // The second line is for one- and two-credit cards, so they take the
@@ -471,20 +566,29 @@ function MiniCard({ card, small = false }) {
         overflow: "hidden", textOverflow: "ellipsis",
         whiteSpace: held ? "nowrap" : "normal",
         fontStyle: held ? "normal" : "italic",
-      }}>{held ? card.code : <TText>{card.code}</TText>}</div>
-      {/* Titles only on the main line: the second line is a strip of small
-          cards, and a wrapped title there costs more height than the courses
-          on it are worth. */}
-      {!!card.title && !small && (
+      }}>{held ? card.code : (name ?? card.title ?? card.code)}</div>
+      {/* Second line: a real course's title, translated as the grid translates
+          it; a placeholder's own English wording, when it adds something. Only
+          on the main line — the small strip is one- and two-credit cards, and a
+          wrapped line there costs more height than the courses on it are worth. */}
+      {!!subline(card, name) && !small && (
         <div style={{
           fontSize: TYPE.meta, color: "var(--text-5)", marginTop: 1,
           lineHeight: "calc(1.3 * var(--lh-scale, 1))",
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
-        }}>{card.title}</div>
+        }}>{held ? <TText>{card.title}</TText> : subline(card, name)}</div>
       )}
     </div>
   );
 }
+
+/**
+ * The quiet second line: a held course's title, or a placeholder's own English
+ * wording. The placeholder half is `reservationSubline` in core, shared with the
+ * planner card so the two surfaces cannot drift apart again.
+ */
+const subline = (card, translated) =>
+  card.isReservation ? reservationSubline(card, translated) : (card.title || "");
 
 /** A co-op across the term — a block, never a card, as on the real grid. */
 function WorkBlock({ run, types, t }) {

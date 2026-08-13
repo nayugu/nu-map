@@ -10,6 +10,7 @@ import { ICalendar }      from "../ports/ICalendar.js";
 import { ICourseOffering } from "../ports/ICourseOffering.js";
 import { REL_STYLE } from "../core/constants.js";
 import { baseId, takesUsed } from "../core/repeatInstances.js";
+import { reservationNameSource, reservationSubline } from "../core/reservations.js";
 import CourseReviewPopover from "./CourseReviewPopover.jsx";
 import { takeConsumesSlot } from "../core/gradeSystem.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
@@ -147,7 +148,20 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const creditSystem = usePort(ICreditSystem);
   const calendar     = usePort(ICalendar);
   const { t }        = useLanguage();
-  const title        = useTranslatedText(course.title);
+  /**
+   * For a course: its title, translated — the quiet line under the code.
+   *
+   * For a reservation: the NAME, translated, which then leads the card. A
+   * placeholder has no course code, so the phrase in the code slot is prose, and
+   * leaving it in English meant a student reading Chinese saw one requirement
+   * twice in two languages — 安全必修课程 in the requirements panel and
+   * "Security Required Course" on the card standing for it. The source string
+   * comes from `reservationNameSource`, which prefers the requirement title
+   * *because* that is the string the panel translates: same input, same output,
+   * so the two now read identically rather than merely in the same language.
+   */
+  const title        = useTranslatedText(
+    course.isReservation ? reservationNameSource(course) : course.title);
 
   const [editingSh, setEditingSh] = useState(false);
   const [gradePop, setGradePop]   = useState(null); // grade popover anchor rect while open
@@ -369,7 +383,9 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: stripeColor, borderRadius: "3px 0 0 3px" }} />
         {/* Shrink code + SH when a warning icon is present so code is always readable */}
         <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 8 : 10, fontWeight: 800, color: codeColor, flex: 1, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-          {course.code}
+          {/* Phone: this row is the whole card, so for a placeholder it is the
+              one chance to say what the slot is — translated, as on desktop. */}
+          {course.isReservation ? (title || course.code) : course.code}
         </span>
         <span style={{ fontSize: (isViolated || notOffered || coreqViol) ? 7 : 10, color: "var(--text-4)", background: "var(--badge-bg)", borderRadius: 3, padding: "1px 3px", flexShrink: 0 }}>
           {shOverrides[course.id] ?? course.sh}
@@ -470,7 +486,9 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         letterSpacing: "0.02em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
         display: "flex", alignItems: "baseline", gap: 3,
       }}>
-        <span style={{ overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>{course.code}</span>
+        <span style={{ overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>
+          {course.isReservation ? (title || course.code) : course.code}
+        </span>
         {course.isCps && <span style={{ fontWeight: 500, fontSize: 8, color: "var(--text-4)", flexShrink: 0 }}>· CPS</span>}
         {multiTake && (
           <span
@@ -485,13 +503,16 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         fontSize: 10, color: "var(--text-3)", lineHeight: "calc(1.25 * var(--lh-scale, 1))",
         whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", marginBottom: 2,
       }}>
-        {title ? scaleLatinRuns(title)
-          /* "No title" means a course whose title we failed to scrape. A
-             reservation has no title BY NATURE — it is a decision, not a
-             course — so the placeholder is a false report about our data.
-             It shows its requirement when the plan named one, and nothing
-             when it did not. */
-          : course.isReservation ? null
+        {/* A reservation's name has moved UP to the code slot, so this line is
+            now the plan's own English wording beneath it — the phrase to search
+            Banner or quote to an advisor, since a placeholder has no code to do
+            that with. Empty when it would only repeat the name above. */}
+        {course.isReservation
+          ? (reservationSubline(course, title) || null)
+          : title ? scaleLatinRuns(title)
+          /* "No title" means a course whose title we failed to scrape — a real
+             report about our data, and never said of a reservation, which has no
+             title BY NATURE: it is a decision, not a course. */
           : <span style={{ color: "var(--text-5)", fontStyle: "italic" }}>{t("course.no.title")}</span>}
       </div>
 

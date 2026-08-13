@@ -273,6 +273,7 @@ function XomGroupHeader({ title, style }) {
 function ReqNode({ r, depth = 0, dimmed = false }) {
   const [open, setOpen]  = useState(true);
   const [hov,  setHov]   = useState(false);
+  const { t }            = useLanguage();
   const { courseMap, onDragStart, setSelectedId, setShowPanel, selectedId, isPhone, wideCatalog } = useContext(GradCtx);
   const pl               = depth * (isPhone ? 4 : 10);
   const rowMB            = isPhone ? 1 : 3;
@@ -359,7 +360,11 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
           style={{ display: "flex", alignItems: "center", gap: rowGap, paddingLeft: baseIndent, cursor: has ? "pointer" : "default", userSelect: "none" }}>
           <CheckBox sat={r.sat} dimmedCheck={dimmed} />
           <span style={{ fontSize: nodeFz, fontWeight: 600, color: r.sat ? "var(--text-2)" : "var(--text-3)", flex: 1 }}>
-            {r.satSh}/{r.reqSh} SH from elective pool
+            {/* A locale key, not a composed English phrase. This row sat in
+                English under a translated parent — the one line in the tree the
+                8 locales could not reach, because it was assembled here out of
+                two numbers and a literal instead of being looked up. */}
+            {t("grad.fromPool", { sat: r.satSh, req: r.reqSh })}
           </span>
           {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>}
         </div>
@@ -382,7 +387,10 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
 
   // AND / OR / nested SECTION
   const has = r.children?.length > 0;
-  const { t } = useLanguage(); // Moved this line to the top of the function
+  // `t` now comes from the top of the function. It used to be read here, below
+  // the COURSE / RANGE / XOM early returns — a hook that only ran for some
+  // requirement types, which is the ordering violation React warns about and
+  // the reason the pool row could not reach for a key without moving it anyway.
   const heading =
     r.type === "AND" ? t("grad.allOf", { count: r.satCount ?? 0, total: r.total ?? 0 }) :
     r.type === "OR"  ? t("grad.oneOf", { count: r.satCount ?? 0, total: r.total ?? 0 }) :

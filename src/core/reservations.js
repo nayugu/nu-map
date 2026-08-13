@@ -273,6 +273,57 @@ export function occupantCards(courseMap, reservations) {
 }
 
 /**
+ * ── How a placeholder is NAMED, on every surface ────────────────────
+ *
+ * A reservation carries two English phrases for one thing: the plan's own
+ * wording (`code`, from plan.json — "Concentration Course") and the requirement
+ * it stands for (`title`, from the catalog — what the requirements tree prints).
+ * Every surface that draws a placeholder has to choose between them, and until
+ * these two functions existed each chose differently:
+ *
+ *   - the requirements tree translated the requirement title → 安全必修课程
+ *   - the planner card left the plan's label in English → "Security Required
+ *     Course", so a student saw one requirement in two languages at once
+ *   - the sample-plan preview translated the plan's LABEL, which the engine
+ *     renders differently again → 保安课程, "security guard course"
+ *
+ * The last one is the important failure: not a worse translation, a different
+ * SOURCE STRING. Two phrases that mean the same thing to a reader do not
+ * translate to the same words, so agreement between surfaces is only possible if
+ * they translate the identical string. Hence one rule, in core, where every
+ * renderer can reach it:
+ *
+ *   `reservationNameSource` — the string to translate and show as the NAME.
+ *      Prefers the requirement's title, because that is what the requirements
+ *      tree translates, and matching it is the whole point.
+ *   `reservationSubline`    — the plan's own English wording, kept underneath.
+ *      A placeholder has no course code, so this phrase is the only handle a
+ *      student has when they search Banner or ask an advisor what fills the
+ *      slot. Dropped when it is just the name again.
+ *
+ * Pure and hook-free on purpose: the translation itself is a React hook in the
+ * UI, so core decides WHAT to translate and what to print beside it, never how.
+ */
+export const reservationNameSource = (card) =>
+  (card?.title || card?.code || "");
+
+/**
+ * @param {{code?: string, title?: string}} card
+ * @param {string} [translatedName]  the rendered name — already translated
+ * @returns {string} the second line, or "" when it would only repeat the first
+ */
+export function reservationSubline(card, translatedName) {
+  const label = card?.code ?? "";
+  if (!label || !translatedName) return "";
+  // Case- and plural-insensitive: "Khoury Approved Elective" against "Khoury
+  // Approved Electives" is one phrase printed twice, which is exactly the noise
+  // this line exists to avoid. When the reader's locale IS the catalog's, the
+  // translation equals the source and nothing shows.
+  const norm = (s) => s.toLowerCase().replace(/s\b/g, "").replace(/[^a-z0-9]/g, "");
+  return norm(label) === norm(translatedName) ? "" : label;
+}
+
+/**
  * How much of the plan is still undecided, as a plain count.
  *
  * The requirements panel reads `placements`, so a section shows `0/2` whether

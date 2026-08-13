@@ -255,7 +255,7 @@ export const strings = {
   "grad.plan.did.replaced":    "Plan replaced with the sample plan.",
   "grad.plan.did.opened":      "Opened as a new plan.",
   "grad.plan.undo":            "Undo",
-  "grad.plan.state.loaded":     "loaded",
+  "grad.plan.state.loaded":     "applied",
   "grad.gpa.title":               "GPA requirements",
   "grad.gpa.met":                 "met with the grades entered",
   "grad.gpa.current":             "{gpa} so far ({n} graded)",
@@ -336,6 +336,7 @@ export const strings = {
   "grad.allOf": "All of ({count}/{total})",
   "grad.oneOf": "One of ({count}/{total})",
   "grad.requiresOutOf": "Requires {count} out of {total}",
+  "grad.fromPool": "{sat}/{req} SH from elective pool",
 
   // ── Course card / info panel ───────────────────────────────────
   "course.no.title":              "No title",
@@ -596,7 +597,7 @@ export const strings = {
   "onboard.sampleplan.label":     "Start from your department's sample plan",
   "onboard.sampleplan.counts":    "adds {courses} courses and {placeholders} placeholders you'll choose later",
   "onboard.sampleplan.loading":   "checking what it includes…",
-  "onboard.sampleplan.which":     "Which schedule?",
+  "onboard.sampleplan.which":     "Which version?",
   "onboard.back":                 "Back",
   "onboard.next":                 "Next",
   "onboard.skip":                 "Skip",
@@ -778,6 +779,7 @@ export const strings = {
   "claude.sem.spring":   "Spring",
   "claude.sem.sum1":     "Summer A",
   "claude.sem.sum2":     "Summer B",
+  "claude.sem.summer":   "Summer",
   "claude.sem.incoming": "Incoming Credit",
   "claude.act.add":            "Add {code} to {sem}",
   "claude.act.remove":         "Remove {code}",
