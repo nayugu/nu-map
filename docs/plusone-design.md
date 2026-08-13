@@ -1,383 +1,628 @@
-# PlusOne — design of record
+# PlusOne — complete design
 
-**Status: design only. No implementation.** Companion to
-`docs/plusone-research.md`, which establishes what PlusOne is and where its data
-lives (and does not). Measurements here were taken against the committed corpus
-on **2026-08-13** and should be re-taken, not assumed, after any scrape that
-changes the parsers.
-
----
-
-## 1. The insight the whole design rests on
-
-**PlusOne's "double count" is never a double count inside any single audit.**
-
-In the bachelor's audit, the graduate course fills exactly one slot, once. In the
-master's audit, it fills exactly one slot, once. The sharing is only visible when
-you compare two audits side by side. Nobody's credit total is inflated anywhere.
-
-This is worth stating first because the obvious design — "make a course count
-twice" — is wrong, and it would require new credit-counting machinery that would
-then be wrong everywhere else. Two consequences:
-
-- We need **no new credit arithmetic at all**.
-- `applySubstitutions` in `planModel.js` already implements the bachelor's side
-  exactly, and needs **zero change**. Its contract, verbatim:
-
-  > A substitution `{ from, to }` means "placing `from` also satisfies `to`": we
-  > add a virtual entry placing `to` in the same semester as `from` […] Credits
-  > are always taken from the real `placements` only — the virtual entry exists
-  > purely for satisfaction and is never counted toward total SH.
-
-  Place `CS 5800`, virtually satisfy `CS 3000`, count 4 SH once. That is
-  precisely the PlusOne bachelor's-side semantics, already built and already
-  tested.
+**Status: design only. No implementation.** Supersedes the first draft of this
+file (commit `2962f80994`); the parts that changed are called out in §11.
+Companion to `docs/plusone-research.md`, which establishes what PlusOne is and
+where its data lives. Measurements were taken against the committed corpus on
+**2026-08-13** and should be re-taken, not assumed, after a scrape that changes
+the parsers.
 
 ---
 
-## 2. What the corpus already supports — measured
+## 1. The one idea to keep
 
-I checked each of these rather than assuming, because three of them decide
-between designs.
+**PlusOne's "double count" is never a double count inside any single audit.** In
+the bachelor's audit the graduate course fills one slot, once. In the master's
+audit it fills one slot, once. The sharing is only visible comparing two audits.
 
-| Capability | Result | Why it matters |
+D'Amore-McKim states the same thing as policy, and adds the precedence:
+
+> Credits counted once, applied to undergraduate degree first.
+
+Consequences: **no new credit arithmetic anywhere**, and `applySubstitutions` in
+[planModel.js:22](../src/core/planModel.js#L22) already implements the
+bachelor's side exactly — `{from, to}` means "placing `from` also satisfies
+`to`", with credits taken from real placements only.
+
+The substitution arrow is **one-way, graduate → undergraduate**. `CS 5800`
+satisfies `CS 3000`; `CS 3000` never satisfies `CS 5800`. This is why the plan's
+own `substitutions` field is the right primitive and the **equivalence index is
+not** — pairs there are symmetric `{a, b}`, and routing PlusOne through them
+would let an undergraduate course claim master's credit. Khoury makes the
+one-wayness sharper still: taking the undergraduate version doesn't merely fail
+to substitute, it **forecloses** the graduate version.
+
+---
+
+## 2. Rule inventory — the technicalities, and which ones bite
+
+Gathered from Khoury (MSCS, MSDS, MS Cybersecurity, CE→MSCS), COE (ChE
+curriculum sheet, ECE, MIE, CEE/SBS, policy page, co-op policy), Bouvé (11
+programs, the double-counting PDF), College of Science (8 programs, Bioinformatics
+PDF), CSSH (Economics, History, SCCJ), D'Amore-McKim (Accounting), CPS, and the
+graduate catalog's Course Credit Sharing policy.
+
+The right-hand column is the design's spine. **C** = computable from data we
+hold. **A** = assertable, only the student can tell us. **U** = unknowable, and
+must never be evaluated.
+
+### 2.1 Budgets
+
+| # | Rule | Instance | Cls |
+|---|---|---|---|
+| 1 | Share cap, **disjunctive** | "not more than four graduate courses **or** 16 SH, **whichever is greater**" (university) | **C** |
+| 2 | Cap variant — SH limb | Bouvé: 5 courses / 15 SH | **C** |
+| 3 | Cap variant — course limb | CoS: **17** SH (4 courses) | **C** |
+| 4 | Governance exception to the cap | "must be approved through governance processes" | **U** |
+| 5 | **Sub-budget on a course domain, scoped by concentration** | ECE non-ECE SH max: CCSP 8, CSYS 12, CVLA 12, ELPO 8, HSMI 12, MSMD 8, POWR 8 | **C** |
+| 6 | Nested breadth cap | ECE: "up to two breadth courses, not to exceed concentration limits" | **C** |
+| 7 | Elective top-up budget over a subject set | Bouvé Pharmacology: "up to 3 SH from 5000-level in PHSC, PMLC, PMST, NNMD, BIOL, BIOT, CHEM"; Pharmaceutics 8 SH; Biomedical 10 SH; MedChem 5 SH | **C** |
+| 8 | Withdrawals consume the budget | Khoury: "four graduate courses total (**including withdrawals**)" | **C** |
+| 9 | External total-credit target | D'Amore-McKim: 134 UG credits, **150 total** (CPA 150-hour rule) | **C** |
+
+### 2.2 Membership of the share set
+
+| # | Rule | Instance | Cls |
+|---|---|---|---|
+| 10 | Explicit course→course table | Khoury MSCS (12 rows), MSDS (12 rows), MS Cyber (11 rows) | **C** |
+| 11 | Graduate course fills a **named** UG course | `BIOT 5621`+`BIOL 5100` → `CHEM 5620` (Bouvé) | **C** |
+| 12 | Graduate course fills a **typed slot** | `BINF 6200` "replaces general elective"; CEE: "Technical Elective or General Elective" | **C** |
+| 13 | Graduate course replaces a **named requirement** | `CAEP 6327` "BNS Breadth (substitute for PHYS 1 requirement)" | **C** |
+| 14 | Anonymous graduate slots | COE ChE sheet: `Graduate Course #1`–`#4` | **C** |
+| 15 | **Share set defined by the MS tree itself** | CEE/SBS: "any graduate course that contributes to the MS degree requirements may be shared" | **C** |
+| 16 | Left side is a requirement, not a course | Khoury Cyber: "Cybersecurity Elective" → `CY 5010` / `CY 5200` / `CY 5210` | **C** |
+| 17 | **Mandatory** share member | CE→MSCS: "all students must take `CS 5010`" | **C** |
+| 18 | **Conditionally** mandatory | CE→MSCS: "`CS 5800` if they haven't already completed `CS 3000`" | **C** |
+| 19 | **Choose-k** from the table | CE→MSCS: "choose **two**" (vs BSCS's four) | **C** |
+| 20 | Per-course exclusion | ECE: `EECE 5698`, `EECE 7398`, `EECE 6400` may **not** count toward the UG degree | **C** |
+| 21 | Capstone exclusion | Bouvé MSHI: any MSHI course shareable **except** `HINF 7701` | **C** |
+| 22 | Subject-domain restriction | SCCJ: electives outside CRIM/INSH/POLS/PPUA/SOCL need permission | **C**+**U** |
+| 23 | Open tail, advisor-determined | Bouvé: "where fewer than four courses are listed, the remaining … in consultation" | **U** |
+| 24 | **Structural partition** | CSSH Economics: 4 core **as UG** + 4 electives **as grad** | **C** |
+| 25 | Track-conditional share list | D'Amore-McKim: Audit → `ACCT 5255`,`6217`; Tax → `ACCT 6243`,`6292` | **C** |
+| 26 | Cohort/co-op-conditional maps | Bouvé BSN: **5 distinct course maps** by 4- vs 5-year plan and co-op schedule | **C** |
+| 27 | Concentration excluded entirely | Bouvé MSHI PlusOne is "no concentration option" only | **C** |
+| 28 | Soft recommendation | Khoury MSDS: `CS 5800`*, `DS 5110`* "strongly recommended" | **C** (info) |
+
+### 2.3 Exclusivity and sequencing
+
+| # | Rule | Instance | Cls |
+|---|---|---|---|
+| 29 | **No graduate version if UG version completed** | Khoury, all pathways | **C** |
+| 30 | Must meet the **UG version's** prereqs | Khoury | **C** |
+| 31 | Graduate course's own prereqs apply | CEE: "prerequisites of all graduate courses must be considered" | **C** |
+| 32 | A specific course must be **first** | `PHSC 5100` "must be taken in first semester of PlusOne"; `HIST 5101` first semester | **C** |
+| 33 | Max graduate courses **per term** | Khoury **1**; History **2**; COE ChE sheet shows **2** | **C** |
+| 34 | Earliest term | Khoury: no grad course in first-year summer; earliest **fall of year 2** | **C** |
+| 35 | Not in the final UG semester (application) | COE | **C** |
+| 36 | Min credits completed before entry | SCCJ **64 SH**; Bouvé SLPA **109 credits** by the preceding summer | **C** |
+| 37 | Min semesters remaining | CoS **≥2**; Marine Biology (Three Seas) **≥3** | **C** |
+| 38 | Apply no earlier than Nth semester | CoS: not before the **5th** | **C** |
+| 39 | Advisor meeting by Nth semester | Khoury: by the **3rd** | **U** |
+| 40 | Entry term restricted | D'Amore-McKim Accounting: **Fall only** | **C** |
+| 41 | Hard application deadline | D'Amore-McKim: **Nov 15**; Bouvé: Fall Jun 15–Aug 1, Spring Nov 1–Dec 1, Summer Apr 1 (HINF only) | **C** (info) |
+| 42 | Prereq set with a **term deadline** | Accounting: 5 ACCT courses before **Fall senior start**, 3 more before graduation | **C** |
+| 43 | Seasonal availability | BINF fall/spring only; many Bouvé courses fall-only or spring-only | **C** |
+| 44 | Post-BS terms are **summers** | Accounting: Summer 1 + Summer 2 course lists | **C** |
+| 45 | Must complete a graduate course **before applying** | Khoury | **C** |
+
+### 2.4 Gates on facts we do not hold
+
+| # | Rule | Instance | Cls |
+|---|---|---|---|
+| 46 | GPA minimum, **multiple scopes at once** | Accounting: cumulative **3.0** *and* accounting-coursework **3.25**; Khoury: cumulative *and* in-major 3.0 | **A** |
+| 47 | GPA preferred vs required | Bouvé: "3.0 minimum, **3.5 preferred**" (5 programs) | **A** |
+| 48 | GPA by undergraduate major | Bouvé MPH: **3.2–3.7** depending on major | **A** |
+| 49 | GPA maintenance, graduate subset | Khoury: cumulative 3.0 **in all graduate CS courses** | **A** |
+| 50 | GPA gate on MS conferral | COE: 3.0 to remain eligible | **A** |
+| 51 | GPA for direct entry | CSSH History: **3.25** | **A** |
+| 52 | **Co-op as a prerequisite** | Accounting: "one completed six-month co-op required" | **A** |
+| 53 | Registration override to enrol | SCCJ: override required above 5000 level | **U** |
+| 54 | Permission for out-of-domain electives | SCCJ | **U** |
+| 55 | Advisor / director sign-off | Bouvé Course Review Form; COE Plan of Study Form | **U** |
+| 56 | Admission to PlusOne ≠ admission to MS | Khoury, verbatim | **U** |
+| 57 | "Placement is not guaranteed" | Khoury CE→MSCS | **U** |
+
+### 2.5 Downstream consequences (after the BS)
+
+| # | Rule | Instance | Cls |
+|---|---|---|---|
+| 58 | No deferral — enrol the next semester | Khoury, COE | **C** (info) |
+| 59 | Full-time graduate minimum | Khoury: **8 SH**; MSDS page: "two courses per fall/spring" | **C** |
+| 60 | Transfer credit may not apply to a PlusOne MS | University policy | **C** (info) |
+| 61 | Shared courses may not also serve a graduate certificate | University policy | **C** |
+| 62 | Extra graduate SH beyond the cap does **not** transfer | COE | **C** (info) |
+| 63 | Total co-op cap across both degrees | COE: **3** | **C** |
+| 64 | Graduate co-op eligibility depends on UG co-op count | COE: 1 grad co-op if **≤2** UG co-ops | **C** |
+| 65 | Graduate co-op sequencing | 1 full-time grad semester (8 SH) **before**; ≥1 academic semester (≥4 SH) **after** | **C** |
+| 66 | Co-op shape | 4–8 months, 32+ hrs/week | **C** (info) |
+| 67 | Scholarship ineligibility | Double Husky (Khoury, CoS, COE); New Program/Location Launch (COE) | **C** (info) |
+| 68 | Automatic scholarship | COE: **25%** applied after add/drop | **C** (info) |
+| 69 | UG financial aid ends at graduate status | CoS | **C** (info) |
+| 70 | Tuition rate for shared courses | Accounting: "at **undergraduate** tuition rates" | **C** (info) |
+| 71 | MS campus set differs by pathway | Khoury CS: Boston/Oakland/Silicon Valley/Seattle; others Boston only | **C** |
+| 72 | Eligibility scoped by **concentration** | ECE: BS Physics eligible for **MSMD only** | **C** |
+| 73 | Cross-college advising owner | Khoury: combined majors in another college use a "Khoury Secondary Advisor" | **U** (info) |
+
+**73 rules. 48 computable, 8 assertable, 17 unknowable-or-informational.** That
+ratio is the design: most of this is real work we can actually do, and a hard
+minority must never be evaluated.
+
+---
+
+## 3. What the corpus supports — measured
+
+| Check | Result |
+|---|---|
+| Graduate program requirements | **485** verified files for 2026, already in `programs-bundle.json` |
+| MS CS (Boston) | 32 SH, min GPA 3.000 → 16 shared SH is exactly half |
+| Shareable courses satisfying MS requirements | **12/12** (10 named; `CS 5340`, `CS 5310` via `RANGE CS 5100–7980`) |
+| Shareable courses existing in the catalog | **56/56** probed across Khoury, Bouvé, CoS, COE, CSSH, D'Amore-McKim |
+| Graduate offering data | **57.0%** of 4,297 grad courses vs **59.0%** of UG — parity. Seasonality derivable (`CS 5150` only in `…30` terms) |
+| Graduate courses gated on `graduate program admission` | **7 of 56** shareable courses (`CS 5310`, `CY 5240`, `CY 5200`, `CY 5210`, `CHEM 5628`, `CHEM 5676`, `ME 5250`); **209** corpus-wide |
+| Timeline extension cost | `buildCohortSemesters` is a pure function of cohort bounds, `numY = max(2, gradYear − startYear + 2)`, no cap → **one parameter** |
+| Share-link cost of materializing 13 substitutions | +116 b64 chars vs +20 for deriving; **17.7% of QR v40 capacity** → not a capacity problem |
+
+Two constraints that bind:
+
+- **Substitutions are strictly one-to-one** (commit `cfbdf5dd01`), so rule #11's
+  `BIOT 5621 + BIOL 5100 → CHEM 5620` cannot be a substitution.
+- **`GradPanel.jsx` is 2,021 lines and not generic over programs** —
+  hand-duplicated state, loaders, localStorage keys and section memos for
+  `major`/`major2`/`minor1`/`minor2`, and it picks `loadGradMajor` vs `loadMajor`
+  from a **per-plan** `isGrad` ([GradPanel.jsx:1366](../src/ui/GradPanel.jsx#L1366)).
+  PlusOne needs a *graduate* program loaded inside an *undergraduate* plan, so
+  that choice must become **per-slot**.
+
+---
+
+## 4. The model
+
+### 4.1 The universal core
+
+Stripped of every college's decoration, a pathway is:
+
+```
+Pathway :  (ugProgram, ugConcentration?) ──▶ (msProgram, msConcentration?, campus)
+           with a set of CANDIDATE SHARES
+           and a set of RULES
+```
+
+and a **share** is:
+
+```
+Share :  gradSource ──▶ ugTarget
+         gradSource = a named course | a domain (subject/level range)
+         ugTarget   = a named course | a named requirement | a slot type
+```
+
+That is the whole universal model. Everything in §2 is a **rule over a chosen set
+of shares**, not a new kind of structure. This is what makes the design tractable.
+
+### 4.2 What this deliberately is *not*
+
+It is **not a solver.** The temptation is to compute an optimal share set under 73
+constraints. Resist it: the repo already has an allocator
+(`allocateMajorWithElectives`, `requirementDemand.js`, `reservations.js`) and a
+plan generator that is *still unimplemented* (CHART). PlusOne's engine has three
+jobs, all cheap:
+
+1. **Enumerate** candidate shares for a pathway — a data lookup.
+2. **Validate** the student's active shares against the rules — a pure predicate
+   battery returning diagnostics.
+3. **Project** the master's side — run the existing `validateMajor` over the MS
+   tree with the shared courses as input.
+
+Substitutions feed the *existing* allocator. We add validators, not a solver.
+
+### 4.3 The tri-state contract, which is the safety property
+
+The codebase already settled this, and it did so **anticipating PlusOne**.
+`src/core/prereqConditions.js`, verbatim:
+
+> A condition may only ever SATISFY, never violate. Unrecognized or unmet
+> conditions are neutral (null), never "missing": **an undergrad in a combined
+> BS/MS legitimately takes 5000-level courses on permission we cannot see**, so a
+> note must not manufacture a red card.
+
+So every PlusOne rule evaluates to one of:
+
+| Status | Meaning | Used for |
 |---|---|---|
-| Graduate program requirements | **485** files for 2026, verified, already in `programs-bundle.json` (1,017 total: 532 UG + 485 grad) | The master's side is already modelled. We are not building it. |
-| MS CS (Boston) shape | `totalCreditsRequired: 32`, `gpaRequirements` min 3.000, 4 sections, 39 course refs | 16 shared SH is *exactly* half of 32 — the "save 50%" claim is arithmetically true, not marketing. |
-| Do shareable courses satisfy MS requirements? | **12 / 12** of Khoury's shareable graduate courses land: 10 named directly, and `CS 5340` + `CS 5310` via `RANGE CS 5100–7980` in Electives | A master's-side audit is **feasible today** with the validator we already have. |
-| Graduate course offering data | **57.0%** of 4,297 grad courses in `offering-summary.json` vs **59.0%** of 3,669 UG — and **12/12** Khoury targets covered with per-term enrolment/capacity/section counts | Availability for graduate courses is as good as for undergraduate. Seasonality is derivable: `CS 5150` appears only in `…30` (Spring) terms. |
-| Substitution primitive | `applySubstitutions({from,to})`, virtual satisfaction, credits counted once | The bachelor's side, already done. |
-| Scoped tier upgrade | `resolveTier(pair, mine)` returns tier A when `pair.e.p` intersects the student's programs | The hook for "this swap is real for *you* and nobody else". |
-| Plan field registry | `PLAN_FIELDS` in `planSchema.js` wires one field through all four doors (slot, share link, export, MCP) | Adding plan state is cheap and cannot half-land. |
+| `satisfied` | we checked, it holds | computable rules (**C**) |
+| `violated` | we checked, it fails | computable rules only — **flags, never blocks** |
+| `unknown` | we cannot know | assertable (**A**) and unknowable (**U**) rules |
+| `info` | nothing to check; say it | deadlines, scholarships, tuition |
 
-**One correction to an earlier alarm of mine.** I first measured zero graduate
-courses with section data and treated it as a blocker. That was wrong: the
-`sections` array is empty for *every* course in `catalog-courses.json`, UG and
-grad alike (0.0% both), because offering lives in `offering-summary.json`. Grad
-and UG coverage there are within two points of each other. No blocker.
+**A rule classified A or U may never return `violated`.** That single invariant is
+what keeps this feature from telling a student something false about their degree,
+and it is the one test I would write first.
 
-**Two constraints that do bind:**
+### 4.4 A one-line correctness fix that falls out
 
-- **Substitutions are deliberately strictly one-to-one** (commit `cfbdf5dd01`,
-  "refactor: substitutions are strictly one-to-one"). Bouvé's
-  `BIOT 5621 + BIOL 5100 → CHEM 5620` is a real published two-for-one and
-  therefore **cannot be expressed** as a substitution.
-- **`studentType` is a single field per plan** (`'undergrad' | 'graduate'`), and
-  the plan library groups plans by it. A plan is one degree level or the other.
-  This is the fact that kills the most tempting design.
+`planConditions(plan)` asserts `grad-admission` only for
+`studentType === "graduate"`. A PlusOne student **is** admitted to a graduate
+program. Without the fix, placing any of the 7 measured shareable courses that
+carry a `graduate program admission` prereq shows a prereq problem we have no
+evidence for — precisely the red card the module's invariant forbids.
+
+```js
+if (plan?.studentType === "graduate" || plan?.plusOne) met.add("grad-admission");
+```
 
 ---
 
-## 3. Four designs, and why three of them lose
+## 5. Architecture
 
-### Design A — one plan, a `plusOne` program slot, timeline extended into the master's year
+Hexagonal, per CLAUDE.md: **UI imports ports only; adapters import core only.**
 
-Add `plusOne` alongside `major`/`major2`, and extend the plan's timeline past
-graduation to hold the remaining ~16 SH.
+```
+                    ┌───────────────────────────────────────────┐
+   UI               │ PlusOnePanel.jsx · PlusOneSlot (Header)    │
+   (ports only)     │ usePathway() hook                         │
+                    └───────────────┬───────────────────────────┘
+                                    │ usePort(IAcceleratedPathway)
+                    ┌───────────────▼───────────────────────────┐
+   PORT             │ src/ports/IAcceleratedPathway.js          │
+   (institution-    │  listPathways · getPathway                │
+   neutral)         │  getShareCandidates                       │
+                    └───────────────┬───────────────────────────┘
+              ┌─────────────────────┴──────────────────┐
+              │                                        │
+   ┌──────────▼──────────────┐        ┌────────────────▼─────────────┐
+   │ adapters/generic/       │        │ adapters/northeastern/       │
+   │  acceleratedPathway.js  │        │  acceleratedPathway.js       │
+   │  → no pathways (no-op)  │        │  → loads NEU pathway data    │
+   └─────────────────────────┘        │  + NEU-only evaluators       │
+                                      └────────────────┬─────────────┘
+                    ┌──────────────────────────────────▼───────────┐
+   CORE             │ src/core/pathway/                            │
+   (pure, no I/O)   │  ruleKinds.js      — the vocabulary          │
+                    │  evaluate.js       — engine + registry       │
+                    │  rules/*.js        — one evaluator per kind  │
+                    │  shareSet.js       — active shares, derived  │
+                    │  project.js        — MS-side projection      │
+                    └──────────────────────────────────────────────┘
+```
 
-**Why it loses.** The graduate year is *graduate status*, and `studentType` is one
-field per plan. Extending the timeline means touching `termWindows`, `semGrid`,
-`planStats`, the co-op machinery, `currentSemId` and the "in progress" logic —
-each of which assumes a single degree level. That is a very large blast radius
-for the *smallest* part of the value: the master's year is planned a year later,
-as its own plan. Worse, it would render graduate terms on the canvas of a student
-whose admission is explicitly **not guaranteed** — showing a plan for a degree
-they may never start.
+**"PlusOne" is Northeastern branding, so it does not appear in the port or the
+core.** The port is `IAcceleratedPathway`; the NEU adapter maps PlusOne (and later
+PlusJD, which has different caps) onto it. This follows the existing pattern
+exactly: 18 ports in `src/ports/`, generic fallbacks in `src/adapters/generic/`,
+wired by `wire()` and read by `usePort()`.
 
-**What to steal from it:** the audit reuse. Running the existing validator over a
-graduate program tree is the good idea here. It does not require the timeline
-surgery, and §5 takes it without it.
+### 5.1 SOLID, concretely
 
-### Design B — two linked plans (BS ↔ MS) with a shared-course contract
+- **SRP** — one evaluator per rule kind, one file each. `shareCap.js` knows the
+  disjunctive cap and nothing else; `noGradIfUgDone.js` knows exclusivity and
+  nothing else.
+- **OCP** — the engine never switches on rule kind. It looks the kind up in a
+  registry:
+  ```js
+  export const EVALUATORS = { shareCap, subBudget, chooseK, /* … */ };
+  ```
+  Adding rule #74 means adding a file and a registry line. **The engine does not
+  change.** This is the property the whole design exists to buy, because §2 is
+  certainly incomplete.
+- **LSP** — every evaluator has one signature and one return contract:
+  ```js
+  /** @returns {Diagnostic} { kind, status, message, evidence } */
+  (rule, ctx) => Diagnostic
+  ```
+  so the engine can run them uniformly and a new kind cannot surprise it.
+- **ISP** — do **not** widen `IMajorRequirements`. A separate, narrow port; and
+  the port is **data-only**. Evaluation is pure and lives in core, so no adapter
+  can accidentally own policy.
+- **DIP** — core defines the `Rule` and `Diagnostic` shapes; the adapter supplies
+  data conforming to them. `src/core/pathway/` imports nothing from adapters.
 
-Keep one undergraduate plan and one graduate plan; link them; the MS plan treats
-the shared courses as already satisfied.
+### 5.2 The escape hatch, and its leash
 
-**Why it loses *as a starting point*.** It is the most faithful model — two
-degrees, sequential, separately conferred, which is exactly what the catalog says
-— and it is probably where this ends up. But cross-plan pointers are a known scar
-in this repo (`planFolders.js` carries a comment about "exactly the failure the
-pointer model was chosen to avoid"), a dangling reference appears the moment
-someone deletes the bachelor's plan, and it is a lot of machinery to build before
-any value ships. Correct destination, wrong first move. Kept as phase 4.
+Some rules are genuinely institution-specific (ECE's per-concentration non-ECE SH
+budgets). Two ways to handle them, and the choice matters:
 
-### Design C — bachelor's side only: pathway-scoped substitutions, cap accounting, rule disclosure
+- **Preferred: express them as data in a generic kind.** ECE's rule is
+  `subBudget { domain: {excludeSubject: "EECE"}, maxSH: 8, scope: {concentration: "CCSP"} }`.
+  A generic `subBudget` evaluator covers all seven ECE concentrations *and*
+  Bouvé's four pharmacology top-ups (#7). One evaluator, eleven published rules.
+- **Fallback: a NEU-only evaluator**, registered by the adapter into the same
+  registry. Allowed, but it must still return the standard `Diagnostic`, and it
+  may not read anything the port doesn't expose.
 
-No new audit, no timeline change. Ship the pathway data; when a student's major
-has a pathway, offer the graduate-for-undergraduate swaps; count them against the
-cap; state the rules.
+The leash: **a rule kind with exactly one instance is a smell.** Before adding an
+evaluator, check whether an existing kind plus different data covers it. That
+check is what turned 73 rules into ~20 kinds.
 
-**Why it wins the first slice.** Smallest change, no schema or timeline surgery,
-reuses `applySubstitutions` and the tier system wholesale, and degrades honestly —
-it never claims master's progress it cannot verify. Its weakness is that it
-doesn't answer "what's left for my MS?", which §5 then adds cheaply.
+### 5.3 Derive the share set; do not materialize it
 
-### Design D — joint BS+MS generation in CHART
+Store `plusOne` (the MS program id) on the plan. **Derive** the substitution list
+from pathway data at read time and concatenate with the user's own.
 
-**Why it loses.** CHART is design-only and unimplemented (`docs/plan-engine-design.md`
-says so in its second paragraph). Building PlusOne on top of it makes this feature
-depend on vapor. Rejected outright.
+Measured: materializing 13 pairs costs +116 b64 chars vs +20, at 17.7% of QR
+capacity — so **this is not a size argument** and I won't pretend it is. The
+reasons are:
 
-### Landing
+- **One source of truth.** A materialized copy can disagree with the pathway data
+  after a data update.
+- **Rule #29 needs withdrawal.** When the student has already taken `CS 3000`, the
+  `CS 5800` substitution must *disappear*. Trivial when derived; a sync problem
+  when stored.
+- **No phantom user state.** The student never opens their substitutions list and
+  finds 13 entries they didn't create.
 
-**C first, then A's audit as a read-only projection, then B only if wanted.** The
-phases are independently shippable and each is useful alone — which is the
-property that matters most, because phase 1 is the one that can fail.
+Pre-arming is safe for a reason worth stating: `applySubstitutions` fires only
+`if (placements[from])`, so an unplaced substitution is **inert**. Deriving all
+candidates has zero effect until a graduate course is actually placed.
 
 ---
 
-## 4. The data, which is the whole risk
+## 6. Data schema
 
-Everything above is cheap. This is the part that can fail, so it goes first and it
-gets the most scrutiny.
-
-### 4.1 Curated, not scraped — and why that is not a violation
-
-CLAUDE.md says data fixes must live in the scrape scripts, "never in one-off
-migrations — the next scheduled scrape overwrites anything else." That rule exists
-because a scrape overwrites manual edits. **There is no scrape here to overwrite
-anything** — the research established that the catalog carries zero PlusOne data
-(7 stub pages, ~450 chars of prose, zero tables), so no existing pipeline touches
-it and none could.
-
-Scraping the real sources instead would mean eight colleges' marketing sites plus
-PDFs, where the research already found: a PDF that states its own expiry ("valid
-as of October 2024"), a policy page reachable only via a **staging host**, a
-canonical domain (`plusone.northeastern.edu`) that **no longer resolves**, and
-internal contradictions inside a single official PDF (Bouvé's "All others" block
-is a copy-paste still naming BNS requirements; `CAEP 6328` and `CAEP 6329` each
-carry two different titles). A scraper over that would be high-effort, fragile,
-and would rot silently — the worst failure mode this project has.
-
-So: **a hand-curated, versioned dataset with a drift detector.** ~100 pathways
-changing annually is curation-scale. The drift detector is what makes it safe: it
-inverts the failure mode from *silently wrong* to *loudly stale*.
-
-- Every pathway carries `source: { url, kind, retrievedAt, contentHash }`.
-- A CI job re-fetches each source and compares the hash. A change **fails loudly**
-  and opens work; it never edits data.
-- A pathway past a staleness horizon renders with a visible "last verified"
-  marker rather than being silently trusted.
-
-If curation proves unsustainable, the honest response is to **narrow coverage, not
-lower confidence** — see §7.
-
-### 4.2 Pathway schema
-
-The three `replaces.kind` values map one-to-one onto the three shapes the
-research found in the wild.
+`data/northeastern/pathways/<college>/<slug>.json`, one file per pathway,
+mirroring how programs are stored.
 
 ```jsonc
 {
-  "id": "khoury/bscs-to-mscs",
+  "id": "khoury/ce-to-mscs",
+  "brand": "PlusOne",                    // NEU label; core never reads this
   "college": "khoury",
-  "ugPrograms": ["2026/computer-information-science/computer_science_bscs_(boston)"],
-  "msProgram": "grad/2026/computer-information-science/computer_science_mscs_(boston)",
 
-  // The university-wide rule is a DISJUNCTION, not a number. See §4.3.
-  "shareCap": { "courses": 4, "semesterHours": 16 },
-
-  "gpa": { "min": 3.0, "scope": "cumulative", "alsoInMajor": true, "preferred": null },
-  "perSemesterMax": 1,                     // Khoury 1, History 2, null = unstated
-  "applyWindow": { "earliestSemester": 3, "notInFinalSemester": true },
-  "rules": ["noGradIfUgCompleted", "noDeferral", "admissionNotGuaranteed", "notDoubleHusky"],
-
-  "shares": [
-    // Pattern 1 — course-for-course. The only shape applySubstitutions fits exactly.
-    { "grad": "CS 5800", "replaces": { "kind": "course", "ref": "CS 3000" } },
-
-    // Pattern 2 — a named graduate course fills a named or typed UG slot.
-    { "grad": "CY 5010", "replaces": { "kind": "requirement", "label": "Cybersecurity Elective" } },
-
-    // Pattern 3 — anonymous slot. Placeable; NOT prereq-checkable. UI must say so.
-    { "grad": null, "gradDomain": { "subject": "CS", "min": 5000 }, "count": 4,
-      "replaces": { "kind": "slot", "label": "General Elective" } }
+  // Eligibility is (program × concentration), per rule #72.
+  "eligibility": [
+    { "ugProgram": "2026/engineering/computer_engineering_bsce_(boston)" },
+    { "ugProgram": "2026/science/physics_bs_(boston)",
+      "requiresMsConcentration": "MSMD" }
   ],
 
-  "notes": [],                             // advisories that are not substitutions
-  "source": { "url": "…", "kind": "html", "retrievedAt": "2026-08-13", "contentHash": "…" },
-  "confidence": "published"                // "published" | "derived"
+  // MS target is a SET of campus variants, per rule #71.
+  "msPrograms": [
+    "grad/2026/computer-information-science/computer_science_mscs_(boston)",
+    "grad/2026/computer-information-science/computer_science_mscs_(oakland)"
+  ],
+
+  "shares": [
+    { "grad": "CS 5010", "target": { "kind": "slot", "label": "General Elective" },
+      "mandatory": true },                                          // #17
+    { "grad": "CS 5800", "target": { "kind": "course", "ref": "CS 3000" },
+      "mandatoryUnless": { "completed": "CS 3000" } },              // #18
+    { "grad": "CS 5200", "target": { "kind": "course", "ref": "CS 3200" } },
+    { "grad": "CS 5600", "target": { "kind": "course", "ref": "CS 3650" } },
+    { "grad": null, "gradDomain": { "subject": "CS", "min": 5000, "max": 7980 },
+      "target": { "kind": "slot", "label": "Technical Elective" } } // #14, #15
+  ],
+
+  "rules": [
+    { "kind": "shareCap", "courses": 4, "semesterHours": 16 },      // #1
+    { "kind": "chooseK", "k": 2, "from": "optional" },              // #19
+    { "kind": "maxGradCoursesPerTerm", "max": 1 },                  // #33
+    { "kind": "countWithdrawals" },                                 // #8
+    { "kind": "noGradIfUgDone" },                                   // #29
+    { "kind": "earliestTerm", "afterTerms": 2, "notSummerOfYear1": true }, // #34
+    { "kind": "excludedFromShare", "courses": ["EECE 5698"] },      // #20
+    { "kind": "subBudget", "domain": { "excludeSubject": "EECE" },
+      "maxSH": 8, "scope": { "msConcentration": "CCSP" } },         // #5
+    { "kind": "gpaMin", "min": 3.0, "scopes": ["cumulative", "major"] },   // #46 → A
+    { "kind": "admissionNotGuaranteed" },                           // #56 → U
+    { "kind": "noDeferral" },                                       // #58 → info
+    { "kind": "scholarshipIneligible", "names": ["Double Husky"] }   // #67 → info
+  ],
+
+  "notes": [
+    { "text": "BIOT 5621 + BIOL 5100 together replace CHEM 5620.",
+      "reason": "two-for-one; substitutions are one-to-one" }        // #11
+  ],
+
+  "source": { "url": "…", "kind": "html", "retrievedAt": "2026-08-13",
+              "contentHash": "…" },
+  "confidence": "published"
 }
 ```
 
-**Two-for-one is out of scope, explicitly.** Bouvé's
-`BIOT 5621 + BIOL 5100 → CHEM 5620` goes in `notes` as an advisory, not in
-`shares`. Reason: substitutions are one-to-one by a deliberate decision
-(`cfbdf5dd01`), and reopening that to serve one published case would weaken a
-model that currently holds everywhere. Degrade to less information, not to wrong
-information.
+**Every rule carries its classification in code, not in data** — `ruleKinds.js`
+owns the `C`/`A`/`U` map, so a data author cannot accidentally promote an
+unknowable rule into one that can fail a student.
 
-### 4.3 The cap is a predicate, not a ceiling
+### 6.1 Curated, not scraped — with a leash
 
-The research's headline correction, restated as code, because this is the single
-easiest thing to get wrong:
+The research established there is no catalog source (7 stub pages, ~450 chars of
+prose, zero tables). Scraping instead means eight marketing sites plus PDFs where
+we already found a dead domain (`plusone.northeastern.edu`), a policy page only
+reachable via a **staging host**, a PDF stating its own expiry, and internal
+contradictions inside one official PDF. So: curate, and make staleness loud.
 
-```js
-// "not more than four graduate courses OR 16 semester hours, WHICHEVER IS GREATER"
-const withinCap = (shares, cap) =>
-  shares.length <= cap.courses || totalSH(shares) <= cap.semesterHours;
-```
-
-It is `||`, not `&&`, and not `Math.min`. Both limbs are load-bearing in
-published practice: Bouvé advertises **5 courses** (15 SH → passes the SH limb),
-College of Science advertises **17 SH** (4 courses → passes the course limb). A
-flat 16 SH ceiling is wrong for two colleges.
+- `contentHash` per source; a CI job re-fetches and **fails on change**. It never
+  edits data.
+- Past a staleness horizon, the UI shows "last verified <date>" rather than
+  silently trusting.
+- A verifier (§7) refuses to ship a pathway whose courses or programs don't
+  resolve.
 
 ---
 
-## 5. Behaviour, phase by phase
+## 7. Code inventory
 
-### Phase 0 — fix the derived-row tier bug (prerequisite, not PlusOne)
+### New — core (pure, no React, no I/O)
 
-`build-equivalences.js:361`'s ternary fallback covers `D` as well as `C`, so a
-tier-D-but-program-backed parent's derived row is emitted at tier C with
-`offer: true`. Documented in `plusone-research.md` §7.1, proven by score
-arithmetic (48.6 − 0.1 = 48.5 for `ARCH 3211 ⇄ ARCH 5211`).
+| File | ~LOC | Contents |
+|---|---|---|
+| `src/core/pathway/ruleKinds.js` | 120 | The ~20 kinds, each with its `C`/`A`/`U` class and required params. The single place the safety classification lives. |
+| `src/core/pathway/evaluate.js` | 140 | Engine + `EVALUATORS` registry. Runs rules, returns `Diagnostic[]`. Enforces "A/U may never return `violated`" as an assertion, not a convention. |
+| `src/core/pathway/shareSet.js` | 160 | Derives active shares from `plusOne` + pathway + placements; applies #18/#29 withdrawal; emits the `{from,to}` list for `applySubstitutions`. |
+| `src/core/pathway/project.js` | 110 | MS-side projection: `validateMajor` over the MS tree with shared courses only; splits before/after graduation. |
+| `src/core/pathway/rules/*.js` | ~20 × 40 | One evaluator per kind: `shareCap`, `subBudget`, `chooseK`, `mandatory`, `excludedFromShare`, `noGradIfUgDone`, `maxGradCoursesPerTerm`, `earliestTerm`, `firstSemesterCourse`, `minCreditsBefore`, `minSemestersRemaining`, `seasonal`, `domainRestriction`, `partition`, `coopPrereq`, `gpaMin`, `advisorApproval`, `admissionNotGuaranteed`, `informational`, `totalCreditTarget`. |
 
-This is pre-existing and **not PlusOne's bug**, but it sits in the exact code
-path phase 2 extends, and doing tier work on top of a known tier defect would
-make both harder to reason about. Fix and regenerate first, on its own commit,
-with the `RAILS` tier-count checks.
+### New — port and adapters
 
-### Phase 1 — data, schema, verifier, drift check
+| File | ~LOC | Contents |
+|---|---|---|
+| `src/ports/IAcceleratedPathway.js` | 110 | Port + typedefs (`Pathway`, `Share`, `Rule`, `Diagnostic`). Institution-neutral. |
+| `src/adapters/generic/acceleratedPathway.js` | 25 | No-op default: no pathways. Keeps non-NEU wiring working. |
+| `src/adapters/northeastern/acceleratedPathway.js` | 180 | Loads `data/northeastern/pathways/**` via `import.meta.glob`, resolves campus variants, registers any NEU-only evaluators. |
 
-The gate. Deliverables: the dataset, a schema validator, and the CI drift job.
-Verifier checks that must pass before any UI is built:
+### New — UI
 
-- every `ugPrograms` / `msProgram` id resolves in `programs-bundle.json`;
-- every named `grad` and `replaces.ref` course exists in `catalog-courses.json`;
-- every `grad` course is ≥5000 and every `replaces.ref` is <5000;
-- every pathway satisfies its own `shareCap` predicate;
-- **each pathway's shares actually satisfy something in the MS tree** — reuse the
-  `validateMajor` walk. This is the check that would have caught a wrong course
-  number, and it is already known to pass 12/12 for Khoury's set.
+| File | ~LOC | Contents |
+|---|---|---|
+| `src/ui/PlusOnePanel.jsx` | 320 | **Separate panel, not a 5th GradPanel clone.** Share meter (courses/SH against the disjunctive cap), diagnostics grouped by status, the MS projection split before/after graduation, source + `retrievedAt`. |
+| `src/ui/PlusOneSlot.jsx` | 120 | The selector below minors; undergrad-only. |
+| `src/ui/usePathway.js` | 90 | Hook: reads the port, memoises evaluation. |
 
-### Phase 2 — the bachelor's side
+### Changed — small and specific
 
-1. **Declare.** New plan field `plusOne` (the MS program id), added to
-   `PLAN_FIELDS` with share key `p1`. The registry then wires it through the
-   slot, the share link, the export file and the MCP snapshot — which is exactly
-   what the registry exists for, and why this is a one-line schema change rather
-   than four hand-edits that history says one of us would forget.
-2. **Derive the share set; do not store it twice.**
-   `shares = substitutions.filter(s => isGradLevel(s.from))` when `plusOne` is
-   set. The shared courses *are* substitutions; a second list would be a second
-   source of truth and a new way for the two to disagree.
-3. **Place and substitute.** Student places `CS 5800`; we record
-   `{ from: "CS 5800", to: "CS 3000" }`. The BS audit sees `CS 3000` satisfied;
-   4 SH counted once. No new code.
-4. **Cap meter.** "3 of 4 courses · 12 of 16 SH shared", using §4.3's predicate.
-5. **Mutual exclusion.** Khoury's rule — *"may not take the graduate-level
-   version of a course if they have already completed the undergraduate
-   version"* — is a **conflict check, not a substitution**. Surface it on the
-   existing violations surface. Per project principle: **flag, never block**.
-6. **Rule disclosure.** `perSemesterMax`, `applyWindow`, `admissionNotGuaranteed`,
-   `noDeferral`, `notDoubleHusky`, and the GPA threshold, shown with the pathway
-   and its `retrievedAt`.
-7. **GPA: state, never evaluate.** We hold no student GPA. Follow the co-op gate
-   precedent exactly — print the threshold, never compute against it, never gate.
+| File | Change |
+|---|---|
+| `src/core/planSchema.js` | Add `{ name: 'plusOne', share: 'p1' }` — and `plusOneConc` if pathways need the MS concentration. Registry then wires all four doors. |
+| `src/core/prereqConditions.js` | `planConditions`: assert `grad-admission` when `plusOne` is set (§4.4). |
+| `src/ui/GradPanel.jsx` | Make the `loadGradMajor` vs `loadMajor` choice **per-slot** instead of per-plan `isGrad`. |
+| `src/ports/index.js` | Add `acceleratedPathway` to `AdapterOverrides`. |
+| `src/adapters/{generic,northeastern}/index.js` | Wire the new port. |
+| `src/locales/*.js` (×8) | Panel strings, hand-written. "PlusOne" stays untranslated (proper noun, same rule as "CLAUDE"). |
+| `src/adapters/mcp/*` | Expose `plusOne` in the plan snapshot and a `SET_PLUSONE` action; document in `get_meta` actionDocs. Needs a worker redeploy to reach prod. |
 
-**Tier integration — scoped, and the veto stays.** Do **not** weaken or exempt
-`grad-boundary`. Instead, emit pathway pairs into the equivalence index with
-`e.p` containing the **MS program's** index. Then `resolveTier(pair, mine)`
-upgrades them to tier A exactly for a student who has declared that PlusOne, and
-leaves them tier D for everyone else — which is the correct answer for everyone
-else. This reuses the mechanism `equivalence.js` already documents:
+### New — scripts and data
 
-> Tiering on `ev.programs` directly was the first design and it was wrong.
-> Measured: 2,536 of 3,525 program-backed pairs are published by exactly ONE
-> program, so a global tier A would tell a chemical engineering student "your
-> program accepts either" […] on the authority of the science writing minor.
+| File | ~LOC | Contents |
+|---|---|---|
+| `data/northeastern/pathways/**` | — | The curated pathways. Khoury first. |
+| `scripts/verify-pathways.js` | 220 | Every `ugProgram`/`msProgram` id resolves; every named course exists; `grad` ≥5000 and `target.ref` <5000; each pathway satisfies its own cap; **every share satisfies something in the MS tree** (the check that catches a wrong course number — known to pass 12/12 for Khoury). |
+| `scripts/check-pathway-sources.js` | 120 | Re-fetch each `source.url`, compare `contentHash`, fail loudly. CI only; never writes data. |
+| `package.json` | — | `data:pathways:verify`, `data:pathways:sources`. |
 
-A global tier A for PlusOne pairs would repeat precisely that mistake. Scoping is
-not a nicety here; it is the difference between a true statement and a false one.
-
-### Phase 3 — the master's projection (read-only)
-
-Run `validateMajor` over the MS program tree with **only the shared courses** as
-placed input. Render: *"You would enter the MS with 16 of 32 SH complete —
-Algorithms satisfied, Breadth 8 of 12, Electives 4 of 12."*
-
-No timeline, no graduate terms, no second plan. Measured feasible: 12/12 of
-Khoury's shareable courses land in the MS CS tree. This is the bulk of design A's
-value at none of its cost.
-
-Two caveats that must appear in the UI, not just here: the projection **assumes
-admission**, which is explicitly not guaranteed; and it is computed against
-*today's* MS requirements, which are re-scraped bimonthly and can change before
-the student gets there.
-
-### Phase 4 — the linked graduate plan (optional)
-
-Design B, once phases 1–3 are real: create a graduate plan seeded with the shared
-courses, linked back to the bachelor's plan. Only worth doing if students actually
-want to plan the master's year in NU Map, which we have not measured. Do not build
-it on speculation.
+Roughly **2,400 LOC new**, ~8 files touched. The bulk is 20 small evaluators and
+one panel.
 
 ---
 
-## 6. What this design deliberately does not do
+## 8. Tests — hostile, per the working method
 
-Named so that a later reader inherits the decision rather than re-litigating it:
+Confirming tests are close to worthless here. The ones that pay:
 
-- **No timeline extension** into graduate terms (§3, design A).
-- **No weakening of `grad-boundary`** — pathway pairs get *scoped* standing
-  instead (§5, phase 2).
-- **No two-for-one substitutions** (§4.2).
-- **No GPA evaluation** — we do not hold the input (§5, phase 2.7).
-- **No global tier A** for PlusOne pairs (§5, phase 2).
-- **No scraper** across eight marketing sites, initially (§4.1).
-- **No PlusJD and no professional-doctorate sharing.** Different credit-sharing
-  limbs entirely — the professional doctorate allows **40%**, not 4 courses/16 SH.
-  Out of scope, and not to be quietly folded in because the URLs look similar.
-- **No "accelerated" name matching.** All three programs in our corpus containing
-  "Accelerated" are false positives, including the One-Year Accelerated MPH, whose
-  catalog page does not contain the string "PlusOne" at all.
+1. **The safety invariant.** For every rule kind classified `A` or `U`, assert the
+   evaluator *cannot* return `violated` — driven off `ruleKinds.js`, so a new kind
+   is covered the moment it is registered. This is the first test to write.
+2. **The disjunctive cap.** Property test: `courses ≤ 4 || SH ≤ 16`. Must accept
+   Bouvé's 5 × 3 SH **and** CoS's 4 × 17 SH, and reject 5 × 4 SH. A `&&` or a
+   `Math.min` implementation fails all three.
+3. **One-wayness.** Assert no derived substitution ever has an undergraduate
+   `from` and a graduate `to`. The bug this prevents is silent and would credit an
+   undergraduate course toward a master's.
+4. **Inertness.** A pathway declared with all candidates armed and nothing placed
+   must produce a plan byte-identical to no pathway at all.
+5. **Withdrawal (#29).** Place the UG version, assert the grad substitution
+   disappears — and that it comes back if the UG placement is removed.
+6. **Every pathway round-trips every door.** Declare, share, export, re-import,
+   share-link, MCP snapshot — the `conc2`/`substitutions`/`grades` bug class is
+   the repo's most repeated, and `planSchema` exists because of it.
+7. **Fixture-driven rule coverage.** One fixture per *published* pathway, asserting
+   the parsed rules match the source. Bouvé's known contradictions are encoded as
+   `expected-source-error` fixtures so they don't read as our bugs.
+8. **Corpus sanity, re-measured not assumed.** All shareable courses exist; all
+   MS programs resolve; ≥1 share per pathway lands in the MS tree.
 
 ---
 
-## 7. The claim I am least sure of, and the honest fallback
+## 9. Phasing
 
-Everything above is downstream of one assumption: **that we can keep ~100
-hand-curated pathways correct.** That is the weakest load-bearing claim in this
-document, and I want to be hardest on it rather than on the easy parts.
+| Phase | Deliverable | Gate |
+|---|---|---|
+| **0** | Fix the derived-row tier bug (`build-equivalences.js:361` promotes tier D → C with `offer: true`; `ARCH 3211/5211`, proven by 48.6 − 0.1 = 48.5). Pre-existing, own commit, `RAILS` re-checked. | — |
+| **1** | Port, generic no-op, core engine + registry, ~8 evaluators covering Khoury only, `verify-pathways.js`, Khoury pathway data (4 pathways). Tests 1–5. | Verifier green on all 4 |
+| **2** | `plusOne` on `planSchema`; slot below minors; derived one-way substitutions; share meter; diagnostics; `planConditions` fix. Tests 6. | Door round-trip green |
+| **3** | MS projection panel, split before/after graduation. | 12/12 still lands |
+| **4** | Widen: COE (needs `subBudget`, `excludedFromShare`, per-concentration eligibility), CoS, then Bouvé (needs `partition`, `firstSemesterCourse`, `notes`). Test 7 per pathway. | Per-college |
+| **5** | Second graduation: extend `gradYear`, derived per-term phase, two graduation rows, both flags on `PLAN_FIELDS`. | §10 |
+| **6** | MCP surface + worker redeploy. | — |
 
-The sources are marketing pages and PDFs with expiry dates, one already dead and
-one already only on a staging host. Drift detection catches *changes*; it does not
-catch a pathway that was transcribed wrong on day one, and it does not create the
-time to fix what it flags.
+Phases 1–3 are Khoury-only and independently shippable. **Phase 4 is where the
+architecture earns its keep** — if adding COE requires touching `evaluate.js`, the
+registry design failed and that is the moment to find out.
 
-**So the fallback is to narrow coverage, never to lower confidence.** If curation
-cannot be sustained, ship **Khoury only**, and say so in the UI. Khoury is the
-right vertical slice on the measurements already taken:
+---
 
-- it publishes explicit **course-for-course** tables — pattern 1, the only shape
-  `applySubstitutions` fits exactly, with no `notes` escape hatch needed;
-- **12/12** of its shareable courses land in the MS CS requirement tree;
-- **12/12** carry full per-term offering data;
-- **18/18** pairs exist in the corpus at 4 SH on both sides, so `credit-mismatch`
-  never fires and the pairs are structurally clean.
+## 10. Two graduations
 
-By contrast Bouvé — the richest source — is pattern 2/3-heavy, needs the `notes`
-escape hatch for its two-for-one, and has **known internal contradictions**. It
-is the right *second* target, not the first.
+Cheaper than I claimed in the first draft, and worth correcting: the timeline is
+one parameter, because `buildCohortSemesters` is a pure function of the cohort
+bounds with no length cap. Extend `gradYear` and the grid follows.
 
-One pathway, fully correct, with its source and date on screen, is worth more here
-than eight colleges at "probably". A student planning a degree on a wrong course
-number is the expensive failure this project is organised around.
+**One plan with two graduations beats two linked plans** — it removes the very
+objection I raised against my own earlier phase 4 (cross-plan pointers, a scar
+`planFolders.js` explicitly comments on). No pointers, no sync, no dangling
+reference when a plan is deleted. Dropping the linked-plans design.
 
-## 8. Open questions that should be answered before phase 2 ships
+The real work is that graduation is currently singular:
 
-1. **How many pathways are wildcard** ("all majors", per CPS and Bouvé)? If it is
-   most of them, the discovery rule in phase 2.1 needs rethinking — a wildcard
-   pathway offered to every student is noise. **Not measured.**
-2. **Is a PlusOne share visible in Banner at all?** If not, this is
-   advisor-and-paperwork only and NU Map can never verify a student's status, only
-   record their claim. Changes how confidently the UI may speak. **Not checked.**
-3. **The registrar's mechanics** — `KB000020031` is still unread (client-rendered).
-   Registration overrides and billing are unresolved; billing in particular
-   affects whether we should say anything about cost at all.
-4. **Does anyone want to plan the master's year here?** Gates phase 4. Unmeasured,
-   and the project has a track record of ideas that read well and died on contact
-   with a measurement — a first-run sample-plan toggle (62% of programs publish
-   none), candidate-set intersection (empty 86.7% of the time).
+- `gradSemId` is one derived id; `isGraduated` is one boolean
+  ([PlannerContext.jsx:241](../src/context/PlannerContext.jsx#L241)).
+- `isGraduated` is a raw localStorage boolean and is **not in `PLAN_FIELDS`** — so
+  it rides neither share links nor exports today. A second flag added the same way
+  inherits exactly the bug the registry was built to stop. **Put both on the
+  registry**, which is also the migration the registry's own comment invites.
+- Do **not** repurpose `studentType` for the master's year: it is plan-level with
+  **278 references**. Add a *derived per-term phase* instead. That is what the
+  audit split, the co-op rules (#63–#66) and the full-time minimum (#59) all
+  actually need, and it keeps a plan's identity single.
+
+---
+
+## 11. What changed from the first draft
+
+- **The equivalence-index route is gone.** Pairs there are symmetric; PlusOne is
+  directional. Use the plan's `substitutions`. (Credit: this was Matthew's catch,
+  and it was a real defect, not a preference.)
+- **Linked plans are gone**, replaced by one plan with two graduations.
+- **"A set of requirements" is now the MS tree**, explicitly split before/after
+  graduation, rather than a fifth peer audit that would read as permanent failure.
+- **The timeline objection is withdrawn** — measured as one parameter.
+- **The QR/size argument is withdrawn** — 17.7% of capacity; deriving is right for
+  state-hygiene reasons, not byte reasons.
+- **A flat `shares[]` array is gone**, replaced by a rule engine, because §2 found
+  73 rules and ECE alone breaks five of the old model's assumptions.
+
+---
+
+## 12. Assumptions, stress-tested
+
+**"The rule inventory is complete."** False, and the design assumes it is false —
+that is what the registry buys. Every college added so far introduced a kind the
+previous ones didn't: ECE brought sub-budgets and per-concentration eligibility,
+Accounting brought co-op-as-prerequisite and two GPA scopes at different
+thresholds, CE→MSCS brought conditional mandatory shares and choose-k. **Assume
+phase 4 finds more.**
+
+**"Khoury's tables are course-for-course."** Mostly — but three rows of the
+Cybersecurity table have "Cybersecurity Elective" on the left, not a course. Even
+the cleanest college needs rule #16. A model that only did course→course would
+have broken on the first pathway.
+
+**"One pathway per (UG, MS) pair."** False. Bouvé's BSN → MPH has **five course
+maps** by cohort and co-op schedule (#26); D'Amore-McKim's share list depends on
+Audit vs Tax track (#25). The schema needs variant selection; §6 does not fully
+model this yet and it is the largest known schema gap.
+
+**"The MS program is one program."** False — Khoury's CS pathways span four
+campuses (#71), and we hold separate files per campus. `msPrograms` is a list.
+
+**"16 SH is the cap."** False, and the most quoted error. It is
+`4 courses OR 16 SH, whichever is greater`; Bouvé ships 5 courses, CoS ships 17 SH.
+
+**"We can verify a student is in PlusOne."** No. Unresolved (#2 below), and until
+it is, everything is the student's assertion. The tri-state contract is what makes
+that safe rather than dishonest.
+
+## 13. Remaining gaps
+
+1. **Variant selection** (#25, #26) is not modelled in §6. Bouvé BSN is the
+   worst case at five maps. Needs a `variants[]` with a selector before Bouvé
+   ships — a phase-4 blocker, not a phase-1 one.
+2. **Is a PlusOne share visible in Banner?** Unchecked. If not, this is
+   advisor-and-paperwork only and the UI must never imply verification.
+3. **Registrar mechanics** — `KB000020031` is still unread (client-rendered).
+   Registration overrides (#53) and billing (#70, only sourced from
+   D'Amore-McKim) are thinly evidenced.
+4. **How many pathways are wildcard** ("all majors", per CPS and Bouvé)? If most,
+   the discovery rule needs rethinking — a pathway offered to everyone is noise.
+5. **The `chooseK` / `mandatory` interaction** is under-specified where a pathway
+   states both (CE→MSCS: `CS 5010` mandatory, `CS 5800` conditional, "choose two"
+   — is the total 4, or 2 + 2 mandatory?). The source is ambiguous; ask an
+   advisor rather than guess, and until then represent it as `unknown`.
