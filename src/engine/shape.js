@@ -104,6 +104,22 @@ export function shapeFromPlan(plan) {
         !e.coop && !e.vacation && !e.heading && !e.either).length;
       // Mixed terms exist — a co-op cell beside a course cell — and are study
       // terms carrying a co-op, because the student is registered either way.
+      //
+      // ── But they are not study terms of the usual SIZE ────────────
+      //
+      // That reasoning is right about whether the term is used and wrong about how
+      // much it can hold. `work` was the only co-op signal the shape carried, so a
+      // term with a co-op and a course fell through as an ordinary study term and was
+      // sized at the full-time cap — and CHART put a full course load into terms the
+      // student spends employed.
+      //
+      // So `coop` is recorded independently of `work`. A term can be all three of
+      // used, studied in, and constrained by employment, and one boolean could not
+      // say that. The BOUND itself lives in `domains.termSlotCap`, as a course count
+      // rather than a credit budget — see there for the measured convention (90 mixed
+      // terms across 42 programs, targetSH {3:2, 4:86, 16:2}) and for the corrected
+      // figures, since the first version of this comment claimed "exactly 1.00 real
+      // courses, no variance at all" and that was false in both halves.
       const work = coopCells > 0 && courseCells === 0;
       const unused = !work && courseCells === 0;
       const stated = Number(term.hours);
@@ -114,6 +130,9 @@ export function shapeFromPlan(plan) {
         label: year.label ?? `Year ${yearIndex + 1}`,
         termLabel: term.term ?? "",
         work, unused,
+        // Carries a co-op, whether or not it also carries courses. `work` answers "is
+        // this term used for study"; this answers "is the student employed in it".
+        coop: coopCells > 0,
         targetSH: (work || unused) ? 0 : (Number.isFinite(stated) && stated > 0 ? stated : summed),
         weight: weightOf(term.type),
       });
@@ -425,6 +444,12 @@ export function extendShape(shape, extraYears) {
         yearIndex,
         label: `Year ${yearIndex + 1}`,
         work: false,
+        // Same reasoning as `work`, and it has to be said separately: the spread above
+        // copies every field of the pattern term, so a pattern year containing a co-op
+        // would give every ADDED year one too — inventing employment nobody planned, and
+        // (since a co-op term is slot-capped) silently shrinking the room the extension
+        // exists to create.
+        coop: false,
         // Not `unused`: an added term exists precisely to be used. Its target is the
         // pattern's, or the pattern's own weight-scaled share where that was empty.
         unused: false,

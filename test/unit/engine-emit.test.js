@@ -3,7 +3,8 @@
 // ever sees the shapes the real catalog happens to contain.
 import test from "node:test";
 import assert from "node:assert/strict";
-import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary } from "../../src/engine/shape.js";
+import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "../../src/engine/shape.js";
+import { termSlotCap } from "../../src/engine/domains.js";
 import { emitPlan, cellLabel, MAX_NAMED_OPTIONS } from "../../src/engine/emit.js";
 import { preflight, MAX_DERIVED_GE_SHARE } from "../../src/engine/preflight.js";
 import { permissivePorts } from "../../src/engine/ports.js";
@@ -52,6 +53,63 @@ test("shape › a term with a co-op AND a course is a study term", () => {
     ])]),
   ] });
   assert.equal(s.terms[0].work, false);
+  // …and it is STILL a co-op term. One boolean could not say both, and conflating
+  // them is what sized these at the full-time cap and put four courses in a term the
+  // student spends employed.
+  assert.equal(s.terms[0].coop, true);
+});
+
+// ── The co-op slot cap, at every targetSH the corpus actually contains ──
+//
+// 90 mixed terms across 42 programs, and the departments' own numbers are
+// {3 SH x2, 4 SH x86, 16 SH x2}. Each end is a case a flat "one course" rule gets
+// wrong, which is why the cap is derived per term rather than fixed.
+test("shape › a co-op term's slot cap is derived from the department's own target", () => {
+  const capFor = (hours, entries) => termSlotCap(shapeFromPlan({ years: [
+    year("Year 3", [term("Fall", "fall", hours, entries)]),
+  ] }).terms[0]);
+  const coop = { text: "Co-op", coop: true };
+
+  // The 86-term majority: one course beside the co-op.
+  assert.equal(capFor(4, [coop, entry("ENGW 3302", [["ENGW3302"]])]), 1);
+  // `data_science_and_mathematics` and `political_science_ba` publish 16 SH co-op
+  // terms carrying three coded courses and an elective. A flat cap of 1 would
+  // contradict a department against its own plan.
+  assert.equal(capFor(16, [coop, entry("ENGW 3302", [["ENGW3302"]])]), 4);
+  // `health_science_bs` states 3 SH. Rounding down gives 0, which would forbid every
+  // standard 4 SH course; the floor of 1 keeps the term usable.
+  assert.equal(capFor(3, [coop, entry("ENGW 3302", [["ENGW3302"]])]), 1);
+});
+
+test("shape › the co-op cap is not overridden by the plan-wide course maximum", () => {
+  // `maxCoursesFull` is a whole-plan ceiling. Read first it would hand a co-op term
+  // four slots, which is the defect this cap exists to prevent.
+  const s = shapeFromPlan({ years: [
+    year("Year 3", [term("Fall", "fall", 4, [
+      { text: "Co-op", coop: true }, entry("ENGW 3302", [["ENGW3302"]]),
+    ])]),
+  ] });
+  assert.equal(termSlotCap(s.terms[0], { maxCoursesFull: 4, maxCoursesHalf: 2 }), 1);
+});
+
+test("shape › extending a plan never invents a co-op in the added years", () => {
+  // `extendShape` spreads the pattern term, and it already resets `work` because
+  // repeating a co-op "would invent a work term nobody planned". `coop` needs the same
+  // reset for the same reason — and now also because a co-op term is slot-capped, so a
+  // leak would shrink the very room the extension exists to create.
+  const s = shapeFromPlan({ years: [
+    year("Year 4", [
+      term("Fall", "fall", 4, [{ text: "Co-op", coop: true }, entry("ENGW 3302", [["ENGW3302"]])]),
+      term("Spring", "spring", 16, [entry("CS 1800", [["CS1800"]])]),
+    ]),
+  ] });
+  const ext = extendShape(s, 1);
+  const added = ext.terms.slice(s.terms.length);
+  assert.ok(added.length > 0, "nothing was added, so this proves nothing");
+  for (const t of added) {
+    assert.equal(t.work, false, "an added term must not be a work term");
+    assert.equal(t.coop, false, "an added term must not carry an invented co-op");
+  }
 });
 
 test("shape › an EMPTY term is unused, and optional rather than excluded", () => {

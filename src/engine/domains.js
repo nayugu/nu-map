@@ -42,6 +42,8 @@ import { groupDepth, courseLevel } from "./prereqDepth.js";
 // numbers would agree until someone edited one. The long provenance comments stay where a
 // reader of this file looks for them; only the VALUE has a single home.
 import { DEFAULT_CALIBRATION, minCoursesFor } from "./calibration.js";
+// The SIZE of a standard course, which is not `REAL_COURSE_SH` — see `coopSlotCap`.
+import { DEFAULT_UNIT_SH } from "../core/requirementDemand.js";
 
 /**
  * @typedef {Object} CellPlan
@@ -232,7 +234,67 @@ export const fullTermMinCourses = (studentType) =>
  */
 export const REAL_COURSE_SH = DEFAULT_CALIBRATION.realCourseSH;
 
+/**
+ * How many courses a CO-OP term may hold.
+ *
+ * ── The convention, measured properly the second time ───────────────
+ *
+ * Over every published plan — 385 files, 678 variants — **90 terms carry a co-op
+ * and coursework at once**, spread across **42 programs**. What the departments
+ * state for them:
+ *
+ *     targetSH   3 SH x2      4 SH x86      16 SH x2       mean 4.244
+ *
+ * So the rule is one course beside a co-op, in 86 of 90 terms — and it is a rule
+ * with real exceptions at both ends, not a constant. `data_science_and_mathematics`
+ * and `political_science_ba` publish 16 SH co-op terms carrying three coded courses
+ * and an elective; `health_science_bs` publishes 3 SH ones.
+ *
+ * An earlier version of this said "exactly 1.00 real courses, no variance at all,
+ * a hard convention". That was wrong, and wrong in the way this repo keeps paying
+ * for: it counted 42, which was mixed terms in `plans[0]` of the programs that
+ * happened to GENERATE, and 42 coincidentally equals the number of distinct
+ * programs — so the sample bias was invisible in the number itself. The real
+ * population is 90. Stated here rather than quietly replaced, because "zero
+ * variance" was the most confident claim in that work and it was the false one.
+ *
+ * ── A count, not a credit budget ────────────────────────────────────
+ *
+ * Derived from `targetSH` because the shape already carries it per term, and the
+ * shape deliberately does NOT carry per-term course counts — inheriting those
+ * would re-import the sequencing CHART exists to replace. Deferring to the
+ * department's own number also means the two 16 SH programs get 4 courses rather
+ * than being contradicted against their own published plan, and `Math.max(1, …)`
+ * absorbs the 3 SH case instead of forbidding every 4 SH course in it.
+ *
+ * ── What this still does not capture ────────────────────────────────
+ *
+ * In 30 of the 33 strictly-coded mixed terms the course is an advanced WRITING
+ * course — ENGW 33xx, ENGL 3710, POLS 470x — the asynchronous requirement students
+ * take while working. The real convention is "the online writing course", and a
+ * cap of one still lets CHART put Organic Chemistry there. Bounding by ATTRIBUTE
+ * rather than by count is the honest fix and is not attempted here; those courses
+ * carry WD and WI, which is the same door the NUPath work would come through.
+ *
+ * ── Divided by the SIZE of a course, not the floor for counting one ──
+ *
+ * `DEFAULT_UNIT_SH` (4) and `REAL_COURSE_SH` (3) are easy to swap and mean opposite
+ * things: one is how big a standard course is, the other is the credit floor at which
+ * a cell COUNTS as one. Dividing by the floor inflates every cap by a third — the
+ * 16 SH terms would admit 5 courses where their own departments publish 4 — so the
+ * bound would be looser than the evidence it claims to come from. Caught by the unit
+ * test below asserting all three of the corpus's targetSH values, which is the reason
+ * to write the hostile one rather than the confirming one.
+ */
+const coopSlotCap = (term) =>
+  Number.isFinite(term?.targetSH) && term.targetSH > 0
+    ? Math.max(1, Math.floor(term.targetSH / DEFAULT_UNIT_SH))
+    : 1;
+
 export const termSlotCap = (term, shape = null) => {
+  // BEFORE the inherited maximum: `maxCoursesFull` is a whole-plan ceiling and would
+  // otherwise override the per-term co-op bound with a number four times larger.
+  if (term?.coop) return coopSlotCap(term);
   const full = (term?.weight ?? 1) >= 1;
   const inherited = full ? shape?.maxCoursesFull : shape?.maxCoursesHalf;
   return inherited ?? (full ? SLOT_CAP_FULL : SLOT_CAP_HALF);
@@ -544,6 +606,17 @@ export function buildDomains(cells, terms, {
  * whole cells rarely add to a stated number, so treating the target as a cap
  * would reject plans that are perfectly legal. Billing hours are a third thing
  * entirely and CHART says nothing about cost.
+ *
+ * ── A co-op term is bounded too, but NOT here ───────────────────────
+ *
+ * A first attempt capped co-op terms at their `targetSH` in this function. It was
+ * the wrong instrument and was reverted. The convention it was enforcing is a
+ * COURSE COUNT, not a credit budget, so it belongs in `termSlotCap`; putting it
+ * here broke three things that a slot cap leaves alone — `preflight`'s `room` sum
+ * and the "N study terms at 19 credits each" message it prints, the permissive
+ * port contract (`creditMax: () => Infinity` stopped producing an infinite cap),
+ * and granularity, since a 3 SH cap admits no standard 4 SH course at all. That
+ * last one is this comment's own warning, which the attempt ignored.
  */
 export function termCapacity(term, { creditMax, studentType, slack = 0 }) {
   const cap = creditMax(studentType) * (term.weight ?? 1);
