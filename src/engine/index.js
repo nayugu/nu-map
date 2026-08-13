@@ -204,9 +204,20 @@ export function generatePlan({
   // One retry, sized from the deficit the critical path reports, and capped: a chain
   // that needs four more years than the degree publishes is a data defect rather than
   // a long program, and stretching to meet it would produce a plan nobody would read.
-  const chainDeficit = Math.max(0, ...critical.impossible
+  // ── Both lists, because the refusal already reads both ────────────
+  //
+  // A cell can be reported unplaceable by either of two mechanisms, and they record the SAME
+  // reason under different field names: `buildDomains` emits `prereq-chain-longer-than-plan`
+  // when `minDepth >= terms.length`, and `criticalPath` emits it when the longest path does not
+  // fit. Three lines below, `preflight` refuses on the UNION of the two — but the decision to
+  // stretch read only `critical.impossible`, so a chain caught by domain construction never
+  // triggered a retry at all. One list decided, both lists condemned.
+  const blocked = [...impossible, ...critical.impossible];
+  const chainDeficit = Math.max(0, ...blocked
     .filter(x => x.reason === "prereq-chain-longer-than-plan")
-    .map(x => (x.earliest ?? 0) - (terms.length - 1)));
+    // `earliest` is the critical path's field and `minDepth` is `buildDomains`'. Reading only
+    // the first scored every domain-derived blockage as a zero deficit.
+    .map(x => (x.earliest ?? x.minDepth ?? 0) - (terms.length - 1)));
   if (chainDeficit > 0 && chainDeficit <= MAX_EXTRA_TERMS) {
     const perYear = Math.max(1, terms.length / Math.max(1, shape.terms.length
       ? Math.max(...shape.terms.map(t => t.yearIndex)) + 1 : 1));
@@ -214,7 +225,15 @@ export function generatePlan({
     const retry = layout(stretched);
     // Only keep it if it actually helped. A stretch that solves nothing is a longer
     // plan for no reason.
-    if (retry.critical.impossible.length < critical.impossible.length) {
+    //
+    // Judged on the union too, and MONOTONICALLY: the old test is kept as a second disjunct so
+    // this can only ever accept MORE stretches than before, never fewer. Replacing it outright
+    // would have risked rejecting a stretch that currently rescues a program — a coverage
+    // regression smuggled in as a tidy-up, which is the shape of two of today's mistakes.
+    const wasBlocked = impossible.length + critical.impossible.length;
+    const nowBlocked = retry.impossible.length + retry.critical.impossible.length;
+    if (nowBlocked < wasBlocked
+        || retry.critical.impossible.length < critical.impossible.length) {
       shape = stretched;
       ({ terms, plans, impossible, critical } = retry);
     }
