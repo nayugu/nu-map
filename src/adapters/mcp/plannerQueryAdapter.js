@@ -25,7 +25,7 @@ import {
 } from "../../core/gradRequirements.js";
 import { buildCohortSemesters, deriveSemMaps } from "../../core/semGrid.js";
 import { getSemSH, getOrderedCourses, filterInTimeline } from "../../core/planModel.js";
-import { computeGrantedAttrs, resolveTermByDuration, termSpans } from "../../core/specialTermUtils.js";
+import { computeGrantedAttrs, computeGrantedCourses, resolveTermByDuration, termSpans } from "../../core/specialTermUtils.js";
 import { applyChangeset, completedCourseIds } from "./plannerActionAdapter.js";
 
 /**
@@ -455,6 +455,19 @@ export function createPlannerQuery(deps) {
       Object.entries(eff).filter(([, semId]) => status(semId) === "completed")
     );
     const doneSet = buildPlacedKeySet(donePlacements, placedOutSet, courseMap);
+
+    // A work term registers a real course (COOP 3945), which 37 undergraduate
+    // programs name as a requirement. It joins placedSet ONLY — realPlacedSet
+    // feeds General Electives and must stay what the student actually placed.
+    // Same treatment the UI's GradPanel gives it, so an audit read here and
+    // the panel on screen cannot disagree about the experiential requirement.
+    const workTerms = plan.workExperience ?? {};
+    const termTypes = specialTerms.getTypes();
+    for (const k of computeGrantedCourses(workTerms, termTypes, semIdx)) placedSet.add(k);
+    const finishedTerms = Object.fromEntries(
+      Object.entries(workTerms).filter(([, d]) => d?.semId && status(d.semId) === "completed")
+    );
+    for (const k of computeGrantedCourses(finishedTerms, termTypes, semIdx)) doneSet.add(k);
 
     const { sections, generalElectives, allocatedSet } =
       allocateMajorWithElectives(majorJson, placedSet, courseMap, doneSet, realPlacedSet);

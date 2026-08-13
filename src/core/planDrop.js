@@ -125,14 +125,21 @@ const exists = (state, id) =>
  *
  * @param {object} state    { placements, reservations, semOrders }
  * @param {object} gesture  { dragId, targetId, targetSemId }
- * @param {object} ctx      { gridPlacements, gridCourseMap, coreqPartners }
+ * @param {object} ctx      { gridPlacements, gridCourseMap, coreqPartners, partnersOf }
+ *        `partnersOf(id)` answers the corequisite question for ANY card, which
+ *        is what lets the swap carry both sides. `coreqPartners` remains for
+ *        the dragged card alone; passing only that is how the displaced card
+ *        came to move terms without its recitation.
  * @returns {object|null} next state, or null when the gesture means nothing
  */
 export function dropOnCard(state, { dragId, targetId, targetSemId }, ctx = {}) {
   const { semOrders } = state;
   if (!dragId || dragId === targetId) return null;
 
-  const { gridPlacements = state.placements, gridCourseMap = {}, coreqPartners = [] } = ctx;
+  const {
+    gridPlacements = state.placements, gridCourseMap = {},
+    coreqPartners = [], partnersOf = null,
+  } = ctx;
 
   // ── A card with no seat: it takes the target's place ────────────
   // Cannot be a swap — there is nothing to hand back. See addOnto.
@@ -159,16 +166,28 @@ export function dropOnCard(state, { dragId, targetId, targetSemId }, ctx = {}) {
 
   // ── Same term: a reorder ────────────────────────────────────────
   if (from === targetSemId) {
+    // Only cards that are ACTUALLY in this term can be positioned within it.
+    // `moving` carries the dragged card's corequisites wherever they live, and
+    // this branch positions without placing — so a partner sitting in another
+    // term was written into this term's order while staying where it was,
+    // leaving a stored order that named a card the term did not contain.
+    //
+    // It does not reach out and pull that partner in, either. The group was
+    // already split before the gesture (an imported plan, or a term parked
+    // outside the timeline), and a nudge to reposition a card is not consent
+    // to drag another one across the board. Reordering is positional; only a
+    // move moves things.
+    const here = moving.filter(id => semOf(state, id) === targetSemId);
     const cur = orderIn(targetSemId, gridPlacements);
     const fi = cur.indexOf(dragId);
     const ti = cur.indexOf(targetId);
-    const rest = cur.filter(id => !moving.includes(id));
+    const rest = cur.filter(id => !here.includes(id));
 
     // An unknown target means the end of the term, never "do nothing" — a
     // silently ignored drag reads as the app being broken rather than a rule
     // being applied.
     if (ti < 0) {
-      return { ...state, semOrders: { ...semOrders, [targetSemId]: [...rest, ...moving] } };
+      return { ...state, semOrders: { ...semOrders, [targetSemId]: [...rest, ...here] } };
     }
 
     // WHICH SIDE of the target to land on depends on the direction of travel.
@@ -182,7 +201,7 @@ export function dropOnCard(state, { dragId, targetId, targetSemId }, ctx = {}) {
     if (fi >= 0 && fi < ti) at += 1;
 
     return { ...state, semOrders: { ...semOrders, [targetSemId]: [
-      ...rest.slice(0, at), ...moving, ...rest.slice(at),
+      ...rest.slice(0, at), ...here, ...rest.slice(at),
     ] } };
   }
 
@@ -192,20 +211,51 @@ export function dropOnCard(state, { dragId, targetId, targetSemId }, ctx = {}) {
   const fi = fromOrder.indexOf(dragId);
   const ti = toOrder.indexOf(targetId);
 
-  let next = state;
-  for (const id of moving) next = place(next, id, targetSemId);
   // The target comes back the other way, but only if it is a real card. A drop
   // on a term's empty space has no target to exchange with.
-  const swapping = targetId && exists(state, targetId);
-  if (swapping) next = place(next, targetId, from);
+  //
+  // Nor is it a swap when the target is IN the dragged card's own group — a
+  // student whose lecture and lab have come apart (an import, a term parked
+  // outside the timeline) drags one onto the other to reunite them, and the
+  // only sane reading is "put the group here". Treating it as a swap sent the
+  // target back the way the rest of the group had just come, splitting the
+  // group further and leaving its id in a term it no longer occupied.
+  const swapping = targetId && exists(state, targetId) && !moving.includes(targetId);
 
-  const nf = fromOrder.filter(id => !moving.includes(id) && id !== targetId);
-  if (swapping) nf.splice(Math.min(Math.max(fi, 0), nf.length), 0, targetId);
+  // BOTH cards carry their corequisites. The displaced one was moving alone —
+  // dropping a card onto CS 3000 in another term sent CS 3000 back and left
+  // CS 3001 where it was, a violation manufactured by the rule that exists to
+  // prevent them. `moving` wins any overlap: two cards that are each other's
+  // partners must not be split by being sent in opposite directions.
+  const swapped = swapping
+    ? [targetId, ...(partnersOf?.(targetId) ?? [])
+        .filter(c => c !== targetId && !isReservationId(c) && !moving.includes(c))]
+    : [];
 
-  const nt = toOrder.filter(id => !moving.includes(id) && id !== targetId);
+  let next = state;
+  for (const id of moving)  next = place(next, id, targetSemId);
+  for (const id of swapped) next = place(next, id, from);
+
+  const gone = (id) => moving.includes(id) || swapped.includes(id);
+
+  const nf = fromOrder.filter(id => !gone(id));
+  if (swapping) nf.splice(Math.min(Math.max(fi, 0), nf.length), 0, ...swapped);
+
+  const nt = toOrder.filter(id => !gone(id));
   nt.splice(Math.min(ti < 0 ? nt.length : ti, nt.length), 0, ...moving);
 
-  return { ...next, semOrders: { ...semOrders, [from]: nf, [targetSemId]: nt } };
+  // A partner of either card can have been sitting in some THIRD term, whose
+  // stored order still lists it. Harmless to the grid — `getOrderedCourses`
+  // filters an order against what is actually in the term — but it would ride
+  // into every export as a reference to a card that is no longer there.
+  const orders = { ...semOrders, [from]: nf, [targetSemId]: nt };
+  for (const id of [...moving, ...swapped]) {
+    const was = semOf(state, id);
+    if (!was || was === from || was === targetSemId) continue;
+    if (orders[was]) orders[was] = orders[was].filter(x => x !== id);
+  }
+
+  return { ...next, semOrders: orders };
 }
 
 /**

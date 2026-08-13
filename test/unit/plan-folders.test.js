@@ -157,6 +157,53 @@ test("flattenTree › sortMode 'recent' orders plans by lastOpened, folders by n
   assert.deepEqual(ids(rows), ["a", "z", "new", "old"]);
 });
 
+test("flattenTree › sortMode 'student' groups an advisee's plans together", () => {
+  // Interleaved on purpose: by NAME these would alternate between students.
+  const state = { folders: [], plans: [
+    P("a1", "Alt",     null, { student: "Jane Doe" }),
+    P("b1", "Baseline", null, { student: "Sam Ito" }),
+    P("a2", "Current",  null, { student: "Jane Doe" }),
+    P("b2", "Draft",    null, { student: "Sam Ito" }),
+  ] };
+  const rows = flattenTree(buildTree(state), { sortMode: "student", ...EN });
+  // Jane's two, then Sam's two — and within each run, ordered by plan name.
+  assert.deepEqual(ids(rows), ["a1", "a2", "b1", "b2"]);
+});
+
+test("flattenTree › sortMode 'student' puts UNASSIGNED plans last, not first", () => {
+  // "" would sort before every name under a plain collator — the ordinary
+  // student's scratch plans must not bury the advisee runs.
+  const state = { folders: [], plans: [
+    P("loose", "Aaa scratch"),
+    P("z", "Zed plan", null, { student: "Zoe Q" }),
+    P("a", "Aaa plan", null, { student: "Ann B" }),
+  ] };
+  const rows = flattenTree(buildTree(state), { sortMode: "student", ...EN });
+  assert.deepEqual(ids(rows), ["a", "z", "loose"]);
+});
+
+test("flattenTree › sortMode 'student' leaves folders on name, and sorts within each", () => {
+  // Folders never reorder by student — a container has none, and a folder that
+  // jumps around is disorienting (same rule 'recent' follows).
+  const state = {
+    folders: [F("z", "Zed"), F("a", "Alpha")],
+    plans: [
+      P("p1", "One", "a", { student: "Sam Ito" }),
+      P("p2", "Two", "a", { student: "Jane Doe" }),
+    ],
+  };
+  const rows = flattenTree(buildTree(state), { sortMode: "student", open: allOpen(state), ...EN });
+  assert.deepEqual(ids(rows), ["a", "p2", "p1", "z"]);
+});
+
+test("flattenTree › sortMode 'student' with no students assigned falls back to name", () => {
+  // The ordinary-student case: the mode must degrade to something sensible
+  // rather than to arbitrary order.
+  const state = { folders: [], plans: [P("b", "Beta"), P("a", "Alpha")] };
+  const rows = flattenTree(buildTree(state), { sortMode: "student", ...EN });
+  assert.deepEqual(ids(rows), ["a", "b"]);
+});
+
 test("flattenTree › hasChildren is direct membership, so an empty folder has no twisty", () => {
   const state = { folders: [F("outer", "Outer"), F("inner", "Inner", "outer")], plans: [] };
   const rows = flattenTree(buildTree(state), { open: allOpen(state), ...EN });
@@ -418,6 +465,54 @@ test("search › the extra slotLabel text is searchable", () => {
   const tree = buildTree(fixture());
   const index = buildSearchIndex(tree, { slotLabel: id => (id === "jane" ? "Computer Science, BSCS" : "") });
   assert.deepEqual([...matchIds(index, "bscs")], ["jane"]);
+});
+
+test("search › the associated student is searchable even when the plan name isn't", () => {
+  // The plan is named for the SCENARIO ("With co-op"); the advisee's name lives
+  // only in the `student` field. Typing the student's name must still find it.
+  const state = { folders: [], plans: [P("p1", "With co-op", null, { student: "Jane Doe" })] };
+  const index = buildSearchIndex(buildTree(state));
+  assert.deepEqual([...matchIds(index, "jane")], ["p1"]);
+  assert.deepEqual([...matchIds(index, "doe")], ["p1"]);
+});
+
+test("search › a student's name finds every plan filed to them, across folders", () => {
+  // The advisor's core case: several scenario plans for one advisee, scattered
+  // by term, none named after the student.
+  const state = {
+    folders: [F("adv", "Advisees"), F("fall", "Fall 2026", "adv"), F("spr", "Spring 2027", "adv")],
+    plans: [
+      P("a", "Current", "fall", { student: "Jane Doe" }),
+      P("b", "With minor", "spr", { student: "Jane Doe" }),
+      P("c", "Baseline", "fall", { student: "Sam Ito" }),
+    ],
+  };
+  const hits = matchIds(buildSearchIndex(buildTree(state)), "jane");
+  assert.deepEqual([...hits].sort(), ["a", "b"]);
+});
+
+test("search › student ANDs with the program label, and folds diacritics", () => {
+  const state = { folders: [], plans: [
+    P("p1", "Draft", null, { student: "José Ramírez" }),
+    P("p2", "Draft", null, { student: "Jane Doe" }),
+  ] };
+  const index = buildSearchIndex(buildTree(state), {
+    slotLabel: id => (id === "p1" ? "Computer Science, BSCS" : "Physics, BS"),
+  });
+  assert.equal(matchIds(index, "jose").size, 1, "diacritics fold on the student too");
+  assert.deepEqual([...matchIds(index, "ramirez bscs")], ["p1"], "student AND program");
+  assert.equal(matchIds(index, "jose physics").size, 0, "the AND must actually constrain");
+});
+
+test("search › a plan with no student is unaffected, and folders carry none", () => {
+  // A folder named "Jane" and a studentless plan must not gain phantom matches.
+  const state = {
+    folders: [F("jane", "Jane")],
+    plans: [P("p1", "Scratch")],
+  };
+  const index = buildSearchIndex(buildTree(state));
+  // "jane" still finds the FOLDER (by its name), never the studentless plan.
+  assert.deepEqual([...matchIds(index, "jane")], ["jane"]);
 });
 
 test("search › an empty query is null, meaning no filter at all", () => {

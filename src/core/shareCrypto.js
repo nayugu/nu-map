@@ -90,6 +90,28 @@ export function normalizeCode(raw) {
   return String(raw ?? "").toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 
+/**
+ * What a human is allowed to type into a code field: normalizeCode, then
+ * drop anything outside the alphabet and cap at CODE_LENGTH.
+ *
+ * Stricter than normalizeCode on purpose, and the difference matters.
+ * normalizeCode keeps 0/O/1/I/L because it cleans up what arrives from
+ * the wire; but no code can CONTAIN them, so accepting one into the field
+ * buys a full 300k-iteration derivation that fails, and reports "Code not
+ * found or expired" about a character that could never have been in a
+ * code. Refusing the keystroke says the true thing immediately.
+ *
+ * Both bounds come from the constants above, so changing the alphabet or
+ * the length carries every caller with it.
+ */
+export function filterCodeInput(raw) {
+  let out = "";
+  for (const ch of normalizeCode(raw)) {
+    if (CODE_ALPHABET.includes(ch) && out.length < CODE_LENGTH) out += ch;
+  }
+  return out;
+}
+
 const toBase64Url = (bytes) => {
   let s = "";
   for (const b of bytes) s += String.fromCharCode(b);

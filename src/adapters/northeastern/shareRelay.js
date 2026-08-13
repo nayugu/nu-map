@@ -26,8 +26,29 @@
 import {
   randomCode, normalizeCode, deriveShareId, encryptForCode, decryptWithCode,
 } from "../../core/shareCrypto.js";
+import { isLoopbackHost } from "../../core/planShare.js";
 
-const SERVER = (import.meta.env.VITE_MCP_SERVER_URL ?? "http://localhost:27182")
+// The dev default follows the page's own host rather than hard-coding
+// localhost. Sharing is the one feature here that is inherently
+// cross-device: a QR is scanned by a phone, and on that phone "localhost"
+// means the phone. So when a developer serves over the LAN (vite --host)
+// and opens the app at 192.168.x.x, the relay has to be that same host or
+// the scan reaches an app that cannot talk to the relay holding its code.
+// Loopback stays loopback — that is the ordinary single-machine case — and
+// a configured VITE_MCP_SERVER_URL (every deployed build) always wins.
+const DEV_RELAY_PORT = 27182;
+
+const _devServer = (host) => `http://${host}:${DEV_RELAY_PORT}`;
+
+const _defaultServer = () => {
+  try {
+    const h = window.location.hostname;
+    if (h && !isLoopbackHost(h)) return _devServer(h);
+  } catch { /* no window — fall through */ }
+  return _devServer("localhost");
+};
+
+const SERVER = (import.meta.env.VITE_MCP_SERVER_URL ?? _defaultServer())
   .replace(/\/$/, "");
 const WS_SERVER = SERVER.replace(/^http/, "ws");
 

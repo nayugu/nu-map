@@ -14,6 +14,23 @@ import { TText } from "../context/TranslationContext.jsx";
 // calendar adapter, not here: a SemesterType may carry `altLabel` (a display override, e.g. NEU's
 // "Summer A") and `translateAs` (an engine disambiguation hint, e.g. "Summer half-term A"). This
 // component stays institution-agnostic — it just reads those optional fields from the port.
+/**
+ * Hand-written season names, by semester-type id.
+ *
+ * Per-word engine translation loses the context ("Fall" → 落下, "falling") and
+ * whole-phrase output reorders per locale, so every term type we know by name
+ * uses a written key instead: deterministic, and season-first in all eight
+ * locales. A type with no key here falls back to engine translation of the
+ * whole label. Lives beside `semLabelPhrases` because it answers the same
+ * question — how is a semester named — and is shared by the planner rows and
+ * the sample-plan preview so the two can never disagree.
+ */
+export const SEM_NAME_KEY = {
+  fall: "claude.sem.fall", spring: "claude.sem.spring",
+  sumA: "claude.sem.sum1", sumB: "claude.sem.sum2",
+  incoming: "claude.sem.incoming",
+};
+
 export function semLabelPhrases(typeId, year, calendar) {
   const st = calendar.getSemesterTypes().find(s => s.id === typeId);
   const base = st?.altLabel ?? st?.label ?? typeId;   // display text (source locale)

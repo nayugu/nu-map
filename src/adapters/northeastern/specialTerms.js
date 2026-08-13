@@ -23,6 +23,18 @@ const _types = [
       { id: "6mo", label: "6-month", duration: 6, weight: 2.0 },
     ],
     attributeGrants: ["EX"],
+    // A co-op block IS a registration for COOP 3945 (Co-op Work Experience) —
+    // students really do register for it, and 37 undergraduate programs name
+    // a COOP course as a requirement. Without this bridge a student with two
+    // co-ops on the board was told the experiential requirement was unmet.
+    //
+    // Only 3945, deliberately. Measured over the corpus: all 37 of those
+    // programs list 3945 among the options, so one key satisfies every one of
+    // them. The others are NOT interchangeable — 3946/3947 are half-time and
+    // 3947/3948 are abroad — and exactly one section (International Business's
+    // "International Experiential Learning") requires 3948 alone. An ordinary
+    // co-op must leave that one unmet rather than claim experience abroad.
+    courseGrants:    ["COOP3945"],
     occupiesSlot:    true,
     creditValue:     0,
   },

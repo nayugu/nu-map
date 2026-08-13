@@ -52,6 +52,75 @@ export function extractEdges(courseId, prereqs, coreqs) {
   return edges;
 }
 
+/**
+ * The courses that must move with `id`, because they must be taken together.
+ *
+ * Symmetric on purpose: 19 of the corpus's corequisite pairs are declared on
+ * one side only (ARCH 1310 names ARCH 1311; ARCH 1311 names nothing), and a
+ * one-way rule would carry the partner in one drag direction and abandon it in
+ * the other.
+ *
+ * ── The WHOLE group, not just the neighbours ───────────────────────
+ *
+ * This walks the connected component. An earlier version returned direct
+ * neighbours only, on the reasoning that nothing in the catalog needs more —
+ * that was wrong, and a fuzz run over random drops found it. Measured over the
+ * live catalog: 505 corequisite edges form 225 groups, of which 20 hold three
+ * courses (the CHEM lecture + lab + recitation triples), and three of those
+ * are CHAINS rather than triangles — GSND 5110–5111–5112, NRSG 2220–2221–2222
+ * and NRSG 4889–4996–4995, where the two ends do not name each other. Moving
+ * an end by its neighbours alone carried the middle and abandoned the far end,
+ * splitting a group that must be taken in one term.
+ *
+ * The walk is bounded by the data, not by a depth limit: the largest group in
+ * the corpus is 3, so at most two other cards travel. A limit would be a
+ * guess; the component is the actual answer to "what must stay together".
+ *
+ * Extracted because every drag handler needs it and each had its own copy of
+ * the same filter/map/dedupe. Copies are how the swap path came to carry the
+ * dragged card's partners and not the displaced card's — one of them was
+ * simply never written.
+ *
+ * @param {Array}  edges     all graph edges (`allEdges`)
+ * @param {string} id        the card being moved
+ * @param {string[]} exclude ids already spoken for by another group
+ */
+export function coreqPartnersOf(edges, id, exclude = []) {
+  if (!id) return [];
+
+  // One pass to index the corequisite edges, then a walk. Building the map per
+  // call keeps this a pure function of its arguments; drags are single events,
+  // not a hot loop.
+  const near = new Map();
+  const link = (a, b) => {
+    if (!near.has(a)) near.set(a, new Set());
+    near.get(a).add(b);
+  };
+  for (const e of edges ?? []) {
+    if (e?.type !== "corequisite" || !e.from || !e.to || e.from === e.to) continue;
+    link(e.from, e.to);
+    link(e.to, e.from);
+  }
+
+  const skip = new Set([id, ...exclude]);
+  const out = new Set();
+  const stack = [id];
+  const seen = new Set([id]);
+  while (stack.length) {
+    for (const other of near.get(stack.pop()) ?? []) {
+      if (seen.has(other)) continue;
+      seen.add(other);
+      // An excluded id is not carried, and the walk does not pass THROUGH it
+      // either: it belongs to another group that is already moving, and
+      // reaching further through it would drag that group's members along.
+      if (skip.has(other)) continue;
+      out.add(other);
+      stack.push(other);
+    }
+  }
+  return [...out];
+}
+
 // ── Offering helpers ─────────────────────────────────────────────
 
 /**

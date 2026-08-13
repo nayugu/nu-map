@@ -49,6 +49,40 @@ export function computeGrantedAttrs(specialTermPl, types, semIndex) {
 }
 
 /**
+ * Compute the Set of COURSE KEYS granted by all placed special terms.
+ *
+ * The sibling of computeGrantedAttrs, and it exists for the same reason: a
+ * work term is not only an attribute, it can be a registration. At NU a co-op
+ * block is a real enrolment in COOP 3945, and programs name that course as a
+ * requirement — so without this, a plan with two co-ops on the board reported
+ * its experiential requirement unmet.
+ *
+ * The result belongs in `placedSet` ONLY, never `realPlacedSet`: these keys
+ * satisfy requirements but are not courses the student dragged onto the grid,
+ * so they must not surface as General Electives. That is the same split the
+ * virtual substitution targets already use.
+ *
+ * Same timeline rule as computeGrantedAttrs — a co-op parked outside the
+ * cohort range grants nothing.
+ *
+ * @param {Object}   specialTermPl - { [id]: { typeId, semId, ... } }
+ * @param {Object[]} types         - specialTerms.types array from ISpecialTerms
+ * @param {Object}   [semIndex]    - SEM_INDEX (semId → ordinal)
+ * @returns {Set<string>}
+ */
+export function computeGrantedCourses(specialTermPl, types, semIndex) {
+  const granted  = new Set();
+  const typeById = Object.fromEntries((types ?? []).map(t => [t.id, t]));
+  for (const data of Object.values(specialTermPl ?? {})) {
+    if (!data?.semId) continue;
+    if (semIndex && semIndex[data.semId] === undefined) continue;
+    const type = typeById[data.typeId];
+    if (type?.courseGrants) type.courseGrants.forEach(k => granted.add(k));
+  }
+  return granted;
+}
+
+/**
  * Returns true when a special term placed in a semester of the given
  * weight would spill into the following semester.
  *

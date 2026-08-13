@@ -383,6 +383,11 @@ test("one module, and only one, knows where logos come from", async () => {
   // Any new surface must go through resolveCompanyLogo / <CompanyLogo>.
   const { readdirSync, readFileSync, statSync } = await import("node:fs");
   const { join } = await import("node:path");
+  // fileURLToPath, not URL.pathname: pathname is percent-encoded, so a
+  // checkout under a directory with a space in it ("05 Personal Projects")
+  // made this scan an ENOENT rather than an assertion. The guard has been
+  // passing by not running.
+  const { fileURLToPath } = await import("node:url");
   const SOURCES = /s2\/favicons|unavatar\.io|icon\.horse|logo\.clearbit|apple-touch-icon|wsrv\.nl/;
   const offenders = [];
   (function walk(dir) {
@@ -392,7 +397,7 @@ test("one module, and only one, knows where logos come from", async () => {
       if (!/\.(js|jsx)$/.test(name) || name === "companyLogo.js") continue;
       if (SOURCES.test(readFileSync(p, "utf8"))) offenders.push(p);
     }
-  })(new URL("../../src", import.meta.url).pathname);
+  })(fileURLToPath(new URL("../../src", import.meta.url)));
   assert.deepEqual(offenders, [], `logo sources leaked outside companyLogo.js:\n${offenders.join("\n")}`);
 });
 

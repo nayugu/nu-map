@@ -12,8 +12,9 @@
 import { createContext, useContext, useState, useRef, useEffect, useMemo, useCallback } from "react";
 import { NUM_YEARS } from "../core/constants.js";
 import { buildCohortSemesters, deriveSemMaps } from "../core/semGrid.js";
-import { extractEdges } from "../core/courseModel.js";
+import { extractEdges, coreqPartnersOf } from "../core/courseModel.js";
 import { evalPrereqTree } from "../core/prereqEval.js";
+import { pruneSemOrders } from "../core/planSchema.js";
 import { planConditions } from "../core/prereqConditions.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
 import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
@@ -27,13 +28,16 @@ import { takeConsumesSlot, yieldsCredit, satisfiesGate, enteredGPA, countsInGPA,
          effectiveGradeOfTakes } from "../core/gradeSystem.js";
 import { resolveTermByDuration, termSpans } from "../core/specialTermUtils.js";
 import { loadSaved, saveState, writeKey } from "../data/persistence.js";
-import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam } from "../core/planShare.js";
+import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam, getHashCodeParam } from "../core/planShare.js";
 import { LIBRARY_BUNDLE_KIND } from "../core/planSchema.js";
 import { buildLibraryBundle, parseLibraryBundle } from "../core/libraryBackup.js";
 import { tabTitle, FIRST_PLAN_NAME } from "../core/tabTitle.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
          siblingsInOrder } from "../core/planFolders.js";
+import { buildLibraryFile, parseLibraryFile, mergeLibrary,
+         libraryToArchive, archiveToLibrary } from "../core/planLibraryFile.js";
+import { writeZip, readZip } from "../core/zipFile.js";
 import { useLanguage }     from "./LanguageContext.jsx";
 import { usePort }         from "./InstitutionContext.jsx";
 import { IInstitution }   from "../ports/IInstitution.js";
@@ -515,12 +519,29 @@ export function PlannerProvider({ children }) {
   // "+ New plan" inside a folder; null means root.
   const [newPlanFolderId,     setNewPlanFolderId]     = useState(null);
   const [showPlanLibrary,     setShowPlanLibrary]     = useState(false);
+  // Arriving on a share-code link (a scanned QR) as a first-time visitor is
+  // the COMMON case for that link, and first-run onboarding is exactly wrong
+  // for it twice over: it covers the import confirm, and finishing it writes
+  // entry/grad/type onto the plan that was just imported, silently replacing
+  // the cohort the sender chose. The shared plan already carries all of it,
+  // so onboarding is deferred while the code is redeemed — and restored (see
+  // Header) if the code turns out to be dead, because then the visitor really
+  // is a first-timer with nothing.
+  //
+  // Read here, in a render-phase initializer, because Header strips the hash
+  // in an effect — by the time effects run the evidence is gone.
+  const [onboardingDeferredForShare] = useState(() => {
+    try {
+      return !!getHashCodeParam() && !localStorage.getItem(key("seen-cohort-setup"));
+    } catch { return false; }
+  });
   const [showCohortSetup,  setShowCohortSetup]  = useState(() => {
     // Pure read — the "seen" flag is written on completion (finishOnboarding),
     // not here, so a reload mid-setup re-shows it rather than stranding the user.
     // Append ?onboarding to the URL to force it during development.
     try {
       if (new URLSearchParams(window.location.search).has("onboarding")) return true;
+      if (getHashCodeParam()) return false;
       return !localStorage.getItem(key("seen-cohort-setup"));
     } catch { return false; }
   });
@@ -1478,11 +1499,7 @@ export function PlannerProvider({ children }) {
         if (selId && pl[selId]) {
           pushUndo();
           const fromSem = pl[selId];
-          const coreqPartners = [...new Set(
-            allEdgesRef.current
-              .filter(e2 => e2.type === "corequisite" && (e2.from === selId || e2.to === selId))
-              .map(e2 => e2.from === selId ? e2.to : e2.from)
-          )];
+          const coreqPartners = coreqPartnersOf(allEdgesRef.current, selId);
           setPlacements(p => {
             const n = { ...p };
             delete n[selId];
@@ -2047,12 +2064,7 @@ export function PlannerProvider({ children }) {
       if (fromSem === semId) { setDragInfo(null); return; }
       // Always move ALL coreq partners together with the dragged course
       // (repeat instances have no edges of their own, so extra takes move alone)
-      const coreqPartners = [...new Set(
-        allEdges
-          .filter(edge => edge.type === "corequisite" && (edge.from === dropId || edge.to === dropId))
-          .map(edge => edge.from === dropId ? edge.to : edge.from)
-          .filter(cid => cid !== dropId)
-      )];
+      const coreqPartners = coreqPartnersOf(allEdges, dropId);
       const allMoving = [dropId, ...coreqPartners];
       setPlacements(p => {
         const n = { ...p, [dropId]: semId };
@@ -2103,11 +2115,7 @@ export function PlannerProvider({ children }) {
     if (type === "specialTerm") {
       if (id) setSpecialTermPl(p => { const n = { ...p }; delete n[id]; return n; });
     } else {
-      const coreqPartners = [...new Set(
-        allEdges
-          .filter(e2 => e2.type === "corequisite" && (e2.from === id || e2.to === id))
-          .map(e2 => e2.from === id ? e2.to : e2.from)
-      )];
+      const coreqPartners = coreqPartnersOf(allEdges, id);
       setPlacements(p => {
         const n = { ...p };
         delete n[id];
@@ -2131,44 +2139,35 @@ export function PlannerProvider({ children }) {
     // Placing out means "I already have credit for this course". There is no
     // course yet, so the gesture has no meaning — ignored rather than half-done.
     if (isReservationId(dragInfo?.id)) { setDragInfo(null); return; }
-    console.log('onDropPlacedOut called with:', dragInfo);
     try {
       if (!dragInfo || dragInfo.type !== "course") return;
       pushUndo();
       const { id, fromSem } = dragInfo;
-
-      console.log('onDropPlacedOut called with:', { id, fromSem });
 
       // Add to placedOut set
       setPlacedOut(prev => new Set([...prev, id]));
 
       // If the course was placed in a semester, remove it from placements
       if (placements[id]) {
-        const coreqPartners = [...new Set(
-          allEdges
-            .filter(edge => edge.type === "corequisite" && (edge.from === id || edge.to === id))
-            .map(edge => edge.from === id ? edge.to : edge.from)
-        )];
-        console.log('Coreq partners:', coreqPartners);
+        // Placing out a lecture unschedules its recitation: the pair is only
+        // meaningful as a pair, and leaving the partner alone on the board
+        // would be a card with nothing it belongs to.
+        const coreqPartners = coreqPartnersOf(allEdges, id);
 
         setPlacements(p => {
           const n = { ...p };
           delete n[id];
           coreqPartners.forEach(cid => delete n[cid]);
-          console.log('New placements:', n);
           return n;
         });
         setSemOrders(p => {
           const next = { ...p };
           const toClean = new Set([fromSem, ...coreqPartners.map(cid => placements[cid])].filter(Boolean));
-          console.log('Cleaning semesters:', toClean);
           toClean.forEach(sid => {
             next[sid] = (next[sid] || []).filter(cid => cid !== id && !coreqPartners.includes(cid));
           });
           return next;
         });
-      } else {
-        console.log('Course was not placed (from bank)');
       }
 
       setPalette(prev => prev.filter(cid => cid !== id));
@@ -2187,12 +2186,7 @@ export function PlannerProvider({ children }) {
     const { id, fromSem } = dragInfo;
     if (palette.includes(id)) { setDragInfo(null); return; }
     pushUndo();
-    const coreqPartners = [...new Set(
-      allEdges
-        .filter(e2 => e2.type === "corequisite" && (e2.from === id || e2.to === id))
-        .map(e2 => e2.from === id ? e2.to : e2.from)
-        .filter(cid => cid !== id)
-    )];
+    const coreqPartners = coreqPartnersOf(allEdges, id);
     const allMoving = [id, ...coreqPartners.filter(cid => !palette.includes(cid))];
     // Remove from semester placements & orders
     const toCleanSems = new Set([fromSem, ...allMoving.map(cid => placements[cid])].filter(Boolean));
@@ -2252,15 +2246,16 @@ export function PlannerProvider({ children }) {
     // half of the same family was a silent no-op. One rule now covers both.
     const noSeat = !isReservationId(dragId) && placements[dragId] == null;
     if (isReservationId(dragId) || isReservationId(targetId) || sameSemReorder || noSeat) {
-      const coreqPartners = [...new Set(
-        allEdges
-          .filter(e2 => e2.type === "corequisite" && (e2.from === dragId || e2.to === dragId))
-          .map(e2 => (e2.from === dragId ? e2.to : e2.from))
-      )];
       const next = resolveDropOnCard(
         { placements, reservations, semOrders },
         { dragId, targetId, targetSemId },
-        { gridPlacements, gridCourseMap, coreqPartners },
+        {
+          gridPlacements, gridCourseMap,
+          coreqPartners: coreqPartnersOf(allEdges, dragId),
+          // The resolver asks about the DISPLACED card too, so a swap through
+          // this door carries both sides' corequisites.
+          partnersOf: (id) => coreqPartnersOf(allEdges, id),
+        },
       );
       if (next) {
         setPlacements(next.placements);
@@ -2275,13 +2270,25 @@ export function PlannerProvider({ children }) {
     const targetSemType = SEMESTERS.find(s => s.id === targetSemId)?.type;
 
     // Always carry all coreq partners of the dragged course
-    const coreqPartners = [...new Set(
-      allEdges
-        .filter(e2 => e2.type === "corequisite" && (e2.from === dragId || e2.to === dragId))
-        .map(e2 => e2.from === dragId ? e2.to : e2.from)
-        .filter(cid => cid !== dragId)
-    )];
+    const coreqPartners = coreqPartnersOf(allEdges, dragId);
     const allMoving = [dragId, ...coreqPartners];
+
+    // ── And the DISPLACED card carries its own ──────────────────────
+    //
+    // Dropping onto an occupied card in another term is a SWAP: the target
+    // goes back to the semester the dragged card left. It was the only card
+    // in the app that moved semester without its corequisites — so dragging
+    // CS 3500 onto CS 3000 sent CS 3000 across the board and left CS 3001
+    // behind, a coreq violation created by the very rule that exists to
+    // prevent them. Every other path moves one card in one direction, which
+    // is why this hid: the bug needed a target that was both occupied and in
+    // a different term.
+    //
+    // The dragged card's group wins any overlap. If the two cards are each
+    // other's partners they are already in `allMoving` and must not be split
+    // apart by being sent in opposite directions.
+    const targetPartners = coreqPartnersOf(allEdges, targetId, allMoving);
+    const allSwapped = [targetId, ...targetPartners];
 
     if (targetSemType === "special") {
       // Append to special/incoming sem — carry coreqs along
@@ -2308,18 +2315,27 @@ export function PlannerProvider({ children }) {
       setPlacements(p => {
         const n = { ...p, [dragId]: targetSemId, [targetId]: fromSem };
         coreqPartners.forEach(cid => { n[cid] = targetSemId; });
+        // After the dragged group, so an id claimed by both lands with the
+        // card that was actually dragged.
+        targetPartners.forEach(cid => { n[cid] = fromSem; });
         return n;
       });
       setSemOrders(prev => {
         const next = { ...prev };
-        // nf: remove dragId+coreqs, insert targetId where dragId was
-        const nf = fromOrder.filter(c => !allMoving.includes(c));
-        nf.splice(Math.min(fi, nf.length), 0, targetId);
-        // nt: remove targetId, insert dragId+coreqs where targetId was
-        const nt = toOrder.filter(c => c !== targetId);
+        // nf: remove dragId+coreqs, insert targetId+its coreqs where dragId was
+        const nf = fromOrder.filter(c => !allMoving.includes(c) && !allSwapped.includes(c));
+        nf.splice(Math.min(fi, nf.length), 0, ...allSwapped);
+        // nt: remove targetId+its coreqs, insert dragId+coreqs where it was
+        const nt = toOrder.filter(c => !allSwapped.includes(c));
         nt.splice(Math.min(ti, nt.length), 0, dragId, ...coreqPartners);
-        // Remove coreqs from any other sems they were in
+        // Remove either group from any OTHER sem it was in — a partner does
+        // not have to have been sitting with the card it belongs to.
         coreqPartners.forEach(cid => {
+          const cOld = placements[cid];
+          if (cOld && cOld !== fromSem && cOld !== targetSemId)
+            next[cOld] = (next[cOld] || []).filter(x => x !== cid);
+        });
+        targetPartners.forEach(cid => {
           const cOld = placements[cid];
           if (cOld && cOld !== fromSem && cOld !== targetSemId)
             next[cOld] = (next[cOld] || []).filter(x => x !== cid);
@@ -3091,8 +3107,16 @@ export function PlannerProvider({ children }) {
     });
   }, [studentType, activePlanId]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Capture full plan state as a serializable object
-  const captureCurrentPlan = () => ({
+  // Capture full plan state as a serializable object.
+  //
+  // Everything that leaves this plan goes through here — the localStorage
+  // slot, the exported file, the zip archive, the share link — so it is the
+  // one place worth tidying at. `pruneSemOrders` drops term-order entries
+  // naming cards the plan no longer holds: invisible in the app, but they
+  // accumulate silently and ride into every file as references to nothing.
+  // It leaves cards parked outside the timeline alone, on purpose — see the
+  // note on the helper.
+  const captureCurrentPlan = () => pruneSemOrders({
     version: 1,
     exported: new Date().toISOString(),
     entSem: planEntSem, entYear: planEntYear,
@@ -3334,6 +3358,23 @@ export function PlannerProvider({ children }) {
     setPlans(prev => prev.map(p => p.id === id ? { ...p, name } : p));
   };
 
+  // Associate a plan with a student (the advisee it belongs to), or clear the
+  // association. Index-only, exactly like `parentId` and `name`: it identifies
+  // and files the plan in the library, it is NOT part of the plan's academic
+  // snapshot, and it must never leave the browser — a share link encodes
+  // plan-data via the registry and never the index, so an advisee's name cannot
+  // ride along by construction. An empty value drops the field entirely, so an
+  // unassigned plan is a record with no `student` key (the same "absent, not
+  // empty" shape `parentId` uses for "at root").
+  const setPlanStudent = (id, student) => {
+    const clean = (student ?? "").trim();
+    setPlans(prev => prev.map(p => {
+      if (p.id !== id) return p;
+      if (!clean) { const { student: _drop, ...rest } = p; return rest; }
+      return { ...p, student: clean };
+    }));
+  };
+
   // Auto-save active plan periodically (on every persistence save)
   useEffect(() => {
     if (isFirstRender.current) {
@@ -3411,7 +3452,7 @@ export function PlannerProvider({ children }) {
    * to stop a leak has to hold across every plan in the bundle, not just the
    * open one.
    */
-  const exportLibraryJSON = () => {
+  const exportLibraryBackupJSON = () => {
     saveCurrentPlanToSlot();
     // The ACTIVE plan is read from live state, not from its slot, so an export
     // taken mid-edit contains the edit rather than the last autosave.
@@ -3434,6 +3475,156 @@ export function PlannerProvider({ children }) {
       `${safeFilePart(institution.shortName ?? institution.name, 'Map')} Map Library - ${dateStr}.json`
     );
     return { plans: bundle.plans.length, folders: bundle.folders.length, skipped: skipped.length };
+  };
+
+  // ── Library (multi-plan) export / import ─────────────────────
+  //
+  // The single-plan door above and this one make the SAME privacy promises:
+  // both run the snapshot through the same two toggles. A bulk file is the
+  // heavier artifact — many advisees' names and grades in one place — so it
+  // being quietly more permissive than the single export is exactly the
+  // failure to avoid.
+  const libraryRedact = (d) => {
+    const out = { ...d };
+    if (privateGrades) delete out.grades;
+    if (privateCoop) out.specialTermPl = redactCoopDetails(out.specialTermPl);
+    return out;
+  };
+
+  /** The saved snapshot for a plan; live capture for the one being edited. */
+  const planSnapshot = (id) => {
+    if (id === activePlanId) return captureCurrentPlan();
+    try {
+      const raw = localStorage.getItem(key(`plan-data-${id}`));
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  };
+
+  /** @param {string[]|null} ids selected nodes, or null for the whole library */
+  const exportLibraryJSON = (ids = null) => {
+    saveCurrentPlanToSlot();
+    const doc = buildLibraryFile(planTree, ids, planSnapshot, { redact: libraryRedact });
+    const blob = new Blob([JSON.stringify(doc, null, 2)], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const label = ids == null ? "Library" : `${doc.plans.length} plans`;
+    a.download = `${label} - ${institution.shortName ?? institution.name} Map - ${dateStr}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    return { plans: doc.plans.length, folders: doc.folders.length };
+  };
+
+  /**
+   * The same export as an ARCHIVE: one ordinary single-plan file per plan,
+   * folders as directories. For browsing the library outside the app and for
+   * pulling one plan out to hand to the student it belongs to — each entry
+   * opens with the ordinary Load.
+   *
+   * @param {string[]|null} ids
+   */
+  const exportLibraryZip = (ids = null) => {
+    saveCurrentPlanToSlot();
+    const doc = buildLibraryFile(planTree, ids, planSnapshot, { redact: libraryRedact });
+    const enc = new TextEncoder();
+    const bytes = writeZip(libraryToArchive(doc).map(e => ({
+      path: e.path, data: enc.encode(JSON.stringify(e.json, null, 2)),
+    })));
+    const blob = new Blob([bytes], { type: "application/zip" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    const dateStr = new Date().toISOString().slice(0, 10);
+    const label = ids == null ? "Library" : `${doc.plans.length} plans`;
+    a.download = `${label} - ${institution.shortName ?? institution.name} Map - ${dateStr}.zip`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+    return { plans: doc.plans.length, folders: doc.folders.length };
+  };
+
+  /** Read one dropped file into an incoming {folders, plans}, whatever it is. */
+  const readOneImport = async (file) => {
+    const isZip = /\.zip$/i.test(file.name) || file.type === "application/zip";
+    if (isZip) {
+      let entries;
+      try {
+        entries = await readZip(new Uint8Array(await file.arrayBuffer()));
+      } catch (e) {
+        return { ok: false, reason: /unsafe/.test(String(e)) ? "unsafe" : "notzip" };
+      }
+      const dec = new TextDecoder();
+      return archiveToLibrary(entries.map(e => ({ path: e.path, text: dec.decode(e.data) })));
+    }
+    const text = await file.text();
+    const asLibrary = parseLibraryFile(text);
+    if (asLibrary.ok) return asLibrary;
+    // Not a library document — a plain single-plan file is the other thing a
+    // user can reasonably hand us, and selecting a pile of them is exactly how
+    // an unzipped export arrives back.
+    if (asLibrary.reason === "kind") {
+      try {
+        const d = JSON.parse(text);
+        if (d && typeof d === "object" && d.version === 1) {
+          const { planName, ...rest } = d;
+          return { ok: true, folders: [], plans: [{
+            id: "single", name: planName || file.name.replace(/\.json$/i, "") || "Plan",
+            parentId: null, studentType: d.studentType === "graduate" ? "graduate" : "undergrad",
+            data: rest,
+          }] };
+        }
+      } catch { /* falls through to the reason below */ }
+    }
+    return { ok: false, reason: asLibrary.reason };
+  };
+
+  /**
+   * Import any mix of files — a .zip, library documents, loose single-plan
+   * files — as ONE merge under one dated folder.
+   *
+   * Merging them together rather than one import per file is what keeps the
+   * undo honest: selecting forty plans is a single act to the user, so it is a
+   * single ⌘Z.
+   *
+   * @returns {Promise<{ok: true, plans, folders, atRoot, failed}|{ok: false, reason}>}
+   */
+  const importLibraryFiles = async (files, folderName) => {
+    const list = [...(files ?? [])];
+    if (!list.length) return { ok: false, reason: "read" };
+
+    const folders = [];
+    const plans = [];
+    let failed = 0;
+    let lastReason = "read";
+    for (let i = 0; i < list.length; i++) {
+      const got = await readOneImport(list[i]);
+      if (!got.ok) { failed++; lastReason = got.reason; continue; }
+      // Each file owns its own id space; namespace them so two files that
+      // both call a folder "f1" cannot collide when merged together.
+      const ns = (id) => `${i}:${id}`;
+      for (const f of got.folders) folders.push({ ...f, id: ns(f.id), parentId: f.parentId == null ? null : ns(f.parentId) });
+      for (const p of got.plans)   plans.push({ ...p, id: ns(p.id), parentId: p.parentId == null ? null : ns(p.parentId) });
+    }
+    if (!plans.length) return { ok: false, reason: lastReason };
+
+    try {
+      saveCurrentPlanToSlot();
+      let n = 0;
+      const newId = () => `imp_${Date.now().toString(36)}${(n++).toString(36)}${Math.random().toString(36).slice(2, 6)}`;
+      const m = mergeLibrary({ folders, plans }, newId, folderName);
+      for (const s of m.slots) {
+        localStorage.setItem(key(`plan-data-${s.id}`), JSON.stringify(s.data));
+      }
+      pushFolderHistory();
+      setFolders(prev => [...prev, ...(m.folder ? [m.folder] : []), ...m.folders]);
+      setPlans(prev => [...prev, ...m.plans]);
+      if (m.folder) setFolderOpen(m.folder.id, true);
+      return { ok: true, plans: m.plans.length, folders: m.folders.length, atRoot: m.atRoot, failed };
+    } catch (err) {
+      return { ok: false, reason: /quota/i.test(String(err)) ? "quota" : "write" };
+    }
   };
 
   const applyPlanData = (d) => {
@@ -4209,7 +4400,7 @@ export function PlannerProvider({ children }) {
     setBankSearch, setBankSort, setBankTab, setBankFilters, setBankWidth, setShowSubjectKeys,
     setCollapsedSubs,
     setShowDisclaimer, setShowSettings,
-    showCohortSetup, setShowCohortSetup, finishOnboarding,
+    showCohortSetup, setShowCohortSetup, onboardingDeferredForShare, finishOnboarding,
     showTour, setShowTour,
     setPersistEnabled,
     setOfferedOverrides,
@@ -4221,16 +4412,25 @@ export function PlannerProvider({ children }) {
     setPlacements, setSpecialTermPl, setSemOrders, setCurrentSemId,
     setEntSem, setEntYear, setGradSem, setGradYear,
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
-    // Whole-library backup — the only real defence against cleared site data,
-    // since nothing server-side holds a copy of a plan.
-    exportLibraryJSON, importLibraryJSON,
+    // ── Two library exports, deliberately distinct ────────────────
+    //
+    // These arrived from two directions and collided on one name. `exportLibraryJSON`
+    // (selective, `ids`-driven, returns `{plans, folders}`) is the one on main and keeps the
+    // name; the whole-library BACKUP is `exportLibraryBackupJSON` — it honours
+    // `privateGrades`/`privateCoop`, reports a `skipped` count, and is the only defence
+    // against cleared site data, since nothing server-side holds a copy of a plan.
+    //
+    // Renamed rather than resolved by picking a winner: both have live callers reading
+    // different return shapes, so choosing one would have silently deleted a feature.
+    exportLibraryJSON, exportLibraryZip, importLibraryFiles,
+    exportLibraryBackupJSON, importLibraryJSON,
     // Trash: a delete is recoverable for TRASH_TTL, across reloads.
     trashedPlans, restoreFromTrash, purgeFromTrash, emptyTrash,
     trashTtlMs: TRASH_TTL_MS,
     // Storage alarm: a write that failed, so the user learns before a reload.
     storageAlarm, dismissStorageAlarm,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
-    plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
+    plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan, setPlanStudent,
     // Folders — structure, view state, and the mutations that respect both.
     folders, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort,

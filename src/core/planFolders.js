@@ -34,8 +34,9 @@
  *
  * ## Order is explicit, never implicit
  *
- * Rows sort by name (natural, locale-aware), by recency, or by an explicit
- * per-record `order` number ('manual'). What is still forbidden is relying on
+ * Rows sort by name (natural, locale-aware), by recency, by the associated
+ * student, or by an explicit per-record `order` number ('manual'). What is
+ * still forbidden is relying on
  * ARRAY POSITION: `plans` is ONE flat array interleaving every folder's
  * children, so a plan dropped into a folder would land wherever the global
  * array implied, which is effectively random. `order` keeps the rule intact —
@@ -372,6 +373,11 @@ export function buildSearchIndex(tree, { slotLabel = null } = {}) {
     const parentId = tree.parentOf.get(id) ?? null;
     const path = folderPath(tree, parentId, { sep: " " });
     const extra = !isFolder && slotLabel ? slotLabel(id) : "";
+    // The advisee a plan belongs to is index-only (see setPlanStudent), so it
+    // is on the record here and needs no slot read. Searchable so an advisor
+    // can type a student's name and find every plan filed to them, wherever
+    // those plans live in the folder tree.
+    const student = !isFolder ? (rec.student ?? "") : "";
     const ancestors = [];
     for (let a = parentId; a != null; a = tree.parentOf.get(a) ?? null) {
       const anc = tree.byId.get(a);
@@ -380,7 +386,7 @@ export function buildSearchIndex(tree, { slotLabel = null } = {}) {
     }
     index.set(id, {
       kind: isFolder ? "folder" : "plan",
-      hay: normalizeSearchText(`${rec.name ?? ""} ${extra} ${path}`),
+      hay: normalizeSearchText(`${rec.name ?? ""} ${extra} ${student} ${path}`),
       // Path matching needs the segments kept apart; `hay` has them mashed
       // together and cannot tell "Fall/Jane" from "Jane/Fall".
       ancestors,
@@ -513,6 +519,19 @@ function comparators(sortMode, locale) {
   if (sortMode === "manual") return { byName: byOrder, plansCmp: byOrder };
   // Otherwise folders always sort by name — "recently opened" is meaningless
   // for a container, and a folder that jumps around is disorienting.
+  if (sortMode === "student") {
+    // Every plan belonging to one advisee lands together, and the scenario name
+    // orders them within that run. Unassigned plans sort LAST rather than under
+    // an empty heading: an advisor sorting by student is looking for the named
+    // ones, and interleaving scratch plans by name would bury them.
+    const plansCmp = (a, b) => {
+      const as = a.student ?? "";
+      const bs = b.student ?? "";
+      if (!as !== !bs) return as ? -1 : 1;
+      return collator.compare(as, bs) || byName(a, b);
+    };
+    return { byName, plansCmp };
+  }
   const plansCmp = sortMode === "recent"
     ? (a, b) => (b.lastOpened ?? 0) - (a.lastOpened ?? 0) || byName(a, b)
     : byName;
@@ -525,7 +544,7 @@ function comparators(sortMode, locale) {
  * @param {object} tree from buildTree
  * @param {object} [opts]
  * @param {Set<string>} [opts.open] persisted expansion; ignored while searching
- * @param {'name'|'recent'|'manual'} [opts.sortMode]
+ * @param {'name'|'recent'|'manual'|'student'} [opts.sortMode]
  * @param {Set<string>|null} [opts.matches] from matchIds
  * @param {string} [opts.locale]
  * @returns {Array<{kind:'folder'|'plan', id:string, depth:number, item:object,

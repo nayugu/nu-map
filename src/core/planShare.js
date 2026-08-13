@@ -1,6 +1,7 @@
 // URL-based plan sharing via gzip + base64url (no external deps, uses browser CompressionStream).
 
 import { SHARE_KEYS, SHARE_KEYS_R, SHARE_INNER_KEYS } from './planSchema.js';
+import { CODE_ALPHABET, CODE_LENGTH } from './shareCrypto.js';
 
 async function _compress(str) {
   const bytes = new TextEncoder().encode(str);
@@ -138,4 +139,89 @@ export function getHashPlanParam() {
   const hash = window.location.hash;
   if (!hash.startsWith('#plan=')) return null;
   return hash.slice('#plan='.length);
+}
+
+// ── Share-by-code links (#c=) ──────────────────────────────────────
+// A snapshot link (#plan=) carries the whole plan and lives forever. A
+// code link carries only the six characters, so it inherits everything
+// the code already is: single use, ten minutes, cancellable, and opaque
+// to the relay (the code IS the decryption key — see shareCrypto.js).
+// This is what the QR encodes; nothing else is small enough to want to.
+
+// A QR is scanned by a DIFFERENT device, so the only origin that can ever
+// be in it is one that device can reach. Loopback cannot be: "localhost"
+// on a phone means the phone, so a localhost QR resolves to nothing at all
+// — it does not even fail informatively. That is the one case that has to
+// be overridden, and it is overridden with the canonical origin declared
+// in index.html (https://numap.app).
+//
+// Everything else keeps window.location.origin, deliberately. An earlier
+// version of this function preferred canonical everywhere, on the reasoning
+// that a preview build's pages.dev / github.io origin "would 404" — that
+// was simply wrong, those origins serve the whole app. Worse, overriding
+// them is actively harmful: a preview deploy is configured against its own
+// relay, so rewriting its links to numap.app would send the recipient to an
+// app talking to a DIFFERENT relay, which cannot hold the code. The origin
+// that minted a code is the origin whose relay has it, so that is the
+// origin the QR must name.
+//
+// The residual honest gap is dev-over-loopback: the code is parked on the
+// localhost relay, and the canonical link we fall back to reaches
+// production, which has never seen it. The recipient gets "Code not found
+// or expired" — the correct message, and a far better failure than a URL
+// that cannot load. A developer who wants a genuinely scannable dev QR
+// serves over the LAN (vite --host) and points VITE_MCP_SERVER_URL at the
+// same host; then origin is a LAN address, this returns it, and the whole
+// flow works end to end.
+// Exported because the share relay needs exactly the same judgement for
+// exactly the same reason (its dev default follows the page's host), and
+// two copies of a rule like this drift — the first draft of them already
+// disagreed about `127.x` and `0.0.0.0`.
+// `127.` rather than `127.0.0.1` because the whole /8 is loopback and the
+// shorthands resolve there too (http://127.1 is a real thing).
+const _LOOPBACK = new Set(['localhost', '0.0.0.0', '::1', '[::1]', '::', '[::]']);
+
+export function isLoopbackHost(hostname) {
+  const h = String(hostname ?? '').toLowerCase().replace(/\.$/, '');
+  return _LOOPBACK.has(h) || h.endsWith('.localhost') || /^127\./.test(h);
+}
+
+function _shareOrigin() {
+  let origin, hostname;
+  try {
+    origin = window.location.origin;
+    hostname = window.location.hostname;
+  } catch { /* no window (tests) — canonical is all we have */ }
+
+  if (origin && !isLoopbackHost(hostname)) return origin;
+
+  try {
+    const href = document.querySelector('link[rel="canonical"]')?.href;
+    if (href) return new URL(href).origin;
+  } catch { /* no DOM, or a malformed canonical — fall through */ }
+
+  return origin ?? '';
+}
+
+// The whole wire format of a code link, in one place. Not exported —
+// nothing outside this module should be assembling or parsing the hash
+// itself; buildCodeUrl and getHashCodeParam are the seam.
+const CODE_HASH_PREFIX = '#c=';
+
+export function buildCodeUrl(code) {
+  return `${_shareOrigin()}/${CODE_HASH_PREFIX}${code}`;
+}
+
+// Returns the code only if it is one this app could have produced. The
+// claim path runs a 300k-iteration PBKDF2 over whatever comes back, so
+// junk in the hash is rejected here rather than paid for in key
+// derivation. Case is normalised; the alphabet excludes 0/O/1/I/L, so a
+// hand-typed "l" is a miss, not a silent near-match.
+export function getHashCodeParam() {
+  const hash = window.location.hash;
+  if (!hash.startsWith(CODE_HASH_PREFIX)) return null;
+  const code = hash.slice(CODE_HASH_PREFIX.length).toUpperCase();
+  if (code.length !== CODE_LENGTH) return null;
+  for (const ch of code) if (!CODE_ALPHABET.includes(ch)) return null;
+  return code;
 }
