@@ -1,0 +1,106 @@
+# https://www.khoury.northeastern.edu/programs/plusone-program-with-ms-in-cybersecurity/
+# fetched 2026-08-13
+
+PlusOne Program with MS in Cybersecurity - Khoury College of Computer Sciences Khoury College of Computer Sciences Open Search Modal &times;
+Close this dialog window Search What are you looking for?
+Search About Column one Mission and Vision Oath for Computing Professionals Belonging at Khoury College Global Campuses Khoury College Facilities Column two Life at Khoury College Khoury News Events History of Khoury College Awards Featured Dean’s Welcome To Our Community Join us in making a shared vision of computer science for everyone a powerful reality.
+Why are students choosing Khoury College?
+Nearly 100% of new Northeastern graduates are working or in master's programs within nine months.
+Here are five more reasons Khoury students pick us.
+Education Undergraduate Undergraduate Programs Combined Majors PlusOne Accelerated Master's Programs Co-ops and Internships Research Clubs and Organizations Graduate PhD Programs Master’s Programs and Graduate Certificates Align Programs Co-ops and Internships Research Clubs and Organizations Featured Khoury College:
+Leading in AI innovation and education In the age of AI, why pursue a CS degree?
+From our AI-forward educational ethos to cutting-edge AI research, there actually has never been a better time to join the field.
+Learn more.
+Experiential Learning It's the Northeastern advantage:
+Learn about the many experiential learning opportunities that set our students apart.
+Global Campus Experience Study, work, and research at one of our nine network campuses as well as at a wide range of locations on seven continents.
+Research Column one Research at Khoury College Research Areas Research Spaces Institutes and Centers Column two Labs and Groups Research Honors and Awards Research Impacts Khoury College at Conferences Featured The partnership that fuels America From our smartphones to the milk we drink, the partnership between government investment, academic research, and industry innovation has driven decades of technological progress and economic growth for the US.
+Learn how Khoury College is committed to playing a key role.
+CHI 2026:
+Khoury researchers set new publishing benchmark Khoury researchers are heading to this year's CHI conference in Barcelona with a college-record 41 accepted works, 53 contributors, and five best paper honorable mentions.
+Learn more from Khoury News.
+Partners Column one Partnering for Change Industry Partnerships:
+Engaging Students Industry Partnerships:
+Collaborating on Research Community Partnerships Featured Hiring a co-op student:
+What to know For more than 500 partners across our global network, co-op students bring fresh perspectives and make an immediate impact.
+Learn more.
+Co-op partners see strong demand for recent CS grads Companies like Dell, HubSpot, and Notability are leaning into early-career hiring — and seeing real results.
+With AI making engineers more productive than ever, new hires are contributing immediately, bringing fresh perspectives, and helping companies build better products.
+Verizon Smart Campus Competition Verizon partnered with Northeastern to challenge students to design real-world solutions using 5G and emerging technologies.
+Explore how the winning teams turned that challenge into feasible, engineering-driven innovations that drew on disciplines from across the campus.
+People Column one All People Leadership Tenured/Tenure-Track Faculty Teaching Faculty Affiliated Faculty Column two Research Faculty Co-op Faculty Staff Post Docs PhD Students Featured Careers at Khoury College View open roles across our global campuses.
+Resources For Prospective Undergraduate Students Master’s Students Align Students PhD Students Faculty Current Undergraduate Students Master’s and Certificate Students Align Students PhD Students Community Alumni Donors Federal Landscape:
+Frequently Asked Questions Contact Visit Apply Donate Instagram TikTok Reddit Linkedin YouTube Bluesky Khoury College X Page Threads Facebook Home | Undergraduate Programs | PlusOne Program with MS in Cybersecurity PlusOne Program with MS in Cybersecurity Our PlusOne Accelerated Master’s programs empower motivated students like you to start earning your master’s degree while pursuing your undergraduate education.
+In the PlusOne Program with MS in Cybersecurity, you can apply up to four graduate-level courses to both your BS and MS in cybersecurity, reducing the time it takes to complete a master’s from two years to one.
+Get a head start on a successful career as you build the skills you need to ensure the safety and reliability of digital environments.
+Program details:
+PlusOne with MS in Cybersecurity Who is eligible for PlusOne with MS in Cybersecurity?
+Who is eligible for PlusOne with MS in Cybersecurity?
+Students must be enrolled in the cybersecurity major or a cybersecurity combined major to be in this pathway.
+Students in combined cybersecurity majors with Khoury College are eligible regardless of their home college affiliation.
+Students may complete up to four graduate (master’s) courses as an undergraduate.
+Only one graduate course may be completed per semester.
+The remaining required courses must be completed as a master’s student (post-bachelor’s graduation).
+When do PlusOne students start taking graduate courses?
+When do PlusOne students start taking graduate courses?
+Minimum 3.0 GPA required to request graduate course enrollment.
+First-year students are not permitted to take their first graduate-level course during the summer.
+Plan to take your first graduate-level course in the fall semester of your second year at the earliest.
+Students request enrollment in graduate-level courses via a survey that is emailed before registration periods each semester.
+What are the admission requirements?
+What are the admission requirements?
+Interested students should meet with their advisor no later than their third semester to discuss how the PlusOne pathway will fit into their academic plan and when they plan to complete their first graduate-level course.
+Admission requires:
+Minimum 3.0 GPA, both cumulative and within the major Successful completion of a graduate-level Khoury College course Submission of the online PlusOne Application form:
+Academic advisors will share the online application form with eligible students Application form should only be submitted after the above requirements are met Admission into the PlusOne program does not guarantee admission into the master’s program upon graduation at the bachelor’s level What are the progression requirements?
+What are the progression requirements?
+To continue in the PlusOne program, students must maintain a minimum 3.0 GPA and earn a cumulative 3.0 GPA in all graduate-level CS courses.
+Students admitted into the PlusOne program maintain undergraduate standing and must continue to request admission into graduate courses each term.
+Undergraduates are limited to one graduate course per semester, with a limit of four graduate courses (including withdrawals) total during the undergraduate degree.
+Placement is not guaranteed.
+Students should confer regularly with their undergraduate academic advisor to ensure proper planning.
+Students entering a graduate program via the PlusOne pathway are not eligible for the Double Husky Scholarship.
+If you have additional questions related to tuition or scholarship eligibility, please reach out to Student Financial Services .
+Graduate replacements for undergraduate courses Please note that the table of classes is not intended to be comprehensive.
+Check the course catalog for course descriptions .
+Important considerations for course selection:
+A student may not take the graduate-level version of a course if they have already completed the undergraduate version.
+(Example:
+If you have already completed CY 4740, a request to take CY 6740 will be denied.) If you do not meet the prerequisites for the undergraduate version of the course, you are not eligible for the graduate version.
+(Example:
+The prerequisite for CS 3650:
+Computer Systems is CS 3100 or CS 3500 or DS 3500.
+You must adhere to this same prerequisite requirement if requesting a seat in CS 5600, which is the graduate-level version of CS 3650.) Undergraduate Course Requirement Graduate Replacement Cybersecurity Elective CY 5010 Cybersecurity Principles and Practices CY 4170 The Law, Ethics, and Policy of Data and Digital Technologies CY 5240 Cyberlaw:
+Privacy Ethics and Digital Rights Cybersecurity Elective CY 5200 Security Risk Management and Assessment Cybersecurity Elective CY 5210 Information System Forensics CY 4740 Network Security CY 6740 Network Security CY 4770 Cryptography CY 5120 Applied Cryptography CS 3650 Computer Systems CS 5600 Computer Systems CS 4500 Software Development OR CS 4530 Fundamentals of Software Engineering CS 5500 Foundations of Software Engineering CS 3700 Networks and Distributed Systems CS 5700 Fundamentals of Computer Networking CS 4700 Network Fundamentals CS 5700 Fundamentals of Computer Networking CY 4760 Security of Wireless and Mobile Systems CY 6760 Wireless and Mobile Systems Security Offered at this Northeastern campus (for both undergraduate and graduate studies) Boston Located in the heart of Boston, Northeastern’s oldest campus is home to a vibrant community of students, researchers, and faculty working across disciplines to build a better world through CS.
+Explore Boston's campus PlusOne student FAQs Do I complete my bachelor's and master's degrees at the same time?
+Do I complete my bachelor's and master's degrees at the same time?
+No.
+As an undergraduate, you can double-count up to four graduate-level courses toward both degrees.
+You must complete your bachelor’s degree first, then finish the final year of the master’s degree afterward.
+Do I have to be a full-time graduate student to participate in PlusOne?
+Do I have to be a full-time graduate student to participate in PlusOne?
+Yes.
+Full-time status at the graduate level means two graduate courses per fall or spring semester.
+Do I have the option to complete a co-op as a graduate student?
+Do I have the option to complete a co-op as a graduate student?
+Yes, though it’s optional.
+Keep in mind that adding a co-op will extend your time to complete the MS degree.
+If you’re interested, connect with the graduate co-op team as early as possible after starting the MS program to review requirements and get access to NUworks at the graduate level.
+You’ll need at least one full-time semester of in-progress graduate coursework (8 semester hours) before you can conduct a full co-op search — so the earliest you could go out on co-op is the term following your first fall or spring semester in the MS program.
+Do I have to continue into the master's program immediately after graduating with my bachelor's?
+Do I have to continue into the master's program immediately after graduating with my bachelor's?
+Yes.
+PlusOne students are expected to enroll directly into graduate study;
+there’s no option to delay or defer.
+Is PlusOne available across all Northeastern campuses?
+Is PlusOne available across all Northeastern campuses?
+For the PlusOne pathway in Computer Science, students can choose to complete their graduate studies in Boston, Oakland, Silicon Valley, or Seattle once they’ve finished their bachelor’s degree and transitioned into the MSCS program.
+For all other PlusOne pathways, both degrees are completed in Boston.
+Who can I contact with questions?
+Who can I contact with questions?
+For questions about your PlusOne participation and how it fits into your undergraduate plan, connect with your Khoury Academic Advisor.
+If you’re in a Khoury combined major housed in a different college, reach out to your assigned Khoury Secondary Advisor instead.
+Faculty spotlight Get to know the engaged, experienced professors who are here to support you every step of the way.
+View all faculty Christo Wilson Christo Wilson is an associate professor and associate dean of academic programs and student experience at Khoury College.
+His research, which draws on computational, political, and economic methods, delves into the data, security, and privacy issues at the heart of our internet use.
+Read bio Instagram TikTok Reddit Linkedin YouTube Bluesky Khoury College X Page Threads Facebook Contact Visit Apply Donate Contact 440 Huntington Avenue 202 West Village H Boston, MA 02115 Quick Links Home Khoury News All People Events Calendar Careers

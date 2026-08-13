@@ -43,9 +43,19 @@ const asJson = process.argv.includes("--json");
 
 // ── load ──────────────────────────────────────────────────────────
 
+/**
+ * Pathway files under data/northeastern/pathways.
+ *
+ * Names beginning with "_" are INTAKE ARTEFACTS, not pathways — `_inventory.json`
+ * from discover-pathways.js and the `_cache/` of fetched page text. Reading the
+ * inventory as a pathway produced four confident complaints that it had no `id`
+ * and no `source.url`, which is true and irrelevant. The underscore prefix is the
+ * convention; it is honoured here, in the test suite, and in the Vite glob.
+ */
 function walk(dir) {
   const out = [];
   for (const name of readdirSync(dir)) {
+    if (name.startsWith("_")) continue;
     const p = join(dir, name);
     if (statSync(p).isDirectory()) out.push(...walk(p));
     else if (name.endsWith(".json")) out.push(p);

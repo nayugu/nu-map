@@ -53,9 +53,10 @@
     }
   ],
   "source": {
-    "url": "https://www.khoury.northeastern.edu/plusone-with-ms-in-cybersecurity-program-details/",
+    "url": "https://www.khoury.northeastern.edu/programs/plusone-program-with-ms-in-cybersecurity/",
     "kind": "html",
-    "retrievedAt": "2026-08-13"
+    "retrievedAt": "2026-08-13",
+    "note": "Originally cited as /plusone-with-ms-in-cybersecurity-program-details/, which 301s here. The coverage check in discover-pathways.js flagged the alias: the sitemap lists only this canonical URL, so citing the alias made a modelled pathway look unmodelled."
   },
   "confidence": "published"
 }

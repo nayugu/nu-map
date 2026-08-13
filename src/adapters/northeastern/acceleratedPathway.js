@@ -30,7 +30,16 @@
 
 import { selectPathways } from "../../core/pathway/select.js";
 
-const modules = import.meta.glob("../../../data/northeastern/pathways/**/*.json", { eager: true });
+// Pathway files only. The negative pattern excludes intake artefacts — the "_"
+// prefix marks `_inventory.json` (75 discovery records) and the `_cache/` of
+// fetched page text, none of which belongs in the browser bundle. The `.id`
+// filter below would have dropped the inventory anyway, but by luck rather than
+// intent, and it would still have been bundled first.
+const modules = import.meta.glob([
+  "../../../data/northeastern/pathways/**/*.json",
+  "!../../../data/northeastern/pathways/_*/**",
+  "!../../../data/northeastern/pathways/_*",
+], { eager: true });
 
 /**
  * Every pathway, in a stable order.

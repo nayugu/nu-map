@@ -32,6 +32,8 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../..");
 function walk(dir) {
   const out = [];
   for (const name of readdirSync(dir)) {
+    // "_" prefix = intake artefact (_inventory.json, _cache/), not a pathway.
+    if (name.startsWith("_")) continue;
     const p = join(dir, name);
     if (statSync(p).isDirectory()) out.push(...walk(p));
     else if (name.endsWith(".json")) out.push(p);

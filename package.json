@@ -43,6 +43,8 @@
     "data:grad-majors:write": "node scripts/scrape-grad-majors.js --write",
     "data:grad-majors:dry": "node scripts/scrape-grad-majors.js --dry-run",
     "data:pathways:verify": "node scripts/verify-pathways.js",
+    "data:pathways:discover": "NODE_EXTRA_CA_CERTS=scripts/lib/certs/incommon-rsa-ov-ssl-ca-3.pem node scripts/discover-pathways.js",
+    "data:pathways:discover:write": "NODE_EXTRA_CA_CERTS=scripts/lib/certs/incommon-rsa-ov-ssl-ca-3.pem node scripts/discover-pathways.js --write",
     "data:equivalences": "node scripts/build-equivalences.js",
     "data:equivalences:write": "node scripts/build-equivalences.js --write",
     "data:term-windows": "node scripts/derive-term-windows.js",
