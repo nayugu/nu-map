@@ -18,7 +18,7 @@ import PlanTree, { FolderIcon } from "./PlanTree.jsx";
 import ContextMenu, { useLongPress } from "./ContextMenu.jsx";
 import {
   flattenTree, buildSearchIndex, matchIds, moveTargets, planMove,
-  topmostNodes, normalizeSearchText, MAX_DEPTH,
+  topmostNodes, normalizeSearchText, MAX_DEPTH, SORT_MODES,
 } from "../core/planFolders.js";
 
 /** Spring-loaded folders: hover a closed folder mid-drag and it opens. */
@@ -733,20 +733,18 @@ export default function PlanLibrary() {
 
   // "By student" appears only once some plan HAS a student — an ordinary
   // student never sees a sort mode that would do nothing for them.
-  const sortMenuItems = () => {
-    const modes = [
-      ["manual", "folders.sort.manual"],
-      ["name",   "folders.sort.name"],
-      ["recent", "folders.sort.recent"],
-      ...(hasStudents ? [["student", "folders.sort.student"]] : []),
-    ];
-    return modes.map(([mode, key]) => ({
-      key: mode,
-      label: t(key),
-      hint: folderSort === mode ? "✓" : undefined,
-      onSelect: () => setFolderSort(mode),
-    }));
-  };
+  const sortMenuItems = () =>
+    // Derived from core's SORT_MODES rather than relisted here: a mode this
+    // menu offers but PlannerContext won't persist is chosen, used, and then
+    // silently lost on reload, which is exactly what happened to 'student'.
+    SORT_MODES
+      .filter(mode => mode !== "student" || hasStudents)
+      .map(mode => ({
+        key: mode,
+        label: t(`folders.sort.${mode}`),
+        hint: folderSort === mode ? "✓" : undefined,
+        onSelect: () => setFolderSort(mode),
+      }));
 
   const footerMoveItems = () => {
     const ids = [...selectedIds];

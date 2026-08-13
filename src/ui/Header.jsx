@@ -419,7 +419,7 @@ export default function Header() {
     shareRelayAvailable, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
     onboardingDeferredForShare, setShowCohortSetup,
     aiAssistantAvailable, claudePreview, claudePaired,
-    plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan,
+    plans, activePlanId, switchPlan, createPlan, deleteNodes, renamePlan,
     folders, planTree, openFolders, toggleFolder, folderSort, setShowPlanLibrary,
     major, major2, conc, minor1, minor2,
     placedOut, substitutions, studentType,
@@ -1177,9 +1177,9 @@ export default function Header() {
         {plans.length > 1 && (
           <button onClick={e => {
             e.stopPropagation();
-            if (confirm(t("header.plan.delete.confirm", { name: p.name }))) { deletePlan(p.id); if (plans.length <= 2) setShowPlanMenu(false); }
+            if (confirm(t("header.plan.delete.confirm", { name: p.name }))) { deleteNodes([p.id]); if (plans.length <= 2) setShowPlanMenu(false); }
           }} style={{ background: "none", border: "none", color: "var(--text-5)", cursor: "pointer", fontSize: 10, padding: "0 2px", flexShrink: 0 }}
-            title="Delete">✕</button>
+            title={t("folders.menu.delete")}>✕</button>
         )}
       </div>
     );
@@ -1518,9 +1518,9 @@ export default function Header() {
                     e.stopPropagation();
                     const count = selectedIds.size;
                     if (count === 0) return;
-                    if (count >= plans.length) { alert("You must keep at least one plan."); return; }
-                    if (confirm(`Delete ${count} plan${count > 1 ? "s" : ""}?`)) {
-                      bulkDeletePlans(Array.from(selectedIds));
+                    if (count >= plans.length) { alert(t("folders.delete.err.last")); return; }
+                    if (confirm(t("folders.delete.questionN", { n: count }))) {
+                      deleteNodes(Array.from(selectedIds));
                       setSelectMode(false);
                       setSelectedIds(new Set());
                     }
@@ -1533,7 +1533,9 @@ export default function Header() {
                     border: `1px solid ${selectedIds.size > 0 ? "var(--red, #ef4444)" : "var(--border-2)"}`,
                     color: selectedIds.size > 0 ? "var(--red, #ef4444)" : "var(--text-5)",
                   }}>
-                    {selectedIds.size === 0 ? "Select plans to delete" : `Delete ${selectedIds.size} plan${selectedIds.size > 1 ? "s" : ""}`}
+                    {selectedIds.size === 0
+                      ? t("folders.menu.delete")
+                      : t("folders.menu.deleteN", { n: selectedIds.size })}
                   </button>
                 ) : (
                   <div style={{ display: "flex", gap: 4 }}>

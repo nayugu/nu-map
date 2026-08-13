@@ -33,7 +33,7 @@ import { encodePlan, decodePlan, buildShareUrl, getHashPlanParam, getHashCodePar
 import { tabTitle, FIRST_PLAN_NAME } from "../core/tabTitle.js";
 import { buildTree, planMove, applyMove, deleteScope, uniqueName, siblingNames,
          topmostNodes, childDepth, MAX_DEPTH, applyReorder,
-         siblingsInOrder } from "../core/planFolders.js";
+         siblingsInOrder, SORT_MODES } from "../core/planFolders.js";
 import { buildLibraryFile, parseLibraryFile, mergeLibrary,
          libraryToArchive, archiveToLibrary } from "../core/planLibraryFile.js";
 import { writeZip, readZip } from "../core/zipFile.js";
@@ -1289,7 +1289,10 @@ export function PlannerProvider({ children }) {
         case "CREATE_PLAN":    createPlan(action.name, action.cohort ?? null);      break;
         case "RENAME_PLAN":    renamePlan(action.planId, action.name);             break;
         case "SWITCH_PLAN":    switchPlan(action.planId);                          break;
-        case "DELETE_PLAN":    deletePlan(action.planId);                          break;
+        // Recoverable for 30 days, and one ⌘Z in the library puts it back. That
+        // matters most on THIS door: a delete Claude performed is the one the
+        // user is least likely to have meant.
+        case "DELETE_PLAN":    deleteNodes([action.planId]);                      break;
       }
     }
 
@@ -2653,7 +2656,6 @@ export function PlannerProvider({ children }) {
   // An unrecognised stored value falls back to 'name' rather than being
   // trusted: this key predates 'manual', and a future mode removed in a later
   // version must not leave the library sorting by a rule that no longer exists.
-  const SORT_MODES = ["name", "recent", "manual"];
   const [folderSort, setFolderSort] = useState(() => {
     try {
       const v = localStorage.getItem(key("folder-sort"));
@@ -2917,7 +2919,7 @@ export function PlannerProvider({ children }) {
    *
    * `deleteScope` normalizes first, so a selection holding both a folder and
    * something inside it counts that child once. At least one plan must always
-   * survive — the same invariant `deletePlan` enforces — and the replacement
+   * survive — this is the only place that invariant lives — and the replacement
    * active plan is chosen from the survivors, so the slot-load effect can
    * never read a key this delete dropped from the index.
    *
@@ -3212,29 +3214,17 @@ export function PlannerProvider({ children }) {
     setActivePlanId(id);
   };
 
-  // Delete a plan
-  const deletePlan = (id) => {
-    if (plans.length <= 1) return; // can't delete last plan
-    try { localStorage.removeItem(key(`plan-data-${id}`)); } catch {}
-    const remaining = plans.filter(p => p.id !== id);
-    setPlans(remaining);
-    if (id === activePlanId) {
-      // Switch to first remaining plan – the useEffect will load its data (or reset)
-      setActivePlanId(remaining[0].id);
-    }
-  };
-
-  // Delete multiple plans at once — avoids stale-closure issue of calling deletePlan in a loop
-  const bulkDeletePlans = (ids) => {
-    const idSet = new Set(ids);
-    const remaining = plans.filter(p => !idSet.has(p.id));
-    if (remaining.length === 0) return;
-    for (const id of ids) {
-      try { localStorage.removeItem(key(`plan-data-${id}`)); } catch {}
-    }
-    setPlans(remaining);
-    if (idSet.has(activePlanId)) setActivePlanId(remaining[0].id);
-  };
+  // Deleting a plan has exactly ONE implementation — `deleteNodes` above.
+  //
+  // There used to be two more here, `deletePlan` and `bulkDeletePlans`, and the
+  // difference was not cosmetic: they called `localStorage.removeItem` on the
+  // slot straight away, so the same plan was recoverable for 30 days when
+  // deleted in the library and gone forever when deleted from the header
+  // dropdown or by an MCP `DELETE_PLAN`. Worse, they never called
+  // `pushFolderHistory`, so an OLDER history entry still listed the plan: one
+  // ⌘Z in the library put the index record back while its slot was already
+  // erased, and the plan reopened empty. A second door that deletes differently
+  // is how that happens, so the door is gone rather than merely aligned.
 
   // Rename a plan
   const renamePlan = (id, name) => {
@@ -4181,7 +4171,7 @@ export function PlannerProvider({ children }) {
     resetAll, exportPlanJSON, importPlanJSON, copyPlanLink,
     exportLibraryJSON, exportLibraryZip, importLibraryFiles,
     shareRelayAvailable: !!shareRelay, createShareCode, claimShareCode, cancelShareCode, abandonShareCode, shareCodeStatus, watchShareCode, importSharedPlan,
-    plans, activePlanId, switchPlan, createPlan, deletePlan, bulkDeletePlans, renamePlan, setPlanStudent,
+    plans, activePlanId, switchPlan, createPlan, renamePlan, setPlanStudent,
     // Folders — structure, view state, and the mutations that respect both.
     folders, planTree, openFolders, toggleFolder, setFolderOpen,
     folderSort, setFolderSort,

@@ -7,7 +7,7 @@
  * materialized `path` string. Both alternatives were considered and lose:
  *
  *   - Nested storage makes every move a deep splice and breaks the flat-array
- *     consumers that already exist (`plans.find`, `bulkDeletePlans`, the
+ *     consumers that already exist (`plans.find`, `deleteNodes`, the
  *     studentType backfill effect).
  *   - A `path` string on each plan cannot represent an EMPTY folder — the
  *     folder would exist only while something referenced it, so "New Folder →
@@ -504,6 +504,20 @@ function matchedPlanCounts(tree, matches) {
 }
 
 // ── Flattening to rows ────────────────────────────────────────────────
+
+/**
+ * Every sort mode, in the order a menu should offer them.
+ *
+ * ONE list, because this is simultaneously three things that must agree: what
+ * `comparators` below implements, what the library's Sort menu offers, and what
+ * PlannerContext will accept back out of localStorage. They used to be three
+ * separate literals and they drifted — `'student'` was implemented here and
+ * offered in the menu, but missing from the persistence allowlist, so choosing
+ * the one sort an advisor actually wants worked until the next reload and then
+ * silently reverted to 'name'. A mode that is not in this array does not exist;
+ * a mode in it cannot be half-supported.
+ */
+export const SORT_MODES = ["manual", "name", "recent", "student"];
 
 function comparators(sortMode, locale) {
   const collator = new Intl.Collator(locale, { numeric: true, sensitivity: "base" });
