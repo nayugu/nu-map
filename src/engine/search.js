@@ -160,7 +160,41 @@ import { barsReachable } from "./cardinality.js";
  * the packing fallback obeys it too — a fallback that produces plans the criteria refuse is
  * not a fallback.
  */
-export const UNGUIDED_PER_TERM_CAP = 3;
+export const UNGUIDED_PER_TERM_CAP = 2;
+
+/**
+ * The same cap, once the ladder has started giving things up.
+ *
+ * ── Why the cap is TWO numbers and not one ──────────────────────────
+ *
+ * Two is what the corpus does: departments leave two or fewer cells unsaid in 98.8% of 5,978
+ * published study terms, reach 3 in 55 of them and 4 in 14. So 2 is the convention and 3 is its
+ * tail. Enforcing 2 everywhere is not free, and enforcing it as a hard floor under every rung is
+ * the mistake this file keeps re-learning: a cap the search cannot satisfy does not produce a
+ * tidier plan, it produces no plan.
+ *
+ * Measured over the 196 degrees that have depth electives (321 plans, `chart-probe`):
+ *
+ *            refused   short of 4   terms 3+ unguided   terms 3+ GEs
+ *   cap 3      41         47             139               138
+ *   cap 2      46         52               9                 0
+ *   cap 1     145         68               3                 0
+ *
+ * Cap 1 is not a stricter convention, it is arithmetic failure: a degree needs at least as many
+ * course-carrying terms as it has elective cells, the median pool is 11, a four-year shape with
+ * two co-ops has about 10, and 53% of degrees have pools larger than that. 104 more degrees get
+ * no plan.
+ *
+ * Cap 2 costs 5 refusals of 321 to remove all 138 three-elective terms. Worth having, and not
+ * worth a refusal — so it is enforced in the STRICT tier and lifted to 3 by the `term-width`
+ * rung, which is the rung that already exists for "this program cannot meet the conventions".
+ * A degree that fits 2 gets 2; a degree that does not gets 3 rather than nothing.
+ *
+ * Three remains the ceiling at EVERY rung, including the loosest. Four general electives in a
+ * term is not a semester with a shape, and there is no reading of the corpus that licenses a
+ * fifth — 14 terms in 5,978 is the 0.2% tail CHART used to live in.
+ */
+export const UNGUIDED_RELAXED_CAP = 3;
 
 /**
  * How deep a DEPTH elective is assumed to be, in chain height — rule 4's estimate.
@@ -1029,22 +1063,31 @@ function attemptPlacement({
   // put four cells of one requirement in a term. General electives are the exception the
   // student notices, because four of them side by side is a term with nothing in it to read.
   //
-  // Three, not two — and two was tried. Departments leave two or fewer cells unsaid in 98.8%
-  // of 5,978 published terms, so two looks like the convention and it measured WORSE on every
-  // axis: refusals 28 -> 30 and thin terms 6 -> 13 on the sample.
+  // TWO in the strict tier, THREE once the ladder is giving things up. See
+  // `UNGUIDED_PER_TERM_CAP` and `UNGUIDED_RELAXED_CAP` for the measurement behind both.
   //
-  // The reason is an interaction worth stating, because the number looks safe on its own. A
-  // general elective is 4 SH, so it IS a real course by `realCourseSH` and counts toward the
-  // four-course bar. Capping the bucket at two starves that bar in exactly the degrees that
-  // lean on electives to fill their terms — the rule meant to stop terms looking empty made
-  // more of them genuinely short.
-  // And THREE is the ceiling at every rung, including the loosest. Four cells of one ordinary
-  // requirement is fine — four `Concentration` cards is a real semester with a real shape.
-  // Four GENERAL ELECTIVES is not: it is a term with nothing in it to read, and it is the
-  // specific thing the International Business benchmark showed. So unlike every other
-  // requirement, this bucket does not widen when `wideTerms` lifts the general cap.
+  // ── Two was tried before and measured worse; that measurement is superseded ──
+  //
+  // The earlier note here read: "Three, not two — and two was tried… it measured WORSE on every
+  // axis: refusals 28 -> 30 and thin terms 6 -> 13 on the sample." That was true, and it was
+  // measured against a demand side that had not been fixed yet — breadth bound to the FIRST
+  // cells of the pool, a positional ramp fighting the graph-derived ordering, and every elective
+  // ranked as filler. Re-measured after rules 1, 3 and 4, over 321 plans: refusals 41 -> 46 and
+  // short terms 47 -> 52, against 138 -> 0 three-elective terms. The cap did not get cheaper;
+  // the plans it applies to got better shaped.
+  //
+  // The interaction the old note names is still real and is why 2 is not free. A general elective
+  // is 4 SH, so it IS a real course by `realCourseSH` and counts toward the four-course bar —
+  // capping the bucket at two starves that bar in exactly the degrees that lean on electives to
+  // fill their terms. That is what the +5 short terms are, and it is what the `term-width` rung
+  // exists to rescue.
+  //
+  // THREE is still the ceiling at every rung, including the loosest. Four cells of one ordinary
+  // requirement is fine — four `Concentration` cards is a real semester with a real shape. Four
+  // GENERAL ELECTIVES is not, and it is the specific thing the International Business benchmark
+  // showed.
   const UNGUIDED_PER_TERM_MAX = UNGUIDED_PER_TERM_CAP;
-  const UNGUIDED_RELAXED_MAX = UNGUIDED_PER_TERM_CAP;
+  const UNGUIDED_RELAXED_MAX = UNGUIDED_RELAXED_CAP;
   // EVERY general elective shares this key, labelled or not. Counting only the unlabelled
   // ones let a term hold three of those plus every breadth-labelled cell on top, which is
   // still four "General Elective" cards to the student — the bucket is what clumps, not the
@@ -1056,16 +1099,20 @@ function attemptPlacement({
    * The per-term ceiling for THIS cell's requirement.
    *
    * `sameReqMax` is 4, the corpus maximum for cells of one requirement, and it stays 4 for
-   * anything the plan can name. An unguided elective gets 3 instead: departments reach 3 in
-   * 55 of 5,978 terms and 4 in 14, so 3 is inside what they do and 4 is the 0.2% tail CHART
-   * was living in.
+   * anything the plan can name. An unguided elective gets 2 instead — the convention in 98.8%
+   * of 5,978 published terms — and 3 once the ladder has reached `wideTerms`.
    *
-   * The `wideTerms` rung lifts `sameReqMax` to Infinity, and this must NOT lift with it. A
-   * first version tied the two and the cap silently vanished for every program that reached
-   * that rung — International Business among them, which is how it went on printing four
-   * identical cards in a term after the cap was added. Relaxed by ONE step instead, to the
-   * corpus maximum: even at the loosest rung there is no evidence for a fifth unguided cell
-   * in a term, so there is no reading of the corpus that licenses one.
+   * `Number.isFinite(sameReqMax)` IS the tier test, and that is why this needs no new argument.
+   * The `wideTerms` rung is the only thing that sets `sameReqMax` to Infinity, so a finite value
+   * means "still in the strict tier, hold the convention at 2" and an infinite one means "this
+   * program has already been granted a wider term, so 3 rather than a refusal". Reading the tier
+   * off a bound the rung already changes keeps the two from drifting apart.
+   *
+   * What must NOT happen is this lifting all the way with `sameReqMax`. A first version tied
+   * the two and the cap silently vanished for every program that reached that rung —
+   * International Business among them, which is how it went on printing four identical cards in
+   * a term after the cap was added. Relaxed by ONE step instead: even at the loosest rung there
+   * is no evidence for a fourth unguided cell in a term.
    */
   const maxPerTerm = (cell) => {
     if (reqKey(cell) !== UNGUIDED) return sameReqMax;
@@ -2425,7 +2472,13 @@ function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
     const sh = p.cell.sh ?? 0, n = coursesInCell(p.cell);
     if (loadSH[ti] + sh > cap[ti] + 0.01) return "credit";
     if (count[ti] + n > slots[ti]) return "slots";
-    if (isGE(p) && geIn[ti] + 1 > UNGUIDED_PER_TERM_CAP) return "ge";
+    // The RELAXED cap, deliberately. The packer runs only after the whole ladder has failed, so
+    // it is strictly further down the concession order than the `term-width` rung that lifts
+    // this to 3 — holding the strict 2 here would mean the last constructor was stricter than
+    // the rung before it, and the plans it exists to rescue are exactly the elective-heavy ones
+    // that cannot fit 2. Still capped, because a fallback that produces plans the criteria refuse
+    // is not a fallback.
+    if (isGE(p) && geIn[ti] + 1 > UNGUIDED_RELAXED_CAP) return "ge";
     if (precedence) {
       const trial = new Map(termOf);
       trial.set(p.cell.id, ti);

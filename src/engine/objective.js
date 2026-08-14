@@ -437,9 +437,23 @@ export function improve({
     !precedence || precedenceViolations(precedence, assignment).length === 0;
   // Established once, from the plan phase 1 handed over: phase 2 may never make it worse.
   const maxThin = thinFullTerms(termOf, plans, terms, studentType, cal, cap);
+  // The same non-erosion shape for the general-elective bucket. Phase 1's cap is 2 in the strict
+  // tier and 3 once `term-width` was granted, so the only bound phase 2 can apply without either
+  // refusing a legal plan or licensing a new clump is the one the incoming plan already meets.
+  // Never below the strict cap, so a plan that arrives with no electives at all in any term does
+  // not forbid phase 2 from putting one somewhere.
+  const maxGE = (() => {
+    const geIn = terms.map(() => 0);
+    for (const p of plans) {
+      if (p.cell.target !== GENERAL_ELECTIVE) continue;
+      const ti = termOf.get(p.cell.id);
+      if (ti != null) geIn[ti] += 1;
+    }
+    return Math.max(UNGUIDED_PER_TERM_CAP, ...geIn);
+  })();
   const fullLegal = (assignment) =>
     isLegal({ plans, terms, termOf: assignment, cap, courseMap, repeatable, ports, byId,
-              precedence, shape, maxThin, studentType, cal });
+              precedence, shape, maxThin, maxGE, studentType, cal });
 
   // One shared budget across every climb, so total work is bounded regardless of how
   // many objectives are ranked.
@@ -1203,19 +1217,32 @@ function fitsCapacity(assignment, plans, terms, cap, shape = null, maxThin = Inf
 
 /** Full hard-constraint check, including the prereq-aware witness. */
 function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId, precedence,
-                  shape, maxThin = Infinity, studentType = "undergraduate",
-                  cal = DEFAULT_CALIBRATION }) {
+                  shape, maxThin = Infinity, maxGE = UNGUIDED_PER_TERM_CAP,
+                  studentType = "undergraduate", cal = DEFAULT_CALIBRATION }) {
   if (!fitsCapacity(termOf, plans, terms, cap, shape, maxThin, studentType, cal)) return false;
-  // ── No term may hold a fourth general elective ───────────────────
+  // ── No term may gain a general elective it did not already have ───
   //
   // The search caps this per term at every rung, and phase 2 knew nothing about it: every
   // hill-climb swap, every `fillFullTerms` donation and every `reclaimFromFiller` trade could
-  // add one back. Measured, the corpus still showed terms of four after the cap was in place
+  // add one back. Measured, the corpus still showed over-full terms after the cap was in place
   // at placement, because they were assembled afterwards.
   //
   // Here rather than in each pass, because `isLegal` gates all of them — one statement of the
   // rule instead of four, which is the arrangement the four implementations of `offered`
   // taught this repo to prefer.
+  //
+  // ── `maxGE` is a NON-EROSION bound, not the constant ──────────────
+  //
+  // The cap is now two numbers: 2 in the strict tier, 3 once `term-width` has been granted. So
+  // phase 2 cannot read a constant, and reading the STRICT one would be a bug in the expensive
+  // direction — it would refuse a plan phase 1 had legally built at 3 and hand the student a
+  // refusal produced entirely by the objective layer.
+  //
+  // Instead the incoming plan sets the ceiling, exactly as `maxThin` does: whatever phase 1
+  // handed over is acceptable by definition, and phase 2 may not exceed it. A plan that arrives
+  // with a 3-elective term keeps the right to that term and gains no others; a plan that arrives
+  // at 2 is held to 2. That also means the bound tightens automatically for every program the
+  // strict tier could satisfy, which is most of them.
   //
   // Four cells of an ordinary requirement stays fine: four `Concentration` cards is a real
   // semester. It is general electives specifically that read as a term with nothing in it.
@@ -1224,7 +1251,7 @@ function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId
     if (p.cell.target !== GENERAL_ELECTIVE) continue;
     const ti = termOf.get(p.cell.id);
     if (ti == null) continue;
-    if (++geIn[ti] > UNGUIDED_PER_TERM_CAP) return false;
+    if (++geIn[ti] > maxGE) return false;
   }
   // Cheapest first: a precedence check is a map lookup, the witness is a matching.
   if (precedence && precedenceViolations(precedence, termOf).length) return false;
