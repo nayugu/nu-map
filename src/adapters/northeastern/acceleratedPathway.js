@@ -56,17 +56,35 @@ const PATHWAYS = Object.freeze(
 
 const byId = new Map(PATHWAYS.map(p => [p.id, p]));
 
+// ── HIDDEN pending further work ────────────────────────────────────
+//
+// Only 4 of ~44 real PlusOne pathways are transcribed (Khoury), and shipping
+// that as if it were the whole picture risks reading as more authoritative
+// or more complete than it is. Nothing below is deleted — the engine, the
+// data, the tests and the UI are all intact and stay exercised by the test
+// suite — this is the one switch that makes the feature invisible until a
+// decision is made to ship it. Flip to `false` to bring it back exactly as
+// it was; every other file is unaffected.
+//
+// A student who already had a pathway declared (only possible in local
+// dev/testing — this never shipped) sees the existing, already-built
+// StaleNotice fallback ("this pathway is no longer published"), the same
+// path a pathway file being removed for real would take.
+const HIDDEN = true;
+
 export default {
   /**
    * @param {{ugProgramId?: string, ugProgramIds?: string[], studentType?: string, msConcentration?: string}} q
    * @returns {import("../../ports/IAcceleratedPathway.js").Pathway[]}
    */
   listPathways(q = {}) {
+    if (HIDDEN) return [];
     return selectPathways(PATHWAYS, q);
   },
 
   /** @returns {import("../../ports/IAcceleratedPathway.js").Pathway|null} */
   getPathway(id) {
+    if (HIDDEN) return null;
     return byId.get(id) ?? null;
   },
 
