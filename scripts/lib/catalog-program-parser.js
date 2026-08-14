@@ -195,10 +195,23 @@ function parseRowGroup(rows) {
     if (!chooseItems.length) { chooseItems = []; chooseCreds = 0; chooseCount = 0; chooseExplicit = false; return; }
 
     if (chooseCreds > 0) {
-      // A credit-hour annotation followed by exactly one course is just a required course,
-      // not an elective pool. Emit as COURSE so the renderer doesn't show "X/Y SH from pool".
+      // A credit-hour annotation followed by exactly one course is normally just a
+      // required course whose credit is given elsewhere (e.g. "3 semester hours ...
+      // count toward the X requirement"), so it's emitted as a bare COURSE — EXCEPT when
+      // the credit is implausible for a single course instance (Studio Art BFA's "68
+      // [SMFA 3000]": a comment row's own hourscol, read as a last-resort credit source
+      // just above). That signals a repeatable, variable-credit course whose SH
+      // accumulates across many term placements, not a fixed per-course value — a
+      // genuinely different shape needing a distinct `accumulate` XOM, since the
+      // ordinary "taken once" COURSE node (or the split-credit XOM below) would silently
+      // over-credit it after just one term. See accumulate:true handling in
+      // src/core/gradRequirements.js, which sums the real per-instance total instead.
       if (chooseItems.length === 1 && chooseItems[0].type === 'COURSE') {
-        requirements.push(chooseItems[0]);
+        if (chooseCreds > 16) {
+          requirements.push({ type: 'XOM', accumulate: true, numCreditsMin: chooseCreds, courses: chooseItems });
+        } else {
+          requirements.push(chooseItems[0]);
+        }
       } else {
         requirements.push({ type: 'XOM', numCreditsMin: chooseCreds, courses: chooseItems });
       }
@@ -931,7 +944,12 @@ export function parseGpaRule(text) {
    // (a handful of engineering pages). NOT "minimum GPA of N" — that
    // family is co-op/application prerequisites ("required in order to
    // apply"), which are not degree rules.
-   || /([0-9]\.[0-9]{1,3}) [Mm]inimum GPA(?: is)? required(?: (in|for) ([^.;]+?))?[.;]?$/.exec(t);
+   || /([0-9]\.[0-9]{1,3}) [Mm]inimum GPA(?: is)? required(?: (in|for) ([^.;]+?))?[.;]?$/.exec(t)
+   // Spelled-out "grade-point average" instead of the "GPA" abbreviation, with the
+   // threshold before the phrase and an optional "or higher" tail (e.g. "A cumulative
+   // grade-point average of 2.500 or higher is required for the art history
+   // requirements" — Studio Art BFA). Same prep/scope handling as the abbreviated forms.
+   || /grade-point average of ([0-9]\.[0-9]{1,3})(?: or (?:higher|more))? is required(?: (in|for) ([^.;]+?))?[.;]?$/i.exec(t);
   if (!m) return null;
   const threshold = parseFloat(m[1]);
   const prep      = m[2] ?? null;

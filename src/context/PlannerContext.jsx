@@ -350,8 +350,32 @@ const { locale, setLocale, locales, t } = useLanguage();
     Object.keys(placements).forEach(materialize);
     Object.keys(pvPlacements).forEach(materialize);
     pvPlacedOut.forEach(materialize);
-    return clones ? { ...catalogCourseMap, ...clones } : catalogCourseMap;
-  }, [catalogCourseMap, placements, pvPlacements, pvPlacedOut]);
+
+    // Accumulated-credit repeatable-course requirements (XOM `accumulate: true`, e.g. "68
+    // SH of SMFA 3000" — see gradRequirements.js) need the real summed credit across every
+    // term a course was repeated; the requirement layer only ever sees this deduplicated
+    // map, one entry per base course key, so a repeat's own SH would otherwise be invisible
+    // to it. Sum each instance's EFFECTIVE sh (its shOverride, since a repeatable/variable-
+    // credit course like SMFA 3000 is exactly what shOverrides exists for — a fixed default
+    // would never reach 68) onto the base key as `repeatTotalSh`, mirroring the same
+    // computation plannerQueryAdapter.js does for the MCP audit path.
+    const repeatTotals = {};
+    for (const id of Object.keys(placements)) {
+      const base = baseId(id);
+      const c = catalogCourseMap[base];
+      if (!c) continue;
+      const sh = pvShOverrides[id] ?? c.sh ?? 0;
+      repeatTotals[base] = (repeatTotals[base] ?? 0) + sh;
+    }
+
+    const merged = clones ? { ...catalogCourseMap, ...clones } : catalogCourseMap;
+    if (!Object.keys(repeatTotals).length) return merged;
+    const withRepeats = { ...merged };
+    for (const [base, total] of Object.entries(repeatTotals)) {
+      withRepeats[base] = { ...withRepeats[base], repeatTotalSh: total };
+    }
+    return withRepeats;
+  }, [catalogCourseMap, placements, pvPlacements, pvPlacedOut, pvShOverrides]);
 
   // ── Sticky Courses ──
   const stickySnapshotRef = useRef(null);

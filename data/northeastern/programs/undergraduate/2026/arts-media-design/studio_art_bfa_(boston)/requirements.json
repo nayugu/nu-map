@@ -1,8 +1,8 @@
 {
   "name": "Studio Art, BFA (Boston)",
   "metadata": {
-    "verified": true,
-    "lastEdited": "8/7/2026",
+    "verified": false,
+    "lastEdited": "8/13/2026",
     "branch": "main",
     "tablesPresent": 3,
     "tablesConsumed": 3,
@@ -20,31 +20,7 @@
       "ENGW3314",
       "SMFA3000",
       "SMFA4000"
-    ],
-    "verification": {
-      "level": "verified",
-      "kind": "major",
-      "score": 1,
-      "checkedAt": "2026-08-08",
-      "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/art-design/studio-art-bfa/",
-      "sourcesAvailable": [
-        "requirement-tables",
-        "stated-total",
-        "plan-of-study",
-        "course-catalog"
-      ],
-      "counters": {
-        "tablesUnaccounted": 0,
-        "leakedMarkers": 0,
-        "duplicateSectionTitles": 0,
-        "zeroTotal": 0,
-        "unknownCourses": 0,
-        "planUnexplained": 0,
-        "planUnexplainedInSubject": 0,
-        "impossibleSections": 0
-      },
-      "discrepancies": []
-    }
+    ]
   },
   "totalCreditsRequired": 136,
   "totalCreditsSource": "stated-total",
@@ -235,9 +211,16 @@
       "title": "Studio Art",
       "requirements": [
         {
-          "type": "COURSE",
-          "subject": "SMFA",
-          "classId": 3000
+          "type": "XOM",
+          "accumulate": true,
+          "numCreditsMin": 68,
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "SMFA",
+              "classId": 3000
+            }
+          ]
         }
       ],
       "minRequirementCount": 1
@@ -253,6 +236,17 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Art History Requirements for Studio Art",
+      "threshold": 2.5,
+      "scope": {
+        "kind": "described",
+        "text": "the art history requirements"
+      },
+      "text": "A cumulative grade-point average of 2.500 or higher is required for the art history requirements."
     }
   ]
 }

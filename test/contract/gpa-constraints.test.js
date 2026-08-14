@@ -63,6 +63,9 @@ test('gpa grammar › every census phrasing lands in the right scope', () => {
     ["Minimum 2.000 GPA required in all business courses", "described", 2],  // fuzzy: never guessed
     ["Minimum 2.000 GPA required in anthropology and philosophy courses", "described", 2],
     ["cumulative 3.500 GPA is required for the core requirement", "described", 3.5], // "for": not a floor
+    // Spelled-out "grade-point average" + "or higher" (Studio Art BFA's actual catalog
+    // sentence) — same "for" → described handling as the abbreviated GPA form above.
+    ["A cumulative grade-point average of 2.500 or higher is required for the art history requirements.", "described", 2.5],
     ["Minimum 2.000 GPA required in all courses completed", "cumulative", 2],
     ["Complete one of the following:", null, null],
     ["Select 12 credit hours from the following", null, null],

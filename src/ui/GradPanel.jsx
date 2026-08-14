@@ -358,7 +358,11 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
     // Single required course mis-encoded as XOM (scraper artifact: a credit-hour comment
     // row followed by exactly one course course). Render as a plain course row instead of
     // "X/Y SH from elective pool" — the pool framing is misleading when there's one option.
-    const singleCourse = r.children?.length === 1 && r.children[0].type === 'COURSE'
+    // EXCEPT `accumulate` nodes (e.g. "68 SH of SMFA 3000"): there the SH progress IS the
+    // whole point — a repeatable course accrues credit across many term placements, so a
+    // plain checkbox would hide that "took it once" isn't "done" the way it is for an
+    // ordinary required course. Let those fall through to the pool display below.
+    const singleCourse = !r.accumulate && r.children?.length === 1 && r.children[0].type === 'COURSE'
       ? r.children[0]
       : null;
     if (singleCourse) {

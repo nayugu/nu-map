@@ -23,6 +23,7 @@ import {
   allocateMajorWithElectives,
   allocateSections,
 } from "../../core/gradRequirements.js";
+import { baseId } from "../../core/repeatInstances.js";
 import { buildCohortSemesters, deriveSemMaps } from "../../core/semGrid.js";
 import { getSemSH, getOrderedCourses, filterInTimeline } from "../../core/planModel.js";
 import { computeGrantedAttrs, computeGrantedCourses, resolveTermByDuration, termSpans } from "../../core/specialTermUtils.js";
@@ -469,8 +470,32 @@ export function createPlannerQuery(deps) {
     );
     for (const k of computeGrantedCourses(finishedTerms, termTypes, semIdx)) doneSet.add(k);
 
+    // Accumulated-credit repeatable-course requirements (XOM `accumulate: true`, e.g. "68
+    // SH of SMFA 3000" — see gradRequirements.js) need the real summed credit across every
+    // term a course was repeated; buildPlacedKeySet collapses repeat instances
+    // ("SMFA3000#2", …) to one Set entry above, discarding that. Sum sh per base course key
+    // from the raw, timeline-scoped placement ids (parked/out-of-timeline takes shouldn't
+    // count, matching placedSet's own scoping) and attach it to a shallow courseMap clone —
+    // never mutate the shared catalog courseMap.
+    const repeatTotals = {};
+    for (const [placementId] of Object.entries(filterInTimeline(eff, semIdx))) {
+      const base = baseId(placementId);
+      const course = courseMap[base];
+      if (!course) continue;
+      const sh = plan.shOverrides?.[placementId] ?? course.sh ?? 0;
+      repeatTotals[base] = (repeatTotals[base] ?? 0) + sh;
+    }
+    const courseMapWithRepeats = Object.keys(repeatTotals).length
+      ? {
+          ...courseMap,
+          ...Object.fromEntries(
+            Object.entries(repeatTotals).map(([base, total]) => [base, { ...courseMap[base], repeatTotalSh: total }])
+          ),
+        }
+      : courseMap;
+
     const { sections, generalElectives, allocatedSet } =
-      allocateMajorWithElectives(majorJson, placedSet, courseMap, doneSet, realPlacedSet);
+      allocateMajorWithElectives(majorJson, placedSet, courseMapWithRepeats, doneSet, realPlacedSet);
     let results = [...sections, generalElectives];
 
     const conc = concentration ?? plan.concentration ?? "";
@@ -481,7 +506,7 @@ export function createPlannerQuery(deps) {
       // major without the concentration the user actually chose.
       const concSection = resolveConcentration(majorJson, conc);
       if (concSection) {
-        results = [...results, ...allocateSections([concSection], placedSet, allocatedSet, courseMap)];
+        results = [...results, ...allocateSections([concSection], placedSet, allocatedSet, courseMapWithRepeats)];
         concentrationApplied = concSection.title;
       }
     }

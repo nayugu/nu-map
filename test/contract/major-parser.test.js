@@ -197,3 +197,51 @@ test('planOfStudy › never drawn from the requirement panes', () => {
   const r = ug('cs-bscs');
   assert.ok(r.excludedPanes.every(p => /^planofstudy/.test(p.id)));
 });
+
+// ── Accumulated-credit repeatable course ──────────────────────────────────────
+// Studio Art BFA's real page shape: a comment row carries the credit total in its
+// OWN hourscol (last-resort credit source), followed by exactly one indented
+// course row. commitChooseGroup ordinarily collapses "one course after a credit
+// annotation" to a bare COURSE (credit given elsewhere) — except when the credit
+// is implausible for a single instance, which instead signals SH accumulated
+// across many repeat placements of one repeatable course.
+
+const page = body => parse(`<html><body><div id="programrequirementstextcontainer">${body}</div></body></html>`);
+const indentedCourseRow = (subj, num, title) => `
+  <tr class="even"><td class="codecol"><div style="margin-left:20px;" class="blockindent">
+    <a href="#" title="${subj} ${num}" class="bubblelink code">${subj}&#160;${num}</a></div></td>
+    <td>${title}</td><td class="hourscol"></td></tr>`;
+const commentRowWithHours = (text, hours) => `
+  <tr class="odd"><td colspan="2"><span class="courselistcomment">${text}</span></td>
+    <td class="hourscol">${hours}</td></tr>`;
+
+test('parser › a comment-row credit implausible for one course becomes an accumulate XOM', () => {
+  const r = parseRequirements(page(`
+    <h2>Requirements</h2>
+    <table class="sc_courselist"><tbody>
+      ${commentRowWithHours('These courses generally have the following course number:', 68)}
+      ${indentedCourseRow('SMFA', '3000', 'Museum of Fine Arts Studio (4 to 12 SH)')}
+    </tbody></table>`), UNDERGRAD_PROFILE);
+  assert.equal(r.requirementSections.length, 1);
+  assert.deepEqual(r.requirementSections[0].requirements, [
+    { type: 'XOM', accumulate: true, numCreditsMin: 68, courses: [{ type: 'COURSE', subject: 'SMFA', classId: 3000 }] },
+  ]);
+});
+
+test('parser › an ordinary small comment-row credit still collapses to a bare COURSE', () => {
+  // Regression guard for the pre-existing behavior this shares a code path with:
+  // a plausible single-course credit annotation means "credit given elsewhere",
+  // not "accumulate across repeats" — must not become an XOM at all. Same
+  // non-matching comment text as the accumulate case above (so both hit the same
+  // last-resort-hourscol branch), just a plausible credit value.
+  const r = parseRequirements(page(`
+    <h2>Requirements</h2>
+    <table class="sc_courselist"><tbody>
+      ${commentRowWithHours('These courses generally have the following course number:', 3)}
+      ${indentedCourseRow('CS', '4995', 'Independent Study')}
+    </tbody></table>`), UNDERGRAD_PROFILE);
+  assert.equal(r.requirementSections.length, 1);
+  assert.deepEqual(r.requirementSections[0].requirements, [
+    { type: 'COURSE', subject: 'CS', classId: 4995 },
+  ]);
+});
