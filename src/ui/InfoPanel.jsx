@@ -262,9 +262,14 @@ function CourseInfo({ selCourse, navTo }) {
             <TText>{selCourse.scheduleType}</TText>
           </span>
         )}
-        {/* Renders itself only when the plan says this course is already
-            behind the student — see CourseReviewButton. */}
-        <CourseReviewButton courseId={selCourse.id} />
+        {/* Hidden for now: its only purpose is opening the hours/difficulty/
+            instructor half of CourseReviewPopover, which is itself hidden
+            pending the read/aggregate side (see courseRatings.js) — without
+            that half it would just be a second "edit grade" affordance
+            duplicating the card's own grade chip. Drop the `false &&` (and
+            restore CourseReviewPopover in CourseCard's GradeChip) to bring
+            both back together. */}
+        {false && <CourseReviewButton courseId={selCourse.id} />}
         {selCourse.repeatable && (() => {
           const overTakes = selCourse.repeatMax != null && takes.length > selCourse.repeatMax;
           return (

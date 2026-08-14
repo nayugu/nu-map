@@ -495,8 +495,11 @@ const { locale, setLocale, locales, t } = useLanguage();
   };
 
   // ── UI: Show "Unlocks" section in info panel ──
+  // Default on: purely additive info (a course's outgoing prereqs/coreqs),
+  // gated on there being any to show, so there's no clutter cost. Anyone who
+  // explicitly turned it off keeps that choice — same pattern as showContLogo.
   const [showUnlocks, setShowUnlocks] = useState(() => {
-    try { const v = localStorage.getItem(key("show-unlocks")); return v === "true"; } catch { return false; }
+    try { const v = localStorage.getItem(key("show-unlocks")); return v === null ? true : v !== "false"; } catch { return true; }
   });
   const updateShowUnlocks = (val) => {
     setShowUnlocks(val);

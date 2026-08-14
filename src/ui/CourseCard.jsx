@@ -11,7 +11,7 @@ import { ICourseOffering } from "../ports/ICourseOffering.js";
 import { REL_STYLE } from "../core/constants.js";
 import { baseId, takesUsed } from "../core/repeatInstances.js";
 import { reservationNameSource, reservationSubline } from "../core/reservations.js";
-import CourseReviewPopover from "./CourseReviewPopover.jsx";
+import GradePopover from "./GradePopover.jsx";
 import { takeConsumesSlot } from "../core/gradeSystem.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTheme }    from "../context/ThemeContext.jsx";
@@ -48,23 +48,23 @@ function fadeSubjectColor(hex, k, isDark) {
   return `rgb(${Math.round((rr + m) * 255)},${Math.round((gg + m) * 255)},${Math.round((bb + m) * 255)})`;
 }
 
-// Optional grade entry — a badge chip that opens the course review popover
-// (the schedule-popover shape) on click. Rendered only on courses in
-// COMPLETED semesters: grades are facts about the past. The rect is
-// captured eagerly at click time — reading it inside a state updater from
-// a pooled event was a real crash in the verification pill.
+// Optional grade entry — a badge chip that opens the grade popover (the
+// schedule-popover shape) on click. Rendered only on courses in COMPLETED
+// semesters: grades are facts about the past. The rect is captured eagerly
+// at click time — reading it inside a state updater from a pooled event
+// was a real crash in the verification pill.
 //
 // `pop`/`setPop` live in the CARD, not here: the empty chip renders on
 // hover, and if the popover's lifetime were tied to the chip's render,
 // hover-state and open-state fight — the chip lingered after dismissing,
 // and a mouse-out could kill an open popover. The card keeps the chip
 // mounted exactly while (hovered || graded || open).
-// The chip opens grade AND rating together: they are the same question
-// ("you took this — how did it go?") and splitting them across two
-// surfaces would leave the second one undiscovered. `pid` carries the
-// grade (per placement, so a retake keeps its own); `courseId` carries the
-// rating (per catalog course + term, so a retake in another term is a
-// separate report rather than an average of two different experiences).
+//
+// Grade-only for now: this opened CourseReviewPopover (grade + hours +
+// difficulty + instructor) until the hours/difficulty/instructor half was
+// hidden pending the read/aggregate side existing (see courseRatings.js).
+// `courseId`/`semId` still flow through so restoring that popover here is
+// a one-line swap back.
 function GradeChip({ pid, courseId, semId, grade, setGrade, t, pop, setPop, compact = false }) {
   return (
     <>
@@ -92,9 +92,8 @@ function GradeChip({ pid, courseId, semId, grade, setGrade, t, pop, setPop, comp
         {grade ?? "–"}
       </span>
       {pop && (
-        <CourseReviewPopover pid={pid} courseId={courseId} semId={semId}
-                             grade={grade} rect={pop}
-                             setGrade={setGrade} onDismiss={() => setPop(null)} />
+        <GradePopover pid={pid} grade={grade} rect={pop}
+                      setGrade={setGrade} onDismiss={() => setPop(null)} />
       )}
     </>
   );
