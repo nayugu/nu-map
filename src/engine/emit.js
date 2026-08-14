@@ -125,6 +125,33 @@ export function emitPlan({
     });
   });
 
+  // ── A plan does not END in empty terms ──────────────────────────
+  //
+  // `defaultShape` builds whole YEARS, so a degree needing less than one gets a term it
+  // can never fill: a 12 SH graduate certificate comes out `Fall 4 courses / Spring
+  // nothing`, and the student is shown a semester they are not enrolled in as if it were
+  // part of the programme. Measured, this is the bulk of the defect — of 360 empty full
+  // terms, 90.3% are graduate and 254 (70.6%) are in derived shapes like these.
+  //
+  // Trimmed here rather than in the shape, deliberately. The term is real as far as the
+  // SEARCH is concerned and must stay available to it: a course that only runs in spring
+  // needs a spring to run in, and shortening the skeleton would refuse those degrees to
+  // tidy the output. What is wrong is printing a trailing term nothing landed in.
+  //
+  // TRAILING only. A gap in the middle is a fact about the plan — the student really is
+  // not enrolled that semester and needs to see it — and a co-op or vacation row is
+  // content, not emptiness. Only the tail is cosmetic, because nothing follows it to give
+  // it meaning.
+  // The GLOBAL tail, not each year's. Trimming per year would cut a blank Year 1 Spring
+  // while Year 2 still had courses, turning a tidy-up into a hole in the middle.
+  const isBlank = (t) => !(t.entries ?? []).length;
+  while (years.length) {
+    const y = years[years.length - 1];
+    while (y.terms.length && isBlank(y.terms[y.terms.length - 1])) y.terms.pop();
+    if (y.terms.length) break;
+    years.pop();
+  }
+
   return {
     plans: [{
       label,

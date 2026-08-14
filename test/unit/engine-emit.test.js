@@ -290,6 +290,56 @@ test("emit › an EMPTY co-op term still says co-op rather than reading as vacat
   assert.equal(entries[0].coop, true);
 });
 
+// ── Trailing empty terms ────────────────────────────────────────────
+//
+// `defaultShape` builds whole YEARS, so a degree needing less than one gets a term it can
+// never fill — a 12 SH graduate certificate came out `Fall: 4 courses / Spring: nothing`.
+// 254 of 360 empty full terms were derived shapes like that. The trim is cosmetic ON
+// PURPOSE: the term stays available to the search, because a course that only runs in
+// spring needs a spring to run in.
+
+test("emit › a plan does not end in an empty term", () => {
+  const doc = emit([cellOf({ title: "One" })],
+                   [{ term: "Fall", type: "fall" }, { term: "Spring", type: "spring" }],
+                   [["c", 0]]);
+  const terms = doc.plans[0].years.flatMap(y => y.terms);
+  assert.equal(terms.length, 1, "the unfillable spring is not printed");
+  assert.equal(terms[0].term, "Fall");
+});
+
+test("emit › a gap in the MIDDLE is kept — it is a fact, not clutter", () => {
+  // The student really is not enrolled that semester and has to see it. Trimming per year
+  // instead of from the global tail would delete this one and invent a tidy plan.
+  const doc = emit([cellOf({ id: "a", title: "A" }), cellOf({ id: "b", title: "B" })],
+                   [{ term: "Fall", type: "fall" },
+                    { term: "Spring", type: "spring" },
+                    { term: "Fall", type: "fall", yearIndex: 1 }],
+                   [["a", 0], ["b", 2]]);
+  const terms = doc.plans[0].years.flatMap(y => y.terms);
+  assert.equal(terms.length, 3, "the empty middle term survives");
+  assert.equal(terms[1].entries.length, 0);
+});
+
+test("emit › a trailing CO-OP term is content and is never trimmed", () => {
+  // A plan that ends on co-op ends on co-op. The marker is an entry, so the term is not
+  // blank — but this pins it, because "ends with no courses" and "ends with nothing" are
+  // the same shape to a careless check.
+  const doc = emit([cellOf({ title: "One" })],
+                   [{ term: "Fall", type: "fall" }, { term: "Spring", type: "spring", work: true }],
+                   [["c", 0]]);
+  const terms = doc.plans[0].years.flatMap(y => y.terms);
+  assert.equal(terms.length, 2);
+  assert.equal(terms[1].entries[0].coop, true);
+});
+
+test("emit › a plan with nothing placed at all does not throw", () => {
+  // Every term blank means every term is trimmed, and the loop has to stop rather than
+  // walk off the end of an empty array.
+  assert.doesNotThrow(() => emit([], [{ term: "Fall", type: "fall" }], []));
+  const doc = emit([], [{ term: "Fall", type: "fall" }], []);
+  assert.equal(doc.plans[0].years.flatMap(y => y.terms).length, 0);
+});
+
 test("emit › a general elective travels as the sentinel, not as a section index", () => {
   const doc = emit([cellOf({ target: GENERAL_ELECTIVE, title: "General Elective" })],
                    [{ term: "Fall", type: "fall" }], [["c", 0]]);
