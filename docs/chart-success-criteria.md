@@ -106,6 +106,30 @@ working bound, and 4 the outer edge of anything the corpus supports.
 
 ---
 
+## Dead ends, measured
+
+Kept because each looked obviously right and each cost coverage. The rule they share:
+**a change that reduces the generated count has to pay for itself in correctness, and a
+convention is not correctness.**
+
+- **Vetoing a small cell out of a term that still owes real courses.** The rule is right
+  and the shape was wrong. Removing options does not help a search find an arrangement;
+  it makes it fail. International Business went from a plan with a short spring to no
+  plan at all.
+- **Ordering big cells before small ones in `byConstraint`.** The same rule as a variable
+  ordering, which removes nothing — and it still cost plans, because it overrode the
+  most-constrained-first heuristic the search depends on. Measured on a 154-plan sample:
+  above MRV, thin terms 18 → 15 and **refusals 2 → 7**. Restricted to where MRV is within
+  one term of indifferent, 17 → 16 and refusals 2 → 3. As a pure tie-break below MRV it
+  changes nothing at all. Removed rather than left inert, because an ordering key that
+  does nothing reads as a principle being enforced when it is not.
+- **What DID work** is the same rule as a phase-2 repair: `fillFullTerms` may now evict a
+  1–2 credit cell to a term that already holds its four, then fit the real course. Every
+  move is checked by `fullLegal`, so it can only rearrange a plan that already exists and
+  can never produce a refusal.
+
+---
+
 ## The standing trap
 
 Every number above is a rate, and this project has now produced **four** wrong

@@ -998,6 +998,34 @@ function attemptPlacement({
   const levelGap = (ti, want) => Math.floor(Math.abs(ti / span - want) * span);
 
   /**
+   * Would this small cell spend the credit a full term still needs for its real courses?
+   *
+   * The four-course bar is the principal rule for a full term and the credit envelope is
+   * what limits the EXTRAS — you cannot take four courses each with a one-credit lab,
+   * because that is 20 credits. The search had it the other way round: credits were the
+   * only currency at placement, so a one- or two-credit cell was free to consume the
+   * budget and the bar was left unsatisfiable afterwards. Measured, 60 thin full terms
+   * have the courses to fix them sitting elsewhere, and the worst reads `2 real courses,
+   * 16 SH` — eight of those credits are labs and seminars.
+   *
+   * A PREFERENCE, and that distinction is the whole lesson. Written first as a veto in
+   * the placement loop it took International Business from a plan with a short spring to
+   * no plan at all: removing options does not help a search find an arrangement, it makes
+   * it fail. Here it steers and nothing is forbidden, so a degree whose small courses
+   * genuinely have nowhere else to go still gets its plan.
+   *
+   * Zero for a term that already holds its four — labs and seminars belong exactly there.
+   */
+  const crowdsOutAReal = (plan, ti) => {
+    if (bigCell(plan) || (terms[ti].weight ?? 1) < 1) return 0;
+    const min = minCoursesFor(cal, studentType);
+    if (min <= 0) return 0;                       // no such convention for graduates
+    const owed = Math.max(0, min - bigIn[ti]);
+    if (owed === 0) return 0;
+    return loadSH[ti] + (plan.cell.sh ?? 0) + owed * cal.realCourseSH > cap[ti] + 0.01 ? 1 : 0;
+  };
+
+  /**
    * Would this cell take the room a later elective needs? A specific course prefers a
    * term that still has its share of elective space free; an elective ignores the
    * reserve, since the reserve exists for it.
@@ -1086,7 +1114,8 @@ function attemptPlacement({
       if (isPool(plan)) {
         const thin = (ti) => ((plan.reachAt?.[ti] ?? 1) < cal.poolReachMin ? 1 : 0);
         return [...plan.domain].sort((a, b) =>
-          byOptional(a, b) || thin(a) - thin(b)
+          byOptional(a, b) || crowdsOutAReal(plan, a) - crowdsOutAReal(plan, b)
+            || thin(a) - thin(b)
           || crowded(plan, a) - crowded(plan, b)
           || takesReserved(plan, a) - takesReserved(plan, b)
           || a - b || f(a) - f(b));
@@ -1117,7 +1146,8 @@ function attemptPlacement({
         // all three at once was tried and cost the elective spread across the board.
         const want = cellLevelTarget(plan, courseMap, studentType) ?? 1;
         return [...plan.domain].sort((a, b) =>
-          byOptional(a, b) || crowded(plan, a) - crowded(plan, b)
+          byOptional(a, b) || crowdsOutAReal(plan, a) - crowdsOutAReal(plan, b)
+            || crowded(plan, a) - crowded(plan, b)
           || levelGap(a, want) - levelGap(b, want)
           || underFilled(a) - underFilled(b)
           || takesReserved(plan, a) - takesReserved(plan, b)
@@ -1134,7 +1164,8 @@ function attemptPlacement({
       // tried last, not excluded.
       const floor = cellLevelFloor(plan, courseMap, studentType) * span;
       return [...plan.domain].sort((a, b) =>
-        byOptional(a, b) || (a < floor ? 1 : 0) - (b < floor ? 1 : 0)
+        byOptional(a, b) || crowdsOutAReal(plan, a) - crowdsOutAReal(plan, b)
+          || (a < floor ? 1 : 0) - (b < floor ? 1 : 0)
         || crowded(plan, a) - crowded(plan, b)
         || takesReserved(plan, a) - takesReserved(plan, b)
         || a - b || f(a) - f(b));
@@ -1173,7 +1204,8 @@ function attemptPlacement({
     const noClaim = unlockOf(plan) === 0 && !majorSubjects.has(cellSubject(plan, courseMap));
     const want = noClaim ? 1 : (cellLevelTarget(plan, courseMap, studentType) ?? 1);
     return [...plan.domain].sort((a, b) =>
-      byOptional(a, b) || crowded(plan, a) - crowded(plan, b)
+      byOptional(a, b) || crowdsOutAReal(plan, a) - crowdsOutAReal(plan, b)
+        || crowded(plan, a) - crowded(plan, b)
       || levelGap(a, want) - levelGap(b, want)
       || underFilled(a) - underFilled(b)
       || takesReserved(plan, a) - takesReserved(plan, b)

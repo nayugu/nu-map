@@ -44,6 +44,13 @@ const flag = (name) => { const i = argv.indexOf(name); return i > -1 ? argv[i + 
 
 const listFile = flag("--plans");
 const jsonOut = flag("--json");
+// A program with concentrations plans very differently once one is chosen — and the
+// pre-pick case legitimately refuses for 8 shapes, so measuring only that reports a
+// refusal where the student would see a plan. Without this the probe cannot tell a real
+// regression from the ∀-option rule doing its job.
+const concentration = flag("--concentration");
+// Per-term detail for one plan, so "why is this term short" does not need a fresh script.
+const showTerms = argv.includes("--terms");
 const wanted = new Set(listFile
   ? JSON.parse(readFileSync(listFile, "utf8"))
   : argv.filter(a => !a.startsWith("--") && a !== listFile && a !== jsonOut));
@@ -104,16 +111,43 @@ for (const lvl of ["undergraduate", "graduate"]) {
           program: data, publishedPlan: variant, courseMap, ports, depthIndex,
           observedOrder: observed.edges, coopPrep: (observed.coopPrep ?? []).map(x => x.course),
           studentType, calibration: chartCalibration, timeBudgetMs: 5000,
+          ...(concentration ? { concentration } : {}),
         });
       } catch (e) { out[label] = { threw: String(e?.message ?? e) }; return; }
       if (r.refused) { refused++; out[label] = { refused: r.refused.reason }; return; }
       out[label] = { ...score(r.plan.plans[0], studentType), relaxed: r.report.relaxed ?? [] };
+      if (showTerms) {
+        console.log(`\n── ${label}${concentration ? ` · ${concentration}` : ""} ──`);
+        for (const y of r.plan.plans[0].years ?? []) for (const t of y.terms ?? []) {
+          const es = flat(t.entries).filter(e => !e.vacation && !e.heading);
+          if (!es.length) continue;
+          const big = es.filter(e => (e.sh ?? 0) >= chartCalibration.realCourseSH).length;
+          const sh = es.reduce((a, e) => a + (e.sh ?? 0), 0);
+          const half = /summer\s*(1|2|a|b)/i.test(`${t.term ?? ""}`);
+          const coop = es.some(e => e.coop);
+          const flagStr = (!half && !coop && minCoursesFor(chartCalibration, studentType) > 0
+            && big < minCoursesFor(chartCalibration, studentType)) ? "SHORT" : "     ";
+          console.log(`  ${`${y.label} ${t.term}`.padEnd(17)}${flagStr} big=${big} ${String(sh).padStart(2)}SH  `
+            + es.map(e => e.text).join(" | ").slice(0, 56));
+        }
+      }
     });
   }
 }
 
 const rows = Object.entries(out);
-console.log(`${rows.length} plans   refused ${refused}`);
+// ── A thrown plan must be LOUD ──────────────────────────────────────
+//
+// Counted and printed first, because a swallowed exception looks exactly like a perfect
+// score: every plan throwing reports 0 short, 0 empty and 0 unguided, which is the most
+// encouraging output this tool can produce and the least true. Caught once, by the numbers
+// being impossibly good rather than by the tool saying so.
+const threw = rows.filter(([, v]) => v.threw);
+if (threw.length) {
+  console.error(`✗ ${threw.length} of ${rows.length} plans THREW — every number below is meaningless`);
+  for (const [k, v] of threw.slice(0, 3)) console.error(`   ${k}: ${v.threw}`);
+}
+console.log(`${rows.length} plans   refused ${refused}   threw ${threw.length}`);
 const tot = (k) => rows.reduce((n, [, v]) => n + (v[k] ?? 0), 0);
 console.log(`  SHORT of four real courses  ${tot("short")}`);
 console.log(`  EMPTY full terms            ${tot("empty")}`);

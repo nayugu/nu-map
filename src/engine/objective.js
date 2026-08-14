@@ -798,6 +798,41 @@ export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses 
       // is not enrolled in, which is a different thing and not this rule's business.
       if (w < 1 || load[t] === 0) continue;
 
+      // ── Make room by moving a LAB out, not by giving up ─────────────
+      //
+      // A term can be short of its four real courses and have no credits left for another,
+      // because one- and two-credit cells got there first. International Business Spring
+      // 2027 is the case: `BUSN 1103` and two 2 SH `INTB` courses take five credits, the
+      // term sits at 17 of 19, and the fourth real course cannot fit. The loop below would
+      // simply find no legal donor and move on, leaving a term that is short AND full.
+      //
+      // So before giving up, try evicting a small cell to somewhere that already has its
+      // four. That is where labs and seminars belong anyway, and it is the only direction
+      // that helps: the four-course bar is what a full term is for, and credits limit the
+      // extras rather than defining it.
+      //
+      // Safe by construction, which is why it is here and not in the placement loop. Every
+      // move is checked by `fullLegal` and skipped if it fails, so this can only ever
+      // rearrange a plan that already exists — it cannot turn one into a refusal, which is
+      // exactly what the same rule did when it was written as a veto during placement.
+      if (!termIsFull(big[t], load[t], cap[t], cal, studentType, bigSH[t])
+          && load[t] + cal.realCourseSH > cap[t] + 0.01) {
+        for (const p of plans) {
+          if (current.get(p.cell.id) !== t || isBig(p)) continue;
+          const sh = p.cell.sh ?? 0;
+          const to = p.domain.find(d => d !== t && (terms[d].weight ?? 1) >= 1
+            && big[d] >= minCourses && load[d] + sh <= cap[d]);
+          if (to == null) continue;
+          const trial = new Map(current);
+          trial.set(p.cell.id, to);
+          if (!fitsCapacity(trial, plans, terms, cap) || !fullLegal(trial)) continue;
+          current = trial;
+          load[t] -= sh; load[to] += sh;
+          moves += 1; changed = true;
+          break;                          // one eviction, then re-test the term
+        }
+      }
+
       while (!termIsFull(big[t], load[t], cap[t], cal, studentType, bigSH[t])) {
         let donor = null;
         // `plans` order is deterministic, so the same input yields the same plan.
