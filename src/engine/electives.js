@@ -58,6 +58,20 @@ export const NUPATH_CODES = 13;
 export const CODES_PER_COURSE = 1.5;
 
 /**
+ * A count, coerced to a non-negative whole number — and `NaN` is a count of nothing.
+ *
+ * `?? 0` is not enough and the difference is not theoretical. Both inputs here are computed
+ * upstream from scraped credit figures — `geCells` is `ceil(geSH / unitSH)` — and `??` catches
+ * `null` and `undefined` while passing `NaN` straight through. `Math.floor(NaN)` is `NaN`,
+ * `NaN <= 0` is false, so a `NaN` pool used to walk past the guard and come back out as a `NaN`
+ * breadth count and a `NaN` depth count. Downstream that is worse than a throw: `breadthIndices`
+ * returns an empty set for it, so every cell silently loses its role and nothing reports why.
+ *
+ * Found by a hostile unit test, not by a plan — which is the point of writing them.
+ */
+const whole = (x) => (Number.isFinite(x) ? Math.max(0, Math.floor(x)) : 0);
+
+/**
  * Rule 1: how much of this elective pool is BREADTH, and how much is the student's own depth.
  *
  * Computed per degree from what the major already guarantees, not from a constant:
@@ -94,12 +108,12 @@ export const CODES_PER_COURSE = 1.5;
  * @param {number} args.remaining   unmet competencies — `breadthCodes(...).length`
  * @returns {{breadth: number, depth: number, all: boolean}}
  */
-export function breadthSplit({ cells, remaining }) {
-  const n = Math.max(0, Math.floor(cells ?? 0));
+export function breadthSplit({ cells, remaining } = {}) {
+  const n = whole(cells);
   if (n <= 0) return { breadth: 0, depth: 0, all: false };
   // Clamped at the real ceiling: a run reporting more unmet codes than NUPath has is a bug
   // upstream, and reserving 14 cells for 13 competencies would be its most expensive symptom.
-  const unmet = Math.max(0, Math.min(NUPATH_CODES, Math.floor(remaining ?? 0)));
+  const unmet = Math.min(NUPATH_CODES, whole(remaining));
   // Ceil, not round: half a course of breadth is a whole cell to a student, and under-reserving
   // costs a graduation while over-reserving costs a slot they can spend freely anyway.
   const need = Math.ceil(unmet / CODES_PER_COURSE);
@@ -125,8 +139,13 @@ export function breadthSplit({ cells, remaining }) {
  * @param {number} count  how many carry breadth
  * @returns {Set<number>} cell indices that carry breadth
  */
-export function breadthIndices(n, count) {
+export function breadthIndices(rawN, rawCount) {
   const out = new Set();
+  // Same `NaN` hole as `breadthSplit`, and it failed louder here: with `n = NaN` the two guards
+  // below are both false, `stride` is `NaN`, and the collision fallback `out.add(k >= 0 ? k :
+  // out.size)` added index 0 to a pool of NaN cells. An index into a pool that does not exist.
+  const n = whole(rawN);
+  const count = whole(rawCount);
   if (count <= 0 || n <= 0) return out;
   if (count >= n) { for (let i = 0; i < n; i++) out.add(i); return out; }
   // Stride across the back, from the last cell forward. A stride of `n / count` spreads them
