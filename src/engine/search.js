@@ -148,6 +148,7 @@ export function generatorBar(plans, courseMap, unlockValue, majorSubjects) {
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
 import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
 import { assignSeedHints } from "./seed.js";
+import { barsReachable } from "./cardinality.js";
 
 /**
  * The most general electives one term may hold, at every tier and every rung.
@@ -434,9 +435,32 @@ export function placeCells({
   // The department's own arrangement, as a branch ordering. Absent for the 62% of programs
   // that publish no plan, which simply search as they did before.
   seed = null,
+  // ── Skip the ladder and pack ────────────────────────────────────────
+  //
+  // For the caller's SECOND attempt, after the first produced a plan the hard criteria
+  // refused. The ladder cannot be asked for "another plan" — it is deterministic, so it
+  // returns the same one — and its last rung deliberately relaxes the four-course bar, which
+  // is precisely the rule the criteria then enforce. So a degree could have the ladder
+  // succeed with a lopsided plan, be refused for it, and never reach the packer that would
+  // have filled every term. International Business is exactly that: the packer solves it in
+  // 200 nodes, and was unreachable because rung 3 answered first.
+  packOnly = false,
   propagateChains = true,
 }) {
   const deadline = now() + timeBudgetMs;
+
+  // The caller has already had a plan refused by the criteria; go straight to the packer,
+  // which is a different constructor rather than the same search asked twice.
+  if (packOnly) {
+    const g = packDecreasing({ plans, terms, ports, studentType, courseMap, repeatable,
+                               precedence, cal, shape });
+    return g.ok
+      ? { ...g, nodes: 0, restarts: 0, cardinalityRelaxed: true,
+          relaxed: ["packed-largest-first"] }
+      : { ok: false, nodes: 0, restarts: 0, exhaustedSpace: false,
+          failure: g.failure ?? { kind: "packed-largest-first-failed" } };
+  }
+
   // ── The fallback tier gets a RESERVED share, not the leftovers ────
   //
   // The relaxed attempt below was gated on `now() <= deadline` and therefore almost never
@@ -733,13 +757,32 @@ export function placeCells({
   // cost seven plans of 154 in the sample. Reached only when every rung has failed, it can
   // do exactly one thing: turn a refusal into a plan. Phase 2 then sequences it like any
   // other, and `relaxed` says how it was found.
-  if (now() <= deadline) {
+  // ── Run unconditionally, because a fallback funded by LEFTOVERS is unreachable ──
+  //
+  // This was gated on `now() <= deadline`, and that is the same defect the relaxed tier had
+  // sixty lines up, for the same reason: the tiers before it spend the whole budget BY
+  // CONSTRUCTION — they escalate until they hit it — so the rescue never ran in precisely the
+  // cases that needed rescuing. International Business exhausted the clock at 18,622 nodes
+  // and 40 restarts, the packer was skipped, and the degree was refused; given 200 nodes so
+  // the ladder failed early, the packer solved it immediately.
+  //
+  // Ungated is affordable in a way another search tier would not be. This is ONE greedy pass
+  // per feedBar setting — O(cells x terms) plus a single witness, measured at 5-36 ms — so it
+  // cannot run away with the clock the way a DFS can. The time budget exists to bound a
+  // search whose cost is unpredictable; spending a fixed handful of milliseconds to turn a
+  // refusal into a plan is what the budget was being saved FOR.
+  let packerFailure = null;
+  {
     const g = packDecreasing({ plans, terms, ports, studentType, courseMap, repeatable,
                                precedence, cal, shape });
     if (g.ok) {
       return { ...g, nodes: totalNodes, restarts: maxRestarts,
                cardinalityRelaxed: true, relaxed: [...given, "packed-largest-first"] };
     }
+    // Kept beside the search's own failure rather than replacing it. The search says which
+    // cell it could not place; the packer says whether ROOM or the courses themselves were
+    // the wall, and a refusal that carries both is the one worth reading.
+    packerFailure = g.failure ?? null;
   }
 
   // ── A diversified retry phase was built here, measured, and REMOVED ──
@@ -774,12 +817,13 @@ export function placeCells({
       // programs the search had already settled. The two need different answers: one wants a
       // better search, the other wants a different shape or a correction to the catalog.
       exhaustedSpace: last?.exhaustedSpace ?? false,
-      failure: { ...f, detail: describe(f), exhausted: true },
+      failure: { ...f, detail: describe(f), exhausted: true, packer: packerFailure },
     };
   }
   return {
     ...last, nodes: totalNodes, restarts: maxRestarts,
     exhaustedSpace: last?.exhaustedSpace ?? false,
+    failure: last?.failure ? { ...last.failure, packer: packerFailure } : last?.failure,
   };
 }
 
@@ -1419,6 +1463,37 @@ function attemptPlacement({
   // has twice over: `minCoursesFor` returns 0 for graduate degrees because they have no such
   // convention, and `termIsFull` passes a 16 SH studio term because no fourth course can fit.
   // A bar that cannot be met is not a bar, and the honest response is to plan and say so.
+  // ── Counting says yes; REACHABILITY is the question ────────────────
+  //
+  // `surplus >= 0` asks whether enough real courses exist. It cannot ask whether they can get
+  // where they are needed, and those come apart: a degree with 32 courses for 6 full terms has
+  // surplus 8 and can still have no arrangement, because the courses that could fill a late
+  // term are all locked early by season or prerequisite window. `barsReachable` settles it
+  // exactly, by flow, in microseconds — see `cardinality.js` for why a `false` is a proof and
+  // a `true` is only a licence to look.
+  //
+  // ── Computed, reported, and deliberately NOT used to pick a tier ────
+  //
+  // Gating `barSatisfiable` on it was tried and reverted, for a reason worth keeping. The
+  // check reads DOMAINS, and `propagateChains` narrows domains — soundly, but it narrows
+  // them. So the proof available depends on whether propagation ran, which made the chosen
+  // rung depend on it too, and `chemical_engineering_bsche#2` duly came out differently with
+  // propagation on and off. That breaks the design's §17.1 guarantee that a pruning
+  // propagator never re-sequences a plan that already generated — a guarantee with an
+  // invariant test behind it, and not one to weaken as a side effect of a diagnostic.
+  //
+  // Measured, gating it changed nothing anyway: the sample was identical either way. So it is
+  // carried as a REASON — "no arrangement can give every full term four" is a far better
+  // sentence than "budget exhausted", and it is a proof rather than a guess. Using it as a
+  // propagator INSIDE the DFS is where it would earn its keep, and that is propagation-
+  // neutral by construction because every branch sees the same domains.
+  const barsAreReachable = barsReachable({
+    plans, terms, realCourseSH: cal.realCourseSH, minCourses,
+    slotCap: (ti) => slotCap[ti],
+    // A summer has no floor of its own in the criteria, so none is imposed here; asking for
+    // one would make instances look infeasible that the criteria would have accepted.
+    halfTermCourses: () => 0,
+  });
   const barSatisfiable = surplus >= 0;
   const bigCap = terms.map((t) => {
     // Not enough courses to give every full term four: the rule is unsatisfiable for this
@@ -1874,6 +1949,10 @@ function attemptPlacement({
             // half terms hold at most 8" is a sentence an advisor can check; "no legal
             // placement exists" is not. Free to attach: all three are already computed.
             realCourses: realTotal, fullTerms: fullCount, minCourses, surplus,
+            // And whether the arithmetic is even the problem. `surplus >= 0` with
+            // `barsReachable` false means the courses exist and cannot GET where they are
+            // needed — a different diagnosis, and a proved one. See `cardinality.js`.
+            reachable: barsAreReachable,
           }
         : null;
       if (dead) {
@@ -2081,15 +2160,40 @@ function packDecreasing(args) {
   //
   // Best-fit was tried as a third and is WORSE: packing terms tight strands the next large
   // cell, where balance keeps room in every term for it. 1 refusal became 3.
-  for (const feedBar of [true, false]) {
-    const r = packOnce({ ...args, feedBar });
+  const failures = [];
+  // ── Three guesses, because size is not the only dimension ─────────
+  //
+  // The first two order by SIZE, which is the dimension a bin-packer's failures usually turn
+  // on, and the comment in `packOnce` says so with a measurement behind it. International
+  // Business is the counterexample that shows it is not the only one. Its "International
+  // Experiential Learning" cell is 0 SH and legal in exactly FOUR terms; size-descending puts
+  // it dead last, by which point all four are at their slot cap, and the packer refuses a
+  // degree it can otherwise pack. The cell had nowhere to go because it was asked last.
+  //
+  // So the third pass orders by DOMAIN WIDTH — most-constrained first, the standard variable
+  // ordering the DFS already uses as `byConstraint`. It runs third rather than first because
+  // the size-ordered passes are the ones measured to produce better plans across the corpus;
+  // this one exists only to answer where they have nothing to say. A pass that runs after two
+  // failures can only ever turn a refusal into a plan.
+  for (const { feedBar, narrowFirst, termMajor } of [
+    { feedBar: true }, { feedBar: false }, { feedBar: true, narrowFirst: true },
+    // Term-major, last: it answers the saturated instances the three orderings above cannot.
+    { termMajor: true }, { termMajor: true, narrowFirst: true },
+  ]) {
+    const r = packOnce({ ...args, feedBar, narrowFirst, termMajor });
     if (r.ok) return r;
+    failures.push({ feedBar: !!feedBar, narrowFirst: !!narrowFirst, termMajor: !!termMajor,
+                    ...(r.failure ?? { kind: "unknown" }) });
   }
-  return { ok: false };
+  // Both passes, kept: they fail differently — the bar-feeding pass can strand a large cell
+  // that plain balance would have placed, and knowing WHICH pass hit WHICH wall is the
+  // difference between "the distribution is wrong" and "the courses are not there".
+  return { ok: false, failure: { kind: "packed-largest-first-failed", passes: failures } };
 }
 
 function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
-                    precedence, cal, shape, feedBar = true }) {
+                    precedence, cal, shape, feedBar = true, narrowFirst = false,
+                    termMajor = false }) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
   const slots = terms.map(t => termSlotCap(t, shape));
   const loadSH = terms.map(() => 0), count = terms.map(() => 0), big = terms.map(() => 0);
@@ -2101,6 +2205,90 @@ function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
   const isGE = (p) => p.cell.target === GENERAL_ELECTIVE;
   const minC = minCoursesFor(cal, studentType);
   const termOf = new Map();
+  // What sits in each term, so a repair can ask who is in the way. An array rather than a
+  // scan of `termOf`, because the repair runs per blocked cell and per candidate term.
+  const held = terms.map(() => []);
+
+  /**
+   * Why this cell cannot go in this term, or null if it can.
+   *
+   * Factored out because the repair below has to ask the identical question — a repair that
+   * checked a subset of these would place a cell the main loop would have rejected, which is
+   * how a fallback starts emitting plans the gate refuses.
+   */
+  const blockedBy = (p, ti) => {
+    const sh = p.cell.sh ?? 0, n = coursesInCell(p.cell);
+    if (loadSH[ti] + sh > cap[ti] + 0.01) return "credit";
+    if (count[ti] + n > slots[ti]) return "slots";
+    if (isGE(p) && geIn[ti] + 1 > UNGUIDED_PER_TERM_CAP) return "ge";
+    if (precedence) {
+      const trial = new Map(termOf);
+      trial.set(p.cell.id, ti);
+      if (precedenceViolations(precedence, trial).length) return "precedence";
+    }
+    return null;
+  };
+
+  const put = (p, ti) => {
+    termOf.set(p.cell.id, ti);
+    loadSH[ti] += p.cell.sh ?? 0;
+    count[ti] += coursesInCell(p.cell);
+    if ((p.cell.sh ?? 0) >= cal.realCourseSH) big[ti] += 1;
+    if (isGE(p)) geIn[ti] += 1;
+    held[ti].push(p);
+  };
+
+  const lift = (p, ti) => {
+    termOf.delete(p.cell.id);
+    loadSH[ti] -= p.cell.sh ?? 0;
+    count[ti] -= coursesInCell(p.cell);
+    if ((p.cell.sh ?? 0) >= cal.realCourseSH) big[ti] -= 1;
+    if (isGE(p)) geIn[ti] -= 1;
+    held[ti] = held[ti].filter(x => x !== p);
+  };
+
+  /**
+   * A cell has nowhere to go. Move ONE cell that is in its way somewhere else.
+   *
+   * ── Why a pure greedy needed this ───────────────────────────────────
+   *
+   * The packer places each cell once and never reconsiders, so a cell legal in four terms out
+   * of fourteen loses them all to cells that could have gone anywhere. International Business
+   * fails exactly there: `s2#0`, "International Experiential Learning", has a domain of four,
+   * and by the time it is reached two of those terms are at their slot cap and two violate
+   * precedence. The cells occupying them had alternatives; nothing asked them to take one.
+   *
+   * So this is min-conflicts, in its smallest useful form: for each term the blocked cell
+   * could use, try lifting each occupant, and keep the swap if the blocked cell then fits AND
+   * the occupant has a legal home elsewhere. Both halves are checked with `blockedBy`, so a
+   * repaired arrangement obeys exactly what the main loop obeys.
+   *
+   * Depth ONE, deliberately. Chained eviction is a search, and a search is what the tiers
+   * above already are — this is the fallback, and its value is that it terminates in bounded
+   * time. Every candidate is tried at most once, so a repair costs O(terms x occupants x
+   * terms) and cannot loop: `repairs` also caps the total, so a pathological instance cannot
+   * turn the packer into a solver.
+   */
+  let repairs = 0;
+  const repairBudget = plans.length;
+  const repair = (p) => {
+    if (repairs >= repairBudget) return false;
+    for (const ti of p.domain) {
+      // A stable order, so two runs repair identically. Determinism is a hard requirement
+      // here: the monthly diff review depends on the same input giving the same plan.
+      const occupants = [...held[ti]].sort((a, b) =>
+        String(a.cell.id).localeCompare(String(b.cell.id)));
+      for (const q of occupants) {
+        lift(q, ti);
+        if (blockedBy(p, ti) === null) {
+          const alt = q.domain.find(x => x !== ti && blockedBy(q, x) === null);
+          if (alt != null) { put(p, ti); put(q, alt); repairs++; return true; }
+        }
+        put(q, ti);
+      }
+    }
+    return false;
+  };
 
   // Size first — the dimension the whole failure turns on. Then the narrowest domain, then
   // the shallowest cell, so a first-year course claims its term before a senior one takes
@@ -2112,28 +2300,92 @@ function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
   // the sample. Claiming the terms with requirements first packs them to the credit cap, and
   // the electives that would have completed a term then fit nowhere. In a packer, size is the
   // dimension that matters and everything else is noise.
-  const order = [...plans].sort((a, b) =>
-    (b.cell.sh ?? 0) - (a.cell.sh ?? 0)
-    || a.domain.length - b.domain.length
+  //
+  // `narrowFirst` swaps the first two keys, and only the third pass sets it: a cell legal in
+  // four terms out of fourteen has to claim one before the cells that could have gone
+  // anywhere take them all. See `packDecreasing` for why this is a separate pass rather than
+  // a change to the order above.
+  let order = [...plans].sort((a, b) =>
+    (narrowFirst
+      ? (a.domain.length - b.domain.length) || ((b.cell.sh ?? 0) - (a.cell.sh ?? 0))
+      : ((b.cell.sh ?? 0) - (a.cell.sh ?? 0)) || (a.domain.length - b.domain.length))
     || (a.minDepth ?? 0) - (b.minDepth ?? 0)
     || String(a.cell.id).localeCompare(String(b.cell.id)));
 
+  // Why a branch died, for the cell that failed. The packer returned a bare `{ ok: false }`,
+  // so a program it could not rescue reported nothing at all — and "the greedy also failed"
+  // is the least useful sentence available when the question is whether room or the courses
+  // themselves ran out.
+  //
+  // Reset PER CELL, and that is not a detail. Accumulated across the whole loop the first
+  // version read `credit 69, slots 4` for a cell with four terms in its domain, which
+  // invites exactly the wrong conclusion: 69 of those rejections belonged to other cells,
+  // and all four of this one's were slots. A diagnostic that has to be discounted is worse
+  // than none, because it is trusted.
+  let blocked = { credit: 0, slots: 0, ge: 0, precedence: 0 };
+
+  // ── TERM-MAJOR: give every term its bar before anyone gets a fifth course ──
+  //
+  // The cell-major loop below asks "where does this cell go", and its answer for an early
+  // term is "here, there is room" — right up to the CREDIT cap. On a saturated degree that is
+  // fatal: International Business has 32 real courses for exactly 32 slots, so a term that
+  // takes five has taken one from a term that now cannot reach four, and the packer discovers
+  // this only when a later cell has nowhere to go. Measured on IB: the blocked cell's four
+  // terms were full of cells that all HAD alternatives, and none of those alternatives had
+  // room either. Nothing local can repair a saturated arrangement.
+  //
+  // So this asks the other question — "what does this term still need" — which is how an
+  // advisor builds a schedule and, more to the point, is the question the hard criteria are
+  // stated in. Each term is filled to its bar and then left alone; the surplus is distributed
+  // afterwards by the ordinary loop. Terms are visited in order so prerequisites land before
+  // the courses that need them, and within a term the most-constrained cell goes first, which
+  // is `byConstraint`'s reasoning applied to a greedy.
+  //
+  // It runs as one PASS among several rather than as a replacement, for the reason the
+  // size-ordered passes are still first: they measure better on the corpus. This one exists
+  // for the saturated instances they cannot express.
+  if (termMajor) {
+    const remaining = new Set(order);
+    /** How many terms this cell could still legally occupy — its true freedom, now. */
+    const freedom = (p) => p.domain.reduce((n, x) => n + (blockedBy(p, x) === null ? 1 : 0), 0);
+    for (let ti = 0; ti < terms.length; ti++) {
+      const t = terms[ti];
+      if (t.work || t.unused) continue;
+      // A full term owes four real courses; a summer owes the half-term convention. Neither
+      // is a cap — the loop below may still add more — it is what this term must not be left
+      // short of while cells are still available.
+      const bar = (t.weight ?? 1) >= 1 ? minC : (cal.halfTermCourses ?? 0);
+      while (bar > 0 && big[ti] < bar) {
+        let pick = null;
+        for (const p of remaining) {
+          if ((p.cell.sh ?? 0) < cal.realCourseSH) continue;   // only real courses fill a bar
+          if (!p.domain.includes(ti) || blockedBy(p, ti) !== null) continue;
+          if (pick == null) { pick = p; continue; }
+          const a = freedom(p), b = freedom(pick);
+          if (a < b
+            || (a === b && (p.cell.sh ?? 0) > (pick.cell.sh ?? 0))
+            || (a === b && (p.cell.sh ?? 0) === (pick.cell.sh ?? 0)
+                && String(p.cell.id).localeCompare(String(pick.cell.id)) < 0)) pick = p;
+        }
+        if (!pick) break;
+        put(pick, ti);
+        remaining.delete(pick);
+      }
+    }
+    order = order.filter(p => remaining.has(p));
+  }
+
   for (const p of order) {
+    blocked = { credit: 0, slots: 0, ge: 0, precedence: 0 };
     const sh = p.cell.sh ?? 0, n = coursesInCell(p.cell);
     const isBig = sh >= cal.realCourseSH;
     let best = null, bestScore = Infinity;
     for (const ti of p.domain) {
-      if (loadSH[ti] + sh > cap[ti] + 0.01) continue;
-      if (count[ti] + n > slots[ti]) continue;
       // Never a fourth general elective. Four reservations in a term is a real semester;
       // four "General Elective" cards is a term with nothing in it to read, and it is a hard
       // criterion, so packing one would only produce a plan the criteria refuse.
-      if (isGE(p) && geIn[ti] + 1 > UNGUIDED_PER_TERM_CAP) continue;
-      if (precedence) {
-        const trial = new Map(termOf);
-        trial.set(p.cell.id, ti);
-        if (precedenceViolations(precedence, trial).length) continue;
-      }
+      const no = blockedBy(p, ti);
+      if (no) { blocked[no]++; continue; }
       // Feed the four-course bar before balancing load: a term still owing real courses is
       // where a real course belongs, and after that the emptiest term keeps the plan level.
       const owes = feedBar && isBig && (terms[ti].weight ?? 1) >= 1 && minC > 0
@@ -2141,10 +2393,26 @@ function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
       const score = -owes * 100 + loadSH[ti];
       if (score < bestScore) { bestScore = score; best = ti; }
     }
-    if (best == null) return { ok: false };
-    termOf.set(p.cell.id, best);
-    loadSH[best] += sh; count[best] += n; if (isBig) big[best] += 1;
-    if (isGE(p)) geIn[best] += 1;
+    // Nowhere to go. Before giving up, ask whether someone else is in the way who does not
+    // need to be — the greedy's one blind spot, and a bounded question to answer.
+    if (best == null && repair(p)) continue;
+    // Still nowhere. Which cell, and what turned every one of its terms away.
+    if (best == null) {
+      // Per TERM, not just a tally. "slots 2, precedence 2" over a domain of four does not
+      // say which two, nor whether the occupants of those terms could have moved — and that
+      // is the whole question when deciding between a better order and a real search.
+      const perTerm = p.domain.map(ti => ({
+        term: ti, why: blockedBy(p, ti), holds: held[ti].length,
+        // Could the occupants go anywhere else? If none can, no repair could ever help here
+        // and the wall is genuine rather than an artefact of the order.
+        movable: held[ti].filter(q => q.domain.some(x => x !== ti)).length,
+      }));
+      return { ok: false, failure: { kind: "packer-cell-has-no-term", cell: p.cell.id,
+                                     title: p.cell.title, domain: p.domain.length,
+                                     needs: coursesInCell(p.cell), sh: p.cell.sh ?? 0,
+                                     blocked, repairs, perTerm } };
+    }
+    put(p, best);
   }
 
   const byId = new Map(plans.map(p => [p.cell.id, p]));
@@ -2155,5 +2423,24 @@ function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
     offeringProbability: ports.offeringProbability, offered: ports.offered,
     repeatable, checkPrereqs: true, contention: buildContention(plans),
   });
-  return w.ok ? { ok: true, termOf, failure: null } : { ok: false };
+  // Every cell got a term and the arrangement still is not a plan: the courses to FILL those
+  // reservations do not exist distinctly. A different failure entirely from running out of
+  // room, and the one that says a better distribution would not have helped.
+  if (!w.ok) {
+    return { ok: false, failure: { kind: "packer-witness-failed", inner: w.failure ?? null,
+                                   bars: barsOf(terms, big, minC) } };
+  }
+  return { ok: true, termOf, failure: null };
+}
+
+/** Which full terms the packed arrangement left short, for the failure report. */
+function barsOf(terms, big, minC) {
+  if (!(minC > 0)) return [];
+  const short = [];
+  for (let ti = 0; ti < terms.length; ti++) {
+    const t = terms[ti];
+    if (t.work || t.unused || t.optional || (t.weight ?? 1) < 1) continue;
+    if (big[ti] < minC) short.push({ term: ti, big: big[ti], want: minC });
+  }
+  return short;
 }

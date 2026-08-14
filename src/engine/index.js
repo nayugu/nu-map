@@ -103,7 +103,7 @@ export { permissivePorts } from "./ports.js";
  * @returns {{plan: object, report: object} | {refused: {reason, detail, data?}}}
  */
 export function generatePlan(args = {}) {
-  const first = generateOnce(args);
+  const first = withPackerRetry(args);
   // ── Breadth guidance is a PREFERENCE, and this is what makes it one ──
   //
   // Binding an elective to an unmet competency gives it a real candidate set, which is the
@@ -122,7 +122,7 @@ export function generatePlan(args = {}) {
   if (!first.refused || !first.refused.data?.breadthBound) return first;
   if (PREFLIGHT_REASONS.has(first.refused.reason)) return first;
 
-  const again = generateOnce({ ...args, breadthGuidance: false });
+  const again = withPackerRetry({ ...args, breadthGuidance: false });
   // The FIRST refusal is the one reported if both fail: it describes the degree, while the
   // retry's describes a degree we deliberately handicapped.
   if (again.refused) return first;
@@ -133,6 +133,38 @@ export function generatePlan(args = {}) {
       relaxed: [...(again.report?.relaxed ?? []), "breadth-guidance"],
     },
   };
+}
+
+/**
+ * Try the ladder; if the criteria refuse what it built, try the PACKER before giving up.
+ *
+ * ── Why a criteria refusal is not the end of the attempt ─────────────
+ *
+ * The criteria are hard, so a plan that fails them cannot ship. That is a statement about
+ * the PLAN, and it was being treated as a statement about the degree. The ladder's last rung
+ * relaxes the four-course bar deliberately — it exists for degrees that cannot meet it — so
+ * whenever that rung answers, its plan is at risk of failing the very rule the criteria
+ * enforce. And because the search SUCCEEDED, `placeCells` returned, and the packer sitting
+ * behind it was never reached: the fallback built to turn refusals into plans is unreachable
+ * in exactly the case where the search's answer is unusable.
+ *
+ * International Business is that case exactly. The ladder's rung 3 produces a plan with an
+ * empty Year 3 Fall and two three-course terms; the packer produces a compliant plan in 200
+ * nodes. The degree was refused for the entire life of this engine because the working
+ * constructor ran second and never got asked.
+ *
+ * So: a criteria refusal falls through to a different CONSTRUCTOR, not a re-run of the same
+ * one. Retrying the ladder would be pointless — it is deterministic and would return the
+ * identical plan.
+ *
+ * The first refusal is kept if both fail, for the same reason as the breadth retry: it
+ * describes what the search found, which is the more informative complaint.
+ */
+function withPackerRetry(args) {
+  const first = generateOnce(args);
+  if (!first.refused || first.refused.reason !== "fails-hard-criteria") return first;
+  const packed = generateOnce({ ...args, packOnly: true });
+  return packed.refused ? first : packed;
 }
 
 /** Refusals decided before any course is placed, which breadth binding cannot have caused. */
@@ -146,6 +178,8 @@ function generateOnce({
   studentType = "undergraduate", preferences = DEFAULT_PREFERENCES,
   depthIndex = null, repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, observedOrder = [], coopPrep = [],
+  // Set only by `withPackerRetry`, after the ladder's plan was refused by the criteria.
+  packOnly = false,
   now = () => Date.now(),
   // The student's concentration, by title, when they have picked one.
   //
@@ -444,7 +478,7 @@ function generateOnce({
     // Off only so the claim "a pruning propagator does not move an existing plan" can be
     // TESTED rather than argued — see `chart-propagator-neutral.test.js`. Production never
     // passes false, and the invariant it protects is the whole basis of §17's placement rule.
-    propagateChains,
+    propagateChains, packOnly,
     // Injectable so DETERMINISM can be tested as the property it is, rather than as a race
     // against the machine. With a frozen clock the search is bounded by nodes alone and the
     // same input must give the same plan; with the real clock a slow run can only ever
