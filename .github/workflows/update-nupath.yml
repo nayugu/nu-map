@@ -65,7 +65,14 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci
+        # `--ignore-scripts` — see .github/workflows/test.yml. Skips `onnxruntime-node`'s
+        # ~100 MB native download, which nothing here loads and which has already failed a job
+        # with ETIMEDOUT.
+        #
+        # Safe for the Playwright path this workflow exists to provide: browsers are installed
+        # by the EXPLICIT `npx playwright install --with-deps chromium` step below, not by the
+        # npm package's postinstall, so skipping install scripts does not skip the browser.
+        run: npm ci --ignore-scripts
 
       # ── Install Playwright + Chromium (used for Tableau browser scraping) ─
       - name: Install Playwright Chromium

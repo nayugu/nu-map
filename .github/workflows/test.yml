@@ -39,7 +39,23 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: "24", cache: npm }
       # Only job with an install: HTML fixtures need node-html-parser.
-      - run: npm ci
+      #
+      # `--ignore-scripts`, because this job does not need a single native binary and
+      # downloading one is how it failed. `@huggingface/transformers` requires
+      # `onnxruntime-node`, whose postinstall fetches a ~100 MB runtime from a CDN, and that
+      # fetch timed out on the runner:
+      #
+      #   npm error command sh -c node ./script/install
+      #   AggregateError [ETIMEDOUT] connect ETIMEDOUT 150.171.110.147:443
+      #
+      # Nothing in this suite runs a model. It parses saved HTML with `node-html-parser`,
+      # which is pure JavaScript, so the install script is pure risk here — a third-party
+      # CDN sitting between a push and a green check.
+      #
+      # Verified: `npm ci --ignore-scripts` then `npm run test:contract` passes all 83 tests.
+      # Do NOT copy this flag to a job that BUILDS — `esbuild` and `sharp` also have install
+      # scripts and vite needs esbuild's.
+      - run: npm ci --ignore-scripts
       - run: npm run test:contract
 
   invariant:
@@ -70,5 +86,9 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: "24" }
-      - run: npm ci
+      # Same reasoning as `contract`: this suite fetches NEU's catalog and parses it with
+      # `node-html-parser`, and runs no model. Verified passing under `--ignore-scripts`.
+      # It already depends on one network being up (catalog.northeastern.edu); there is no
+      # reason to make it depend on a second one it never uses.
+      - run: npm ci --ignore-scripts
       - run: npm run test:live

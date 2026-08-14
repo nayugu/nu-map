@@ -60,7 +60,11 @@ jobs:
           cache: "npm"
 
       - name: Install dependencies
-        run: npm ci
+        # `--ignore-scripts` — see .github/workflows/test.yml. `onnxruntime-node`'s postinstall
+        # fetches a ~100 MB runtime this project never loads, and it has already failed a job
+        # with ETIMEDOUT. This workflow pushes to main unattended, so a third-party CDN must not
+        # sit between the catalog and the scrape. The scrapers need `node-html-parser`, pure JS.
+        run: npm ci --ignore-scripts
 
       # ── Step 1: Scrape catalog.northeastern.edu ───────────────────────────────
       - name: Scrape catalog
