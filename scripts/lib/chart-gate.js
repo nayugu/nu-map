@@ -54,7 +54,7 @@
 
 // The sentinel the emitter writes into a concentration cell's binding. Core, not engine: it is
 // what a target IS, not how one gets scheduled.
-import { CONCENTRATION } from "../../src/core/requirementDemand.js";
+import { CONCENTRATION, GENERAL_ELECTIVE } from "../../src/core/requirementDemand.js";
 
 /**
  * Does this card tell the student anything about what to take?
@@ -118,6 +118,7 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
       // placeholder and is NOT unguided, and conflating the two is what made CHART look
       // better than the departments at clumping when it is four times worse. See `isUnguided`.
       let unguided = 0;
+      let ge = 0;
       const walk = (entries) => {
         for (const e of entries ?? []) {
           if (e.coop) { coop = true; walk(e.children); continue; }
@@ -135,6 +136,11 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
           if (key) perReq.set(key, (perReq.get(key) ?? 0) + 1);
           if (!e.options?.length) fillers++;
           if (isUnguided(e.text)) unguided++;
+          // Cells of the GENERAL ELECTIVE bucket, labelled or not. Counted separately from
+          // `unguided`, which excludes the ones carrying a competency code, and from
+          // `maxPerReq`, which counts every requirement alike — this is the one bucket
+          // whose clumping reads as filler to a student.
+          if (e.binding?.targets?.includes(GENERAL_ELECTIVE)) ge++;
           if (e.options?.length === 1) for (const id of e.options[0]) placed[id] = ord;
           walk(e.children);
         }
@@ -144,7 +150,7 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
         label: `${year.label ?? ""} ${t.term ?? ""}`.trim(),
         season: t.type, coop, cells, big, sh,
         maxPerReq: perReq.size ? Math.max(...perReq.values()) : 0,
-        fillers, unguided,
+        fillers, unguided, ge,
         // A work term still occupies an ordinal: it separates a prerequisite from the
         // course that needs it, and collapsing it would make a co-op look like no time at all.
         half: /summer\s*(1|2|a|b)/i.test(`${t.term ?? ""}`),
@@ -217,6 +223,13 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
   }
 
   const overCap = [], thin = [], emptyFull = [];
+  // Terms whose every cell is an unlabelled elective — criterion 3, in its literal form.
+  // Read off `rows`, not `studyRows`, which is declared further down: a `const` used above
+  // its declaration is a temporal-dead-zone throw, and this gate runs against every plan in
+  // the corpus, so it would have taken the whole sweep down.
+  const allUnguided = rows
+    .filter(r => !r.coop && !r.half && r.cells > 0 && r.unguided === r.cells)
+    .map(r => r.label);
   let fullTerms = 0;
   for (const r of rows) {
     // ── An EMPTY fall or spring is the defect this gate could not see ──
@@ -301,6 +314,10 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
     // one and made CHART look better than the departments here when it is several times
     // worse — see docs/chart-success-criteria.md §3 and the denominator note.
     unguidedMax: studyRows.length ? Math.max(...studyRows.map(r => r.unguided)) : 0,
+    // GENERAL ELECTIVES specifically — the one bucket whose clumping reads as filler.
+    geMax: studyRows.length ? Math.max(...studyRows.map(r => r.ge)) : 0,
+    geOver2: studyRows.filter(r => r.ge > 2).length,
+    geOver1: studyRows.filter(r => r.ge > 1).length,
     unguidedOver2: studyRows.filter(r => r.unguided > 2).length,
     unguidedOver3: studyRows.filter(r => r.unguided > 3).length,
     // ── Surviving choice, for a reservation that promises one ────────
@@ -339,8 +356,22 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
     // unsatisfiable — 4.2% of published full terms miss it too, and they are architecture and
     // art where one studio course is 16 credits. The other three are rules a student cannot
     // work around: the registrar refuses the enrolment, so one instance is a bug.
+    //
+    // ── The success criteria are hard too, and checked HERE as well ──
+    //
+    // `generatePlan` refuses a plan that fails them, so in principle none reaches this
+    // gate. That is exactly why the check belongs here: the engine grading its own work is
+    // the arrangement that let a co-op term with no marker read as an empty semester for
+    // months. An independent reader of the emitted document either agrees or finds a bug.
+    //
+    // Only the two that need no judgement: a semester the student is not enrolled in, and a
+    // term that says nothing at all about what to take. `thin` stays out, because the
+    // four-course bar is unsatisfiable for degrees built from 2 SH courses and this reader
+    // has no way to know which those are — the engine waives it on that test and reporting
+    // it as a violation here would contradict a deliberate decision.
     ok: order.length === 0 && availability.length === 0 && overCap.length === 0
-      && reservations.length === 0,
+      && reservations.length === 0
+      && emptyFull.length === 0 && allUnguided.length === 0,
   };
 }
 

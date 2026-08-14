@@ -135,6 +135,7 @@ const Q = {
   choicePairs: 0, choiceCollapsed: 0, choiceTight: 0, plansWithForcedChoice: 0,
   choiceP10s: [],
   unguidedMax: 0, unguidedOver2: 0, unguidedOver3: 0,
+  geMax: 0, geOver2: 0, geOver1: 0,
 };
 // Plans whose concentration reservations cannot be filled under some option, and the programs
 // they belong to. Counted separately from `violations` while the engine still emits them, so the
@@ -237,6 +238,9 @@ for (const d of degrees) {
     Q.unguidedMax = Math.max(Q.unguidedMax, g.quality.unguidedMax);
     Q.unguidedOver2 += g.quality.unguidedOver2;
     Q.unguidedOver3 += g.quality.unguidedOver3;
+    Q.geMax = Math.max(Q.geMax, g.quality.geMax);
+    Q.geOver2 += g.quality.geOver2;
+    Q.geOver1 += g.quality.geOver1;
     if (optionPools(d.data).length) { R.concPlans++; R.concPrograms.add(label.split("#")[0]); }
     if (g.reservations.length) { R.plans++; R.programs.add(label.split("#")[0]); }
     if (!g.ok) {
@@ -280,6 +284,9 @@ console.log(`  3+ cells of one requirement in a term   ${Q.clumped} of ${Q.study
 // cell, which is why this counts unguidedness and not placeholders — see chart-gate `isUnguided`.
 console.log(`  terms leaving 3+ cells UNGUIDED         ${Q.unguidedOver2} of ${Q.studyTerms} `
   + `(${pct(Q.unguidedOver2, Q.studyTerms)})    departments: 1.2%`);
+console.log(`  terms with 3+ GENERAL ELECTIVES         ${Q.geOver2} of ${Q.studyTerms} `
+  + `(${pct(Q.geOver2, Q.studyTerms)})   with 2+: ${Q.geOver1} (${pct(Q.geOver1, Q.studyTerms)})`
+  + `   worst term ${Q.geMax}`);
 console.log(`  terms leaving 4+ cells unguided         ${Q.unguidedOver3} of ${Q.studyTerms} `
   + `(${pct(Q.unguidedOver3, Q.studyTerms)})    departments: 0.2%   worst term ${Q.unguidedMax}`);
 console.log(`  mean placeholder position                `

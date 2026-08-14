@@ -1231,7 +1231,12 @@ function attemptPlacement({
     // major, so it becomes filler and goes late — where the corpus puts it anyway
     // (median 0.78, p90 0.89).
     const noClaim = unlockOf(plan) === 0 && !majorSubjects.has(cellSubject(plan, courseMap));
-    const want = noClaim ? 1 : (cellLevelTarget(plan, courseMap, studentType) ?? 1);
+    // A cell that carries its own target uses it. Only general electives do, and it is how
+    // they stop all wanting the same term: `cellLevelTarget` has nothing to say about a cell
+    // naming no course, so every one of them fell through to 1.0 and clumped at the end.
+    // See `deriveCells` for what the spread means.
+    const want = plan.cell.levelTarget
+      ?? (noClaim ? 1 : (cellLevelTarget(plan, courseMap, studentType) ?? 1));
     return [...plan.domain].sort((a, b) =>
       byOptional(a, b) || crowdsOutAReal(plan, a) - crowdsOutAReal(plan, b)
         || crowded(plan, a) - crowded(plan, b)
@@ -1965,8 +1970,23 @@ const isFiller = (p) => p.candidates === null;
  * and the witness. A plan from here is exactly as legal as one from the search — it is only
  * less thoughtfully sequenced, and phase 2 sequences it.
  */
-function packDecreasing({ plans, terms, ports, studentType, courseMap, repeatable,
-                          precedence, cal, shape }) {
+function packDecreasing(args) {
+  // Two passes, because one greedy is one guess. The first feeds the four-course bar — a
+  // term still owing real courses is where a real course belongs — and the second ignores
+  // it and simply balances. The bar is a convention and feasibility is not, so a pass that
+  // chases it can strand a large cell that plain balance would have placed.
+  //
+  // Best-fit was tried as a third and is WORSE: packing terms tight strands the next large
+  // cell, where balance keeps room in every term for it. 1 refusal became 3.
+  for (const feedBar of [true, false]) {
+    const r = packOnce({ ...args, feedBar });
+    if (r.ok) return r;
+  }
+  return { ok: false };
+}
+
+function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
+                    precedence, cal, shape, feedBar = true }) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
   const slots = terms.map(t => termSlotCap(t, shape));
   const loadSH = terms.map(() => 0), count = terms.map(() => 0), big = terms.map(() => 0);
@@ -1997,7 +2017,7 @@ function packDecreasing({ plans, terms, ports, studentType, courseMap, repeatabl
       }
       // Feed the four-course bar before balancing load: a term still owing real courses is
       // where a real course belongs, and after that the emptiest term keeps the plan level.
-      const owes = isBig && (terms[ti].weight ?? 1) >= 1 && minC > 0
+      const owes = feedBar && isBig && (terms[ti].weight ?? 1) >= 1 && minC > 0
         ? Math.max(0, minC - big[ti]) : 0;
       const score = -owes * 100 + loadSH[ti];
       if (score < bestScore) { bestScore = score; best = ti; }

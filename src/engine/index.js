@@ -483,6 +483,30 @@ function generateOnce({
     reasons: improved.reasons,
   });
 
+  // ── 9. The criteria are HARD, so a plan that fails one is not offered ──
+  //
+  // See docs/chart-success-criteria.md. These are not quality metrics to report and
+  // improve on: a full term that is not full, a semester the student is not enrolled in,
+  // or a term that is nothing but unlabelled electives makes the plan one NU Map should
+  // not put in front of a student. The sanctioned outcome for those is a refusal.
+  //
+  // Checked on the EMITTED document rather than on the assignment, for the same reason
+  // `gatePlan` is: the artifact is what the student sees, and the two have disagreed
+  // before — a co-op term with no marker read as an empty semester until `emit` was fixed.
+  //
+  // This is deliberately the last thing that happens. Everything before it exists to make
+  // the plan pass; this only decides whether it did.
+  const failed = criteriaFailures(plan, { studentType, cal });
+  if (failed.length) {
+    return {
+      refused: {
+        reason: "fails-hard-criteria",
+        detail: failed[0].detail,
+        data: { failures: failed.slice(0, 4) },
+      },
+    };
+  }
+
   return {
     plan,
     report: {
@@ -647,4 +671,89 @@ function generateOnce({
       })(),
     },
   };
+}
+
+/**
+ * The hard criteria, read off the emitted plan.
+ *
+ * `docs/chart-success-criteria.md` states three, and they are HARD: a plan that fails one
+ * is not offered at all. The alternative — offering it with the failure reported — was the
+ * standing behaviour and is what put a spring with three courses and two years of nothing
+ * but "General Elective" in front of a student.
+ *
+ * A refusal is not free either: the fallback is the department's published plan, which this
+ * corpus measures at 31.9% season violations. So this runs LAST, after every rung and the
+ * packing fallback, and only decides whether the work succeeded.
+ *
+ * Half terms and co-op terms are exempt from the course count by construction — a summer
+ * holds two, and a term spent employed is not a full course load. The four-course bar is an
+ * undergraduate convention and `minCoursesFor` returns 0 for graduates, which switches the
+ * first check off for them rather than inventing a rule their departments do not follow.
+ */
+function criteriaFailures(plan, { studentType, cal }) {
+  const out = [];
+  let minCourses = minCoursesFor(cal, studentType);
+  const flat = (es, acc = []) => { for (const e of es ?? []) { acc.push(e); flat(e.children, acc); } return acc; };
+  // Bare "Elective"/"General Elective", with or without an aside. A NUPath code in
+  // parentheses is guidance and does not count — see `chart-gate.js` `isUnguided`, which
+  // this mirrors deliberately rather than importing, because scripts must not be a runtime
+  // dependency of the engine.
+  const unguided = (text) => {
+    const m = /^(general\s+|open\s+|free\s+)?electives?\s*(\(([^)]*)\))?$/i
+      .exec(String(text ?? "").trim());
+    return !!m && !/^[A-Z]{2}$/.test((m[3] ?? "").trim());
+  };
+
+  // ── The bar has to be SATISFIABLE before it can be failed ────────
+  //
+  // A degree with sixteen real courses and five full terms cannot put four in each of them,
+  // however it is arranged — that is a fact about the degree, not a defect in the plan, and
+  // `attemptPlacement` already switches its own cardinality propagator off on exactly this
+  // test. Refusing here would refuse the degree for being small, which is not what "every
+  // full term must be full" means.
+  //
+  // Empty terms and all-elective terms are still failures for those degrees. Only the count
+  // is waived, and only when no arrangement could have met it.
+  if (minCourses > 0) {
+    let real = 0, fulls = 0;
+    for (const y of plan?.plans?.[0]?.years ?? []) for (const t of y.terms ?? []) {
+      const es = flat(t.entries);
+      if (es.some(e => e.coop) || /summer\s*(1|2|a|b)/i.test(`${t.term ?? ""}`)) continue;
+      const cells = es.filter(e => !e.vacation && !e.heading);
+      if (!cells.length) continue;
+      fulls++;
+      real += cells.filter(e => (e.sh ?? 0) >= cal.realCourseSH).length;
+    }
+    if (real < fulls * minCourses) minCourses = 0;
+  }
+
+  for (const y of plan?.plans?.[0]?.years ?? []) {
+    for (const t of y.terms ?? []) {
+      const label = `${y.label ?? ""} ${t.term ?? ""}`.trim();
+      const es = flat(t.entries);
+      if (es.some(e => e.coop)) continue;                       // employed, not enrolled
+      if (/summer\s*(1|2|a|b)/i.test(`${t.term ?? ""}`)) continue;
+      const cells = es.filter(e => !e.vacation && !e.heading);
+
+      // Criterion 1, worst case: a semester the student is not enrolled in.
+      if (!cells.length) {
+        out.push({ criterion: 1, term: label, detail: `${label} is empty — a semester you are not enrolled in.` });
+        continue;
+      }
+      // Criterion 1: a full term carries four courses of at least `realCourseSH`.
+      if (minCourses > 0) {
+        const big = cells.filter(e => (e.sh ?? 0) >= cal.realCourseSH).length;
+        if (big < minCourses) {
+          out.push({ criterion: 1, term: label,
+                     detail: `${label} carries ${big} courses of ${cal.realCourseSH}+ credits, not ${minCourses}.` });
+        }
+      }
+      // Criterion 3: a term that says nothing at all about what to take.
+      if (cells.length && cells.every(e => unguided(e.text))) {
+        out.push({ criterion: 3, term: label,
+                   detail: `${label} is nothing but unlabelled electives.` });
+      }
+    }
+  }
+  return out;
 }

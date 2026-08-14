@@ -80,6 +80,31 @@ import { resolveConcentration } from "../core/concentrationResolve.js";
 export { GENERAL_ELECTIVE, CONCENTRATION };
 
 /**
+ * Where a degree's free credit sits, as a fraction through the plan.
+ *
+ * Not a tuning knob — two statements about what a general elective IS.
+ *
+ * The FLOOR is CHART's founding complaint. Departments spend the electives before the first
+ * co-op (54.0% of theirs are), and the whole engine exists because that leaves a student with
+ * nothing but requirements afterwards. So the earliest an elective sits is a third of the way
+ * in, which still leaves room for a first-year exploration course without reproducing the
+ * defect.
+ *
+ * The CEILING runs to the end of the plan. Lowering it to 0.85 was tried on the reasoning
+ * that an elective should yield the final term to the capstone that belongs there — a senior
+ * requirement's target runs to about 0.9 (`LEVEL_POSITION`, 4000-level). It measured WORSE:
+ * terms leaving three or more cells unguided went 10 to 12 on the sample, and it did not fix
+ * the case that motivated it. Squeezing the range packs the electives closer together, which
+ * is the opposite of the point. Recorded rather than quietly dropped, because the argument
+ * still sounds right and someone will try it again.
+ *
+ * The mean of the resulting spread is 0.625, against the departments' measured 0.601 and
+ * CHART's own 0.645. The same centre of gravity — distributed rather than piled.
+ */
+export const GE_SPREAD_LO = 0.30;
+export const GE_SPREAD_HI = 0.95;
+
+/**
  * @typedef {Object} Cell
  * @property {string} id            deterministic; position in the derivation
  * @property {number|string} target section index, or a sentinel
@@ -675,6 +700,33 @@ export function deriveCells(programData, {
         // Carried so the card can say which competency, and so `reqKey` does not count this
         // cell as one of the term's unguided ones — it is guided, just not constrained.
         ...(bind ? { nupath: bind.code } : {}),
+        // ── What a general elective is FOR, expressed as WHEN it sits ──
+        //
+        // Every general elective used to fall through to a level target of 1.0 — the end of
+        // the plan — because `cellLevelTarget` has nothing to say about a cell that names no
+        // course. Fourteen electives then all wanted the same last term, and clumped there.
+        // That is not a missing constraint; it is fourteen copies of one instruction.
+        //
+        // They are not one thing. A degree's free credit is a PORTFOLIO:
+        //
+        //   BREADTH      covers an unmet NUPath competency. Those courses are mostly 1000-
+        //                2000 level and carry no prerequisites, so they sit early.
+        //   DEPTH        an advanced course in or near the major. It has prerequisites in
+        //                practice, so it sits late.
+        //   EXPLORATION  anything, anywhere.
+        //
+        // So they get a SPREAD of targets rather than a shared one, and the existing level
+        // machinery distributes them with no new rule and no repair pass. Breadth cells are
+        // emitted first and therefore take the early end, which is where they belong.
+        //
+        // The range is skewed late deliberately. CHART exists because departments spend the
+        // electives before the first co-op, so an even spread over the whole plan would
+        // reintroduce the founding defect. Over [0.30, 0.95] the mean target is ~0.63,
+        // against the departments' measured 0.601 and CHART's own 0.645 — the same centre of
+        // gravity, distributed instead of piled.
+        ...(target === GENERAL_ELECTIVE && n > 1
+          ? { levelTarget: GE_SPREAD_LO + (GE_SPREAD_HI - GE_SPREAD_LO) * (i / (n - 1)) }
+          : {}),
         // ── And the union is not, on its own, a legal answer ──────────
         //
         // The union says what MAY answer this cell before the student chooses. It does not say

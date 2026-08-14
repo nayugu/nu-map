@@ -51,6 +51,11 @@ const jsonOut = flag("--json");
 const concentration = flag("--concentration");
 // Per-term detail for one plan, so "why is this term short" does not need a fresh script.
 const showTerms = argv.includes("--terms");
+// Raise the search budget, to tell "no arrangement exists" from "we stopped looking".
+// 53% of refusals exhaust the node budget with space left, so this is the difference
+// between a fact about the degree and a weakness in the search.
+const nodeBudget = flag("--nodes") ? Number(flag("--nodes")) : null;
+const timeMs = flag("--ms") ? Number(flag("--ms")) : 5000;
 const wanted = new Set(listFile
   ? JSON.parse(readFileSync(listFile, "utf8"))
   : argv.filter(a => !a.startsWith("--") && a !== listFile && a !== jsonOut));
@@ -110,11 +115,18 @@ for (const lvl of ["undergraduate", "graduate"]) {
         r = generatePlan({
           program: data, publishedPlan: variant, courseMap, ports, depthIndex,
           observedOrder: observed.edges, coopPrep: (observed.coopPrep ?? []).map(x => x.course),
-          studentType, calibration: chartCalibration, timeBudgetMs: 5000,
+          studentType, calibration: chartCalibration, timeBudgetMs: timeMs,
+          ...(nodeBudget ? { nodeBudget } : {}),
           ...(concentration ? { concentration } : {}),
         });
       } catch (e) { out[label] = { threw: String(e?.message ?? e) }; return; }
-      if (r.refused) { refused++; out[label] = { refused: r.refused.reason }; return; }
+      if (r.refused) {
+        refused++;
+        // The detail too. "fails-hard-criteria" names WHICH term and WHICH criterion, and
+        // without it the reason alone sends you back to a fresh script to find out.
+        out[label] = { refused: r.refused.reason, detail: r.refused.detail ?? "" };
+        return;
+      }
       out[label] = { ...score(r.plan.plans[0], studentType), relaxed: r.report.relaxed ?? [] };
       if (showTerms) {
         console.log(`\n── ${label}${concentration ? ` · ${concentration}` : ""} ──`);

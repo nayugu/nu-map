@@ -56,6 +56,7 @@ import { witnessPlan } from "./witness.js";
 import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
 import { DEFAULT_CALIBRATION, minCoursesFor, termIsFull } from "./calibration.js";
 import { unlockUniverse, unlockOfCell, isPoolCell, generatorBar } from "./search.js";
+import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
 import { unlockValues } from "./prereqDepth.js";
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
 import { precedenceViolations, chainHeight } from "./precedence.js";

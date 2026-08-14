@@ -151,6 +151,21 @@ export function emitPlan({
     if (y.terms.length) break;
     years.pop();
   }
+  // ── And the same at the FRONT ───────────────────────────────────
+  //
+  // A plan whose first term is empty is a plan that starts later, not a plan with a hole.
+  // It happens when nothing the degree needs runs in the fall — the courses are all spring
+  // offerings, so the search legitimately puts them there and the artifact opens on a
+  // semester the student is not enrolled in.
+  //
+  // Same rule as the tail and the same limit: only the blank RUN at the very start goes. A
+  // gap after real coursework has begun is a fact the student needs to see.
+  while (years.length) {
+    const y = years[0];
+    while (y.terms.length && isBlank(y.terms[0])) y.terms.shift();
+    if (y.terms.length) break;
+    years.shift();
+  }
 
   return {
     plans: [{
