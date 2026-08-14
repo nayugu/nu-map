@@ -1,13 +1,16 @@
 # Nathan's ideas
 
 Main
-- Engine to create sample plans (especially since we have a lot more information and we can use information theory to build really good sample plans)
-- Mass import and export (Matthew is already working on this)
-- Search function on the data pages
+- Fix duplicate concentrations
+- Account for coops as a class taken, and integrate with current coop system. 
+
 
 Optional
 - Ability to select intended instructor for a semester
 - Ability to compare courses side by side
+
+
+
 
 
 ## Next phase big picture: run without us (2026-08-08)
