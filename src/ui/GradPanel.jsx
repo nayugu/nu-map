@@ -120,7 +120,15 @@ function CheckBox({ sat, dimmedCheck = false }) {
 
 // ── Searchable combobox (matches course-bank search style) ───────────────
 
-export function SearchCombo({ value, onChange, groups, placeholder = "Search…", size = 10 }) {
+export function SearchCombo({
+  value, onChange, groups, placeholder = "Search…", size = 10,
+  // Majors are a ~1,500-option list, so an empty query has to render nothing —
+  // see `rankOptions` below. Concentrations are a handful per program (measured:
+  // median 5, max 30 across the catalog), where the opposite is true: a new
+  // student who does not yet know a program's concentrations is better served
+  // by seeing all of them on focus, filtering only once they start typing.
+  showAllWhenEmpty = false,
+}) {
   const [query, setQuery] = useState("");
   const [open,  setOpen]  = useState(false);
   const [rect,  setRect]  = useState(null);
@@ -160,8 +168,10 @@ export function SearchCombo({ value, onChange, groups, placeholder = "Search…"
 
   const q        = query.trim().toLowerCase();
   // Rank by closeness (exact/prefix first) with light typo tolerance, instead of
-  // an unordered substring filter. Empty query renders nothing (never all ~1500).
-  const filtered = rankOptions(allOptions, query);
+  // an unordered substring filter. Empty query renders nothing (never all ~1500) —
+  // `rankOptions` itself stays that way for every other caller; the pull-down-on-
+  // focus behavior below is opted into per instance, not changed at the source.
+  const filtered = q ? rankOptions(allOptions, query) : (showAllWhenEmpty ? allOptions : []);
 
   const sel = value ? allOptions.find(o => o.path === value) : null;
   // Always show the selected label when not editing, otherwise show the query
@@ -234,7 +244,7 @@ export function SearchCombo({ value, onChange, groups, placeholder = "Search…"
               color: "var(--text-5)", borderBottom: "1px solid var(--border-1)",
             }}
           >(None)</div>
-          {!q ? (
+          {!q && !showAllWhenEmpty ? (
             <div style={{ padding: `${Math.round(size * 0.7)}px ${size}px`, fontSize: size + 1, color: "var(--text-5)", fontStyle: "italic" }}>{t("bank.search.empty.typing")}</div>
           ) : filtered.length === 0 ? (
             <div style={{ padding: `${Math.round(size * 0.7)}px ${size}px`, fontSize: size + 1, color: "var(--text-5)" }}>{t("bank.search.empty.none")}</div>
@@ -1891,7 +1901,7 @@ export default function GradPanel({ wideCatalog = false }) {
                   <div style={{ fontSize: isPhone ? 8 : 10, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", marginBottom: 4 }}>
                     {t("grad.conc.label")}
                   </div>
-                  <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.conc.search")} />
+                  <SearchCombo value={selConc} onChange={setSelConc} groups={concGroups} placeholder={isPhone ? t("grad.major.search.short") : t("grad.conc.search")} showAllWhenEmpty />
                   {major.concentrations.minOptions > 0 && !selConc && (
                     <div style={{ fontSize: 9, color: "var(--warn-bright)", marginTop: 3 }}>
                       ⚠ {major.concentrations.minOptions} concentration{major.concentrations.minOptions > 1 ? "s" : ""} required
@@ -1931,7 +1941,7 @@ export default function GradPanel({ wideCatalog = false }) {
                         {t("grad.conc.label")}
                       </div>
                       <SearchCombo value={selConc2} onChange={setSelConc2} groups={conc2Groups}
-                                   placeholder={isPhone ? t("grad.major.search.short") : t("grad.conc.search")} />
+                                   placeholder={isPhone ? t("grad.major.search.short") : t("grad.conc.search")} showAllWhenEmpty />
                       {major2Data.concentrations.minOptions > 0 && !selConc2 && (
                         <div style={{ fontSize: 9, color: "var(--warn-bright)", marginTop: 3 }}>
                           ⚠ {major2Data.concentrations.minOptions} concentration{major2Data.concentrations.minOptions > 1 ? "s" : ""} required
