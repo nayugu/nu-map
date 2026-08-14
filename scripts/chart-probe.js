@@ -37,6 +37,7 @@ import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { minCoursesFor } from "../src/engine/calibration.js";
 import { isUnguided } from "./lib/chart-gate.js";
+import { GENERAL_ELECTIVE } from "../src/core/requirementDemand.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const argv = process.argv.slice(2);
@@ -77,6 +78,12 @@ const flat = (es, out = []) => { for (const e of es ?? []) { out.push(e); flat(e
 function score(doc, studentType) {
   const minCourses = minCoursesFor(chartCalibration, studentType);
   let short = 0, empty = 0, unguided3 = 0, terms = 0;
+  // The GENERAL ELECTIVE bucket, by binding rather than by wording. `unguided3` reads the
+  // card TEXT, so a breadth cell reading "General Elective (IC)" counts as guided — correct
+  // for "does this card say anything", and the wrong instrument for "how many electives are
+  // stacked here". Four reservations in a term is a real semester; four general electives is
+  // not, and only this counts them.
+  let ge3 = 0, geMax = 0;
   for (const y of doc.years ?? []) for (const t of y.terms ?? []) {
     const es = flat(t.entries);
     const coop = es.some(e => e.coop);
@@ -87,8 +94,11 @@ function score(doc, studentType) {
     terms++;
     if (minCourses > 0 && cells.filter(e => (e.sh ?? 0) >= chartCalibration.realCourseSH).length < minCourses) short++;
     if (cells.filter(e => isUnguided(e.text)).length > 2) unguided3++;
+    const ge = cells.filter(e => e.binding?.targets?.includes(GENERAL_ELECTIVE)).length;
+    if (ge > 2) ge3++;
+    geMax = Math.max(geMax, ge);
   }
-  return { short, empty, unguided3, terms };
+  return { short, empty, unguided3, ge3, geMax, terms };
 }
 
 const out = {};
@@ -164,4 +174,6 @@ const tot = (k) => rows.reduce((n, [, v]) => n + (v[k] ?? 0), 0);
 console.log(`  SHORT of four real courses  ${tot("short")}`);
 console.log(`  EMPTY full terms            ${tot("empty")}`);
 console.log(`  terms with 3+ UNGUIDED      ${tot("unguided3")}`);
+console.log(`  terms with 3+ GEN ELECTIVES ${tot("ge3")}   worst term `
+  + `${rows.reduce((m, [, v]) => Math.max(m, v.geMax ?? 0), 0)}`);
 if (jsonOut) { writeFileSync(jsonOut, JSON.stringify(out, null, 1)); console.log(`  → ${jsonOut}`); }

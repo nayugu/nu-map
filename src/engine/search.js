@@ -149,6 +149,18 @@ import { cellSubject, majorSubjectsOf } from "./subjects.js";
 import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
 
 /**
+ * The most general electives one term may hold, at every tier and every rung.
+ *
+ * Four cells of an ordinary requirement is fine — four `Concentration` cards is a real
+ * semester with a real shape. Four GENERAL ELECTIVES is not: it is a term with nothing in it
+ * to read, and `docs/chart-success-criteria.md` makes it a hard criterion. So unlike every
+ * other requirement this bucket does not widen when `wideTerms` lifts the general cap, and
+ * the packing fallback obeys it too — a fallback that produces plans the criteria refuse is
+ * not a fallback.
+ */
+export const UNGUIDED_PER_TERM_CAP = 3;
+
+/**
  * Nodes phase 1 may expand before refusing.
  *
  * 20,000 — and it stays there, which took two measured regressions to establish.
@@ -851,13 +863,34 @@ function attemptPlacement({
   // per-term count, the crowding comparator and the relaxation rung all treat it as one more
   // requirement, and `wideTerms` still lifts it when nothing else will fit.
   const UNGUIDED = "~general:unguided";
-  const UNGUIDED_PER_TERM_MAX = 3;
-  // What the loosest rung allows: the corpus maximum, reached in 14 of 5,978 terms.
-  const UNGUIDED_RELAXED_MAX = 4;
+  // ── The GENERAL ELECTIVE bucket is capped harder than any other ────
+  //
+  // `sameRequirementPerTermMax` is 4 and correct for requirements in general: departments do
+  // put four cells of one requirement in a term. General electives are the exception the
+  // student notices, because four of them side by side is a term with nothing in it to read.
+  //
+  // Three, not two — and two was tried. Departments leave two or fewer cells unsaid in 98.8%
+  // of 5,978 published terms, so two looks like the convention and it measured WORSE on every
+  // axis: refusals 28 -> 30 and thin terms 6 -> 13 on the sample.
+  //
+  // The reason is an interaction worth stating, because the number looks safe on its own. A
+  // general elective is 4 SH, so it IS a real course by `realCourseSH` and counts toward the
+  // four-course bar. Capping the bucket at two starves that bar in exactly the degrees that
+  // lean on electives to fill their terms — the rule meant to stop terms looking empty made
+  // more of them genuinely short.
+  // And THREE is the ceiling at every rung, including the loosest. Four cells of one ordinary
+  // requirement is fine — four `Concentration` cards is a real semester with a real shape.
+  // Four GENERAL ELECTIVES is not: it is a term with nothing in it to read, and it is the
+  // specific thing the International Business benchmark showed. So unlike every other
+  // requirement, this bucket does not widen when `wideTerms` lifts the general cap.
+  const UNGUIDED_PER_TERM_MAX = UNGUIDED_PER_TERM_CAP;
+  const UNGUIDED_RELAXED_MAX = UNGUIDED_PER_TERM_CAP;
+  // EVERY general elective shares this key, labelled or not. Counting only the unlabelled
+  // ones let a term hold three of those plus every breadth-labelled cell on top, which is
+  // still four "General Elective" cards to the student — the bucket is what clumps, not the
+  // wording on it.
   const reqKey = (cell) =>
-    (cell.target === GENERAL_ELECTIVE && !cell.nupath && !cell.spec)
-      ? UNGUIDED
-      : (cell.target ?? `#${cell.id}`);
+    cell.target === GENERAL_ELECTIVE ? UNGUIDED : (cell.target ?? `#${cell.id}`);
   const reqCount = (ti, cell) => reqIn[ti].get(reqKey(cell)) ?? 0;
   /**
    * The per-term ceiling for THIS cell's requirement.
@@ -1990,6 +2023,12 @@ function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
   const slots = terms.map(t => termSlotCap(t, shape));
   const loadSH = terms.map(() => 0), count = terms.map(() => 0), big = terms.map(() => 0);
+  // General electives held per term. The packer checked credits, slots and precedence and
+  // knew nothing about this, so it would happily stack four — and the criteria would then
+  // refuse the plan it had just rescued. A fallback that produces plans the gate rejects is
+  // not a fallback.
+  const geIn = terms.map(() => 0);
+  const isGE = (p) => p.cell.target === GENERAL_ELECTIVE;
   const minC = minCoursesFor(cal, studentType);
   const termOf = new Map();
 
@@ -1997,6 +2036,12 @@ function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
   // the shallowest cell, so a first-year course claims its term before a senior one takes
   // the credits. Ties break on id, because determinism is a hard requirement here as
   // everywhere: two runs must produce the same plan.
+  // Size first, and ONLY size. Putting requirements before electives was tried — it is what
+  // `byConstraint` does, and with the bucket capped at three a full term needs a non-elective
+  // to reach four courses, so the argument is good. It measured WORSE: thin terms 10 -> 16 on
+  // the sample. Claiming the terms with requirements first packs them to the credit cap, and
+  // the electives that would have completed a term then fit nowhere. In a packer, size is the
+  // dimension that matters and everything else is noise.
   const order = [...plans].sort((a, b) =>
     (b.cell.sh ?? 0) - (a.cell.sh ?? 0)
     || a.domain.length - b.domain.length
@@ -2010,6 +2055,10 @@ function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
     for (const ti of p.domain) {
       if (loadSH[ti] + sh > cap[ti] + 0.01) continue;
       if (count[ti] + n > slots[ti]) continue;
+      // Never a fourth general elective. Four reservations in a term is a real semester;
+      // four "General Elective" cards is a term with nothing in it to read, and it is a hard
+      // criterion, so packing one would only produce a plan the criteria refuse.
+      if (isGE(p) && geIn[ti] + 1 > UNGUIDED_PER_TERM_CAP) continue;
       if (precedence) {
         const trial = new Map(termOf);
         trial.set(p.cell.id, ti);
@@ -2025,6 +2074,7 @@ function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
     if (best == null) return { ok: false };
     termOf.set(p.cell.id, best);
     loadSH[best] += sh; count[best] += n; if (isBig) big[best] += 1;
+    if (isGE(p)) geIn[best] += 1;
   }
 
   const byId = new Map(plans.map(p => [p.cell.id, p]));

@@ -55,7 +55,7 @@ import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
 import { witnessPlan } from "./witness.js";
 import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
 import { DEFAULT_CALIBRATION, minCoursesFor, termIsFull } from "./calibration.js";
-import { unlockUniverse, unlockOfCell, isPoolCell, generatorBar } from "./search.js";
+import { unlockUniverse, unlockOfCell, isPoolCell, generatorBar, UNGUIDED_PER_TERM_CAP } from "./search.js";
 import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
 import { unlockValues } from "./prereqDepth.js";
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
@@ -1206,6 +1206,26 @@ function isLegal({ plans, terms, termOf, cap, courseMap, repeatable, ports, byId
                   shape, maxThin = Infinity, studentType = "undergraduate",
                   cal = DEFAULT_CALIBRATION }) {
   if (!fitsCapacity(termOf, plans, terms, cap, shape, maxThin, studentType, cal)) return false;
+  // ── No term may hold a fourth general elective ───────────────────
+  //
+  // The search caps this per term at every rung, and phase 2 knew nothing about it: every
+  // hill-climb swap, every `fillFullTerms` donation and every `reclaimFromFiller` trade could
+  // add one back. Measured, the corpus still showed terms of four after the cap was in place
+  // at placement, because they were assembled afterwards.
+  //
+  // Here rather than in each pass, because `isLegal` gates all of them — one statement of the
+  // rule instead of four, which is the arrangement the four implementations of `offered`
+  // taught this repo to prefer.
+  //
+  // Four cells of an ordinary requirement stays fine: four `Concentration` cards is a real
+  // semester. It is general electives specifically that read as a term with nothing in it.
+  const geIn = terms.map(() => 0);
+  for (const p of plans) {
+    if (p.cell.target !== GENERAL_ELECTIVE) continue;
+    const ti = termOf.get(p.cell.id);
+    if (ti == null) continue;
+    if (++geIn[ti] > UNGUIDED_PER_TERM_CAP) return false;
+  }
   // Cheapest first: a precedence check is a map lookup, the witness is a matching.
   if (precedence && precedenceViolations(precedence, termOf).length) return false;
   const cells = plans

@@ -208,6 +208,20 @@ expensive failure, so the loop is:
   mangles a file nobody re-reads. Shell is for *running* things: tests, builds,
   git, throwaway measurement scripts. It is not for changing source, and that
   includes locale files.
+- **Never idle on a long command.** `verify-chart` is 4–10 minutes and the suites
+  are minutes more. Background them and keep editing, reading or writing the next
+  thing while they run; collect the result when it lands. Waiting for a number
+  before doing anything else turns a ten-minute run into ten wasted minutes, and
+  it happens a dozen times in a session.
+  - The only reason to block is when the very next edit depends on the answer and
+    getting it wrong would be expensive to unwind — landing a change on main,
+    or a measurement that decides whether to keep or revert work already built.
+    That is rare. Default to carrying on.
+  - Prefer ONE reusable instrument over a stream of throwaway scripts.
+    `scripts/chart-probe.js` answers the same questions over a named list of
+    plans in ~13 seconds where the corpus sweep takes ten minutes; every `node -e`
+    heredoc instead reloads the 8,000-course catalog from scratch. Extend the
+    instrument, do not write another script.
 - **Re-anchor these rules as a session runs long.** Drift is the default, not
   the exception — the shell creeps back in, tests get gentler, claims get
   confident again. Re-read this section periodically and after any long stretch
