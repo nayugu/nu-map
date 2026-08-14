@@ -1,5 +1,11 @@
 # PlusOne intake — keeping ~75 pathways correct
 
+
+> **This document is the reasoning behind a decision, not the reference.**
+> For what PlusOne *is* — the rules, the sources, the measurements and the
+> known gaps — see **[`plusone.md`](plusone.md)**, which is the single source
+> of truth. This file is kept for the argument it records.
+
 **Status: design + measured inventory. The discovery stage is prototyped and
 works; nothing is committed as a script yet.** Third document in the set, after
 `plusone-research.md` (what PlusOne is) and `plusone-design.md` (the engine).

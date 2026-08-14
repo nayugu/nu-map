@@ -1,5 +1,11 @@
 # PlusOne — complete design
 
+
+> **This document is the reasoning behind a decision, not the reference.**
+> For what PlusOne *is* — the rules, the sources, the measurements and the
+> known gaps — see **[`plusone.md`](plusone.md)**, which is the single source
+> of truth. This file is kept for the argument it records.
+
 **Status: design only. No implementation.** Supersedes the first draft of this
 file (commit `2962f80994`); the parts that changed are called out in §11.
 Companion to `docs/plusone-research.md`, which establishes what PlusOne is and

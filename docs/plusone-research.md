@@ -1,5 +1,11 @@
 # PlusOne — what it is, how it works, and where its data lives
 
+
+> **This document is the reasoning behind a decision, not the reference.**
+> For what PlusOne *is* — the rules, the sources, the measurements and the
+> known gaps — see **[`plusone.md`](plusone.md)**, which is the single source
+> of truth. This file is kept for the argument it records.
+
 Research notes, **2026-08-13**. No implementation. No design decisions yet.
 
 This document exists because PlusOne breaks two assumptions the repo currently
