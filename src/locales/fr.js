@@ -89,8 +89,6 @@ export const strings = {
   "bank.filter.empty":            "Aucun cours ne correspond à vos filtres.",
 
   // ── Semester row ───────────────────────────────────────────────
-  "sem.slot.add":           "+ ajouter",
-  "sem.slot.drop":          "déposer pour ajouter",
   "sem.other.label.open":   "▼ autres crédits",
   "sem.other.label.closed": "► autres crédits",
   "sem.other.title.hide":   "Masquer les autres crédits",

@@ -90,8 +90,6 @@ export const strings = {
   "bank.filter.empty":            "No courses match your filters.",
 
   // ── Semester row ───────────────────────────────────────────────
-  "sem.slot.add":           "+ add",
-  "sem.slot.drop":          "drop to add",
   "sem.other.label.open":   "\u25bc other credits",
   "sem.other.label.closed": "\u25ba other credits",
   "sem.other.title.hide":   "Hide other credits",
