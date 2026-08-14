@@ -151,18 +151,48 @@ Measured against `origin/main` at `f9df193ce2`:
 
 | | main | now |
 |---|---|---|
-| generated of 1,031 shapes | 774 | **782** |
+| generated of 1,031 shapes | 774 | **820** |
 | `full-term-cannot-reach-four` refusals | 21 | **0** |
-| 3+ cells of one requirement in a term | 6.5% | **3.3%** |
-| terms leaving 3+ cells unguided | — | **2.1%** (departments 1.2%) |
+| `search-budget-exhausted` | 71 | **38** |
+| 3+ cells of one requirement in a term | 6.5% | **3.2%** |
+| terms leaving 3+ cells unguided | — | **2.0%** (departments 1.2%) |
 | terms leaving 4+ cells unguided | — | **0.4%** (departments 0.2%) |
-| thin full terms | 2.1% | 2.6% ¹ |
-| EMPTY full terms | 360 | **360** |
-| plans with an empty-semester gap | 34.8% | **34.0%** |
+| thin full terms | 2.1% | 2.8% ¹ |
+| EMPTY full terms | 360 | **145** |
+| plans with an empty-semester gap | 34.8% | **14.8%** |
 | hard-rule violations | 0 | 0 |
 
-¹ Not a regression: the measure is stricter now, and 28 of these plans exist at all
-only because the four-course rung finally runs.
+### Scheduling a degree is BIN PACKING, and the search did not know it
+
+The single largest finding. Classified across the corpus, of 249 refusals:
+
+```
+132  GAVE UP   ran out of nodes with space still unexplored
+105  DATA      not enough of the degree can be read to plan it
+ 12  PROVED    genuinely no arrangement exists
+```
+
+**Only 12 were ever impossible.** And the stuck instances are *loose*, not tight:
+`business_administration_bsba` is 31 cells into 10 terms with 22 SH and 19 slots to
+spare, every domain 9 or 10 terms wide. There is nothing for MRV to grip, and the
+constraints that actually bite — credit sums, the four-course count, distinctness — only
+fail once a term is already full, so the DFS backtracks over an exponential space to
+discover what a different ORDER would have avoided.
+
+The dimension it never consulted is SIZE. Pack every full term to 16 SH with 4 SH courses
+and a 6 SH course fits nowhere: 16+6 > 19 in every full term, 8+6 > 9.5 in every half.
+First-fit decreasing — one pass, no backtracking — solves eight of nine of those programs
+in 5–36 ms. Raising the node budget tenfold and the clock twelvefold rescued one.
+
+`packDecreasing` therefore runs LAST, after every rung, and that placement is the whole
+safety argument. Tried first it would replace carefully sequenced plans with merely legal
+ones; tried as a variable ordering inside the search it cost seven plans of 154. Reached
+only when everything else has failed, it can do exactly one thing — turn a refusal into a
+plan — and it fires 38 times, rescuing all 38.
+
+¹ Not a regression: the measure is stricter now, and 106 of these plans exist at all only
+because the four-course rung and the packing fallback run — a plan with one light term is
+not a worse outcome than no plan.
 
 ### The empty-term regression, and what it cost to find
 
