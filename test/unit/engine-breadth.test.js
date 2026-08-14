@@ -100,7 +100,12 @@ test("breadth › a bound elective is named but keeps its freedom", async () => 
   assert.ok(bound.length > 0, "a degree that is all free electives should bind at least one");
   for (const c of bound) {
     assert.equal(c.spec, null, "a breadth elective must NOT be restricted to a candidate set");
-    assert.match(c.title, /\(IC\)/, "and it must say which competency it is for");
+    // And it must not ANNOUNCE the competency either. The binding is guidance that spreads
+    // breadth across the plan — one ordering among several — so printing it on the card
+    // would read as an instruction to a student whose own choice of elective could carry
+    // the code just as well. The cell keeps `nupath`; the card says "General Elective".
+    assert.equal(c.title, "General Elective");
+    assert.doesNotMatch(c.title, /\(/, "no competency, no parenthetical of any kind");
   }
 });
 

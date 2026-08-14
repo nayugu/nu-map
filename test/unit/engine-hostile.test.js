@@ -107,11 +107,22 @@ test("hostile › the unguided classifier is not fooled by whitespace or case", 
   }
 });
 
-test("hostile › a competency code is guidance; an aside is not", () => {
+// CHART no longer prints a competency on an elective card — see `demand.js`, where the title
+// is now plainly "General Elective". The classifier still has to READ one, because the
+// departments' own published plans write titles like this and the gate measures those against
+// ours; it is our own output that stopped containing them.
+test("hostile › a competency code in a DEPARTMENT's title is guidance; an aside is not", () => {
   assert.equal(isUnguided("General Elective (IC)"), false);
   assert.equal(isUnguided("Elective (Dialogue of Civilizations possible)"), true);
   // A lowercase parenthetical is not a NUPath code — those are two capitals.
   assert.equal(isUnguided("Elective (ic)"), true);
+});
+
+test("hostile › our own elective cards carry no competency to read", () => {
+  // The guidance still exists on the cell as `nupath` and still spreads breadth across the
+  // plan; it is simply not a label, because binding a competency to an elective is one
+  // ordering among several and printing it would read as an instruction.
+  assert.equal(isUnguided("General Elective"), true);
 });
 
 test("hostile › anything naming a subject or level is guided", () => {

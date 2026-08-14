@@ -676,12 +676,26 @@ export function deriveCells(programData, {
         // that concentration's courses at that point and a card reading "Concentration" would
         // hide the difference between a plan built for one option and a plan built for the
         // union of five. Unchosen it keeps the generic title, which is then the honest one.
-        // The code goes in the title, because the cell now stands for something the student
-        // has to satisfy and a card reading "General Elective" would hide which. The code
-        // itself is not translated — it is the registrar's own label, like "CLAUDE".
+        //
+        // ── The competency is NOT printed on the card ─────────────────
+        //
+        // This read `General Elective (IC)`, on the reasoning that a card saying only
+        // "General Elective" hides what the cell is for. The reasoning is backwards about
+        // what the code MEANS here. Binding a competency to an elective is guidance — one
+        // ordering among several the plan could have chosen — and printing it turns that
+        // into an instruction, telling a student their fifth elective must be an IC course
+        // when any elective of theirs could carry it and the choice was never the plan's to
+        // make. It also overclaims on data we know is partial: `attributes` covers 1,516 of
+        // 7,966 courses, so the code names one competency out of a set we cannot see the
+        // whole of.
+        //
+        // The binding still exists and still does its job — `nupath` below carries it, and
+        // it is what spreads breadth across the plan instead of stacking it. It simply is
+        // not a label on the student's card, because a reservation should say what it
+        // reserves and nothing it cannot stand behind.
         title: target === CONCENTRATION
           ? (resolveConcentration(programData, concentration)?.title ?? "Concentration")
-          : (bind ? `General Elective (${bind.code})` : "General Elective"),
+          : "General Elective",
         sh: unit,
         kind: "open",
         groups: null,
