@@ -53,15 +53,39 @@ export function inCohortWindow(plan, semId) {
       && k <= semSortKey(`${pre(plan.gradSem)}${plan.gradYear}`);
 }
 
-/** Build { semId → chronological index } for prereq ordering. */
+/**
+ * Build { semId → chronological index } for prereq ordering.
+ *
+ * "incoming" occupies index 0 — before every dated term — and it MUST be in
+ * this map. `evalPrereqTree` reads a prerequisite's position as
+ * `semIndex[placements[id]]` and treats `undefined` as **missing**, so a
+ * semester absent from the index is not "early", it is "not in the plan at
+ * all". Leaving `incoming` out therefore reported every prerequisite met by
+ * transfer, AP or IB credit as a missing prerequisite over MCP, while the
+ * browser — whose SEM_INDEX is built over the whole SEMESTERS array, incoming
+ * included (`src/core/semGrid.js`) — reported the same plan clean.
+ *
+ * That divergence was one-sided in the worst direction: this module's own
+ * `completedCourseIds` and the query adapter's `checkPrereqs` both already
+ * count incoming credit as completed, so the plan was simultaneously told the
+ * course was done and that its dependents were unsatisfiable.
+ *
+ * The dated terms are numbered from 1 for that reason; only the ORDER matters
+ * to the evaluator (`fi < ti`), so the offset changes no other verdict.
+ * See repeatInstances.js `buildTakesResolver` for the same rule stated from
+ * the browser's side.
+ */
 export function buildSemIndex(plan) {
   const ids = new Set(
     Object.values(plan.placements ?? {}).filter(id => id && id !== "incoming")
   );
-  if (plan.currentSemId) ids.add(plan.currentSemId);
+  // Guarded rather than assumed: `SEM_ID_RE` accepts "incoming", so a hostile
+  // or malformed plan can name it here, and re-adding it would overwrite the
+  // pinned 0 below.
+  if (plan.currentSemId && plan.currentSemId !== "incoming") ids.add(plan.currentSemId);
   const sorted = [...ids].sort((a, b) => semSortKey(a) - semSortKey(b));
-  const index  = {};
-  sorted.forEach((id, i) => { index[id] = i; });
+  const index  = { incoming: 0 };
+  sorted.forEach((id, i) => { index[id] = i + 1; });
   return index;
 }
 

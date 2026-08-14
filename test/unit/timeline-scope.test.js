@@ -8,7 +8,7 @@ import assert from "node:assert/strict";
 import { inTimeline, filterInTimeline } from "../../src/core/planModel.js";
 import { computeGrantedAttrs } from "../../src/core/specialTermUtils.js";
 import { takesUsed } from "../../src/core/repeatInstances.js";
-import { inCohortWindow, completedCourseIds, checkViolations } from "../../src/adapters/mcp/plannerActionAdapter.js";
+import { inCohortWindow, completedCourseIds, checkViolations, buildSemIndex } from "../../src/adapters/mcp/plannerActionAdapter.js";
 
 // A toy SEM_INDEX for a fall2026 → spr2028 cohort (as deriveSemMaps builds it)
 const IDX = { incoming: 0, fall2026: 1, spr2027: 2, sumA2027: 3, sumB2027: 4, fall2027: 5, spr2028: 6 };
@@ -80,4 +80,89 @@ test("timeline › MCP checkViolations ignores parked placements entirely", () =
   // Both in range and ordered → clean
   const v3 = checkViolations({ ...base, placements: { CS2500: "fall2026", CS3500: "spr2027" } }, courseMap);
   assert.deepEqual(v3, []);
+});
+
+// ── Incoming credit satisfies prerequisites, over MCP too ────────────
+//
+// `evalPrereqTree` reads a prerequisite's position as `semIndex[placements[id]]`
+// and treats `undefined` as MISSING — so a semester left out of the index is not
+// "early", it is "not in the plan". `buildSemIndex` used to filter "incoming"
+// out, which reported every prerequisite met by transfer/AP/IB credit as a
+// missing prerequisite to Claude, on a plan the browser rendered clean.
+//
+// The browser's SEM_INDEX (deriveSemMaps over the whole SEMESTERS array) puts
+// incoming at 0, and this adapter's own completedCourseIds already counted it as
+// done — so the plan was simultaneously told the course was finished and that
+// its dependents were unsatisfiable. These tests pin the agreement.
+
+const PREREQ_MAP = {
+  CS2500: { id: "CS2500", prereqs: [] },
+  CS2510: { id: "CS2510", prereqs: [{ subject: "CS", number: "2500" }] },
+  CS3000: { id: "CS3000", prereqs: [{ subject: "CS", number: "2510" }] },
+};
+const COHORT = { entSem: "fall", entYear: 2026, gradSem: "spring", gradYear: 2028 };
+
+test("timeline › MCP: a prereq met by incoming credit is NOT a violation", () => {
+  const v = checkViolations(
+    { ...COHORT, placements: { CS2500: "incoming", CS2510: "fall2026" } }, PREREQ_MAP);
+  assert.deepEqual(v, [], "transfer credit satisfies the prerequisite");
+});
+
+test("timeline › MCP: incoming credit satisfies a whole chain", () => {
+  // The bug compounded: CS2510 reads missing, and CS3000 reads missing too.
+  const v = checkViolations(
+    { ...COHORT, placements: { CS2500: "incoming", CS2510: "incoming", CS3000: "fall2026" } },
+    PREREQ_MAP);
+  assert.deepEqual(v, []);
+});
+
+test("timeline › MCP: incoming is index 0, before every dated term", () => {
+  const idx = buildSemIndex({
+    placements: { A: "spr2028", B: "incoming", C: "fall2026" },
+    currentSemId: "fall2027",
+  });
+  assert.equal(idx.incoming, 0, "incoming must be IN the index, not absent");
+  for (const [semId, i] of Object.entries(idx)) {
+    if (semId !== "incoming") assert.ok(i > 0, `${semId} must sort after incoming`);
+  }
+  // Chronological order is preserved by the +1 offset.
+  assert.ok(idx.fall2026 < idx.fall2027 && idx.fall2027 < idx.spr2028);
+});
+
+test("timeline › MCP: currentSemId of \"incoming\" cannot displace the pinned 0", () => {
+  // SEM_ID_RE accepts "incoming", so a malformed or hostile plan can name it.
+  const idx = buildSemIndex({ placements: { A: "fall2026" }, currentSemId: "incoming" });
+  assert.equal(idx.incoming, 0);
+  assert.ok(idx.fall2026 > 0);
+});
+
+test("timeline › MCP: the fix does not launder real ordering violations", () => {
+  // The +1 offset must not turn a genuine out-of-order placement into a pass.
+  const late = checkViolations(
+    { ...COHORT, placements: { CS2500: "spr2027", CS2510: "fall2026" } }, PREREQ_MAP);
+  assert.equal(late.length, 1);
+  assert.match(late[0].message, /before a required prerequisite/);
+
+  // Same term is still an ordering violation (the prereq is not concurrent).
+  const same = checkViolations(
+    { ...COHORT, placements: { CS2500: "fall2026", CS2510: "fall2026" } }, PREREQ_MAP);
+  assert.equal(same.length, 1);
+
+  // And a prerequisite that is genuinely absent still reads missing.
+  const gone = checkViolations({ ...COHORT, placements: { CS2510: "fall2026" } }, PREREQ_MAP);
+  assert.equal(gone.length, 1);
+  assert.match(gone[0].message, /missing one or more prerequisites/);
+
+  // A prereq PARKED outside the cohort still fails — incoming is inside the
+  // timeline, fall2024 is not, and the two must not be confused.
+  const parked = checkViolations(
+    { ...COHORT, placements: { CS2500: "fall2024", CS2510: "fall2026" } }, PREREQ_MAP);
+  assert.equal(parked.length, 1);
+});
+
+test("timeline › MCP: a course sitting IN incoming is never itself validated", () => {
+  // CS2510 in incoming has an unmet prereq, but incoming credit is asserted by
+  // the student, not sequenced by us — no phantom violation.
+  const v = checkViolations({ ...COHORT, placements: { CS2510: "incoming" } }, PREREQ_MAP);
+  assert.deepEqual(v, []);
 });

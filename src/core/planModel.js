@@ -28,6 +28,50 @@ export function applySubstitutions(placements, substitutions = []) {
   return ep;
 }
 
+/**
+ * HTML-escape one text value for the printed report.
+ *
+ * ── Why this exists ────────────────────────────────────────────────
+ *
+ * `exportReport` below builds a document by string concatenation and opens it
+ * as a `blob:` URL. A blob document INHERITS THE ORIGIN of the page that
+ * created it, so script inside it is same-origin with the app: it can read
+ * every plan slot in localStorage, grades included — the one thing
+ * `docs/grades-design.md` promises never leaves the browser.
+ *
+ * Several of the strings that document interpolates arrive from a SHARE LINK,
+ * which is to say from whoever wrote it. `planSchema.js` carries co-op
+ * `company`, `subline` and `duration` (SHARE_INNER_KEYS.specialTerm) and the
+ * whole `reservations` map, whose `label` and `requirement.title` become a
+ * card's `code` and `title` in `occupantCards`. A recipient who loads a shared
+ * plan and prints it was executing the sender's markup.
+ *
+ * React escapes these everywhere else in the app, which is exactly why the one
+ * surface that does its own string-building is the one that was wrong.
+ *
+ * ── Escape at the sink, not at the door ────────────────────────────
+ *
+ * Validating on import is worth doing too, but it cannot be the fix: it has to
+ * be right at every door (hash link, share code, imported JSON, library
+ * bundle, restored slot) and there is no shape check that makes an arbitrary
+ * user-typed employer name safe to splice into markup. Escaping at the point
+ * of interpolation is one rule in one place and holds for inputs nobody has
+ * thought of yet.
+ *
+ * Quotes are escaped too — `color` is interpolated inside a `style="…"`
+ * attribute, where `<` alone would not be enough to break out.
+ */
+const esc = (v) =>
+  String(v ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+
+/** Test seam: the escaper is the whole security property, so it is testable. */
+export const _escapeHtml = esc;
+
 /** Convert a CSS hex colour to "r,g,b" string (for use in rgba()). */
 export function hexRgb(hex) {
   const r = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
@@ -178,7 +222,7 @@ function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
     const icon   = status === "done" ? "✓" : status === "planned" ? "○" : status === "dimmed" ? "╱" : "";
     return `<div class="rc rc-${status}" style="padding-left:${pl}px${isDimmed ? ";opacity:0.4" : ""}">
       <span class="rc-icon rc-icon-${status}">${icon}</span>
-      <span class="rc-lbl">${r.label}</span>
+      <span class="rc-lbl">${esc(r.label)}</span>
     </div>`;
   }
   if (r.type === "RANGE") {
@@ -189,7 +233,7 @@ function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
       : r.label;
     return `<div class="rc rc-${status}" style="padding-left:${pl}px${isDimmed ? ";opacity:0.4" : ""}">
       <span class="rc-icon rc-icon-${status}">${r.sat ? "✓" : isDimmed ? "╱" : ""}</span>
-      <span class="rc-lbl">${lbl}</span>
+      <span class="rc-lbl">${esc(lbl)}</span>
     </div>`;
   }
   const isSat   = r.sat;
@@ -209,7 +253,7 @@ function reqNodeHtml(r, doneKeys, depth = 0, dimmed = false) {
   return `<div class="rg" style="padding-left:${pl}px${groupDimmed ? ";opacity:0.4" : ""}">
     <div class="rg-head rg-${groupStatus}">
       <span class="rg-icon">${groupIcon}</span>
-      <span class="rg-lbl">${heading}</span>
+      <span class="rg-lbl">${esc(heading)}</span>
     </div>
     ${childrenHtml}
   </div>`;
@@ -224,11 +268,14 @@ function sectionHtml(sec, doneKeys) {
   const hasSplit           = isGeneralElectives && sec.completedSH !== undefined;
 
   // Progress text
+  // Numbers, but escaped anyway: `sh` reaches these totals from scraped
+  // `credits`, and "it is a number" is an assumption about someone else's
+  // data rather than a fact about this function's input.
   const progHtml = hasSplit
-    ? `<span style="color:#16a34a">${sec.completedSH}</span>${sec.plannedSH > 0 ? `<span style="color:#2563eb">+${sec.plannedSH}</span>` : ""}/${sec.requiredSH} SH`
+    ? `<span style="color:#16a34a">${esc(sec.completedSH)}</span>${sec.plannedSH > 0 ? `<span style="color:#2563eb">+${esc(sec.plannedSH)}</span>` : ""}/${esc(sec.requiredSH)} SH`
     : isGeneralElectives
-      ? `${sec.placedSH}/${sec.requiredSH} SH`
-      : `${displaySatCount}/${displayTotal}`;
+      ? `${esc(sec.placedSH)}/${esc(sec.requiredSH)} SH`
+      : `${esc(displaySatCount)}/${esc(displayTotal)}`;
 
   // Progress bar
   const printColor = `-webkit-print-color-adjust:exact;print-color-adjust:exact`;
@@ -248,9 +295,9 @@ function sectionHtml(sec, doneKeys) {
   })();
 
   const warnHtml = (sec.warnings ?? []).map(w =>
-    `<div class="sec-warn">⚠ ${w}</div>`).join("");
+    `<div class="sec-warn">⚠ ${esc(w)}</div>`).join("");
   const noteHtml = isPoolStructure && sec.minRequired > 0
-    ? `<div class="sec-note">Requires ${sec.minRequired} of ${sec.total}</div>` : "";
+    ? `<div class="sec-note">Requires ${esc(sec.minRequired)} of ${esc(sec.total)}</div>` : "";
   const secStatus = sec.sat ? (() => {
     const satReqs = (sec.children ?? []).filter(r => r.sat);
     if (!satReqs.length) return "done";
@@ -261,7 +308,7 @@ function sectionHtml(sec, doneKeys) {
   return `<div class="sec${secStatus === "done" ? " sec-sat" : secStatus === "planned" ? " sec-planned" : ""}">
     <div class="sec-head">
       <span class="sec-icon">${secIcon}</span>
-      <span class="sec-title">${sec.title}</span>
+      <span class="sec-title">${esc(sec.title)}</span>
       <span class="sec-prog">${progHtml}</span>
     </div>
     ${barHtml}
@@ -469,7 +516,7 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
       sections = sections.filter(s => s.title !== "General Electives");
     }
     const sectionsHtml = sections.map(s => sectionHtml(s, doneKeysSet)).join("");
-    return `<div class="section-title">${headerLabel}<span class="prog-name">${name}</span></div>
+    return `<div class="section-title">${esc(headerLabel)}<span class="prog-name">${esc(name)}</span></div>
       ${sectionsHtml}`;
   }
 
@@ -485,8 +532,8 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     const sat = npCovered.has(key);
     return `<div class="np-cell${sat ? " sat" : ""}">
       <span class="np-check">${sat ? "✓" : "·"}</span>
-      <span class="np-key">${key}</span>
-      <span class="np-lbl">${attributeSystem?.getLabel(key) ?? key}</span>
+      <span class="np-key">${esc(key)}</span>
+      <span class="np-lbl">${esc(attributeSystem?.getLabel(key) ?? key)}</span>
     </div>`;
   }).join("\n");
 
@@ -502,8 +549,15 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
         if (url) coopLogos.set(domain, url);
       })
   );
+  // `src` is an ATTRIBUTE, so the escaper's quote handling is what matters here
+  // rather than its angle brackets. Today nothing hostile can reach this map —
+  // a URL only lands in it after an <img> at that URL loaded and measured, and
+  // `companyDomain` (which a share link does carry) cannot form a resolvable
+  // host once it contains a quote. That is a sound argument and it is an
+  // argument, made about `resolveCompanyLogo`'s internals, one refactor away
+  // from silently ceasing to hold. Escaping states it locally instead.
   const coopIcon = domain => coopLogos.has(domain)
-    ? `<img class="coop-logo" src="${coopLogos.get(domain)}" />`
+    ? `<img class="coop-logo" src="${esc(coopLogos.get(domain))}" />`
     : `<div class="coop-bar"></div>`;
 
   // ── Semester blocks HTML ──────────────────────────────────────
@@ -522,15 +576,15 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
         const contRole    = contData.subline  || "";
         return `<div class="sem-block${tag}">
           <div class="sem-head">
-            <span class="sem-label">${sem.label}</span>
+            <span class="sem-label">${esc(sem.label)}</span>
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
           <div class="coop-row" style="border-color:#e0e0e0">
             <div class="coop-icon">${coopIcon(contData.companyDomain)}</div>
             <div style="flex:1">
-              <div class="coop-title">${contType.label} CONTINUES${contCompany ? `<span style="text-transform:none"> \u00b7 ${contCompany}</span>` : ""}</div>
-              ${contRole ? `<div class="coop-role">${contRole}</div>` : ""}
-              <div class="coop-sub">${contData.duration}-month block</div>
+              <div class="coop-title">${esc(contType.label)} CONTINUES${contCompany ? `<span style="text-transform:none"> \u00b7 ${esc(contCompany)}</span>` : ""}</div>
+              ${contRole ? `<div class="coop-role">${esc(contRole)}</div>` : ""}
+              <div class="coop-sub">${esc(contData.duration)}-month block</div>
             </div>
           </div>
         </div>`;
@@ -551,15 +605,15 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
         const blockLabel = `${startData.duration}-month block`;
         return `<div class="sem-block${tag}">
           <div class="sem-head">
-            <span class="sem-label">${sem.label}</span>
+            <span class="sem-label">${esc(sem.label)}</span>
             <span class="sem-sh">${isDone ? "completed" : isCur ? "in progress" : ""}</span>
           </div>
           <div class="coop-row" style="border-color:#e0e0e0">
             <div class="coop-icon">${coopIcon(startData.companyDomain)}</div>
             <div style="flex:1">
-              <div class="coop-title">${startType.label}${company ? `<span style="text-transform:none"> \u00b7 ${company}</span>` : ""}</div>
-              ${role ? `<div class="coop-role">${role}</div>` : ""}
-              <div class="coop-sub">${spansNext ? `Spans into ${nextSem.label} \u00b7 ${blockLabel}` : blockLabel}</div>
+              <div class="coop-title">${esc(startType.label)}${company ? `<span style="text-transform:none"> \u00b7 ${esc(company)}</span>` : ""}</div>
+              ${role ? `<div class="coop-role">${esc(role)}</div>` : ""}
+              <div class="coop-sub">${spansNext ? `Spans into ${esc(nextSem.label)} \u00b7 ${esc(blockLabel)}` : esc(blockLabel)}</div>
             </div>
           </div>
         </div>`;
@@ -570,20 +624,23 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     const rows = ids.map(id => {
       const c = layoutCards[id];
       if (!c) return "";
-      const pill     = `<span class="pill" style="background:${c.color}">${c.subject ?? c.id}</span>`;
-      const nuBadges = (c.attributes ?? []).map(np => `<span class="np-badge">${np}</span>`).join("");
+      // `c` is a card from the LAYOUT map, so it may be a reservation \u2014 whose
+      // `code` is the plan's own label and `title` the requirement's, both of
+      // which ride a share link verbatim (planSchema `rv`).
+      const pill     = `<span class="pill" style="background:${esc(c.color)}">${esc(c.subject ?? c.id)}</span>`;
+      const nuBadges = (c.attributes ?? []).map(np => `<span class="np-badge">${esc(np)}</span>`).join("");
       return `<div class="course-row">
         ${pill}
-        <span class="ccode">${c.code ?? c.id}</span>
-        <span class="ctitle">${c.title ?? ""}</span>
+        <span class="ccode">${esc(c.code ?? c.id)}</span>
+        <span class="ctitle">${esc(c.title ?? "")}</span>
         ${nuBadges ? `<span class="np-badges">${nuBadges}</span>` : ""}
-        <span class="csh">${c.shMax ? `${c.sh}\u2013${c.shMax}` : c.sh} ${unitName}</span>
+        <span class="csh">${c.shMax ? `${esc(c.sh)}\u2013${esc(c.shMax)}` : esc(c.sh)} ${esc(unitName)}</span>
       </div>`;
     }).join("\n");
     return `<div class="sem-block${tag}">
       <div class="sem-head">
-        <span class="sem-label">${sem.label}</span>
-        <span class="sem-sh">${semSH} SH${isDone ? " · completed" : isCur ? " · in progress" : ""}</span>
+        <span class="sem-label">${esc(sem.label)}</span>
+        <span class="sem-sh">${esc(semSH)} SH${isDone ? " · completed" : isCur ? " · in progress" : ""}</span>
       </div>
       ${rows}
     </div>`;
@@ -604,12 +661,12 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
         appendixHtml.push(`
         <div class="appendix-course">
           <div style="display: grid; grid-template-columns: 45px 85px 1fr auto; align-items: baseline; gap: 10px; margin-bottom: 4px;">
-            <span class="pill" style="background:${c.color}; display: inline-block; width: 100%; text-align: center;">${c.subject}</span>
-            <span class="ccode">${c.code}</span>
-            <span class="ctitle">${c.title}</span>
-            <span class="csh">${c.sh} ${unitName}</span>
+            <span class="pill" style="background:${esc(c.color)}; display: inline-block; width: 100%; text-align: center;">${esc(c.subject)}</span>
+            <span class="ccode">${esc(c.code)}</span>
+            <span class="ctitle">${esc(c.title)}</span>
+            <span class="csh">${esc(c.sh)} ${esc(unitName)}</span>
           </div>
-          <div class="appendix-course-description">${desc.replace(/\n/g, '<br>')}</div>
+          <div class="appendix-course-description">${esc(desc).replace(/\n/g, '<br>')}</div>
         </div>
       `);
     }
@@ -622,28 +679,28 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
   const minor1Label = minor1?.name ?? "";
   const minor2Label = minor2?.name ?? "";
   const metaLines = [
-    majorLabel  && `<div class="meta-row"><span class="meta-lbl">${major2Label ? "Major 1" : "Major"}</span><span class="meta-val">${majorLabel}</span></div>`,
-    major2Label && `<div class="meta-row"><span class="meta-lbl">Major 2</span><span class="meta-val">${major2Label}</span></div>`,
-    concLabel   && `<div class="meta-row"><span class="meta-lbl">Concentration</span><span class="meta-val">${concLabel}</span></div>`,
-    minor1Label && `<div class="meta-row"><span class="meta-lbl">Minor 1</span><span class="meta-val">${minor1Label}</span></div>`,
-    minor2Label && `<div class="meta-row"><span class="meta-lbl">Minor 2</span><span class="meta-val">${minor2Label}</span></div>`,
+    majorLabel  && `<div class="meta-row"><span class="meta-lbl">${major2Label ? "Major 1" : "Major"}</span><span class="meta-val">${esc(majorLabel)}</span></div>`,
+    major2Label && `<div class="meta-row"><span class="meta-lbl">Major 2</span><span class="meta-val">${esc(major2Label)}</span></div>`,
+    concLabel   && `<div class="meta-row"><span class="meta-lbl">Concentration</span><span class="meta-val">${esc(concLabel)}</span></div>`,
+    minor1Label && `<div class="meta-row"><span class="meta-lbl">Minor 1</span><span class="meta-val">${esc(minor1Label)}</span></div>`,
+    minor2Label && `<div class="meta-row"><span class="meta-lbl">Minor 2</span><span class="meta-val">${esc(minor2Label)}</span></div>`,
   ].filter(Boolean).join("\n");
 
   // ── Credit summary ────────────────────────────────────────────
   const reqPct = effectiveTotalSHRequired > 0 ? Math.min(100, (doneSH / effectiveTotalSHRequired) * 100).toFixed(0) : null;
   const creditHtml = `<div class="credit-row">
-    <div class="credit-num">${doneSH}<span class="credit-unit"> ${unitName} completed</span></div>
+    <div class="credit-num">${esc(doneSH)}<span class="credit-unit"> ${esc(unitName)} completed</span></div>
     <div class="credit-sep">+</div>
-    <div class="credit-num">${plannedSH}<span class="credit-unit"> ${unitName} planned</span></div>
-    ${effectiveTotalSHRequired > 0 ? `<div class="credit-sep">/</div><div class="credit-num">${effectiveTotalSHRequired}<span class="credit-unit"> ${unitName} required</span></div>` : ""}
-    ${reqPct !== null ? `<div class="credit-pct">${reqPct}%</div>` : ""}
+    <div class="credit-num">${esc(plannedSH)}<span class="credit-unit"> ${esc(unitName)} planned</span></div>
+    ${effectiveTotalSHRequired > 0 ? `<div class="credit-sep">/</div><div class="credit-num">${esc(effectiveTotalSHRequired)}<span class="credit-unit"> ${esc(unitName)} required</span></div>` : ""}
+    ${reqPct !== null ? `<div class="credit-pct">${esc(reqPct)}%</div>` : ""}
   </div>`;
 
   // ── Full HTML ─────────────────────────────────────────────────
   const html = `<!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8">
-<title>Course Schedule · ${appName}</title>
+<title>Course Schedule · ${esc(appName)}</title>
 <style>
   @page { margin: 18mm 15mm; }
   * { box-sizing: border-box; }
@@ -849,15 +906,15 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
 </head><body>
 
 <!-- ── PAGE 1: Graduation summary ── -->
-<h1>${appName}</h1>
-<div class="date">Generated ${date}</div>
+<h1>${esc(appName)}</h1>
+<div class="date">Generated ${esc(date)}</div>
 
 ${metaLines ? `<div class="section-title">Program</div>${metaLines}` : ""}
 
 <div class="section-title">Credits</div>
 ${creditHtml}
 
-${isGrad ? "" : `<div class="section-title">${attrName} <span class="prog-name">(${npCovered.size}/${gridCodes.length} fulfilled)</span></div>
+${isGrad ? "" : `<div class="section-title">${esc(attrName)} <span class="prog-name">(${esc(npCovered.size)}/${esc(gridCodes.length)} fulfilled)</span></div>
 <div class="np-grid">${npHtml}</div>`}
 
 ${reqHtml}
@@ -867,7 +924,7 @@ ${placedOut.size > 0 ? `
 <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">
 ${[...placedOut].map(id => {
   const c = courseMap[id];
-  return c ? `<span style="font-size:10px;font-weight:700;background:#f3f4f6;border:1px solid #e0e0e0;border-radius:4px;padding:2px 7px">${c.code}</span>` : "";
+  return c ? `<span style="font-size:10px;font-weight:700;background:#f3f4f6;border:1px solid #e0e0e0;border-radius:4px;padding:2px 7px">${esc(c.code)}</span>` : "";
 }).filter(Boolean).join("\n")}
 </div>` : ""}
 
@@ -880,9 +937,9 @@ ${substitutions.map(({ from, to }) => {
   if (!fc || !tc) return "";
   const placed = !!placements[from];
   return `<div style="display:flex;align-items:center;gap:6px;font-size:10px;${placed ? "" : "opacity:0.5"}">
-    <span style="font-weight:700;color:#2563eb">${fc.code}</span>
+    <span style="font-weight:700;color:#2563eb">${esc(fc.code)}</span>
     <span style="color:#888">→ satisfies</span>
-    <span style="font-weight:700">${tc.code}</span>
+    <span style="font-weight:700">${esc(tc.code)}</span>
     ${placed ? "" : '<span style="color:#b45309;font-size:9px">⚠ not placed</span>'}
   </div>`;
 }).filter(Boolean).join("\n")}
@@ -891,8 +948,8 @@ ${substitutions.map(({ from, to }) => {
 <div class="page-break"></div>
 
 <!-- ── PAGE 2+: Semester schedule ── -->
-<h1>${appName}: Course Schedule</h1>
-<div class="date">Generated ${date}</div>
+<h1>${esc(appName)}: Course Schedule</h1>
+<div class="date">Generated ${esc(date)}</div>
 <br>
 ${semHtml}
 ${appendixHtml.join('\n')}
