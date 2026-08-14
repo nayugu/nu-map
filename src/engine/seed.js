@@ -133,13 +133,20 @@ export function assignSeedHints(plans, seed) {
     if (ti != null) hints.set(p.cell.id, ti);
     else unseeded.push(p);
   }
-  unseeded.sort((a, b) => String(a.cell.id).localeCompare(String(b.cell.id)));
-  // More cells than the department reserved rows for is normal — our demand counts every
-  // requirement, theirs is one path through it. The surplus simply goes unhinted and is
-  // ordered by the preferences below, exactly as before this existed.
-  const spread = seed.reservationTerms ?? [];
-  for (let i = 0; i < unseeded.length && i < spread.length; i++) {
-    hints.set(unseeded[i].cell.id, spread[i]);
-  }
+  // ── The reservation SPREAD is no longer dealt, and should not be ────
+  //
+  // It paired our unhinted cells against the department's reserved rows in cell-id ORDER,
+  // which is not a pairing at all — "CS Required Courses" could be handed Year 1 Spring
+  // because its id happens to sort early. A named course's hint is a fact ("an advisor put
+  // MATH 1341 in term 0"); this was a fact about alphabetical order wearing the same clothes.
+  //
+  // It measured well on the numbers I was watching — refusals, empty terms — and those are
+  // blind to sequencing. What it actually produced was `CS 4530 or 4535` in year one and
+  // CS 3000 at the end of the degree. The level and unlock orderings it displaced are
+  // measured over 12,848 placements; this was not measured at all.
+  //
+  // Named cells keep their hints, because those are real. `unseeded` is left unhinted and
+  // ordered by the preferences, exactly as before any of this existed.
+  void unseeded;
   return hints;
 }

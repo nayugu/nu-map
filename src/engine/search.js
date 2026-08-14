@@ -1186,13 +1186,28 @@ function attemptPlacement({
     //
     // Still only an order. A seeded term that precedence has already excluded is simply not
     // in `plan.domain` and never gets tried.
-    const seededTerm = seedHints.get(plan.cell.id) ?? null;
-    if (seededTerm != null) {
-      return [...plan.domain].sort((a, b) =>
-        byOptional(a, b) || Math.abs(a - seededTerm) - Math.abs(b - seededTerm) || a - b);
-    }
+    // ── ONLY where the preferences have already been dropped ──────────
+    //
+    // This ran FIRST, ahead of every sequencing preference, and that was a bad trade made
+    // without measuring the thing it traded away. The level and unlock orderings below are
+    // what keep 4000-level courses late and high-unlock courses early — 12,848 measured
+    // placements' worth — and a hint consulted before them silently replaces all of it.
+    //
+    // Computer Science BSCS is what it looks like from a student's chair: `CS 4530 or 4535` in
+    // YEAR ONE SPRING, and CS 3000 — which unlocks most of the major — at the end. Both plans
+    // are legal (CS 4535 records no prerequisites, so the witness is right), and both are
+    // advice no advisor would give. The refusal and empty-term numbers I was watching did not
+    // move, because those are not what this breaks.
+    //
+    // So the hint now applies only under `preferenceFree`, where the ladder has already given
+    // the preferences up and the alternative is position order — there it is strictly better
+    // information, and it is what rescues the saturated instances. Where preferences still
+    // apply, they win, because they are measured and this is a guess.
     if (preferenceFree) {
-      return [...plan.domain].sort((a, b) => byOptional(a, b) || a - b);
+      const seededTerm = seedHints.get(plan.cell.id) ?? null;
+      return [...plan.domain].sort((a, b) => byOptional(a, b)
+        || (seededTerm == null ? 0 : Math.abs(a - seededTerm) - Math.abs(b - seededTerm))
+        || a - b);
     }
     const filler = plan.candidates === null;
     const f = (ti) => fill(ti, filler);

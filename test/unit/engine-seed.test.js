@@ -76,21 +76,21 @@ test("seed › a filler cell has no candidates and no hint of its own", () => {
 
 const P = (id, candidates = null) => ({ cell: { id }, candidates });
 
-test("seed › unseeded cells are dealt the department's reservation spread", () => {
+// The reservation spread is deliberately NOT dealt any more. It paired our unhinted cells
+// against the department's reserved rows in cell-id order, which is not a pairing — a cell
+// could be handed Year 1 Spring because its id sorts early — and it displaced the level and
+// unlock orderings that keep 4000-level courses late. What it produced was `CS 4530 or 4535`
+// in year one and CS 3000 at the end of the degree. See `seed.js`.
+test("seed › a RESERVATION is never hinted, whatever the department's spread says", () => {
   const seed = { courseTerm: new Map([["A", 0]]), reservationTerms: [2, 5, 5] };
   const hints = assignSeedHints([P("c1", ["A"]), P("c2"), P("c3"), P("c4")], seed);
-  assert.equal(hints.get("c1"), 0, "named cells take their course's term");
-  assert.equal(hints.get("c2"), 2);
-  assert.equal(hints.get("c3"), 5);
-  assert.equal(hints.get("c4"), 5);
+  assert.equal(hints.get("c1"), 0, "a named cell's term is a fact and is kept");
+  assert.equal(hints.size, 1, "the unhinted cells stay unhinted, for the preferences to order");
 });
 
-test("seed › more cells than reserved rows leaves the surplus unhinted", () => {
-  // Normal: our demand counts every requirement, theirs is one path through it.
+test("seed › with no named cells at all, nothing is hinted", () => {
   const seed = { courseTerm: new Map(), reservationTerms: [1] };
-  const hints = assignSeedHints([P("a"), P("b"), P("c")], seed);
-  assert.equal(hints.size, 1);
-  assert.equal(hints.get("a"), 1);
+  assert.equal(assignSeedHints([P("a"), P("b"), P("c")], seed).size, 0);
 });
 
 test("seed › dealing is deterministic regardless of the order cells arrive in", () => {
