@@ -706,11 +706,16 @@ function RelationshipList({ selCourse, selEdges, courseMap, navTo, compact = fal
   if (unlocks.length === 0) return null;
 
   return (
-    <div style={{ width: compact ? "100%" : "fit-content", flexShrink: 0, display: "flex", flexDirection: "column", paddingRight: compact ? 0 : 12 }}>
+    <div style={{ width: compact ? "100%" : "fit-content", flexShrink: 0, display: "flex", flexDirection: "column" }}>
       <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.06em", marginBottom: 5 }}>
         {t("info.relationships.title")}
       </div>
-      <div style={{ overflowY: "auto", maxHeight: 220, paddingRight: 14 }}>
+      {/* Right padding only wide enough to clear the scrollbar when the list overflows —
+          not an extra spacer before the back/close buttons, which already get their gap
+          from the parent flex row like every other column (CourseInstructors, etc). An
+          outer paddingRight here used to stack on top of that gap, pushing this column's
+          content noticeably farther from the back button than any other column's. */}
+      <div style={{ overflowY: "auto", maxHeight: 220, paddingRight: compact ? 0 : 6 }}>
         {unlocks.map((rel, i) => {
           const isOut   = rel.from === selCourse.id;
           const otherId = isOut ? rel.to : rel.from;
