@@ -155,13 +155,14 @@ Other cross-cutting facts:
 - **Full-time graduate study** is 8 SH (Khoury), stated elsewhere as "two courses
   per fall/spring".
 
-## 6. The full rule inventory — 84 published rules
+## 6. The full rule inventory — 88 published rules
 
 Gathered across Khoury (4 pathways), COE (ECE/MIE/CEE/ChE + policy, FAQ, co-op),
 Bouvé (11 programmes), CoS (8), CSSH (3 departments), D'Amore-McKim and CPS.
 
 Classified by **what we can know**, which is what decides whether a rule may ever
-report a failure: **48 computable · 8 assertable · 17 unknowable · 11 informational.**
+report a failure: **51 computable · 8 assertable · 18 unknowable · 11 informational**
+(84 from the college pages, plus the 4 catalog-only rules below).
 
 **Budgets** — the disjunctive cap; per-college variants; per-concentration SH
 sub-budgets over a course domain (ECE: 8–12 SH of non-EECE across 7
@@ -197,12 +198,15 @@ for out-of-domain electives; advisor/director sign-off; Standard Petitions;
 modality restrictions (V35 sections are part-time-graduate only); international
 visa compliance; "placement is not guaranteed".
 
-**Catalog-only rules, found 2026-08-13** — a **requirement waiver** for PlusOne
-students (MSBioE drops BIOE 6000 and BIOE 7390 while holding the 32 SH total); a
-**substitution granted to PlusOne students only** (MSME Mechatronics); an
-**enrolment gate** ("apply before enrolling in CS or CY courses"); and **minor
-exclusivity** — a minor's courses must be exclusive of those counted for a
-PlusOne. None of the four are modelled.
+**Catalog-only rules, found 2026-08-13** — four, none of them modelled, and all
+four found on ordinary catalog pages rather than any PlusOne page (§9.1):
+
+| Rule | Source | Class |
+|---|---|---|
+| **Requirement waiver** — MSBioE drops BIOE 6000 and BIOE 7390 for PlusOne students, holding the 32 SH total | `bioengineering-msbioe` footnote | computable |
+| **Substitution granted to PlusOne students only** — ME 5250 for ME 5659 if ME 4555 is done | `…mechatronics-msme` footnote | computable |
+| **Minor exclusivity** — a minor's courses must be exclusive of those counted for a PlusOne | ~24 CAMD minors | computable |
+| **Enrolment gate** — "apply to the MSCS PlusOne program **before enrolling** in CS or CY courses" | `information-technology-bs` | unknowable |
 
 **Downstream** — no deferral; full-time minimum; transfer-credit bars; the
 certificate bar; co-op caps across both degrees (COE: 3 total; 1 graduate co-op
