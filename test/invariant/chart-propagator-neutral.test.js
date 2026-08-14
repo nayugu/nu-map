@@ -22,6 +22,33 @@
 // everywhere. That is a strong claim about the search's behaviour and exactly the kind this
 // codebase has been wrong about before, so it is tested rather than reasoned about.
 //
+// ── The claim above is PER RUNG, and the first version of this test forgot to say so ──
+//
+// "The plan is bit-identical" holds while both runs are answered by the SAME rung. It does not
+// hold across the relaxation ladder, and the reason is the one thing pruning is for: it spends
+// fewer nodes. Every rung has a node allowance, so a rung that exhausts its allowance WITHOUT
+// pruning can fit inside it WITH pruning — and the ladder's rungs enforce different constraint
+// sets, so the plan then legitimately differs. It was not re-sequenced by the propagator; it was
+// built by a different constructor, a better one.
+//
+// Measured, on `chemical_engineering_bsche_(boston)#2`: without pruning the search falls all the
+// way to `["sequencing-preferences","term-width","four-course-bar","packed-largest-first"]` —
+// the packer — and with it the plan is found at `["sequencing-preferences"]`. Nothing about the
+// second plan is worse; it gave up three fewer conventions to exist.
+//
+// This is the same phenomenon `gained` already tolerates, one notch weaker. A propagator that
+// turns a REFUSAL into a plan changes the output too, and the test has always counted that as
+// the propagator working. A propagator that turns a packer plan into a rung-0 plan is that with
+// a smaller step, and there is no principled reading on which the first is success and the
+// second is a regression.
+//
+// So the invariant is asserted at the strength it actually has, and every other case still
+// fails: a plan that differs at the SAME rung is genuine re-sequencing, and a rung that gets
+// WORSE with pruning means the propagator is unsound. Both are failures below.
+//
+// The frozen clock (see `generate`) is what makes this a statement about nodes rather than about
+// the machine — with a live clock a rung change could be nothing but scheduler noise.
+//
 // `propagateChains: false` exists for this test and for nothing else. Production never passes
 // it, and any future propagator claiming neutrality should be added here the same way.
 // ═══════════════════════════════════════════════════════════════════
@@ -126,7 +153,11 @@ const canonical = (plan) => {
   return lines.join("\n");
 };
 
-const moved = [], gained = [], lost = [], same = [];
+const moved = [], gained = [], lost = [], same = [], improved = [], degraded = [];
+
+/** The concessions a run made, as a set — `report.relaxed` is the rungs it had to spend. */
+const rungs = (r) => new Set(r.report?.relaxed ?? []);
+const subset = (a, b) => [...a].every(x => b.has(x));
 
 for (const p of PROGRAMS) {
   const variants = p.plan?.plans?.length ? p.plan.plans : [null];
@@ -140,27 +171,50 @@ for (const p of PROGRAMS) {
     if (!off.refused && on.refused) { lost.push(label); return; }
     const a = canonical(off.plan.plans[0]);
     const b = canonical(on.plan.plans[0]);
-    (a === b ? same : moved).push(label);
+    if (a === b) { same.push(label); return; }
+    // The plans differ. Which rung answered decides whether that is a violation: neutrality is
+    // a per-rung claim, because pruning changes how many nodes a rung spends and therefore
+    // whether it fits its allowance at all. See the header.
+    const ro = rungs(off), rn = rungs(on);
+    if (subset(rn, ro) && rn.size < ro.size) improved.push(label);
+    else if (subset(ro, rn) && ro.size < rn.size) degraded.push(label);
+    else moved.push(label);
   });
 }
 
 // What the comparison actually saw. Printed rather than only asserted, because "moved: 0" is
 // worth nothing without knowing how many plans it had the chance to move — and `gained` is the
 // evidence the propagator does something at all.
-console.log(`  [propagator] compared ${same.length + moved.length} plans · `
-  + `identical ${same.length} · moved ${moved.length} · gained ${gained.length} · lost ${lost.length}`);
+const comparable = same.length + moved.length + improved.length + degraded.length;
+console.log(`  [propagator] compared ${comparable} plans · identical ${same.length} · `
+  + `moved ${moved.length} · better rung ${improved.length} · worse rung ${degraded.length} · `
+  + `gained ${gained.length} · lost ${lost.length}`);
+if (improved.length) console.log(`  [propagator] rescued to a better rung: ${improved.join(", ")}`);
 
 test("propagator › the corpus sample is not empty", () => {
   // Every assertion below passes trivially over nothing, which is the failure mode that
   // lets a gate report success while doing no work.
-  assert.ok(same.length + moved.length > 5,
-    `only ${same.length + moved.length} comparable plans — the harness is not loading the corpus`);
+  assert.ok(comparable > 5,
+    `only ${comparable} comparable plans — the harness is not loading the corpus`);
 });
 
-test("propagator › chain propagation moves NO plan that already generated", () => {
+test("propagator › chain propagation moves no plan answered by the SAME rung", () => {
+  // The neutrality claim, at the strength it holds. A plan that differs while both runs spent
+  // the same concessions was genuinely re-sequenced by pruning, which a pruning propagator
+  // cannot legitimately do.
   assert.deepEqual(moved, [],
-    `${moved.length} plans changed. A pruning propagator must not re-sequence an existing `
-    + `plan; if this is intended, it belongs in a later rung instead (design §17.1).`);
+    `${moved.length} plans changed at an unchanged rung. A pruning propagator must not `
+    + `re-sequence a plan the ladder reached the same way; if this is intended, it belongs in a `
+    + `later rung instead (design §17.1).`);
+});
+
+test("propagator › chain propagation never makes a plan spend MORE concessions", () => {
+  // The other direction, and the one that would mean the propagator is actively harmful: pruning
+  // should never force the ladder further down. Coverage tests would not catch it — the program
+  // still generates — but the plan gives up conventions it did not have to.
+  assert.deepEqual(degraded, [],
+    `${degraded.length} plans needed a LOWER rung with pruning on, so the propagator is `
+    + `costing conventions rather than saving them.`);
 });
 
 test("propagator › chain propagation never LOSES a plan", () => {
