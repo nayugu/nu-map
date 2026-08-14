@@ -86,6 +86,18 @@ export function placeEveryCourse(major) {
     if (!node || typeof node !== 'object') return;
     if (node.type === 'COURSE') { place(node.subject, node.classId, realSh(node.subject, node.classId)); return; }
     if (node.type === 'RANGE')  { ranges.push(node); return; }
+    if (node.type === 'XOM' && node.accumulate && node.courses?.length === 1 && node.courses[0].type === 'COURSE') {
+      // Accumulated-credit repeatable course (e.g. "68 SH of SMFA 3000"): the witness
+      // places a course once, never modeling repeat instances, so a single placement can
+      // never prove real accumulation reaches numCreditsMin — that would always look
+      // "impossible" under impossibleSectionTitles even though a real student satisfies it
+      // over many terms. Model the witness as having taken enough repeats directly.
+      const child = node.courses[0];
+      const k = courseKey(child.subject, child.classId);
+      place(child.subject, child.classId, realSh(child.subject, child.classId));
+      courseMap[k].repeatTotalSh = node.numCreditsMin;
+      return;
+    }
     for (const v of Object.values(node)) {
       if (Array.isArray(v)) v.forEach(walk);
       else if (v && typeof v === 'object') walk(v);
@@ -126,6 +138,50 @@ export function impossibleSectionTitles(major) {
     const ideal = checkSection(section, placedSet, courseMap);
     const alloc = allocByTitle.get(section.title);
     if (ideal.sat && alloc && !alloc.sat) titles.push(section.title);
+  }
+  return titles;
+}
+
+/**
+ * Recursively find every XOM node in a result tree and collect its { satSh, reqSh }.
+ * Used to catch a section that stays *technically* satisfiable (so impossibleSectionTitles
+ * misses it) but silently over-consumes named courses beyond its own threshold — starving a
+ * later section that lists the same courses without ever going fully unsatisfiable itself
+ * (a large pool absorbs the loss). See the Media Arts BFA "Electives Option" case: its pool
+ * is big enough that losing courses to an earlier section never flips it to unsatisfiable,
+ * so only a credit-level check like this one catches the degradation.
+ */
+function collectXomCredits(node, out) {
+  if (!node || typeof node !== 'object') return;
+  if (node.type === 'XOM' && typeof node.reqSh === 'number' && typeof node.satSh === 'number') {
+    out.push({ satSh: node.satSh, reqSh: node.reqSh });
+  }
+  if (Array.isArray(node.children)) node.children.forEach((c) => collectXomCredits(c, out));
+}
+
+/**
+ * Return titles of sections whose allocated XOM pools capture markedly more credit than
+ * their own numCreditsMin under the witness plan — the signature of a pool that over-
+ * consumes named courses instead of stopping once satisfied (see allocateNode's XOM cap in
+ * src/core/gradRequirements.js). A modest slack (one typical course's credit) avoids flagging
+ * ordinary rounding; `shared` sections are skipped, same as impossibleSectionTitles, since
+ * they are deliberately permissive.
+ */
+export function overconsumingPoolTitles(major) {
+  if (!Array.isArray(major.requirementSections)) return [];
+  const { placedSet, courseMap } = placeEveryCourse(major);
+  const allocated = allocateMajor(major, placedSet, courseMap);
+  const allocByTitle = new Map(allocated.map((s) => [s.title, s]));
+
+  const titles = [];
+  for (const section of major.requirementSections) {
+    if (section.title === 'Required General Electives') continue;
+    if (section.shared) continue;
+    const alloc = allocByTitle.get(section.title);
+    if (!alloc) continue;
+    const xoms = [];
+    collectXomCredits(alloc, xoms);
+    if (xoms.some((x) => x.satSh - x.reqSh > 4)) titles.push(section.title);
   }
   return titles;
 }

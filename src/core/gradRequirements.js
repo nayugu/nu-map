@@ -590,7 +590,7 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
   };
 }
 
-function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContext = false) {
+function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContext = false, creditBudget = Infinity) {
   // A hole or a scalar where a requirement node belongs. Unsatisfied and
   // contributing nothing is the honest reading; crashing would take out the whole
   // requirements panel over one bad entry.
@@ -624,7 +624,14 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
     case 'RANGE': {
       const matched = [];
       const allocatedCourses = new Set();
+      // creditBudget caps how much of this range a caller (an enclosing XOM pool) still
+      // needs. Once exhausted, remaining placed courses are left untouched — not added to
+      // `matched`/`used` — so they stay free for whatever other section/pool also lists
+      // them, instead of this node greedily claiming every match it can find. Infinity
+      // (the default for any non-XOM-budgeted call) preserves today's behavior exactly.
+      let budget = creditBudget;
       for (const key of placedSet) {
+        if (budget <= 0) break;
         const c = courseMap[key];
         if (!c || c.subject !== node.subject) continue;
         const num = parseInt(c.number, 10);
@@ -643,6 +650,7 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
             coreqKeys.forEach(k => { if (placedSet.has(k)) allocatedCourses.add(k); });
             used.add(key);
             coreqKeys.forEach(k => { if (placedSet.has(k)) used.add(k); });
+            budget -= (c.sh ?? 4);
           }
         }
       }
@@ -678,6 +686,33 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
     }
 
     case 'XOM': {
+      // Accumulated-credit repeatable course: a single course whose SH accrues across many
+      // term placements (e.g. 68 SH of a repeatable "Studio" course), rather than a fixed
+      // per-course value — a genuinely different shape from the split-credit pattern below,
+      // whose "taken once, credit allotted" semantics would silently over-credit this case
+      // after just one term. `placedSet` only tracks distinct courses once (buildPlacedKeySet
+      // dedupes every repeat instance to one key), so satisfaction here reads the real summed
+      // total the caller attaches at `courseMap[key].repeatTotalSh` — never assumed from a
+      // single placement, since a wrong "satisfied" here is the most expensive kind of wrong.
+      // Absent that data, this honestly reports unsatisfied rather than guessing.
+      if (node.accumulate && node.courses?.length === 1 && node.courses[0].type === 'COURSE') {
+        const child = node.courses[0];
+        const key = courseKey(child.subject, child.classId);
+        const accumulatedSh = courseMap[key]?.repeatTotalSh ?? 0;
+        const sat = accumulatedSh >= node.numCreditsMin;
+        if (sat) used.add(key);
+        const desc = child.description ? `: ${child.description}` : '';
+        return {
+          type: 'XOM',
+          accumulate: true,
+          sat,
+          satSh: accumulatedSh, reqSh: node.numCreditsMin,
+          children: [{ type: 'COURSE', key, sat, label: `${child.subject} ${child.classId}${desc}` }],
+          label: `${child.subject} ${child.classId}${desc}`,
+          allocatedCourses: sat ? new Set([key]) : new Set(),
+        };
+      }
+
       // Split-credit pattern: a single required course whose SH is divided across
       // multiple sections (common in combined-degree programs like IECS).
       // Bypass originalUsed so the course can satisfy XOM requirements in more than
@@ -706,12 +741,6 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
         };
       }
 
-      // Recursively allocate all children
-      const children = (node.courses ?? []).map(child =>
-        allocateNode(child, placedSet, used, originalUsed, courseMap)
-      );
-
-
       // Helper: recursively sum credits from all satisfied leaf COURSEs and matched RANGEs
       function sumSatisfiedCredits(node) {
         if (!node) return 0;
@@ -733,10 +762,42 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
         return 0;
       }
 
-      const satSh = children.reduce((sum, child) => sum + sumSatisfiedCredits(child), 0);
+      // Allocate children in declared order, capping consumption at numCreditsMin: once
+      // earlier children cumulatively meet the threshold, later children are evaluated on a
+      // throwaway clone of `used` so nothing they match gets committed to the real `used`
+      // set — those courses stay free for whatever other section/pool also lists them,
+      // instead of this pool greedily consuming every match and starving that other pool
+      // (the "extra elective credit should overflow, not vanish" bug). `capped[i]` records
+      // which children were evaluated this way so their credit/allocation is excluded below
+      // even though a plain COURSE child (an atomic, budget-unaware checker) still reports
+      // itself as satisfied on the throwaway clone.
+      let remainingSh = node.numCreditsMin;
+      const capped = [];
+      const children = (node.courses ?? []).map(child => {
+        if (remainingSh <= 0) {
+          capped.push(true);
+          const dry = allocateNode(child, placedSet, new Set(used), originalUsed, courseMap, true, 0);
+          // A bare COURSE child is an atomic, budget-unaware checker (unlike RANGE, which
+          // already reports empty/unsatisfied once its own budget is 0) — force it honest
+          // here too, so the UI never shows the same physical course as "satisfied" under
+          // this section AND under whichever other pool actually claims its credit.
+          if (dry.type === 'COURSE' && dry.sat) {
+            return { ...dry, sat: false, allocatedCourses: new Set() };
+          }
+          return dry;
+        }
+        capped.push(false);
+        const childResult = allocateNode(child, placedSet, used, originalUsed, courseMap, true, remainingSh);
+        remainingSh -= sumSatisfiedCredits(childResult);
+        return childResult;
+      });
+
+      const satSh = children.reduce(
+        (sum, child, i) => sum + (capped[i] ? 0 : sumSatisfiedCredits(child)), 0
+      );
       const sat = satSh >= node.numCreditsMin;
 
-      // Collect all allocated course keys from satisfied children.
+      // Collect all allocated course keys from satisfied, non-capped children.
       // Prefer node.allocatedCourses when present (covers RANGE and OR nodes
       // that already track their own set) before falling back to recursion.
       function collectAllocated(node, outSet) {
@@ -753,7 +814,7 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
         }
       }
       const allocatedCourses = new Set();
-      children.forEach(child => collectAllocated(child, allocatedCourses));
+      children.forEach((child, i) => { if (!capped[i]) collectAllocated(child, allocatedCourses); });
 
       // Reconstruct named area groups for display (present when scraper used "choose from areas" merge)
       let allocatedGroups = null;

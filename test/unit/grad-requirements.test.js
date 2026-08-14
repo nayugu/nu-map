@@ -148,6 +148,115 @@ test("allocate › placed coreq is consumed with its course, not shown as a gene
   assert.ok(!geKeys.includes("CS3001"), "coreq should be absorbed, not a general elective");
 });
 
+test("allocate › XOM pool caps consumption at numCreditsMin, so excess named courses overflow to a later overlapping pool", () => {
+  // Mirrors the real "Media Arts History Elective" (4 SH from named ARTH courses) +
+  // "Electives Option" (a later pool re-listing the same ARTH courses) shape: taking two
+  // of the shared courses must satisfy the first pool with only one of them, leaving the
+  // other free to satisfy the second pool instead of silently vanishing.
+  const major = { requirementSections: [
+    { title: "History Elective", minRequirementCount: 1, requirements: [
+      { type: "XOM", numCreditsMin: 4, courses: [
+        { type: "COURSE", subject: "ARTH", classId: "2210" },
+        { type: "COURSE", subject: "ARTH", classId: "2211" },
+      ] },
+    ] },
+    { title: "Electives Option", minRequirementCount: 1, requirements: [
+      { type: "XOM", numCreditsMin: 4, courses: [
+        { type: "COURSE", subject: "ARTH", classId: "2211" },
+        { type: "COURSE", subject: "ARTD", classId: "2000" },
+      ] },
+    ] },
+  ] };
+  const cm = {
+    ...courseMap,
+    ARTH2210: { subject: "ARTH", number: "2210", sh: 4 },
+    ARTH2211: { subject: "ARTH", number: "2211", sh: 4 },
+    ARTD2000: { subject: "ARTD", number: "2000", sh: 4 },
+  };
+  const placedSet = set("ARTH2210", "ARTH2211");
+  const { sections } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  const byTitle = Object.fromEntries(sections.map(s => [s.title, s]));
+  assert.equal(byTitle["History Elective"].sat, true, "first pool satisfied by one course");
+  assert.equal(byTitle["Electives Option"].sat, true,
+    "second pool must be satisfied by the other course spilling over, not starved");
+});
+
+test("allocate › a RANGE inside an XOM pool also stops consuming once numCreditsMin is met", () => {
+  const major = { requirementSections: [
+    { title: "Pool A", minRequirementCount: 1, requirements: [
+      { type: "XOM", numCreditsMin: 4, courses: [
+        { type: "RANGE", subject: "CS", idRangeStart: 3000, idRangeEnd: 3999 },
+      ] },
+    ] },
+    { title: "Pool B", minRequirementCount: 1, requirements: [
+      { type: "COURSE", subject: "CS", classId: "3800" },
+    ] },
+  ] };
+  // CS3500 and CS3800 both fall in the 3000-3999 range; Pool A only needs 4 SH (one of them).
+  const placedSet = set("CS3500", "CS3800");
+  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
+  const byTitle = Object.fromEntries(sections.map(s => [s.title, s]));
+  assert.equal(byTitle["Pool A"].sat, true, "range pool satisfied by one match");
+  assert.equal(byTitle["Pool B"].sat, true,
+    "the other range match must remain free for the section that names it specifically");
+});
+
+// ── XOM accumulate: repeatable-course credit summed across term placements ────
+test("allocate › accumulate XOM sums repeatTotalSh across repeat placements, never a single sh", () => {
+  // Mirrors Studio Art BFA's "68 SH of SMFA 3000": a repeatable course taken across many
+  // terms, whose requirement can only be checked from a real summed total the caller
+  // attaches to courseMap — buildPlacedKeySet collapses every repeat instance to one Set
+  // entry, so this must NOT fall back to the split-credit "taken once" path.
+  const major = { requirementSections: [
+    { title: "Studio Art", minRequirementCount: 1, requirements: [
+      { type: "XOM", accumulate: true, numCreditsMin: 68, courses: [
+        { type: "COURSE", subject: "SMFA", classId: "3000" },
+      ] },
+    ] },
+  ] };
+  const cmShort = { SMFA3000: { subject: "SMFA", number: "3000", sh: 4, repeatTotalSh: 40 } };
+  const cmEnough = { SMFA3000: { subject: "SMFA", number: "3000", sh: 4, repeatTotalSh: 68 } };
+  const placedSet = set("SMFA3000");
+
+  const short = allocateMajorWithElectives(major, placedSet, cmShort, null, placedSet);
+  assert.equal(short.sections[0].sat, false, "40 of 68 SH is not enough");
+
+  const enough = allocateMajorWithElectives(major, placedSet, cmEnough, null, placedSet);
+  assert.equal(enough.sections[0].sat, true, "68 of 68 SH satisfies the requirement");
+});
+
+test("allocate › accumulate XOM without repeatTotalSh data reports unsatisfied, never guesses from a single placement", () => {
+  const major = { requirementSections: [
+    { title: "Studio Art", minRequirementCount: 1, requirements: [
+      { type: "XOM", accumulate: true, numCreditsMin: 68, courses: [
+        { type: "COURSE", subject: "SMFA", classId: "3000" },
+      ] },
+    ] },
+  ] };
+  // No repeatTotalSh attached — the caller hasn't computed it (or the course isn't
+  // repeatable). Falling back to "taken at all" would silently claim 68/68 SH from one
+  // 4-credit term; the honest answer is unsatisfied.
+  const cm = { SMFA3000: { subject: "SMFA", number: "3000", sh: 4 } };
+  const placedSet = set("SMFA3000");
+  const { sections } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  assert.equal(sections[0].sat, false);
+});
+
+test("allocate › a plain (non-accumulate) single-course XOM keeps its existing split-credit behavior", () => {
+  // Regression guard: the accumulate branch must not swallow the pre-existing split-credit
+  // pattern (a course's SH divided across sibling sections in one term).
+  const major = { requirementSections: [
+    { title: "Split", minRequirementCount: 1, requirements: [
+      { type: "XOM", numCreditsMin: 2, courses: [
+        { type: "COURSE", subject: "CS", classId: "2000" }, // full sh = 4
+      ] },
+    ] },
+  ] };
+  const placedSet = set("CS2000");
+  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
+  assert.equal(sections[0].sat, true);
+});
+
 test("allocate › an unrequired placed course lands in General Electives with its credits", () => {
   const major = { requirementSections: [
     { title: "Core", minRequirementCount: 1, requirements: [{ type: "COURSE", subject: "CS", classId: "2000" }] },
