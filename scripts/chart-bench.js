@@ -22,6 +22,7 @@ import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { minCoursesFor } from "../src/engine/calibration.js";
 import { evalPrereqTree } from "../src/core/prereqEval.js";
 import { realCourseCount } from "../src/core/coreqGroups.js";
+import { GENERAL_ELECTIVE } from "../src/core/requirementDemand.js";
 import { gatePlan } from "./lib/chart-gate.js";
 
 const arg = (name, dflt = null) => {
@@ -79,8 +80,22 @@ function termRows(doc) {
         coop: es.some(e => e.coop),
         cells: es.length,
         real,
-        ge: es.filter(e => /^general elective/i.test(e.title ?? "")).length,
-        names: es.map(e => e.options?.length === 1 ? e.options[0].join("+") : (e.coop ? "COOP" : "[res]")),
+        // ── By BINDING, never by wording ──────────────────────────────
+        //
+        // This read `e.title`, and an emitted entry has no `title` — `emit.js` writes `text`.
+        // So the column printed 0 for every term of every program, including the two
+        // benchmarks this file exists to judge, and the International Business plan whose
+        // Year 4 Spring is four general electives reported `GE 0`. An instrument that cannot
+        // fail is not a measurement, and this one had been reporting the benchmark's central
+        // defect as absent.
+        //
+        // Fixed the way `chart-probe.js` already counts them: by `binding.targets`. Wording
+        // would be wrong even spelled right — a breadth cell is deliberately titled
+        // "General Elective" with no competency printed on it, and the bucket is what
+        // clumps, not the words on the card.
+        ge: es.filter(e => e.binding?.targets?.includes(GENERAL_ELECTIVE)).length,
+        names: es.map(e => e.options?.length === 1 ? e.options[0].join("+")
+          : (e.coop ? "COOP" : (e.binding?.targets?.includes(GENERAL_ELECTIVE) ? "[GE]" : "[res]"))),
       });
     }
   }
