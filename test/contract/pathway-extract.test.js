@@ -5,6 +5,23 @@
 // wrong reaches a student's degree, so most of what is tested here is its
 // refusal to guess: no shares, no rules, and a loud todo whenever a page has the
 // shape that has already fooled it once.
+//
+// ── CONTRACT, not UNIT, and the reason is the CI job shape ──────────
+//
+// This lived in `test/unit/` and failed in CI while passing on every developer machine —
+// the most expensive shape a red test can have, because the difference is invisible
+// locally. `pathway-extract.js` imports `node-html-parser`, and `.github/workflows/test.yml`
+// runs the unit and invariant jobs with NO `npm ci`, deliberately: "the unit and invariant
+// import only src/ + Node builtins (committed data, no runtime deps), and keeping it that way
+// is enforced here by omitting the install step." So the import threw before a single
+// assertion ran, and the whole file reported as one failure at line 1 in 42 ms.
+//
+// `contract` is the one job that installs, precisely because it "parses saved catalog HTML
+// fixtures, which needs node-html-parser". Parsing HTML is what this file does, so it belongs
+// here on the workflow's own terms rather than by convenience.
+//
+// The relative import depth is unchanged — `test/contract` and `test/unit` are siblings — so
+// nothing below needed editing.
 // ═══════════════════════════════════════════════════════════════════
 
 import { test, describe } from "node:test";
