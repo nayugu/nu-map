@@ -140,8 +140,21 @@ async function fetchProgramUrls() {
   console.log('Fetching sitemap…');
   const xml = await fetchPage(SITEMAP_URL);
   const programs = parseSitemapPrograms(xml, { pathPrefix: '/undergraduate/', minSegments: 3, urlBase: EDITION ? BASE : '' });
-  console.log(`Found ${programs.length} program URLs`);
-  return programs;
+  // CPS's bachelor's-completion programs (Lowell Institute School: IT, Analytics,
+  // Biotechnology, …) are NOT nested under /undergraduate/ like every other
+  // college — they live at /professional-studies/bachelors-postbaccalaureate/,
+  // a sibling top-level path. That one path-shape assumption is why this
+  // scraper has shipped zero CPS undergraduate programs: verified against the
+  // live sitemap (2026-08-14), 13 such pages exist, including
+  // information-technology-bs, whose catalog page carries the richest PlusOne
+  // course-sharing table found anywhere. `collegeAt: 0` matches the
+  // 'professional-studies' college slug its ~88 graduate siblings already use.
+  const cps = parseSitemapPrograms(xml, {
+    pathPrefix: '/professional-studies/bachelors-postbaccalaureate/',
+    minSegments: 3, collegeAt: 0, urlBase: EDITION ? BASE : '',
+  });
+  console.log(`Found ${programs.length} program URLs (+ ${cps.length} CPS bachelor's-completion)`);
+  return [...programs, ...cps];
 }
 
 // ── Credit helpers ────────────────────────────────────────────────────────────
@@ -405,12 +418,18 @@ async function scrapeProgram(url) {
     // they render as info in the graduation panel and are evaluated only
     // against grades the user chose to enter (src/core/gradeSystem.js).
     ...(gpaConstraints?.length ? { gpaRequirements: gpaConstraints } : {}),
-    // Only footnotes that state something machine-readable are kept — the ones
-    // carrying a substitution, or naming courses a reader may want to check.
-    // The rest is prose we would store and never use.
-    ...(footnotes?.some(f => f.substitution)
-        ? { footnotes: footnotes.filter(f => f.substitution) }
-        : {}),
+    // Every footnote parseFootnotes found is kept. This used to filter down to
+    // `f.substitution` only, which silently dropped footnotes shaped as a
+    // WAIVER ("Principles of Bioengineering (BIOE 6000) and Seminar (BIOE 7390)
+    // are not required for students in a PlusOne bioengineering pathway") or a
+    // table-wide note with no course codes to parse at all ("Graduate courses
+    // that may be used toward the MS in Computer Science when part of the
+    // PlusOne program" — a real rule, attached to a whole concentration table,
+    // naming no course in its own text). Neither has a `substitution`, and the
+    // second has no `codes` either, so no code-based filter can catch it —
+    // only keeping everything does. parseFootnotes already drops near-empty
+    // text (< 8 chars) and de-dupes repeats, so nothing here is unbounded.
+    ...(footnotes?.length ? { footnotes } : {}),
     ...(concentrations ? { concentrations } : {}),
     ...(generalElectiveSH > 0 ? { generalElectiveSH } : {}),
   };
@@ -478,7 +497,12 @@ async function main() {
 
   if (URL_ARG) {
     const parts = URL_ARG.replace(BASE, '').replace(/^\/|\/$/g, '').split('/');
-    programs = [{ url: URL_ARG, college: parts[1] ?? 'unknown', name: '' }];
+    // CPS's bachelor's-completion pages aren't under BASE (/undergraduate/) at
+    // all, so the replace above is a no-op and parts[0] is 'professional-studies'
+    // — matching the collegeAt: 0 override in fetchProgramUrls, and the college
+    // slug its ~88 graduate siblings already use.
+    const collegeAt = parts[0] === 'professional-studies' ? 0 : 1;
+    programs = [{ url: URL_ARG, college: parts[collegeAt] ?? 'unknown', name: '' }];
   } else {
     programs = await fetchProgramUrls();
     if (DRY_RUN) {

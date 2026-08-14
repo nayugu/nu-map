@@ -406,12 +406,18 @@ async function scrapeProgram(url) {
     // they render as info in the graduation panel and are evaluated only
     // against grades the user chose to enter (src/core/gradeSystem.js).
     ...(gpaConstraints?.length ? { gpaRequirements: gpaConstraints } : {}),
-    // Only footnotes that state something machine-readable are kept — the ones
-    // carrying a substitution, or naming courses a reader may want to check.
-    // The rest is prose we would store and never use.
-    ...(footnotes?.some(f => f.substitution)
-        ? { footnotes: footnotes.filter(f => f.substitution) }
-        : {}),
+    // Every footnote parseFootnotes found is kept. This used to filter down to
+    // `f.substitution` only, which silently dropped footnotes shaped as a
+    // WAIVER ("Principles of Bioengineering (BIOE 6000) and Seminar (BIOE 7390)
+    // are not required for students in a PlusOne bioengineering pathway") or a
+    // table-wide note with no course codes to parse at all ("Graduate courses
+    // that may be used toward the MS in Computer Science when part of the
+    // PlusOne program" — a real rule, attached to a whole concentration table,
+    // naming no course in its own text). Neither has a `substitution`, and the
+    // second has no `codes` either, so no code-based filter can catch it —
+    // only keeping everything does. parseFootnotes already drops near-empty
+    // text (< 8 chars) and de-dupes repeats, so nothing here is unbounded.
+    ...(footnotes?.length ? { footnotes } : {}),
     ...(concentrations ? { concentrations } : {}),
     ...(generalElectiveSH > 0 ? { generalElectiveSH } : {}),
   };

@@ -45,9 +45,15 @@ const CONCENTRATION_PATH = /\/(?:under)?graduate\/[^/]+\/concentrations\//;
  * @param {string} profile.pathPrefix     e.g. "/undergraduate/"
  * @param {number} [profile.minSegments=3]
  * @param {string} [profile.urlBase]      e.g. "https://catalog.northeastern.edu/archive/2022-2023"
+ * @param {number} [profile.collegeAt=1]  which path segment names the college.
+ *   True for every `/undergraduate/{college}/…` and `/graduate/{college}/…`
+ *   page, but NOT for CPS's bachelor's-completion pages, which live at
+ *   `/professional-studies/bachelors-postbaccalaureate/{school-or-program}/…`
+ *   — segment 0 (`professional-studies`), not 1, matching the college slug
+ *   its ~88 graduate siblings already use.
  * @returns {{url: string, college: string, lastmod: string|null, name: string}[]}
  */
-export function parseSitemapPrograms(xml, { pathPrefix, minSegments = 3, urlBase = '' }) {
+export function parseSitemapPrograms(xml, { pathPrefix, minSegments = 3, urlBase = '', collegeAt = 1 }) {
   const seen = new Set();
   const programs = [];
 
@@ -76,7 +82,7 @@ export function parseSitemapPrograms(xml, { pathPrefix, minSegments = 3, urlBase
 
     programs.push({
       url,
-      college: parts[1] ?? 'unknown',
+      college: parts[collegeAt] ?? 'unknown',
       lastmod: rawMod?.trim() || null,
       // The AZ index used to supply a label here, but it was never read —
       // scrapeProgram takes the name from the page's <h1>.
