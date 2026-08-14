@@ -152,6 +152,8 @@ export const strings = {
   "plusone.group.unknown":      "आपको पुष्टि करनी है",
   "plusone.group.info":         "जानने योग्य",
   "plusone.group.satisfied":    "{n} जाँच पास हुईं",
+  "plusone.group.eligible":     "आपके विषय के लिए",
+  "plusone.group.other":        "अन्य रास्ते",
 
   "plusone.rule.unrecognised":       "एक नियम जिसे हम अभी पढ़ नहीं सकते ({kind}) — सलाहकार से पूछें।",
   "plusone.rule.shareCap.ok":        "{maxCourses} में से {courses} कोर्स · {maxSH} SH में से {sh} SH साझा।",

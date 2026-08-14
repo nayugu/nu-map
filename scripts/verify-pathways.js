@@ -33,6 +33,7 @@ import { fileURLToPath } from "node:url";
 import { RULE_KINDS } from "../src/core/pathway/ruleKinds.js";
 import { EVALUATORS } from "../src/core/pathway/rules/index.js";
 import { plannerId, isGradCode, isUgCode } from "../src/core/pathway/ids.js";
+import { matchesEligibility } from "../src/core/pathway/select.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const PATHWAYS = join(ROOT, "data/northeastern/pathways");
@@ -69,6 +70,7 @@ const courses = new Set(
 const bundle = JSON.parse(readFileSync(BUNDLE, "utf8"));
 const programIds = new Set(bundle.programs.map(p => p.id));
 const programData = bundle.programData ?? {};
+const ugMajors = bundle.programs.filter(p => p.level === "undergrad" && p.type === "major");
 
 /** Every course reference inside a requirement tree, as planner ids. */
 function courseRefsOf(node, out = new Set()) {
@@ -134,9 +136,33 @@ for (const file of walk(PATHWAYS)) {
   if (!p.source?.url) at("source", "missing `source.url` — every pathway must name where it came from");
   if (!p.source?.retrievedAt) at("source", "missing `source.retrievedAt` — staleness cannot be shown without it");
 
-  // 1. programs resolve
+  // 1. eligibility entries are well formed AND actually match something.
+  //
+  // Eligibility is a RULE, not a list (see core/pathway/select.js): a college, a
+  // name fragment that catches combined majors, or an exact id. The check that
+  // matters is the last one — an entry matching zero programs is a transcription
+  // error that no amount of shape validation would catch, and it is exactly how
+  // Khoury MSCS shipped listing 1 of the 71 programs it is open to.
+  if (!(p.eligibility ?? []).length) at("eligibility", "no eligibility stated");
   for (const e of p.eligibility ?? []) {
-    if (!programIds.has(e.ugProgram)) at("ugProgram", `unknown program id: ${e.ugProgram}`);
+    if (e.ugProgram) {
+      if (!programIds.has(e.ugProgram)) at("ugProgram", `unknown program id: ${e.ugProgram}`);
+      continue;
+    }
+    if (!e.college && !e.nameIncludes && !e.anyMajor) {
+      at("eligibility", `entry matches nothing: ${JSON.stringify(e)} — ` +
+                        `use ugProgram, college, nameIncludes, or anyMajor`);
+      continue;
+    }
+    if (e.anyMajor) continue;                     // deliberate wildcard
+    const n = ugMajors.filter(u => matchesEligibility(u, e)).length;
+    if (n === 0) {
+      at("eligibility", `entry matches 0 undergraduate majors: ${JSON.stringify(e)}`);
+    } else if (n > ugMajors.length * 0.5) {
+      warnings.push({ file: rel, id: p.id, check: "eligibility",
+        detail: `entry matches ${n} of ${ugMajors.length} majors — very broad; ` +
+                `intended, or a name fragment that is too short?` });
+    }
   }
   if (!(p.msPrograms ?? []).length) at("msPrograms", "no master's program listed");
   for (const id of p.msPrograms ?? []) {

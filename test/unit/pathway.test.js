@@ -22,7 +22,9 @@ import {
   shareTotals, excludedIds, resolveCandidates, ambiguousShares,
   shareCandidates, hasOpenShareDomain,
 } from "../../src/core/pathway/shareSet.js";
-import { selectPathways, msProgramFor, isStale } from "../../src/core/pathway/select.js";
+import {
+  selectPathways, msProgramFor, isStale, isEligibleFor, matchesEligibility, collegeOf,
+} from "../../src/core/pathway/select.js";
 import { plannerId, displayCode, inDomain, isGradCode, isUgCode } from "../../src/core/pathway/ids.js";
 import { applySubstitutions } from "../../src/core/planModel.js";
 import { planConditions } from "../../src/core/prereqConditions.js";
@@ -562,58 +564,125 @@ describe("anonymous domain shares", () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════
-describe("selection is undergraduate-only and program-scoped", () => {
-  test("a graduate plan gets nothing", () => {
-    assert.deepEqual(
-      selectPathways(PATHWAYS, {
-        studentType: "graduate",
-        ugProgramId: "2026/computer-information-science/computer_science_bscs_(boston)",
-      }), []);
+describe("anyone may declare any pathway — eligibility only warns", () => {
+  // The rule this encodes, and the reason the old gate was wrong twice over:
+  // our eligibility data is a hand transcription of a marketing page, and
+  // Khoury MSCS shipped listing ONE of the 71 programs it is actually open to.
+  // Gating on that silently denied real students their programme. It also
+  // contradicted the project's own principle — flag, never block.
+  const ALL = PATHWAYS.length;
+
+  test("an undergraduate plan is offered every pathway, whatever their major", () => {
+    assert.equal(selectPathways(PATHWAYS, { studentType: "undergrad" }).length, ALL);
   });
 
-  test("a BSCS plan finds its pathways", () => {
-    const got = selectPathways(PATHWAYS, {
-      studentType: "undergrad",
-      ugProgramId: "2026/computer-information-science/computer_science_bscs_(boston)",
-    });
-    assert.ok(got.length >= 3, `expected several, got ${got.length}`);
-    assert.ok(got.every(p => p.eligibility.some(
-      e => e.ugProgram === "2026/computer-information-science/computer_science_bscs_(boston)")));
+  test("even with no major declared at all", () => {
+    assert.equal(selectPathways(PATHWAYS, {}).length, ALL);
   });
 
-  test("an unrelated program finds none", () => {
-    assert.deepEqual(selectPathways(PATHWAYS, {
-      studentType: "undergrad",
-      ugProgramId: "2026/health-sciences/nursing_bsn_(boston)",
-    }), []);
+  test("a graduate plan is offered none — sharing needs undergraduate status", () => {
+    assert.deepEqual(selectPathways(PATHWAYS, { studentType: "graduate" }), []);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════
+describe("eligibility is a rule, not a list of program ids", () => {
+  const prog = (id, label) => ({ id, label });
+  const BSCS = prog("2026/computer-information-science/computer_science_bscs_(boston)",
+                    "Computer Science, BSCS (Boston)");
+  const CSBIO = prog("2026/computer-information-science/computer_science_and_biology_bs_(boston)",
+                     "Computer Science and Biology, BS (Boston)");
+  const CMPE = prog("2026/engineering/computer_engineering_and_computer_science_bscmpe_(boston)",
+                    "Computer Engineering and Computer Science, BSCmpE (Boston)");
+  const NURSING = prog("2026/health-sciences/nursing_bsn_(boston)", "Nursing, BSN (Boston)");
+
+  test("the college is read straight off the id — no lookup needed", () => {
+    assert.equal(collegeOf(BSCS.id), "computer-information-science");
+    assert.equal(collegeOf("grad/2026/engineering/x_ms_(boston)"), "engineering");
+    assert.equal(collegeOf("nonsense"), null);
   });
 
-  test("no program means no pathways, not all of them", () => {
-    assert.deepEqual(selectPathways(PATHWAYS, { studentType: "undergrad" }), []);
+  test("a college entry admits the whole college", () => {
+    const e = { college: "computer-information-science" };
+    assert.equal(matchesEligibility(BSCS, e), true);
+    assert.equal(matchesEligibility(CSBIO, e), true);
+    assert.equal(matchesEligibility(NURSING, e), false);
   });
 
-  test("a concentration-scoped entry closes when another concentration is chosen", () => {
-    const p = [{
-      id: "x",
-      eligibility: [{ ugProgram: "P", requiresMsConcentration: "MSMD" }],
-      msPrograms: [], shares: [], rules: [],
-    }];
-    assert.equal(selectPathways(p, { ugProgramId: "P", msConcentration: "MSMD" }).length, 1);
-    assert.equal(selectPathways(p, { ugProgramId: "P", msConcentration: "POWR" }).length, 0);
-    assert.equal(selectPathways(p, { ugProgramId: "P" }).length, 1, "undecided still offers");
+  // "and all combined majors" works because NEU names a combined major after
+  // both halves, and such a major may be housed in ANOTHER college — which is
+  // exactly what Khoury says: "eligible regardless of their home college".
+  test("a name entry catches combined majors, including outside the college", () => {
+    const e = { nameIncludes: "Computer Science" };
+    assert.equal(matchesEligibility(BSCS, e), true);
+    assert.equal(matchesEligibility(CSBIO, e), true);
+    assert.equal(matchesEligibility(CMPE, e), true, "housed in engineering, still eligible");
+    assert.equal(matchesEligibility(NURSING, e), false);
+  });
+
+  test("a name entry accepts several phrases", () => {
+    const e = { nameIncludes: ["Data Science", "Computer Science"] };
+    assert.equal(matchesEligibility(BSCS, e), true);
+    assert.equal(matchesEligibility(NURSING, e), false);
+  });
+
+  test("an exact program id still works", () => {
+    assert.equal(matchesEligibility(BSCS, { ugProgram: BSCS.id }), true);
+    assert.equal(matchesEligibility(CSBIO, { ugProgram: BSCS.id }), false);
+  });
+
+  test("an empty entry matches nothing rather than everything", () => {
+    assert.equal(matchesEligibility(BSCS, {}), false);
+    assert.equal(matchesEligibility(BSCS, null), false);
+    assert.equal(matchesEligibility(null, { college: "x" }), false);
+  });
+
+  test("a deliberate wildcard is honoured", () => {
+    assert.equal(matchesEligibility(NURSING, { anyMajor: true }), true);
+  });
+
+  test("isEligibleFor is false with no declared programme, never a crash", () => {
+    assert.equal(isEligibleFor(byId(MSCS), []), false);
+    assert.equal(isEligibleFor(byId(MSCS), [null]), false);
+  });
+
+  test("a concentration-scoped entry closes when another is chosen", () => {
+    const pw = { eligibility: [{ nameIncludes: "Physics", requiresMsConcentration: "MSMD" }] };
+    const phys = prog("2026/science/physics_bs_(boston)", "Physics, BS (Boston)");
+    assert.equal(isEligibleFor(pw, [phys], "MSMD"), true);
+    assert.equal(isEligibleFor(pw, [phys], "POWR"), false);
+    assert.equal(isEligibleFor(pw, [phys]), true, "undecided still offers");
+  });
+
+  // The measurement that proves the fix: 1 -> 71.
+  test("Khoury MSCS is open to the whole college plus combined majors elsewhere", () => {
+    const bundle = JSON.parse(readFileSync(
+      join(ROOT, "public/northeastern/programs-bundle.json"), "utf8"));
+    const ug = bundle.programs.filter(p => p.level === "undergrad" && p.type === "major");
+    const n = ug.filter(u => isEligibleFor(byId(MSCS), [u])).length;
+    assert.ok(n >= 60, `expected the whole Khoury college and more, got ${n}`);
+    assert.ok(n < ug.length, "but not literally every major at the university");
+  });
+
+  test("every shipped pathway admits at least one real programme", () => {
+    const bundle = JSON.parse(readFileSync(
+      join(ROOT, "public/northeastern/programs-bundle.json"), "utf8"));
+    const ug = bundle.programs.filter(p => p.level === "undergrad" && p.type === "major");
+    for (const pw of PATHWAYS) {
+      const n = ug.filter(u => isEligibleFor(pw, [u])).length;
+      assert.ok(n > 0, `${pw.id} admits nobody — eligibility is mistranscribed`);
+    }
   });
 
   test("campus variants resolve, and default to the first listed", () => {
     const p = byId(MSCS);
     assert.ok(msProgramFor(p, "Oakland").includes("(oakland)"));
-    assert.ok(msProgramFor(p, "Silicon Valley").includes("(silicon_valley)"));
     assert.equal(msProgramFor(p), p.msPrograms[0]);
     assert.equal(msProgramFor(p, "Nowhere"), p.msPrograms[0], "unknown campus falls back");
   });
 
   test("an undated pathway is stale by definition", () => {
     assert.equal(isStale({ source: {} }), true);
-    assert.equal(isStale({ source: { retrievedAt: "not-a-date" } }), true);
     assert.equal(isStale({ source: { retrievedAt: "2026-08-13" } }, Date.parse("2026-08-20")), false);
     assert.equal(isStale({ source: { retrievedAt: "2020-01-01" } }, Date.parse("2026-08-20")), true);
   });

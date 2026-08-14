@@ -152,6 +152,8 @@ export const strings = {
   "plusone.group.unknown":      "\u9700\u4f60\u786e\u8ba4",
   "plusone.group.info":         "\u4f9b\u4f60\u53c2\u8003",
   "plusone.group.satisfied":    "\u5df2\u901a\u8fc7 {n} \u9879\u68c0\u67e5",
+  "plusone.group.eligible":     "适用于你的专业",
+  "plusone.group.other":        "其他路径",
 
   "plusone.rule.unrecognised":       "\u6211\u4eec\u5c1a\u65e0\u6cd5\u8bfb\u53d6\u7684\u89c4\u5219\uff08{kind}\uff09\u2014\u2014\u8bf7\u54a8\u8be2\u5bfc\u5e08\u3002",
   "plusone.rule.shareCap.ok":        "\u5df2\u5171\u4eab {maxCourses} \u95e8\u4e2d\u7684 {courses} \u95e8 \u00b7 {maxSH} SH \u4e2d\u7684 {sh} SH\u3002",

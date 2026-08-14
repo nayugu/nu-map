@@ -153,6 +153,8 @@ export const strings = {
   "plusone.group.unknown":      "ご自身で確認",
   "plusone.group.info":         "知っておくこと",
   "plusone.group.satisfied":    "{n} 件の確認に合格",
+  "plusone.group.eligible":     "あなたの専攻向け",
+  "plusone.group.other":        "その他の経路",
 
   "plusone.rule.unrecognised":       "まだ読み取れない規則です（{kind}）。アドバイザーに確認してください。",
   "plusone.rule.shareCap.ok":        "{maxCourses} 科目中 {courses} 科目・{maxSH} SH 中 {sh} SH を共通利用中。",

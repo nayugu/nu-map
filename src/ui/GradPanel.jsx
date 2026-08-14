@@ -20,6 +20,7 @@ import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { IAcceleratedPathway } from "../ports/IAcceleratedPathway.js";
+import { isEligibleFor } from "../core/pathway/select.js";
 import { computeGrantedAttrs, computeGrantedCourses } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { cohortCatalogYear, programIdFromPath } from "../data/programPaths.js";
@@ -1412,29 +1413,54 @@ export default function GradPanel({ wideCatalog = false }) {
   // eligible undergraduate could actually enter, and [] for a graduate plan.
   // Both majors are passed because a second major can be the eligible one —
   // Computer Engineering reaches the MS in Computer Science, for instance.
+  // EVERY pathway, for an undergraduate plan — not just the ones our data says
+  // the student is eligible for. Eligibility is a fact about a published page we
+  // transcribed by hand, and gating on it means a wrong transcription silently
+  // denies a real student their programme. We show them all and warn instead.
   const plusOneOptions = useMemo(
-    () => acceleratedPathway.listPathways({
-      // The plan stores a glob module path; the pathway data and the bundle key
-      // on the registry id. Comparing the two forms directly matches nothing,
-      // silently — see programIdFromPath.
-      ugProgramIds: [major2Path, majorPath].map(programIdFromPath).filter(Boolean),
-      studentType,
-    }),
-    [acceleratedPathway, majorPath, major2Path, studentType]
+    () => acceleratedPathway.listPathways({ studentType }),
+    [acceleratedPathway, studentType]
   );
 
-  // SearchCombo keys options on `path`, so the pathway id goes there. Grouped by
-  // the master's degree so a student with several options sees what they lead to
-  // rather than a flat list of near-identical labels.
+  // The declared programmes, as { id, label } — the id gives the college (it is
+  // "<year>/<college>/<folder>") and the label is what "and all combined majors"
+  // matches on, since NEU names a combined major after both of its halves.
+  const myPrograms = useMemo(() => {
+    const labelOf = (path) => {
+      for (const opts of majorGroups.values()) {
+        const hit = opts.find(o => o.path === path);
+        if (hit) return hit.label;
+      }
+      return null;
+    };
+    return [majorPath, major2Path].filter(Boolean).map(path => ({
+      id: programIdFromPath(path),
+      label: labelOf(path),
+    })).filter(p => p.id);
+  }, [majorPath, major2Path, majorGroups]);
+
+  // Pathways the student's own programme is listed for. Not a filter — the
+  // dropdown offers everything — but it drives the ORDER and the default, so the
+  // common case is one click and the unusual one is still reachable.
+  const eligiblePathways = useMemo(
+    () => plusOneOptions.filter(p => isEligibleFor(p, myPrograms)),
+    [plusOneOptions, myPrograms]
+  );
+
+  // SearchCombo keys options on `path`, so the pathway id goes there. Two groups:
+  // what this student is listed for, then everything else. A flat alphabetical
+  // list buried the relevant pathway among near-identical labels.
   const plusOneGroups = useMemo(() => {
     const map = new Map();
-    for (const p of plusOneOptions) {
-      const key = p.brand ?? "PlusOne";
+    const eligibleIds = new Set(eligiblePathways.map(p => p.id));
+    const push = (key, p) => {
       if (!map.has(key)) map.set(key, []);
       map.get(key).push({ path: p.id, label: p.label ?? p.id, name: p.label ?? p.id });
-    }
+    };
+    for (const p of plusOneOptions) if (eligibleIds.has(p.id)) push(t("plusone.group.eligible"), p);
+    for (const p of plusOneOptions) if (!eligibleIds.has(p.id)) push(t("plusone.group.other"), p);
     return map;
-  }, [plusOneOptions]);
+  }, [plusOneOptions, eligiblePathways, t]);
 
   // A saved pathway that no longer resolves (the college stopped publishing it,
   // or the id changed) must not vanish silently — the block renders a notice and
@@ -1972,7 +1998,7 @@ export default function GradPanel({ wideCatalog = false }) {
                   </div>
                 ) : (
                   <button
-                    onClick={() => setPlusOne(plusOneOptions[0].id)}
+                    onClick={() => setPlusOne((eligiblePathways[0] ?? plusOneOptions[0]).id)}
                     style={{
                       display: "block", width: "100%", marginTop: 6, marginBottom: 8,
                       padding: "4px 0", background: "transparent",
@@ -2099,7 +2125,7 @@ export default function GradPanel({ wideCatalog = false }) {
           plusOnePathway
             ? <PlusOneBlock
                 pathway={plusOnePathway}
-                eligible={plusOneOptions.some(o => o.id === plusOne)}
+                eligible={isEligibleFor(plusOnePathway, myPrograms)}
                 onClear={() => setPlusOne("")}
                 nameColor={claudePreview?.changed?.has?.("plusOne") ? "#fb923c" : undefined}
               />

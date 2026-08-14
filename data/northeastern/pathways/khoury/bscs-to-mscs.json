@@ -4,7 +4,12 @@
   "college": "computer-information-science",
   "label": "Computer Science, BSCS → Computer Science, MSCS",
   "eligibility": [
-    { "ugProgram": "2026/computer-information-science/computer_science_bscs_(boston)" }
+    {
+      "college": "computer-information-science"
+    },
+    {
+      "nameIncludes": "Computer Science"
+    }
   ],
   "msPrograms": [
     "grad/2026/computer-information-science/computer_science_mscs_(boston)",
@@ -17,33 +22,151 @@
     "note": "Khoury: 'four graduate courses total allowed (including withdrawals)'."
   },
   "shares": [
-    { "grad": "CS 5340", "target": { "kind": "course", "ref": "CS 2484" } },
-    { "grad": "CS 5800", "target": { "kind": "course", "ref": "CS 3000" } },
-    { "grad": "CS 5200", "target": { "kind": "course", "ref": "CS 3200" } },
-    { "grad": "CS 5600", "target": { "kind": "course", "ref": "CS 3650" } },
-    { "grad": "CS 5700", "target": { "kind": "course", "ref": "CS 4700" } },
-    { "grad": "CS 5100", "target": { "kind": "course", "ref": "CS 4100" } },
-    { "grad": "CS 5150", "target": { "kind": "course", "ref": "CS 4150" } },
-    { "grad": "CS 5310", "target": { "kind": "course", "ref": "CS 4300" } },
-    { "grad": "CS 5400", "target": { "kind": "course", "ref": "CS 4400" } },
-    { "grad": "CS 5500", "target": { "kind": "course", "ref": "CS 4500" } },
-    { "grad": "CS 5500", "target": { "kind": "course", "ref": "CS 4530" } },
-    { "grad": "CS 5520", "target": { "kind": "course", "ref": "CS 4520" } },
-    { "grad": "CS 5610", "target": { "kind": "course", "ref": "CS 4550" } }
+    {
+      "grad": "CS 5340",
+      "target": {
+        "kind": "course",
+        "ref": "CS 2484"
+      }
+    },
+    {
+      "grad": "CS 5800",
+      "target": {
+        "kind": "course",
+        "ref": "CS 3000"
+      }
+    },
+    {
+      "grad": "CS 5200",
+      "target": {
+        "kind": "course",
+        "ref": "CS 3200"
+      }
+    },
+    {
+      "grad": "CS 5600",
+      "target": {
+        "kind": "course",
+        "ref": "CS 3650"
+      }
+    },
+    {
+      "grad": "CS 5700",
+      "target": {
+        "kind": "course",
+        "ref": "CS 4700"
+      }
+    },
+    {
+      "grad": "CS 5100",
+      "target": {
+        "kind": "course",
+        "ref": "CS 4100"
+      }
+    },
+    {
+      "grad": "CS 5150",
+      "target": {
+        "kind": "course",
+        "ref": "CS 4150"
+      }
+    },
+    {
+      "grad": "CS 5310",
+      "target": {
+        "kind": "course",
+        "ref": "CS 4300"
+      }
+    },
+    {
+      "grad": "CS 5400",
+      "target": {
+        "kind": "course",
+        "ref": "CS 4400"
+      }
+    },
+    {
+      "grad": "CS 5500",
+      "target": {
+        "kind": "course",
+        "ref": "CS 4500"
+      }
+    },
+    {
+      "grad": "CS 5500",
+      "target": {
+        "kind": "course",
+        "ref": "CS 4530"
+      }
+    },
+    {
+      "grad": "CS 5520",
+      "target": {
+        "kind": "course",
+        "ref": "CS 4520"
+      }
+    },
+    {
+      "grad": "CS 5610",
+      "target": {
+        "kind": "course",
+        "ref": "CS 4550"
+      }
+    }
   ],
   "rules": [
-    { "kind": "shareCap", "courses": 4, "semesterHours": 16 },
-    { "kind": "chooseK", "k": 4, "counts": "allShares" },
-    { "kind": "noGradIfUgDone" },
-    { "kind": "maxGradCoursesPerTerm", "max": 1 },
-    { "kind": "earliestTerm", "afterTerms": 3 },
-    { "kind": "gpaMin", "min": 3.0, "scopes": ["cumulative", "major"] },
-    { "kind": "gradCourseCompletedFirst", "count": 1 },
-    { "kind": "admissionNotGuaranteed" },
-    { "kind": "noDeferral" },
-    { "kind": "fullTimeGradMin", "sh": 8 },
-    { "kind": "noTransferCredit" },
-    { "kind": "scholarshipIneligible", "names": ["Double Husky"] }
+    {
+      "kind": "shareCap",
+      "courses": 4,
+      "semesterHours": 16
+    },
+    {
+      "kind": "chooseK",
+      "k": 4,
+      "counts": "allShares"
+    },
+    {
+      "kind": "noGradIfUgDone"
+    },
+    {
+      "kind": "maxGradCoursesPerTerm",
+      "max": 1
+    },
+    {
+      "kind": "earliestTerm",
+      "afterTerms": 3
+    },
+    {
+      "kind": "gpaMin",
+      "min": 3.0,
+      "scopes": [
+        "cumulative",
+        "major"
+      ]
+    },
+    {
+      "kind": "gradCourseCompletedFirst",
+      "count": 1
+    },
+    {
+      "kind": "admissionNotGuaranteed"
+    },
+    {
+      "kind": "noDeferral"
+    },
+    {
+      "kind": "fullTimeGradMin",
+      "sh": 8
+    },
+    {
+      "kind": "noTransferCredit"
+    },
+    {
+      "kind": "scholarshipIneligible",
+      "names": [
+        "Double Husky"
+      ]
+    }
   ],
   "notes": [
     {
@@ -53,6 +176,10 @@
     {
       "text": "'Only one graduate course may be completed per semester' and 'first-year students cannot take their first graduate-level course during the summer' — so the earliest is the fall of year two.",
       "reason": "source wording behind earliestTerm"
+    },
+    {
+      "text": "Verbatim: “Students pursuing a Khoury College undergraduate degree program, in both core and combined majors, are eligible. Students in combined majors with Khoury College are eligible regardless of their home college affiliation.” So eligibility is the whole college plus any combined major named for Computer Science, wherever it is housed — 42 programs by name, 66 in the college. It was previously one program id.",
+      "reason": "eligibility is a rule, not a list"
     }
   ],
   "source": {

@@ -152,6 +152,8 @@ export const strings = {
   "plusone.group.unknown":      "직접 확인 필요",
   "plusone.group.info":         "알아둘 점",
   "plusone.group.satisfied":    "{n}개 항목 통과",
+  "plusone.group.eligible":     "내 전공 대상",
+  "plusone.group.other":        "다른 경로",
 
   "plusone.rule.unrecognised":       "아직 읽을 수 없는 규칙입니다({kind}). 지도교수에게 문의하세요.",
   "plusone.rule.shareCap.ok":        "{maxCourses}과목 중 {courses}과목 · {maxSH} SH 중 {sh} SH 공통 인정 중.",

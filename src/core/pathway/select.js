@@ -22,36 +22,104 @@
 // ═══════════════════════════════════════════════════════════════════
 
 /**
- * Pathways open to a student.
+ * The college segment of a program id.
+ *
+ * Ids are "<year>/<college>/<folder>" for undergraduate programs and
+ * "grad/<year>/<college>/<folder>" for graduate ones, so the college is free —
+ * no lookup, no extra data passed around.
+ */
+export function collegeOf(programId) {
+  const parts = String(programId ?? "").split("/");
+  const i = parts.findIndex(s => /^\d{4}$/.test(s));
+  return i >= 0 ? (parts[i + 1] ?? null) : null;
+}
+
+/**
+ * Does one eligibility entry admit this program?
+ *
+ * Eligibility is stated by colleges in three shapes, and modelling only the
+ * first was badly wrong. Khoury MSCS says "students pursuing a Khoury College
+ * undergraduate degree program, in BOTH CORE AND COMBINED MAJORS, are eligible…
+ * regardless of their home college affiliation". Listing one program id caught
+ * 1 of the 42 programs whose name contains "Computer Science", and 1 of the 66
+ * in the college.
+ *
+ *   { ugProgram: "<id>" }        exactly this program
+ *   { college: "engineering" }   any undergraduate program of that college
+ *   { nameIncludes: "Computer Science" }
+ *                                any program whose LABEL contains that phrase —
+ *                                which is how "and all combined majors" works,
+ *                                since NEU names a combined major after both of
+ *                                its halves ("Computer Science and Biology, BS")
+ *
+ * `nameIncludes` deliberately matches across colleges: a combined major can be
+ * housed anywhere, and Khoury says so explicitly.
+ *
+ * @param {{id: string, label?: string}} program
+ * @param {object} entry
+ */
+export function matchesEligibility(program, entry) {
+  if (!program?.id || !entry) return false;
+  if (entry.ugProgram) return entry.ugProgram === program.id;
+  if (entry.college && collegeOf(program.id) !== entry.college) return false;
+  if (entry.nameIncludes) {
+    const label = String(program.label ?? "").toLowerCase();
+    const wanted = [entry.nameIncludes].flat().map(s => String(s).toLowerCase());
+    if (!wanted.some(w => label.includes(w))) return false;
+  }
+  // An entry with neither a college nor a name is a wildcard ("all majors",
+  // which CPS and Bouvé both publish). Honoured rather than treated as a
+  // mistake, but the verifier requires it to be written deliberately.
+  return Boolean(entry.college || entry.nameIncludes || entry.anyMajor);
+}
+
+/**
+ * Is this pathway open to any of the student's declared programs?
+ *
+ * Separate from `selectPathways` on purpose: the UI shows EVERY pathway and uses
+ * this only to decide whether to warn. Eligibility is a fact about the published
+ * page, not a permission we grant — a student may know something we do not
+ * (an advisor's approval, a page we have not re-read), and blocking them on our
+ * transcription would be the planner overruling the university.
+ *
+ * @param {object} pathway
+ * @param {{id: string, label?: string}[]} programs
+ * @param {string} [msConcentration]
+ */
+export function isEligibleFor(pathway, programs = [], msConcentration = null) {
+  const list = programs.filter(Boolean);
+  if (!list.length) return false;
+  return (pathway?.eligibility ?? []).some(e => {
+    // A concentration-scoped entry only opens when that concentration is in
+    // play. Undecided still offers it: hiding a pathway the student could reach
+    // by choosing a concentration is worse than showing one they must narrow.
+    if (e.requiresMsConcentration && msConcentration &&
+        e.requiresMsConcentration !== msConcentration) return false;
+    return list.some(p => matchesEligibility(p, e));
+  });
+}
+
+/**
+ * Pathways to OFFER a student.
+ *
+ * Every pathway, for an undergraduate plan. Not a filter by eligibility — see
+ * `isEligibleFor`. The only gate is degree level, because sharing happens while
+ * in undergraduate status and that is the entire mechanism.
+ *
+ * This used to filter by eligibility, which was wrong twice over: our
+ * eligibility data was far too narrow (see matchesEligibility), so real students
+ * were shown nothing; and gating a selection on our own transcription of a
+ * marketing page contradicts the project's rule of flagging rather than
+ * blocking. The student decides; we warn.
  *
  * @param {import("../../ports/IAcceleratedPathway.js").Pathway[]} pathways
  * @param {Object} q
- * @param {string} [q.ugProgramId]     the plan's major (or second major)
- * @param {string[]} [q.ugProgramIds]  several, when a plan has two majors
- * @param {string} [q.studentType]     "undergrad" | "graduate"
- * @param {string} [q.msConcentration] narrows concentration-scoped eligibility
+ * @param {string} [q.studentType] "undergrad" | "graduate"
  * @returns {import("../../ports/IAcceleratedPathway.js").Pathway[]}
  */
 export function selectPathways(pathways = [], q = {}) {
   if (q.studentType === "graduate") return [];
-
-  const ids = new Set(
-    [q.ugProgramId, ...(q.ugProgramIds ?? [])].filter(Boolean)
-  );
-  if (!ids.size) return [];
-
-  return pathways.filter(p =>
-    (p?.eligibility ?? []).some(e => {
-      if (!ids.has(e.ugProgram)) return false;
-      // A concentration-scoped entry only opens when that concentration is the
-      // one in play. When the caller has not chosen yet we DO offer it, because
-      // hiding a pathway the student could reach by choosing a concentration is
-      // worse than showing one they must then narrow.
-      if (e.requiresMsConcentration && q.msConcentration &&
-          e.requiresMsConcentration !== q.msConcentration) return false;
-      return true;
-    })
-  );
+  return [...pathways];
 }
 
 /**

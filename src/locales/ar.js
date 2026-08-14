@@ -152,6 +152,8 @@ export const strings = {
   "plusone.group.unknown":      "عليك التأكد",
   "plusone.group.info":         "معلومات مفيدة",
   "plusone.group.satisfied":    "نجحت {n} من الفحوص",
+  "plusone.group.eligible":     "متاح لتخصصك",
+  "plusone.group.other":        "مسارات أخرى",
 
   "plusone.rule.unrecognised":       "قاعدة لا نستطيع قراءتها بعد ({kind}) — اسأل مرشدك.",
   "plusone.rule.shareCap.ok":        "تشارك {courses} من {maxCourses} مقررًا · {sh} من {maxSH} ساعة.",

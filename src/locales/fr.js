@@ -152,6 +152,8 @@ export const strings = {
   "plusone.group.unknown":      "À confirmer par vous",
   "plusone.group.info":         "Bon à savoir",
   "plusone.group.satisfied":    "{n} vérifications réussies",
+  "plusone.group.eligible":     "Pour votre majeure",
+  "plusone.group.other":        "Autres parcours",
 
   "plusone.rule.unrecognised":       "Une règle que nous ne savons pas encore lire ({kind}) — demandez à votre conseiller.",
   "plusone.rule.shareCap.ok":        "Vous partagez {courses} cours sur {maxCourses} · {sh} SH sur {maxSH}.",
