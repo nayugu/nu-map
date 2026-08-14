@@ -262,7 +262,7 @@ export const strings = {
   "chart.contract.soft.3": "Never places a course earlier than a published plan has put one of that level",
   "chart.contract.soft.4": "Avoids more than two cards of the same requirement in one term",
   "chart.contract.soft.5": "Sticks to the terms your department’s plan uses, adding a summer only when the courses will not otherwise fit",
-  "chart.contract.soft.6": "Spreads free electives across the plan, reserving room in each term rather than leaving them for the end",
+  "chart.contract.soft.6": "Spreads free electives one or two to a term, filling in around the major’s own chains — where a major has none, they carry your depth and go early enough to count at co-op",
   "chart.contract.soft.7": "Spends a free elective as a buffer — to shift a course into a season it runs in, or to carry a prerequisite your degree never lists",
   "chart.contract.soft.8": "Prefers the season where a course’s offering history is strongest",
   "chart.contract.soft.9": "Keeps every full term at a full-time load, and a couple of credits below the cap",
@@ -296,7 +296,7 @@ export const strings = {
   "chart.explain.order.forced":"a course whose prerequisites leave it only one term goes there",
   "chart.explain.order.major":"major courses go as early as they legally can",
   "chart.explain.order.level":"but no earlier than real plans ever put a course of that level",
-  "chart.explain.order.filler":"free electives go last, so they are not spent before you need them",
+  "chart.explain.order.filler":"free electives spread one or two to a term, around the major’s chains — where the major is shallow, they carry the depth and go early",
   "chart.explain.order.coop": "Getting major depth in early is what makes you competitive at co‑op recruiting — the published plans often spend the free electives first instead.",
   "chart.explain.order.traded":"To do that, this plan gave up:",
 
