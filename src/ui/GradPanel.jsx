@@ -1494,6 +1494,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const [major2Gone,    setMajor2Gone]    = useState(false);
   const major2Name = useTranslatedText(major2Data?.name ?? null);
   const [showMajor2,    setShowMajor2]    = useState(() => major2Path !== "");
+  const [showPlusOnePicker, setShowPlusOnePicker] = useState(() => plusOne !== "");
   // Kept alongside the disabled switch-type prompt below; nothing sets it now.
   const [showSwitchPrompt, setShowSwitchPrompt] = useState(false);
   const [showNP,        setShowNP]        = useState(() => {
@@ -1990,33 +1991,49 @@ export default function GradPanel({ wideCatalog = false }) {
                   changed to an ineligible major had a PlusOne card with no way to
                   remove it. A selection must always be removable by whoever made
                   it — the same reason a stale major keeps its Remove button. */}
+              {/* `showPlusOnePicker` is separate state, not derived from `plusOne`
+                  — the button used to commit straight to
+                  `eligiblePathways[0] ?? plusOneOptions[0]`, so a student with NO
+                  eligible pathway (everyone outside Khoury today) was silently
+                  defaulted into whichever pathway happened to ship first and
+                  shown it as "not eligible", reading as "my program has no
+                  PlusOne" rather than "we haven't transcribed yours yet". Opening
+                  an empty picker instead — the same pattern `showMajor2` already
+                  uses — makes the student choose, and `showAllWhenEmpty` lists
+                  every pathway (there are only a handful) rather than requiring
+                  a search term first, matching the concentration picker. */}
               {!isGrad && (plusOneOptions.length > 0 || plusOne) && (
-                plusOne ? (
+                (plusOne || showPlusOnePicker) ? (
                   <div data-claude-focus="plusOne" style={{ marginTop: 8, marginBottom: 8, ...(pvMark("plusOne", { inset: true }).style ?? {}) }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
                       <div style={{ fontSize: isPhone ? 7 : 9, fontWeight: 700, color: "var(--text-4)", letterSpacing: "0.05em", flex: 1 }}>
                         {t("plusone.label")}
                       </div>
                       <button
-                        onClick={() => setPlusOne("")}
+                        onClick={() => { setPlusOne(""); setShowPlusOnePicker(false); }}
                         style={{ background: "transparent", border: "none", color: "var(--text-5)", fontSize: 12, cursor: "pointer", lineHeight: 1, padding: "0 2px" }}
                         title={t("plusone.remove")}
                       >✕</button>
                     </div>
                     <SearchCombo value={plusOne} onChange={setPlusOne} groups={plusOneGroups}
-                                 placeholder={isPhone ? t("grad.major.search.short") : t("plusone.search")} />
+                                 placeholder={isPhone ? t("grad.major.search.short") : t("plusone.search")} showAllWhenEmpty />
                   </div>
                 ) : (
-                  <button
-                    onClick={() => setPlusOne((eligiblePathways[0] ?? plusOneOptions[0]).id)}
-                    style={{
-                      display: "block", width: "100%", marginTop: 6, marginBottom: 8,
-                      padding: "4px 0", background: "transparent",
-                      border: "1px dashed var(--border-3)", borderRadius: 4,
-                      color: "var(--text-5)", fontSize: isPhone ? 8 : 9,
-                      cursor: "pointer", textAlign: "center",
-                    }}
-                  >{t("plusone.add")}</button>
+                  <>
+                    <button
+                      onClick={() => setShowPlusOnePicker(true)}
+                      style={{
+                        display: "block", width: "100%", marginTop: 6, marginBottom: 2,
+                        padding: "4px 0", background: "transparent",
+                        border: "1px dashed var(--border-3)", borderRadius: 4,
+                        color: "var(--text-5)", fontSize: isPhone ? 8 : 9,
+                        cursor: "pointer", textAlign: "center",
+                      }}
+                    >{t("plusone.add")}</button>
+                    <div style={{ fontSize: isPhone ? 6 : 8, color: "var(--text-5)", textAlign: "center", marginBottom: 8 }}>
+                      {t("plusone.coverage.note")}
+                    </div>
+                  </>
                 )
               )}
             </>
@@ -2136,14 +2153,14 @@ export default function GradPanel({ wideCatalog = false }) {
             ? <PlusOneBlock
                 pathway={plusOnePathway}
                 eligible={isEligibleFor(plusOnePathway, myPrograms)}
-                onClear={() => setPlusOne("")}
+                onClear={() => { setPlusOne(""); setShowPlusOnePicker(false); }}
                 nameColor={claudePreview?.changed?.has?.("plusOne") ? "#fb923c" : undefined}
               />
             : <StaleNotice
                 isPhone={isPhone}
                 message={t("plusone.gone")}
                 removeLabel={t("grad.stale.remove")}
-                onRemove={() => setPlusOne("")}
+                onRemove={() => { setPlusOne(""); setShowPlusOnePicker(false); }}
               />
         )}
 
