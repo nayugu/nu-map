@@ -1877,6 +1877,23 @@ function attemptPlacement({
       //
       // Only under `enforceCardinality`, so the last rung — which exists precisely because
       // some degrees cannot meet the bar — is unaffected and still answers.
+      //
+      // ── Gating it on `barSatisfiable` was TRIED, and measured worse ──
+      //
+      // The argument for it is good: the last rung relaxes the bar, so it can return a thin
+      // plan, and because it SUCCEEDS the packer behind it is never asked — the same
+      // preemption fixed one level up. The corpus disagreed. Refusals went 31 to 40 on the
+      // sample while `fails-hard-criteria` stayed at exactly 21: it fixed none of the target
+      // and cost nine plans.
+      //
+      // Which measures a DISAGREEMENT, not a rung. Those nine were thin by this check and
+      // accepted by `criteriaFailures` on the emitted document, so the assignment-level mirror
+      // is still stricter than the gate somewhere — the opposite direction from the co-op and
+      // summer mismatches already corrected. Tightening the search against a rule the
+      // authority does not enforce refuses plans a student could have followed.
+      //
+      // Find the disagreement first. Enforcing more strictly than the authority is not
+      // conservatism; it is a second opinion wearing the same name.
       if (enforceCardinality && minCourses > 0 && !barsMet()) return false;
       return true;
     }
