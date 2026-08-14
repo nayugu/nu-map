@@ -12,7 +12,7 @@
 // Sections: Overview · Composition (by level / by department) · Credit
 // Load · Experience. Charts are hand-rolled div/SVG (no dependency).
 // ═══════════════════════════════════════════════════════════════════
-import { useState, useMemo, useEffect, useLayoutEffect, useRef, Fragment } from "react";
+import { useState, useMemo, useCallback, useEffect, useLayoutEffect, useRef, Fragment } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { usePort } from "../context/InstitutionContext.jsx";
 import { useLanguage } from "../context/LanguageContext.jsx";
@@ -60,11 +60,19 @@ function BuildingIcon({ size = 16, color = "var(--text-4)" }) {
 
 // CSS effects injected once with the panel: a rotating glow band (grad-
 // courses tile + each work experience) and a soft pulse (grad class chips).
+// (plus a one-shot nudge: a backdrop click is ignored in skyline mode, so the
+// way out has to say where it is rather than nothing happening at all.)
 const GLOW_CSS = `
 @keyframes numap-spin { to { transform: rotate(360deg); } }
 @keyframes numap-glow {
   0%,100% { box-shadow: 0 0 3px var(--glow), 0 0 1px var(--glow); }
   50%     { box-shadow: 0 0 9px var(--glow), 0 0 3px var(--glow); }
+}
+@keyframes numap-nudge {
+  0%,100% { transform: translateX(0); }
+  18%     { transform: translateX(-4px); }
+  42%     { transform: translateX(4px); }
+  68%     { transform: translateX(-2px); }
 }`;
 
 // Container width via ResizeObserver — lets the load chart fit exactly.
@@ -82,14 +90,23 @@ function useContainerWidth() {
 
 // ── Small presentational primitives ─────────────────────────────────
 
-function Section({ title, hint, children }) {
+// `grow` turns the section into the flex child that eats the card's leftover
+// height — used only by skyline mode, where the chart IS the page and has to
+// scroll inside its own frame instead of lengthening the card. It also tightens
+// the padding: in that mode every reclaimed pixel goes to the canvas.
+//
+// A falsy `title` drops the header row entirely — skyline mode names itself in
+// the panel header, so "COMPOSITION" above it is a line of chrome saying
+// nothing the badge has not already said.
+function Section({ title, hint, grow = false, children }) {
   return (
     <div style={{
       background: "var(--bg-surface)", border: "1px solid var(--border-1)",
-      borderRadius: 10, padding: "14px 16px", marginBottom: 12,
+      borderRadius: 10, padding: grow ? "10px 11px" : "14px 16px", marginBottom: grow ? 0 : 12,
+      ...(grow ? { flex: 1, minHeight: 0, display: "flex", flexDirection: "column" } : {}),
     }}>
-      <div style={{ fontSize: 12.5, fontWeight: 800, letterSpacing: "0.06em",
-        textTransform: "uppercase", color: "var(--text-3)", marginBottom: hint ? 3 : 10 }}>{title}</div>
+      {title && <div style={{ fontSize: 12.5, fontWeight: 800, letterSpacing: "0.06em",
+        textTransform: "uppercase", color: "var(--text-3)", marginBottom: hint ? 3 : 10 }}>{title}</div>}
       {hint && <div style={{ fontSize: 11, color: "var(--text-5)", marginBottom: 11, lineHeight: "calc(1.5 * var(--lh-scale, 1))" }}>{hint}</div>}
       {children}
     </div>
@@ -404,7 +421,22 @@ function CourseGroup({ title, sub, badge, badgeSlot = false, ids, cmap, onOpen, 
 // (≥5000) rule and label in the grad colour. Incoming-credit chips fade.
 // Because the grid is sparse by nature it carries ZOOM controls (CSS
 // `zoom`, so layout and scrollbars track the scale).
+//
+// Selecting it IS skyline mode — the panel widens and drops every other
+// section — so this always renders as the page: the canvas fills the card's
+// remaining height and opens AUTO-FITTED (see `fitToScreen`). There is no
+// inline variant; it took a `focus` flag for one commit, and a flag whose
+// false branch is unreachable is dead code pretending to be a choice.
+const ZOOM_MIN = 0.45, ZOOM_MAX = 1.6;
 function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
+  const { t } = useLanguage();
+  // The width below which the grid's columns stop shrinking — one number for
+  // both the grid's own `minWidth` and the auto-fit's horizontal term, so the
+  // two can never drift apart: 78px gutter + 92px min column + 8px gap each.
+  const minGridW = byDept.length * 100 + 86;
+  // Refit when the plan's SHAPE changes: a department widens the grid, a
+  // course can open a new level band.
+  const contentKey = `${byDept.length}:${byDept.reduce((s, g) => s + g.ids.length, 0)}`;
   // Canvas-style viewport: pinch zoom (a macOS trackpad pinch reaches the
   // browser as ctrl+wheel; a touchscreen pinch is two moving touches),
   // anchored at the cursor/pinch midpoint, plus grab-and-drag panning.
@@ -418,11 +450,14 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
   const zoomRef = useRef(1);
   const wrapRef = useRef(null);
   const gridRef = useRef(null);
+  const manualRef = useRef(false);     // a gesture has happened → stop auto-fitting
+  const fitRef = useRef({ w: 0, h: 0 });   // frame size the live fit was computed for
+  const syncRef = useRef(0);
   useEffect(() => { zoomRef.current = zoom; }, [zoom]);
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
-    const clamp = (z) => Math.min(1.6, Math.max(0.55, z));
+    const clamp = (z) => Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, z));
     let target = null;                       // { z, vx, vy } — latest within this frame
     let raf = 0, settle = 0;
     const flush = () => {
@@ -442,6 +477,7 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
       settle = setTimeout(() => setZoom(zoomRef.current), 140); // sync the % pill
     };
     const queueZoom = (z, vx, vy) => {
+      manualRef.current = true;              // the user has taken the wheel
       target = { z, vx, vy };
       if (!raf) raf = requestAnimationFrame(flush);
     };
@@ -498,6 +534,82 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
     };
   }, []);
 
+  // ── Auto-fit ────────────────────────────────────────────────────────
+  // Skyline mode opens on the WHOLE plan, never the top-left corner of it,
+  // at the least zoom that gets there — the frame is exactly filled on
+  // whichever axis binds, and no further.
+  //
+  // Both terms are MEASURED, because neither is guessable: the frame is
+  // whatever the viewport left over, and the content is however many
+  // departments and level bands this plan has. Measured on a 1512×900
+  // viewport: 8 departments fit at 1.6 (the cap — the frame is wider than
+  // they need), 22 at 0.62; the same 22 in an 1180×700 window, 0.48.
+  //
+  // Three facts about CSS `zoom`, all measured rather than assumed (the
+  // numbers below are from an 8-department plan in a 1436px frame):
+  //  · `scrollHeight`/`offsetHeight` report UNZOOMED layout units (345 at
+  //    zoom 1, 336 at zoom 1.6) while `getBoundingClientRect` reports visual
+  //    px (345 → 537). So the natural height is read with the grid pinned to
+  //    zoom 1, and the frame's own client box is already in visual px.
+  //  · the grid's columns are `1fr`, so it always stretches to the frame's
+  //    width — `scrollWidth` measures the FRAME, not the content (1436 at
+  //    zoom 1, 898 at 1.6), and would pin every fit at 1. The horizontal
+  //    term is the grid's own minimum (`minGridW`), the width below which
+  //    columns stop shrinking; that is the real thing being fitted.
+  //  · zooming re-lays-out, so the height is not exactly linear in the zoom.
+  //    Hence the second pass: the model picks a zoom, then the RESULT is
+  //    measured and the zoom backed off by whatever actually overflowed.
+  //    A model that is nearly right still ships a scrollbar.
+  const fitToScreen = useCallback(() => {
+    const el = wrapRef.current, g = gridRef.current;
+    if (!el || !g) return;
+    // -2 for the frame's border: fitting to the border box invites the
+    // scrollbar the fit exists to avoid.
+    const availW = el.clientWidth - 2, availH = el.clientHeight - 2;
+    if (availW <= 0 || availH <= 0) return;
+    g.style.zoom = 1;
+    const natH = g.scrollHeight;               // forces the layout it reads
+    if (!natH) return;
+    // FLOORED to 2dp, never rounded: rounding 0.627 up to 0.63 is what put a
+    // 22-department plan 4px over its frame and gave the "fitted" chart a
+    // horizontal scrollbar. 2dp so a sub-pixel frame change cannot ripple
+    // into a new zoom, and with it a scrollbar, and with it another change.
+    const floor2 = (v) => Math.floor(v * 100) / 100;
+    let z = floor2(Math.min(ZOOM_MAX, Math.max(ZOOM_MIN, Math.min(availW / minGridW, availH / natH))));
+    g.style.zoom = z;
+    // Second pass: whatever still overhangs, on either axis, divides it out.
+    const over = Math.max(el.scrollWidth / el.clientWidth, el.scrollHeight / el.clientHeight);
+    if (over > 1.001) {
+      z = Math.max(ZOOM_MIN, floor2(z / over));
+      g.style.zoom = z;
+    }
+    el.scrollLeft = 0; el.scrollTop = 0;
+    zoomRef.current = z;
+    fitRef.current = { w: el.clientWidth, h: el.clientHeight };
+    clearTimeout(syncRef.current);
+    syncRef.current = setTimeout(() => setZoom(z), 140);   // sync the % pill
+  }, [minGridW]);
+
+  // Fit on mount, and again whenever the frame resizes — which includes the
+  // 300ms max-width animation the mode opens with, so the chart blooms out
+  // with the frame instead of fitting the width it started at.
+  // A 4px deadband stops a scrollbar appearing/disappearing from oscillating;
+  // one gesture and auto-fitting stands down for good (the user's scale wins).
+  useLayoutEffect(() => {
+    manualRef.current = false;
+    fitToScreen();
+    const el = wrapRef.current;
+    if (!el || typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(() => {
+      if (manualRef.current) return;
+      const { w, h } = fitRef.current;
+      if (Math.abs(el.clientWidth - w) < 4 && Math.abs(el.clientHeight - h) < 4) return;
+      fitToScreen();
+    });
+    ro.observe(el);
+    return () => { ro.disconnect(); clearTimeout(syncRef.current); };
+  }, [fitToScreen, contentKey]);
+
   const cells = new Map();          // `${subject}|${tier}` → ids
   const tierTotals = new Map();     // tier → { sh, n }  (the numbers ARE the point)
   const present = [];
@@ -520,28 +632,32 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
 
   const rule = (tier) => `1px dashed ${tier >= 5000 ? GRAD_COLOR + "66" : "var(--border-1)"}`;
   return (
-    <div style={{ position: "relative" }}>
-      {zoom !== 1 && (
-        <button onClick={() => { zoomRef.current = 1; if (gridRef.current) gridRef.current.style.zoom = 1; setZoom(1); }} title="Reset zoom"
-          style={{ position: "absolute", top: -4, right: 0, zIndex: 5,
+    <div style={{ position: "relative", flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+      {/* The scale readout, and the way back to the fit. The mode OPENS
+          zoomed, so "100%" is not the state to return to — "everything on
+          screen" is, and this is what restores it after a pinch. Inline
+          rather than absolute, so it cannot sit over what it describes. */}
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 3 }}>
+        <button onClick={fitToScreen} title={t("stats.sky.fit")}
+          style={{
             fontSize: 9.5, fontVariantNumeric: "tabular-nums", lineHeight: 1, padding: "3px 7px",
             background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", borderRadius: 99,
             color: "var(--text-4)", cursor: "pointer" }}>
           {Math.round(zoom * 100)}%
         </button>
-      )}
+      </div>
       {/* The bounded canvas: pan/zoom activates only inside this frame. */}
       <div ref={wrapRef} style={{
-        overflow: "auto", maxHeight: 480, cursor: "grab",
+        overflow: "auto", cursor: "grab", flex: 1, minHeight: 160,
         overscrollBehavior: "contain", userSelect: "none",
         border: "1px solid var(--border-1)", borderRadius: 8,
         background: "var(--bg-surface-2)",
       }}>
-        <div ref={gridRef} style={{
+        <div ref={gridRef} data-sky-grid="true" style={{
           zoom,
           display: "grid", columnGap: 8,
           gridTemplateColumns: `78px repeat(${byDept.length}, minmax(92px, 1fr))`,
-          minWidth: byDept.length * 100 + 86,
+          minWidth: minGridW,
           paddingRight: 10, paddingBottom: 10,
         }}>
           {/* header row: the per-department aggregates — FROZEN (sticky top),
@@ -785,6 +901,36 @@ export default function StatsPanel() {
 
   const unit = creditSystem.getUnitName();
   const [compView, setCompView] = useState("dept"); // "dept" | "total" (by level) | "sky"
+  // ── Skyline mode ────────────────────────────────────────────────────
+  // Picking Skyline is not "switch the figure", it is "give the figure the
+  // window": the card widens to the viewport and every other section drops
+  // away, because the grid is dept-columns wide and 720px was the one
+  // dimension it needed and could not have.
+  //
+  // Leaving is therefore DELIBERATE, never incidental. Three things that
+  // dismiss the ordinary panel are neutered here:
+  //   · a backdrop click — the mode is dragged and pinched, so the pointer
+  //     lives near the edges, and one stray click must not throw the view
+  //     away. It nudges the way out instead of silently doing nothing.
+  //   · Escape — steps out of the MODE only, never the panel (the repo's
+  //     one-layer-per-Escape rule, same as ChartExplainer).
+  //   · the ✕ — replaced by "Exit skyline" while in the mode, so closing
+  //     Insights outright is two deliberate clicks rather than a miss.
+  const skyFocus = compView === "sky";
+  const [nudge, setNudge] = useState(0);
+  const exitSky = () => setCompView("dept");
+  useEffect(() => {
+    if (!skyFocus) return;
+    // Capture phase: the global planner handler also listens for Escape, and
+    // one keypress must mean one layer.
+    const onKey = (e) => {
+      if (e.key !== "Escape") return;
+      e.stopPropagation();
+      exitSky();
+    };
+    window.addEventListener("keydown", onKey, true);
+    return () => window.removeEventListener("keydown", onKey, true);
+  }, [skyFocus]);
   const toggleBtn = (id, label) => {
     const active = compView === id;
     return (
@@ -969,12 +1115,15 @@ export default function StatsPanel() {
 
   return (
     <div
-      onClick={() => setShowStats(false)}
+      onClick={() => { if (skyFocus) { setNudge(n => n + 1); return; } setShowStats(false); }}
       style={{
         position: "fixed", inset: 0, zIndex: 9000,
-        background: "rgba(0,0,0,0.55)", display: "flex",
+        // A shade darker in skyline mode: the frame now reaches the viewport
+        // edges, so the backdrop has to keep reading as "behind", not as a gap.
+        background: skyFocus ? "rgba(0,0,0,0.7)" : "rgba(0,0,0,0.55)", display: "flex",
         alignItems: "flex-start", justifyContent: "center",
-        padding: isPhone ? "0" : "40px 20px",
+        padding: isPhone ? "0" : (skyFocus ? "20px 16px" : "40px 20px"),
+        transition: "background 200ms ease, padding 260ms cubic-bezier(0.22,0.61,0.36,1)",
         fontFamily: "'Inter', system-ui, sans-serif",
       }}
     >
@@ -985,12 +1134,21 @@ export default function StatsPanel() {
           // The CARD is the scroller (not the backdrop): the sticky header
           // pins to the card's own top edge and scrolled content is clipped
           // by it — nothing can render in the strip above the header.
-          width: "100%", maxWidth: 720, background: "var(--bg-app)",
+          //
+          // In skyline mode it stops being a scroller and becomes a frame:
+          // fixed to the viewport's height, column-flexed, with the canvas
+          // owning the only scrollbar. Otherwise the card and the canvas
+          // would both scroll and dragging the grid would move the report.
+          width: "100%", maxWidth: skyFocus ? 1500 : 720, background: "var(--bg-app)",
           border: "1px solid var(--border-2)", borderRadius: isPhone ? 0 : 14,
           boxShadow: "var(--shadow-modal)",
-          height: isPhone ? "100dvh" : undefined,
-          maxHeight: isPhone ? "100dvh" : "calc(100dvh - 80px)",
-          overflowY: "auto",
+          height: isPhone ? "100dvh" : (skyFocus ? "calc(100dvh - 40px)" : undefined),
+          maxHeight: isPhone ? "100dvh" : (skyFocus ? "calc(100dvh - 40px)" : "calc(100dvh - 80px)"),
+          overflowY: skyFocus ? "hidden" : "auto",
+          ...(skyFocus ? { display: "flex", flexDirection: "column" } : {}),
+          // Only the width animates — the mode change should read as the frame
+          // opening out, which is the whole point of the gesture.
+          transition: "max-width 300ms cubic-bezier(0.22,0.61,0.36,1)",
           color: "var(--text-1)",
         }}
       >
@@ -999,29 +1157,54 @@ export default function StatsPanel() {
           position: "sticky", top: 0, zIndex: 1, background: "var(--bg-app)",
           borderBottom: "1px solid var(--border-1)", borderRadius: isPhone ? 0 : "14px 14px 0 0",
           padding: "13px 16px", display: "flex", alignItems: "center", justifyContent: "space-between",
+          gap: 10, flexShrink: 0,
         }}>
-          <span style={{ fontSize: 15.5, fontWeight: 800, letterSpacing: "-0.01em", display: "inline-flex", alignItems: "center", gap: 7 }}>
+          <span style={{ fontSize: 15.5, fontWeight: 800, letterSpacing: "-0.01em", display: "inline-flex", alignItems: "center", gap: 7, minWidth: 0 }}>
             <svg width="15" height="15" viewBox="0 0 12 12" fill="currentColor" aria-hidden="true" style={{ color: "var(--active)" }}>
               <rect x="0.5" y="6.5" width="2.6" height="5" rx="0.6" />
               <rect x="4.7" y="3.5" width="2.6" height="8" rx="0.6" />
               <rect x="8.9" y="1" width="2.6" height="10.5" rx="0.6" />
             </svg>
-            {t("stats.title")}
+            <span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{t("stats.title")}</span>
+            {/* The mode says its own name: the sections it hid are gone, so
+                without this the panel just looks short. */}
+            {skyFocus && (
+              <span style={{ fontSize: 10.5, fontWeight: 800, letterSpacing: "0.06em", textTransform: "uppercase",
+                padding: "3px 7px", borderRadius: 99, whiteSpace: "nowrap",
+                background: "var(--active-bg)", border: "1px solid var(--active)", color: "var(--active)" }}>
+                {t("stats.comp.sky")}
+              </span>
+            )}
           </span>
-          <button onClick={() => setShowStats(false)} style={{
-            background: "none", border: "none", cursor: "pointer",
-            color: "var(--text-4)", fontSize: 17, lineHeight: 1, padding: 4,
-          }} title={t("stats.close")}>✕</button>
+          {skyFocus ? (
+            // key={nudge} restarts the shake on each blocked backdrop click;
+            // at nudge 0 (entering the mode) there is no animation to run.
+            <button key={nudge} onClick={exitSky} title={t("stats.sky.exit.title")} style={{
+              display: "inline-flex", alignItems: "center", gap: 6, flexShrink: 0,
+              fontSize: 11.5, fontWeight: 700, padding: "5px 10px", borderRadius: 6, cursor: "pointer",
+              background: "var(--bg-surface-2)", border: "1px solid var(--border-2)", color: "var(--text-3)",
+              animation: nudge ? "numap-nudge 420ms ease" : "none",
+            }}>
+              <span aria-hidden="true" style={{ fontSize: 13, lineHeight: 1 }}>↩</span>
+              {t("stats.sky.exit")}
+            </button>
+          ) : (
+            <button onClick={() => setShowStats(false)} style={{
+              background: "none", border: "none", cursor: "pointer", flexShrink: 0,
+              color: "var(--text-4)", fontSize: 17, lineHeight: 1, padding: 4,
+            }} title={t("stats.close")}>✕</button>
+          )}
         </div>
 
-        <div style={{ padding: 12 }}>
+        <div style={{ padding: skyFocus ? 8 : 12, ...(skyFocus ? { flex: 1, minHeight: 0, display: "flex", flexDirection: "column" } : {}) }}>
           {empty ? (
             <div style={{ padding: "40px 20px", textAlign: "center", color: "var(--text-5)", fontSize: 13 }}>
               {t("stats.empty")}
             </div>
           ) : (
             <>
-              {/* ── 1 · OVERVIEW ── */}
+              {/* ── 1 · OVERVIEW ── (dropped in skyline mode) */}
+              {!skyFocus && (
               <Section title={t("stats.section.overview")} hint={t("stats.overview.hint")}>
                 <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginBottom: 12 }}>
                   <StatTile label={t("stats.tile.planned")} value={totalSHPlaced}
@@ -1044,13 +1227,15 @@ export default function StatsPanel() {
                   </div>
                 </div>
               </Section>
+              )}
 
               {/* ── 2 · COMPOSITION ──
                   Three modes: the two flat chip inventories (by department —
                   the default — and by level) plus Skyline (dept columns ×
-                  level bands, zoomable; incoming-credit chips fade). */}
-              <Section title={t("stats.section.composition")}>
-                <div style={{ display: "flex", gap: 5, marginBottom: 12 }}>
+                  level bands, zoomable; incoming-credit chips fade). Picking
+                  Skyline enters skyline mode — see the note by `skyFocus`. */}
+              <Section title={skyFocus ? null : t("stats.section.composition")} grow={skyFocus}>
+                <div style={{ display: "flex", gap: 5, marginBottom: 12, flexShrink: 0 }}>
                   {toggleBtn("dept", t("stats.comp.dept"))}
                   {toggleBtn("total", t("stats.comp.total"))}
                   {toggleBtn("sky", t("stats.comp.sky"))}
@@ -1124,13 +1309,21 @@ export default function StatsPanel() {
                     ))}
                   </>
                 )}
-                <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-                  <StatTile label={t("stats.level.undergrad")} value={levels.undergrad.count} sub={`${levels.undergrad.sh} ${unit}`} color={UG_COLOR} />
-                  <GlowTile label={t("stats.level.grad")} value={levels.grad.count} sub={`${levels.grad.sh} ${unit}`} color={GRAD_COLOR} />
-                </div>
+                {/* The UG / grad split is a summary of the composition, and in
+                    skyline mode the chart already carries it: grad bands rule
+                    and label in the grad colour, with their own credit totals
+                    in the gutter. So the tiles come out and the ~80px they
+                    took goes to the canvas. */}
+                {!skyFocus && (
+                  <div style={{ display: "flex", gap: 8, marginTop: 12, flexShrink: 0 }}>
+                    <StatTile label={t("stats.level.undergrad")} value={levels.undergrad.count} sub={`${levels.undergrad.sh} ${unit}`} color={UG_COLOR} />
+                    <GlowTile label={t("stats.level.grad")} value={levels.grad.count} sub={`${levels.grad.sh} ${unit}`} color={GRAD_COLOR} />
+                  </div>
+                )}
               </Section>
 
-              {/* ── 3 · CREDIT LOAD ── */}
+              {/* ── 3 · CREDIT LOAD ── (dropped in skyline mode) */}
+              {!skyFocus && (
               <Section title={t("stats.section.load")} hint={t("stats.load.hint")}>
                 <LoadChart rows={timeline.rows} fullTimeMin={shMin} semesterMax={shMaxRef} shortSem={shortSem} />
                 <div style={{ display: "flex", gap: 14, marginTop: 8, flexWrap: "wrap" }}>
@@ -1145,8 +1338,10 @@ export default function StatsPanel() {
                   <StatTile label={t("stats.load.avg")} value={timeline.avg.toFixed(1)} sub={`${unit} / ${t("stats.load.term")}`} />
                 </div>
               </Section>
+              )}
 
-              {/* ── 4 · EXPERIENCE & DEPTH ── */}
+              {/* ── 4 · EXPERIENCE & DEPTH ── (dropped in skyline mode) */}
+              {!skyFocus && (
               <Section title={t("stats.section.experience")}>
                 <div style={{ fontSize: 11.5, fontWeight: 700, color: "var(--text-4)", marginBottom: 8 }}>{t("stats.work.title")}</div>
                 {work.items.length === 0 ? (
@@ -1194,8 +1389,11 @@ export default function StatsPanel() {
                   </>
                 )}
               </Section>
+              )}
 
-              <div style={{ fontSize: 10, color: "var(--text-6)", textAlign: "center", padding: "4px 0 8px" }}>
+              {/* The advisor-authority line stays in every mode — it is the
+                  panel's disclaimer, not one section's footnote. */}
+              <div style={{ fontSize: 10, color: "var(--text-6)", textAlign: "center", padding: "4px 0 8px", flexShrink: 0 }}>
                 {t("stats.footer")}
               </div>
             </>

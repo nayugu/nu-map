@@ -1020,6 +1020,9 @@ export const strings = {
   "stats.comp.sky":               "Skyline Chart",
   "stats.comp.total":             "By level",
   "stats.comp.dept":              "By department",
+  "stats.sky.exit":               "Exit skyline",
+  "stats.sky.exit.title":         "Leave skyline view (Esc)",
+  "stats.sky.fit":                "Fit every course on screen",
 
   "stats.dept.title":             "Credits by department",
   "stats.dept.value":             "{sh} {unit} \xb7 {n} classes",
