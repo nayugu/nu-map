@@ -967,6 +967,25 @@ function attemptPlacement({
 
   const byId = new Map(plans.map(p => [p.cell.id, p]));
   const termOf = new Map();
+  // ── Rule 5's index: which terms a MAJOR NAMED cell could still use ──
+  //
+  // Precomputed and then maintained incrementally, because the alternative is a scan. Written
+  // first as a loop over `order` inside the term comparator, it was O(cells) per comparison
+  // inside a sort that runs at every node — the same ~2,000-operations-per-node cost the Hall
+  // propagator above was removed for. A counter per term is O(1) at the only place that reads it.
+  //
+  // Named cells only, and major subjects only. A choice cell guarantees neither branch, so it has
+  // no claim to press; and a non-major requirement is not what rule 5 protects — the rule is that
+  // an elective must not displace THE MAJOR, which is the depth a co-op recruiter reads.
+  const majorWants = new Map();
+  const majorUnplacedIn = new Array(terms.length).fill(0);
+  for (const p of plans) {
+    if (p.cell.kind !== "named" || !isMajor(p)) continue;
+    const wants = (p.domain ?? []).filter(t => t >= 0 && t < terms.length);
+    if (!wants.length) continue;
+    majorWants.set(p.cell.id, wants);
+    for (const t of wants) majorUnplacedIn[t] += 1;
+  }
   const loadSH = new Array(terms.length).fill(0);
   const countIn = new Array(terms.length).fill(0);
   // Courses of at least 3 SH per term, which is a different count from the cells above:
@@ -1238,6 +1257,45 @@ function attemptPlacement({
     return loadSH[ti] + (plan.cell.sh ?? 0) > target(ti) - reserve[ti] ? 1 : 0;
   };
 
+  /**
+   * Rule 5: would this elective take a slot a major course still needs?
+   *
+   * The converse of `takesReserved`, and the counterweight to rule 4. Rule 4 lets a depth
+   * elective compete for early terms in a shallow degree, which is right, and it creates the
+   * risk this answers: an elective can go ANYWHERE, and a major course whose prerequisites are
+   * now met has a reason to be exactly here. Measured on `computer_science_and_mathematics_bs`,
+   * a reservation took Year 1 Summer 1 and CS 3100 ended up in Year 2 Fall.
+   *
+   * Two conditions, both necessary. The term must have no room left for a real course AFTER this
+   * elective takes its slot — if it does, nothing is displaced and there is no contest. And some
+   * still-unplaced major named cell must actually be able to use the term; a slot no major course
+   * could occupy is not one an elective is taking from anything.
+   *
+   * ── A PREFERENCE, and this file has already paid for learning that ──
+   *
+   * The design note argues that a correct rule stated as a CONSTRAINT removes a class of
+   * failures while a preference relocates it, and rule 2 is exactly that. Rule 5 is not, and the
+   * evidence is two rungs up this same comparator: `crowdsOutAReal` was "written first as a veto
+   * in the placement loop [and] took International Business from a plan with a short spring to no
+   * plan at all". Removing options does not help a search find an arrangement.
+   *
+   * The difference between the two rules is what they bound. Rule 2 caps a term's contents, so it
+   * can be checked against the term alone and a refusal is a real statement about the plan. Rule
+   * 5 is about a cell that has not been placed yet, so as a veto it would forbid a placement on a
+   * prediction — and when the prediction is wrong the student gets no plan instead of an
+   * imperfect one. Conservative beats clever: this steers, and a degree whose electives genuinely
+   * have nowhere else to go still gets its plan.
+   */
+  const yieldsToMajor = (plan, ti) => {
+    if (plan.cell.target !== GENERAL_ELECTIVE) return 0;
+    if (majorUnplacedIn[ti] <= 0) return 0;           // no major course wants this term
+    const afterSH = loadSH[ti] + (plan.cell.sh ?? 0);
+    const afterN = countIn[ti] + coursesInCell(plan.cell);
+    // Room for one more real course afterwards means this elective displaces nothing.
+    const roomLeft = afterN < slotCap[ti] && afterSH + cal.realCourseSH <= cap[ti] + 0.01;
+    return roomLeft ? 0 : 1;
+  };
+
   const termPreference = (plan) => {
     // ── FEASIBILITY MUST NOT DEPEND ON TASTE ────────────────────────
     //
@@ -1436,14 +1494,22 @@ function attemptPlacement({
     // major, so it becomes filler and goes late — where the corpus puts it anyway
     // (median 0.78, p90 0.89).
     const noClaim = unlockOf(plan) === 0 && !majorSubjects.has(cellSubject(plan, courseMap));
-    // A cell that carries its own target uses it. Only general electives do, and it is how
-    // they stop all wanting the same term: `cellLevelTarget` has nothing to say about a cell
-    // naming no course, so every one of them fell through to 1.0 and clumped at the end.
-    // See `deriveCells` for what the spread means.
+    // A cell that carries its own target uses it. General electives USED to — a positional
+    // ramp across the pool — and no longer do: see `deriveCells`, where the ramp was deleted
+    // because a hand-fitted curve on top of a graph-derived ordering can only disagree with it.
+    // The `??` is kept because the field is still part of the cell contract and a caller may
+    // legitimately set one; nothing in the engine does today, so electives fall through to
+    // `noClaim` and want the END, which is what rules 2 and 4 then argue with.
     const want = plan.cell.levelTarget
       ?? (noClaim ? 1 : (cellLevelTarget(plan, courseMap, studentType) ?? 1));
     return [...plan.domain].sort((a, b) =>
       byOptional(a, b) || crowdsOutAReal(plan, a) - crowdsOutAReal(plan, b)
+        // Rule 5, ranked here on purpose. Below `crowdsOutAReal`, because a term that cannot
+        // otherwise reach four real courses is a HARD criterion and rule 5 yields to it — the
+        // alternative is a refused plan. Above the level target and load balance, because those
+        // are about where a cell would look nice and this is about a major course losing a slot
+        // it had a reason to hold.
+        || yieldsToMajor(plan, a) - yieldsToMajor(plan, b)
         || crowded(plan, a) - crowded(plan, b)
       || levelGap(a, want) - levelGap(b, want)
       || underFilled(a) - underFilled(b)
@@ -1924,6 +1990,10 @@ function attemptPlacement({
     countIn[ti] += coursesInCell(c);
     if ((c.sh ?? 0) >= cal.realCourseSH) { bigIn[ti] += 1; bigSH[ti] += c.sh ?? 0; }
     reqIn[ti].set(reqKey(c), reqCount(ti, c) + 1);
+    // Rule 5's counter. Decremented across the cell's WHOLE domain, not just the term it took:
+    // the question `yieldsToMajor` asks is "can a major course still use this term", and a major
+    // cell that is now placed can no longer use any of them.
+    if (majorWants.has(c.id)) for (const t of majorWants.get(c.id)) majorUnplacedIn[t] -= 1;
   };
   const unplace = (c, ti) => {
     termOf.delete(c.id);
@@ -1931,6 +2001,7 @@ function attemptPlacement({
     countIn[ti] -= coursesInCell(c);
     if ((c.sh ?? 0) >= cal.realCourseSH) { bigIn[ti] -= 1; bigSH[ti] -= c.sh ?? 0; }
     reqIn[ti].set(reqKey(c), reqCount(ti, c) - 1);
+    if (majorWants.has(c.id)) for (const t of majorWants.get(c.id)) majorUnplacedIn[t] += 1;
   };
 
   function step(i) {
