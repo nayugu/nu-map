@@ -149,6 +149,7 @@ import { cellSubject, majorSubjectsOf } from "./subjects.js";
 import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
 import { assignSeedHints } from "./seed.js";
 import { barsReachable } from "./cardinality.js";
+import { assignmentFailures } from "./criteria.js";
 
 /**
  * The most general electives one term may hold, at every tier and every rung.
@@ -1516,14 +1517,16 @@ function attemptPlacement({
    * `termIsFull` and not `bigIn[ti] >= minCourses`, for the reason that function documents: a
    * term carrying a 16 SH studio has no room for a fourth course and is full at two.
    */
-  const barsMet = () => {
-    for (let ti = 0; ti < terms.length; ti++) {
-      const t = terms[ti];
-      if (t.work || t.unused || t.optional || (t.weight ?? 1) < 1) continue;
-      if (!termIsFull(bigIn[ti], loadSH[ti], cap[ti], cal, studentType, bigSH[ti])) return false;
-    }
-    return true;
-  };
+  //
+  // Delegated to `criteria.js` rather than read off the running tallies, and the difference is
+  // not stylistic. `bigIn` counts CELLS at or above the credit floor; the criteria count
+  // COREQUISITE GROUPS, so a term holding `INTB 2205` and `INTB 2206` — 2 SH each, one
+  // enrolment, one 4 SH course — is two thin cells to the tally and one real course to the
+  // gate. Two opinions about one rule is the defect this module exists to remove, and the
+  // search must be judged by the rule it will actually be judged by.
+  const barsMet = () => assignmentFailures(termOf, plans, terms, {
+    cal, studentType, courseMap, minCourses, capOf: (ti) => cap[ti],
+  }).length === 0;
 
   const suffix = new Array(order.length + 1);
   suffix[order.length] = new Array(terms.length).fill(0);
@@ -2429,6 +2432,22 @@ function packOnce({ plans, terms, ports, studentType, courseMap, repeatable,
   if (!w.ok) {
     return { ok: false, failure: { kind: "packer-witness-failed", inner: w.failure ?? null,
                                    bars: barsOf(terms, big, minC) } };
+  }
+  // ── And does its own answer meet the rules it will be judged by? ────
+  //
+  // It did not ask. The packer verified capacity, slots, precedence and the witness, then
+  // handed back an arrangement the criteria could refuse a phase later — and because it had
+  // "succeeded", nothing else was tried. A constructor that cannot tell whether its answer is
+  // acceptable will keep producing unacceptable ones confidently.
+  //
+  // Failing here is not a refusal: `packDecreasing` simply moves to its next pass, which is
+  // ordered differently and may well satisfy what this one missed. That is the whole value of
+  // having several passes, and it was unavailable while none of them could tell.
+  const short = assignmentFailures(termOf, plans, terms, {
+    cal, studentType, courseMap, minCourses: minC, capOf: (ti) => cap[ti],
+  });
+  if (short.length) {
+    return { ok: false, failure: { kind: "packer-plan-fails-criteria", short: short.slice(0, 4) } };
   }
   return { ok: true, termOf, failure: null };
 }

@@ -20,7 +20,14 @@ import assert from "node:assert/strict";
 import { placeCells } from "../../src/engine/search.js";
 import { permissivePorts } from "../../src/engine/ports.js";
 
-const term = (i, weight = 1) => ({ index: i, weight, work: false, unused: false });
+// HALF terms, so these stay tests of control flow. The packer now checks its own answer
+// against the hard criteria before returning (`criteria.js`), and a full term owes four real
+// courses — so a two-cell fixture in full terms would be refused for being thin, and every
+// test here would be measuring the four-course bar instead of whether the fallback is
+// reachable. A summer has no such floor, which is exactly the neutral ground this needs.
+const term = (i, weight = 0.5) => ({
+  index: i, weight, work: false, unused: false, termLabel: "Summer 1",
+});
 
 // Cells naming a REAL course, because the packer verifies its arrangement with the same
 // witness the search uses: an unbounded cell against an empty catalog has nothing to fill it
@@ -54,13 +61,20 @@ test("fallback › the packer runs even with NO time left on the clock", () => {
   assert.equal(r.termOf.size, 2);
 });
 
-test("fallback › a starved node budget reaches the packer rather than refusing", () => {
+test("fallback › a tiny node budget still returns a plan", () => {
+  // This asserted the plan came from the PACKER, and it does not: `perAttempt` has a floor of
+  // 64 nodes, so `nodeBudget: 1` does not starve the strict tier at all — it solves this in
+  // five nodes and answers first. The premise was wrong, not the engine, and the floor is
+  // worth knowing: a caller cannot force the fallback by shrinking the budget.
+  //
+  // What IS guaranteed here is coverage, so that is what it now checks. Reachability of the
+  // packer is tested above, by an expired clock, and below, by `packOnly` — both of which
+  // close the ladder rather than trying to squeeze it.
   const terms = [term(0), term(1), term(2)];
   const plans = ["a1", "b2", "c3", "d4"].map(id => plan(id, [0, 1, 2]));
   const r = placeCells({ ...base(plans, terms), nodeBudget: 1 });
   assert.equal(r.ok, true);
-  assert.ok(r.relaxed?.includes("packed-largest-first"),
-    "and it must SAY the plan came from the packer");
+  assert.equal(r.termOf.size, 4, "every cell placed");
 });
 
 test("fallback › packOnly skips the ladder entirely and still verifies", () => {
