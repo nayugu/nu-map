@@ -49,7 +49,7 @@ function flatten(entries, out = []) {
  * which the department fills with a concentration course and three electives, came out EMPTY.
  * A term of pure reservations is invisible to a hint that only knows course ids.
  *
- * So `reservationTerms` records one term index per reserved row, in term order. It is a
+ * So `reservationTerms` records one term index per reserved ENTRY, in term order. It is a
  * distribution, not an assignment: it says the department put four reservations in term 8 and
  * two in term 11, and our unnamed cells are handed those terms in that order.
  *
@@ -135,7 +135,7 @@ export function assignSeedHints(plans, seed) {
   }
   // ── The reservation SPREAD is no longer dealt, and should not be ────
   //
-  // It paired our unhinted cells against the department's reserved rows in cell-id ORDER,
+  // It paired our unhinted cells against the department's reserved entries in cell-id ORDER,
   // which is not a pairing at all — "CS Required Courses" could be handed Year 1 Spring
   // because its id happens to sort early. A named course's hint is a fact ("an advisor put
   // MATH 1341 in term 0"); this was a fact about alphabetical order wearing the same clothes.
