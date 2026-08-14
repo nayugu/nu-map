@@ -103,8 +103,39 @@ in `src/ui`. But prose has used it for entries too: `seed.js` said "one term ind
 row", meaning one per reserved *entry*. A reader cannot tell whether a "row" is a term or a thing
 inside a term.
 
-Rule: a **row** is a semester in the grid. What sits inside it is a card, an entry or a cell,
-depending on the layer.
+Rule: a **row** is a line in a list or a grid — a semester in the planner, a search result in the
+bank. It is never a *course* and never a *placeholder*.
+
+> The first version of this rule said "a row is a semester in the grid" and nothing else, which
+> overreached: `bank.empty.saved.hint` says "Click ☆ on any course row to save it", meaning a line
+> in the search results. That is ordinary UI language and correct. The defect in `seed.js` was
+> never that it said "row" — it was that it said row for a thing *inside* a term, which is a card
+> or an entry. Narrowed accordingly.
+
+## What this audit did NOT cover
+
+Stated so the next pass knows where to start, and so nobody mistakes the scope for the whole.
+
+**Verified consistent, no change needed:** `course` vs `card` in student-facing strings. `card`
+appears in 7 live strings, all in the chart explainer plus one tip, against 128 for `course`, and
+they follow the pipeline rule above. `reservation` and `cell` have zero student-facing strings.
+
+**Fixed:** the placeholder concept (8 locales), the `row`-for-entry comment in `seed.js`, and 24
+orphaned keys.
+
+**Not examined at all:**
+
+- other concept clusters — *term* vs *semester*, *major* vs *program* vs *degree*, *requirement*
+  vs *section* vs *obligation*, *co-op* vs *work term*, *concentration* vs *option*
+- locale **key** naming, as opposed to values (`grad.plan.replace.*.slots` holds placeholder text)
+- component code in `src/ui` — 276 uses of `card` and 485 of `row` were counted, never read
+- every non-app surface: MCP tool descriptions in `mcp-server/` and `cloudflare/mcp-server/`,
+  `/llms.txt` and the AI data surface, `public/documentation/`, README
+- two untranslated English literals in `BankPanel.jsx` ("Type to search…", "No results"), left
+  alone because that file is under active edit elsewhere
+- whether the planner grid showing "Summer 1" contradicts CLAUDE.md's "never Summer 1/2". The NU
+  adapter carries `label: "Summer 1"` beside `altLabel: "Summer A"` deliberately, so this is a
+  product decision, not a defect to silently rename.
 
 ## Quick reference
 
