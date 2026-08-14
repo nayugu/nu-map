@@ -3,7 +3,7 @@
 Main
 - Fix duplicate concentrations
 - Account for coops as a class taken, and integrate with current coop system. 
-
+- Measure consistency of earliness in determining placement (e.g. microecon)
 
 Optional
 - Ability to select intended instructor for a semester
