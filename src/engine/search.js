@@ -62,7 +62,7 @@
 
 import { witnessPlan, buildContention, bipartiteMatch } from "./witness.js";
 import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
-import { chainHeight } from "./precedence.js";
+import { chainHeight, precedenceViolations } from "./precedence.js";
 import { DEFAULT_CALIBRATION, minCoursesFor, termIsFull } from "./calibration.js";
 import { cellLevelTarget, cellLevelFloor, unlockValues } from "./prereqDepth.js";
 
@@ -695,6 +695,35 @@ export function placeCells({
       };
     }
     last = r.failure ? r : last;
+  }
+
+  // ── Last resort: pack it, largest first ─────────────────────────────
+  //
+  // Placing courses in terms is BIN PACKING, and the search never consulted the one
+  // dimension bin packing turns on: size. Pack every full term to 16 SH with 4 SH courses
+  // and a 6 SH course fits nowhere — 16+6 > 19 in every full term, 8+6 > 9.5 in every half —
+  // so the search backtracks through the whole tree looking for room that a different ORDER
+  // would simply have left. That is what "exhausted the node budget" was measuring: of 249
+  // refusals, 132 ended with space still unexplored and only 12 were ever proved impossible,
+  // and the instances are LOOSE — business_administration_bsba is 31 cells into 10 terms
+  // with 22 SH and 19 slots spare, every domain 9 or 10 terms wide.
+  //
+  // First-fit decreasing solves eight of nine of those in 5-36 ms with no backtracking at
+  // all. Raising the node budget tenfold rescued one.
+  //
+  // LAST, though, and that placement is the whole safety argument. Tried first it would
+  // replace carefully sequenced plans with merely legal ones across the corpus; tried as a
+  // variable ordering inside the search it disrupts the machinery the DFS depends on and
+  // cost seven plans of 154 in the sample. Reached only when every rung has failed, it can
+  // do exactly one thing: turn a refusal into a plan. Phase 2 then sequences it like any
+  // other, and `relaxed` says how it was found.
+  if (now() <= deadline) {
+    const g = packDecreasing({ plans, terms, ports, studentType, courseMap, repeatable,
+                               precedence, cal, shape });
+    if (g.ok) {
+      return { ...g, nodes: totalNodes, restarts: maxRestarts,
+               cardinalityRelaxed: true, relaxed: [...given, "packed-largest-first"] };
+    }
   }
 
   // ── A diversified retry phase was built here, measured, and REMOVED ──
@@ -1918,3 +1947,73 @@ function byConstraint(a, b, termCount, rankOf = () => 0) {
  * prerequisite structure that could justify an early term.
  */
 const isFiller = (p) => p.candidates === null;
+
+/**
+ * First-fit decreasing: assign every cell to a term, largest cell first.
+ *
+ * The constructive counterpart to `attemptPlacement`, and it exists because the two fail in
+ * opposite directions. A DFS is strong where the instance is tight and the answer needs
+ * proving; it is helpless where the instance is LOOSE and merely awkward, because with every
+ * domain nine or ten terms wide there is nothing for MRV to grip and the global constraints —
+ * credit sums, the four-course count, distinctness — only bite once a term is already full.
+ * Then it backtracks over an exponential space to discover what ordering would have avoided.
+ *
+ * No backtracking here, deliberately. If one pass in size order cannot place a cell, this
+ * says so and the caller keeps the search's own refusal, which is the more informative one.
+ *
+ * Verified the same way as everything else before it is returned: capacity, slots, precedence
+ * and the witness. A plan from here is exactly as legal as one from the search — it is only
+ * less thoughtfully sequenced, and phase 2 sequences it.
+ */
+function packDecreasing({ plans, terms, ports, studentType, courseMap, repeatable,
+                          precedence, cal, shape }) {
+  const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
+  const slots = terms.map(t => termSlotCap(t, shape));
+  const loadSH = terms.map(() => 0), count = terms.map(() => 0), big = terms.map(() => 0);
+  const minC = minCoursesFor(cal, studentType);
+  const termOf = new Map();
+
+  // Size first — the dimension the whole failure turns on. Then the narrowest domain, then
+  // the shallowest cell, so a first-year course claims its term before a senior one takes
+  // the credits. Ties break on id, because determinism is a hard requirement here as
+  // everywhere: two runs must produce the same plan.
+  const order = [...plans].sort((a, b) =>
+    (b.cell.sh ?? 0) - (a.cell.sh ?? 0)
+    || a.domain.length - b.domain.length
+    || (a.minDepth ?? 0) - (b.minDepth ?? 0)
+    || String(a.cell.id).localeCompare(String(b.cell.id)));
+
+  for (const p of order) {
+    const sh = p.cell.sh ?? 0, n = coursesInCell(p.cell);
+    const isBig = sh >= cal.realCourseSH;
+    let best = null, bestScore = Infinity;
+    for (const ti of p.domain) {
+      if (loadSH[ti] + sh > cap[ti] + 0.01) continue;
+      if (count[ti] + n > slots[ti]) continue;
+      if (precedence) {
+        const trial = new Map(termOf);
+        trial.set(p.cell.id, ti);
+        if (precedenceViolations(precedence, trial).length) continue;
+      }
+      // Feed the four-course bar before balancing load: a term still owing real courses is
+      // where a real course belongs, and after that the emptiest term keeps the plan level.
+      const owes = isBig && (terms[ti].weight ?? 1) >= 1 && minC > 0
+        ? Math.max(0, minC - big[ti]) : 0;
+      const score = -owes * 100 + loadSH[ti];
+      if (score < bestScore) { bestScore = score; best = ti; }
+    }
+    if (best == null) return { ok: false };
+    termOf.set(p.cell.id, best);
+    loadSH[best] += sh; count[best] += n; if (isBig) big[best] += 1;
+  }
+
+  const byId = new Map(plans.map(p => [p.cell.id, p]));
+  const w = witnessPlan({
+    cells: plans.map(p => ({ ...p.cell, term: termOf.get(p.cell.id) })),
+    candidatesOf: (c) => byId.get(c.id).candidates,
+    terms, courseMap,
+    offeringProbability: ports.offeringProbability, offered: ports.offered,
+    repeatable, checkPrereqs: true, contention: buildContention(plans),
+  });
+  return w.ok ? { ok: true, termOf, failure: null } : { ok: false };
+}
