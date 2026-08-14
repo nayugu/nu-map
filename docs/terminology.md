@@ -160,6 +160,47 @@ eight locales**, with no call site anywhere outside `src/locales`. It contribute
 the pile while being unreachable, and is deleted. (Defect 11 in `chart-open-defects.md` is dead
 locale keys generally; this was one of them.)
 
+## Dead keys, and why the obvious way to find them is unsound
+
+A locale key is reachable only through `t(key)`, and `t` falls back to the **key itself**, so a
+wrongly-deleted key prints `chart.explain.order.h` to a student. That asymmetry is why this
+section is longer than the cleanup it justifies.
+
+**78 of 952 English keys were unreachable. 24 are deleted** — the old four-section explainer
+namespace, superseded by `chart.contract.*` / `chart.how.*` / `chart.limits.*` and evidenced by
+`ChartExplainer`'s own header describing the rewrite.
+
+**The other 54 are left in place deliberately**, because *a dead key in a live feature is
+ambiguous*: it is either a leftover or a string the code forgot to render, and deleting it
+destroys the evidence for the second reading. `plusone.rule.earliest.{ok,tooEarly,
+outsideTimeline,unknown}` is exactly that shape — a complete verdict set for a shipped feature —
+and wants somebody to read `PlusOneBlock` before anything is removed. The groups are
+`grad.*` 14, `plusone.*` 13, `stats.*` 6, `chart.*` 6, `header.*` 5, `claude.*` 4, `folders.*` 3,
+and one each in `bank.*`, `sem.*`, `modal.*`.
+
+### Four instrument failures, in order
+
+The count moved four times and the code never changed. Recorded because each error is one a
+reasonable person makes:
+
+1. **92** — the scan matched key names inside *comments* and called them references.
+2. **91** — included 14 `tour.step.*` keys that are **live**. `FeatureTour` holds base keys in a
+   data table (`{ t: "tour.step.1" }`) and renders `` t(`${cur.t}.title`) ``. **No static scan can
+   resolve a prefix that arrives in a variable.** Deleting them would have removed 112 real
+   translations and visibly broken the tour.
+3. **32** (chart-only) — nearly took `chart.source.chart.b1/b2/b3`, live via
+   `` t(`chart.source.chart.${k}`) ``, because the prefix list was hand-copied from console output
+   that had been **truncated at 12 of 16 prefixes**. A lead-in string with no bullets should have
+   been the tell.
+4. **`chart.explain.legal.witness` looked live** — because this very document named the key an
+   hour earlier. Documenting a key made the scan think it was used. It was dead, and it had
+   already been hand-edited in all 8 locales in the terminology pass: wasted work on a string no
+   student can see.
+
+**The sound method, if the remaining 54 are ever settled: runtime instrumentation.** Log every key
+`t()` actually resolves across a pass of `test/browser`, and diff that against the key list. Static
+analysis provably cannot do it here, and the proof is `FeatureTour`.
+
 **One accepted mismatch, recorded rather than fixed.** `grad.reserved.note` interpolates `{cards}`
 while its text now says "placeholders", and `grad.plan.replace.{gain,lose}.slots` are keyed `slots`
 while their text says "placeholders". The key and the parameter are internal names and the data
