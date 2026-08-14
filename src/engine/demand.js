@@ -877,9 +877,14 @@ function concentrationSpec(programData, chosen = null) {
  * @returns {{code: string, ids: string[]}[]} unmet codes, rarest first
  */
 export function breadthCodes(cells, courseMap, granted = []) {
+  // An array, or nothing. A string is iterable, so `for (const a of "IC")` yields "I" and
+  // "C" — a scrape that ever emits a bare string would invent single-letter competencies
+  // and bind electives to them. Cheap to rule out, and impossible to notice downstream.
+  const codesOf = (c) => (Array.isArray(c?.attributes) ? c.attributes : [])
+    .filter(a => typeof a === "string" && a.length >= 2);
   const byCode = new Map();
   for (const id in courseMap) {
-    for (const a of courseMap[id]?.attributes ?? []) {
+    for (const a of codesOf(courseMap[id])) {
       if (!byCode.has(a)) byCode.set(a, []);
       byCode.get(a).push(id);
     }
@@ -890,7 +895,7 @@ export function breadthCodes(cells, courseMap, granted = []) {
   for (const c of cells) {
     if (c.kind !== "named" || !c.groups?.[0]) continue;
     for (const id of c.groups[0]) {
-      for (const a of courseMap[id]?.attributes ?? []) covered.add(a);
+      for (const a of codesOf(courseMap[id])) covered.add(a);
     }
   }
   return [...byCode.entries()]
