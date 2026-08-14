@@ -614,7 +614,13 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
   const tierTotals = new Map();     // tier → { sh, n }  (the numbers ARE the point)
   const present = [];
   for (const g of byDept) {
-    for (const id of g.ids) {
+    // Reversed: g.ids arrives ascending (byDept sorts it for the GPA math below,
+    // which doesn't care about direction), but tiers themselves run highest-at-
+    // top. A cell stacking its own chips ascending top-to-bottom then reads as
+    // the number climbing going DOWN, the opposite of every tier boundary above
+    // it — the "increases going up, except right here" the chart looked like.
+    // Highest-first keeps the climb-going-up reading continuous into the cell.
+    for (const id of [...g.ids].reverse()) {
       const tier = courseTier(cmap[id]?.number) ?? 0;
       present.push(tier);
       const k = `${g.subject}|${tier}`;
