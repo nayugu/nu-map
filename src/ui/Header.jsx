@@ -1228,7 +1228,10 @@ export default function Header() {
   return (
     <>
       {/* ── Sticky header bar ── */}
-      <div style={{
+      {/* Tagged so a reveal-scroll can measure the strip of the timeline this
+          covers (ui/smoothScroll.js) — it grows a row on narrow windows, so
+          the height has to be read rather than assumed. */}
+      <div data-timeline-header="" style={{
         display: "flex", flexDirection: "column", gap: 6, marginBottom: 10,
         position: "sticky", top: 0, zIndex: 30, background: "var(--bg-app)",
         paddingTop: 10, paddingBottom: 8, borderBottom: "1px solid var(--border-1)",

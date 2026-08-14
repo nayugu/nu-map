@@ -534,7 +534,6 @@ const { locale, setLocale, locales, t } = useLanguage();
   const [hoveredCardId, setHoveredCardId] = useState(null);
   const [showPanel,     setShowPanel]     = useState(false);
   const [lines,         setLines]         = useState([]);
-  const [scrollTick,    setScrollTick]    = useState(0);
   const [showViolLines, setShowViolLines] = useState(true);
   // Prereq-tree depth: how many hops the selection highlight expands, capped
   // independently upstream (prerequisites) and downstream (dependents).
@@ -950,18 +949,18 @@ const { locale, setLocale, locales, t } = useLanguage();
     };
   }, []);
 
-  // ── Effect: scroll → SVG recalc ──────────────────────────────
-  // Depends on `loading` so it re-runs (and finds the DOM node) once
-  // the timeline div is actually mounted after data loads.
-  useEffect(() => {
-    const el = timelineRef.current;
-    if (!el) return;
-    const h = () => setScrollTick(t => t + 1);
-    el.addEventListener("scroll", h, { passive: true });
-    return () => {
-      el.removeEventListener("scroll", h);
-    };
-  }, [loading]);
+  // ── Scrolling and the SVG lines ──────────────────────────────
+  // There used to be a scroll listener here that bumped a `scrollTick` state
+  // so the lines effect below re-measured every card on every scroll event —
+  // a full provider re-render plus a full re-measure per frame, which is why
+  // the lines lagged and looked frozen while the timeline moved.
+  //
+  // They don't need re-measuring. Every line endpoint is a card INSIDE the
+  // timeline, so a scroll moves all of them by the same amount: the picture
+  // is unchanged, only shifted. RelationLines translates the overlay by that
+  // shift on each scroll event, which is exact and costs no React work. All
+  // this side owes it is the offset the current geometry was measured at.
+  const linesScrollRef = useRef(0);
 
   // effectivePlacements: real placements + virtual entries for substitution targets.
   // When CS3500 → CS4400 substitution exists and CS3500 is placed in fall2024,
@@ -1228,10 +1227,14 @@ const { locale, setLocale, locales, t } = useLanguage();
         });
       }
 
+      // The offset these coordinates were measured at. RelationLines shifts
+      // the overlay by whatever the timeline has scrolled since, so the lines
+      // stay glued to their cards without another measure pass.
+      linesScrollRef.current = timelineRef.current?.scrollTop ?? 0;
       setLines(newLines);
     });
     return () => cancelAnimationFrame(raf);
-  }, [selectedId, connectionEdges, showViolLines, placements, cardSemOf, effectivePlacements, substitutions, specialTermPl, scrollTick, allEdges, SEM_INDEX, pvPlacedOut, takesOf, grades, prereqConditions]);
+  }, [selectedId, connectionEdges, showViolLines, placements, cardSemOf, effectivePlacements, substitutions, specialTermPl, allEdges, SEM_INDEX, pvPlacedOut, takesOf, grades, prereqConditions]);
 
   // ── MCP action applier ───────────────────────────────────────────
   // Applies a batch of IPlannerAction actions dispatched by Claude via APPLY events.
@@ -1954,6 +1957,79 @@ const { locale, setLocale, locales, t } = useLanguage();
   // hypothetical order inside a state updater.
   const gridPlacements = semView.occupants;
   const gridCourseMap  = semView.cards;
+
+  // ── Reveal: scroll the grid to a course ──────────────────────────
+  // Naming a course anywhere in the app — a bank row, a prereq chip, a
+  // requirement row, a NUPath witness, an MCP FOCUS_COURSE — should take the
+  // student TO it when it is in their plan. Selecting a card the user cannot
+  // see highlights nothing and draws relation lines off screen.
+  //
+  // This half is state only: which card, and unhiding it. The measuring and
+  // the animation are DOM work and live in ui/smoothScroll.js, driven from
+  // App.jsx — a context that reached into the ui layer would invert the
+  // dependency the hexagon exists to keep one-way.
+  const [revealTarget, setRevealTarget] = useState(null); // { pid, n }
+
+  /**
+   * Ask the timeline to show the card for `rawId`, if there is one.
+   *
+   * The id handed in is NOT reliably a card id. The grad panel and the info
+   * panel's links deal in base course keys ("CS3500"); the stats panel and
+   * the NUPath witnesses deal in real placement ids, which for a retake is
+   * "CS3500#2". Resolving one to the other is the whole reason this is a
+   * shared action rather than a `scrollIntoView` at each call site.
+   */
+  const revealCourse = useCallback((rawId) => {
+    if (!rawId) return false;
+    let pid = null;
+    if (gridPlacements[rawId] !== undefined) pid = rawId;
+    else {
+      // Not placed under that exact id — find the take that IS on the board.
+      // Earliest term wins, deliberately: with CS2500 and CS2500#2 both
+      // placed, "show me CS2500" means the one the student took first, and
+      // any rule that depends on object key order would be a coin flip.
+      const base = baseId(rawId);
+      let bestIdx = Infinity;
+      for (const [id, sid] of Object.entries(gridPlacements)) {
+        if (baseId(id) !== base) continue;
+        const idx = SEM_INDEX[sid] ?? Infinity;
+        if (idx < bestIdx) { bestIdx = idx; pid = id; }
+      }
+    }
+    // Not in the plan, or parked outside the cohort's years: there is no card
+    // on screen, so there is nothing to scroll to and we do nothing at all.
+    // Silence is the honest answer — a scroll to "somewhere" would be worse.
+    const semId = pid ? gridPlacements[pid] : null;
+    if (!semId || !inTimeline(semId, SEM_INDEX)) return false;
+
+    // A card inside a COLLAPSED section is not something scrolling can reach.
+    // Special/incoming rows collapse through `collapsedSubs`, which lives
+    // here; the low-credit ("other") zone collapses through local state in
+    // SemRow/SummerRow, which watch `revealTarget` and open themselves once.
+    const semType = SEMESTERS.find(s => s.id === semId)?.type;
+    const isSubRow = semType !== "fall" && semType !== "spring" && semType !== "summer";
+    if (isSubRow && collapsedSubs[semId] !== false) {
+      // Same map as the bank's per-subject collapse, keyed by semester id
+      // there and by subject code here — disjoint key spaces, one store.
+      setCollapsedSubs(p => ({ ...p, [semId]: false }));
+    }
+
+    // Counter, not just the id: clicking the same course twice must scroll
+    // twice (the user may have scrolled away in between), and identical
+    // state would not re-run the effect.
+    setRevealTarget(prev => ({ pid, n: (prev?.n ?? 0) + 1 }));
+    return true;
+  }, [gridPlacements, SEM_INDEX, SEMESTERS, collapsedSubs]);
+
+  // Every course-identifying click already sets `selectedId` — that is what
+  // "the user pointed at this course" means here. Hanging the reveal off it
+  // covers all ~14 of those sites at once, including ones added later, rather
+  // than asking each to remember. Nothing else writes `selectedId`: it is not
+  // restored from storage and no drop or import sets it, so this cannot fire
+  // on its own.
+  useEffect(() => {
+    if (selectedId) revealCourse(selectedId);
+  }, [selectedId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /**
    * Lay out a department's published plan.
@@ -4537,13 +4613,13 @@ const { locale, setLocale, locales, t } = useLanguage();
 
   // Preview auto-focus: scroll the first affected course into view. Panel
   // switching (grad panel / bank) is handled where that local state lives
-  // (BankPanel); course cards register DOM nodes in cardRefs.
+  // (BankPanel). Goes through `revealCourse` like every other jump, so a
+  // preview of a 1 SH course opens the collapsed zone it lands in instead of
+  // scrolling to a card nobody can see.
   useEffect(() => {
     const f = claudePreview?.focus;
     if (f?.kind !== "course") return;
-    const timer = setTimeout(() => {
-      cardRefs.current[f.courseId]?.scrollIntoView?.({ behavior: "smooth", block: "center" });
-    }, 250);
+    const timer = setTimeout(() => { revealCourse(f.courseId); }, 250);
     return () => clearTimeout(timer);
   }, [claudePreview?.proposalId]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -4690,7 +4766,8 @@ const { locale, setLocale, locales, t } = useLanguage();
     SEMESTERS, SEM_INDEX, SEM_NEXT, SEM_PREV,
     // UI state
     selectedId, dragInfo, hoveredSem, hoveredZone, hoveredCardId,
-    showPanel, lines, scrollTick, showViolLines,
+    revealCourse, revealTarget,
+    showPanel, lines, linesScrollRef, showViolLines,
     prereqDepth, setPrereqDepth, unlockDepth, setUnlockDepth, showPrereqTree,
     // Bank state
     bankSearch, bankSort, bankTab, bankFilters, bankWidth, showSubjectKeys,

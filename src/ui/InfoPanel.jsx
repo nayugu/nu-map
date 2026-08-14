@@ -125,6 +125,10 @@ export default function InfoPanel() {
   return (
     <div
       onClick={e => e.stopPropagation()}
+      /* Tagged so a reveal-scroll can measure how much of the timeline this
+         covers — see ui/smoothScroll.js. Its height is content-driven, so it
+         has to be read off the DOM rather than taken from panelHeight. */
+      data-info-panel=""
       style={{
         position: "fixed", bottom: 0,
         left: isPhone ? 0 : (showPalette ? 100 : 18),
@@ -246,7 +250,7 @@ export default function InfoPanel() {
 }
 
 function CourseInfo({ selCourse, navTo }) {
-  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX, cardRefs } = usePlanner();
+  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX } = usePlanner();
   const attributeSystem = usePort(IAttributeSystem);
   const creditSystem    = usePort(ICreditSystem);
   const calendar        = usePort(ICalendar);
@@ -336,12 +340,14 @@ function CourseInfo({ selCourse, navTo }) {
               onMouseEnter={e => setRepHover(e.currentTarget.getBoundingClientRect())}
               onMouseLeave={() => setRepHover(null)}
               onClick={takes.length > 1 ? (e) => {
-                // Cycle: select the next take and bring its card into view.
+                // Cycle: select the next take. Selecting it is all this needs
+                // to do — bringing the card into view follows from selection
+                // everywhere in the app now (PlannerContext → revealCourse),
+                // and doing it again here would race that scroll.
                 e.stopPropagation();
                 const i = takes.findIndex(tk => tk.pid === selCourse.id);
                 const next = takes[(i + 1) % takes.length];
                 navTo(next.pid);
-                cardRefs.current?.[next.pid]?.scrollIntoView({ behavior: "smooth", block: "center" });
               } : undefined}
               style={{
                 fontSize: 9,

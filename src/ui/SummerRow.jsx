@@ -38,7 +38,7 @@ export default function SummerRow({ semA, semB }) {
     cardRefs, onDragStart,
     SEM_INDEX,
     pushUndo, isPhone,
-    collapseOtherCredits, showContLogo,
+    collapseOtherCredits, showContLogo, revealTarget,
     semTrackingMode,
     studentType,
     privateCoop,
@@ -59,6 +59,16 @@ export default function SummerRow({ semA, semB }) {
 
   const year     = semA.id.replace("sumA", "");
   const sems     = [semA, semB].filter(Boolean);
+
+  // Open the low-credit zone when a reveal lands in it — see the same effect
+  // in SemRow. One `showOther` covers BOTH halves here, so both are checked;
+  // a jump to a 1 SH course in Summer B must not depend on Summer A.
+  useEffect(() => {
+    if (!revealTarget) return;
+    const inOthers = sems.some(s => semesterCards(s.id)
+      .some(c => c.id === revealTarget.pid && c.sh <= 2 && !c.shVoided));
+    if (inOthers) setShowOther(true);
+  }, [revealTarget]); // eslint-disable-line react-hooks/exhaustive-deps
   const combinedDone   = sems.every(s => getSemStatus(s.id) === "completed");
   const combinedActive = sems.some(s => getSemStatus(s.id) === "inprogress");
   // Per-half: a co-op occupying Summer A/B excludes that half's courses from the

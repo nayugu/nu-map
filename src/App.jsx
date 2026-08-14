@@ -3,7 +3,7 @@
 // AGPL-3.0-only + attribution term under §7(b); see LICENSING.md and NOTICE.
 //
 // APP  -- composition root (hexagonal architecture)
-import { useState }                    from 'react';
+import { useState, useEffect }         from 'react';
 import { PlannerProvider, usePlanner } from './context/PlannerContext.jsx';
 import { RelevanceProvider }           from './context/RelevanceContext.jsx';
 import { CandidatesProvider }          from './context/CandidatesContext.jsx';
@@ -32,6 +32,7 @@ import StorageAlarm     from './ui/StorageAlarm.jsx';
 import DevClockPanel    from './ui/DevClockPanel.jsx';
 import TermReviewPrompt from './ui/TermReviewPrompt.jsx';
 import PastClassRater   from './ui/PastClassRater.jsx';
+import { scrollCardIntoView, overlayHeight } from './ui/smoothScroll.js';
 
 // Main planner layout -- consumes PlannerContext
 function PlannerApp() {
@@ -43,7 +44,46 @@ function PlannerApp() {
     timelineRef,
     setSelectedId, setShowPanel,
     studentType,
+    revealTarget, cardRefs,
   } = usePlanner();
+
+  // ── Reveal: the DOM half of "scroll the grid to that course" ──────
+  // The context decides WHICH card (see `revealCourse`); this runs the scroll,
+  // because only here are the element, the scroll container and the two insets
+  // that hide parts of it — the sticky header, the info panel — all in reach.
+  //
+  // Two frames, then retries: the same state change that asks for the reveal
+  // may also be un-collapsing the section the card sits in, and SemRow opens
+  // that in an effect of its own, so the node can be a frame or two late. A
+  // card that never appears (removed while the reveal was in flight) just runs
+  // out of tries and nothing moves.
+  useEffect(() => {
+    if (!revealTarget) return;
+    let cancelled = false, timer = null, tries = 0;
+    const attempt = () => {
+      if (cancelled) return;
+      const el = cardRefs.current?.[revealTarget.pid];
+      // A ref left behind by an unmounted card is detached, and a detached
+      // node measures 0 — which is also what an un-laid-out one measures, so
+      // both cases are simply "not ready yet".
+      if (!el || el.getBoundingClientRect().height === 0) {
+        if (tries++ < 6) timer = setTimeout(attempt, 50);
+        return;
+      }
+      const container = timelineRef.current;
+      const scale = isPhone ? 1 : (uiScale || 1);
+      scrollCardIntoView(container, el, {
+        scale,
+        topInset: overlayHeight(container, '[data-timeline-header]', scale),
+        // The info panel is drawn OVER the timeline, not beside it, so its
+        // height is viewport the card must not land in. Measured, because it
+        // hugs its content: `panelHeight` is only the cap.
+        bottomInset: overlayHeight(document, '[data-info-panel]', scale),
+      });
+    };
+    const raf = requestAnimationFrame(() => requestAnimationFrame(attempt));
+    return () => { cancelled = true; cancelAnimationFrame(raf); clearTimeout(timer); };
+  }, [revealTarget]); // eslint-disable-line react-hooks/exhaustive-deps
 
   if (loading || loadErr) {
     return <LoadingScreen loadErr={loadErr} loadPct={loadPct} />;

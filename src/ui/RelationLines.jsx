@@ -1,11 +1,54 @@
 // ═══════════════════════════════════════════════════════════════════
 // RELATION LINES  — SVG overlay for prereq / coreq bezier curves
 // ═══════════════════════════════════════════════════════════════════
+import { useEffect, useLayoutEffect, useRef } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { REL_STYLE } from "../core/constants.js";
 
 export default function RelationLines() {
-  const { lines, bankWidth, isPhone } = usePlanner();
+  const { lines, bankWidth, isPhone, timelineRef, linesScrollRef } = usePlanner();
+
+  // ── Follow the scroll without re-measuring ────────────────────────
+  // Every endpoint is a card inside the timeline, so scrolling moves them all
+  // by the same amount: the drawing is still right, just displaced. Shifting
+  // the group by that displacement is EXACT, not an approximation, and it is
+  // one style write per scroll event — where re-deriving the geometry meant a
+  // provider re-render and a getBoundingClientRect for every card per frame,
+  // which could not keep up and left the lines behind the cards.
+  //
+  // Layout changes still go the long way round (state → recompute), which is
+  // right: those move cards relative to each other, and no translation can
+  // express that.
+  const gRef = useRef(null);
+  const syncRef = useRef(() => {});
+  syncRef.current = () => {
+    const g = gRef.current;
+    if (!g) return;
+    const dy = linesScrollRef.current - (timelineRef.current?.scrollTop ?? 0);
+    g.style.transform = dy ? `translateY(${dy}px)` : "";
+  };
+
+  useEffect(() => {
+    let raf = 0, el = null;
+    const onScroll = () => syncRef.current();
+    // Scroll events land before the frame is painted, so the shift applies in
+    // the same frame the scroll happened in — no trailing. Retried until the
+    // container exists rather than assumed: this overlay is rendered before
+    // the timeline div, and a listener that silently never attached would
+    // look exactly like the bug it is here to fix.
+    const attach = () => {
+      el = timelineRef.current;
+      if (!el) { raf = requestAnimationFrame(attach); return; }
+      el.addEventListener("scroll", onScroll, { passive: true });
+    };
+    attach();
+    return () => { cancelAnimationFrame(raf); el?.removeEventListener("scroll", onScroll); };
+  }, [timelineRef]);
+
+  // Fresh geometry was measured at `linesScrollRef`, so the leftover shift has
+  // to be re-based in the same commit that paints it — a frame drawn with the
+  // old translation still on would jump.
+  useLayoutEffect(() => { syncRef.current(); }, [lines]);
 
   return (
     <svg style={{
@@ -36,6 +79,8 @@ export default function RelationLines() {
         )}
       </defs>
 
+      {/* One group, so the scroll shift is a single style write. */}
+      <g ref={gRef}>
       {lines.map((ln, i) => {
         const s    = REL_STYLE[ln.type] ?? REL_STYLE.prerequisite;
         const dx   = ln.tp.x - ln.fp.x;
@@ -65,6 +110,7 @@ export default function RelationLines() {
           />
         );
       })}
+      </g>
     </svg>
   );
 }

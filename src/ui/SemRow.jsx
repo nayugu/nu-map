@@ -134,9 +134,17 @@ export default function SemRow({ sem }) {
   const gridCols  = isPhone ? Math.min(2, slotCount) : slotCount;
 
   // Collapsible other credits
-  const { collapseOtherCredits, collapsedSubs, setCollapsedSubs, showContLogo, privateCoop } = usePlanner();
+  const { collapseOtherCredits, collapsedSubs, setCollapsedSubs, showContLogo, privateCoop, revealTarget } = usePlanner();
   const [showOther, setShowOther] = useState(!collapseOtherCredits);
   useEffect(() => { if (collapseOtherCredits) setShowOther(false); else setShowOther(true); }, [collapseOtherCredits]);
+
+  // A jump to a 1 SH course lands on a card that is inside this collapsed
+  // zone, i.e. not rendered at all. Open it — once, as a plain state change,
+  // so the toggle stays the user's: forcing it open for as long as the course
+  // is the reveal target would make the ▼ button do nothing.
+  useEffect(() => {
+    if (revealTarget && others.some(c => c.id === revealTarget.pid)) setShowOther(true);
+  }, [revealTarget]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Collapsed state for incoming credit section (per-semester)
   const isIncomingCollapsed = collapsedSubs[sem.id] !== false;
