@@ -617,7 +617,9 @@ that safe rather than dishonest.
    ships — a phase-4 blocker, not a phase-1 one.
 2. **Is a PlusOne share visible in Banner?** Unchecked. If not, this is
    advisor-and-paperwork only and the UI must never imply verification.
-3. **Registrar mechanics** — `KB000020031` is still unread (client-rendered).
+3. **Registrar mechanics** — `KB000020031` is READ (via the ServiceNow API; see
+   plusone-research.md §8a). It adds a 14 SH floor on post-bachelor's work that
+   `shareCap` does not model. Still unanswered by it:
    Registration overrides (#53) and billing (#70, only sourced from
    D'Amore-McKim) are thinly evidenced.
 4. **How many pathways are wildcard** ("all majors", per CPS and Bouvé)? If most,

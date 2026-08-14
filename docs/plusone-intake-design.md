@@ -288,8 +288,10 @@ is not. That measurement is cheap and should come before any extractor.
 4. **`plusone-robo` in three departments** — we have no id convention for one
    master's reached from several undergraduate homes. Probably one pathway file
    with several `eligibility` entries, but unverified against the three pages.
-5. **Still unread:** the registrar's `KB000020031` (client-rendered), which is the
-   only authority on registration mechanics and billing.
+5. **`KB000020031` is read** (ServiceNow Knowledge API — see plusone-research.md
+   §8a), and adds a universal rule we do not model: a minimum of 14 graduate
+   semester hours AFTER the bachelor's. It is silent on registration mechanics
+   and billing, which remain unsourced.
 6. **Banner visibility** — never checked. If a PlusOne share is invisible to
    Banner, everything here is the student's assertion and the UI must keep saying
    so.

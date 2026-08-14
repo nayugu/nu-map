@@ -196,10 +196,12 @@ explicit that I could not: there is no page that lists them all. The obvious
 candidate, `plusone.northeastern.edu`, **does not resolve** (DNS failure,
 verified) despite being the top search result and being linked from several live
 pages. `www.northeastern.edu/plusone` 302s to a ServiceNow registrar KB article
-(`KB000020031`) that is **client-rendered and returned no article body** to two
-different fetch attempts — so the registrar's own canonical statement of the
-mechanics (registration, billing, how the share is recorded on the audit) is
-**unread**. That is the single largest hole in this research.
+(`KB000020031`) that is **client-rendered and returns no article body** to an
+ordinary fetch. Recorded here as the largest hole in this research, it was later
+closed from a different direction: the ServiceNow Knowledge API serves the same
+article as JSON, and §8a records what it says. The lesson is worth keeping — a
+page that renders empty is not the same as a page with nothing in it, and the
+first three attempts stopped at the shell.
 
 **Adjacent family members, not to be conflated with PlusOne:**
 
@@ -370,12 +372,15 @@ work. I have not fixed it — a change here needs a regeneration plus the
 Listed plainly, because several of these change what an implementation would look
 like:
 
-1. **The registrar's mechanics.** `KB000020031` is unread. How the share is
-   recorded on the degree audit, how a PlusOne student registers for a graduate
-   course as an undergraduate (override? special permission?), and **how those
-   courses are billed** are all unresolved. CPS says the credits count "at no
-   additional cost", which implies undergraduate tuition covers them, but I could
-   not confirm that from a registrar or SFS source.
+1. **The registrar's mechanics — partly resolved, see §8a.** `KB000020031` is no
+   longer unread: it is served as JSON by the ServiceNow Knowledge API, and it
+   settled the approval process, the 14 SH floor on post-bachelor's work, and
+   what happens if the master's is abandoned. What it does **not** say is how the
+   share is recorded on the degree audit, how a PlusOne student registers for a
+   graduate course as an undergraduate (override? special permission?), or **how
+   those courses are billed**. CPS says the credits count "at no additional cost"
+   and D'Amore-McKim says "undergraduate tuition rates", but no registrar or SFS
+   source confirms either.
 2. **Whether any of this is in Banner.** Not checked at all. If a PlusOne share
    is invisible to Banner, then it is advisor-and-paperwork only, and NU Map
    could never verify a student's status — only take their word for it.
@@ -532,5 +537,9 @@ Colleges:
 [CSSH SCCJ](https://cssh.northeastern.edu/sccj/academics/plusone/) ·
 [D'Amore-McKim Accounting](https://damore-mckim.northeastern.edu/programs/plusone-accounting/)
 
-Dead or unreadable: `plusone.northeastern.edu` (DNS failure) ·
-`KB000020031` via `www.northeastern.edu/plusone` (client-rendered, no body).
+Dead: `plusone.northeastern.edu` (DNS failure).
+Client-rendered, so empty to an ordinary fetch, but readable as JSON through the
+ServiceNow Knowledge API (§8a):
+[`KB000020031`](https://service.northeastern.edu/api/sn_km_api/knowledge/articles/KB000020031)
+· mirrored at
+[registrar.northeastern.edu](https://registrar.northeastern.edu/article/plusone-program-accelerated-bachelorgraduate-degree-programs/).
