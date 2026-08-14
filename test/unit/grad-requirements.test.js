@@ -10,7 +10,8 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import {
   courseKey, buildPlacedKeySet, checkReq, checkSection,
-  allocateMajorWithElectives, getTotalPlacedSH,
+  allocateMajorWithElectives, allocateMajorSections, allocateSections,
+  collectCandidateKeys, calculateGeneralElectives, getTotalPlacedSH,
 } from "../../src/core/gradRequirements.js";
 
 // courseMap keyed by canonical id (subject+number). sh drives XOM/RANGE credit math.
@@ -199,6 +200,72 @@ test("allocate › a RANGE inside an XOM pool also stops consuming once numCredi
   assert.equal(byTitle["Pool A"].sat, true, "range pool satisfied by one match");
   assert.equal(byTitle["Pool B"].sat, true,
     "the other range match must remain free for the section that names it specifically");
+});
+
+test("allocate › a released XOM-pool course with nowhere else to go lands in General Electives, not nowhere", () => {
+  // Regression for a bug the overflow fix itself introduced: collectCandidateKeys
+  // walks every COURSE node in the result tree, including a released (capped)
+  // one, and unconditionally treats it as a "candidate pending completion of an
+  // incomplete requirement" — excluding it from General Electives even though the
+  // pool already let it go. Three courses, only one needed, and NO other section
+  // lists the extras: they must show up as general electives, not vanish.
+  const major = { requirementSections: [
+    { title: "History Elective", minRequirementCount: 1, requirements: [
+      { type: "XOM", numCreditsMin: 4, courses: [
+        { type: "COURSE", subject: "ARTH", classId: "2210" },
+        { type: "COURSE", subject: "ARTH", classId: "2211" },
+        { type: "COURSE", subject: "ARTH", classId: "2212" },
+      ] },
+    ] },
+  ] };
+  const cm = {
+    ...courseMap,
+    ARTH2210: { subject: "ARTH", number: "2210", sh: 4 },
+    ARTH2211: { subject: "ARTH", number: "2211", sh: 4 },
+    ARTH2212: { subject: "ARTH", number: "2212", sh: 4 },
+  };
+  const placedSet = set("ARTH2210", "ARTH2211", "ARTH2212");
+  const { generalElectives } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  const geKeys = generalElectives.children.map(c => c.key);
+  assert.deepEqual(geKeys.sort(), ["ARTH2211", "ARTH2212"],
+    "the two courses the pool didn't need must land in General Electives, not vanish");
+});
+
+test("allocate › General Electives computed after a concentration doesn't double-count a released course", () => {
+  // A course an XOM pool releases (see the cap in allocateNode) can be claimed by
+  // a LATER concentration section. Computing General Electives before that
+  // concentration runs — the bug this guards — lets the same course read as both
+  // a general elective AND concentration credit. allocateMajorSections +
+  // allocateSections + collectCandidateKeys + calculateGeneralElectives, called in
+  // that order, is the pattern plannerQueryAdapter.js and GradPanel.jsx now use.
+  const major = { requirementSections: [
+    { title: "History Elective", minRequirementCount: 1, requirements: [
+      { type: "XOM", numCreditsMin: 4, courses: [
+        { type: "COURSE", subject: "ARTH", classId: "2210" },
+        { type: "COURSE", subject: "ARTH", classId: "2211" },
+      ] },
+    ] },
+  ] };
+  const concSection = { title: "Electives Option", minRequirementCount: 1, requirements: [
+    { type: "XOM", numCreditsMin: 4, courses: [
+      { type: "COURSE", subject: "ARTH", classId: "2211" },
+    ] },
+  ] };
+  const cm = {
+    ...courseMap,
+    ARTH2210: { subject: "ARTH", number: "2210", sh: 4 },
+    ARTH2211: { subject: "ARTH", number: "2211", sh: 4 },
+  };
+  const placedSet = set("ARTH2210", "ARTH2211");
+
+  const { sections, allocatedSet } = allocateMajorSections(major, placedSet, cm);
+  const [concResult] = allocateSections([concSection], placedSet, allocatedSet, cm);
+  const candidateKeys = collectCandidateKeys([...sections, concResult], placedSet);
+  const generalElectives = calculateGeneralElectives(placedSet, allocatedSet, cm, 0, null, candidateKeys, placedSet);
+
+  assert.equal(concResult.sat, true, "concentration satisfied by the released ARTH2211");
+  assert.deepEqual(generalElectives.children.map(c => c.key), [],
+    "ARTH2211 must not ALSO show as a general elective once the concentration claims it");
 });
 
 // ── XOM accumulate: repeatable-course credit summed across term placements ────

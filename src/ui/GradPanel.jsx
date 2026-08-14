@@ -34,7 +34,10 @@ import { useTranslatedText, scaleLatinRuns }    from "../context/TranslationCont
 import {
   buildPlacedKeySet,
   allocateMajorWithElectives,
+  allocateMajorSections,
   allocateSections,
+  collectCandidateKeys,
+  calculateGeneralElectives,
 } from "../core/gradRequirements.js";
 import { findNewerMajorVersion, findNewerGradMajorVersion } from "../data/majorLoader.js";
 import { rankOptions } from "../core/searchRank.js";
@@ -1669,23 +1672,34 @@ export default function GradPanel({ wideCatalog = false }) {
   const { majorSections, concSection } = useMemo(() => {
     if (!major) return { majorSections: [], concSection: null };
 
-    // Allocate major requirements + General Electives
-    const { sections: majorResults, generalElectives, allocatedSet } = allocateMajorWithElectives(major, placedSet, courseMap, doneSet, realPlacedSet);
-
-    // Add General Electives as the last major section
-    const majorWithElectives = [...majorResults, generalElectives];
+    // Allocate major requirements first, WITHOUT General Electives yet.
+    const { sections: majorResults, allocatedSet } = allocateMajorSections(major, placedSet, courseMap);
 
     // Allocate concentration sharing the major's used set so courses already
     // counted toward major requirements can't also satisfy the concentration.
+    let concAllocated = null;
     if (selConc && major.concentrations) {
       const chosen = resolveConcentration(major, selConc);
       if (chosen) {
         const [allocated] = allocateSections([chosen], placedSet, allocatedSet, courseMap);
-        return { majorSections: majorWithElectives, concSection: allocated ?? null };
+        concAllocated = allocated ?? null;
       }
     }
 
-    return { majorSections: majorWithElectives, concSection: null };
+    // General Electives must come AFTER the concentration: a course an XOM pool
+    // releases once satisfied (see the cap in allocateNode) is exactly the kind of
+    // course a concentration might then claim — computing General Electives before
+    // that runs would let it double-count that course as both a general elective
+    // and concentration credit.
+    const candidateKeys = collectCandidateKeys(
+      concAllocated ? [...majorResults, concAllocated] : majorResults, realPlacedSet ?? placedSet
+    );
+    const generalElectives = calculateGeneralElectives(
+      placedSet, allocatedSet, courseMap, major.generalElectiveSH ?? 0, doneSet, candidateKeys, realPlacedSet
+    );
+    const majorWithElectives = [...majorResults, generalElectives];
+
+    return { majorSections: majorWithElectives, concSection: concAllocated };
   }, [allSections, placedSet, doneSet, realPlacedSet, courseMap, major, selConc]);
 
   const allocatedSections = concSection ? [...majorSections, concSection] : majorSections;
@@ -1717,18 +1731,24 @@ export default function GradPanel({ wideCatalog = false }) {
   // ── Second major allocation (courses double-count freely per NU policy) ─
   const major2Sections = useMemo(() => {
     if (!major2Data) return [];
-    const { sections, generalElectives, allocatedSet } =
-      allocateMajorWithElectives(major2Data, placedSet, courseMap, doneSet, realPlacedSet);
-    const out = [...sections, generalElectives];
+    const { sections, allocatedSet } = allocateMajorSections(major2Data, placedSet, courseMap);
     // Concentration shares this major's used set, so a course already counted
     // toward its requirements can't also satisfy its concentration — the same
     // rule major 1 uses. Across the two majors, courses still double-count
     // freely, per NU policy.
+    let concResults = [];
     if (selConc2 && major2Data.concentrations) {
       const chosen = resolveConcentration(major2Data, selConc2);
-      if (chosen) out.push(...allocateSections([chosen], placedSet, allocatedSet, courseMap));
+      if (chosen) concResults = allocateSections([chosen], placedSet, allocatedSet, courseMap);
     }
-    return out;
+    // General Electives comes after the concentration is allocated (see the
+    // matching comment on majorSections above) so a released XOM-pool course the
+    // concentration then claims isn't also double-counted as a general elective.
+    const candidateKeys = collectCandidateKeys([...sections, ...concResults], realPlacedSet ?? placedSet);
+    const generalElectives = calculateGeneralElectives(
+      placedSet, allocatedSet, courseMap, major2Data.generalElectiveSH ?? 0, doneSet, candidateKeys, realPlacedSet
+    );
+    return [...sections, generalElectives, ...concResults];
   }, [major2Data, placedSet, courseMap, doneSet, realPlacedSet, selConc2]);
 
   const major2DoneSections = useMemo(() => {

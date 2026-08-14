@@ -384,12 +384,16 @@ export function allocateMajor(major, placedSet, courseMap) {
  * OR nodes are handled by only taking their committed allocatedCourses — unsatisfied
  * OR alternatives remain available for general electives.
  */
-function collectCandidateKeys(sections, placedSet) {
+export function collectCandidateKeys(sections, placedSet) {
   const keys = new Set();
   function visit(node) {
     if (!node) return;
     if (node.type === 'COURSE') {
-      if (node.key && placedSet.has(node.key)) keys.add(node.key);
+      // `released` (see the XOM cap in allocateNode): a course a pool let go once
+      // its own threshold was met is NOT a candidate pending completion of some
+      // other requirement — it must be free to land in General Electives (or be
+      // claimed by a later section/concentration) like any other unclaimed course.
+      if (!node.released && node.key && placedSet.has(node.key)) keys.add(node.key);
       return;
     }
     if (node.type === 'OR') {
@@ -782,7 +786,12 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
           // here too, so the UI never shows the same physical course as "satisfied" under
           // this section AND under whichever other pool actually claims its credit.
           if (dry.type === 'COURSE' && dry.sat) {
-            return { ...dry, sat: false, allocatedCourses: new Set() };
+            // `released` marks this as a course the pool deliberately let go once
+            // satisfied, not a course still "pending" as part of an incomplete
+            // compound requirement — collectCandidateKeys must tell the two apart,
+            // or a released course with no other section/concentration listing it
+            // gets excluded from General Electives too and genuinely vanishes.
+            return { ...dry, sat: false, allocatedCourses: new Set(), released: true };
           }
           return dry;
         }
@@ -976,11 +985,16 @@ export function calculateGeneralElectives(placedSet, allocatedSet, courseMap, re
 }
 
 /**
- * Allocate all sections + calculate general electives.
- * Returns sections array with general electives appended at end.
- * completedSet: optional set of course keys in completed semesters, for the SH split.
+ * Allocate a major's own requirement sections only — no General Electives yet.
+ * Split out of allocateMajorWithElectives so a caller that ALSO applies a
+ * concentration (or a second major/PlusOne) can allocate that too and fold its
+ * allocatedCourses in BEFORE General Electives is computed. Computing General
+ * Electives too early is exactly how a course an XOM pool releases (see the
+ * cap in allocateNode) could land in General Electives AND get separately
+ * claimed by a concentration that runs afterward — double-counted instead of
+ * released to exactly one place.
  */
-export function allocateMajorWithElectives(major, placedSet, courseMap, completedSet = null, realPlacedSet = null) {
+export function allocateMajorSections(major, placedSet, courseMap) {
   const globalUsed = new Set();
   // Filter out "Required General Electives" placeholder - we generate our own
   const sectionsToAllocate = mergeDuplicateSections(
@@ -989,6 +1003,19 @@ export function allocateMajorWithElectives(major, placedSet, courseMap, complete
     )
   );
   const sections = allocateSections(sectionsToAllocate, placedSet, globalUsed, courseMap);
+  return { sections, allocatedSet: globalUsed };
+}
+
+/**
+ * Allocate all sections + calculate general electives.
+ * Returns sections array with general electives appended at end.
+ * completedSet: optional set of course keys in completed semesters, for the SH split.
+ * Convenience wrapper for a major with no concentration to also account for —
+ * see allocateMajorSections' comment for why a caller that DOES apply a
+ * concentration must not use this directly.
+ */
+export function allocateMajorWithElectives(major, placedSet, courseMap, completedSet = null, realPlacedSet = null) {
+  const { sections, allocatedSet: globalUsed } = allocateMajorSections(major, placedSet, courseMap);
   const candidateKeys = collectCandidateKeys(sections, realPlacedSet ?? placedSet);
   const generalElectives = calculateGeneralElectives(placedSet, globalUsed, courseMap, major.generalElectiveSH ?? 0, completedSet, candidateKeys, realPlacedSet);
   return { sections, generalElectives, allocatedSet: globalUsed };

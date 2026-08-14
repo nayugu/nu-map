@@ -20,8 +20,10 @@ import { evalPrereqTree } from "../../core/prereqEval.js";
 import { planConditions, collectConditions } from "../../core/prereqConditions.js";
 import {
   buildPlacedKeySet,
-  allocateMajorWithElectives,
+  allocateMajorSections,
   allocateSections,
+  collectCandidateKeys,
+  calculateGeneralElectives,
 } from "../../core/gradRequirements.js";
 import { baseId } from "../../core/repeatInstances.js";
 import { buildCohortSemesters, deriveSemMaps } from "../../core/semGrid.js";
@@ -494,22 +496,35 @@ export function createPlannerQuery(deps) {
         }
       : courseMap;
 
-    const { sections, generalElectives, allocatedSet } =
-      allocateMajorWithElectives(majorJson, placedSet, courseMapWithRepeats, doneSet, realPlacedSet);
-    let results = [...sections, generalElectives];
+    // General Electives must be computed AFTER the concentration is applied, not
+    // before: a course an XOM pool releases once its own threshold is met (see the
+    // cap in allocateNode) is exactly the kind of course a concentration listing it
+    // might then claim — compute General Electives too early and that course reads
+    // as both a general elective AND concentration credit, double-counted instead
+    // of landing in exactly one place.
+    const { sections, allocatedSet } = allocateMajorSections(majorJson, placedSet, courseMapWithRepeats);
+    let results = [...sections];
 
     const conc = concentration ?? plan.concentration ?? "";
     let concentrationApplied = null;
+    let concResults = [];
     if (conc && majorJson.concentrations) {
       // Resolve through aliases/labels: a saved plan may carry a title from
       // before a scraper-side rename, and silently ignoring it would audit the
       // major without the concentration the user actually chose.
       const concSection = resolveConcentration(majorJson, conc);
       if (concSection) {
-        results = [...results, ...allocateSections([concSection], placedSet, allocatedSet, courseMapWithRepeats)];
+        concResults = allocateSections([concSection], placedSet, allocatedSet, courseMapWithRepeats);
+        results = [...results, ...concResults];
         concentrationApplied = concSection.title;
       }
     }
+
+    const candidateKeys = collectCandidateKeys([...sections, ...concResults], realPlacedSet ?? placedSet);
+    const generalElectives = calculateGeneralElectives(
+      placedSet, allocatedSet, courseMapWithRepeats, majorJson.generalElectiveSH ?? 0, doneSet, candidateKeys, realPlacedSet
+    );
+    results = [...results, generalElectives];
 
     // Surface the fidelity verdict IN THE PAYLOAD, not only in the tool
     // description. The server's own instructions already treat `note` as
