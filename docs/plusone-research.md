@@ -393,6 +393,95 @@ like:
 
 ---
 
+## 8a. Is there a central source? Measured, 2026-08-13
+
+**No central list of PlusOne programs exists.** Swept the seven university-level
+hosts by sitemap — about 4,300 URLs — and the decisive result is negative:
+
+| Host | URLs | PlusOne pages |
+|---|---|---|
+| `graduate.northeastern.edu` | 2,005 | **0** |
+| `catalog.northeastern.edu` | 1,781 | 13 (1 policy + 7 college stubs + 5 false positives) |
+| `admissions` | 216 | 0 |
+| `www` | 208 | 0 |
+| `registrar` | 99 | **1** (the policy article) |
+| `undergraduate`, `service` | — | 0 |
+
+`graduate.northeastern.edu` is the strongest negative: it lists every master's
+programme the university runs and mentions PlusOne on **none** of them.
+
+### The two central sources that DO exist are policy, not programmes
+
+1. `catalog…/graduate/academic-policies-procedures/course-credit-sharing/`
+2. `registrar…/article/plusone-program-accelerated-bachelorgraduate-degree-programs/`
+   — the same article as ServiceNow `KB000020031`.
+
+**KB000020031 is machine-readable after all.** The page is client-rendered, which
+is why three fetch attempts returned an empty shell and earlier drafts of this
+document listed it as unread. The underlying ServiceNow Knowledge API serves it
+as JSON with no authentication:
+
+    https://service.northeastern.edu/api/sn_km_api/knowledge/articles/KB000020031
+
+That is the most authoritative PlusOne text found anywhere, and it states three
+things **no college page does**:
+
+- **A floor on post-bachelor's work.** "A minimum of **14 semester hours at the
+  graduate level (after completion of the undergraduate requirements)** are
+  required for the master's degree." Sharing is bounded from *both* ends — the
+  16 SH ceiling is only half the rule, and for a smaller master's the floor is
+  what actually binds.
+- **The cap, framed the other way round.** "A maximum of 16 **undergraduate**
+  semester hours of credit may be **waived** via graduate course sharing. Course
+  credits waived via any course-credit sharing will be at the undergraduate level
+  only." Not "16 graduate hours shared" — 16 undergraduate hours waived.
+- **What happens if the master's is abandoned**, which §8 listed as unanswered:
+  "If a student decides at some point to pursue only the undergraduate portion…
+  **Credit from the undergraduate degree cannot be used toward the graduate
+  degree at a later date.**" Leaving is not merely a pause; it forfeits the
+  sharing permanently.
+
+It also confirms the transition model behind two graduations: "There is a clear
+transition point… beyond which the student will be considered a graduate student
+and will then officially transition into graduate status."
+
+### Per-college index pages: all seven exist, none are standardised
+
+Every college publishes one, and no two agree on anything:
+
+| College | Index path |
+|---|---|
+| Khoury | `/plusone-accelerated-masters-programs/` |
+| COE | `/…/graduate-academic-programs/accelerated-masters/` |
+| CoS | `/admissions/undergraduate/plusone-accelerated/` |
+| CSSH | `/academics/majors-minors-programs/plusone-programs/` |
+| Bouvé | `/academics/plusone-accelerated-masters-programs/` |
+| CAMD | `/programs-admissions/plusone/` |
+| CPS | `/academics/plusone-programs/` |
+
+D'Amore-McKim is the exception: its list is a **client-side filter**
+(`?filters[0]=program|type|plus-one`), which is why fetching it returns "No
+programs found". Its three programme pages are static and were found directly.
+
+**The standardisation that is real and usable is one level down, inside
+engineering:** 26 pages across six hosts share the identical
+`Eligible Undergrad Majors | Additional Prerequisites` table. That is what
+`scripts/extract-pathways.js` exploits, and it is the only place a scraper gets
+structure rather than prose.
+
+### A weakness this exposed in our own classifier
+
+Checking the seven index pages against `_inventory.json` found **3 of 7
+misclassified as `pathway`** — CoS, CSSH and Bouvé — because their indexes list
+course codes inline and the classifier treats "≥3 course codes plus eligibility
+language" as decisive. Some genuine pathway pages are labelled `index` for the
+mirror-image reason (sidebar links to sibling pathways, courses held in a PDF).
+
+So **"44 pathway pages" is soft in both directions**, and the coverage figure
+built on it is approximate. The fix is not a threshold tweak: an index and a
+pathway page differ in whether the courses belong to *one* programme, which the
+current signals do not capture.
+
 ## 9. The honest summary
 
 PlusOne is simple as a *policy* — one rule, one cap, two degrees in sequence —
