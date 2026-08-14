@@ -474,25 +474,30 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
               picker, which gave equal weight to "choose the plan" and "look at
               the plan" and cost a whole row of a panel that has none to spare.
               It is a small trailing control now — the picker keeps the width,
-              because reading the co-op pattern is the harder job of the two. */}
+              because reading the co-op pattern is the harder job of the two.
+
+              With no picker to sit beside (one variant, nothing to choose),
+              Preview goes back to spanning the row: a spacer holding room for a
+              picker that will not render left it as a small button stranded on
+              the right of empty space, which is worse than the full-width
+              button it replaced. */}
           {(catalogVariants.length > 1 || chosen) && (
             <div style={{
               display: "flex", alignItems: "stretch", gap: 6,
               marginBottom: isPhone ? 5 : 6,
             }}>
-              {catalogVariants.length > 1 ? (
+              {catalogVariants.length > 1 && (
                 <VariantPicker
                   variants={catalogVariants}
                   value={Math.min(variantIdx, catalogVariants.length - 1)}
                   onChange={setVariantIdx} isPhone={isPhone}
                 />
-              ) : (
-                // Nothing to choose, but Preview still belongs on the right
-                // rather than stretched across a row of its own.
-                <span style={{ flex: 1, minWidth: 0 }} />
               )}
               {chosen && (
-                <PreviewButton onClick={() => setPreviewing(true)} isPhone={isPhone} t={t} />
+                <PreviewButton
+                  onClick={() => setPreviewing(true)} isPhone={isPhone} t={t}
+                  fullWidth={catalogVariants.length <= 1}
+                />
               )}
             </div>
           )}
