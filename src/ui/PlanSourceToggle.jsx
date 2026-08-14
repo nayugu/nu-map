@@ -84,27 +84,24 @@ export default function PlanSourceToggle({
   // The measured comparison — 35.5% of the departments' own 678 published variants break one
   // of the first three rules, against zero of CHART's 773 — is a stronger argument than any of
   // this, and it belongs where there is room to state it rather than assert it in passing.
-  const chartTip = (
-    <>
-      <div style={{ marginBottom: 5 }}>{t("chart.source.chart.lead")}</div>
-      <ul style={{ margin: 0, paddingInlineStart: 15, lineHeight: 1.5 }}>
-        {["b1", "b2", "b3"].map(k => (
-          <li key={k}>{t(`chart.source.chart.${k}`)}</li>
-        ))}
-      </ul>
-      <div style={{ marginTop: 5, opacity: 0.75 }}>{t("chart.source.chart.caveat")}</div>
-    </>
-  );
-
+  // ── One sentence, not a leaflet ───────────────────────────────────
+  //
+  // This was a lead line, a three-bullet list and a caveat: six lines of tooltip on a two-option
+  // toggle, which is more than the choice is worth and more than anyone reads with a pointer
+  // hovering. It also sat beside a `Catalog` option explained in one line, so the imbalance read
+  // as advocacy rather than description.
+  //
+  // What survives is the pair of claims that actually distinguish the two, and they are the two
+  // the corpus supports: 35.5% of the departments' own 678 published variants break a hard rule
+  // against zero of CHART's 773. The advisor caveat is not lost — it is stated where there is
+  // room to mean it, in the explainer and under the plan itself.
   const options = [
     { id: "catalog", label: t("chart.source.catalog"),
       enabled: hasCatalog, why: t("chart.source.catalog.none"),
       tip: t("chart.source.catalog.tip"), tipTitle: undefined },
     { id: "chart", label: t("chart.source.chart"),
       enabled: canGenerate, why: t("chart.source.chart.none"),
-      // No title. The lead already names the engine, and a caps header repeating it was
-      // the second grey heading asked to go from this control.
-      tip: chartTip, tipTitle: undefined },
+      tip: t("chart.source.chart.tip"), tipTitle: undefined },
   ];
 
   // ── No caption ────────────────────────────────────────────────────

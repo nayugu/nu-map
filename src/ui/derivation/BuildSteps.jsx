@@ -44,6 +44,7 @@
 // between a picture and a wall of identical rectangles.
 // ═══════════════════════════════════════════════════════════════════
 import { useEffect, useMemo, useRef, useState } from "react";
+import { createPortal } from "react-dom";
 import { useLanguage }  from "../../context/LanguageContext.jsx";
 import { usePlanner }   from "../../context/PlannerContext.jsx";
 import { usePort }      from "../../context/InstitutionContext.jsx";
@@ -77,7 +78,7 @@ const MONTHS_PER_UNIT_WEIGHT = 4;
 const QUEUE_W = 224;
 const COL_GAP = 10;
 
-export default function BuildSteps({ steps, isPhone }) {
+export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
   const { t } = useLanguage();
   // `studentType` because the credit ceiling is per student type — a graduate term is full at a
   // load an undergraduate one has room in, and an empty slot is a claim about room.
@@ -90,6 +91,10 @@ export default function BuildSteps({ steps, isPhone }) {
   // The caption's own size. It is the one sentence on the page and it is now the page's lead, so
   // it sits above the control labels rather than beside them.
   const fzL = isPhone ? 11 : 14;
+  // The transport glyphs. Deliberately the largest type on the page after the plan itself: these
+  // are the only controls here, and at 11px in a corner they read as a footnote about the picture
+  // rather than as the way to drive it.
+  const fzB = isPhone ? 12 : 15;
 
   const place = steps?.place ?? [];
   const swaps = steps?.swaps ?? [];
@@ -101,7 +106,15 @@ export default function BuildSteps({ steps, isPhone }) {
   const [playing, setPlaying] = useState(false);
   const timer = useRef(null);
 
-  useEffect(() => { setAt(0); setPlaying(false); }, [total]);
+  // ── It plays itself ───────────────────────────────────────────────
+  //
+  // The page is called "the process" and its own button says "how this plan was built". Opening on
+  // a still frame of the finished plan with a play button beside it asks the reader to discover
+  // that the picture moves before they learn anything from it — and the movement IS the argument:
+  // a course landing, bouncing off two full semesters, landing again. So it starts.
+  //
+  // Every control still stops it, and pausing is a real stop rather than a pause that resumes.
+  useEffect(() => { setAt(0); setPlaying(total > 0); }, [total]);
   useEffect(() => {
     if (!playing) return undefined;
     timer.current = setInterval(
@@ -258,6 +271,43 @@ export default function BuildSteps({ steps, isPhone }) {
 
   if (!total) return null;
 
+  // The controls, built once and placed either in the dialog's header or inline above the caption.
+  const gap = isPhone ? 5 : 7;
+  // ── Three columns, so PLAY is the centre ──────────────────────────
+  //
+  // A flex row of four buttons and a counter centres the ROW, which puts the third button right of
+  // centre and the counter's width decides by how much. The reader's eye goes to the play button,
+  // so the play button is what has to be at the middle of the page: two equal `1fr` columns
+  // around an `auto` one put it there exactly, whatever the counter reads and however long the
+  // labels get in another locale.
+  const transport = (
+    <div style={{
+      display: "grid", gridTemplateColumns: "1fr auto 1fr", alignItems: "center",
+      width: "100%", pointerEvents: "none",
+    }}>
+      <div style={{ justifySelf: "end", display: "flex", gap, pointerEvents: "auto",
+                    marginInlineEnd: gap }}>
+        <Btn onClick={() => { setPlaying(false); setAt(0); }} label="⏮" fz={fzB} title={t("chart.deriv.play.start")} />
+        <Btn onClick={() => { setPlaying(false); setAt(v => Math.max(0, v - 1)); }} label="◀" fz={fzB} title={t("chart.deriv.play.prev")} />
+      </div>
+      <div style={{ pointerEvents: "auto" }}>
+        <Btn
+          onClick={() => { if (at >= total) setAt(0); setPlaying(p => !p); }}
+          label={playing ? "❙❙" : "▶"} fz={fzB} wide primary
+          title={t(playing ? "chart.deriv.play.pause" : "chart.deriv.play.play")}
+        />
+      </div>
+      <div style={{ justifySelf: "start", display: "flex", gap, alignItems: "center",
+                    pointerEvents: "auto", marginInlineStart: gap }}>
+        <Btn onClick={() => { setPlaying(false); setAt(v => Math.min(total, v + 1)); }} label="▶" fz={fzB} title={t("chart.deriv.play.next")} />
+        <span style={{ fontSize: fzL, color: "var(--text-4)",
+                       fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
+          {t("chart.deriv.play.step", { n: at, total })}
+        </span>
+      </div>
+    </div>
+  );
+
   // The same context bag the preview passes its rows, minus everything only a real applied plan
   // has: there is no `programData` here and no student placements, just the search's own answer.
   const ctx = {
@@ -302,33 +352,33 @@ export default function BuildSteps({ steps, isPhone }) {
         * Height is fixed at two lines of the caption: without it, a step whose sentence wraps
         * shoves the whole plan down a line — movement the plan did not make, on the one surface
         * whose entire job is showing movement that did. */}
+      {/* ── The transport, then the line it produced ──────────────────
+        *
+        * Centred over the plan, and big. They were 11px glyphs in 5px boxes tucked in a corner —
+        * the controls for the only thing on the page you can operate, sized like a footnote. A
+        * reader arriving mid-play needs to find pause without hunting, and the step counter has to
+        * be legible from reading distance.
+        *
+        * Above the caption rather than beside it, because the caption is the OUTPUT of pressing
+        * them: you press, the plan changes, and the line underneath says what changed. Reading
+        * order and causal order agree.
+        *
+        * The height is fixed at two lines of caption so a wrapping sentence never shoves the plan
+        * down — movement the plan did not make, on the one surface whose job is showing movement
+        * that did. */}
+      {/* The transport itself renders into the dialog's header line when there is a slot for it —
+          see `ChartExplainer`. Without one (a caller that mounts this panel bare) it falls back to
+          sitting here, above the caption, so the component is never left without its controls. */}
+      {portal(transport, controlsSlot)}
+
       <div style={{
-        display: "flex", alignItems: "center", gap: COL_GAP, marginBottom: 6,
-        minHeight: Math.round(fzL * 3),
+        fontSize: fzL, color: "var(--text-2)", lineHeight: 1.4, textAlign: "center",
+        minHeight: Math.round(fzL * 2.9), maxWidth: 640, margin: "0 auto",
+        // Air under the header rule. The sentence changes on every step, and with it hard against
+        // the rule the whole page flickered at the top edge on each tick.
+        padding: controlsSlot ? "10px 6px 8px" : "0 6px 6px",
       }}>
-        <div style={{
-          flex: 1, minWidth: 0, fontSize: fzL, color: "var(--text-2)", lineHeight: 1.4,
-          textAlign: "center", padding: "0 6px",
-        }}>
-          {caption(cur, t, at, total, steps, view, (i) => termName(semIds[i], SEMESTERS, steps, i, t))}
-        </div>
-        <div style={{
-          flex: isPhone ? "0 0 auto" : `0 0 ${QUEUE_W}px`,
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 5,
-        }}>
-          <Btn onClick={() => { setPlaying(false); setAt(0); }} label="⏮" fz={fz} title={t("chart.deriv.play.start")} />
-          <Btn onClick={() => { setPlaying(false); setAt(v => Math.max(0, v - 1)); }} label="◀" fz={fz} title={t("chart.deriv.play.prev")} />
-          <Btn
-            onClick={() => { if (at >= total) setAt(0); setPlaying(p => !p); }}
-            label={playing ? "❙❙" : "▶"} fz={fz} wide
-            title={t(playing ? "chart.deriv.play.pause" : "chart.deriv.play.play")}
-          />
-          <Btn onClick={() => { setPlaying(false); setAt(v => Math.min(total, v + 1)); }} label="▶" fz={fz} title={t("chart.deriv.play.next")} />
-          <span style={{ fontSize: fz, color: "var(--text-4)", marginInlineStart: 2,
-                         fontVariantNumeric: "tabular-nums", whiteSpace: "nowrap" }}>
-            {t("chart.deriv.play.step", { n: at, total })}
-          </span>
-        </div>
+        {caption(cur, t, at, total, steps, view, (i) => termName(semIds[i], SEMESTERS, steps, i, t))}
       </div>
 
       {/* `stretch`, so the queue is exactly as tall as the grid beside it and its list scrolls
@@ -517,14 +567,17 @@ function RankQueue({ ranking, cards, placed, liveCard, t, fz, totalTerms }) {
       {/* Every card still to place, scrolling. It used to be the first nine and a "+25 more", which
           is the shape of the argument the panel is making — the LIST is the logic, and truncating
           it at nine hid the whole tail where the electives sit. */}
-      <div style={{ overflowY: "auto", minHeight: 0, flex: "1 1 auto" }}>
+      {/* Quieter than the card above it, and quieter still the further down it goes. What is at the
+          top is what the step is about; the queue behind it is context, and at full strength it
+          competed with the one row a reader is meant to be looking at. */}
+      <div style={{ overflowY: "auto", minHeight: 0, flex: "1 1 auto", opacity: 0.62 }}>
         {left.filter(r => r !== live).map((r, i, arr) => (
           <div key={r.card} style={{
             display: "flex", alignItems: "baseline", gap: 6,
             padding: "2px 1px", borderTop: i ? "1px solid var(--border-sub)" : "none",
           }}>
             <span style={{
-              fontSize: fz, color: "var(--text-3)", flex: "1 1 auto", minWidth: 0,
+              fontSize: fz, color: "var(--text-4)", flex: "1 1 auto", minWidth: 0,
               overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
             }} title={r.title}>{name(r)}</span>
             {/* Against the NEXT row in the list as drawn, which is the order the reader sees. */}
@@ -575,6 +628,15 @@ function reasonText(reason, t) {
  * tie-break as a rule about degrees rather than a device for repeatability.
  */
 const RUNGS = ORDER_KEYS.filter(k => k !== "tie");
+
+/**
+ * Draw `node` into `slot`, or here if there is no slot.
+ *
+ * The slot is a DOM node the dialog's header hands down. A portal rather than lifting the playback
+ * state up: `at` and `playing` change on a 480 ms tick, and hoisting them into the explainer would
+ * re-render the whole dialog — both tabs' worth of prose — twice a second to move one button.
+ */
+const portal = (node, slot) => (slot ? createPortal(node, slot) : node);
 
 /** The roster index as an id the planner's own helpers can key on. */
 const cardId = (i) => `deriv-${i}`;
@@ -628,13 +690,22 @@ function caption(cur, t, at, total, steps, view, nameOf) {
   return line;
 }
 
-const Btn = ({ onClick, label, fz, wide, title }) => (
+/**
+ * A transport button, at a size you can hit.
+ *
+ * `primary` is play/pause: it is the one a reader reaches for first and the only one whose state
+ * they need to read from across the dialog, so it carries the accent and the extra width. The rest
+ * are the same size and quieter — a row of four equally loud buttons has no first thing to press.
+ */
+const Btn = ({ onClick, label, fz, wide, primary, title }) => (
   <button
     onClick={onClick} title={title} aria-label={title}
     style={{
-      fontSize: fz, lineHeight: 1, padding: wide ? "4px 12px" : "4px 7px",
-      borderRadius: 5, border: "1px solid var(--border-2)",
-      background: "var(--bg-surface-2)", color: "var(--text-2)", cursor: "pointer",
+      fontSize: fz, lineHeight: 1, padding: wide ? "7px 18px" : "7px 12px",
+      borderRadius: 7, border: `1px solid ${primary ? "var(--active)" : "var(--border-2)"}`,
+      background: primary ? "var(--active-bg)" : "var(--bg-surface-2)",
+      color: primary ? "var(--active)" : "var(--text-2)",
+      fontWeight: primary ? 700 : 400, cursor: "pointer",
     }}
   >{label}</button>
 );

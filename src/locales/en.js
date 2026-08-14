@@ -200,14 +200,18 @@ export const strings = {
   // ── CHART: the generated alternative to the catalog's plan ──────
   "chart.source.label":       "Plan by",
   "chart.source.catalog":     "Catalog",
-  "chart.source.chart":       "NU Map",
+  // ── Not "NU Map" ────────────────────────────────────────────────
+  //
+  // The toggle offers a plan from the catalog or a plan we build, and calling the second one after
+  // the whole site made the choice unreadable: every plan in the app is an NU Map plan, including
+  // the catalog one sitting next to it. What actually distinguishes them is that one is published
+  // and one is generated on the spot, so that is what the labels say.
+  "chart.source.chart":       "Generated",
   "chart.source.catalog.none":"This program does not publish a plan.",
   "chart.source.catalog.tip": "The sample plan of study published on the catalog for this program.",
-  "chart.source.chart.lead":  "Uses NU Map’s native engine, CHART:",
-  "chart.source.chart.b1":    "Prerequisites always in the right order",
-  "chart.source.chart.b2":    "Courses only in terms they are likely to be offered",
-  "chart.source.chart.b3":    "Optimized for co-op competitiveness",
-  "chart.source.chart.caveat":"Confirm with your advisor.",
+  // Short enough to read at a glance, because that is all a hover gets. What it aims for, and the
+  // two things it checks — the detail lives in the explainer, which is one click away.
+  "chart.source.chart.tip":   "Optimizes for co-op; verifies availability and prerequisite chains.",
   "chart.source.chart.none":  "There is not enough requirement data to generate a plan.",
   "chart.busy":               "Working out an order…",
   "chart.why":                "How this was built",
@@ -287,19 +291,32 @@ export const strings = {
   // ── The process page ────────────────────────────────────────────
   // A record of one search rather than prose about every plan. See
   // src/ui/derivation/ and docs/chart-derivation-design.md.
-  "chart.explain.tab.text":   "The rules",
-  "chart.explain.tab.process": "The process",
+  // Title case, because these are the names of the two pages and they now sit on the dialog's only
+  // header line — where sentence case read as a caption to the strip rather than as its labels.
+  "chart.explain.tab.text":   "The Rules",
+  "chart.explain.tab.process": "The Process",
   "chart.deriv.why":          "See what it tried",
   "chart.deriv.none":         "Nothing was recorded for this plan. A recording is made while the plan is being built and is not kept, so re-generating will produce one.",
   "chart.deriv.truncated":    "Recording stopped after {n} placements. The counts are complete; the pictures below are not.",
-  "chart.deriv.stat.nodes":   "placements tried",
-  "chart.deriv.stat.cuts":    "branches rejected",
-  "chart.deriv.stat.undone":  "times it took a course back",
+  // ── The four figures, in the reader's words rather than the solver's ──
+  //
+  // Every one of these was named after the thing it counts INSIDE the engine — a node, a cut, a
+  // backtrack — and each needed the engine's vocabulary to parse. "Times it took a course back"
+  // was the worst: it is a perfectly accurate description of backtracking and it reads as though
+  // the planner repossessed something. What a reader can hold is what the engine DID: it put a
+  // course somewhere, it ruled a possibility out, it undid a decision, it tidied up at the end.
+  "chart.deriv.stat.h":       "What it took",
+  "chart.deriv.stat.nodes":   "times it placed a course",
+  "chart.deriv.stat.cuts":    "possibilities ruled out",
+  "chart.deriv.stat.undone":  "times it undid a placement",
   "chart.deriv.stat.layouts": "possible layouts",
   "chart.deriv.stat.layouts.note": "An upper bound: each course’s own window multiplied out, so it also counts layouts that a prerequisite between two courses rules out.",
-  "chart.deriv.stat.moves":   "improvements afterwards",
+  "chart.deriv.stat.moves":   "improvements at the end",
 
-  "chart.deriv.spine.h":      "What it did",
+  // "What it did" named the whole page — the walkthrough above it is also what it did, and so are
+  // the figures below. What is actually behind this disclosure is the PIPELINE: four numbered
+  // steps, then the ladder of attempts with what each one had to give up.
+  "chart.deriv.spine.h":      "Stage by stage",
   "chart.deriv.stage.demand": "Turn the requirements into a list of courses",
   "chart.deriv.stage.narrowing": "Work out which semesters each course could use",
   "chart.deriv.stage.place":  "Give all {n} courses a semester, breaking no rule",
@@ -331,7 +348,9 @@ export const strings = {
   "chart.deriv.play.step":    "{n} of {total}",
   "chart.deriv.subject.other": "other",
   "chart.deriv.step.start":   "An empty plan, and {n} courses to place. Press play, or step through one course at a time.",
-  "chart.deriv.step.place":   "{title} → {term}.",
+  // A sentence, not an arrow. This is the page's lead line now — centred, at reading size, over the
+  // plan it describes — and "INTB 3000 → Fall 2027." is a log entry.
+  "chart.deriv.step.place":   "{title} goes in {term}.",
   "chart.deriv.step.bounced": "It was pushed out of {n} earlier semester(s) first — the first because the {why}.",
   "chart.deriv.step.cost":    "Getting this far meant building and undoing {n} arrangements.",
   "chart.deriv.step.done":    "Every course has a semester and no rule is broken. This is the plan.",
@@ -435,10 +454,19 @@ export const strings = {
   "chart.deriv.cause.term-at-its-course-ceiling": "term had no room for another full course",
   "chart.deriv.cause.prereq-order-with-what-is-placed": "order clashed with a course already placed",
   "chart.deriv.cause.chain-has-no-room-left": "prerequisite chain would have had no room left",
-  "chart.deriv.cause.no-room-left-for-the-rest": "remaining cards would not have fitted",
-  "chart.deriv.cause.full-term-cannot-reach-four": "a full term could no longer reach four courses",
-  "chart.deriv.cause.no-candidate": "no course could answer it there",
-  "chart.deriv.cause.over-subscribed": "cards in that term needed more distinct courses than exist",
+  // ── Every one of these is interpolated after the word "the" ─────────
+  //
+  // `step.bounced` and `cause.at` both read "… because the {why}", so a cause has to be a noun
+  // phrase with its article already stripped. Two of these were not, and produced "because the no
+  // course could answer it there" and "because the a full term could no longer…" — printed, in the
+  // one sentence on the page that explains why a course did not fit a semester.
+  //
+  // "Cards" is also gone from the two that used it. It is what the engine calls a cell and it is
+  // not a word this dialog uses anywhere else the reader can see.
+  "chart.deriv.cause.no-room-left-for-the-rest": "courses still to place would not have fitted",
+  "chart.deriv.cause.full-term-cannot-reach-four": "plan could no longer give every full term four courses",
+  "chart.deriv.cause.no-candidate": "requirement had no course that could answer it there",
+  "chart.deriv.cause.over-subscribed": "term needed more distinct courses than exist",
   "chart.deriv.cause.named-prereq": "named course could not be taken by then",
   "chart.deriv.cause.concentration-unfillable": "concentration could not be filled from one option",
   "chart.deriv.cause.other": "check failed for another reason",

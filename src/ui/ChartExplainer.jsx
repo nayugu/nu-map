@@ -42,8 +42,18 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
   // matters most: there is no plan to read instead, so the record of the search is the only
   // account of what happened. So the text page is conditional on there being one, and the
   // panel opens on whichever page it actually has.
+  // ── The process opens first, always ───────────────────────────────
+  //
+  // The button says "how this plan was built", and the process page is the only one that answers
+  // that literally: it plays the plan being built. The rules page answers a different and later
+  // question — what the engine will and will not do in general — and it opened first only because
+  // it was written first. So the order on the strip is the order of the questions, and the page a
+  // reader lands on is the one they asked for.
   const hasText = !!report;
-  const [tab, setTab] = useState(hasText ? "text" : "process");
+  const [tab, setTab] = useState(derivation ? "process" : "text");
+  // The header's control slot, as STATE rather than a ref: a ref does not re-render, so the child
+  // that portals into it would be told about the node one render too late and draw nothing.
+  const [controls, setControls] = useState(null);
 
   // ── Escape closes ONE layer ───────────────────────────────────────
   //
@@ -160,7 +170,9 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
           // same reason; it is a property of portalling, not of either component.
           fontFamily: "'Inter', system-ui, sans-serif",
           border: "1px solid var(--border-2)",
-          borderRadius: 10, padding: isPhone ? 14 : 22,
+          // Tighter at the top than the sides: the header is now a single line, and the space
+          // above it was sized for a title that is no longer drawn.
+          borderRadius: 10, padding: isPhone ? "8px 14px 14px" : "10px 22px 18px",
           // Themed, not fixed. A 0.45-alpha black drop shadow is tuned for a dark surface and
           // reads as grime under a white card; the theme already carries the right value for each
           // side (`0 24px 64px rgba(0,0,0,0.65)` dark, `0 8px 32px rgba(0,0,0,0.12)` light), and
@@ -170,20 +182,40 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
           // card is as tall as it needs to be and nothing is unreachable.
         }}
       >
-        {/* No subtitle. It restated the section headings immediately above the section
-          * headings, which is the definition of filler. */}
-        <header style={{ marginBottom: isPhone ? 10 : 16 }}>
-          <div style={{ fontSize: fzH + 2, fontWeight: 800 }}>{t("chart.explain.title")}</div>
-          {/* The tab strip appears only when there is a second page to go to. A recording is
-            * made during a live generate and does not survive a reload, so a plan restored from
-            * storage legitimately has none — and a tab leading to "nothing recorded" is worse
-            * than no tab. */}
+        {/* ── One line: the tabs, and the way out ──────────────────────
+          *
+          * The title, the tab strip and the ✕ were three stacked bands costing about 90px before
+          * the first pixel of plan. And the title is the one thing here a reader already knows —
+          * they clicked a button that said it — so as a heading it spends the most space saying
+          * the least. It survives as the dialog's accessible name (`aria-label` on the card) and
+          * as the visible heading ONLY where there is no tab strip to name the page instead.
+          *
+          * What is left is what the page is for: press play, watch the plan get built. */}
+        <header style={{
+          display: "flex", alignItems: "flex-end", gap: 10, position: "relative",
+          // ── Tall enough to hold the transport ────────────────────────
+          //
+          // The controls are absolutely positioned inside this line, so the header's own height
+          // comes from the TABS — which are shorter than a button. The buttons then grew upward
+          // out of the header and over the top edge of the dialog. This is the height of the
+          // tallest thing the line actually contains, which is what a header should be.
+          minHeight: isPhone ? 32 : 39,
+          marginBottom: isPhone ? 8 : 10, borderBottom: "1px solid var(--border-2)",
+        }}>
+          {/* A recording is made during a live generate and does not survive a reload, so a plan
+            * restored from storage legitimately has none — and a tab leading to "nothing recorded"
+            * is worse than no tab. That is the case where the title has to appear. */}
+          {!(derivation && hasText) && (
+            <div style={{ fontSize: fzH + 2, fontWeight: 800, flex: 1, minWidth: 0,
+                          paddingBottom: 6 }}>
+              {t("chart.explain.title")}
+            </div>
+          )}
           {derivation && hasText && (
             <div role="tablist" style={{
-              display: "flex", gap: 2, marginTop: isPhone ? 8 : 12,
-              borderBottom: "1px solid var(--border-2)",
+              display: "flex", gap: 2, flex: 1, minWidth: 0, marginBottom: -1,
             }}>
-              {[["text", "chart.explain.tab.text"], ["process", "chart.explain.tab.process"]]
+              {[["process", "chart.explain.tab.process"], ["text", "chart.explain.tab.text"]]
                 .map(([k, key]) => (
                   <button
                     key={k} role="tab" aria-selected={tab === k}
@@ -204,10 +236,47 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
                 ))}
             </div>
           )}
+          {/* ── Where the walkthrough's transport lands ─────────────────
+            *
+            * An empty slot on the header line, filled by `BuildSteps` through a portal. The
+            * controls belong on this line — it is the only band of chrome left, and a row of
+            * buttons on its own underneath was the last thing between the reader and the plan —
+            * but the playback state belongs in the component that owns the steps, not up here
+            * where nothing else knows what a step is.
+            *
+            * A portal is what lets both be true. It also means the slot is EMPTY on the rules
+            * page: `BuildSteps` is not mounted there, so there is nothing to fill it, and a play
+            * button over a page of prose would be a control for nothing. */}
+          <div
+            ref={setControls}
+            style={{
+              // ── Centred on the DIALOG, not between its neighbours ────
+              //
+              // In flow, the transport sat in whatever gap the tabs and the ✕ left it, so its
+              // centre moved with the length of two tab labels — and in a locale with longer ones
+              // it would move again. Taken out of flow and stretched across the header, it is
+              // centred on the page itself, which is where the eye looks for a play button.
+              //
+              // `pointerEvents: none` on the strip so the tabs underneath stay clickable; the
+              // buttons themselves turn it back on.
+              position: "absolute", insetInlineStart: 0, insetInlineEnd: 0, bottom: 4,
+              display: "flex", justifyContent: "center", pointerEvents: "none",
+            }}
+          />
+          {/* Where the footer button used to be, and where every other dialog here keeps it. A
+              glyph, sized as a comfortable target rather than to sit on the type scale. */}
+          <button
+            onClick={onClose} aria-label={t("chart.explain.close")} title={t("chart.explain.close")}
+            style={{
+              fontSize: 16, lineHeight: 1, background: "transparent", border: "none",
+              color: "var(--text-5)", cursor: "pointer", padding: "2px 0 6px 8px",
+              flex: "0 0 auto",
+            }}
+          >✕</button>
         </header>
 
         {tab === "process" && derivation && (
-          <DerivationPanel trace={derivation} isPhone={isPhone} />
+          <DerivationPanel trace={derivation} isPhone={isPhone} controlsSlot={controls} />
         )}
         {tab === "text" && hasText && (<>
 
@@ -440,19 +509,16 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
         </Section>
         </>)}
 
-        <footer style={{
-          display: "flex", justifyContent: "flex-end", gap: 8,
-          borderTop: "1px solid var(--border-2)", paddingTop: 12, marginTop: 2,
-        }}>
-          <button
-            onClick={onClose}
-            style={{
-              fontSize: fz, padding: isPhone ? "5px 10px" : "6px 14px", borderRadius: 6,
-              border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
-              cursor: "pointer", fontWeight: 600,
-            }}
-          >{t("chart.explain.close")}</button>
-        </footer>
+        {/* ── The footer Close button is gone ────────────────────────
+          *
+          * It sat alone in a bordered strip at the foot of a long scrolling page, and it read as
+          * an empty box: `--bg-surface-2` against `--bg-surface` is nearly no contrast, and the
+          * label carried the only weight. Worse, it was the third way to close a dialog that
+          * already closes on Escape and on a click outside, and the one that cost a rule, a
+          * padded strip and a scroll to reach.
+          *
+          * The affordance moved to the header instead (see the ✕ beside the title), where it is
+          * where every other dialog in the app puts it and does not move as the page grows. */}
       </div>
     </div>,
     document.body,

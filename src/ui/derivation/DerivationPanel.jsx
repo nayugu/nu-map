@@ -42,7 +42,7 @@ import { buildSteps } from "../../core/derivation/steps.js";
 import StageSpine from "./StageSpine.jsx";
 import BuildSteps from "./BuildSteps.jsx";
 
-export default function DerivationPanel({ trace, isPhone }) {
+export default function DerivationPanel({ trace, isPhone, controlsSlot = null }) {
   const { t } = useLanguage();
   const fz = isPhone ? 9 : 12;
   const fzH = isPhone ? 10 : 13;
@@ -89,14 +89,21 @@ export default function DerivationPanel({ trace, isPhone }) {
     // what the page is for, started below four numbers and a fold. They read better as a footnote
     // to the picture than as an overture to it.
     <div style={{
-      display: "flex", gap: isPhone ? 12 : 24, margin: isPhone ? "10px 0 0" : "12px 0 0",
-      borderTop: "1px solid var(--border-2)",
-      paddingTop: 10, flexWrap: "wrap",
+      margin: isPhone ? "10px 0 0" : "12px 0 0",
+      borderTop: "1px solid var(--border-2)", paddingTop: 10,
     }}>
+      {/* A lead, because four bare numbers under a rule at the foot of a page belong to nothing.
+          They had a position at the top that said "these are the headline"; at the bottom they
+          need a word that says what they are counting. */}
+      <div style={{ fontSize: fz, color: "var(--text-4)", marginBottom: 6 }}>
+        {t("chart.deriv.stat.h")}
+      </div>
+      <div style={{ display: "flex", gap: isPhone ? 12 : 24, flexWrap: "wrap" }}>
       <Stat v={s.nodes.toLocaleString()} l={t("chart.deriv.stat.nodes")} {...{ fz, fzH }} />
       <Stat v={s.rejects.toLocaleString()} l={t("chart.deriv.stat.cuts")} {...{ fz, fzH }} />
       <Stat v={(s.takenBack ?? 0).toLocaleString()} l={t("chart.deriv.stat.undone")} {...{ fz, fzH }} />
       <Stat v={s.moves.toLocaleString()} l={t("chart.deriv.stat.moves")} {...{ fz, fzH }} />
+      </div>
     </div>
   );
 
@@ -151,7 +158,7 @@ export default function DerivationPanel({ trace, isPhone }) {
           Uncapped width: the 760px cap here was sized for a grid of pills, and what draws now is
           the planner's own rows, where every pixel taken away comes out of a course title. */}
       {steps && steps.place.length > 0 && (
-        <BuildSteps steps={steps} isPhone={isPhone} />
+        <BuildSteps steps={steps} isPhone={isPhone} controlsSlot={controlsSlot} />
       )}
       {steps && !steps.place.length && (
         <p style={{ margin: 0, fontSize: fz, lineHeight: 1.6, color: "var(--text-3)" }}>
