@@ -44,6 +44,8 @@ import { emitPlan } from "./emit.js";
 import { buildDepthIndex } from "./prereqDepth.js";
 import { withDefaults } from "./ports.js";
 import { withCalibration, minCoursesFor } from "./calibration.js";
+import { EXCLUSION } from "./trace.js";
+import { cellSubject } from "./subjects.js";
 import { realCourseCount } from "../core/coreqGroups.js";
 
 /**
@@ -79,6 +81,9 @@ export const isStranded = (x) =>
 
 export { DEFAULT_PREFERENCES } from "./objective.js";
 export { permissivePorts } from "./ports.js";
+// The output port, beside the input one. `src/engine/` is internal apart from this file, so a
+// caller that wants to watch the search asks for the sink here rather than reaching in.
+export { createTrace, NULL_TRACE, CAUSES, EXCLUSION, NODE } from "./trace.js";
 
 /**
  * Generate a plan, or say why not.
@@ -122,6 +127,10 @@ export function generatePlan(args = {}) {
   if (!first.refused || !first.refused.data?.breadthBound) return first;
   if (PREFLIGHT_REASONS.has(first.refused.reason)) return first;
 
+  // A retry is part of the process, so it is marked rather than hidden. Without this the
+  // recorded node run would simply continue and the spine would show one search where there
+  // were two, under different demand.
+  if (args.trace) args.trace.stage("retry", { because: "breadth-guidance" });
   const again = withPackerRetry({ ...args, breadthGuidance: false });
   // The FIRST refusal is the one reported if both fail: it describes the degree, while the
   // retry's describes a degree we deliberately handicapped.
@@ -163,8 +172,18 @@ export function generatePlan(args = {}) {
 function withPackerRetry(args) {
   const first = generateOnce(args);
   if (!first.refused || first.refused.reason !== "fails-hard-criteria") return first;
+  if (args.trace) args.trace.stage("retry", { because: "fails-hard-criteria" });
   const packed = generateOnce({ ...args, packOnly: true });
-  return packed.refused ? first : packed;
+  if (!packed.refused) return packed;
+  // ── The recording now describes a pass we are NOT returning ─────────
+  //
+  // `first`'s plan is the answer, and the packer retry has already reset the recording (a second
+  // pass re-derives the cells, so the old card indices point at courses that no longer exist —
+  // see `trace.roster`). The recording is therefore of the discarded pass, and the honest move is
+  // to mark it unusable rather than let the panel walk a reader through a plan they are not
+  // looking at. `deriveModel` returns null on this and the panel says nothing was recorded.
+  if (args.trace) args.trace.stage("stale", { because: "an earlier pass produced the answer" });
+  return first;
 }
 
 /** Refusals decided before any course is placed, which breadth binding cannot have caused. */
@@ -202,6 +221,17 @@ function generateOnce({
   // Set false by the retry in `generatePlan` when binding electives to unmet competencies is
   // what made the degree unplannable. Not a caller-facing option.
   breadthGuidance = true,
+  // ── Where the derivation view gets its material ───────────────────
+  //
+  // A recording sink from `src/engine/trace.js`, or null. Null is the production default for
+  // every caller except the browser's "show me the process" panel, and it is what keeps
+  // `verify-chart`'s 1,031 shapes unaffected.
+  //
+  // It is NOT part of the report and never reaches `plan.json`. A saturated program records
+  // ~20,000 nodes, and the plan document is persisted, shared by link and diffed by the
+  // monthly workflow — none of which wants a search log welded to it. CHART runs in the
+  // browser, so the trace is recorded live, read by the panel, and dropped.
+  trace = null,
 } = {}) {
   const cal = withCalibration(calibration);
   const prepSet = new Set(coopPrep);
@@ -222,9 +252,11 @@ function generateOnce({
     .some(t => JSON.stringify(t?.entries ?? []).includes("\"coop\":true")));
   const grantedAttributes = hasCoop ? (ports.coopGrantedAttrs?.({}) ?? []) : [];
 
+  if (trace) trace.stage("demand");
   let { cells, notes, reconciliation } =
     deriveCells(program, { courseMap, repeatable, concentration, grantedAttributes,
                            breadthGuidance });
+  if (trace) trace.stage("demand-done", { cells: cells.length, sh: cellsSH(cells) });
   // Reported on every refusal so `generatePlan` can tell a program that was handicapped by
   // breadth binding from one that was never bound at all, without re-deriving to find out.
   const breadthBound = cells.filter(c => c.nupath).length;
@@ -282,6 +314,7 @@ function generateOnce({
       // `registrable` — this feeds both the witness and the reachable share.
       studentType,
       cal,
+      trace,
     });
     // Fold precedence into the domains, and catch a chain that cannot fit before the
     // search tries to discover it by exhaustion. Narrowing here also gives MRV a
@@ -293,7 +326,18 @@ function generateOnce({
       const hi = critical.latest.get(p.cell.id);
       if (lo == null || hi == null) continue;
       const narrowed = p.domain.filter(t => t >= lo && t <= hi);
-      if (narrowed.length) p.domain = narrowed;
+      if (narrowed.length) {
+        // The second narrowing, and the only one the card's own data cannot explain: these
+        // terms are legal for the card in isolation and illegal given what has to come before
+        // and after it. Recorded separately for exactly that reason — collapsing it into
+        // "before its prerequisites" would attribute a chain-wide bound to one course.
+        if (trace && p.excluded) {
+          for (const t of p.domain) {
+            if (t < lo || t > hi) p.excluded.push({ term: t, reason: EXCLUSION.PRECEDENCE_WINDOW });
+          }
+        }
+        p.domain = narrowed;
+      }
     }
 
     // ── An unchosen concentration cannot be planned against the union ──
@@ -437,6 +481,10 @@ function generateOnce({
     // cannot name — and it was measured at the knee of the corpus distribution.
     const share = cellsSH(cells.filter(c => ids.has(c.id))) / Math.max(1, cellsSH(cells));
     if (share > MAX_DERIVED_GE_SHARE) {
+      // Before any card is placed, so there is no search to show — but the stage is still emitted
+      // so that every refusal path ends the same way. A `refused` stage missing on one route is
+      // how the criteria refusal came to claim a stage had produced a plan.
+      if (trace) trace.stage("refused", { reason: "mostly-unschedulable", share });
       return {
         refused: {
           reason: "mostly-unschedulable",
@@ -464,10 +512,60 @@ function generateOnce({
   });
   // A gate result with `warn` is not a refusal — it is a discrepancy in the catalog
   // that the student should know about and that does not stop a plan being built.
-  if (gate && !gate.warn) return { refused: gate };
+  if (gate && !gate.warn) {
+    // The fourth and last refusal route. All four now emit the stage, which is the property worth
+    // having: "a refused run has a `refused` stage" is checkable, where "most refusals do" is not.
+    if (trace) trace.stage("refused", { reason: gate.reason ?? null, preflight: true });
+    return { refused: gate };
+  }
   const warnings = gate?.warn ? [{ kind: gate.warn, ...gate.data }] : [];
 
   // ── 6. A legal plan ────────────────────────────────────────────
+  //
+  // The roster and the domains are recorded HERE and once, from the cell set and the layout the
+  // search is about to be handed. Every earlier candidate — a shape that was stretched and the
+  // stretch rejected, a layout rebuilt after a stranded cell — is gone by now, so the trace
+  // cannot describe a narrowing that no plan was ever built from.
+  if (trace) {
+    // ── The SUBJECT travels on the roster, computed not guessed ────────
+    //
+    // The walkthrough colours each course by its subject, and a regex over the card title would
+    // be a second, worse reading of something the engine already knows exactly: `cellSubject`
+    // resolves a named cell to its one subject and a pool to its dominant one, and returns null
+    // where a cell genuinely spans several. A title-scraping fallback would silently mis-colour
+    // every `One of (…)` and every elective pool.
+    trace.roster(plans.map(p => ({
+      ...p.cell,
+      candidates: p.candidates?.length ?? null,
+      subject: cellSubject(p, courseMap),
+      // ── The one course a cell names, or nothing ──────────────────────
+      //
+      // A chip in the walkthrough has room for about four characters, and the honest four are the
+      // course number — the subject is already the colour and the row is already the semester. But
+      // only where the cell NAMES one course: a choice cell and an elective pool name none, and
+      // printing the first candidate's code would assert a decision the plan deliberately leaves
+      // to the student. Those fall back to an abbreviation of the requirement.
+      code: (p.cell.groups?.length === 1 && p.cell.groups[0]?.length === 1)
+        ? p.cell.groups[0][0] : null,
+      // ── The work terms, which `terms` cannot carry ──────────────────
+      //
+      // `terms` is `studyTerms(shape)`, and that filters employment out: there is nothing to
+      // place in a term the student spends on co-op. The derivation view draws the whole plan
+      // though, and a four-year degree drawn with its two co-ops missing is a picture of a
+      // different degree. They go in as their own list so no term index moves.
+    })), terms, shape.terms.filter(t => t.work));
+    trace.domains(plans.map(p => ({
+      id: p.cell.id, legal: p.domain, excluded: p.excluded ?? [],
+    })));
+    trace.stage("narrowing-done", {
+      cards: plans.length,
+      terms: terms.length,
+      // The size of the space the search is entering, as the product of the domain widths. The
+      // explainer already prints this figure from `criticalPath` windows; naming it at the
+      // stage boundary is what lets the spine say what narrowing BOUGHT.
+      legalPairs: plans.reduce((n, p) => n + p.domain.length, 0),
+    });
+  }
   const placed = placeCells({
     plans, terms, ports, studentType, courseMap, repeatable, nodeBudget, timeBudgetMs,
     precedence, shape, cal,
@@ -478,7 +576,7 @@ function generateOnce({
     // Off only so the claim "a pruning propagator does not move an existing plan" can be
     // TESTED rather than argued — see `chart-propagator-neutral.test.js`. Production never
     // passes false, and the invariant it protects is the whole basis of §17's placement rule.
-    propagateChains, packOnly,
+    propagateChains, packOnly, trace,
     // Injectable so DETERMINISM can be tested as the property it is, rather than as a race
     // against the machine. With a frozen clock the search is bounded by nodes alone and the
     // same input must give the same plan; with the real clock a slow run can only ever
@@ -486,6 +584,15 @@ function generateOnce({
     now,
   });
   if (!placed.ok) {
+    // A refusal is a derivation too, and the more interesting one: it is the case where the
+    // process is the ONLY thing there is to show, since there is no plan to read instead.
+    if (trace) {
+      trace.stage("refused", {
+        reason: placed.failure?.kind ?? null,
+        nodes: placed.nodes ?? 0,
+        exhaustedSpace: placed.exhaustedSpace ?? false,
+      });
+    }
     // Name a term where the shape itself cannot hold what only it can hold. The
     // search's own failure is about a cell; this is about the calendar, and it is
     // the more useful sentence when both are true.
@@ -510,12 +617,47 @@ function generateOnce({
   }
 
   // ── 7. A better plan ───────────────────────────────────────────
+  if (trace) {
+    trace.stage("search-done", {
+      nodes: placed.nodes ?? 0,
+      restarts: placed.restarts ?? 0,
+      relaxed: [...(placed.relaxed ?? [])],
+    });
+  }
   const improved = improve({
     plans, terms, termOf: placed.termOf, ports, studentType, courseMap,
     repeatable, preferences, precedence, shape, cal,
     boundary: firstWorkBoundary(shape),
     depthOf: depth.depthOf,
   });
+  // ── Hill climbing is recorded from its RESULT, not instrumented ────
+  //
+  // Phase 2 is local search over COMPLETE assignments, so it has no tree, no depth and no
+  // branch causes — the three things the search recording exists to capture. What it has is a
+  // move count and a set of trades, both of which `improve` already returns. Instrumenting it
+  // would add call sites to a hot loop to re-derive numbers that are handed back for free.
+  //
+  // The moves are worth showing because they are where a card's term actually CHANGES after the
+  // search settled it, and the spine would otherwise imply the search's answer is the plan.
+  if (trace) {
+    trace.stage("improve-done", {
+      moves: improved.moves ?? 0,
+      trades: (improved.trades ?? []).length,
+      reclaimed: (improved.reclaimed ?? []).length,
+      depthTrades: (improved.depthTrades ?? []).length,
+    });
+    // The swaps themselves, so the walkthrough can play them out on the grid. Bounded by
+    // construction (p50 4, max 18), and mapped to roster indices here rather than in the
+    // reducer so the model never has to know about cell ids.
+    trace.moves((improved.moveLog ?? [])
+      .map(m => ({ pass: m.pass, card: trace.cardOf(m.cell), from: m.from, to: m.to }))
+      .filter(m => m.card >= 0));
+    // Where every card ended up, as roster index → term. The search's own answer and the
+    // improved one can differ, and this is the improved one — the plan the student reads.
+    trace.chosen([...improved.termOf.entries()]
+      .map(([id, ti]) => [trace.cardOf(id), ti])
+      .filter(([i]) => i >= 0));
+  }
 
   // ── 8. The artifact ────────────────────────────────────────────
   const plan = emitPlan({
@@ -538,6 +680,23 @@ function generateOnce({
   // the plan pass; this only decides whether it did.
   const failed = criteriaFailures(plan, { studentType, cal, courseMap });
   if (failed.length) {
+    // ── A refusal HERE is the one a trace can most easily misreport ───
+    //
+    // The search succeeded, so the recording holds a solved arrangement — and without this stage
+    // the derivation had no way to know the plan was thrown away afterwards. It duly marked the
+    // stage that found the arrangement as "produced this plan" for a degree that got none, which
+    // is a success claimed inside a refusal.
+    //
+    // Caught by `chart-derivation-neutral.test.js` on
+    // `information_design_and_visualization_graduate_certificate`, whose ladder finds a complete
+    // arrangement and whose packer then also fails.
+    if (trace) {
+      trace.stage("refused", {
+        reason: "fails-hard-criteria",
+        criterion: failed[0]?.criterion ?? null,
+        nodes: placed.nodes ?? 0,
+      });
+    }
     return {
       refused: {
         reason: "fails-hard-criteria",

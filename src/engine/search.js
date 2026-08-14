@@ -61,6 +61,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { witnessPlan, buildContention, bipartiteMatch } from "./witness.js";
+import { NODE, causeCode } from "./trace.js";
 import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
 import { chainHeight, precedenceViolations } from "./precedence.js";
 import { DEFAULT_CALIBRATION, minCoursesFor, termIsFull } from "./calibration.js";
@@ -501,14 +502,19 @@ export function placeCells({
   // 200 nodes, and was unreachable because rung 3 answered first.
   packOnly = false,
   propagateChains = true,
+  // A recording sink, or null. See trace.js: null is the production default and costs one
+  // truthiness check per branch, and nothing in here may consult it to make a decision.
+  trace = null,
 }) {
   const deadline = now() + timeBudgetMs;
 
   // The caller has already had a plan refused by the criteria; go straight to the packer,
   // which is a different constructor rather than the same search asked twice.
   if (packOnly) {
+    if (trace) trace.stage("packer", { only: true });
     const g = packDecreasing({ plans, terms, ports, studentType, courseMap, repeatable,
                                precedence, cal, shape });
+    if (trace) trace.stage("packer-done", { ok: g.ok });
     return g.ok
       ? { ...g, nodes: 0, restarts: 0, cardinalityRelaxed: true,
           relaxed: ["packed-largest-first"] }
@@ -592,11 +598,15 @@ export function placeCells({
   // same wall being hit repeatedly, and the useful move is to learn and start again.
   let perAttempt = Math.max(64, Math.min(nodeBudget, 300));
 
+  if (trace) trace.stage("strict", { nodeAllowance: strictNodes });
   for (let attempt = 0; attempt <= maxRestarts; attempt++) {
+    // One tree per restart, and it genuinely is a new one: a nogood narrows a domain, so
+    // the space this attempt walks is not a suffix of the last one's.
+    if (trace) trace.attempt({ tier: "strict", restart: attempt, gave: null });
     const r = attemptPlacement({
       plans: working, terms, ports, studentType, courseMap, repeatable,
       nodeBudget: Math.min(perAttempt, Math.max(1, strictNodes - totalNodes)),
-      precedence, now, shape, cal, propagateChains, seed,
+      precedence, now, shape, cal, propagateChains, seed, trace,
       // The GLOBAL deadline only. Each attempt used to get a time slice as well, and that
       // was the last source of non-determinism: how many nodes an attempt explored depended
       // on machine load, so `business_administration_and_public_health_bs` returned
@@ -639,6 +649,11 @@ export function placeCells({
       && target.domain.length > 1 && target.domain.includes(f.term);
 
     if (canLearn) {
+      // At most one per restart, so ≤41 of these exist and they can be plain objects. The
+      // narrowing matrix needs them: a term this loop removes is missing from the domain the
+      // LAST attempt searched, and without the record it is indistinguishable from a term
+      // availability never allowed.
+      if (trace) trace.stage("nogood", { cell: f.cell, term: f.term, restart: attempt });
       target.domain = target.domain.filter(t => t !== f.term);
       continue;
     }
@@ -750,6 +765,10 @@ export function placeCells({
     const rung = RUNGS[ri];
     if (totalNodes >= nodeBudget || now() > deadline) break;
     given.push(rung.gave);
+    // A rung is a different CONSTRAINT SET, so it is a different tree rather than a
+    // continuation — which is exactly why the stage spine has to exist and why no single
+    // picture may be captioned "the search tree".
+    if (trace) trace.attempt({ tier: "rung", rung: ri, gave: rung.gave, restart: 0 });
     const r = attemptPlacement({
       plans: plans.map(p => ({ ...p, domain: [...p.domain] })),
       terms, ports, studentType, courseMap, repeatable,
@@ -759,7 +778,7 @@ export function placeCells({
       nodeBudget: Math.max(1, Math.min(
         Math.floor(nodeBudget * (TIER_SHARES.rungs[ri] ?? 0.2)),
         nodeBudget - totalNodes)),
-      precedence, now, deadline, cal, propagateChains, seed,
+      precedence, now, deadline, cal, propagateChains, seed, trace,
       shape: rung.shape,
       enforceCardinality: rung.enforceCardinality ?? true,
       preferenceFree: rung.preferenceFree ?? false,
@@ -828,8 +847,10 @@ export function placeCells({
   // refusal into a plan is what the budget was being saved FOR.
   let packerFailure = null;
   {
+    if (trace) trace.stage("packer", { only: false });
     const g = packDecreasing({ plans, terms, ports, studentType, courseMap, repeatable,
                                precedence, cal, shape });
+    if (trace) trace.stage("packer-done", { ok: g.ok });
     if (g.ok) {
       return { ...g, nodes: totalNodes, restarts: maxRestarts,
                cardinalityRelaxed: true, relaxed: [...given, "packed-largest-first"] };
@@ -898,6 +919,8 @@ function attemptPlacement({
   seed = null,
   // See `precedenceRoom`. Test-only when false; production is always true.
   propagateChains = true,
+  // Observation only. Nothing below may branch on it except to record.
+  trace = null,
 }) {
   const cap = terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType }));
   const slotCap = terms.map(t => termSlotCap(t, shape));
@@ -998,6 +1021,28 @@ function attemptPlacement({
   // helper about elective roles.
   const fillerOf = (p) => p.candidates === null && !isCompetingDepthElective(p);
   const order = [...plans].sort((a, b) => byConstraint(a, b, terms.length, rankOf, fillerOf));
+  // The permutation this attempt walks — recorded per attempt, not once per run, because
+  // `preferenceFree` and `sameReqMax` change what "most constrained" means and two rungs
+  // therefore order the same cards differently. A single recorded order would mislabel
+  // every level of every rung but the first.
+  //
+  // The DOMAINS are not re-recorded here, deliberately. `buildDomains` records them once with
+  // the reason each term was removed, and the only thing that narrows them afterwards is
+  // nogood learning, which records a `nogood` event per removal — so every attempt's domain is
+  // reconstructible from two small records instead of 41 copies of forty arrays.
+  // The keys go with it, in the same order and in the same terms the comparator uses them: is it
+  // a filler, what does it claim, how many terms are still legal for it, how many courses could
+  // fill it, how deep its chain runs. That is the entire variable ordering — read them down the
+  // list and you have re-run the sort by eye, which is the point.
+  if (trace) {
+    trace.order(order.map(p => trace.cardOf(p.cell.id)), order.map(p => ({
+      filler: fillerOf(p) ? 1 : 0,
+      claim: rankOf(p),
+      terms: p.domain.length || terms.length + 1,
+      options: p.candidates === null ? null : p.candidates.length,
+      depth: p.minDepth ?? 0,
+    })));
+  }
 
   const byId = new Map(plans.map(p => [p.cell.id, p]));
   const termOf = new Map();
@@ -2051,8 +2096,23 @@ function attemptPlacement({
     if (majorWants.has(c.id)) for (const t of majorWants.get(c.id)) majorUnplacedIn[t] += 1;
   };
 
-  function step(i) {
-    if (++nodes > nodeBudget) return "budget";
+  // `from` is the term the PARENT committed to reach this node — the label on the edge, and the
+  // one thing a depth-and-card recording cannot recover. Without it a recorded run is a list of
+  // levels; with it, it is the actual tree: level = card, branch = term.
+  //
+  // Unused by the search itself, and it must stay that way. See trace.js.
+  function step(i, from = -1) {
+    // ── Recorded BEFORE the budget check, so the two counts reconcile ──
+    //
+    // `nodes` is incremented and then compared, so the node that exceeds the budget is counted.
+    // Recording after the check therefore lost one node per attempt that ran out — measured as
+    // a 4-node gap on International Business, which is small and is exactly the kind of
+    // off-by-a-few that makes a chart quietly untrustworthy. `recorded === nodes` is now an
+    // equality a test can assert rather than an approximation to explain away.
+    const ci = trace && i < order.length ? trace.cardOf(order[i].cell.id) : -1;
+    const nd = trace ? trace.node(i, ci, from) : -1;
+    const ret = (code, value) => { if (trace) trace.result(nd, code); return value; };
+    if (++nodes > nodeBudget) return ret(NODE.BUDGET, "budget");
     // Checked every 64 nodes rather than every one: a clock read per node is
     // itself measurable at this node rate, and 64 nodes is well inside the budget.
     // Every 8 nodes, not every 64.
@@ -2067,12 +2127,12 @@ function attemptPlacement({
     // this is free where it used to be worth avoiding, and it bounds the overshoot to eight
     // nodes instead of sixty-four. It does not affect DETERMINISM: the clock can only turn an
     // answer into a refusal, never into a different answer.
-    if ((nodes & 7) === 0 && now() > deadline) return "time";
+    if ((nodes & 7) === 0 && now() > deadline) return ret(NODE.TIME, "time");
     if (i >= order.length) {
       // The one place prereq-reachability is checked: a complete assignment, where
       // every cell that could supply a prerequisite has a term.
       const w = runWitness(true);
-      if (!w.ok) { worstFailure = w.failure; return false; }
+      if (!w.ok) { worstFailure = w.failure; return ret(NODE.GOAL_WITNESS, false); }
       // ── The bar is part of the GOAL, not a report on the answer ──────
       //
       // This returned `true` the moment every cell had a term, which is the definition of a
@@ -2112,15 +2172,15 @@ function attemptPlacement({
       //
       // Find the disagreement first. Enforcing more strictly than the authority is not
       // conservatism; it is a second opinion wearing the same name.
-      if (enforceCardinality && minCourses > 0 && !barsMet()) return false;
-      return true;
+      if (enforceCardinality && minCourses > 0 && !barsMet()) return ret(NODE.GOAL_BAR, false);
+      return ret(NODE.SOLVED, true);
     }
 
     const plan = order[i];
     const cell = plan.cell;
     if (!plan.domain.length) {
       worstFailure = { kind: "empty-domain", cell: cell.id, title: cell.title };
-      return false;
+      return ret(NODE.EMPTY_DOMAIN, false);
     }
 
     for (const ti of termPreference(plan)) {
@@ -2140,7 +2200,13 @@ function attemptPlacement({
       // nogood learning, which rewrites domains between restarts, so adding sources to it
       // would change which nogoods are learned and could re-sequence a program that restarts.
       // This one is consulted only when nothing better is known, and only for the message.
-      const block = (kind) => { blockedBy = { kind, cell: cell.id, title: cell.title, term: ti }; };
+      // Recording here rather than at each `continue` is the same argument `place`/`unplace`
+      // makes one screen up: five hand-copied call sites is where a sixth cause gets added and
+      // silently counted as nothing. Every cheap reject already funnels through this one line.
+      const block = (kind) => {
+        blockedBy = { kind, cell: cell.id, title: cell.title, term: ti };
+        if (trace) trace.branch(nd, ci, ti, causeCode(kind));
+      };
       // Term credit envelope — the registration cap, which is hard.
       if (loadSH[ti] + (cell.sh ?? 0) > cap[ti]) { block("term-at-credit-cap"); continue; }
       // Eleven courses in one term fits inside 19 credits and is not a plan anyone
@@ -2195,6 +2261,7 @@ function attemptPlacement({
         : null;
       if (dead) {
         worstFailure = worstFailure ?? { ...dead, cell: cell.id, title: cell.title, term: ti };
+        if (trace) trace.branch(nd, ci, ti, causeCode(dead.kind));
         unplace(cell, ti);
         continue;
       }
@@ -2205,16 +2272,23 @@ function attemptPlacement({
       // absent rather than as late, so no branch is cut for a fixable violation.
       const w = runWitness(false);
       if (w.ok) {
-        const r = step(i + 1);
-        if (r === true) return true;
-        if (r === "budget" || r === "time") return r;
+        // The one branch actually TAKEN. Recorded through the same counter as the rejects,
+        // because the quantity the cause matrix reads is the ratio: a (card, term) pair tried
+        // forty times and entered twice is thrash, and counting only failures cannot show it.
+        if (trace) trace.branch(nd, ci, ti, 0, true);
+        const r = step(i + 1, ti);
+        if (r === true) return ret(NODE.SOLVED, true);
+        if (r === "budget" || r === "time") {
+          return ret(r === "budget" ? NODE.BUDGET : NODE.TIME, r);
+        }
       } else {
         worstFailure = w.failure;
+        if (trace) trace.branch(nd, ci, ti, causeCode(w.failure?.kind));
       }
 
       unplace(cell, ti);
     }
-    return false;
+    return ret(NODE.EXHAUSTED, false);
   }
 
   const result = step(0);

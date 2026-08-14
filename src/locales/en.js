@@ -284,6 +284,165 @@ export const strings = {
   "chart.limits.optional": "It used {terms}, which your department’s plan leaves empty, because a required course only runs then",
   "chart.limits.nodata": "It knows nothing about course difficulty, workload or instructors, so none of that was considered",
 
+  // ── The process page ────────────────────────────────────────────
+  // A record of one search rather than prose about every plan. See
+  // src/ui/derivation/ and docs/chart-derivation-design.md.
+  "chart.explain.tab.text":   "The rules",
+  "chart.explain.tab.process": "The process",
+  "chart.deriv.why":          "See what it tried",
+  "chart.deriv.none":         "Nothing was recorded for this plan. A recording is made while the plan is being built and is not kept, so re-generating will produce one.",
+  "chart.deriv.truncated":    "Recording stopped after {n} placements. The counts are complete; the pictures below are not.",
+  "chart.deriv.stat.nodes":   "placements tried",
+  "chart.deriv.stat.cuts":    "branches rejected",
+  "chart.deriv.stat.undone":  "times it took a course back",
+  "chart.deriv.stat.layouts": "possible layouts",
+  "chart.deriv.stat.layouts.note": "An upper bound: each course’s own window multiplied out, so it also counts layouts that a prerequisite between two courses rules out.",
+  "chart.deriv.stat.moves":   "improvements afterwards",
+
+  "chart.deriv.spine.h":      "What it did",
+  "chart.deriv.stage.demand": "Turn the requirements into a list of courses",
+  "chart.deriv.stage.narrowing": "Work out which semesters each course could use",
+  "chart.deriv.stage.place":  "Give all {n} courses a semester, breaking no rule",
+  "chart.deriv.stage.packer": "Pack them in by size instead of searching",
+  "chart.deriv.stage.improve": "Improve the order",
+  "chart.deriv.rung.strict":  "following every rule",
+  "chart.deriv.stage.demand.d": "{n} courses, {sh} credits",
+  "chart.deriv.stage.narrowing.d2": "across {terms} semesters",
+  "chart.deriv.stage.rung.d": "{nodes} tries",
+  "chart.deriv.stage.restarts": "{n} fresh start(s)",
+  "chart.deriv.stage.improve.d": "{n} change(s)",
+  "chart.deriv.gave":         "Gave up {what}",
+  "chart.deriv.gave.sequencing-preferences": "the preferred order",
+  "chart.deriv.gave.term-width": "the limit on same-requirement cards per term",
+  "chart.deriv.gave.four-course-bar": "four courses in every full term",
+  "chart.deriv.gave.packed-largest-first": "searching, and packed by size",
+  "chart.deriv.retry.breadth-guidance": "electives were unbound and the search run again",
+  "chart.deriv.retry.fails-hard-criteria": "the first plan broke a hard requirement",
+  "chart.deriv.refused.space": "every arrangement was tried; none is legal",
+  "chart.deriv.refused.budget": "the search ran out of time before proving anything",
+
+  // ── The walkthrough: watch the plan get built ───────────────────
+  "chart.deriv.build.h":      "Watch it get built",
+  "chart.deriv.play.play":    "Play",
+  "chart.deriv.play.pause":   "Pause",
+  "chart.deriv.play.next":    "Next course",
+  "chart.deriv.play.prev":    "Previous course",
+  "chart.deriv.play.start":   "Back to the start",
+  "chart.deriv.play.step":    "{n} of {total}",
+  "chart.deriv.subject.other": "other",
+  "chart.deriv.step.start":   "An empty plan, and {n} courses to place. Press play, or step through one course at a time.",
+  "chart.deriv.step.place":   "{title} → {term}.",
+  "chart.deriv.step.bounced": "It was pushed out of {n} earlier semester(s) first — the first because the {why}.",
+  "chart.deriv.step.cost":    "Getting this far meant building and undoing {n} arrangements.",
+  "chart.deriv.step.done":    "Every course has a semester and no rule is broken. This is the plan.",
+  "chart.deriv.step.packed":  "This plan was not searched for course by course. Every attempt to place them one at a time failed, so the courses were packed in largest-first instead — which has no step-by-step order to show.",
+  // The queue beside the grid: the engine's own variable ordering, with the numbers it sorted on.
+  // "Why this course now" is the question the walkthrough could not answer, and the answer is not
+  // a story — it is this sort, so the panel shows the sort.
+  "chart.deriv.rank.h":       "Why this one",
+  // Collapsed, this is the whole rule in one line: the numbers on the bullets are tests in order,
+  // and the FIRST one that separates two courses ends the comparison. That last part is the only
+  // thing a reader cannot work out from the bullets themselves, so it is the part that stays.
+  "chart.deriv.rank.rule.short": "Five tests, in order — the first difference decides, and nothing below it can overturn that.",
+  "chart.deriv.rank.rule":    "Everything still to place, in the order the engine takes them. Five tests, applied in this order — the first one that separates two courses decides them, and nothing below it can overturn that:",
+  // The ladder itself. The numbers on the bullets below refer to these, so the wording has to be
+  // short enough to sit in a 224px column and specific enough to be recognised from a bullet.
+  "chart.deriv.rank.rung.filler":  "open electives last",
+  // Named in the order the rank itself runs, because "what it claims" alone is not recognisable
+  // from a bullet that says "other courses depend on it".
+  "chart.deriv.rank.rung.claim":   "what it claims: unlocks, then major depth",
+  "chart.deriv.rank.rung.terms":   "fewest semesters left",
+  "chart.deriv.rank.rung.options": "fewest courses that fit",
+  "chart.deriv.rank.rung.depth":   "longest chain after it",
+  "chart.deriv.rank.none":    "Everything has a semester. What follows only moves courses that are already placed.",
+  // The card at the front of the queue. One bullet per key that actually settled it against some
+  // of the cards behind it: what the key measured, this card's value for it, and how many cards it
+  // decided. The counts sum to the number still queued.
+  // Each bullet is ONE reason, in plain words. The tally of how many cards that reason settled is
+  // NOT in the sentence — it was, and it made every line read as arithmetic ("fewer than the 1 it
+  // is tied with on everything above" is a true statement nobody can parse). It sits after the
+  // sentence as a quiet count instead, where it can be read or ignored.
+  "chart.deriv.rank.why2.filler":  "It is not an open elective, and open electives take whatever is left over.",
+  "chart.deriv.rank.why2.claim.0": "Other courses depend on it, so it cannot wait without making them wait too.",
+  "chart.deriv.rank.why2.claim.1": "It carries the major’s depth — the coursework a co-op employer reads.",
+  "chart.deriv.rank.why2.claim.2": "It names a course, rather than being a choice still to make.",
+  "chart.deriv.rank.why2.terms":   "Only {n} of the {total} semesters still fit it.",
+  "chart.deriv.rank.why2.terms.one": "One single semester still fits it.",
+  "chart.deriv.rank.why2.options": "Only {n} courses could fill it.",
+  "chart.deriv.rank.why2.options.one": "Exactly one course can fill it — there is no choice to make.",
+  "chart.deriv.rank.why2.depth":   "{n} courses have to come after it.",
+  "chart.deriv.rank.why2.depth.one": "Another course has to come after it, so it cannot go last.",
+  "chart.deriv.rank.why2.tie":     "Nothing tells it apart from {beat} of the others — those are ordered by name, so the plan comes out the same every time.",
+  "chart.deriv.rank.why2.tie.one": "Nothing tells it apart from one other card — those two are ordered by name, so the plan comes out the same every time.",
+  // The tally: how many of the cards still queued this one reason settled. Muted, after the line.
+  "chart.deriv.rank.why2.ahead":   "ahead of {beat}",
+  // Why a row sits above the one below it — the first key on which the two differ, which is the
+  // only key that decided them. Written as the winner's advantage, not as a comparison.
+  "chart.deriv.rank.why.filler":  "before the open electives",
+  "chart.deriv.rank.why.claim.0": "other courses depend on it",
+  "chart.deriv.rank.why.claim.1": "it carries the major’s depth",
+  "chart.deriv.rank.why.claim.2": "it names a course",
+  "chart.deriv.rank.why.terms":   "only {n} semesters fit it",
+  "chart.deriv.rank.why.options": "only {n} courses can fill it",
+  "chart.deriv.rank.why.depth":   "{n} courses must follow it",
+  "chart.deriv.rank.why.tie":     "tied — ordered by name",
+  "chart.deriv.rank.why.last":    "last in the queue",
+
+  "chart.deriv.more.show":    "Show every possibility, and the search itself",
+  "chart.deriv.more.hide":    "Hide the detail",
+
+  // What each phase-2 pass was for. The engine names them; these say why they exist.
+  "chart.deriv.pass.rank":    "{title} moved from {from} to {to}, to improve the order.",
+  "chart.deriv.pass.depth-trade": "{title} moved from {from} to {to} — major coursework earlier, so a co-op employer sees it.",
+  "chart.deriv.pass.fill-full-terms": "{title} moved from {from} to {to}, to bring a light semester up to a full load.",
+  "chart.deriv.pass.reclaim-from-filler": "{title} moved from {from} to {to}, taking an early semester back from a free elective.",
+  "chart.deriv.pass.availability-swap": "{title} moved from {from} to {to}, into a season it actually runs in.",
+  "chart.deriv.pass.threshold-repair": "{title} moved from {from} to {to}, to clear a bar the plan was missing.",
+
+  "chart.deriv.tree.h":       "The search itself",
+  "chart.deriv.tree.note":    "One level per card, one branch per term tried. A short stub is a term rejected on the spot; the line that carries on is the term it kept. Hover any point.",
+  "chart.deriv.tree.big":     "{n} placements is far too many to draw one by one — it would be a texture, not a picture. The profile above is the same search at that scale.",
+  "chart.deriv.tree.restart": "Attempt {n}",
+  "chart.deriv.tree.goal":    "Every card has a term — check the whole arrangement against every rule.",
+  "chart.deriv.tree.cut":     "“{title}” in {term}: rejected, {why}.",
+  "chart.deriv.tree.kept":    "“{title}” in {term} — kept. This is part of the plan.",
+  "chart.deriv.tree.back":    "“{title}” in {term}: nothing below it worked, so this was undone.",
+  "chart.deriv.tree.tried":   "“{title}” in {term}: tried, then abandoned once the plan was found elsewhere.",
+
+  "chart.deriv.narrow.h":     "Which terms each card could take",
+  "chart.deriv.narrow.note":  "A row is a card, in the order the search decided them; a column is a term. Gaps in the middle of a row are real — a spring-only course is illegal in autumn however far through the degree it sits. Hover any square.",
+  "chart.deriv.fate.chosen":  "taken",
+  "chart.deriv.fate.legal":   "legal, not taken",
+  "chart.deriv.fate.before-prereqs": "its prerequisites are not met by then",
+  "chart.deriv.fate.not-offered-then": "not offered that season",
+  "chart.deriv.fate.order":   "ruled out by what must come before or after",
+  "chart.deriv.fate.outside-precedence-window": "outside the window the prerequisite chains leave",
+  "chart.deriv.fate.coop-prep-bound": "co-op preparation has to come before the co-op",
+  "chart.deriv.fate.learned-nogood": "set aside after an attempt failed there",
+  "chart.deriv.cell":         "“{title}” in {term}: {why}.",
+  "chart.deriv.cell.tried":   "Tried {tried} time(s), kept {entered}.",
+
+  "chart.deriv.cause.h":      "What the rejected branches ran into",
+  "chart.deriv.cause.note":   "Counted per card. A card decided early is retried under every arrangement below it, so a large count reflects its position as much as its difficulty — the hover says where in the order it sat.",
+  "chart.deriv.cause.total":  "rejected",
+  "chart.deriv.cause.at":     "“{title}” (decided {depth}th): rejected {n} time(s) because the {why}.",
+  "chart.deriv.cause.top":    "Most often the {why} — {pct}% of every rejection.",
+  "chart.deriv.cause.more":   "Show {n} more",
+  "chart.deriv.cause.less":   "Show fewer",
+  "chart.deriv.cause.term-at-credit-cap": "term was already at its credit cap",
+  "chart.deriv.cause.term-at-slot-cap": "term already held as many courses as any published plan does",
+  "chart.deriv.cause.too-many-of-one-requirement": "term already held enough of that one requirement",
+  "chart.deriv.cause.term-at-its-course-ceiling": "term had no room for another full course",
+  "chart.deriv.cause.prereq-order-with-what-is-placed": "order clashed with a course already placed",
+  "chart.deriv.cause.chain-has-no-room-left": "prerequisite chain would have had no room left",
+  "chart.deriv.cause.no-room-left-for-the-rest": "remaining cards would not have fitted",
+  "chart.deriv.cause.full-term-cannot-reach-four": "a full term could no longer reach four courses",
+  "chart.deriv.cause.no-candidate": "no course could answer it there",
+  "chart.deriv.cause.over-subscribed": "cards in that term needed more distinct courses than exist",
+  "chart.deriv.cause.named-prereq": "named course could not be taken by then",
+  "chart.deriv.cause.concentration-unfillable": "concentration could not be filled from one option",
+  "chart.deriv.cause.other": "check failed for another reason",
+
   "chart.explain.close":      "Close",
   "grad.plan.load":           "Lay out",
   "grad.plan.placed":         "Placed {n} courses and {c} co-ops.",

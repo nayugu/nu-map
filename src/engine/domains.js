@@ -44,6 +44,7 @@ import { groupDepth, courseLevel } from "./prereqDepth.js";
 import { DEFAULT_CALIBRATION, minCoursesFor } from "./calibration.js";
 // The SIZE of a standard course, which is not `REAL_COURSE_SH` — see `coopSlotCap`.
 import { DEFAULT_UNIT_SH } from "../core/requirementDemand.js";
+import { EXCLUSION } from "./trace.js";
 
 /**
  * @typedef {Object} CellPlan
@@ -438,6 +439,10 @@ export function buildDomains(cells, terms, {
   // `cal` at every use site so it is obvious a value came from outside rather than from a
   // constant two hundred lines up. See calibration.js.
   cal = DEFAULT_CALIBRATION,
+  // Read for its TRUTHINESS only: is anyone recording? Nothing here calls it — the exclusion
+  // list rides out on each plan and the caller emits it (see the note below `excluded`). Named
+  // `trace` rather than a second flag so a call site cannot enable one and forget the other.
+  trace = null,
 } = {}) {
   const plans = [];
   const impossible = [];
@@ -523,9 +528,23 @@ export function buildDomains(cells, terms, {
     }
 
     const domain = [];
+    // ── What this loop already knows and used to throw away ──────────
+    //
+    // Every `continue` below is a term leaving the domain for a NAMED reason, and the domain
+    // that comes out records only the survivors. So "why is this card not in year 1" was
+    // answerable by the engine at exactly this point and by nothing downstream — the search
+    // sees a list of legal terms and cannot tell a prerequisite bound from a season one.
+    //
+    // Collected only when someone is recording (`trace.js`), and pushed to plain objects
+    // because this loop runs once per card per shape, not once per node.
+    const excluded = trace ? [] : null;
+    const drop = (ti, reason) => { if (excluded) excluded.push({ term: ti, reason }); };
+    // Above `lastAllowed` the loop never looks, so the co-op-prep bound would otherwise be
+    // the one narrowing with no record at all.
+    for (let ti = lastAllowed + 1; ti < terms.length; ti++) drop(ti, EXCLUSION.COOP_PREP_BOUND);
     for (let ti = 0; ti <= lastAllowed; ti++) {
       const term = terms[ti];
-      if (ti < minDepth) continue;
+      if (ti < minDepth) { drop(ti, EXCLUSION.BEFORE_PREREQS); continue; }
       if (candidates === null) { domain.push(ti); continue; }
       // A term is legal when SOME OPTION is entirely takeable in it.
       //
@@ -542,7 +561,14 @@ export function buildDomains(cells, terms, {
         ?? candidates.map(id => [id]);      // an open pool: each candidate stands alone
       const ok = options.some(g =>
         g.every(id => depthBoth(id) <= ti && allowedSeasons(id).has(term.semTypeId)));
-      if (ok) domain.push(ti);
+      if (ok) { domain.push(ti); continue; }
+      // WHICH of the two conjuncts failed, asked in the honest order: if no option is deep
+      // enough by then, the obstruction is the prerequisite chain and the season question does
+      // not arise. Only when an option IS deep enough does "not offered then" mean anything.
+      if (excluded) {
+        drop(ti, options.some(g => g.every(id => depthBoth(id) <= ti))
+          ? EXCLUSION.NOT_OFFERED : EXCLUSION.BEFORE_PREREQS);
+      }
     }
 
     if (!domain.length) {
@@ -592,7 +618,17 @@ export function buildDomains(cells, terms, {
       seasonOk.set(s, list);
     }
 
-    plans.push({ cell, domain, candidates, seasonOk, minDepth, reachAt });
+    // ── `excluded` travels ON THE PLAN, not straight to the sink ──────
+    //
+    // Because `layout()` is called up to three times — once for the published shape, again if a
+    // prerequisite chain needs a stretch, again if a stranded cell has to be replaced — and a
+    // stretch that does not help is DISCARDED. Emitting from here would leave the trace holding
+    // the domains of a layout the plan was never built from, which is the exact class of
+    // almost-right that this view exists to avoid.
+    //
+    // So the caller records once, from the plans it actually searched. Absent when nobody is
+    // recording, so the ordinary path allocates nothing.
+    plans.push({ cell, domain, candidates, seasonOk, minDepth, reachAt, ...(excluded ? { excluded } : {}) });
   }
   return { plans, impossible };
 }

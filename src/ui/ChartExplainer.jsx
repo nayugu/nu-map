@@ -23,31 +23,47 @@
 // requirement cannot be invisible — dropping it with the rest would have quietly
 // recreated the defect it exists to prevent.
 // ═══════════════════════════════════════════════════════════════════
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 import { useLanguage } from "../context/LanguageContext.jsx";
+import DerivationPanel from "./derivation/DerivationPanel.jsx";
 
-export default function ChartExplainer({ report, program, onClose, isPhone }) {
+export default function ChartExplainer({ report, program, derivation, onClose, isPhone }) {
   const { t } = useLanguage();
+  // ── Two pages, not two dialogs ────────────────────────────────────
+  //
+  // "What the engine promises" and "what it did for this degree" are different kinds of
+  // document — one is prose that holds for every plan, the other is a record of one search —
+  // and they answer questions a reader has in sequence rather than at once. So they are tabs
+  // in one dialog: the second only makes sense once the first has said what the rules are,
+  // and a reader who does not want it never opens it.
+  //
+  // A REFUSED degree has a derivation and no report, and it is the case where the process
+  // matters most: there is no plan to read instead, so the record of the search is the only
+  // account of what happened. So the text page is conditional on there being one, and the
+  // panel opens on whichever page it actually has.
+  const hasText = !!report;
+  const [tab, setTab] = useState(hasText ? "text" : "process");
 
   // ── Escape closes ONE layer ───────────────────────────────────────
   //
   // Matching `SamplePlanPreview`, which this panel now sits beside: the handler stops
   // propagation so a dialog opened over another closes only itself. Registered before the
   // `report` guard below, because a hook cannot run conditionally.
+  const open = !!report || !!derivation;
   useEffect(() => {
-    if (!report) return undefined;
+    if (!open) return undefined;
     const onKey = (e) => { if (e.key === "Escape") { e.stopPropagation(); onClose?.(); } };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, [report, onClose]);
+  }, [open, onClose]);
 
-  if (!report) return null;
+  if (!open) return null;
 
   const fz  = isPhone ? 9 : 12;
   const fzH = isPhone ? 10 : 13;
 
-  const required = report.totalCreditsRequired ?? 0;
+  const required = report?.totalCreditsRequired ?? 0;
 
   // ── One weight, one colour, no ornament ───────────────────────────
   //
@@ -106,7 +122,16 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
       <div
         onClick={(e) => e.stopPropagation()}
         style={{
-          width: "100%", maxWidth: 620,
+          // ── Two widths, because the two tabs are two different kinds of thing ──
+          //
+          // The rules tab is prose, and 620 is about as wide as a paragraph should get before the
+          // eye loses the start of the next line. The process tab is the PLANNER: four cards to a
+          // fall, each carrying a course code and a title, behind a label column. At 620 those
+          // cards are 104px wide and every title is an ellipsis, which is the same "shrink until
+          // it fits" failure the preview's type scale was written to end. 900 is the width the
+          // sample-plan preview settled on for exactly these rows, so the two dialogs in this
+          // panel now draw the same grid at the same size.
+          width: "100%", maxWidth: tab === "process" ? 900 : 620,
           // ── OPAQUE, and with a token that EXISTS ────────────────────
           //
           // This read `var(--bg-solid, var(--bg-1, #ffffff))`, and neither `--bg-solid` nor
@@ -149,7 +174,43 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           * headings, which is the definition of filler. */}
         <header style={{ marginBottom: isPhone ? 10 : 16 }}>
           <div style={{ fontSize: fzH + 2, fontWeight: 800 }}>{t("chart.explain.title")}</div>
+          {/* The tab strip appears only when there is a second page to go to. A recording is
+            * made during a live generate and does not survive a reload, so a plan restored from
+            * storage legitimately has none — and a tab leading to "nothing recorded" is worse
+            * than no tab. */}
+          {derivation && hasText && (
+            <div role="tablist" style={{
+              display: "flex", gap: 2, marginTop: isPhone ? 8 : 12,
+              borderBottom: "1px solid var(--border-2)",
+            }}>
+              {[["text", "chart.explain.tab.text"], ["process", "chart.explain.tab.process"]]
+                .map(([k, key]) => (
+                  <button
+                    key={k} role="tab" aria-selected={tab === k}
+                    onClick={() => setTab(k)}
+                    style={{
+                      fontSize: fz, fontWeight: tab === k ? 700 : 500,
+                      padding: isPhone ? "4px 8px" : "6px 12px",
+                      border: "none", background: "transparent", cursor: "pointer",
+                      color: tab === k ? "var(--text-1)" : "var(--text-4)",
+                      // The selected tab is marked by a rule under it, not by a fill: this
+                      // dialog already carries one accent (the stage that answered, inside the
+                      // process page) and a second one competing with it in the header would
+                      // make the emphasis mean nothing.
+                      borderBottom: `2px solid ${tab === k ? "var(--active)" : "transparent"}`,
+                      marginBottom: -1,
+                    }}
+                  >{t(key)}</button>
+                ))}
+            </div>
+          )}
         </header>
+
+        {tab === "process" && derivation && (
+          <DerivationPanel trace={derivation} isPhone={isPhone} />
+        )}
+        {tab === "text" && hasText && (<>
+
 
         {/* ── 0. The contract, in two lists ──────────────────────────
           *
@@ -377,7 +438,7 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
             </p>
           )}
         </Section>
-
+        </>)}
 
         <footer style={{
           display: "flex", justifyContent: "flex-end", gap: 8,

@@ -16,7 +16,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { IPlanGenerator } from "../../ports/IPlanGenerator.js";
-import { generatePlan, DEFAULT_PREFERENCES } from "../../engine/index.js";
+import { generatePlan, DEFAULT_PREFERENCES, createTrace } from "../../engine/index.js";
 import { buildDepthIndex } from "../../engine/prereqDepth.js";
 import enginePorts from "./enginePorts.js";
 import chartCalibration from "./chartCalibration.js";
@@ -68,6 +68,18 @@ export default {
   async generate({
     programKey, isGrad = false, programData, publishedPlan = null,
     studentType, preferences, courseMap, concentration = null,
+    // ── Recording the search, for the explainer's second page ────────
+    //
+    // On by default in the browser and off for every other caller, which is the right way
+    // round: the Node MCP server and the Cloudflare worker generate plans for a machine to
+    // read, and `verify-chart` generates 1,031 of them in the monthly workflow.
+    //
+    // Measured over the four benchmark shapes, the cost is inside run-to-run noise (−5% to
+    // −2% of wall clock across three repeats, with one unreproduced +14% outlier). That
+    // matters because the search refuses when its clock runs out, so a slow sink could turn
+    // a plan into a refusal — which is why `chart-probe --trace` compares the emitted
+    // documents rather than trusting the argument.
+    trace: wantTrace = true,
   }) {
     if (!courseMap) {
       return { refused: { reason: "no-catalog", detail: "The course catalog has not loaded yet." } };
@@ -79,7 +91,9 @@ export default {
     // takes 5000-level courses in their first term.
     const type = studentType ?? (isGrad ? "graduate" : "undergraduate");
 
+    const sink = wantTrace ? createTrace() : null;
     const out = generatePlan({
+      trace: sink,
       program: programData,
       publishedPlan,
       courseMap,
@@ -104,8 +118,18 @@ export default {
       repeatable: (id) => !!courseMap[id]?.repeatable,
     });
 
-    if (out.refused) return { refused: out.refused };
-    return { plan: out.plan.plans[0], report: out.report };
+    // ── The recording travels BESIDE the plan, never inside it ───────
+    //
+    // Not in `report`, and not in the plan document. Both of those are persisted, shared by
+    // link and diffed by the monthly workflow, and a saturated program's recording is ~24,000
+    // node rows — a search log welded to an artifact that outlives the search. It rides on the
+    // generate RESULT, which the panel reads and nothing stores.
+    //
+    // Carried on a refusal too, and that is the case where it matters most: a refused degree
+    // has no plan to read instead, so the process is the only account of what happened.
+    const derivation = sink ? sink.snapshot() : null;
+    if (out.refused) return { refused: out.refused, derivation };
+    return { plan: out.plan.plans[0], report: out.report, derivation };
   },
 
   defaultPreferences() { return DEFAULT_PREFERENCES; },

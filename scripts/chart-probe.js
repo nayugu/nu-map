@@ -30,7 +30,10 @@
 import { readFileSync, readdirSync, existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { generatePlan } from "../src/engine/index.js";
+import { generatePlan, createTrace } from "../src/engine/index.js";
+import { deriveModel } from "../src/core/derivation/reduce.js";
+import { searchTree } from "../src/core/derivation/tree.js";
+import { buildSteps, orderWhy, orderReason } from "../src/core/derivation/steps.js";
 import { buildDepthIndex } from "../src/engine/prereqDepth.js";
 import { loadCatalog } from "../src/adapters/northeastern/courseCatalog.node.js";
 import enginePorts from "../src/adapters/northeastern/enginePorts.js";
@@ -77,6 +80,17 @@ const timeMs = flag("--ms") ? Number(flag("--ms")) : 5000;
 // side by side (course level and in-plan chain height) so the choice is made on the corpus
 // rather than on which one sounds more like depth.
 const electivesMode = argv.includes("--electives");
+// ── `--trace`: is the derivation recording OBSERVATION ONLY? ────────
+//
+// The one property the whole derivation view rests on, and the only way to establish it is to
+// run the same program twice — once recording, once not — and compare the emitted documents
+// byte for byte. Two ways a sink could break it and this catches both: a write through a
+// reference it was handed, and the wall clock, since `placeCells` refuses when the clock runs
+// out and anything that slows a node down can turn a plan into a refusal.
+//
+// It also prints the overhead, because "it does not change the plan on my machine at 5,000 ms"
+// is a weaker claim than "it costs 0.4% of the clock". The second one survives a slower machine.
+const traceMode = argv.includes("--trace");
 // ── `--concentrations`: where concentration cells LAND, ours against the departments' ──
 //
 // The gate for the `thin` reach preference on concentration cells. That preference pushes a cell
@@ -266,6 +280,7 @@ for (const lvl of ["undergraduate", "graduate"]) {
       if (!wanted.has(label)) return;
       const studentType = lvl === "graduate" ? "graduate" : "undergraduate";
       let r;
+      const tPlain = Date.now();
       try {
         r = generatePlan({
           program: data, publishedPlan: variant, courseMap, ports, depthIndex,
@@ -275,6 +290,171 @@ for (const lvl of ["undergraduate", "graduate"]) {
           ...(concentration ? { concentration } : {}),
         });
       } catch (e) { out[label] = { threw: String(e?.message ?? e) }; return; }
+      if (traceMode) {
+        const msPlain = Date.now() - tPlain;
+        const trace = createTrace();
+        const t0 = Date.now();
+        let r2;
+        try {
+          r2 = generatePlan({
+            program: data, publishedPlan: variant, courseMap, ports, depthIndex,
+            observedOrder: observed.edges, coopPrep: (observed.coopPrep ?? []).map(x => x.course),
+            studentType, calibration: chartCalibration, timeBudgetMs: timeMs,
+            ...(nodeBudget ? { nodeBudget } : {}),
+            ...(concentration ? { concentration } : {}),
+            trace,
+          });
+        } catch (e) { out[label] = { threw: `traced: ${String(e?.message ?? e)}` }; return; }
+        const snap = trace.snapshot();
+        // The reducers run HERE, against real recordings, because that is the only place the
+        // full input space exists: a fixture can be hostile about shapes and cannot be
+        // hostile about a 13,000-node search over 32 cards with five attempts and a rung.
+        let model = null, modelErr = null;
+        try { model = deriveModel(snap); }
+        catch (e) { modelErr = String(e?.message ?? e); }
+        // The EMITTED document, stringified. Comparing reports would be weaker: two runs can
+        // agree on every statistic and put a course in a different term.
+        const same = JSON.stringify(r.refused ? r.refused : r.plan)
+                  === JSON.stringify(r2.refused ? r2.refused : r2.plan);
+        out[label] = {
+          same, nodes: r.report?.nodes ?? r.refused?.data?.nodes ?? 0,
+          recorded: snap.nodes, truncated: snap.truncated,
+          attempts: snap.attempts.length, stages: snap.stages.length,
+          msPlain, msTraced: Date.now() - t0,
+          rejects: snap.causeCounts.reduce((a, b) => a + b, 0),
+          modelErr,
+          stageKeys: model ? model.stages.map(s => s.key).join(">") : null,
+          answered: model ? (model.stages.find(s => s.answered)?.key ?? "none") : null,
+          saturated: model?.summary.saturated ?? null,
+          drawableTree: model?.summary.drawableTree ?? null,
+          buckets: model?.profile.buckets.length ?? 0,
+          exact: model?.profile.exact ?? null,
+          topCause: model?.causeTotals[0]?.cause ?? null,
+          // Every (card, term) pair must get exactly one fate, so the counts have to sum to
+          // cards x terms. An invariant rather than a statistic: a fate that falls through
+          // every branch would silently render as "not offered", which is a false claim
+          // about the catalog.
+          // The fate DISTRIBUTION, not just its total. Which reasons actually occur decides how
+          // many categorical hues the matrix needs, and the dataviz procedure is explicit that a
+          // ninth series is never a generated hue — so the palette is sized from this rather
+          // than from the length of the enumeration.
+          fates: model ? { ...model.narrowing.counts } : null,
+          fateSum: model ? Object.values(model.narrowing.counts).reduce((a, b) => a + b, 0) : 0,
+          fateExpect: model ? model.narrowing.rows.length * model.narrowing.terms.length : 0,
+          // ── Where the walkthrough stops matching the plan ────────────
+          //
+          // The reconciliation is a boolean, and a boolean is useless for fixing it. This names
+          // the courses whose term the walkthrough gets wrong, which is the difference between
+          // "the swaps are mis-recorded" and "the spine is read off the wrong node".
+          steps: (() => {
+            if (!model) return null;
+            const st = buildSteps(snap, model);
+            if (!st) return null;
+            const rolled = new Map(st.afterSearch);
+            for (const m of st.swaps) rolled.set(m.card, m.to);
+            const fin = new Map(st.final);
+            const wrong = [];
+            for (const [c, tt] of fin) {
+              if (rolled.get(c) !== tt) {
+                wrong.push(`${snap.roster[c]?.title ?? c}: walk ${rolled.get(c)} vs plan ${tt}`);
+              }
+            }
+            const extra = [...rolled.keys()].filter(c => !fin.has(c));
+            // ── Is the step's course the TOP of the queue? ─────────────
+            //
+            // The panel beside the grid claims the engine takes the next card off one sorted
+            // list, so the course a step is about must be the first still-unplaced entry of the
+            // recorded order. It is a claim about the search, not a rendering detail: if the DFS
+            // ever places out of order — a seeded cell, a rung that re-sorts mid-attempt — the
+            // panel would be captioning the step with the wrong reason, confidently.
+            const rank = st.ranking ?? [];
+            const seen = new Set();
+            let top = 0;
+            for (const s of st.place) {
+              const next = rank.find(r => !seen.has(r.card));
+              if (next && next.card === s.card) top += 1;
+              seen.add(s.card);
+            }
+            // ── Do the bullets add up? ─────────────────────────────────
+            //
+            // The panel says "ahead of N that unlock nothing", "fewer than the M it ties with", and
+            // so on, one bullet per key. Those counts are a partition of the cards still queued —
+            // every rival is beaten by exactly one key — so they must SUM to the queue behind it.
+            // If they do not, some rival is being counted twice or not at all and the sentences are
+            // arithmetic nobody can check. Reported for the first step and the middle one.
+            const whyAt = (k) => {
+              const seenTo = new Set(st.place.slice(0, k).map(s => s.card));
+              const rest = rank.filter(r => !seenTo.has(r.card));
+              const why = orderWhy(rest[0], rest);
+              const sum = why.reduce((n, w) => n + w.beat, 0);
+              // ── Is the PRINCIPAL reason the first bullet? ────────────
+              //
+              // The panel bolds the key that separates the front card from the RUNNER-UP, on the
+              // argument that losing that one key would put it second whatever else is true. The
+              // cheap alternative — bold the first bullet — is the same thing only when the
+              // highest-numbered test that beat anybody also beat the runner-up. This says how
+              // often that is actually so; if it were always, the distinction would be theatre.
+              const principal = orderReason(rest[0], rest[1])?.key ?? null;
+              return { at: k, rivals: rest.length - 1, sum, ok: sum === rest.length - 1,
+                       principal, firstBullet: why[0]?.key ?? null,
+                       principalIsFirst: principal === (why[0]?.key ?? null),
+                       bullets: why.map(w => `${w.key}${w.value != null ? `=${w.value}` : ""}x${w.beat}`) };
+            };
+            return { via: st.via, place: st.place.length, swaps: st.swaps.length,
+                     final: fin.size, rolled: rolled.size,
+                     wrong: wrong.slice(0, 6), wrongN: wrong.length, extra: extra.length,
+                     rank: rank.length, rankTop: top, rankTier: st.rankingTier,
+                     why: [whyAt(0), whyAt(Math.floor(st.place.length / 2))],
+                     passes: [...new Set(st.swaps.map(m => m.pass))] };
+          })(),
+          // ── What the walkthrough can actually DRAW ───────────────────
+          //
+          // The derivation view renders the planner's own rows over the student's semesters, so
+          // two things have to hold on every real recording and neither is visible from the plan:
+          //
+          //   the TERM JOIN — every term carries the `yearIndex` + `semTypeId` pair that lands it
+          //   on a semester. A term missing it is a row the reader does not have, and the view
+          //   falls back to the shape's words for it.
+          //   the CARD SPLIT — how many cells name one course (drawn as a course card, striped by
+          //   subject) against how many are requirements (drawn as a placeholder). The split is
+          //   the whole argument for naming placeholders by their requirement rather than hatching
+          //   them: measured here rather than assumed.
+          walkGrid: (() => {
+            const terms = snap.terms ?? [];
+            const joined = terms.filter(t => t.semTypeId && t.yearIndex != null).length;
+            const named = (snap.roster ?? []).filter(
+              c => /^[A-Z]{2,5}\s*\d{3,4}$/.test(String(c.code ?? "").trim())).length;
+            // The employment terms travel separately — `studyTerms` filters them out of the
+            // search's list — and a plan whose co-ops never reach the recording is drawn without
+            // them, which is how the view shipped a four-year degree with two co-ops missing.
+            const wk = snap.workTerms ?? [];
+            return {
+              terms: terms.length, joined,
+              work: wk.length, workJoined: wk.filter(t => t.semTypeId && t.yearIndex != null).length,
+              workAt: wk.map(t => `${t.yearIndex}:${t.semTypeId}`).join(" "),
+              join: terms.slice(0, 4).map(t => `${t.yearIndex}:${t.semTypeId}`).join(" "),
+              cards: snap.roster?.length ?? 0, named,
+              placeholders: (snap.roster?.length ?? 0) - named,
+              sampleCode: (snap.roster ?? []).find(c => c.code)?.code ?? null,
+              sampleTitle: (snap.roster ?? []).find(c => !c.code)?.title ?? null,
+            };
+          })(),
+          tree: (() => {
+            if (!model) return null;
+            try {
+              const t = searchTree(snap);
+              // A node whose parent link points forward, or to the wrong level, means the
+              // pre-order reconstruction is wrong — which would draw a plausible tree that
+              // is not the search's.
+              const bad = t.nodes.filter(nd => nd.parent >= nd.index
+                || (nd.parent >= 0 && t.nodes[nd.parent].depth !== nd.depth - 1)).length;
+              return { drawable: t.drawable, span: t.span, nodes: t.nodes.length,
+                       depth: t.depth, width: t.width, badParents: bad };
+            } catch (e) { return { threw: String(e?.message ?? e) }; }
+          })(),
+        };
+        return;
+      }
       if (r.refused) {
         refused++;
         // The detail too. "fails-hard-criteria" names WHICH term and WHICH criterion, and
@@ -395,6 +575,79 @@ if (electivesMode) {
   }
   if (jsonOut) { writeFileSync(jsonOut, JSON.stringify(out, null, 1)); console.log(`  → ${jsonOut}`); }
   process.exit(0);
+}
+
+if (traceMode) {
+  const ok = rows.filter(([, v]) => !v.threw);
+  const differ = ok.filter(([, v]) => !v.same);
+  console.log(`${ok.length} plans traced   IDENTICAL ${ok.length - differ.length}`
+    + `   DIFFERENT ${differ.length}`);
+  // Loud, and first. A trace that changes a plan is the same class of defect as a propagator
+  // that rewrites what it was asked to check, and the whole view is worthless if it is true.
+  if (differ.length) {
+    console.error(`✗ the trace CHANGED the plan for ${differ.length} of ${ok.length}`);
+    for (const [k] of differ.slice(0, 5)) console.error(`   ${k}`);
+  }
+  for (const [k, v] of ok) {
+    console.log(`  ${k.padEnd(46)} nodes ${String(v.nodes).padStart(6)}`
+      + `  recorded ${String(v.recorded).padStart(6)}${v.truncated ? " TRUNC" : "      "}`
+      + `  attempts ${String(v.attempts).padStart(3)}  stages ${String(v.stages).padStart(3)}`
+      + `  rejects ${String(v.rejects).padStart(7)}`
+      + `  ${String(v.msPlain).padStart(5)} → ${String(v.msTraced).padStart(5)} ms`);
+    console.log(`      ${v.saturated ? "SATURATED" : "small    "}`
+      + `  answered=${String(v.answered).padEnd(9)}`
+      + `  tree ${v.tree?.drawable ? `${v.tree.nodes}n d${v.tree.depth} w${v.tree.width}` : "not drawable"}`
+      + `  badParents ${v.tree?.badParents ?? "-"}`
+      + `  buckets ${v.buckets}${v.exact ? " exact" : ""}`
+      + `  fates ${v.fateSum}/${v.fateExpect}`
+      + `  top ${v.topCause ?? "-"}`);
+    console.log(`      ${v.stageKeys}`);
+    if (v.steps) {
+      console.log(`      steps via=${v.steps.via} place=${v.steps.place} swaps=${v.steps.swaps}`
+        + ` final=${v.steps.final} rolled=${v.steps.rolled} WRONG=${v.steps.wrongN}`
+        + ` extra=${v.steps.extra}  passes=${v.steps.passes.join(",")}`);
+      for (const w of v.steps.wrong) console.log(`        ${w}`);
+    }
+    if (v.modelErr) console.error(`      ✗ deriveModel threw: ${v.modelErr}`);
+  }
+  // The three invariants of the reduction, checked over real recordings rather than argued.
+  const modelBad = ok.filter(([, v]) => v.modelErr);
+  const fateBad = ok.filter(([, v]) => v.fateSum !== v.fateExpect);
+  const parentBad = ok.filter(([, v]) => (v.tree?.badParents ?? 0) > 0);
+  console.log(`  deriveModel threw ${modelBad.length}`
+    + `   fate coverage wrong ${fateBad.length}`
+    + `   tree parent links wrong ${parentBad.length}`);
+  // ── How many CATEGORIES the narrowing matrix actually needs ────────
+  const allFates = {};
+  for (const [, v] of ok) for (const [k, c] of Object.entries(v.fates ?? {})) {
+    allFates[k] = (allFates[k] ?? 0) + c;
+  }
+  const fTot = Object.values(allFates).reduce((a, b) => a + b, 0) || 1;
+  console.log("  fate distribution over every (card, term) pair:");
+  for (const [k, c] of Object.entries(allFates).sort((a, b) => b[1] - a[1])) {
+    console.log(`    ${k.padEnd(26)} ${String(c).padStart(7)}  ${(100 * c / fTot).toFixed(1)}%`
+      + `   in ${ok.filter(([, v]) => (v.fates?.[k] ?? 0) > 0).length}/${ok.length} plans`);
+  }
+  const sat = ok.filter(([, v]) => v.saturated).length;
+  const drawable = ok.filter(([, v]) => v.drawableTree).length;
+  const nodeList = ok.map(([, v]) => v.nodes).sort((a, b) => a - b);
+  const q = (p) => nodeList[Math.min(nodeList.length - 1, Math.floor(p * nodeList.length))];
+  console.log(`  nodes p10 ${q(0.1)}  p50 ${q(0.5)}  p90 ${q(0.9)}  max ${nodeList[nodeList.length - 1]}`);
+  console.log(`  saturated ${sat}/${ok.length}   tree drawable ${drawable}/${ok.length}`);
+  // The overhead, as a share of the clock the search shares with its own fallback tiers. This
+  // is the number that decides whether the sink is safe: `placeCells` refuses when the clock
+  // runs out, so the only way tracing can change an answer is by being slow.
+  const msP = ok.reduce((a, [, v]) => a + v.msPlain, 0);
+  const msT = ok.reduce((a, [, v]) => a + v.msTraced, 0);
+  console.log(`  clock  ${msP} ms untraced → ${msT} ms traced`
+    + `   overhead ${msP ? (100 * (msT - msP) / msP).toFixed(1) : "0.0"}%`);
+  // Every node the engine counted must appear in the recording. A gap means a `step()` path
+  // returns without recording its result, which is the failure mode that would show up in the
+  // profile as a search that ends early for no reason.
+  const lost = ok.filter(([, v]) => v.recorded < v.nodes && !v.truncated);
+  console.log(`  nodes recorded < nodes counted (and not truncated)   ${lost.length}`);
+  if (jsonOut) { writeFileSync(jsonOut, JSON.stringify(out, null, 1)); console.log(`  → ${jsonOut}`); }
+  process.exit(differ.length || lost.length ? 1 : 0);
 }
 
 console.log(`${rows.length} plans   refused ${refused}   threw ${threw.length}`);

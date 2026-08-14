@@ -401,9 +401,13 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
         <span style={{ fontSize: fz - 1, color: "var(--text-5)" }}>{open ? "▾" : "▸"}</span>
       </div>
 
-      {showWhy && gen?.report && (
+      {/* Opened for a REFUSAL too, on `derivation` alone. A refused degree has no plan to read
+          instead, so the record of the search is the only account of what happened — and it is
+          the case where "why?" is most likely to be asked. */}
+      {showWhy && (gen?.report || gen?.derivation) && (
         <ChartExplainer
-          report={gen.report} program={programData} isPhone={isPhone}
+          report={gen.report ?? null} derivation={gen.derivation ?? null}
+          program={programData} isPhone={isPhone}
           onClose={() => setShowWhy(false)}
         />
       )}
@@ -470,6 +474,21 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
               {gen.refused.reason === "concentration-unfillable" && !concentration
                 ? t("chart.refused.conc")
                 : refusalMessage(gen.refused, t)}
+              {/* The refusal says WHAT could not be done; this opens what was tried. Inside the
+                  same box rather than beside it, because it is a continuation of that sentence
+                  and not a separate offer. */}
+              {gen.derivation && (
+                <div style={{ marginTop: 5 }}>
+                  <button
+                    onClick={() => setShowWhy(true)}
+                    style={{
+                      fontSize: PHONE_FZ(isPhone), background: "transparent", border: "none",
+                      color: "var(--text-3)", cursor: "pointer", padding: 0,
+                      textDecoration: "underline", textUnderlineOffset: 2,
+                    }}
+                  >{t("chart.deriv.why")}</button>
+                </div>
+              )}
             </div>
           )}
 
