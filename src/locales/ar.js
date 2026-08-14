@@ -89,8 +89,6 @@ export const strings = {
   "bank.filter.empty":            "لا توجد مقررات تطابق عوامل التصفية.",
 
   // ── Semester row ───────────────────────────────────────────────
-  "sem.slot.add":           "+ إضافة",
-  "sem.slot.drop":          "إسقاط للإضافة",
   "sem.other.label.open":   "▼ ساعات أخرى",
   "sem.other.label.closed": "► ساعات أخرى",
   "sem.other.title.hide":   "إخفاء الساعات الأخرى",

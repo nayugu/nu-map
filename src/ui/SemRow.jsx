@@ -426,6 +426,10 @@ export default function SemRow({ sem }) {
                   }}
                   onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
                   onDrop={e => { e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id); }}
+                  // No label. Every other empty slot in the planner is a bare dashed
+                  // box that only highlights on drag-over — text here was the one
+                  // inconsistent spot, and "+ add" read as a button to click rather
+                  // than a place to drop a course.
                   style={{
                     height: 70, width: 164, flexShrink: 0,
                     border: hoveredZone?.semId === sem.id && hoveredZone?.zone === "append"
@@ -433,14 +437,9 @@ export default function SemRow({ sem }) {
                     borderRadius: 6,
                     background: hoveredZone?.semId === sem.id && hoveredZone?.zone === "append"
                       ? "var(--active-bg)" : "transparent",
-                    display: "flex", alignItems: "center", justifyContent: "center",
                     transition: "border-color 0.1s, background 0.1s",
                   }}
-                >
-                  <span style={{ fontSize: 9, color: "var(--text-5)", fontStyle: "italic", pointerEvents: "none" }}>
-                    {hoveredZone?.semId === sem.id && hoveredZone?.zone === "append" ? t("sem.slot.drop") : t("sem.slot.add")}
-                  </span>
-                </div>
+                />
               </div>
             )}
           </div>

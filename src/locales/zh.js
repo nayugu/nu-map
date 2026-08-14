@@ -89,8 +89,6 @@ export const strings = {
   "bank.filter.empty":            "\u6ca1\u6709\u7b26\u5408\u7b5b\u9009\u6761\u4ef6\u7684\u8bfe\u7a0b\u3002",
 
   // ── Semester row ───────────────────────────────────────────────
-  "sem.slot.add":              "+ \u6dfb\u52a0",
-  "sem.slot.drop":             "\u62d6\u653e\u6dfb\u52a0",
   "sem.other.label.open":      "\u25bc \u5176\u4ed6\u5b66\u5206",
   "sem.other.label.closed":    "\u25ba \u5176\u4ed6\u5b66\u5206",
   "sem.other.title.hide":      "\u9690\u85cf\u5176\u4ed6\u5b66\u5206",
