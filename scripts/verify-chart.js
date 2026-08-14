@@ -134,6 +134,7 @@ const Q = {
   loadSpreadSum: 0, longestEmptyRun: 0, plansWithGap: 0,
   choicePairs: 0, choiceCollapsed: 0, choiceTight: 0, plansWithForcedChoice: 0,
   choiceP10s: [],
+  unguidedMax: 0, unguidedOver2: 0, unguidedOver3: 0,
 };
 // Plans whose concentration reservations cannot be filled under some option, and the programs
 // they belong to. Counted separately from `violations` while the engine still emits them, so the
@@ -233,6 +234,9 @@ for (const d of degrees) {
     Q.choiceTight += g.quality.choiceTight;
     Q.plansWithForcedChoice += g.quality.choiceCollapsedHere ? 1 : 0;
     if (g.quality.choiceP10 != null) Q.choiceP10s.push(g.quality.choiceP10);
+    Q.unguidedMax = Math.max(Q.unguidedMax, g.quality.unguidedMax);
+    Q.unguidedOver2 += g.quality.unguidedOver2;
+    Q.unguidedOver3 += g.quality.unguidedOver3;
     if (optionPools(d.data).length) { R.concPlans++; R.concPrograms.add(label.split("#")[0]); }
     if (g.reservations.length) { R.plans++; R.programs.add(label.split("#")[0]); }
     if (!g.ok) {
@@ -271,6 +275,13 @@ const pct = (n, d) => `${(100 * n / Math.max(1, d)).toFixed(1)}%`;
 console.log(`\n  ── quality (reported, never gated) ──`);
 console.log(`  3+ cells of one requirement in a term   ${Q.clumped} of ${Q.studyTerms} `
   + `(${pct(Q.clumped, Q.studyTerms)})    departments: 0.7%`);
+// Criterion 3. The bound is the departments' own: over 5,978 published undergraduate study
+// terms they leave <=2 cells unguided in 98.8%, 3 in 55 and 4 in 14. Past two they NAME the
+// cell, which is why this counts unguidedness and not placeholders — see chart-gate `isUnguided`.
+console.log(`  terms leaving 3+ cells UNGUIDED         ${Q.unguidedOver2} of ${Q.studyTerms} `
+  + `(${pct(Q.unguidedOver2, Q.studyTerms)})    departments: 1.2%`);
+console.log(`  terms leaving 4+ cells unguided         ${Q.unguidedOver3} of ${Q.studyTerms} `
+  + `(${pct(Q.unguidedOver3, Q.studyTerms)})    departments: 0.2%   worst term ${Q.unguidedMax}`);
 console.log(`  mean placeholder position                `
   + `${(Q.fillerPositionSum / Math.max(1, Q.fillerCount)).toFixed(3)}`
   + `                    departments: 0.601`);

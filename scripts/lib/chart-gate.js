@@ -57,6 +57,32 @@
 import { CONCENTRATION } from "../../src/core/requirementDemand.js";
 
 /**
+ * Does this card tell the student anything about what to take?
+ *
+ * UNGUIDED: "Elective", "General Elective", "Open elective", "Free elective", any of those
+ * with a parenthetical aside. GUIDED: anything naming a subject, a level, a field or a
+ * requirement — "PSYC elective", "Upper-division elective", "Foreign language core course",
+ * and CHART's own "General Elective (IC)" once it is bound to a competency.
+ *
+ * The boundary matters more than it looks. Matching only the literal "General Elective"
+ * misses 2,440 cells written as a bare "Elective" and yields a tidy "max 2, zero
+ * exceptions" that is an artifact of the regex; counting every placeholder instead sweeps
+ * in the named ones and reverses the comparison against the departments entirely. Both
+ * errors were made before this line was written.
+ */
+export const isUnguided = (text) => {
+  const m = /^(general\s+|open\s+|free\s+)?electives?\s*(\(([^)]*)\))?$/i
+    .exec(String(text ?? "").trim());
+  if (!m) return false;
+  // The parenthetical decides. A department's aside — "Elective (Dialogue of Civilizations
+  // possible)" — says nothing about what to take, so the cell is still unguided. A NUPath
+  // code is the opposite: it names a competency the student must satisfy, which is the whole
+  // point of binding the cell, so "General Elective (IC)" is GUIDED. Reading both the same
+  // way would have scored CHART's own fix as if it had changed nothing.
+  return !/^[A-Z]{2}$/.test((m[3] ?? "").trim());
+};
+
+/**
  * @param {object} args
  * @param {object} args.plan          one entry of `plans[]` from a generated document
  * @param {Record<string,object>} args.courseMap
@@ -87,6 +113,11 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
       // them and nothing was counting them either — see `quality` below.
       const perReq = new Map();
       let fillers = 0;
+      // Cells that say nothing at all about what to take. Counted separately from
+      // `fillers`, which includes every placeholder — a department's "PSYC elective" is a
+      // placeholder and is NOT unguided, and conflating the two is what made CHART look
+      // better than the departments at clumping when it is four times worse. See `isUnguided`.
+      let unguided = 0;
       const walk = (entries) => {
         for (const e of entries ?? []) {
           if (e.coop) { coop = true; walk(e.children); continue; }
@@ -103,6 +134,7 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
           const key = e.text ?? "";
           if (key) perReq.set(key, (perReq.get(key) ?? 0) + 1);
           if (!e.options?.length) fillers++;
+          if (isUnguided(e.text)) unguided++;
           if (e.options?.length === 1) for (const id of e.options[0]) placed[id] = ord;
           walk(e.children);
         }
@@ -112,7 +144,7 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
         label: `${year.label ?? ""} ${t.term ?? ""}`.trim(),
         season: t.type, coop, cells, big, sh,
         maxPerReq: perReq.size ? Math.max(...perReq.values()) : 0,
-        fillers,
+        fillers, unguided,
         // A work term still occupies an ordinal: it separates a prerequisite from the
         // course that needs it, and collapsing it would make a co-op look like no time at all.
         half: /summer\s*(1|2|a|b)/i.test(`${t.term ?? ""}`),
@@ -256,6 +288,21 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
     // legal on every term cap can still be 19 SH then 8 SH, which no student would choose.
     loadSpread: studyRows.length
       ? Math.max(...studyRows.map(r => r.sh)) - Math.min(...studyRows.map(r => r.sh)) : 0,
+    // ── How many cells a term leaves UNSAID ──────────────────────────
+    //
+    // The corpus bound, over 5,978 published undergraduate study terms: cells that name
+    // nothing number **≤2 in 98.8%** of them, 3 in 55, 4 in 14. Departments buy the headroom
+    // past two by NAMING — "PSYC elective", "Upper-division elective", "Foreign language core
+    // course" — and 43% of their elective-bucket cells are named that way. So the convention
+    // is not a limit on electives at all; it is a limit on how much a term may leave unsaid,
+    // and naming is how they raise it.
+    //
+    // Counted because nothing counted it. Measuring PLACEHOLDERS instead swept in every named
+    // one and made CHART look better than the departments here when it is several times
+    // worse — see docs/chart-success-criteria.md §3 and the denominator note.
+    unguidedMax: studyRows.length ? Math.max(...studyRows.map(r => r.unguided)) : 0,
+    unguidedOver2: studyRows.filter(r => r.unguided > 2).length,
+    unguidedOver3: studyRows.filter(r => r.unguided > 3).length,
     // ── Surviving choice, for a reservation that promises one ────────
     //
     // `choicePairs` is the denominator and is reported with the rest: a zero collapse count

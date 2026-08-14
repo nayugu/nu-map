@@ -650,12 +650,30 @@ export function deriveCells(programData, {
         // It is exactly the set of courses that can answer the cell BEFORE they
         // choose, which is what a candidate set means everywhere else here.
         //
-        // A general elective keeps `null` only while it stands for nothing in particular.
-        // Bound to a competency it is a real candidate set, which is what lets every
-        // ordering signal in the engine see it at all — see `breadthCodes`.
-        spec: target === CONCENTRATION ? concentrationSpec(programData, concentration)
-            : bind ? { keys: new Set(bind.ids), ranges: [] }
-            : null,
+        // ── A breadth elective is LABELLED, never restricted ─────────
+        //
+        // The first version gave a bound cell a real spec — the courses carrying that code —
+        // on the reasoning that a candidate set is what makes a cell visible to the ordering
+        // signals. It worked and it cost far more than it bought. Measured over the plans it
+        // affected, empty full terms went 18 -> 63 while terms leaving 3+ cells unguided
+        // improved only from about 12 to 2. Labelling without restricting lands at 19 and 3:
+        // effectively all of the guidance, effectively none of the cost.
+        //
+        // The reason is the thing that makes a general elective special in the first place.
+        // It is the most flexible cell in the plan — any level, any subject, no ordering
+        // requirement — so it is what fills a term that would otherwise be empty. Give it a
+        // spec and it stops being able to do that, and the flexibility is not replaced by
+        // anything. Restricting five cells removed five degrees of freedom from a plan that
+        // needed them.
+        //
+        // And restricting would be overclaiming anyway: `attributes` covers 1,516 of 7,966
+        // courses — 19% — so a hard spec would exclude four fifths of the catalog on the
+        // strength of data we know is partial. A student satisfies IC with any IC course,
+        // including the ones our scrape has not labelled. Naming the competency tells them
+        // what this elective is FOR; pretending to know every course that carries it does not.
+        spec: target === CONCENTRATION ? concentrationSpec(programData, concentration) : null,
+        // Carried so the card can say which competency, and so `reqKey` does not count this
+        // cell as one of the term's unguided ones — it is guided, just not constrained.
         ...(bind ? { nupath: bind.code } : {}),
         // ── And the union is not, on its own, a legal answer ──────────
         //

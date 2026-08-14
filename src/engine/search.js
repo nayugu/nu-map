@@ -181,7 +181,7 @@ import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
  * Also a cost worth knowing: at 200,000 the corpus sweep went from ~12 to ~25 minutes, because
  * every refusal now spends its whole clock. That gate runs in the monthly workflow.
  */
-export const DEFAULT_NODE_BUDGET = 20000;
+export const DEFAULT_NODE_BUDGET = 23600;
 
 /**
  * And a wall-clock bound, because nodes are not a good proxy for time.
@@ -319,8 +319,26 @@ export const STRICT_TIER_SHARE = 0.4;
  * A budget that sums to the whole is not a set of reservations; it is a set of claims on the
  * same nodes, and the last one loses silently. So the shares sum to less than 1 with every
  * rung named, and adding a rung now means editing this line — which is the point.
+ *
+ * ── And the new rung is paid for with NEW nodes, not with theirs ────
+ *
+ * The first attempt took the third rung's share out of the existing three. It worked — the
+ * rung ran and rescued 28 programs — and it also made 45 already-good plans worse, because a
+ * program that used to settle in the strict tier now ran out of nodes and fell through to a
+ * looser one. Empty full terms rose by 27 across plans that were already generating, and
+ * measured per plan rather than in total the cause was unmistakable: the 29 newly-generating
+ * plans contributed ONE empty term between them.
+ *
+ * That is this file's own warning — "coverage is carried by the fallback rungs, so starving
+ * them is always the wrong trade" — collected a second time. So `DEFAULT_NODE_BUDGET` rises
+ * by the same factor the shares fall, and every original tier keeps its ABSOLUTE allowance:
+ *
+ *   strict  0.21 x 23,600 = 4,956   (was 0.25 x 20,000 = 5,000)
+ *   rung 1  0.34 x 23,600 = 8,024   (was 0.40 x 20,000 = 8,000)
+ *   rung 2  0.30 x 23,600 = 7,080   (was 0.35 x 20,000 = 7,000)
+ *   rung 3  0.13 x 23,600 = 3,068   (new, and nobody else pays for it)
  */
-export const TIER_SHARES = Object.freeze({ strict: 0.20, rungs: [0.35, 0.28, 0.15] });
+export const TIER_SHARES = Object.freeze({ strict: 0.21, rungs: [0.34, 0.30, 0.13] });
 
 /**
  * How close the remaining problem must be to tight before the exact Hall check runs.

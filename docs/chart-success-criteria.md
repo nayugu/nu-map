@@ -82,9 +82,21 @@ prereq depth, season, contention, chain height, the witness — is blind to it. 
 placed badly; it is **outside the model**, so it lands wherever room is left, which is
 the end.
 
-So the order of work is: evaluate electives correctly first (bind the unmet
-competencies, then treat the remainder as the genuinely free resource they are), and
-the term-level distribution follows. A per-term cap is the guard, never the mechanism.
+So the order of work is: evaluate electives correctly first, and the term-level
+distribution follows. A per-term cap is the guard, never the mechanism.
+
+**And the guidance is a LABEL, not a restriction — this is the part that was got wrong
+once and is easy to get wrong again.** Naming the competency on the card gives the
+student what they need. Narrowing the cell's candidate set to the courses carrying that
+code does not, and it costs the one thing that made the cell valuable: measured over the
+plans it touched, hard binding sent empty full terms from 18 to 63 while improving
+unguided-heavy terms only from ~12 to 2, where labelling alone lands at 19 and 3.
+
+It would also overclaim. `courseMap[id].attributes` covers **1,516 of 7,966 courses —
+19%** — so a hard spec excludes four fifths of the catalog on data known to be partial.
+A student satisfies IC with any IC course, including the ones the scrape has not
+labelled yet. Say what the elective is FOR; do not pretend to know every course that
+qualifies.
 
 *Measured by:* unguided cells per term. The corpus bound: over 5,978 published
 undergraduate study terms, cells labelled only "Elective"/"General Elective" number
@@ -115,16 +127,37 @@ Measured against `origin/main` at `f9df193ce2`:
 
 | | main | now |
 |---|---|---|
-| generated of 1,031 shapes | 774 | **794** |
-| `full-term-cannot-reach-four` refusals | 21 | **2** |
-| 3+ cells of one requirement in a term | 6.5% | **4.5%** |
-| thin full terms | 2.1% | 2.5% ¹ |
-| EMPTY full terms | 360 | **391** ← open |
+| generated of 1,031 shapes | 774 | **782** |
+| `full-term-cannot-reach-four` refusals | 21 | **0** |
+| 3+ cells of one requirement in a term | 6.5% | **3.3%** |
+| terms leaving 3+ cells unguided | — | **2.1%** (departments 1.2%) |
+| terms leaving 4+ cells unguided | — | **0.4%** (departments 0.2%) |
+| thin full terms | 2.1% | 2.6% ¹ |
+| EMPTY full terms | 360 | **360** |
+| plans with an empty-semester gap | 34.8% | **34.0%** |
 | hard-rule violations | 0 | 0 |
 
 ¹ Not a regression: the measure is stricter now, and 28 of these plans exist at all
 only because the four-course rung finally runs.
 
-**Open against criterion 1:** empty full terms rose 360 → 391. An empty term is the
-worst possible failure of "every full term must be full", so this is the next thing to
-break down and fix, not something to accept alongside the wins above.
+### The empty-term regression, and what it cost to find
+
+An intermediate version reached 794 generated and pushed empty terms to 391. Three
+hypotheses were wrong before the cause turned up, and the sequence is worth keeping:
+
+1. *"The 20 new plans bring their own empty terms."* No — measured per plan, the 29
+   newly-generating plans carried **one** empty term between them; the rise was 764
+   plans that already existed getting worse.
+2. *"The rebalanced tier shares starved the earlier tiers."* Real, and fixed by paying
+   for the new rung with new nodes — but it moved the number by 2.
+3. *"`bigSH` was added to the receiving term and never subtracted from the donor."* A
+   genuine bug, fixed, and still not the cause.
+
+The cause was **binding breadth electives to a candidate set**, and 33 of the 43
+regressed plans had reached the *strict* tier — no relaxation involved at all, which is
+what ruled out every ladder explanation at a glance once the data was grouped that way.
+
+That diagnosis took three full-corpus runs at ~10 minutes each. `scripts/chart-probe.js`
+now runs the same question over a named list of plans in **13 seconds**, and the whole
+bisection above was redone with it in under two minutes. A slow feedback loop is not a
+neutral cost: it is why three changes were in flight before the first number came back.

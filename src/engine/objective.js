@@ -819,7 +819,11 @@ export function fillFullTerms(termOf, { plans, terms, cap, fullLegal, maxPasses 
         const sh = donor.p.cell.sh ?? 0;
         current = donor.trial;
         big[t] += 1; load[t] += sh; bigSH[t] += sh;
-        big[donor.from] -= 1; load[donor.from] -= sh;
+        // `bigSH` has to be unwound on BOTH sides. Added to the receiver and not subtracted
+        // from the donor, the donor's real-course credit only ever grows, so `termIsFull`
+        // reads it as fuller than it is and it is never refilled — a term can be drained and
+        // then skipped by the very loop that exists to fill it.
+        big[donor.from] -= 1; load[donor.from] -= sh; bigSH[donor.from] -= sh;
         moves += 1;
         changed = true;
         filled.push({ cell: donor.p.cell.title ?? "", from: donor.from, to: t });
