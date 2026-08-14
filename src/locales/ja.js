@@ -158,6 +158,8 @@ export const strings = {
   "plusone.rule.unrecognised":       "まだ読み取れない規則です（{kind}）。アドバイザーに確認してください。",
   "plusone.rule.shareCap.ok":        "{maxCourses} 科目中 {courses} 科目・{maxSH} SH 中 {sh} SH を共通利用中。",
   "plusone.rule.shareCap.over":      "{courses} 科目・{sh} SH は上限（{maxCourses} 科目または {maxSH} SH）を超えています。",
+  "plusone.rule.transferCap.ok":     "学部生として履修した大学院科目のうち {sh}/{maxSH} SH が修士号に振り替え可能です。",
+  "plusone.rule.transferCap.over":   "学部生として履修した大学院科目 {sh} SH は、修士号に振り替え可能な上限 {maxSH} SH を超えています — 超過分は修士号にカウントされません。",
   "plusone.rule.subBudget.ok":       "学科外の科目は {maxSH} SH 中 {usedSH} SH。",
   "plusone.rule.subBudget.over":     "学科外の {usedSH} SH は上限 {maxSH} SH を超えています。",
   "plusone.rule.subBudget.inapplicable": "{concentration} では学科外 {maxSH} SH まで認められます。",
@@ -513,6 +515,7 @@ export const strings = {
   "info.offered.pop.other":       "その他",
   "info.offered.pop.basis":       "記録されている全学期の履修者数に占める割合。",
   "info.drag.title":              "ドラッグして配置",
+  "info.back.title":              "{code} に戻る",
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":         "{n}件のコース",

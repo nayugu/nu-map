@@ -157,6 +157,8 @@ export const strings = {
   "plusone.rule.unrecognised":       "아직 읽을 수 없는 규칙입니다({kind}). 지도교수에게 문의하세요.",
   "plusone.rule.shareCap.ok":        "{maxCourses}과목 중 {courses}과목 · {maxSH} SH 중 {sh} SH 공통 인정 중.",
   "plusone.rule.shareCap.over":      "{courses}과목과 {sh} SH는 {maxCourses}과목 또는 {maxSH} SH 한도를 넘습니다.",
+  "plusone.rule.transferCap.ok":     "학부생 신분으로 이수한 대학원 과목 중 {sh}/{maxSH} SH가 석사 학위로 이전될 수 있습니다.",
+  "plusone.rule.transferCap.over":   "학부생 신분으로 이수한 대학원 과목 {sh} SH가 석사 학위로 이전 가능한 한도 {maxSH} SH를 초과했습니다 — 초과분은 석사 학위에 반영되지 않습니다.",
   "plusone.rule.subBudget.ok":       "학과 외 과목은 {maxSH} SH 중 {usedSH} SH.",
   "plusone.rule.subBudget.over":     "학과 외 {usedSH} SH는 {maxSH} SH 한도를 넘습니다.",
   "plusone.rule.subBudget.inapplicable": "{concentration}은(는) 학과 외 {maxSH} SH까지 허용합니다.",
@@ -512,6 +514,7 @@ export const strings = {
   "info.offered.pop.other":       "기타",
   "info.offered.pop.basis":       "기록된 모든 학기의 수강 인원 기준 비율입니다.",
   "info.drag.title":              "드래그하여 배치",
+  "info.back.title":              "{code}로 돌아가기",
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":         "{n}개 코스",

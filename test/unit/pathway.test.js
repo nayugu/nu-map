@@ -20,7 +20,7 @@ import { evaluateRule, evaluatePathway, summarise } from "../../src/core/pathway
 import {
   activeShares, pathwaySubstitutions, mergeSubstitutions, assertOneWay,
   shareTotals, excludedIds, resolveCandidates, ambiguousShares,
-  shareCandidates, hasOpenShareDomain,
+  shareCandidates, hasOpenShareDomain, pathwayGradCreditSH,
 } from "../../src/core/pathway/shareSet.js";
 import {
   selectPathways, msProgramFor, isStale, isEligibleFor, matchesEligibility, collegeOf,
@@ -55,11 +55,9 @@ const MSCS = "khoury/bscs-to-mscs";
 const CMPE = "khoury/bscmpe-to-mscs";
 
 /** Minimal ctx builder. */
-function ctxFor(pathway, { placements = {}, grades = {}, semIndex = null, includeWithdrawn } = {}) {
-  const shares = activeShares({
-    pathway, placements, courseMap, grades,
-    isVoid: g => g === "W" || g === "F" || g === "U",
-  });
+function ctxFor(pathway, { placements = {}, grades = {}, semIndex = null, includeWithdrawn, msTotalSH = null } = {}) {
+  const isVoid = g => g === "W" || g === "F" || g === "U";
+  const shares = activeShares({ pathway, placements, courseMap, grades, isVoid });
   const counting = pathway.counting ?? {};
   return {
     pathway, shares, placements, courseMap, semIndex,
@@ -67,6 +65,8 @@ function ctxFor(pathway, { placements = {}, grades = {}, semIndex = null, includ
     totals: shareTotals(shares, {
       includeWithdrawn: includeWithdrawn ?? !!counting.includeWithdrawn,
     }),
+    gradCreditSH: pathwayGradCreditSH(pathway, { placements, courseMap, grades, isVoid }),
+    msTotalSH,
   };
 }
 
@@ -192,6 +192,96 @@ describe("the share cap is DISJUNCTIVE — four courses OR 16 SH", () => {
       [5, 20, STATUS.VIOLATED],
     ].map(([c, sh, want]) => run({ courses: c, semesterHours: sh }).status === want);
     assert.deepEqual(results, [true, true, true, true]);
+  });
+});
+
+// ═══════════════════════════════════════════════════════════════════
+describe("transferCap is a SECOND, independent 16 SH limit, with a 14 SH floor", () => {
+  const rule = { kind: "transferCap", maxSH: 16, floorSH: 14 };
+
+  // CS5010 is a real graduate CS course — NOT one of MSCS's 13 named shares.
+  // CS5800 IS named (targets CS3000). DS5010 is graduate but a different
+  // subject MSCS shares nothing from.
+  test("named-share credit within the cap is satisfied, same as shareCap", () => {
+    const ctx = ctxFor(byId(MSCS), { placements: { CS5800: "f1" } });
+    assert.equal(ctx.gradCreditSH.semesterHours, 4);
+    assert.equal(evaluateRule(rule, ctx).status, STATUS.SATISFIED);
+  });
+
+  // The bug this rule exists to prevent: a student can be LEGAL under
+  // shareCap (nothing here fills a bachelor's requirement beyond it) while
+  // still being over THIS cap, because transferCap counts graduate credit
+  // taken as an undergraduate whether or not it is shared.
+  test("extra graduate courses beyond the named shares still spend against this cap, even though shareCap does not see them", () => {
+    // 5 unnamed 4-SH CS graduate courses = 20 SH, no named share among them.
+    const placements = {
+      CS5010: "f1", CS5047: "f1", CS5097: "f2", CS5130: "f2", CS5170: "f3",
+    };
+    const ctx = ctxFor(byId(MSCS), { placements });
+    assert.equal(ctx.totals.semesterHours, 0, "shareCap's own total sees nothing here");
+    assert.equal(evaluateRule({ kind: "shareCap" }, ctx).status, STATUS.SATISFIED,
+      "shareCap is satisfied — nothing here fills a bachelor's requirement");
+    assert.equal(ctx.gradCreditSH.semesterHours, 20);
+    const d = evaluateRule(rule, ctx);
+    assert.equal(d.status, STATUS.VIOLATED,
+      "transferCap must independently catch what shareCap cannot see");
+    assert.equal(d.params.sh, 20);
+    assert.equal(d.params.maxSH, 16);
+  });
+
+  test("a graduate course OUTSIDE the pathway's subject family does not count", () => {
+    const ctx = ctxFor(byId(MSCS), { placements: { DS5010: "f1" } });
+    assert.equal(ctx.gradCreditSH.semesterHours, 0);
+    assert.equal(evaluateRule(rule, ctx).status, STATUS.SATISFIED);
+  });
+
+  test("a withdrawn attempt earns no credit and does not count", () => {
+    const ctx = ctxFor(byId(MSCS), {
+      placements: { CS5010: "f1" }, grades: { CS5010: "W" },
+    });
+    assert.equal(ctx.gradCreditSH.semesterHours, 0);
+  });
+
+  test("a retake counts once: a withdrawn first attempt plus a passed retake is one course", () => {
+    const ctx = ctxFor(byId(MSCS), {
+      placements: { CS5010: "f1", "CS5010#2": "f2" },
+      grades: { CS5010: "W" },
+    });
+    assert.equal(ctx.gradCreditSH.semesterHours, 4);
+  });
+
+  // COE FAQ: beyond 16 SH cannot transfer "even if not applied to BS" — the
+  // registrar's 14 SH floor (KB000020031) narrows this further for a master's
+  // smaller than 30 SH. Khoury's programs are all 32 SH, so the floor never
+  // binds for what ships today (32 - 14 = 18 > 16); this pathway is synthetic
+  // exactly so the floor gets exercised somewhere.
+  test("a smaller master's floor binds BEFORE the plain 16 SH cap", () => {
+    const placements = { CS5010: "f1", CS5047: "f2", CS5097: "f3" }; // 3 × 4 SH = 12 SH
+    const ctx15 = { ...ctxFor(byId(MSCS), { placements, msTotalSH: 28 }) };
+    // 12 SH here is under both the 16 SH cap and the 28-14=14 SH floor cap.
+    assert.equal(ctx15.gradCreditSH.semesterHours, 12);
+    assert.equal(evaluateRule(rule, ctx15).status, STATUS.SATISFIED);
+
+    // A 4th unnamed course pushes to 16 SH — legal against the plain cap,
+    // but the 28 SH master's floor caps at 28 - 14 = 14 SH, so this must
+    // violate DESPITE being exactly at the university-wide 16 SH number.
+    const ctx16 = ctxFor(byId(MSCS), {
+      placements: { ...placements, CS5130: "f4" }, msTotalSH: 28,
+    });
+    assert.equal(ctx16.gradCreditSH.semesterHours, 16);
+    const d = evaluateRule(rule, ctx16);
+    assert.equal(d.status, STATUS.VIOLATED, "the 14 SH floor must bind before 16 SH does");
+    assert.equal(d.params.maxSH, 14);
+  });
+
+  test("an unloaded master's (msTotalSH unknown) degrades to the plain 16 SH cap, never guesses a floor", () => {
+    const ctx = ctxFor(byId(MSCS), {
+      placements: { CS5010: "f1", CS5047: "f2", CS5097: "f3", CS5130: "f4" }, // 16 SH
+      msTotalSH: null,
+    });
+    assert.equal(ctx.gradCreditSH.semesterHours, 16);
+    assert.equal(evaluateRule(rule, ctx).status, STATUS.SATISFIED);
+    assert.equal(evaluateRule(rule, ctx).evidence.floorCap, null);
   });
 });
 

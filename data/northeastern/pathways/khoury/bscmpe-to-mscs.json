@@ -94,6 +94,11 @@
       "semesterHours": 16
     },
     {
+      "kind": "transferCap",
+      "maxSH": 16,
+      "floorSH": 14
+    },
+    {
       "kind": "mandatoryShares"
     },
     {

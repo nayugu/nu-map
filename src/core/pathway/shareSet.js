@@ -45,7 +45,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { baseId } from "../repeatInstances.js";
-import { plannerId, isGradCode, isUgCode, inDomain } from "./ids.js";
+import { plannerId, isGradCode, isUgCode, inDomain, subjectOf } from "./ids.js";
 
 /**
  * @typedef {Object} Share            one row of a pathway's share table
@@ -480,4 +480,53 @@ export function shareTotals(shares = [], { includeWithdrawn = false } = {}) {
     semesterHours: counted.reduce((n, s) => n + (Number(s.sh) || 0), 0),
     withdrawn: shares.filter(s => s.withdrawn).length,
   };
+}
+
+/**
+ * Is `code` within the graduate-course FAMILY this pathway shares from — the
+ * subject a named share names, or whatever a domain share restricts to (or
+ * every subject, when it restricts nothing — `inDomain({})` already returns
+ * true for exactly that reason: CEE/SBS publish "any graduate course that
+ * contributes to the MS degree requirements").
+ */
+function inPathwayGradFamily(pathway, code) {
+  const subj = subjectOf(code);
+  for (const s of pathway?.shares ?? []) {
+    if (s.grad) { if (subjectOf(s.grad) === subj) return true; }
+    else if (s.gradDomain && inDomain(code, s.gradDomain)) return true;
+  }
+  return false;
+}
+
+/**
+ * Every graduate course PLACED anywhere in the plan, within this pathway's own
+ * share family — deliberately broader than `shareTotals`.
+ *
+ * `shareTotals` counts only courses that satisfy a NAMED bachelor's
+ * requirement — the sharing cap. This counts every graduate course of the
+ * same family the student has placed, whether or not it happens to fill a
+ * bachelor's slot, because the COE FAQ states a SEPARATE limit: "additional
+ * graduate coursework beyond 16 hours cannot transfer to MS, even if not
+ * applied to BS." A student who takes a 5th, 6th graduate CS course purely to
+ * get ahead on the master's — no bachelor's requirement left to fill — still
+ * spends against this cap. See rules/transferCap.js for the policy math this
+ * feeds.
+ *
+ * One course counts once, however many times attempted (matching
+ * `activeShares`' own convention), and a voided attempt (W/F/U) earns no
+ * credit and does not count at all — checked per PLACEMENT so a withdrawn
+ * first attempt plus a passed retake of the same course still counts once.
+ */
+export function pathwayGradCreditSH(pathway, { placements = {}, courseMap = {}, grades = {}, isVoid } = {}) {
+  const voided = g => (typeof isVoid === "function" ? !!isVoid(g) : false);
+  const seen = new Set();
+  let semesterHours = 0;
+  for (const pid of Object.keys(placements)) {
+    const base = baseId(pid);
+    if (!isGradCode(base) || seen.has(base) || voided(grades[pid])) continue;
+    if (!inPathwayGradFamily(pathway, base)) continue;
+    seen.add(base);
+    semesterHours += shOf(courseMap, base);
+  }
+  return { semesterHours };
 }

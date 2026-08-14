@@ -52,6 +52,13 @@ import { EVALUATORS } from "./rules/index.js";
  * @property {Object}   [semIndex]  semId → ordinal, for sequencing rules
  * @property {Object}   [assertions] student-asserted facts; {} when unknown
  * @property {Object}   [totals]    shareSet.shareTotals output
+ * @property {Object}   [gradCreditSH] shareSet.pathwayGradCreditSH output —
+ *           ALL graduate credit taken as an undergraduate in this pathway's
+ *           family, not just what shareTotals counts (that subset is only what
+ *           satisfies a bachelor's requirement). Feeds rules/transferCap.js.
+ * @property {?number}  [msTotalSH]  the master's own total credits, when its
+ *           requirements have been loaded — rules/transferCap.js's 14 SH floor
+ *           needs it; every other rule is indifferent to it.
  */
 
 /** A diagnostic every unrecognised kind collapses to. Never a failure. */

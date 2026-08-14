@@ -81,6 +81,21 @@ export const RULE_KINDS = Object.freeze({
          "of Science ships 17 SH (4 courses); both are legal and a flat 16 SH " +
          "ceiling is wrong for both.",
   },
+  transferCap: {
+    cls: COMPUTABLE,
+    doc: "A SECOND, independent 16 SH limit, easy to conflate with shareCap's " +
+         "but not the same number. The COE FAQ, verbatim: 'Additional graduate " +
+         "coursework beyond 16 hours cannot transfer to MS, even if not applied " +
+         "to BS.' shareCap caps what may be SHARED with the bachelor's; this caps " +
+         "how much graduate credit taken as an undergraduate may ever transfer " +
+         "to the master's AT ALL — a graduate course taken beyond what any " +
+         "bachelor's requirement needs still spends against this cap. Also " +
+         "carries the registrar's floor (KB000020031): 'a minimum of 14 semester " +
+         "hours at the graduate level, after completion of the undergraduate " +
+         "requirements, are required for the master's degree' — so for a " +
+         "master's smaller than 30 SH the floor binds before 16 SH does. See " +
+         "rules/transferCap.js and shareSet.pathwayGradCreditSH.",
+  },
   subBudget: {
     cls: COMPUTABLE,
     doc: "§2.1 #5, #7. A semester-hour ceiling over a course DOMAIN, optionally " +
@@ -185,9 +200,11 @@ export const RULE_KINDS = Object.freeze({
   },
   noTransferCredit: {
     cls: INFORMATIONAL,
-    doc: "§2.5 #60, #62. University policy: transfer credit may not apply to a " +
-         "master's earned through a PlusOne, and graduate hours beyond the cap " +
-         "do not carry over.",
+    doc: "§2.5 #60. University policy: (external) transfer credit — from " +
+         "another institution, AP, IB — may not apply to a master's earned " +
+         "through a PlusOne. Not to be confused with `transferCap`, #62's " +
+         "SEPARATE limit on how much of the student's OWN graduate coursework " +
+         "may transfer to the master's.",
   },
   scholarshipIneligible: {
     cls: INFORMATIONAL,

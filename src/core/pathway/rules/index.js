@@ -22,6 +22,7 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import shareCap from "./shareCap.js";
+import transferCap from "./transferCap.js";
 import subBudget from "./subBudget.js";
 import mandatoryShares from "./mandatoryShares.js";
 import chooseK from "./chooseK.js";
@@ -40,6 +41,7 @@ import {
 export const EVALUATORS = Object.freeze({
   // computable — the only class permitted to report a failure
   shareCap,
+  transferCap,
   subBudget,
   mandatoryShares,
   chooseK,

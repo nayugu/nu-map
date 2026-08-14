@@ -157,6 +157,8 @@ export const strings = {
   "plusone.rule.unrecognised":       "قاعدة لا نستطيع قراءتها بعد ({kind}) — اسأل مرشدك.",
   "plusone.rule.shareCap.ok":        "تشارك {courses} من {maxCourses} مقررًا · {sh} من {maxSH} ساعة.",
   "plusone.rule.shareCap.over":      "{courses} مقررًا و{sh} ساعة تتجاوز حدّ {maxCourses} مقررًا أو {maxSH} ساعة.",
+  "plusone.rule.transferCap.ok":     "{sh} من أصل {maxSH} ساعة من المقررات الدراسية العليا التي أُخذت كطالب جامعي يمكن أن تُحوَّل إلى درجة الماجستير.",
+  "plusone.rule.transferCap.over":   "{sh} ساعة من المقررات الدراسية العليا التي أُخذت كطالب جامعي تتجاوز الحد الذي يمكن تحويله إلى الماجستير، وهو {maxSH} ساعة — والباقي لن يُحتسب ضمنها.",
   "plusone.rule.subBudget.ok":       "{usedSH} من {maxSH} ساعة من خارج القسم.",
   "plusone.rule.subBudget.over":     "{usedSH} ساعة من خارج القسم تتجاوز حدّ {maxSH} ساعة.",
   "plusone.rule.subBudget.inapplicable": "يسمح {concentration} بـ {maxSH} ساعة من خارج القسم.",
@@ -511,6 +513,7 @@ export const strings = {
   "info.offered.pop.other":       "أخرى",
   "info.offered.pop.basis":       "نسبة من إجمالي المسجّلين في جميع الفصول المسجَّلة.",
   "info.drag.title":              "اسحب لوضعه",
+  "info.back.title":              "الرجوع إلى {code}",
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":         "{n} مقررًا",

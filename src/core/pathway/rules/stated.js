@@ -187,9 +187,10 @@ export function fullTimeGradMin(rule) {
 }
 
 /**
- * University policy: transfer credit may not be applied to a master's completed
- * as part of a PlusOne, and (COE) graduate coursework beyond the sharing cap
- * does not carry over to the MS either.
+ * University policy: (external) transfer credit — from another institution,
+ * AP, IB — may not be applied to a master's completed as part of a PlusOne.
+ * Distinct from `transferCap` (rules/transferCap.js), which limits how much
+ * of the student's OWN graduate coursework may transfer instead.
  */
 export function noTransferCredit() {
   return {

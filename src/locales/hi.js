@@ -157,6 +157,8 @@ export const strings = {
   "plusone.rule.unrecognised":       "एक नियम जिसे हम अभी पढ़ नहीं सकते ({kind}) — सलाहकार से पूछें।",
   "plusone.rule.shareCap.ok":        "{maxCourses} में से {courses} कोर्स · {maxSH} SH में से {sh} SH साझा।",
   "plusone.rule.shareCap.over":      "{courses} कोर्स और {sh} SH, {maxCourses} कोर्स या {maxSH} SH की सीमा से अधिक हैं।",
+  "plusone.rule.transferCap.ok":     "स्नातक रहते हुए ली गई {sh} में से {maxSH} SH स्नातकोत्तर कोर्सवर्क मास्टर डिग्री में ट्रांसफर हो सकती है।",
+  "plusone.rule.transferCap.over":   "स्नातक रहते हुए ली गई {sh} SH स्नातकोत्तर कोर्सवर्क, मास्टर डिग्री में ट्रांसफर होने वाली {maxSH} SH की सीमा से अधिक है — बाकी हिस्सा उसमें नहीं गिना जाएगा।",
   "plusone.rule.subBudget.ok":       "विभाग के बाहर से {maxSH} SH में से {usedSH} SH।",
   "plusone.rule.subBudget.over":     "विभाग के बाहर के {usedSH} SH, {maxSH} SH की सीमा से अधिक हैं।",
   "plusone.rule.subBudget.inapplicable": "{concentration} विभाग के बाहर से {maxSH} SH की अनुमति देता है।",
@@ -512,6 +514,7 @@ export const strings = {
   "info.offered.pop.other":       "अन्य",
   "info.offered.pop.basis":       "सभी दर्ज सेमेस्टरों में नामांकन का अनुपात।",
   "info.drag.title":              "स्थान के लिए ड्रैग करें",
+  "info.back.title":              "{code} पर वापस जाएं",
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":         "{n} कोर्सेस",

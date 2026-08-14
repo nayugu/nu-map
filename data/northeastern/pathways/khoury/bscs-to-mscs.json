@@ -121,6 +121,11 @@
       "semesterHours": 16
     },
     {
+      "kind": "transferCap",
+      "maxSH": 16,
+      "floorSH": 14
+    },
+    {
       "kind": "chooseK",
       "k": 4,
       "counts": "allShares"

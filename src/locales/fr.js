@@ -157,6 +157,8 @@ export const strings = {
   "plusone.rule.unrecognised":       "Une règle que nous ne savons pas encore lire ({kind}) — demandez à votre conseiller.",
   "plusone.rule.shareCap.ok":        "Vous partagez {courses} cours sur {maxCourses} · {sh} SH sur {maxSH}.",
   "plusone.rule.shareCap.over":      "{courses} cours et {sh} SH dépassent la limite de {maxCourses} cours ou {maxSH} SH.",
+  "plusone.rule.transferCap.ok":     "{sh} des {maxSH} SH de cours de troisième cycle suivis en tant qu'étudiant de premier cycle peuvent être transférées vers la maîtrise.",
+  "plusone.rule.transferCap.over":   "{sh} SH de cours de troisième cycle suivis en tant qu'étudiant de premier cycle dépassent les {maxSH} SH transférables vers la maîtrise — le reste ne comptera pas pour celle-ci.",
   "plusone.rule.subBudget.ok":       "{usedSH} SH sur {maxSH} venant d'un autre département.",
   "plusone.rule.subBudget.over":     "{usedSH} SH venant d'un autre département dépassent la limite de {maxSH} SH.",
   "plusone.rule.subBudget.inapplicable": "{concentration} autorise {maxSH} SH venant d'un autre département.",
@@ -512,6 +514,7 @@ export const strings = {
   "info.offered.pop.other":       "autres",
   "info.offered.pop.basis":       "Part des inscriptions, tous les semestres enregistrés.",
   "info.drag.title":              "glisser pour placer",
+  "info.back.title":              "Retour à {code}",
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":         "{n} cours",

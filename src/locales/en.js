@@ -160,6 +160,8 @@ export const strings = {
   "plusone.rule.unrecognised":       "A rule we cannot read yet ({kind}) — ask your advisor.",
   "plusone.rule.shareCap.ok":        "Sharing {courses} of {maxCourses} courses · {sh} of {maxSH} SH.",
   "plusone.rule.shareCap.over":      "{courses} courses and {sh} SH is past the limit of {maxCourses} courses or {maxSH} SH.",
+  "plusone.rule.transferCap.ok":     "{sh} of {maxSH} SH of graduate coursework taken as an undergraduate can transfer to the master’s.",
+  "plusone.rule.transferCap.over":   "{sh} SH of graduate coursework taken as an undergraduate is past the {maxSH} SH that can transfer to the master’s — the rest will not count toward it.",
   "plusone.rule.subBudget.ok":       "{usedSH} of {maxSH} SH from outside the department.",
   "plusone.rule.subBudget.over":     "{usedSH} SH from outside the department is past the {maxSH} SH limit.",
   "plusone.rule.subBudget.inapplicable": "{concentration} allows {maxSH} SH from outside the department.",
@@ -543,6 +545,7 @@ export const strings = {
   "info.offered.pop.other":       "other",
   "info.offered.pop.basis":       "Share of enrolment, all recorded terms.",
   "info.drag.title":              "drag to place",
+  "info.back.title":              "Back to {code}",
 
   // ── Header ─────────────────────────────────────────────────────
   "header.courses.count":         "{n} courses",

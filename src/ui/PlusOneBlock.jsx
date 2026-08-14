@@ -47,7 +47,7 @@ import { useTranslatedText } from "../context/TranslationContext.jsx";
 import { evaluatePathway, summarise } from "../core/pathway/evaluate.js";
 import {
   activeShares, shareTotals, resolveCandidates, excludedIds,
-  shareCandidates, hasOpenShareDomain,
+  shareCandidates, hasOpenShareDomain, pathwayGradCreditSH,
 } from "../core/pathway/shareSet.js";
 import { msProgramFor, isStale } from "../core/pathway/select.js";
 import { displayCode } from "../core/pathway/ids.js";
@@ -199,20 +199,26 @@ export default function PlusOneBlock({ pathway, eligible = true, onClear, nameCo
   }, [msProgramId, majorRequirements]);
 
   const ctx = useMemo(() => {
-    const shares = activeShares({
-      pathway, placements, courseMap, grades, placedOut,
-      // A take whose grade voids it (W/F/U) is "withdrawn" for our purposes.
-      // Reuses the grade layer's own rule rather than re-listing the letters.
-      isVoid: g => g != null && !takeConsumesSlot(g),
-    });
+    // A take whose grade voids it (W/F/U) is "withdrawn" for our purposes.
+    // Reuses the grade layer's own rule rather than re-listing the letters.
+    const isVoid = g => g != null && !takeConsumesSlot(g);
+    const shares = activeShares({ pathway, placements, courseMap, grades, placedOut, isVoid });
     const counting = pathway?.counting ?? {};
     return {
       pathway, shares, placements, placedOut, courseMap,
       candidates: resolveCandidates(pathway, { excluded: excludedIds(pathway) }),
       semIndex: SEM_INDEX,
       totals: shareTotals(shares, { includeWithdrawn: !!counting.includeWithdrawn }),
+      // Broader than `totals`: every graduate course of this pathway's family
+      // the student placed, whether or not it fills a bachelor's requirement.
+      // rules/transferCap.js is the only consumer — see its header for why
+      // this has to be a second number, not a re-read of `totals`.
+      gradCreditSH: pathwayGradCreditSH(pathway, { placements, courseMap, grades, isVoid }),
+      // Null until the master's own requirements load — transferCap degrades
+      // to the plain 16 SH cap rather than guessing at the 14 SH floor.
+      msTotalSH: Number.isFinite(msData?.totalCreditsRequired) ? msData.totalCreditsRequired : null,
     };
-  }, [pathway, placements, placedOut, courseMap, grades, SEM_INDEX]);
+  }, [pathway, placements, placedOut, courseMap, grades, SEM_INDEX, msData]);
 
   const diags = useMemo(() => evaluatePathway(ctx), [ctx]);
   const roll = useMemo(() => summarise(diags), [diags]);
