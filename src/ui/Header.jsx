@@ -1396,14 +1396,14 @@ export default function Header() {
               borderRadius: 5, display: "inline-flex", alignItems: "center", lineHeight: 1, ...(isPhone ? { height: 20, padding: "0 5px" } : { height: 22, padding: "0 8px", whiteSpace: "nowrap" }) }}>
             {(() => {
               // Same clipped-name treatment on every device: the per-character
-              // fade lives between a pinned "/" (desktop prefix) and "▾".
+              // fade sits before the "▾". No "/" prefix on the name itself —
+              // that read as part of the plan's name rather than as decoration.
               const planName = (plans.find(p => p.id === activePlanId)?.name) || "Plan";
               const hdrRtl = (locales.find(l => l.code === locale)?.dir ?? "ltr") === "rtl";
               if (isPhone && planSlash) return "/";
               if (!isPhone && iconOnly) return "/";
               return (
                 <>
-                  {!isPhone && <span style={{ flexShrink: 0, marginRight: 4 }}>/</span>}
                   <FadeText text={planName} rtl={hdrRtl} />
                   <span style={{ flexShrink: 0, marginLeft: isPhone ? 3 : 4 }}>▾</span>
                 </>
