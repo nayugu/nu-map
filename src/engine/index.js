@@ -30,6 +30,7 @@
 
 import { deriveCells, cellsSH, substitutePrereqs } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
+import { seedFromPlan } from "./seed.js";
 import { buildDomains, wideAtFor } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
 import { preflight, tightestTerms, MAX_DERIVED_GE_SHARE } from "./preflight.js";
@@ -43,6 +44,7 @@ import { emitPlan } from "./emit.js";
 import { buildDepthIndex } from "./prereqDepth.js";
 import { withDefaults } from "./ports.js";
 import { withCalibration, minCoursesFor } from "./calibration.js";
+import { realCourseCount } from "../core/coreqGroups.js";
 
 /**
  * The most a prerequisite chain may stretch a plan, in terms.
@@ -435,6 +437,10 @@ function generateOnce({
   const placed = placeCells({
     plans, terms, ports, studentType, courseMap, repeatable, nodeBudget, timeBudgetMs,
     precedence, shape, cal,
+    // Where the department puts each course. A branch ORDER, not a constraint: it steers the
+    // search toward an arrangement we know exists rather than toward position 0. See
+    // `seed.js` — International Business exhausted the budget looking elsewhere.
+    seed: seedFromPlan(publishedPlan),
     // Off only so the claim "a pruning propagator does not move an existing plan" can be
     // TESTED rather than argued — see `chart-propagator-neutral.test.js`. Production never
     // passes false, and the invariant it protects is the whole basis of §17's placement rule.
@@ -496,13 +502,21 @@ function generateOnce({
   //
   // This is deliberately the last thing that happens. Everything before it exists to make
   // the plan pass; this only decides whether it did.
-  const failed = criteriaFailures(plan, { studentType, cal });
+  const failed = criteriaFailures(plan, { studentType, cal, courseMap });
   if (failed.length) {
     return {
       refused: {
         reason: "fails-hard-criteria",
         detail: failed[0].detail,
-        data: { failures: failed.slice(0, 4) },
+        // How the plan was BUILT, carried with the verdict. Without it a criteria refusal
+        // says a term came out empty and nothing about which tier emptied it — and the
+        // tiers behave differently enough that the answer decides where the fix goes: the
+        // DFS follows the seed hints and the last-resort packer does not.
+        data: {
+          failures: failed.slice(0, 4),
+          relaxed: placed.relaxed ?? null,
+          nodes: placed.nodes ?? null,
+        },
       },
     };
   }
@@ -690,7 +704,7 @@ function generateOnce({
  * undergraduate convention and `minCoursesFor` returns 0 for graduates, which switches the
  * first check off for them rather than inventing a rule their departments do not follow.
  */
-function criteriaFailures(plan, { studentType, cal }) {
+function criteriaFailures(plan, { studentType, cal, courseMap }) {
   const out = [];
   let minCourses = minCoursesFor(cal, studentType);
   const flat = (es, acc = []) => { for (const e of es ?? []) { acc.push(e); flat(e.children, acc); } return acc; };
@@ -722,7 +736,7 @@ function criteriaFailures(plan, { studentType, cal }) {
       const cells = es.filter(e => !e.vacation && !e.heading);
       if (!cells.length) continue;
       fulls++;
-      real += cells.filter(e => (e.sh ?? 0) >= cal.realCourseSH).length;
+      real += realCoursesIn(cells, courseMap, cal.realCourseSH);
     }
     if (real < fulls * minCourses) minCourses = 0;
   }
@@ -742,7 +756,7 @@ function criteriaFailures(plan, { studentType, cal }) {
       }
       // Criterion 1: a full term carries four courses of at least `realCourseSH`.
       if (minCourses > 0) {
-        const big = cells.filter(e => (e.sh ?? 0) >= cal.realCourseSH).length;
+        const big = realCoursesIn(cells, courseMap, cal.realCourseSH);
         if (big < minCourses) {
           out.push({ criterion: 1, term: label,
                      detail: `${label} carries ${big} courses of ${cal.realCourseSH}+ credits, not ${minCourses}.` });
@@ -756,4 +770,23 @@ function criteriaFailures(plan, { studentType, cal }) {
     }
   }
   return out;
+}
+
+/**
+ * How many real courses a term's emitted entries amount to.
+ *
+ * Named entries are resolved to course ids so `realCourseCount` can merge corequisite
+ * partners — two 2 SH halves of one course are one course, not two oddments. A reservation
+ * names nothing, so it is counted on its own credit: it is one course the student will pick,
+ * and it has no partners to merge with.
+ */
+function realCoursesIn(cells, courseMap, realCourseSH) {
+  const named = [];
+  let anonymous = 0;
+  for (const e of cells) {
+    const ids = e.options?.length === 1 ? e.options[0] : null;
+    if (ids?.length) named.push({ id: ids[0], sh: e.sh ?? 0 });
+    else if ((e.sh ?? 0) >= realCourseSH) anonymous += 1;
+  }
+  return realCourseCount(named, courseMap, realCourseSH) + anonymous;
 }

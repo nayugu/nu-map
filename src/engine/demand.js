@@ -302,10 +302,30 @@ function cellsForSection(section, target, courseMap) {
       case "OR": {
         const groups = orGroups(req);
         if (groups && groups.length > 1) {
-          // The term load a choice costs is not knowable until it is made, so the
-          // largest option is used — a plan that fits the biggest choice fits any
-          // of them, where the average could put a term over the cap.
-          push("choice", { groups, sh: Math.max(...groups.map(groupSH)), node: req });
+          // ── The CHEAPEST option, not the dearest ──────────────────
+          //
+          // This was `Math.max`, reasoned as "a plan that fits the biggest choice fits any of
+          // them". That is true about term capacity and wrong about the degree, and the
+          // degree is the one that cannot be recovered from.
+          //
+          // A cell's credit is not only a load to reserve; it is also credit counted as
+          // ALREADY EARNED when the general electives are derived to close the gap to the
+          // stated total. Charging the maximum therefore spends credit the student may never
+          // receive. International Business is the clean case: "Business Experiential
+          // Learning" offers seven options, six of them 0 SH co-ops and one an 8 SH field
+          // course, so `max` charged the plan 8 credits, derived 8 SH fewer general electives,
+          // and emitted two courses too few. A student who takes COOP 3945 — the option the
+          // department's own plan shows — and follows ours would graduate EIGHT CREDITS SHORT.
+          //
+          // So the cell is worth what it GUARANTEES, which is its cheapest option; anything
+          // above that is a bonus the electives no longer have to cover. This is the same
+          // trade `emitPool` already states two hundred lines up — over is recoverable, under
+          // is not — applied to the other half of the arithmetic. The cost is a term
+          // occasionally reserving less room than the student's actual choice needs, which is
+          // one course they move; the benefit is that no plan can silently under-credit a
+          // degree. Measured: 319 cells in 198 programs (37.2%) disagree across their options,
+          // over-charging 711 SH corpus-wide.
+          push("choice", { groups, sh: Math.min(...groups.map(groupSH)), node: req });
         } else if (groups) {
           push("named", { groups, node: req });
         } else {
@@ -565,7 +585,9 @@ export function deriveCells(programData, {
   });
 
   const merged = poolExcess(
-    mergeForcedCells(withCoreqPartners(cells, notes, courseMap), notes, repeatable),
+    mergeForcedCells(
+      mergeCoreqCells(withCoreqPartners(cells, notes, courseMap), notes, courseMap, repeatable),
+      notes, repeatable),
     notes, { total: programData?.totalCreditsRequired ?? 0, courseMap, sections });
 
   // ── The two sentinels ────────────────────────────────────────────
@@ -827,6 +849,70 @@ function withCoreqPartners(cells, notes, courseMap) {
  * `choice` cells are untouched. See the header for why merging them would satisfy
  * two requirements with one course.
  */
+/**
+ * Two named cells the registrar forces into the same term become ONE cell.
+ *
+ * `withCoreqPartners` deliberately declines this case — "a partner some other cell already
+ * names is left alone" — because pulling a claimed course into a second cell would
+ * double-count its credit. Correct, and it leaves the pair as two cells that nothing keeps
+ * together, which is wrong in two ways at once.
+ *
+ * International Business names `INTB 2205` and `INTB 2206` in separate requirements. They
+ * list each other as corequisites, so a student takes them in one term, as one 4 SH decision:
+ *
+ *   - nothing in the search made them share a term, so a plan could print them a year apart,
+ *     which no student can register for; and
+ *   - at 2 SH each neither is a "real course", so the term they sit in was counted as
+ *     carrying two fewer courses than it does. IB has exactly 32 real courses for exactly 32
+ *     slots, and read this way it has 31 — the search then proved, correctly, that no
+ *     arrangement of 31 could fill 6 full terms, and refused a degree the department itself
+ *     publishes a working plan for.
+ *
+ * Merging fixes both at the root instead of teaching every counter about corequisites: one
+ * cell, one term by construction, credit summed, and `alsoAnswers` carrying the requirement
+ * the absorbed cell used to answer — exactly the bookkeeping `mergeForcedCells` already does
+ * for duplicates.
+ *
+ * Only NAMED, non-repeatable cells, and only where the catalog states the edge. A repeatable
+ * course genuinely can be two registrations, and a choice cell has no fixed course to be
+ * co-required with.
+ */
+function mergeCoreqCells(cells, notes, courseMap, repeatable = () => false) {
+  const fixed = (c) => c.kind === "named" && c.groups?.[0]?.length
+    && !c.groups[0].every(id => repeatable(id));
+  // Where each course is named, so an edge can find the cell at its other end.
+  const cellOf = new Map();
+  for (const c of cells) if (fixed(c)) for (const id of c.groups[0]) if (!cellOf.has(id)) cellOf.set(id, c);
+
+  const absorbed = new Set();
+  // Deterministic: the same pair must always merge the same way round, or two runs of the
+  // same program produce different cell ids.
+  const order = [...cells].sort((a, b) => String(a.id).localeCompare(String(b.id)));
+  for (const cell of order) {
+    if (!fixed(cell) || absorbed.has(cell)) continue;
+    for (const id of [...cell.groups[0]]) {
+      for (const r of courseMap[id]?.coreqs ?? []) {
+        if (!r || typeof r !== "object" || !r.subject) continue;
+        const partner = `${String(r.subject).toUpperCase()}${parseInt(r.number, 10)}`;
+        const other = cellOf.get(partner);
+        if (!other || other === cell || absorbed.has(other) || !fixed(other)) continue;
+        // Already in this cell's group — `withCoreqPartners` got there first.
+        if (cell.groups[0].includes(partner)) continue;
+        cell.groups = [[...cell.groups[0], ...other.groups[0].filter(x => !cell.groups[0].includes(x))]];
+        cell.sh = (cell.sh ?? 0) + (other.sh ?? 0);
+        cell.alsoAnswers = [...(cell.alsoAnswers ?? []), other.target,
+                            ...(other.alsoAnswers ?? [])];
+        if (other.allot != null) cell.allots = { ...(cell.allots ?? {}), [other.target]: other.allot };
+        for (const x of other.groups[0]) cellOf.set(x, cell);
+        absorbed.add(other);
+        notes.push({ kind: "merged-coreq", kept: cell.id, absorbed: other.id,
+                     courses: [...cell.groups[0]], sh: cell.sh });
+      }
+    }
+  }
+  return cells.filter(c => !absorbed.has(c));
+}
+
 function mergeForcedCells(cells, notes, repeatable = () => false) {
   const out = [];
   const byGroup = new Map();

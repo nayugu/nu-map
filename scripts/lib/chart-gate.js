@@ -55,6 +55,9 @@
 // The sentinel the emitter writes into a concentration cell's binding. Core, not engine: it is
 // what a target IS, not how one gets scheduled.
 import { CONCENTRATION, GENERAL_ELECTIVE } from "../../src/core/requirementDemand.js";
+// Two 2 SH corequisites are ONE 4 SH course — the student cannot take them apart. Counting
+// them separately reported the departments' own International Business spring as thin.
+import { realCourseCount } from "../../src/core/coreqGroups.js";
 
 /**
  * Does this card tell the student anything about what to take?
@@ -108,6 +111,9 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
   for (const year of plan?.years ?? []) {
     for (const t of year.terms ?? []) {
       let coop = false, cells = 0, big = 0, sh = 0;
+      // Named courses in this term, so corequisite partners can be merged before counting.
+      const named = [];
+      let anonBig = 0;
       // Cells of ONE requirement in this term, and how many carry no named course. Both are
       // quality properties that live only in the search's branch ORDER, so nothing guarantees
       // them and nothing was counting them either — see `quality` below.
@@ -125,7 +131,11 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
           if (e.vacation || e.heading) { walk(e.children); continue; }
           cells++;
           sh += e.sh ?? 0;
-          if ((e.sh ?? 0) >= realCourseSH) big++;
+          {
+            const ids = e.options?.length === 1 ? e.options[0] : null;
+            if (ids?.length) named.push({ id: ids[0], sh: e.sh ?? 0 });
+            else if ((e.sh ?? 0) >= realCourseSH) anonBig++;
+          }
           // A cell reserved for the concentration, by the binding the emitter writes. Read
           // from the target sentinel rather than the title, because the title is the
           // requirement's own wording and varies across 93 programs.
@@ -146,6 +156,7 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
         }
       };
       walk(t.entries);
+      big = realCourseCount(named, courseMap, realCourseSH) + anonBig;
       rows.push({
         label: `${year.label ?? ""} ${t.term ?? ""}`.trim(),
         season: t.type, coop, cells, big, sh,

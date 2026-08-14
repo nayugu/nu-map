@@ -147,6 +147,7 @@ export function generatorBar(plans, courseMap, unlockValue, majorSubjects) {
 }
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
 import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
+import { assignSeedHints } from "./seed.js";
 
 /**
  * The most general electives one term may hold, at every tier and every rung.
@@ -430,6 +431,9 @@ export function placeCells({
   repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, now = () => Date.now(),
   precedence = null, maxRestarts = 40, shape = null, cal = DEFAULT_CALIBRATION,
+  // The department's own arrangement, as a branch ordering. Absent for the 62% of programs
+  // that publish no plan, which simply search as they did before.
+  seed = null,
   propagateChains = true,
 }) {
   const deadline = now() + timeBudgetMs;
@@ -513,7 +517,7 @@ export function placeCells({
     const r = attemptPlacement({
       plans: working, terms, ports, studentType, courseMap, repeatable,
       nodeBudget: Math.min(perAttempt, Math.max(1, strictNodes - totalNodes)),
-      precedence, now, shape, cal, propagateChains,
+      precedence, now, shape, cal, propagateChains, seed,
       // The GLOBAL deadline only. Each attempt used to get a time slice as well, and that
       // was the last source of non-determinism: how many nodes an attempt explored depended
       // on machine load, so `business_administration_and_public_health_bs` returned
@@ -676,7 +680,7 @@ export function placeCells({
       nodeBudget: Math.max(1, Math.min(
         Math.floor(nodeBudget * (TIER_SHARES.rungs[ri] ?? 0.2)),
         nodeBudget - totalNodes)),
-      precedence, now, deadline, cal, propagateChains,
+      precedence, now, deadline, cal, propagateChains, seed,
       shape: rung.shape,
       enforceCardinality: rung.enforceCardinality ?? true,
       preferenceFree: rung.preferenceFree ?? false,
@@ -790,6 +794,9 @@ function attemptPlacement({
   // Order terms by position alone, dropping every sequencing preference. NOT a relaxation:
   // the constraints are identical. See `termPreference`.
   preferenceFree = false,
+  // Where the department puts each course, when it publishes a plan. A branch HINT and
+  // nothing else — see `src/engine/seed.js` for why it cannot affect legality.
+  seed = null,
   // See `precedenceRoom`. Test-only when false; production is always true.
   propagateChains = true,
 }) {
@@ -799,6 +806,8 @@ function attemptPlacement({
   const unlockOf = (plan) => unlockOfCell(plan, unlockValue);
   const isPool = isPoolCell;
   const majorSubjects = majorSubjectsOf(plans, courseMap);
+  // Computed once per attempt, not per branch: it is a property of the cell set.
+  const seedHints = assignSeedHints(plans, seed);
   const unlockBar = generatorBar(plans, courseMap, unlockValue, majorSubjects);
   /** Does this cell open up enough of the degree to earn an early slot? */
   const isGenerator = (plan) => unlockOf(plan) >= unlockBar;
@@ -1122,6 +1131,22 @@ function attemptPlacement({
     // The property worth having: adding a sequencing preference can no longer make a program
     // unplannable. Which is the guarantee the priority order demands, since a student cannot
     // register for a plan that does not exist, and can perfectly well follow an ugly one.
+    // ── The advisor's own answer, tried first ───────────────────────
+    //
+    // Ahead of `preferenceFree` deliberately, because it is not one of the tastes that
+    // clause exists to strip. Those preferences guess at where a course belongs from level
+    // conventions and unlock value; this one READS where a department actually put it, in a
+    // plan we have measured to be legal. Ordering by distance to that term searches outward
+    // from a known-good arrangement instead of from position 0, which is the difference
+    // between finding it in the budget and exhausting it.
+    //
+    // Still only an order. A seeded term that precedence has already excluded is simply not
+    // in `plan.domain` and never gets tried.
+    const seededTerm = seedHints.get(plan.cell.id) ?? null;
+    if (seededTerm != null) {
+      return [...plan.domain].sort((a, b) =>
+        byOptional(a, b) || Math.abs(a - seededTerm) - Math.abs(b - seededTerm) || a - b);
+    }
     if (preferenceFree) {
       return [...plan.domain].sort((a, b) => byOptional(a, b) || a - b);
     }
@@ -1403,6 +1428,28 @@ function attemptPlacement({
       ? minCourses + surplus                 // a full term may take extra, up to the surplus
       : Math.min(cal.halfTermCourses, surplus); // a summer gets only what is left over
   });
+  /**
+   * Does every full term meet the bar? The search's goal test, and deliberately a MIRROR of
+   * `criteriaFailures` rather than an independent opinion about fullness.
+   *
+   * So it copies that function's exemptions exactly: a summer is skipped, because a half term
+   * legitimately holds two courses and the criteria never judge one; an optional term is
+   * skipped, because a department left it blank and `emit` will trim it. Judging either here
+   * would refuse plans the criteria would have accepted, which is the same class of mistake
+   * in the opposite direction.
+   *
+   * `termIsFull` and not `bigIn[ti] >= minCourses`, for the reason that function documents: a
+   * term carrying a 16 SH studio has no room for a fourth course and is full at two.
+   */
+  const barsMet = () => {
+    for (let ti = 0; ti < terms.length; ti++) {
+      const t = terms[ti];
+      if (t.work || t.unused || t.optional || (t.weight ?? 1) < 1) continue;
+      if (!termIsFull(bigIn[ti], loadSH[ti], cap[ti], cal, studentType, bigSH[ti])) return false;
+    }
+    return true;
+  };
+
   const suffix = new Array(order.length + 1);
   suffix[order.length] = new Array(terms.length).fill(0);
   for (let i = order.length - 1; i >= 0; i--) {
@@ -1730,6 +1777,29 @@ function attemptPlacement({
       // every cell that could supply a prerequisite has a term.
       const w = runWitness(true);
       if (!w.ok) { worstFailure = w.failure; return false; }
+      // ── The bar is part of the GOAL, not a report on the answer ──────
+      //
+      // This returned `true` the moment every cell had a term, which is the definition of a
+      // complete assignment and NOT the definition of an acceptable plan. So the search
+      // stopped at the first legal arrangement it stumbled on, `emit` built it, and
+      // `criteriaFailures` refused it a phase later — and the student got nothing, for a
+      // degree the search had already proved arrangeable.
+      //
+      // International Business is the case that made it undeniable. It has exactly 32 real
+      // courses for exactly 32 slots, so the ONLY acceptable arrangement gives every full
+      // term four and every summer two; there is no slack anywhere. The search duly found a
+      // complete assignment that left Year 3 Fall empty and Year 4 Fall with none, declared
+      // victory, and was overruled downstream.
+      //
+      // A search whose success test is weaker than the test its answer will face is not
+      // searching for the right thing. Checking it HERE means a lopsided assignment
+      // backtracks and the search keeps looking, which is exactly what it should have been
+      // doing all along — and on a tight instance it is the difference between a plan and a
+      // refusal, not merely a nicer plan.
+      //
+      // Only under `enforceCardinality`, so the last rung — which exists precisely because
+      // some degrees cannot meet the bar — is unaffected and still answers.
+      if (enforceCardinality && minCourses > 0 && !barsMet()) return false;
       return true;
     }
 

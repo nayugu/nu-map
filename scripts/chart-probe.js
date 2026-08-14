@@ -38,6 +38,7 @@ import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { minCoursesFor } from "../src/engine/calibration.js";
 import { isUnguided } from "./lib/chart-gate.js";
 import { GENERAL_ELECTIVE } from "../src/core/requirementDemand.js";
+import { realCourseCount } from "../src/core/coreqGroups.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const argv = process.argv.slice(2);
@@ -92,7 +93,16 @@ function score(doc, studentType) {
     if (half || coop) continue;
     if (!cells.length) { empty++; continue; }
     terms++;
-    if (minCourses > 0 && cells.filter(e => (e.sh ?? 0) >= chartCalibration.realCourseSH).length < minCourses) short++;
+    if (minCourses > 0) {
+      const named = [], anon = [];
+      for (const e of cells) {
+        const ids = e.options?.length === 1 ? e.options[0] : null;
+        if (ids?.length) named.push({ id: ids[0], sh: e.sh ?? 0 }); else anon.push(e.sh ?? 0);
+      }
+      const real = realCourseCount(named, courseMap, chartCalibration.realCourseSH)
+        + anon.filter(sh => sh >= chartCalibration.realCourseSH).length;
+      if (real < minCourses) short++;
+    }
     if (cells.filter(e => isUnguided(e.text)).length > 2) unguided3++;
     const ge = cells.filter(e => e.binding?.targets?.includes(GENERAL_ELECTIVE)).length;
     if (ge > 2) ge3++;

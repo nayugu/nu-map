@@ -22,6 +22,8 @@ const CM = Object.fromEntries([
   course("CS2800"), course("CS3000"), course("CS4300"), course("CS4100"),
   course("MATH1341"), course("MATH3001"), course("MATH3002"), course("MATH4999"),
   course("GE1501"), course("SEM1000", 1),
+  // A 0 SH co-op, which is what makes a choice cell's credit ambiguous in the corpus.
+  course("COOP3945", 0),
 ].map(c => [c.id, c]));
 
 const prog = (sections, extra = {}) => ({
@@ -66,11 +68,28 @@ test("demand › a nested OR flattens; a nested AND stays one group", () => {
   assert.deepEqual(cell.groups, [["CS4300"], ["CS4100"], ["CS2000", "CS2001"]]);
 });
 
-test("demand › a choice cell costs the LARGEST option, so a term cannot overflow", () => {
+// This asserted the LARGEST option, reasoned as "a plan that fits the biggest choice fits any
+// of them". That is sound about term capacity and unsound about the degree, and the degree is
+// what a student cannot recover from: a cell's credit is also counted as already earned when
+// the general electives are derived to close the gap to the stated total, so charging the
+// maximum spends credit the student may never receive. See `demand.js` at the OR case —
+// International Business charged 8 SH for a co-op requirement whose usual option is 0 SH, and
+// emitted two courses too few as a result.
+test("demand › a choice cell costs the CHEAPEST option, so the degree cannot be under-credited", () => {
   const { cells } = cellsOf([
     SECTION("Pick", 1, OR(C("CS", "4300"), AND(C("CS", "2000"), C("CS", "2001")))),
   ]);
-  assert.equal(cells.find(c => typeof c.target === "number").sh, 5);
+  assert.equal(cells.find(c => typeof c.target === "number").sh, 4,
+    "CS 4300 alone is 4 SH; the 5 SH pair is the dearer option and is not what the cell guarantees");
+});
+
+test("demand › a 0 SH option makes the choice cell free, so electives cover the rest", () => {
+  // The International Business shape: a requirement answered EITHER by a credit-bearing
+  // course or by a 0 SH co-op. Charging 4 here would silently delete a general elective.
+  const { cells } = cellsOf([
+    SECTION("Experiential", 1, OR(C("CS", "4300"), C("COOP", "3945"))),
+  ]);
+  assert.equal(cells.find(c => typeof c.target === "number").sh, 0);
 });
 
 test("demand › a credit pool emits cells sized by its own courses", () => {
