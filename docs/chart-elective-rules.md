@@ -81,9 +81,43 @@ International Business's worst term sits at exactly 3 because the cap says 3.
 > wording on it". So the scope is already exactly "general electives" and the only thing rule 2
 > leaves open is N.
 
-> **Open decision: N = 1 or 2**, and whether it varies with how elective-heavy the degree is.
-> Measured at 3, 2 and 1 over 196 degrees that have depth electives — see the measurement note
-> at the end of this document.
+**N is 2, and 3 once the ladder concedes.** Measured over the 196 degrees that have depth
+electives (321 plans, `chart-probe`):
+
+| cap | refused | short of 4 | terms 3+ unguided | terms 3+ GEs |
+|---|---|---|---|---|
+| 3 | 41 | 47 | 139 | 138 |
+| **2** | 46 | 52 | 9 | **0** |
+| 1 | **145** | 68 | 3 | 0 |
+
+**N = 1 is not a stricter convention, it is arithmetic failure.** A degree needs at least as many
+course-carrying terms as it has elective cells. The median pool is 11, a four-year shape with two
+co-ops has about 10, and **53% of degrees have pools larger than 10** — so cap 1 is infeasible for
+most of the corpus by counting alone, and 104 more degrees get no plan. That bound was checkable
+in seconds and was instead established by an eleven-minute corpus run. *Do the counting argument
+before the measurement when the measurement is expensive and the counting is not.*
+
+**N = 2 costs 5 refusals of 321 to remove all 138 three-elective terms**, and 2 is what the corpus
+does — departments leave 2 or fewer cells unsaid in 98.8% of 5,978 published terms. So 2 is
+enforced in the strict tier and lifted to 3 by the `term-width` rung, which already exists for
+"this program cannot meet the conventions". A degree that fits 2 gets 2; a degree that does not
+gets 3 rather than nothing, so **no refusal is caused by the cap**. Three stays the ceiling at
+every rung: 14 of 5,978 published terms hold four, and that 0.2% tail is where CHART used to live.
+
+This also answers the "does it vary with how elective-heavy the degree is" half of the question —
+it does, but through the rung the degree needs rather than through a formula over its pool size.
+
+> **The earlier measurement that rejected 2 is superseded, not wrong.** The comment in `search.js`
+> said two "measured WORSE on every axis: refusals 28 → 30 and thin terms 6 → 13". That was true,
+> and it was measured against a demand side that had not been fixed yet — breadth bound to the
+> first cells, a positional ramp fighting the graph-derived ordering, and every elective ranked as
+> filler. The cap did not get cheaper; the plans it applies to got better shaped. Any future
+> re-measurement of a cap has to say which demand side it was taken against.
+
+> **Phase 2 cannot read the constant.** With the cap tier-dependent, `objective.js` reading the
+> strict value would refuse a plan phase 1 legally built at 3 — a refusal manufactured entirely by
+> the objective layer. `isLegal` takes `maxGE`, a non-erosion bound computed from the incoming
+> assignment exactly as `maxThin` is.
 
 ### 3. Breadth leans late, distributed
 
@@ -213,7 +247,7 @@ All six are now wired. What the table recorded, and what replaced it:
 | rule | was | now |
 |---|---|---|
 | 1 | breadth capped by unmet-code COUNT — one cell per code, ceiling 4 | `ceil(remaining / 1.5)`, in `electives.js`, called from `deriveCells` |
-| 2 | cap is 3 | cap is `UNGUIDED_PER_TERM_CAP`; the value is the one open decision left |
+| 2 | cap is 3 | `UNGUIDED_PER_TERM_CAP` 2 in the strict tier, `UNGUIDED_RELAXED_CAP` 3 from `term-width` on |
 | 3 | breadth binds to the **first** cells | binds by even stride from the **back** (`breadthIndices`) |
 | 4 | `GE_SPREAD` ramp overrode the engine's own depth estimate | ramp deleted; `GE_DEPTH_ESTIMATE` compared against the major's max chain height |
 | 5 | not enforced | `yieldsToMajor`, as a preference — but see the reachability note under rule 5 |
