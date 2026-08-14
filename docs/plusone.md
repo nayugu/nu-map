@@ -197,6 +197,13 @@ for out-of-domain electives; advisor/director sign-off; Standard Petitions;
 modality restrictions (V35 sections are part-time-graduate only); international
 visa compliance; "placement is not guaranteed".
 
+**Catalog-only rules, found 2026-08-13** — a **requirement waiver** for PlusOne
+students (MSBioE drops BIOE 6000 and BIOE 7390 while holding the 32 SH total); a
+**substitution granted to PlusOne students only** (MSME Mechatronics); an
+**enrolment gate** ("apply before enrolling in CS or CY courses"); and **minor
+exclusivity** — a minor's courses must be exclusive of those counted for a
+PlusOne. None of the four are modelled.
+
 **Downstream** — no deferral; full-time minimum; transfer-credit bars; the
 certificate bar; co-op caps across both degrees (COE: 3 total; 1 graduate co-op
 if ≤2 undergraduate); graduate co-op sequencing; scholarship eligibility;
@@ -253,7 +260,11 @@ needs `ME 2355`, `ME 2350`; other majors need different ones).
 
 # PART III — WHERE THE DATA LIVES
 
-## 9. There is no central list
+## 9. There is no central list — but the catalog is not empty
+
+Two separate questions, and conflating them cost this project weeks of assuming
+the catalog had nothing (§9.1). **There is no central DIRECTORY of PlusOne
+programmes.** There *is* catalog-authoritative PlusOne content, scattered.
 
 **Measured**, sweeping the seven university-level hosts by sitemap:
 
@@ -269,16 +280,94 @@ needs `ME 2355`, `ME 2350`; other majors need different ones).
 `graduate.northeastern.edu` is the decisive negative: it lists **every master's
 the university runs** and mentions PlusOne on none of them.
 
-### 9.1 The catalog carries no PlusOne data
+### 9.1 The catalog's *dedicated* PlusOne pages are stubs — but the catalog is not silent
 
-Its seven per-college pages — CAMD, business, Khoury, COE, Bouvé, CoS, CSSH —
+The seven per-college pages — CAMD, business, Khoury, COE, Bouvé, CoS, CSSH —
 are **stubs**: ~450 characters of real prose, **zero tables**, and six of the
-seven are the same two sentences with the college name swapped. No pairings, no
-courses, no GPA.
+seven are the same two sentences with the college name swapped.
 
-This is the fact that makes PlusOne unlike every other program data in NU Map:
-**it is the first requirement-shaped, student-visible data with no catalog
-authority.**
+**That was the whole story until 2026-08-13, and it was wrong.** Searching the
+catalog itself (CourseLeaf `/search/?P=PlusOne`) and verifying every hit by
+literal string match found **42 of 42 candidate pages genuinely mention
+PlusOne** — on *ordinary* programme and department pages, not the dedicated ones.
+Ranked by how much they carry:
+
+**Course-level share tables.** `professional-studies/…/information-technology-bs/`
+carries an entire *"Concentration in Computer Science"* requirement table
+footnoted **"Graduate courses that may be used toward the Master of Science in
+Computer Science when part of the PlusOne program"** — a share list, in a catalog
+requirement table. The same page carries an application gate ("students must
+apply to the MSCS PlusOne program **before enrolling in CS or CY courses**") and
+plan-of-study notes ("CS 5002, 4 semester hours recommended for PlusOne
+students"; "PlusOne students consult advisor to reach 120 semester hours").
+
+**Requirement waivers and substitutions, as footnotes on the MS page.**
+
+> `bioengineering-msbioe`: "Principles of Bioengineering (BIOE 6000) and Seminar
+> (BIOE 7390) are **not required for students in a PlusOne bioengineering
+> pathway**, but students must successfully complete a total of 32 semester
+> hours."
+
+> `mechanical-engineering-concentration-mechatronics-msme`: "PlusOne students who
+> have already successfully completed ME 4555 **may substitute** ME 5250 for
+> ME 5659. In such cases a different course must be taken to satisfy the
+> mechanics competency."
+
+**Pathway existence and MS targets on the undergraduate programme page.**
+`international-business-bsib`: "the program offers the opportunity to earn a
+Master of Science in International Management, a Master of Science in Finance, or
+a Master of Science in Accounting **through the PlusOne option**." That is the
+eligibility mapping, catalog-authoritative.
+
+**Department-level sections with timing.** Economics, English, History and
+Political Science each carry a *"PlusOne Program in …"* block — e.g. English:
+"majors at the end of their sophomore year or the beginning of their junior year
+may qualify… consult the undergraduate program director by the end of the
+sophomore year."
+
+**A minor-exclusivity rule, as boilerplate on ~24 CAMD minors.** "A student
+pursuing this minor must complete a minimum of four courses exclusive to this
+minor **beyond the courses required for the student's declared major(s),
+minor(s), or PlusOne**." Low information per page, but a real constraint we do
+not model: minor courses must be exclusive of PlusOne courses.
+
+So the accurate claim is narrower and more useful than the old one: **the
+catalog has no central PlusOne *directory*, and its dedicated PlusOne pages are
+empty — but PlusOne rules are scattered through ordinary programme and
+department pages, where they carry catalog authority and the monthly refresh.**
+
+42 is a **lower bound** from a single search, and most of the 42 are the CAMD
+boilerplate. The rich pages number roughly eight.
+
+### 9.1a Two of our own pipelines are losing this data
+
+The catalog data above is largely inside pages **we already scrape monthly**, and
+two defects stop it reaching us. Both were verified, not inferred.
+
+**Footnotes are being dropped.** `bioengineering_msbioe_(boston)` has
+`class="sc_footnotes"` twice on the live page and **zero** footnotes in
+`programs-bundle.json`. Sampling eight programmes across eight colleges found
+**two with live footnotes and none parsed**, and corpus-wide only **36 of 1,017**
+programmes carry any parsed footnote. The MSME Mechatronics footnote *did* survive
+— with its course codes extracted — which proves the parser can do it and makes
+the loss elsewhere a bug rather than a missing feature.
+
+This matters beyond PlusOne: a footnote is where the catalog puts conditions, and
+we are discarding most of them.
+
+**CPS undergraduate programmes are absent entirely.** The bundle holds **88
+professional-studies programmes, all graduate** — zero undergraduate. So
+`information-technology-bs`, the page with the richest catalog PlusOne content
+found anywhere, is not in our corpus at all.
+
+**Why this is the most consequential finding in this document.** The intake design
+assumed hand-curation from marketing pages because "the catalog carries no PlusOne
+data". For a real subset of pathways that assumption is false, and the catalog
+route is strictly better on every axis that matters: it is authoritative, it
+refreshes monthly through a pipeline that already exists, it is already verified
+by `verify-majors.js`, and it does not rot the way a college marketing page does.
+Fixing the footnote parser and adding CPS undergraduates is likely worth more
+than transcribing several colleges by hand.
 
 ### 9.2 The two authoritative central sources are policy-only
 
@@ -422,7 +511,9 @@ total; the bar measures the sharing ceiling.
 `extract-pathways.js` (reads engineering's tables: 14–18 eligible majors per
 page), `verify-pathways.js` (the gate).
 
-**Data** — 4 Khoury pathways, each naming its source URL and check date.
+**Data** — 4 Khoury pathways, each naming its source URL and check date. None
+yet drawn from the catalog, which §9.1 shows is a missed source rather than an
+absent one.
 
 **Tests** — 183 pathway-specific (115 engine, 49 intake, 19 extraction) inside a
 suite of 1,769.
@@ -482,6 +573,11 @@ probing before a push.
    transfer-to-the-master's (§4.3).
 2. **The 14 SH floor** on post-bachelor's work is not modelled at all (§4.2).
 
+**Two pipeline defects losing catalog data (§9.1a)** — footnotes are dropped
+(36 of 1,017 programmes carry one; 2 of 8 sampled had live footnotes and none
+parsed), and CPS undergraduate programmes are absent from the corpus entirely.
+Both cost us PlusOne rules the catalog already publishes.
+
 **Coverage** — 4 of ~44 pathway pages, and the denominator is soft (§9.4).
 Per-major prerequisites and per-concentration eligibility are extracted but the
 schema does not yet consume them.
@@ -506,8 +602,10 @@ schema does not yet consume them.
 
 1. **"16 credits" is not the rule.** It is `4 courses OR 16 SH, whichever is
    greater`, and there is also a **14 SH floor** on work after the bachelor's.
-2. **There is no central list.** The catalog has none; the two central sources
-   are policy only; every college publishes its own index in its own shape.
+2. **There is no central list — but the catalog is not empty.** No directory
+   exists, and the dedicated PlusOne catalog pages are stubs; yet 42 ordinary
+   programme and department pages carry real PlusOne content, including share
+   tables and requirement waivers. We drop most of it in our own parser (§9.1a).
 3. **Eligibility is a rule, not a list** — "and all combined majors" means a name
    match, and getting this wrong silently denies students their programme.
 4. **A published table can list one graduate course against two undergraduate

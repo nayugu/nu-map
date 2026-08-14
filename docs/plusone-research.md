@@ -6,6 +6,13 @@
 > known gaps — see **[`plusone.md`](plusone.md)**, which is the single source
 > of truth. This file is kept for the argument it records.
 
+> **Superseded in part (2026-08-13).** This document's claim that the catalog
+> carries no PlusOne data is **too strong**. The catalog's *dedicated* PlusOne
+> pages are stubs, but 42 ordinary programme and department pages carry real
+> PlusOne content — share tables, requirement waivers, substitutions and
+> timing. See [`plusone.md`](plusone.md) §9.1 and §9.1a, which also record two
+> defects in our own pipeline that discard it.
+
 Research notes, **2026-08-13**. No implementation. No design decisions yet.
 
 This document exists because PlusOne breaks two assumptions the repo currently
