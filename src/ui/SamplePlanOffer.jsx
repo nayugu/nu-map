@@ -325,15 +325,25 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
   const primaryLabel = offer.verbs[0] === "load" ? t("grad.plan.load") : t("grad.plan.newplan");
   const fz = PHONE_FZ(isPhone);
   // See the header for why a generated plan's own label is not one of these.
-  const showPlanLabel = !open && loaded
+  // …and not on a phone either, for the same reason as the badge below it:
+  // "Four Years, Two Co-ops in Spring/Summer First Half" has ~28px to live in
+  // there, which renders as "Fou…" — a byline nobody can read, taking the room
+  // from the title that says what the section is.
+  const showPlanLabel = !open && loaded && !isPhone
     && !!appliedTemplate?.planLabel && !isGeneratedPlanLabel(appliedTemplate.planLabel);
 
   return (
     <div style={{
       // Padding tightened with the type, or 2/3-size text sits in a frame built
       // for text half again as large and the box reads mostly as empty.
+      //
+      // On a phone it is tightened again, and this time for room rather than
+      // rhythm. Measured: the side panel is a fixed 88px there, and by the time
+      // the panel, the major card and this box have each taken their padding,
+      // 46 of those 88px are chrome — the content had 42px, which is narrower
+      // than the words in it. Every pixel returned here is a pixel of text.
       margin: isPhone ? "6px 0 7px" : "8px 0 10px",
-      padding: isPhone ? "5px 6px" : "9px 10px", borderRadius: 6,
+      padding: isPhone ? "4px 4px" : "9px 10px", borderRadius: 6,
       border: "1px solid var(--border-2)", background: "var(--bg-surface-2)",
     }}>
       {/* Header doubles as the collapse control, so the section is always in
@@ -342,8 +352,20 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
         onClick={() => setOpen(v => !v)}
         style={{ display: "flex", alignItems: "center", gap: isPhone ? 4 : 6, cursor: "pointer", userSelect: "none" }}
       >
+        {/* Tracking is a phone casualty. 0.06em is what makes a small-caps
+            label read as a label, but at 42px of column it was pushing
+            "SAMPLE PLAN OF STUDY" onto a third line — four words, one per
+            line, is not a label any more, it is a column of words. The
+            letters keep their weight and their caps; they give up the air. */}
         <span style={{
-          fontSize: PHONE_FZL(isPhone), fontWeight: 700, letterSpacing: "0.06em", color: "var(--text-4)",
+          fontSize: PHONE_FZL(isPhone), fontWeight: 700,
+          letterSpacing: isPhone ? "0.02em" : "0.06em", color: "var(--text-4)",
+          // The label takes the row's slack unless the plan name is there to
+          // take it instead. Without this it is `0 1 auto` next to a `flex: 1`
+          // spacer, so the SPACER got all the free width and the label was
+          // squeezed to its longest word — which on a phone is why four words
+          // came out as three lines inside a box that had room for two.
+          flex: showPlanLabel ? "0 1 auto" : 1, minWidth: 0,
         }}>{t("grad.plan.label")}</span>
         {/* Collapsed, the row still says something worth knowing: WHICH plan
             this canvas came from. Nothing else in the app surfaces that.
@@ -361,10 +383,19 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
             overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
           }}>{shortVariantLabel(appliedTemplate.planLabel)}</span>
         )}
-        {/* The label takes the slack when it is there; when it is not, the
-            spacer does, so the state badge stays pinned right either way. */}
-        <span style={{ flex: showPlanLabel ? "0 0 auto" : 1 }} />
-        {loaded && (
+        {/* The spacer that used to sit here is gone. Its job — pinning the
+            badge right when there is no plan label — is now done by the
+            title's own `flex: 1`, and having BOTH meant two greedy children
+            splitting the row down the middle: the title got half of 46px on a
+            phone and wrapped one word per line while an empty span held the
+            other half. */}
+        {/* Not on a phone. The state badge is worth a corner of a desktop row
+            and half of a phone one: measured, it left the section's own title
+            about 28px, which is where "SAMPLE PLAN OF STUDY" became four
+            lines of one word. The section still says it — expanded, the verb
+            is "open as new plan" rather than "lay out", which is the same
+            fact in the place the student is actually deciding. */}
+        {loaded && !isPhone && (
           <span style={{ fontSize: fz - 1, color: "var(--success)" }}>{t("grad.plan.state.loaded")}</span>
         )}
         <span style={{ fontSize: fz - 1, color: "var(--text-5)" }}>{open ? "▾" : "▸"}</span>
@@ -507,12 +538,22 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
 
               {/* One row, two equal halves. These are the two answers to the
                   same question — "where does this plan go?" — so they are
-                  read as a pair or not at all. Wrapping them stacked them
+                  read as a pair or not at all. Letting them WRAP stacked them
                   into what looked like a primary action with an afterthought
                   underneath, at every panel width narrower than about 200px,
                   which is most of them. `minWidth: 0` is what lets the halves
-                  shrink instead of forcing the row to wrap. */}
-              <div style={{ display: "flex", alignItems: "stretch", gap: 6 }}>
+                  shrink instead of forcing the row to wrap.
+                  ── Except on a phone ─────────────────────────────────
+                  There the panel is 88px wide, so a half is ~21px: "Open as
+                  new plan" and "Replace my plan" each came out four lines
+                  tall and one word wide, which is not a pair being compared,
+                  it is two unreadable towers. Stacked DELIBERATELY (not by
+                  wrapping) they are full-width, one line each, and still
+                  adjacent — the comparison survives, the reading does too. */}
+              <div style={{
+                display: "flex", alignItems: "stretch", gap: isPhone ? 4 : 6,
+                flexDirection: isPhone ? "column" : "row",
+              }}>
                 {/* Once loaded, laying out again is not the point — switching
                     variant or branching a comparison is. */}
                 <button

@@ -123,8 +123,14 @@ export default function PlanSourceToggle({
       // row and the Lay-out/Replace row beneath it — this used to be ONE merged, bordered strip
       // with no gap at all, which read as a different kind of control from its neighbours
       // rather than as the same rhythm repeated three times down the panel.
+      //
+      // And STACKED on a phone, which is a separate finding rather than a competing one. The
+      // panel is 88px there, so side by side each half is ~21px and both labels wrap into
+      // stacks of syllables: seen at once, and legible in neither. Stacked, each label gets
+      // the full width and one line, and the two halves keep their own borders and their gap.
       style={{
         display: "flex", width: "100%", gap: 6, marginBottom: isPhone ? 5 : 6,
+        flexDirection: isPhone ? "column" : "row",
       }}
     >
       {options.map((o) => {
@@ -150,7 +156,11 @@ export default function PlanSourceToggle({
               style={{
                 width: "100%",
                 fontSize: fz, fontWeight: on ? 700 : 500,
-                padding: isPhone ? "4px 8px" : "6px 10px",
+                // 8px of side padding is a fifth of a phone panel's width, and it was enough
+                // to break "NU Map" across two lines. The names are two words at most; they
+                // never wrap.
+                padding: isPhone ? "4px 2px" : "6px 10px",
+                whiteSpace: "nowrap",
                 // Its own border and radius, same as every other button in this panel, now that
                 // the two halves are separate pieces rather than one box divided by fill alone.
                 border: "1px solid var(--border-1)", borderRadius: 5,
