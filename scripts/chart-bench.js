@@ -28,7 +28,15 @@ const arg = (name, dflt = null) => {
   const i = process.argv.indexOf(`--${name}`);
   return i === -1 ? dflt : (process.argv[i + 1]?.startsWith("--") ? true : process.argv[i + 1] ?? true);
 };
-const MATCH = String(arg("program", "international_business"));
+// The three benchmarks, chosen because they fail differently. International Business is
+// SATURATED — 32 real courses for exactly 32 slots, no slack anywhere — and it is the degree
+// whose published plan proves a compliant arrangement exists. Computer Science is the
+// opposite: deep prerequisite chains of its own, so it tests whether the unlock-then-depth
+// ordering survives (it is where `CS 4530` in Year 1 Spring and CS 3000 at the end showed up).
+// Mathematics sits between them, with a shallow major and a large elective pool, which is
+// exactly where the free-elective rule decides everything.
+const BENCHMARKS = ["international_business", "computer_science_and_mathematics"];
+const MATCH = arg("program", null);
 const ROOT = "data/northeastern/programs/undergraduate/2026";
 
 const { courseMap } = loadCatalog();
@@ -95,8 +103,9 @@ function report(title, doc) {
   return bad;
 }
 
-const found = findProgram(MATCH);
-if (!found) { console.error(`no program matching "${MATCH}"`); process.exit(1); }
+for (const match of (MATCH ? [String(MATCH)] : BENCHMARKS)) {
+const found = findProgram(match);
+if (!found) { console.error(`no program matching "${match}"`); continue; }
 const program = JSON.parse(readFileSync(`${found.dir}/requirements.json`, "utf8"));
 const published = existsSync(`${found.dir}/plan.json`)
   ? (JSON.parse(readFileSync(`${found.dir}/plan.json`, "utf8")).plans ?? [])[0] ?? null : null;
@@ -144,4 +153,5 @@ if (out.refused) {
 // demonstrably exists and any refusal is ours, not the degree's.
 if (arg("published") && published) {
   report("THE DEPARTMENT'S OWN PLAN:", published);
+}
 }
