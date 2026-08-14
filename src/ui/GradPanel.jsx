@@ -1985,12 +1985,18 @@ export default function GradPanel({ wideCatalog = false }) {
                   no college pairs with a master's, so the button simply is not
                   there — the same reason the attribute grid hides itself when
                   the adapter publishes no attributes. */}
-              {/* Shown when a pathway is available OR already declared. The
-                  second half matters: the ✕ lives here, so gating purely on
-                  availability meant a student who declared a pathway and then
-                  changed to an ineligible major had a PlusOne card with no way to
-                  remove it. A selection must always be removable by whoever made
-                  it — the same reason a stale major keeps its Remove button. */}
+              {/* Shown when a pathway is available OR already declared AND STILL
+                  RESOLVABLE. The second half used to be bare `plusOne` (any
+                  declared id at all), so the ✕ stayed reachable for a student
+                  whose major became ineligible — but it also meant a plan
+                  whose pathway can no longer be looked up at all (deleted, or
+                  the whole feature switched off via acceleratedPathway's
+                  HIDDEN flag) still showed this row: an empty search box with
+                  nothing in it, since there is nothing left to search. `plusOnePathway`
+                  is null in both cases, and the StaleNotice card further down
+                  (driven by `plusOne` directly, unaffected by this gate) already
+                  owns removing an unresolvable pathway — this row has nothing
+                  useful to add once there is nothing to pick from. */}
               {/* `showPlusOnePicker` is separate state, not derived from `plusOne`
                   — the button used to commit straight to
                   `eligiblePathways[0] ?? plusOneOptions[0]`, so a student with NO
@@ -2002,7 +2008,7 @@ export default function GradPanel({ wideCatalog = false }) {
                   uses — makes the student choose, and `showAllWhenEmpty` lists
                   every pathway (there are only a handful) rather than requiring
                   a search term first, matching the concentration picker. */}
-              {!isGrad && (plusOneOptions.length > 0 || plusOne) && (
+              {!isGrad && (plusOneOptions.length > 0 || plusOnePathway) && (
                 (plusOne || showPlusOnePicker) ? (
                   <div data-claude-focus="plusOne" style={{ marginTop: 8, marginBottom: 8, ...(pvMark("plusOne", { inset: true }).style ?? {}) }}>
                     <div style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 3 }}>
