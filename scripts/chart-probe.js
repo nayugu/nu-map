@@ -37,7 +37,7 @@ import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { minCoursesFor } from "../src/engine/calibration.js";
 import { isUnguided } from "./lib/chart-gate.js";
-import { GENERAL_ELECTIVE } from "../src/core/requirementDemand.js";
+import { GENERAL_ELECTIVE, CONCENTRATION } from "../src/core/requirementDemand.js";
 import { realCourseCount } from "../src/core/coreqGroups.js";
 // `--electives` only. Imported here rather than in a second script because every one of these
 // questions is about the SAME cells the plan loop below regenerates, and a separate file would
@@ -77,12 +77,25 @@ const timeMs = flag("--ms") ? Number(flag("--ms")) : 5000;
 // side by side (course level and in-plan chain height) so the choice is made on the corpus
 // rather than on which one sounds more like depth.
 const electivesMode = argv.includes("--electives");
+// ── `--concentrations`: where concentration cells LAND, ours against the departments' ──
+//
+// The gate for the `thin` reach preference on concentration cells. That preference pushes a cell
+// towards terms where its option list survives, and pushing later is the failure mode: measured
+// BEFORE it was wired, departments place concentration cells at mean position 0.591 with 18.6% in
+// the first quarter, and CHART at 0.580 with 14.3% — we were already marginally later than they
+// are. So "fewer narrow cells" is not sufficient evidence; the position distribution has to stay
+// where the corpus is, and this is what says whether it did.
+//
+// Compares against the DEPARTMENTS in the same run rather than against a remembered number, since
+// their figure moves whenever the plan corpus is re-scraped.
+const concentrationsMode = argv.includes("--concentrations");
 const wanted = new Set(listFile
   ? JSON.parse(readFileSync(listFile, "utf8"))
   : argv.filter(a => !a.startsWith("--") && a !== listFile && a !== jsonOut));
-if (!wanted.size && !electivesMode) {
+if (!wanted.size && !electivesMode && !concentrationsMode) {
   console.error("usage: chart-probe.js [--plans list.json] [--json out.json] [label ...]");
   console.error("       chart-probe.js --electives [--json out.json]");
+  console.error("       chart-probe.js --concentrations");
   process.exit(2);
 }
 
@@ -144,6 +157,29 @@ function electiveFacts(program) {
   };
 }
 
+// ── `--concentrations` state ────────────────────────────────────────
+const deptPos = [], chartPos = [];
+
+/**
+ * Every concentration cell's position in one plan, as a fraction through it.
+ *
+ * By `binding.targets`, not by card text, for the same reason the general-elective count is: a
+ * concentration cell is titled with the concentration once one is picked and generically before,
+ * so wording cannot identify the bucket. Work and unused terms are counted in the denominator
+ * because position means "how far through the degree", and a co-op term is part of the degree.
+ */
+function concPositions(planDoc, sink) {
+  if (!planDoc) return;
+  const terms = [];
+  for (const y of planDoc.years ?? []) for (const t of y.terms ?? []) terms.push(t);
+  if (terms.length < 2) return;
+  terms.forEach((t, ti) => {
+    for (const e of flat(t.entries)) {
+      if (e.binding?.targets?.includes(CONCENTRATION)) sink.push(ti / (terms.length - 1));
+    }
+  });
+}
+
 /** The three criteria, read off one emitted plan. */
 function score(doc, studentType) {
   const minCourses = minCoursesFor(chartCalibration, studentType);
@@ -192,7 +228,7 @@ for (const lvl of ["undergraduate", "graduate"]) {
     // Cheap pre-filter: skip a program none of whose variants were asked for. `--electives`
     // sweeps everything — it asks about degrees rather than about plans, and there is no list
     // of interesting ones until it has run.
-    if (!electivesMode
+    if (!electivesMode && !concentrationsMode
         && ![...wanted].some(w => w === prefix || w.startsWith(`${prefix}#`))) continue;
     const data = JSON.parse(readFileSync(rf, "utf8"));
     if (electivesMode) {
@@ -206,6 +242,24 @@ for (const lvl of ["undergraduate", "graduate"]) {
     }
     const pf = join(base, col, key, "plan.json");
     const doc = existsSync(pf) ? JSON.parse(readFileSync(pf, "utf8")) : null;
+    if (concentrationsMode) {
+      // Only degrees with a real disjunction to place. A program naming one option has no
+      // choice to misrepresent, so including it would dilute the very thing being measured.
+      if (lvl !== "undergraduate") continue;
+      if ((data.concentrations?.concentrationOptions ?? []).length < 2) continue;
+      const pub = (doc?.plans ?? [])[0] ?? null;
+      concPositions(pub, deptPos);
+      let r;
+      try {
+        r = generatePlan({
+          program: data, publishedPlan: pub, courseMap, ports, depthIndex,
+          observedOrder: observed.edges, coopPrep: (observed.coopPrep ?? []).map(x => x.course),
+          calibration: chartCalibration, timeBudgetMs: timeMs,
+        });
+      } catch { continue; }
+      if (!r.refused) concPositions(r.plan.plans[0], chartPos);
+      continue;
+    }
     const variants = doc?.plans?.length ? doc.plans : [null];
     variants.forEach((variant, vi) => {
       const label = prefix + (variants.length > 1 ? `#${vi}` : "");
@@ -261,6 +315,35 @@ if (threw.length) {
   for (const [k, v] of threw.slice(0, 3)) console.error(`   ${k}: ${v.threw}`);
 }
 const tot = (k) => rows.reduce((n, [, v]) => n + (v[k] ?? 0), 0);
+
+if (concentrationsMode) {
+  const stat = (xs, label) => {
+    if (!xs.length) { console.log(`  ${label}: none`); return null; }
+    const s = [...xs].sort((a, b) => a - b);
+    const at = (q) => s[Math.min(s.length - 1, Math.floor(q * s.length))];
+    const mean = s.reduce((a, b) => a + b, 0) / s.length;
+    const q1 = 100 * s.filter(x => x < 0.25).length / s.length;
+    console.log(`  ${label.padEnd(12)} n=${String(s.length).padStart(4)}  mean ${mean.toFixed(3)}`
+      + `  p10 ${at(0.1).toFixed(2)}  med ${at(0.5).toFixed(2)}  p90 ${at(0.9).toFixed(2)}`
+      + `  first quarter ${q1.toFixed(1)}%`);
+    return { mean, q1 };
+  };
+  console.log("Concentration cell POSITION, as a fraction through the plan");
+  const d = stat(deptPos, "DEPARTMENTS");
+  const c = stat(chartPos, "CHART");
+  if (d && c) {
+    // The gate. Being LATER than the departments is the failure this watches for — CHART exists
+    // because departments spend the flexible credit too early, and overshooting the correction
+    // reproduces the defect at the other end.
+    const dm = c.mean - d.mean, dq = c.q1 - d.q1;
+    console.log(`\n  CHART - DEPARTMENTS: mean ${dm >= 0 ? "+" : ""}${dm.toFixed(3)}`
+      + `   first quarter ${dq >= 0 ? "+" : ""}${dq.toFixed(1)} pts`);
+    console.log(`  ${dm > 0.04 ? "✗ LATER than the corpus by more than 0.04 — the preference overshot"
+      : dm < -0.06 ? "✗ EARLIER than the corpus by more than 0.06"
+      : "✓ within 0.04 of the corpus"}`);
+  }
+  process.exit(0);
+}
 
 if (electivesMode) {
   const ok = rows.filter(([, v]) => !v.threw).map(([k, v]) => ({ key: k, ...v }));

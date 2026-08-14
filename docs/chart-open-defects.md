@@ -705,6 +705,73 @@ Two things follow for whoever picks this up:
   statement about how many candidates survive per term, which is precisely what the
   proposed `termPreference` ranking measures.
 
+**The preference below was BUILT, measured, and reverted — 2026-08-14.** Read this before
+building it again, because the diagnosis was right and the fix still did not pay.
+
+*What was wrong, and it is a real gap:* the `thin` reach preference — "prefer terms where at
+least `poolReachMin` of the pool is reachable", measured over 742 published major-subject pools
+at mean 0.92 / median 1.00 / p10 0.69 — is applied only inside `termPreference`'s
+major-subject branch. A pre-pick concentration cell can never reach that branch, because it
+carries the union of every option and `cellSubject` therefore returns **null**: International
+Business's union is 30 courses across ACCT, FINA, MKTG, MISM, SCHM, INNO and ENTR, and no
+single subject holds the required half. So the cell with the most at stake fell into the
+"no-claim filler" branch, the one branch with no reach test at all. That is still true.
+
+*Two measurements that reframe it, and both should be taken before touching this again:*
+
+| concentration cell position | n | mean | p10 | med | first quarter |
+|---|---|---|---|---|---|
+| departments (published plans) | 350 | **0.587** | 0.14 | 0.62 | **18.9%** |
+| CHART | 133–154 | **0.580** | 0.08 | 0.62 | **14.3%** |
+
+**Concentration cells are not placed too early.** Departments put them in the first quarter of
+the plan *more often than we do*. Any fix framed as "push them later" is moving away from the
+corpus, and the intuition that a Year 1 concentration course must be wrong is not supported.
+
+**Prerequisites are not the binding constraint, measured directly.** Worst-option prerequisite
+reach at the placement — the share of the *least* reachable concentration option available in
+that term — is **1.000 for departments (n=350) and 1.000 for CHART (n=130)**. Not one case
+below the 0.69 bar on either side. This independently confirms the season/prereq split below
+(93.1% season, 5.3% prerequisites) from the other direction.
+
+*So `minDepthOf`'s minimum is NOT the thing to change,* and this is the entry's standing
+warning made concrete. Replacing it with an average or a quantile would (a) break soundness —
+it feeds the DOMAIN, and `prereqDepth.js` is explicit that depth is "the lower bound that gives
+every cell its domain — never the placement" — so it would forbid a term a student can legally
+use, converting followable plans into refusals; and (b) aim at an empty set, per the 1.000
+above.
+
+*What was built:* `thin` extended to concentration cells, as a preference, ranked exactly where
+the major branch ranks it. It worked as designed — concentration position moved 0.580 → 0.585
+against the departments' 0.587, and forced picks fell 34 → 31 of 2,739. It was reverted anyway,
+on the corpus:
+
+| | before | with the preference |
+|---|---|---|
+| generated | 733 | 733 (no gain) |
+| forced picks (≤1 course) | 34 | 31 |
+| terms with 3+ general electives | 127 | 137 |
+| terms leaving 3+ cells UNGUIDED | 154 | 164 |
+| 3+ cells of one requirement | 217 | 237 |
+| thin full terms | 50 | 55 |
+
+Three forced picks against roughly forty-five worse terms. A first version scoped to every
+bounded no-claim pool was worse still (142 / 166 / 236) because it also moved
+`Supporting Course`-shaped cells and rearranged everything around them; narrowing to
+`target === CONCENTRATION` recovered most but not all of that, and gave up the +2 coverage the
+wide version had.
+
+*The instrument survives:* `node scripts/chart-probe.js --concentrations` prints both position
+distributions in one run and gates on the difference. Use it before and after, and treat "later
+than the departments" as the failure, not just "fewer narrow cells" — the whole engine exists
+because departments spend flexible credit too early, and overshooting the correction reproduces
+the defect at the other end.
+
+*If it is picked up again,* the untouched 93% is SEASON, and the honest next step is to measure
+the season dimension per option rather than to re-run this. `reachAt` already folds season in
+(`domains.js`), so the signal exists; what is missing is evidence that acting on it is worth
+the term quality it costs.
+
 **The cause is SEASON, not prerequisites** — and this is the part worth reading before
 designing anything, because the obvious fix is a dead end:
 
