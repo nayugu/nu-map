@@ -1403,8 +1403,12 @@ export default function Header() {
               // that read as part of the plan's name rather than as decoration.
               const planName = (plans.find(p => p.id === activePlanId)?.name) || "Plan";
               const hdrRtl = (locales.find(l => l.code === locale)?.dir ?? "ltr") === "rtl";
-              if (isPhone && planSlash) return "/";
-              if (!isPhone && iconOnly) return "/";
+              // The bare "/" collapse (no room for even a faded name) still needs its
+              // own "▾" — without one, a lone slash with no arrow reads as inert
+              // decoration or a stray artifact rather than the same clickable dropdown
+              // every other width shows, even though the button itself is unchanged.
+              if (isPhone && planSlash) return <>/<span style={{ flexShrink: 0, marginLeft: 3 }}>▾</span></>;
+              if (!isPhone && iconOnly) return <>/<span style={{ flexShrink: 0, marginLeft: 4 }}>▾</span></>;
               return (
                 <>
                   <FadeText text={planName} rtl={hdrRtl} />
