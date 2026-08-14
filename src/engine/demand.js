@@ -76,33 +76,30 @@ import {
 } from "../core/requirementDemand.js";
 import { obligationsOf } from "../core/requirementBinding.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
+import { breadthSplit, breadthIndices } from "./electives.js";
 
 export { GENERAL_ELECTIVE, CONCENTRATION };
 
-/**
- * Where a degree's free credit sits, as a fraction through the plan.
- *
- * Not a tuning knob — two statements about what a general elective IS.
- *
- * The FLOOR is CHART's founding complaint. Departments spend the electives before the first
- * co-op (54.0% of theirs are), and the whole engine exists because that leaves a student with
- * nothing but requirements afterwards. So the earliest an elective sits is a third of the way
- * in, which still leaves room for a first-year exploration course without reproducing the
- * defect.
- *
- * The CEILING runs to the end of the plan. Lowering it to 0.85 was tried on the reasoning
- * that an elective should yield the final term to the capstone that belongs there — a senior
- * requirement's target runs to about 0.9 (`LEVEL_POSITION`, 4000-level). It measured WORSE:
- * terms leaving three or more cells unguided went 10 to 12 on the sample, and it did not fix
- * the case that motivated it. Squeezing the range packs the electives closer together, which
- * is the opposite of the point. Recorded rather than quietly dropped, because the argument
- * still sounds right and someone will try it again.
- *
- * The mean of the resulting spread is 0.625, against the departments' measured 0.601 and
- * CHART's own 0.645. The same centre of gravity — distributed rather than piled.
- */
-export const GE_SPREAD_LO = 0.30;
-export const GE_SPREAD_HI = 0.95;
+// ── A degree's free credit has no positional curve, and had one ────
+//
+// `GE_SPREAD_LO = 0.30` and `GE_SPREAD_HI = 0.95` lived here, ramping an expected position
+// across the elective sequence. Both are gone; see the note at the cell construction below for
+// why a fitted curve on top of a graph-derived ordering can only disagree with it.
+//
+// One argument from the old comment is worth keeping, because it is about the DEGREE and not
+// about the mechanism: departments spend the electives before the first co-op — 54.0% of theirs
+// are — and CHART exists because that leaves a student with nothing but requirements afterwards.
+// Rule 4 serves that intent better than the floor did. The floor asserted that no elective may
+// sit in the first third of any plan; rule 4 says a DEPTH elective competes against the major's
+// own courses for an early slot and a BREADTH one defers, which is the same instinct stated
+// about what the cell is for rather than about where its index falls.
+//
+// The ceiling's dead end is also worth keeping. Lowering it to 0.85 was tried, so an elective
+// would yield the final term to the capstone that belongs there, and it measured WORSE: terms
+// leaving three or more cells unguided went 10 to 12, and it did not fix the case that motivated
+// it. Squeezing the range packs the electives closer together, which is the opposite of the
+// point — and "spread them out" is now rule 2's per-term constraint, where squeezing is not
+// expressible.
 
 /**
  * @typedef {Object} Cell
@@ -643,6 +640,26 @@ export function deriveCells(programData, {
   // The competencies this degree does not already guarantee, rarest first. Computed once,
   // from the cells built above, so it sees every named course the program commits to.
   const breadth = breadthGuidance ? breadthCodes(merged, courseMap, grantedAttributes) : [];
+
+  // ── Rule 1: the pool SPLITS, by arithmetic, per degree ─────────────
+  //
+  // How many general-elective cells this degree has, computed here rather than inside the loop
+  // below because the split needs the total before it can say which cells carry breadth. The
+  // arithmetic is `breadthSplit`'s and the reasoning is there; what matters at this call site
+  // is that both halves come from the same count the loop then emits, so a change to one
+  // cannot silently disagree with the other.
+  const geOb = byTarget.get(GENERAL_ELECTIVE);
+  const geUnit = geOb?.unitSH || DEFAULT_UNIT_SH;
+  const geCells = geSH > 0 ? Math.max(1, Math.ceil(geSH / geUnit)) : 0;
+  const split = breadthSplit({ cells: geCells, remaining: breadth.length });
+  // ── Rule 3: breadth binds to the LATER cells ──────────────────────
+  //
+  // `breadthAt` used to walk from 0, so the shallowest electives in the degree were also the
+  // earliest and the student's depth was pushed behind them. Breadth is what a plan can afford
+  // to defer, so it leans late — spread by an even stride rather than clustered at the very
+  // end, because a wall of placeholders in the last two terms is the defect this whole rule set
+  // exists to remove.
+  const breadthCells = breadthIndices(geCells, split.breadth);
   let breadthAt = 0;
 
   for (const target of [CONCENTRATION, GENERAL_ELECTIVE]) {
@@ -653,7 +670,11 @@ export function deriveCells(programData, {
     // Up, for the same reason as a pool: 13 SH of free electives rounded down to
     // three 4 SH slots leaves the plan a credit short of the degree, and a student
     // who follows it graduates late. Rounded up it is a slot they can drop.
-    const n = Math.max(1, Math.ceil(wanted / unit));
+    //
+    // The general-elective count comes from `geCells` rather than being re-derived, so the
+    // split above and the cells emitted here cannot disagree. Identical arithmetic today; a
+    // shared binding is what keeps it identical after the next edit to either one.
+    const n = target === GENERAL_ELECTIVE ? geCells : Math.max(1, Math.ceil(wanted / unit));
     if (wanted % unit !== 0) {
       notes.push({ kind: "indivisible-pool", target, credits: wanted,
                    unit, emitting: n * unit });
@@ -666,7 +687,12 @@ export function deriveCells(programData, {
       // never the other way round: in 6.9% of programs the unmet codes outnumber the free
       // electives, and a degree whose breadth cannot fit in its electives is a fact about
       // the degree — refusing over it would turn a real constraint into a missing plan.
-      const bind = target === GENERAL_ELECTIVE && breadthAt < breadth.length
+      // Rule 1 decided HOW MANY cells carry breadth and rule 3 decided WHICH; the codes
+      // themselves are still taken rarest-first, so the scarcest competency is the one a cell
+      // is bound to. Fewer cells than codes is the point of rule 1, not a shortfall: at ~1.5
+      // codes per course, four well-chosen electives cover six competencies, and labelling six
+      // cells would reserve two slots the student never needed to spend.
+      const bind = target === GENERAL_ELECTIVE && breadthCells.has(i) && breadthAt < breadth.length
         ? breadth[breadthAt++]
         : null;
       merged.push({
@@ -736,33 +762,41 @@ export function deriveCells(programData, {
         // Carried so the card can say which competency, and so `reqKey` does not count this
         // cell as one of the term's unguided ones — it is guided, just not constrained.
         ...(bind ? { nupath: bind.code } : {}),
-        // ── What a general elective is FOR, expressed as WHEN it sits ──
+        // ── Which HALF of the pool this cell is, carried on the cell ───
         //
-        // Every general elective used to fall through to a level target of 1.0 — the end of
-        // the plan — because `cellLevelTarget` has nothing to say about a cell that names no
-        // course. Fourteen electives then all wanted the same last term, and clumped there.
-        // That is not a missing constraint; it is fourteen copies of one instruction.
+        // Rule 1 splits the pool into breadth and depth, and rules 4 and 5 place the two
+        // differently — a depth elective competes for an early slot against the major's own
+        // courses, a breadth elective defers. So the role has to survive the trip from here to
+        // the search, and it travels ON THE CELL for the same reason `optionPools` does: a flag
+        // threaded through four layers of arguments is a flag the next caller forgets.
         //
-        // They are not one thing. A degree's free credit is a PORTFOLIO:
-        //
-        //   BREADTH      covers an unmet NUPath competency. Those courses are mostly 1000-
-        //                2000 level and carry no prerequisites, so they sit early.
-        //   DEPTH        an advanced course in or near the major. It has prerequisites in
-        //                practice, so it sits late.
-        //   EXPLORATION  anything, anywhere.
-        //
-        // So they get a SPREAD of targets rather than a shared one, and the existing level
-        // machinery distributes them with no new rule and no repair pass. Breadth cells are
-        // emitted first and therefore take the early end, which is where they belong.
-        //
-        // The range is skewed late deliberately. CHART exists because departments spend the
-        // electives before the first co-op, so an even spread over the whole plan would
-        // reintroduce the founding defect. Over [0.30, 0.95] the mean target is ~0.63,
-        // against the departments' measured 0.601 and CHART's own 0.645 — the same centre of
-        // gravity, distributed instead of piled.
-        ...(target === GENERAL_ELECTIVE && n > 1
-          ? { levelTarget: GE_SPREAD_LO + (GE_SPREAD_HI - GE_SPREAD_LO) * (i / (n - 1)) }
+        // Derived from the breadth binding rather than stored twice. `nupath` is the label and
+        // this is the role; they agree by construction because both come from `breadthCells`.
+        ...(target === GENERAL_ELECTIVE
+          ? { geRole: breadthCells.has(i) ? "breadth" : "depth" }
           : {}),
+        // ── No POSITIONAL depth curve. It could only fight the ordering ──
+        //
+        // A ramp used to live here: `GE_SPREAD_LO -> GE_SPREAD_HI` across the elective sequence,
+        // so the i-th elective of n wanted a position `0.30 + 0.65 * i/(n-1)`. It was reached
+        // for because every general elective otherwise falls through to a level target of 1.0 —
+        // `cellLevelTarget` has nothing to say about a cell that names no course — so fourteen
+        // electives all wanted the last term and clumped there.
+        //
+        // The diagnosis was right and the remedy was the wrong shape. Depth already comes from
+        // the prerequisite graph, so a hand-fitted curve laid on top of a graph-derived ordering
+        // can only disagree with it — and with breadth bound to the FIRST cells, as it was, the
+        // curve disagreed in the wrong direction: it asked the shallowest electives in the
+        // degree to sit earliest and pushed the student's depth behind them.
+        //
+        // What replaces it is rule 4, in `search.js`: a depth elective is ordered by comparing
+        // its estimated depth against the depths of the MAJOR'S OWN courses. One comparison,
+        // opposite outcomes in a shallow and a deep degree, because the comparand differs — and
+        // no curve to fit. The clumping the ramp was aimed at is rule 2's job, which states it
+        // as a per-term constraint instead of a preference.
+        //
+        // `i` is still the cell's position in the pool and rule 3 reads it; nothing positional
+        // is asserted about the TERM any more.
         // ── And the union is not, on its own, a legal answer ──────────
         //
         // The union says what MAY answer this cell before the student chooses. It does not say

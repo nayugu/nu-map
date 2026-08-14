@@ -1,78 +1,128 @@
 // ═══════════════════════════════════════════════════════════════════
-// ELECTIVES — four rules, written down
+// ELECTIVES — what a general elective is FOR, and therefore where it goes
 //
-// A free elective is the most flexible cell in a plan, and for most of this engine's life it
-// has been treated as one undifferentiated thing: filler, to be placed wherever room was left.
-// That is wrong in a way that shows up in every plan. Electives are not one thing, and what an
-// elective is FOR decides where it belongs.
+// A general elective is the most flexible cell in a plan — any level, any subject, no
+// ordering requirement — and the engine treated that flexibility as licence to defer it.
+// That is why they stack. Electives are the least constrained cells, so most-constrained-first
+// ordering places them LAST, and by then only the late terms have room. The clumping is an
+// artifact of WHEN they are chosen, not of any decision about where they belong.
 //
-//   1. SPLIT THE POOL. Breadth need is 3-4 courses — the NUPath competencies a degree does not
-//      already guarantee. If the pool is smaller than 3 slots or 8 SH, it is ALL breadth and
-//      there are no depth electives to place.
+// They are also not one thing. About half the pool exists to satisfy NUPath competencies the
+// degree does not otherwise guarantee; the rest is the student's own depth. Those two have
+// opposite placement logic, and treating them as one category is what makes every plan wrong
+// at one end or the other.
 //
-//   2. BREADTH LEANS LATE, DISTRIBUTED. One or two to a term, never stacked at the end. These
-//      are shallow by nature, so they are what a plan can afford to defer — but deferring all
-//      of them produces the wall of placeholders a student sees in years three and four.
-//
-//   3. EVERY OTHER ELECTIVE HAS NO SPECIAL RULE. It enters the same unlock-then-depth ordering
-//      as a major course. Where a major has deep chains of its own, these fill in around them;
-//      where it does not, they ARE the depth and the ordering puts them early on its own. Same
-//      rule, opposite-looking plans, because the inputs differ.
-//
-//   4. AN ELECTIVE NEVER TAKES A SLOT AN UNLOCKED MAJOR COURSE COULD USE. Measured on
-//      `computer_science_and_mathematics_bs`: a reservation took Year 1 Summer 1 and pushed
-//      CS 3100 back to Year 2 Fall. An elective can go anywhere; a major course, once its
-//      prerequisites are met, has a reason to be exactly there.
+// The rules live in `docs/chart-elective-rules.md`. This file owns the two that are pure
+// arithmetic over the pool — the split and which cells carry it — and nothing about terms.
+// Which TERM a cell lands in is the search's decision; rules 2, 4 and 5 are enforced there.
 //
 // ── Why these are rules and not a score ─────────────────────────────
 //
-// Every one of them is decidable from data the engine already computes — the unmet competency
-// codes, the pool's size, unlock value, chain depth. None needs a weight, a threshold to tune,
-// or a metric to optimise against. A human can read the four lines above, look at a plan, and
-// say whether it followed them. That property is worth more here than any objective function:
-// the failures this engine has actually shipped were not close calls between good plans, they
-// were plans that broke a rule nobody had written down.
+// Every one is decidable from data the engine already computes — the unmet competency codes,
+// the pool's size, unlock value, chain depth. None needs a weight, a threshold to tune, or a
+// metric to optimise against. A human can read the rules, look at a plan, and say whether it
+// followed them. That property is worth more here than any objective function: the failures
+// this engine has shipped were not close calls between good plans, they were plans that broke
+// a rule nobody had written down.
 // ═══════════════════════════════════════════════════════════════════
 
 /**
- * How many courses of breadth a degree needs.
+ * NUPath competencies, in full.
  *
- * Three to four, and bounded by what is actually unmet — a degree whose named courses already
- * carry most competencies needs fewer. Never more than the pool holds.
+ * Thirteen, not twelve: eleven competencies, but competency 9 ("Writing Across Audiences and
+ * Genres") is awarded as three separate codes — `WF`, `WD`, `WI`. Carried here only as the
+ * ceiling `remaining` is sanity-checked against; the working figure is MEASURED from the
+ * catalog's own attribute data rather than assumed, because a scrape that has lost a code
+ * should shrink the breadth need rather than invent a cell for something we cannot see.
  */
-export const BREADTH_NEED = 4;
+export const NUPATH_CODES = 13;
 
 /**
- * Rule 1: how many of this elective pool are breadth, and is the pool ALL breadth?
+ * Competencies one well-chosen course carries.
  *
- * The small-pool case is not an edge case, it is a common shape: a degree with two free
- * electives has no room for depth electives at all, and treating one of them as "depth" would
- * promise a student a choice the credits do not exist for.
+ * ── The one estimate in this file, and it is named so it can be argued with ──
  *
- * @param {number} n         elective cells in the pool
- * @param {number} poolSH    their combined credit
- * @param {number} unmet     unmet NUPath competencies
- * @returns {{count: number, all: boolean}}
+ * Not a fact about the catalog: it is what a student ACHIEVES picking well. Many courses carry
+ * one code, a good number carry two, and a student who reads the list can cover six
+ * competencies in four courses. Set at 1.5 because that is the efficiency the rest of the
+ * arithmetic assumes, and it is the figure the worked example in the design doc rests on.
+ *
+ * It is deliberately NOT derived from `attributes` coverage. That data covers 1,516 of 7,966
+ * courses, so the mean codes-per-labelled-course would be a statement about our scrape's
+ * completeness rather than about what a student can do. An honest estimate beats a precise
+ * measurement of the wrong population.
+ *
+ * Raising it shrinks the breadth need and hands more cells to depth; lowering it does the
+ * reverse. It is the knob, and there is exactly one of it.
  */
-export function breadthSplit(n, poolSH, unmet) {
-  if (n <= 0) return { count: 0, all: false };
-  // Under three slots or eight credits there is nothing left over once breadth is served.
-  if (n < 3 || poolSH <= 8) return { count: Math.min(n, unmet), all: true };
-  return { count: Math.min(n, unmet, BREADTH_NEED), all: false };
+export const CODES_PER_COURSE = 1.5;
+
+/**
+ * Rule 1: how much of this elective pool is BREADTH, and how much is the student's own depth.
+ *
+ * Computed per degree from what the major already guarantees, not from a constant:
+ *
+ *     satisfied   NUPath codes the major's REQUIRED courses carry, whatever the student picks
+ *     remaining   13 − satisfied
+ *     breadth     ceil(remaining / 1.5)     ~1.5 codes per course, picking efficiently
+ *     depth       cells − breadth
+ *
+ * Worked, from the design doc: a degree allowing 10 general electives whose required courses
+ * leave 6 competencies remaining needs about 4 courses to cover them, leaving 6 electives free
+ * for anything.
+ *
+ * ── What this pins down that the old fixed 3–4 did not ──────────────
+ *
+ * The previous version took `min(cells, unmet, 4)` — effectively ONE CELL PER UNMET CODE up to
+ * a ceiling of four. That is the wrong shape twice over. It ignores that a course can carry two
+ * codes, so it over-reserves by about a third; and the ceiling of 4 is a constant that no
+ * degree's arithmetic produced.
+ *
+ * `satisfied` counts only what the major guarantees NO MATTER WHAT. A code carried by one
+ * branch of a choice is not satisfied — the student may take the other branch. That reasoning
+ * is `breadthCodes`'s already, and `remaining` is simply how many codes it returns: derived
+ * from the catalog's own attribute data rather than from `13 − satisfied`, so a competency our
+ * scrape cannot see reduces the need instead of reserving a cell for a code we cannot name.
+ *
+ * Where the arithmetic leaves `depth <= 0` the pool is entirely breadth and there are no depth
+ * electives to place. That is the small-pool case, and it falls out of the formula rather than
+ * needing a threshold of its own — a degree with two free electives has no room for depth, and
+ * calling one of them "depth" would promise a student a choice the credits do not exist for.
+ *
+ * @param {object} args
+ * @param {number} args.cells       general-elective cells in the pool
+ * @param {number} args.remaining   unmet competencies — `breadthCodes(...).length`
+ * @returns {{breadth: number, depth: number, all: boolean}}
+ */
+export function breadthSplit({ cells, remaining }) {
+  const n = Math.max(0, Math.floor(cells ?? 0));
+  if (n <= 0) return { breadth: 0, depth: 0, all: false };
+  // Clamped at the real ceiling: a run reporting more unmet codes than NUPath has is a bug
+  // upstream, and reserving 14 cells for 13 competencies would be its most expensive symptom.
+  const unmet = Math.max(0, Math.min(NUPATH_CODES, Math.floor(remaining ?? 0)));
+  // Ceil, not round: half a course of breadth is a whole cell to a student, and under-reserving
+  // costs a graduation while over-reserving costs a slot they can spend freely anyway.
+  const need = Math.ceil(unmet / CODES_PER_COURSE);
+  const breadth = Math.min(n, need);
+  return { breadth, depth: n - breadth, all: breadth >= n };
 }
 
 /**
- * Rule 2: WHICH cells in the pool carry breadth — the later ones, distributed.
+ * Rule 3: WHICH cells in the pool carry breadth — the later ones, distributed.
  *
- * The previous behaviour bound breadth to cells 0..k-1, so the shallowest electives in the
- * degree were also the earliest, and the depth a student could show at co-op recruiting was
- * pushed behind them. This walks from the back and steps by an even stride, so `k` breadth
- * cells among `n` land spread across the later portion rather than clustered at the very end.
+ * Breadth courses are shallow by nature, so they are what a plan can afford to defer. But
+ * deferring ALL of them is what produces the wall of placeholders, so they lean late and
+ * spread rather than clustering at the very end. Rule 2's per-term cap is what actually keeps
+ * the lean from becoming a clump; this only decides which cells are which.
  *
- * Indices, not terms: which TERM a cell lands in is the search's decision. This says which
- * cells carry the competency, and the ordering does the rest — a cell marked breadth is
- * shallow, and shallow cells sort late under the same rule that sorts everything else.
+ * The previous behaviour bound breadth to cells `0..k-1`, which is backwards: it put the
+ * shallowest electives earliest and pushed the student's depth behind them.
  *
+ * Indices, not terms. Which TERM a cell lands in is the search's decision. This says which
+ * cells carry the competency, and the ordering does the rest.
+ *
+ * @param {number} n      cells in the pool
+ * @param {number} count  how many carry breadth
  * @returns {Set<number>} cell indices that carry breadth
  */
 export function breadthIndices(n, count) {

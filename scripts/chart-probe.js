@@ -39,6 +39,14 @@ import { minCoursesFor } from "../src/engine/calibration.js";
 import { isUnguided } from "./lib/chart-gate.js";
 import { GENERAL_ELECTIVE } from "../src/core/requirementDemand.js";
 import { realCourseCount } from "../src/core/coreqGroups.js";
+// `--electives` only. Imported here rather than in a second script because every one of these
+// questions is about the SAME cells the plan loop below regenerates, and a separate file would
+// reload the 8,000-course catalog to ask them.
+import { deriveCells, breadthCodes } from "../src/engine/demand.js";
+import { breadthSplit } from "../src/engine/electives.js";
+import { buildPrecedence, chainHeight } from "../src/engine/precedence.js";
+import { cellLevelTarget } from "../src/engine/prereqDepth.js";
+import { majorSubjectsOf, cellSubject } from "../src/engine/subjects.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 const argv = process.argv.slice(2);
@@ -58,11 +66,23 @@ const showTerms = argv.includes("--terms");
 // between a fact about the degree and a weakness in the search.
 const nodeBudget = flag("--nodes") ? Number(flag("--nodes")) : null;
 const timeMs = flag("--ms") ? Number(flag("--ms")) : 5000;
+// ── `--electives`: the elective ARITHMETIC, corpus-wide, without searching ──
+//
+// A different question from the rest of this file, and much cheaper. "How does this degree's
+// free credit split, and how deep are its own courses" is answered from the CELLS — no search,
+// no ladder, no clock — so it sweeps every program in about the time one plan takes to generate.
+//
+// It exists because rule 4 needs a COMPARAND, and picking one by intuition is how the level-
+// versus-time metric got built to measure a rule we do not hold. Two candidates are printed
+// side by side (course level and in-plan chain height) so the choice is made on the corpus
+// rather than on which one sounds more like depth.
+const electivesMode = argv.includes("--electives");
 const wanted = new Set(listFile
   ? JSON.parse(readFileSync(listFile, "utf8"))
   : argv.filter(a => !a.startsWith("--") && a !== listFile && a !== jsonOut));
-if (!wanted.size) {
+if (!wanted.size && !electivesMode) {
   console.error("usage: chart-probe.js [--plans list.json] [--json out.json] [label ...]");
+  console.error("       chart-probe.js --electives [--json out.json]");
   process.exit(2);
 }
 
@@ -74,6 +94,55 @@ const observed = existsSync(orderFile)
   ? JSON.parse(readFileSync(orderFile, "utf8")) : { edges: [], coopPrep: [] };
 
 const flat = (es, out = []) => { for (const e of es ?? []) { out.push(e); flat(e.children, out); } return out; };
+
+/** The median of a numeric list, or null for an empty one. */
+const median = (xs) => {
+  if (!xs.length) return null;
+  const s = [...xs].sort((a, b) => a - b);
+  return s[Math.floor((s.length - 1) / 2)];
+};
+
+/**
+ * One program's elective arithmetic, and the two candidate comparands for rule 4.
+ *
+ * Everything here is read off the CELLS, so it is a statement about the degree rather than
+ * about the plan we happened to construct for it — which is the right level for a rule that
+ * decides what an elective competes against.
+ */
+function electiveFacts(program) {
+  const { cells } = deriveCells(program, { courseMap, repeatable: () => false });
+  const ge = cells.filter(c => c.target === GENERAL_ELECTIVE);
+  const remaining = breadthCodes(cells, courseMap).length;
+  const split = breadthSplit({ cells: ge.length, remaining });
+  // Roles as the engine actually emitted them, so a disagreement between the arithmetic above
+  // and `deriveCells` shows up here rather than in a plan three layers later.
+  const emittedBreadth = ge.filter(c => c.geRole === "breadth").length;
+  const emittedDepth = ge.filter(c => c.geRole === "depth").length;
+
+  // The major's OWN courses, which is what rule 4 compares an elective against. Named cells
+  // only: a choice cell guarantees neither of its branches, so its level is not the degree's
+  // claim about depth any more than it is its claim about a competency.
+  const plans = cells.map(c => ({ cell: c, candidates: c.groups?.flat() ?? null }));
+  const majors = majorSubjectsOf(plans, courseMap);
+  const majorNamed = plans.filter(p =>
+    p.cell.kind === "named" && majors.has(cellSubject(p, courseMap)));
+
+  // Candidate A: course LEVEL, via the measured level→position table (r = 0.809 over 12,848
+  // placements). Candidate B: in-plan CHAIN HEIGHT — how many cells must follow this one.
+  const levels = majorNamed.map(p => cellLevelTarget(p, courseMap)).filter(v => v != null);
+  const precedence = buildPrecedence(cells, courseMap, { observed: observed.edges ?? [] });
+  const heights = chainHeight(plans, precedence);
+  const majorHeights = majorNamed.map(p => heights.get(p.cell.id) ?? 0);
+
+  return {
+    ge: ge.length, remaining, breadth: split.breadth, depth: split.depth,
+    emittedBreadth, emittedDepth,
+    majorNamed: majorNamed.length,
+    levelMed: median(levels), levelMax: levels.length ? Math.max(...levels) : null,
+    heightMed: median(majorHeights),
+    heightMax: majorHeights.length ? Math.max(...majorHeights) : null,
+  };
+}
 
 /** The three criteria, read off one emitted plan. */
 function score(doc, studentType) {
@@ -120,9 +189,21 @@ for (const lvl of ["undergraduate", "graduate"]) {
     const rf = join(base, col, key, "requirements.json");
     if (!existsSync(rf)) continue;
     const prefix = `${lvl === "graduate" ? "grad" : "ug"}/${key}`;
-    // Cheap pre-filter: skip a program none of whose variants were asked for.
-    if (![...wanted].some(w => w === prefix || w.startsWith(`${prefix}#`))) continue;
+    // Cheap pre-filter: skip a program none of whose variants were asked for. `--electives`
+    // sweeps everything — it asks about degrees rather than about plans, and there is no list
+    // of interesting ones until it has run.
+    if (!electivesMode
+        && ![...wanted].some(w => w === prefix || w.startsWith(`${prefix}#`))) continue;
     const data = JSON.parse(readFileSync(rf, "utf8"));
+    if (electivesMode) {
+      // Undergraduate only. NUPath is an undergraduate framework, so `remaining` is not a
+      // meaningful quantity for a master's and printing one would invite a rule to be fitted
+      // to it.
+      if (lvl !== "undergraduate") continue;
+      try { out[prefix] = electiveFacts(data); }
+      catch (e) { out[prefix] = { threw: String(e?.message ?? e) }; }
+      continue;
+    }
     const pf = join(base, col, key, "plan.json");
     const doc = existsSync(pf) ? JSON.parse(readFileSync(pf, "utf8")) : null;
     const variants = doc?.plans?.length ? doc.plans : [null];
@@ -179,8 +260,61 @@ if (threw.length) {
   console.error(`✗ ${threw.length} of ${rows.length} plans THREW — every number below is meaningless`);
   for (const [k, v] of threw.slice(0, 3)) console.error(`   ${k}: ${v.threw}`);
 }
-console.log(`${rows.length} plans   refused ${refused}   threw ${threw.length}`);
 const tot = (k) => rows.reduce((n, [, v]) => n + (v[k] ?? 0), 0);
+
+if (electivesMode) {
+  const ok = rows.filter(([, v]) => !v.threw).map(([k, v]) => ({ key: k, ...v }));
+  const withGE = ok.filter(r => r.ge > 0);
+  console.log(`${ok.length} undergraduate degrees   ${withGE.length} with a general-elective pool`);
+  // The split, which is rule 1. Printed as a distribution rather than a mean, because the
+  // small-pool case is a SHAPE and a mean over it says nothing.
+  const allBreadth = withGE.filter(r => r.depth <= 0).length;
+  console.log(`  rule 1 — pool is ALL breadth (depth <= 0)   ${allBreadth}`
+    + `  (${(100 * allBreadth / Math.max(1, withGE.length)).toFixed(1)}%)`);
+  console.log(`  rule 1 — median pool ${median(withGE.map(r => r.ge))}`
+    + `  breadth ${median(withGE.map(r => r.breadth))}`
+    + `  depth ${median(withGE.map(r => r.depth))}`
+    + `  unmet codes ${median(withGE.map(r => r.remaining))}`);
+  // The invariant that matters: the arithmetic above and the cells `deriveCells` emitted must
+  // agree. A mismatch means rule 1 and rule 3 disagree about which cells exist.
+  const mismatch = ok.filter(r => r.emittedBreadth !== r.breadth || r.emittedDepth !== r.depth);
+  console.log(`  emitted roles DISAGREE with the split          ${mismatch.length}`
+    + (mismatch.length ? `   e.g. ${mismatch.slice(0, 3).map(r => r.key).join(", ")}` : ""));
+
+  // ── Rule 4's comparand, both candidates ──────────────────────────
+  //
+  // The rule needs a number that separates a SHALLOW major from a DEEP one. Whichever
+  // candidate has a usable spread across degrees can carry the comparison; one that is
+  // constant tells an elective the same thing everywhere and is therefore not a comparand.
+  const lv = withGE.map(r => r.levelMed).filter(v => v != null);
+  const ht = withGE.map(r => r.heightMed).filter(v => v != null);
+  const htMax = withGE.map(r => r.heightMax).filter(v => v != null);
+  const dist = (xs) => {
+    const s = [...xs].sort((a, b) => a - b);
+    const at = (q) => s[Math.min(s.length - 1, Math.floor(q * s.length))];
+    return `p10 ${at(0.1)}  med ${at(0.5)}  p90 ${at(0.9)}  max ${s[s.length - 1]}`;
+  };
+  console.log(`  rule 4 cand A — major median LEVEL target   ${dist(lv)}`);
+  console.log(`  rule 4 cand B — major median CHAIN height   ${dist(ht)}`);
+  console.log(`  rule 4 cand B — major MAX chain height      ${dist(htMax)}`);
+  const distinctLv = new Set(lv).size, distinctHt = new Set(ht).size;
+  console.log(`  distinct values: level ${distinctLv}, chain-height-median ${distinctHt},`
+    + ` chain-height-max ${new Set(htMax).size}`);
+  for (const name of ["international_business", "computer_science_and_mathematics"]) {
+    const r = ok.find(x => x.key.includes(name));
+    if (r) {
+      console.log(`  · ${r.key}`);
+      console.log(`      ge ${r.ge}  unmet ${r.remaining}  breadth ${r.breadth}  depth ${r.depth}`
+        + `   majorNamed ${r.majorNamed}`);
+      console.log(`      level med ${r.levelMed} max ${r.levelMax}`
+        + `   chain height med ${r.heightMed} max ${r.heightMax}`);
+    }
+  }
+  if (jsonOut) { writeFileSync(jsonOut, JSON.stringify(out, null, 1)); console.log(`  → ${jsonOut}`); }
+  process.exit(0);
+}
+
+console.log(`${rows.length} plans   refused ${refused}   threw ${threw.length}`);
 console.log(`  SHORT of four real courses  ${tot("short")}`);
 console.log(`  EMPTY full terms            ${tot("empty")}`);
 console.log(`  terms with 3+ UNGUIDED      ${tot("unguided3")}`);

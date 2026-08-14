@@ -163,6 +163,27 @@ import { barsReachable } from "./cardinality.js";
 export const UNGUIDED_PER_TERM_CAP = 3;
 
 /**
+ * How deep a DEPTH elective is assumed to be, in chain height — rule 4's estimate.
+ *
+ * A depth elective is "an advanced course in or near the major", and such a course sits on
+ * about two terms of prerequisites: a 3000-level course in a major subject typically needs an
+ * introductory course and its successor behind it. Two is that, and it is an ESTIMATE — the
+ * cell names no course, so no measurement of it is available even in principle.
+ *
+ * What makes an estimate safe to act on is that it is never used alone. It is only ever
+ * COMPARED against the degree's own chains (`majorChainMax`), so what it has to get right is
+ * the ORDER of two numbers, not either one's value. Measured over 351 degrees with an elective
+ * pool, the major's max chain height runs p10 1, median 2, p90 4, max 7 — so 2 sits at the
+ * corpus median and the comparison genuinely splits the population rather than answering the
+ * same way for everyone.
+ *
+ * Raising it lets electives compete in deeper degrees; lowering it confines them to the
+ * shallowest. The two benchmarks bracket it: International Business is 2 and its electives must
+ * compete, Computer Science and Mathematics is 3 and its must not.
+ */
+export const GE_DEPTH_ESTIMATE = 2;
+
+/**
  * Nodes phase 1 may expand before refusing.
  *
  * 20,000 — and it stays there, which took two measured regressions to establish.
@@ -857,6 +878,59 @@ function attemptPlacement({
   const isGenerator = (plan) => unlockOf(plan) >= unlockBar;
   const isMajor = (plan) => majorSubjects.has(cellSubject(plan, courseMap));
 
+  // ── Rule 4: a DEPTH elective is placed by comparing it to the MAJOR'S OWN courses ──
+  //
+  // A depth elective names no course, so it has no depth of its own — it has an ESTIMATE, and
+  // that estimate means nothing in isolation. What makes it decidable is the comparand: the
+  // depth of the courses this degree actually requires. One comparison, opposite outcomes:
+  //
+  //   shallow major   its chains bottom out early, so the estimate stands ABOVE them. The
+  //                   elective competes for early slots and wins some — correct, because in
+  //                   a degree like International Business the electives ARE the depth.
+  //   deep major      its chains run past a generic elective, so the same estimate stands
+  //                   BELOW them. The elective loses those contests and fills in around.
+  //
+  // ── Why CHAIN HEIGHT and not course level ───────────────────────────
+  //
+  // Measured over 351 degrees with an elective pool (`chart-probe --electives`). Course level
+  // was the obvious candidate and it CANNOT carry the comparison: the median major level target
+  // is 0.36 for International Business and 0.36 for Computer Science and Mathematics — the two
+  // benchmarks chosen precisely because they are opposites — and it takes only 4 distinct values
+  // across the whole corpus. A comparand that is constant tells every elective the same thing.
+  //
+  // Max in-plan chain height separates them (IB 2, CS+Math 3) and has a real spread: p10 1,
+  // median 2, p90 4, max 7, over 8 distinct values. It is also the RIGHT quantity on the
+  // argument's own terms — the rule talks about chains running past an elective, and a chain is
+  // what this measures. `chainHeight` is the same function `termPreference` uses below, so the
+  // two cannot disagree about what a chain is.
+  //
+  // MAX rather than median: the median is 0 for over half the corpus, because most named cells
+  // are leaves whatever the degree's shape. A degree is deep if it HAS a long chain, not if the
+  // typical course sits on one.
+  const majorHeights = precedence ? chainHeight(plans, precedence) : new Map();
+  const majorChainMax = plans
+    .filter(p => p.cell.kind === "named" && isMajor(p))
+    .reduce((m, p) => Math.max(m, majorHeights.get(p.cell.id) ?? 0), 0);
+  /**
+   * Does a depth elective outrank this degree's own courses?
+   *
+   * `<=`, so a degree whose deepest chain is exactly as tall as a generic advanced course lets
+   * the elective compete — International Business, at 2 against the estimate's 2, is that case
+   * and is the degree the rule was written for.
+   */
+  const depthElectivesCompete = majorChainMax <= GE_DEPTH_ESTIMATE;
+  /**
+   * A depth elective that has earned a place in the ordinary ordering.
+   *
+   * Breadth electives are never this: they are shallow by nature and rule 3 leans them late.
+   * Neither is anything in a deep major, which is why rule 5 reads as almost a consequence of
+   * this one — in a deep degree the comparison has already put the elective behind.
+   */
+  const isCompetingDepthElective = (plan) =>
+    depthElectivesCompete
+    && plan.cell.target === GENERAL_ELECTIVE
+    && plan.cell.geRole === "depth";
+
   /**
    * Who gets first claim on a scarce early term.
    *
@@ -866,8 +940,14 @@ function attemptPlacement({
    *    published plans put LAST. This is the deliberate inversion
    * 2  everything else specific, including a major requirement that unlocks nothing
    * 3  fillers, handled above and unconditionally last
+   *
+   * A depth elective in a SHALLOW major ranks 1, with the major-subject pools. Rule 4's
+   * comparison has put it above the degree's own courses, and 1 is where "the depth a co-op
+   * employer reads" already sits — so it enters the ordering the engine already uses rather
+   * than getting a tier of its own.
    */
   const claimRank = (plan) => {
+    if (isCompetingDepthElective(plan)) return 1;
     if (isPool(plan)) return isMajor(plan) ? 1 : 2;
     return isGenerator(plan) ? 0 : 2;
   };
@@ -875,7 +955,15 @@ function attemptPlacement({
   const rankOf = (p) => rank.get(p.cell.id) ?? 2;
 
   // Deterministic order before any heuristic reorders: two runs must agree.
-  const order = [...plans].sort((a, b) => byConstraint(a, b, terms.length, rankOf));
+  //
+  // `fillerOf` is what lets rule 4 reach the ordering at all. `byConstraint`'s first key puts
+  // fillers last UNCONDITIONALLY, and a general elective is a filler by the only test available
+  // there — `candidates === null`. So a depth elective could be ranked 1 all day and never be
+  // compared on it, because the filler key decides first. Passing the predicate in keeps the
+  // decision here, next to the comparison that makes it, instead of teaching a module-level
+  // helper about elective roles.
+  const fillerOf = (p) => p.candidates === null && !isCompetingDepthElective(p);
+  const order = [...plans].sort((a, b) => byConstraint(a, b, terms.length, rankOf, fillerOf));
 
   const byId = new Map(plans.map(p => [p.cell.id, p]));
   const termOf = new Map();
@@ -2110,18 +2198,32 @@ export function describe(f) {
  * admits any course sorts last on BOTH keys, so it is placed into whatever room
  * is left rather than claiming a term a specific course needed.
  */
-function byConstraint(a, b, termCount, rankOf = () => 0) {
-  // Fillers last, unconditionally. This is the ordering the whole engine exists
-  // for, and it must not be left to emerge from a tie-break: the motivating
-  // complaint is that departments spend the general electives before the first
-  // co-op, so the courses with something to say about a degree claim their terms
-  // first and the electives take what is left.
+function byConstraint(a, b, termCount, rankOf = () => 0, fillerOf = isFiller) {
+  // Fillers last. This is the ordering the whole engine exists for, and it must not
+  // be left to emerge from a tie-break: the motivating complaint is that departments
+  // spend the general electives before the first co-op, so the courses with
+  // something to say about a degree claim their terms first and the electives take
+  // what is left.
   //
   // Most-constrained-first would NOT deliver this on its own. The prereq DAG gives
   // 71% of the catalog depth 0, so a broad elective and a first-year requirement
   // look equally unconstrained, and which goes first comes down to how the
   // candidate counts happen to compare.
-  const fa = isFiller(a) ? 1 : 0, fb = isFiller(b) ? 1 : 0;
+  //
+  // ── "Unconditionally" was the word this key lost, and deliberately ──
+  //
+  // It read `unconditionally` for good reason, and rule 4 is the one condition worth admitting:
+  // a DEPTH elective in a degree whose own chains are shallower than a generic advanced course
+  // is not filler, because in such a degree the electives ARE the student's depth. Deciding that
+  // needs the degree's chain heights, which this comparator cannot see, so the caller supplies
+  // `fillerOf` and the default remains exactly the old behaviour.
+  //
+  // What has NOT changed: a breadth elective is still filler, and so is every elective in a deep
+  // major. The founding complaint is about spending free credit before the first co-op on
+  // nothing in particular, and a depth elective competing on the same ranking as a major pool is
+  // not that — it is the inversion `claimRank` already makes for major-subject pools, extended
+  // to the cells that carry depth in a degree with no chains of its own.
+  const fa = fillerOf(a) ? 1 : 0, fb = fillerOf(b) ? 1 : 0;
   if (fa !== fb) return fa - fb;
 
   // ── Who claims a scarce early term, among the non-fillers ─────────
