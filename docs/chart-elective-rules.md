@@ -19,17 +19,35 @@ one end or the other.
 
 ## The rules
 
-### 1. Split the pool
+### 1. Split the pool — by arithmetic, per degree
 
-Breadth need is **3–4 courses** (12–16 SH), bounded by the competencies actually unmet — a
-degree whose named courses already carry most of them needs fewer.
+Not a constant. The split is computed from what the major already guarantees:
 
-**If the pool is smaller than 3 slots or 8 SH, it is *all* breadth.** There are no depth
-electives to place, and pretending otherwise promises a student a choice the credits do not
-exist for.
+```
+satisfied   = NUPath codes the major's REQUIRED courses carry, whatever the student chooses
+remaining   = 13 − satisfied
+breadth     = remaining / 1.5          # ~1.5 codes per course, if the student picks efficiently
+depth       = generalElectives − breadth
+```
 
-Worked: a 28 SH pool is ~7 courses, of which 3–4 are breadth. Breadth is roughly *half* the
-pool in a typical degree, not a minority.
+Worked, from the specification: a degree allowing **10** general electives whose required
+courses guarantee **4** competencies leaves **6** remaining, which takes about **4** courses to
+cover, leaving **6** electives free for anything.
+
+Three things this pins down that a fixed "3–4" does not:
+
+- **`satisfied` is what the major guarantees no matter what.** A code carried only by one branch
+  of a choice is not satisfied — the student may take the other branch. The same reasoning
+  `breadthCodes` already applies to choice cells.
+- **1.5 codes per course is an efficiency assumption**, not a fact about the catalog. A course
+  carrying two codes does the work of two; the figure is what a student achieves picking well.
+  It is the one number here that is an estimate, and it belongs in one named constant.
+- **The remainder is what is actually free**, and how it is used depends on the depth of the
+  major — which is rule 4, not a separate decision.
+
+Where the arithmetic leaves `depth ≤ 0`, the pool is entirely breadth and there are no depth
+electives to place. That is the small-pool case, and it falls out of the formula rather than
+needing a threshold of its own.
 
 ### 2. No more than N electives in a term — as a CONSTRAINT
 
@@ -107,14 +125,15 @@ Most of this is layering rather than ranking.
 
 | rule | current behaviour |
 |---|---|
-| 1 | breadth capped by unmet-code count, not by need; no small-pool case |
+| 1 | breadth capped by unmet-code COUNT — one cell per code — rather than by `remaining / 1.5` |
 | 2 | cap is 3, scoped to "unguided" rather than electives |
 | 3 | breadth binds to the **first** cells, not the later ones |
 | 4 | `GE_SPREAD` ramp imposes a positional depth curve |
 | 5 | not enforced; a reservation can outrank an unlocked major course |
 | 6 | correct — labelled, not restricted, and the code no longer prints it |
 
-`src/engine/electives.js` implements rules 1 and 3 as pure functions. Nothing is wired.
+`src/engine/electives.js` predates rule 1's arithmetic — its `breadthSplit` uses a fixed 3–4
+with a small-pool threshold, which the formula above replaces. Nothing is wired.
 
 ## How we landed on these
 
