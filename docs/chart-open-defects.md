@@ -669,6 +669,42 @@ computer_science_bscs                         · Foundations                    
 For those students the concentration is a forced sequence wearing the costume of a
 choice.
 
+**A worked instance, 2026-08-14 — International Business, Concentration in Finance.**
+Found by stress-testing the plan by eye rather than by a metric, which is why it is
+recorded: no number in `verify-chart` flags it.
+
+Before the elective rules landed, IB's plan put a `Concentration` cell in **Year 1 Fall**
+and two more in **Year 1 Spring**. The Finance concentration's core is `FINA 3301 or
+3303` (Corporate Finance / Investments), both of which require `FINA 2201`, which the
+same plan schedules in **Year 1 Summer 1** — after all three cells.
+
+The first reading of this was that the plan was *illegal* for a finance student, and
+**that was wrong**; it is worth stating plainly because the ∀-option witness is the thing
+it would have impugned. The Finance option also contains three courses with no
+prerequisites at all — `FINA 2720` Sustainability in the Business Environment,
+`INNO 3520` Impact Investing and Social Finance, `INNO 3309` Funding and Measuring Social
+Impact — all inside its 12 SH `XOM` pool. So the cell genuinely was fillable under the
+Finance option in Year 1 Fall, the witness was right, and nothing was unregistrable.
+
+What is wrong is exactly this entry's claim and no more: the card promises a **choice**
+and offers one course out of the option's pool. A student reading "Concentration" in the
+first term of year one would reasonably plan for Corporate Finance and be blocked. This is
+a **prerequisite** instance — one of the 5.3% — not a season one, so it is not evidence
+against the season finding below.
+
+Two things follow for whoever picks this up:
+
+- The symptom is currently **absent in IB**: wiring the elective rules moved those cells to
+  Year 3 Summer 2 and Year 4 Fall, because depth electives now compete for the early slots
+  the concentration cells had been drifting into. The cause is untouched — `minDepthOf`
+  still takes the minimum over the union — so any change to elective ordering can bring it
+  back, and it will look like a new bug.
+- It is a good test case for the preference described below, because the *correct* answer
+  here is not "later" in general. A Year 1 Fall cell filled by `FINA 2720` is fine; three
+  first-year cells that must ALL come from the three no-prereq courses is not. That is a
+  statement about how many candidates survive per term, which is precisely what the
+  proposed `termPreference` ranking measures.
+
 **The cause is SEASON, not prerequisites** — and this is the part worth reading before
 designing anything, because the obvious fix is a dead end:
 
@@ -695,3 +731,52 @@ and for a chosen concentration `candidates` is already that option's pool.
 *unless the student has already taken that course*, in which case it is genuinely
 unregistrable and this is S1 rather than S3. CHART plans around completed courses, so
 that path exists. It is one probe and it decides the severity of the whole entry.
+
+---
+
+### 16. A co-op WORK EXPERIENCE course can be scheduled before any co-op
+
+Found 2026-08-14 by reading International Business's plan, not by a metric. Nothing in
+`verify-chart` reports it, and it is 0 SH so no credit or four-course check notices.
+
+`COOP 3948` "Co-op Work Experience Abroad" is placed in **Year 1 Fall**. The first work
+term in that shape is Year 2 Spring, so the plan schedules the record of a co-op three
+terms before the student has one.
+
+It is not an elective and not a choice the engine got wrong. IB's
+`International Experiential Learning` section is an `OR` containing exactly **one** course,
+so `COOP 3948` is a forced named cell that must be scheduled somewhere — and co-op terms
+are `work: true`, which `cardinality.js` gives `hi = 0`. The course therefore *cannot* be
+placed in the term it describes, so it lands in a study term, and every study term looks
+equally acceptable to the ordering: it unlocks nothing, so `noClaim` sends it to whatever
+term load balance prefers.
+
+**The mechanism to mirror already exists.** `domains.js` enforces the opposite rule as a
+hard bound — a co-op PREP course may not follow the co-op it prepares for:
+
+```js
+const isPrep = coopPrep && (cell.groups ?? []).some(g => g.some(id => coopPrep.has(id)));
+const lastAllowed = isPrep ? Math.min(terms.length - 1, coopBoundary - 1) : terms.length - 1;
+```
+
+The missing rule is its reflection: a co-op *work experience* cell may not PRECEDE the
+first work term, so its domain starts at `coopBoundary` rather than ending before it. That
+is a `firstAllowed` beside the existing `lastAllowed`, on the same `coopBoundary` the prep
+rule already computes — no new data and no new port.
+
+**Severity is unresolved and deliberately not guessed.** If Northeastern gates registration
+for these 0 SH co-op records on actually being placed on co-op, this is **S1** — the
+student cannot register and the plan is unfollowable. If it is an administrative row that
+can sit anywhere, it is **S2**, a plan that reads wrong. Deciding it needs one question
+answered about registration, not a probe, and the fix is the same either way.
+
+**Do not read this as a regression from the elective rules, or as unaffected by them.**
+Before they landed the same cell sat in Year 3 Fall — after two co-ops, so accidentally
+plausible; afterwards it sits in Year 1 Fall, which is plainly wrong. The ordering change
+moved it, but the reason it can move at all is that nothing constrains it, and it was never
+placed for a reason in either build. Fixing the constraint is what makes the placement
+stable against the next ordering change.
+
+Related: `chart-bench.js` shows IB's Year 1 Fall holding **7 cells / 17 SH** against the
+department's own 5. Legal — the cap is 19 — and worth a look alongside this, since two of
+those seven are the 1 SH `BUSN 1102` and the 0 SH `COOP 3948`.

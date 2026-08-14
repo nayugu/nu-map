@@ -30,9 +30,22 @@ breadth     = remaining / 1.5          # ~1.5 codes per course, if the student p
 depth       = generalElectives − breadth
 ```
 
-Worked, from the specification: a degree allowing **10** general electives whose required
-courses guarantee **4** competencies leaves **6** remaining, which takes about **4** courses to
-cover, leaving **6** electives free for anything.
+Worked: a degree allowing **10** general electives whose required courses guarantee **7**
+competencies leaves **6** remaining, which takes about **4** courses to cover, leaving **6**
+electives free for anything.
+
+> The worked example first said the required courses guarantee **4**, and that does not follow
+> from the formula above it — `13 − 4` is 9, which needs 6 courses and leaves 4 free, not 6. The
+> other three numbers (6 remaining, 4 courses, 6 free) are mutually consistent, so the formula
+> was right and only `satisfied` was mistyped. Corrected in place rather than deleted, because
+> the arithmetic is what the implementation follows and a reader checking it against a wrong
+> example would conclude the code was broken.
+
+**Measured, once the formula was wired** (`chart-probe --electives`, 529 undergraduate degrees,
+351 with a pool): median pool 11, of which breadth 5 and depth 6, against a median 7 unmet
+codes. The pool is entirely breadth for **50 degrees (14.2%)**. The previous fixed rule took
+`min(cells, unmet, 4)` — one cell per unmet code, capped at four — so it over-reserved by about
+a third, which is exactly the 1.5-codes-per-course factor it did not know about.
 
 Three things this pins down that a fixed "3–4" does not:
 
@@ -58,11 +71,19 @@ or reorder anything.
 This is the rule that fixes the stacking, and it is the only one that does. Rules 1, 3 and 4
 change *which* elective is which; none of them would move a cell out of Year 4.
 
-`UNGUIDED_PER_TERM_CAP` in `search.js` is already this rule, enforced at every rung and in the
-packer — set to 3, and scoped to "unguided" rather than to electives. International Business's
-worst term sits at exactly 3 because the cap says 3.
+`UNGUIDED_PER_TERM_CAP` in `search.js` is already this rule, enforced at every rung, in the
+packer, and in `objective.js`'s `isLegal` so phase 2 cannot reassemble what placement refused.
+International Business's worst term sits at exactly 3 because the cap says 3.
+
+> It was recorded here as "scoped to 'unguided' rather than to electives". That is wrong about
+> the code: `reqKey` maps **every** cell whose `target` is `GENERAL_ELECTIVE` to the `UNGUIDED`
+> key, labelled or not, and the comment beside it says why — "the bucket is what clumps, not the
+> wording on it". So the scope is already exactly "general electives" and the only thing rule 2
+> leaves open is N.
 
 > **Open decision: N = 1 or 2**, and whether it varies with how elective-heavy the degree is.
+> Measured at 3, 2 and 1 over 196 degrees that have depth electives — see the measurement note
+> at the end of this document.
 
 ### 3. Breadth leans late, distributed
 
@@ -70,9 +91,9 @@ Breadth courses are shallow by nature, so they are what a plan can afford to def
 deferring *all* of them is what produces the wall of placeholders. Late-leaning, subject to
 rule 2, which prevents the lean becoming a clump.
 
-Today `demand.js` binds breadth to the **first** cells of the pool (`breadthAt` walks from 0),
-which is backwards: it puts the shallowest electives earliest and pushes the student's depth
-behind them.
+`demand.js` used to bind breadth to the **first** cells of the pool (`breadthAt` walking from 0),
+which is backwards: it put the shallowest electives earliest and pushed the student's depth
+behind them. It now binds by even stride from the **back** (`breadthIndices`).
 
 ### 4. A depth elective is placed by comparing its depth to the major's own courses
 
@@ -97,14 +118,53 @@ close to a consequence rather than an independent rule: in a deep major the comp
 already put the elective behind.
 
 Consequently there is no positional depth curve. `GE_SPREAD_LO → GE_SPREAD_HI` in `demand.js`
-imposes one, on top of an ordering derived from the actual prerequisite graph, and can only
-fight it.
+imposed one, on top of an ordering derived from the actual prerequisite graph, and could only
+fight it. Both constants are now deleted.
+
+**The comparand is MAX IN-PLAN CHAIN HEIGHT, and it was chosen by measurement.** The rule above
+says only "depth", and the obvious reading — course level — cannot carry it. Measured over the
+351 degrees with an elective pool, the median level target of the major's own named cells is
+**0.36 for International Business and 0.36 for Computer Science and Mathematics**: the two
+benchmarks picked precisely because they are opposites are indistinguishable on it, and it takes
+only 4 distinct values across the whole corpus. A comparand that is near-constant tells every
+elective the same thing, which is what "means nothing in isolation" would become in practice.
+
+Max chain height separates them — IB **2**, CS+Math **3** — over 8 distinct values with a real
+spread (p10 1, median 2, p90 4, max 7). It is also the right quantity on the rule's own wording:
+the rule talks about *chains running past* an elective, and a chain is what this measures.
+`GE_DEPTH_ESTIMATE = 2` is the estimate, and what it has to get right is the **order of two
+numbers**, not its own value — which is what makes an estimate safe to act on here.
+
+Max rather than median, because the median major chain height is 0 for over half the corpus:
+most named cells are leaves whatever the degree's shape. A degree is deep if it *has* a long
+chain, not if its typical course sits on one.
 
 ### 5. An elective never takes a slot an unlocked major course could use
 
 Measured on `computer_science_and_mathematics_bs`: a reservation took Year 1 Summer 1 and
 pushed CS 3100 to Year 2 Fall. An elective can go anywhere; a major course whose prerequisites
 are now met has a reason to be exactly there.
+
+Implemented as `yieldsToMajor` in the term comparator: an elective ranks a term last if some
+still-unplaced major **named** cell could use it and the elective would leave no room for a real
+course behind it. A **preference**, not a veto — see the priority section — and backed by a
+per-term counter of unplaced major cells rather than a scan, because a scan inside a comparator
+is O(cells) per node.
+
+> **It does not reach its own motivating case, and that is a fact about reachability rather than
+> about the rule.** Measured after wiring, it changes neither benchmark:
+>
+> - **CS+Math has no depth electives at all** — pool 7, unmet 10, so breadth 7 and depth 0.
+>   Breadth electives are filler and are placed *after* every major course, so by the time one
+>   picks a term there is no unplaced major cell left to displace and the rule cannot fire. The
+>   Year 1 Summer 1 elective is therefore not "taking a slot CS 3100 could use" in the sense
+>   stated; whatever pushed CS 3100 to Year 2 Fall, it was not an elective winning a contest.
+> - **International Business generates at the `sequencing-preferences` rung**, which is
+>   `preferenceFree` — the entire term comparator is skipped, rule 5 with it.
+>
+> So the rule is live only for a degree that is shallow, *has* depth electives, and generates
+> without the preference-free rung. The next person to work on the CS+Math sequencing should
+> start from the ordering of major courses, not from the electives.
 
 ### 6. Labelled, never restricted
 
@@ -129,23 +189,43 @@ Most of this is layering rather than ranking.
 2. **Rule 2 is a constraint, so it does not compete.** It bounds the others rather than being
    traded against them.
 3. **Rule 5 governs contested slots**, but only slots rule 2 has not already reserved to
-   electives by capping them elsewhere.
+   electives by capping them elsewhere. It is a **preference**, and that is not a weakening —
+   it is the one shape it can take. Rule 2 bounds a term's *contents*, so it is checkable against
+   the term alone and refusing is a true statement about the plan. Rule 5 is about a cell that has
+   not been placed yet, so as a veto it forbids a placement on a *prediction*, and a wrong
+   prediction costs the student the whole plan instead of one imperfect term. `search.js` has
+   already paid for this lesson twice: `crowdsOutAReal` as a veto "took International Business
+   from a plan with a short spring to no plan at all", and the standing floor as a filter cost 15
+   points of coverage.
 4. **Rule 4 is the ordinary ordering** and needs no priority of its own — it *is* the priority
    the rest of the engine already uses.
 
+This is the one place the document's own general lesson needs qualifying. "A correct rule stated
+as a constraint removes a class of failures; a preference plus a mechanism relocates it" is right
+about rule 2 and wrong as a universal: it holds for rules that bound *what already exists*, and
+not for rules that bound *what a search will do next*. The test is whether the rule can be checked
+without predicting anything.
+
 ## What the code contradicts today
 
-| rule | current behaviour |
-|---|---|
-| 1 | breadth capped by unmet-code COUNT — one cell per code — rather than by `remaining / 1.5` |
-| 2 | cap is 3, scoped to "unguided" rather than electives |
-| 3 | breadth binds to the **first** cells, not the later ones |
-| 4 | `GE_SPREAD` ramp overrides the engine's own depth estimate, and nothing compares it against the major |
-| 5 | not enforced; a reservation can outrank an unlocked major course |
-| 6 | correct — labelled, not restricted, and the code no longer prints it |
+All six are now wired. What the table recorded, and what replaced it:
 
-`src/engine/electives.js` predates rule 1's arithmetic — its `breadthSplit` uses a fixed 3–4
-with a small-pool threshold, which the formula above replaces. Nothing is wired.
+| rule | was | now |
+|---|---|---|
+| 1 | breadth capped by unmet-code COUNT — one cell per code, ceiling 4 | `ceil(remaining / 1.5)`, in `electives.js`, called from `deriveCells` |
+| 2 | cap is 3 | cap is `UNGUIDED_PER_TERM_CAP`; the value is the one open decision left |
+| 3 | breadth binds to the **first** cells | binds by even stride from the **back** (`breadthIndices`) |
+| 4 | `GE_SPREAD` ramp overrode the engine's own depth estimate | ramp deleted; `GE_DEPTH_ESTIMATE` compared against the major's max chain height |
+| 5 | not enforced | `yieldsToMajor`, as a preference — but see the reachability note under rule 5 |
+| 6 | correct — labelled, not restricted, and the code no longer prints it | unchanged |
+
+Cells now carry `geRole` (`"breadth"` or `"depth"`), derived from the same set as the `nupath`
+label so the two cannot disagree, and `chart-probe --electives` asserts that the emitted roles
+match the arithmetic across all 529 undergraduate degrees.
+
+`src/engine/electives.js` no longer predates the rules: `breadthSplit` takes
+`{cells, remaining}` and returns `{breadth, depth, all}`, and the fixed 3–4 with its separate
+small-pool threshold is gone — the small-pool case falls out of `depth <= 0`.
 
 ## How we landed on these
 
