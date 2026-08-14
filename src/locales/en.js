@@ -121,6 +121,7 @@ export const strings = {
   // untranslated in every locale, like "CLAUDE" and "NUPath".
   "plusone.label":              "PLUSONE",
   "plusone.add":                "+ Add PlusOne",
+  "plusone.coverage.note":      "Not every pathway may be listed yet — check your college's PlusOne page or your advisor.",
   "plusone.search":             "⌕ search PlusOne pathways",
   "plusone.remove":             "Remove PlusOne",
   "plusone.campus":             "MASTER’S CAMPUS",

@@ -118,6 +118,7 @@ export const strings = {
   // "PlusOne"은 프로그램 고유명이므로 어떤 언어에서도 번역하지 않는다.
   "plusone.label":              "PLUSONE",
   "plusone.add":                "+ PlusOne 추가",
+  "plusone.coverage.note":      "아직 모든 경로가 등록되지 않았을 수 있습니다 — 소속 단과대학의 PlusOne 페이지나 지도교수에게 확인하세요.",
   "plusone.search":             "⌕ PlusOne 경로 검색",
   "plusone.remove":             "PlusOne 제거",
   "plusone.campus":             "석사 캠퍼스",

@@ -118,6 +118,7 @@ export const strings = {
   // "PlusOne" कार्यक्रम का नाम है, किसी भी भाषा में अनुवाद नहीं होता।
   "plusone.label":              "PLUSONE",
   "plusone.add":                "+ PlusOne जोड़ें",
+  "plusone.coverage.note":      "हो सकता है सभी पाथवे अभी सूचीबद्ध न हों — अपने कॉलेज के PlusOne पेज या सलाहकार से जांच करें।",
   "plusone.search":             "⌕ PlusOne रास्ते खोजें",
   "plusone.remove":             "PlusOne हटाएँ",
   "plusone.campus":             "स्नातकोत्तर कैंपस",

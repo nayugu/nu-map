@@ -118,6 +118,7 @@ export const strings = {
   // \u201cPlusOne\u201d \u662f\u9879\u76ee\u4e13\u540d\uff0c\u5404\u8bed\u8a00\u5747\u4e0d\u7ffb\u8bd1\u3002
   "plusone.label":              "PLUSONE",
   "plusone.add":                "+ \u6dfb\u52a0 PlusOne",
+  "plusone.coverage.note":      "\u6b64\u5217\u8868\u53ef\u80fd\u5c1a\u672a\u5305\u542b\u60a8\u6240\u5728\u9879\u76ee\u7684\u6240\u6709 PlusOne \u9014\u5f84 \u2014 \u8bf7\u67e5\u770b\u60a8\u6240\u5728\u5b66\u9662\u7684 PlusOne \u9875\u9762\u6216\u54a8\u8be2\u5bfc\u5e08\u3002",
   "plusone.search":             "\u2315 \u641c\u7d22 PlusOne \u8def\u5f84",
   "plusone.remove":             "\u79fb\u9664 PlusOne",
   "plusone.campus":             "\u7855\u58eb\u6821\u533a",

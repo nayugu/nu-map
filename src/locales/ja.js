@@ -119,6 +119,7 @@ export const strings = {
   // 「PlusOne」はプログラムの固有名なので、どの言語でも訳さない。
   "plusone.label":              "PLUSONE",
   "plusone.add":                "+ PlusOne を追加",
+  "plusone.coverage.note":      "すべての履修パスがまだ掲載されていない場合があります — 所属カレッジの PlusOne ページかアドバイザーにご確認ください。",
   "plusone.search":             "⌕ PlusOne の経路を検索",
   "plusone.remove":             "PlusOne を外す",
   "plusone.campus":             "修士のキャンパス",

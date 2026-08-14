@@ -118,6 +118,7 @@ export const strings = {
   // ‏"PlusOne" اسم عَلَم للبرنامج ولا يُترجم في أي لغة.
   "plusone.label":              "PLUSONE",
   "plusone.add":                "+ إضافة PlusOne",
+  "plusone.coverage.note":      "قد لا تكون جميع المسارات مدرجة بعد — راجع صفحة PlusOne الخاصة بكليتك أو مستشارك الأكاديمي.",
   "plusone.search":             "⌕ ابحث في مسارات PlusOne",
   "plusone.remove":             "إزالة PlusOne",
   "plusone.campus":             "حرم الماجستير",
