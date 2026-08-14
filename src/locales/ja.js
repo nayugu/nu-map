@@ -215,7 +215,7 @@ export const strings = {
 
   "chart.refused": "このプログラムの生成プランはありません。",
   "chart.refused.conc": "ここでは、すべてのコンセントレーションに合う単一のプランはありません。1つ選ぶと、それに合わせて作成します。",
-  "chart.refused.mostly-unlabelled": "この学位の{total}単位のうち、内訳が判明しているのは{pct}%だけです。残りは名称のないプレースホルダーになります。",
+  "chart.refused.mostly-unlabelled": "この学位の{total}単位のうち、内訳が判明しているのは{pct}%だけです。残りは名称のない枠になります。",
   "chart.refused.no-requirements": "このプログラムには解析された要件セクションがないため、プランを作成する材料がありません。",
   "chart.refused.no-total-credits": "このプログラムは必要総単位数を示していないため、プランの規模を決められません。",
   "chart.refused.no-cells": "要件セクションから配置できるものが得られませんでした。",
@@ -297,7 +297,6 @@ export const strings = {
   "grad.plan.label":          "履修モデルプラン",
   "grad.plan.load":           "配置",
   "grad.plan.placed":         "{n} 科目と {c} 件のコープを配置しました。",
-  "grad.plan.left":           "{choices} 件の選択と {slots} 件の空き枠はご自身で。",
   "grad.plan.kept":           "すでに配置済みの {n} 科目はそのままです。",
   "grad.plan.overflow":       "{n} 学期がプランの終了後になります。",
   "grad.plan.newplan":        "新しいプランで開く",

@@ -296,7 +296,6 @@ export const strings = {
   "grad.plan.label":          "参考修读计划",
   "grad.plan.load":           "安排",
   "grad.plan.placed":         "已安排 {n} 门课程和 {c} 段 co-op。",
-  "grad.plan.left":           "{choices} 个选择和 {slots} 个占位由你决定。",
   "grad.plan.kept":           "你已经安排的 {n} 门课程保持原位。",
   "grad.plan.overflow":       "{n} 个学期超出了计划的范围。",
   "grad.plan.newplan":        "作为新计划打开",

@@ -118,7 +118,51 @@ depending on the layer.
 - A position that holds one card, and so also the count of them → **slot**
 - A semester line in the grid → **row**
 
-Two things the student sees are `card` and `placeholder`, and they are consistent under these
-definitions: every entry renders as a card, and a card with no course yet is a placeholder. No
-locale string needs changing for that; `cell` and `reservation` should stay out of the UI, which
-they already are.
+Two things the student sees are `card` and `placeholder`: every entry renders as a card, and a card
+with no course yet is a placeholder. `cell` and `reservation` stay out of the UI, which they already
+did.
+
+## What the student ACTUALLY saw, before this — the deep pass
+
+An earlier draft of this document asserted that "no locale string needs changing". That was wrong,
+and it was wrong because it reasoned from the definitions instead of reading the strings. Reading
+them, one panel used three different words for one object:
+
+- `grad.reserved.note` — "Your plan reserves **{cards} cards** … you haven't chosen yet"
+- `chart.explain.legal.witness` — "For each **open slot**, a real course that fits it was found"
+- `chart.explain.complete.unschedulable` — "The plan keeps **the slot**"
+- against `onboard.sampleplan.counts` and `grad.plan.replace.*` — "**{n} placeholders**"
+
+**The translations were worse than the English**, which is the part no amount of reasoning would
+have found. For this one concept, Spanish used four words (*tarjetas*, *hueco abierto*, *el hueco*,
+*espacios libres*), French four (*cartes*, *case libre*, *la place*, *cases libres*), Arabic four.
+Chinese was already perfectly consistent (占位 in all of them) and Japanese nearly so.
+
+Fixed by aligning every locale to the word it *already* used in the majority of its placeholder
+strings, rather than by inventing one:
+
+| locale | canonical word |
+|---|---|
+| en | placeholder |
+| es | espacio |
+| fr | emplacement |
+| ar | خانة / خانات |
+| hi | स्थान |
+| ja | 枠 |
+| ko | 자리 |
+| zh | 占位 |
+
+Japanese also had one string using the transliteration プレースホルダー where the other six used
+枠; that is now 枠 too.
+
+`grad.plan.left` — "{choices} choices and {slots} open slots are yours to fill" — was **dead in all
+eight locales**, with no call site anywhere outside `src/locales`. It contributed two more words to
+the pile while being unreachable, and is deleted. (Defect 11 in `chart-open-defects.md` is dead
+locale keys generally; this was one of them.)
+
+**One accepted mismatch, recorded rather than fixed.** `grad.reserved.note` interpolates `{cards}`
+while its text now says "placeholders", and `grad.plan.replace.{gain,lose}.slots` are keyed `slots`
+while their text says "placeholders". The key and the parameter are internal names and the data
+field behind them is `reserved.cards`; renaming the chain reaches `GradPanel.jsx`,
+`SamplePlanOffer.jsx` and core's `planTemplate`, which is more risk than a name nobody reads is
+worth. If that chain is ever touched for another reason, rename them then.

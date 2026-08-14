@@ -244,7 +244,7 @@ export const strings = {
   "chart.explain.complete.cells": "cards, each one a requirement this degree states",
   "chart.explain.complete.credits": "credits scheduled, against the {required} this degree requires",
   "chart.explain.complete.excess": "This program’s own requirements total {over} credits more than the {total} it states as the degree. The plan schedules all of them — worth raising with an advisor.",
-  "chart.explain.complete.unschedulable": "{n} requirement(s) name a course the catalog no longer offers ({courses}). The plan keeps the slot, but ask an advisor what satisfies it now.",
+  "chart.explain.complete.unschedulable": "{n} requirement(s) name a course the catalog no longer offers ({courses}). The plan keeps the placeholder, but ask an advisor what satisfies it now.",
   "chart.contract.hard.h": "Hard requirements, checked first",
   "chart.contract.hard.1": "Prerequisites before the courses that need them",
   "chart.contract.hard.2": "Co-requisites in the same term",
@@ -290,7 +290,7 @@ export const strings = {
   "chart.explain.legal.season":"no course sits in a season it has never run in",
   "chart.explain.legal.load": "no term exceeds the credits you may register for",
   "chart.explain.legal.once": "no course is scheduled twice",
-  "chart.explain.legal.witness":"For each open slot, a real course that fits it was found before the plan was shown — then discarded, because which one to take is yours to choose.",
+  "chart.explain.legal.witness":"For each placeholder, a real course that fits it was found before the plan was shown — then discarded, because which one to take is yours to choose.",
 
   "chart.explain.order.h":    "Why this order?",
   "chart.explain.order.p":    "Where the rules leave a choice, four preferences decide, in this order:",
@@ -313,7 +313,6 @@ export const strings = {
   "chart.explain.close":      "Close",
   "grad.plan.load":           "Lay out",
   "grad.plan.placed":         "Placed {n} courses and {c} co-ops.",
-  "grad.plan.left":           "{choices} choices and {slots} open slots are yours to fill.",
   "grad.plan.kept":           "{n} courses you had already placed were left where they are.",
   "grad.plan.overflow":       "{n} terms fall past the end of your plan.",
   "grad.plan.newplan":        "Open as new plan",
@@ -428,7 +427,7 @@ export const strings = {
   // Says only what it can prove. Sections below read placements and cannot see
   // a reservation, so one the student has reserved two cards for still reads
   // "0/2" \u2014 this stops that being read as "not planned".
-  "grad.reserved.note":     "Your plan reserves {cards} cards ({sh} SH) you haven\u2019t chosen yet.",
+  "grad.reserved.note":     "Your plan holds {cards} placeholders ({sh} SH) you haven\u2019t chosen yet.",
   "grad.empty":             "Search for your major above\nto check graduation requirements\nagainst your current plan.",
   "grad.programSelection": "Program Selection",
   "grad.row.title":        "Graduation",
