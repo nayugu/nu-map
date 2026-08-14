@@ -74,15 +74,27 @@ Today `demand.js` binds breadth to the **first** cells of the pool (`breadthAt` 
 which is backwards: it puts the shallowest electives earliest and pushes the student's depth
 behind them.
 
-### 4. Every other elective has no special rule
+### 4. A depth elective is placed by comparing its depth to the major's own courses
 
 A depth elective enters the same **unlock-then-depth** ordering as a major course: place what
 unlocks the most first, then take the deepest thing now unlocked.
 
-This is the rule that makes a single policy produce opposite-looking plans. Where a major has
-deep chains of its own, electives fill in around them. Where it does not — International
-Business — the electives *are* the depth, and the ordering puts them early on its own, without
-a special case. The elective's depth is always **relative to its major**.
+A depth elective names no course, so it has no depth of its own — it has an **estimated**
+depth, and that estimate means nothing in isolation. It is placed by **comparing it against
+the depths of the major's own courses**.
+
+That comparison is the whole of the rule, and it is what makes a single policy produce
+opposite-looking plans:
+
+- **shallow major** — its courses bottom out early, so the estimate stands *above* them. The
+  elective competes for early slots and wins some, which is correct: in International Business
+  the electives *are* the student's depth.
+- **deep major** — its chains run past a generic elective, so the same estimate stands *below*
+  them. The elective loses those contests and fills in around the chains.
+
+One comparison, opposite outcomes, because the comparand differs. This is also why rule 5 is
+close to a consequence rather than an independent rule: in a deep major the comparison has
+already put the elective behind.
 
 Consequently there is no positional depth curve. `GE_SPREAD_LO → GE_SPREAD_HI` in `demand.js`
 imposes one, on top of an ordering derived from the actual prerequisite graph, and can only
@@ -128,7 +140,7 @@ Most of this is layering rather than ranking.
 | 1 | breadth capped by unmet-code COUNT — one cell per code — rather than by `remaining / 1.5` |
 | 2 | cap is 3, scoped to "unguided" rather than electives |
 | 3 | breadth binds to the **first** cells, not the later ones |
-| 4 | `GE_SPREAD` ramp imposes a positional depth curve |
+| 4 | `GE_SPREAD` ramp overrides the engine's own depth estimate, and nothing compares it against the major |
 | 5 | not enforced; a reservation can outrank an unlocked major course |
 | 6 | correct — labelled, not restricted, and the code no longer prints it |
 
