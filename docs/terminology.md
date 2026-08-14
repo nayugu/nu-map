@@ -112,6 +112,61 @@ bank. It is never a *course* and never a *placeholder*.
 > never that it said "row" — it was that it said row for a thing *inside* a term, which is a card
 > or an entry. Narrowed accordingly.
 
+## `term`, not `semester` — and the split was ENGLISH ONLY
+
+A **term** is any scheduling period the planner holds: fall, spring, either summer half, and a
+co-op work term. A **semester** would be only a full fall or spring, which makes it the wrong word
+for most of what this app says.
+
+That is not a style preference, it is a correctness one. "Corequisite must be in the same semester"
+is false when the pair sits in a summer half; "graduation semester" is false when a student finishes
+after a summer term. `term` is the superset, so it is never the wrong word where `semester` was
+right.
+
+**`work term` stays.** It is Northeastern's own phrase for a co-op period, preserved in all 9
+strings that use it, and it harmonises with `term` rather than fighting it.
+
+### The measurement, and the surprise in it
+
+| area | `term` | `semester` | speaks |
+|---|---|---|---|
+| `src/engine` | 1,171 | 18 | **term** |
+| `scripts` | 395 | 40 | **term** |
+| `src/adapters` | 136 | 44 | **term** |
+| `src/core` | 205 | 110 | mixed |
+| `src/ui` | 169 | 108 | mixed |
+| `src/ports` | 79 | 65 | mixed |
+
+The engine, the scripts and the adapters already speak `term`. `src/core`, `src/ui` and `src/ports`
+are mixed, and the identifiers show why: `birthTermCode`, `decodeTermCode`, `isTermPast` (the
+registrar's word, from Banner term codes) sit beside `currentSemId`, `targetSemId`, `getSemStatus`,
+`dropOnSemester` (the planner grid's word). Those are two vocabularies for one period, and the
+boundary leaks.
+
+**The renames are NOT done and should probably never be done.** Renaming 1,171 engine `term`s or
+108 UI `semester`s is a large, risky refactor with no user-visible benefit. What was fixed is the
+part a student reads.
+
+**And the student-facing split was English only.** 44 English strings said "term" and 13 said
+"semester" — including `header.coop.conflict.title`, which managed *both in one sentence*: "Work
+term overlaps graduation semester". Every other locale already uses a single word for the concept
+and translates both English words to it:
+
+| locale | one word | covers |
+|---|---|---|
+| es / fr | *semestre* | 12 of 13 semester-strings, and most term-strings |
+| ar | *فصل* | 13 of 13 |
+| hi | *सेमेस्टर* | 12 of 13 |
+| ja / ko / zh | *学期* / *학기* / *学期* | 13 of 13 |
+
+So the fix was 13 strings in `en.js` and **no translation changes at all** — the other seven
+languages were already internally consistent, because they have one word where English has two.
+English now says "term" in all 54 and "semester" in none.
+
+That is worth remembering as a general point: a vocabulary defect in the source language can be
+invisible in every translation, because translators collapse synonyms that the source keeps apart.
+Checking only the English would have found it; checking only the translations never would.
+
 ## What this audit did NOT cover
 
 Stated so the next pass knows where to start, and so nobody mistakes the scope for the whole.
