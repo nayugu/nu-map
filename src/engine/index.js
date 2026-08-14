@@ -28,7 +28,7 @@
 // outcome, and the official plan still loads beside it.
 // ═══════════════════════════════════════════════════════════════════
 
-import { deriveCells, cellsSH, substitutePrereqs } from "./demand.js";
+import { deriveCells, cellsSH, substitutePrereqs, GENERAL_ELECTIVE } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
 import { seedFromPlan } from "./seed.js";
 import { buildDomains, wideAtFor } from "./domains.js";
@@ -593,6 +593,30 @@ function generateOnce({
       fullTermBarApplies: minCoursesFor(cal, studentType) > 0
         && cells.filter(c => (c.sh ?? 0) >= cal.realCourseSH).length
            >= minCoursesFor(cal, studentType) * terms.filter(t => (t.weight ?? 1) >= 1).length,
+      // ── How this degree's free credit SPLITS ──────────────────────
+      //
+      // Rule 1 of `docs/chart-elective-rules.md`, per degree rather than in the abstract. The
+      // explainer can then say "5 of your 11" instead of "about half", which is the difference
+      // between a fact the reader can check against their own grid and a generality they cannot.
+      //
+      // `breadth` is how many free electives are set aside for NUPath competencies the major's
+      // required courses do not already guarantee; `depth` is what is left for anything. Read off
+      // the emitted cells rather than recomputed, so the panel and the plan cannot disagree.
+      //
+      // A note on what this number IS, since it is about to be shown to a student: it is a
+      // planning ALLOWANCE, deliberately generous. Only NAMED courses count as guaranteeing a
+      // code, so a competency the student happens to pick up from a choice cell is not credited,
+      // and `attributes` covers 1,516 of 7,966 courses. Both push the same way — we may set aside
+      // a slot that was not strictly needed, which costs a free choice rather than a graduation.
+      generalElectives: (() => {
+        const ge = cells.filter(c => c.target === GENERAL_ELECTIVE);
+        if (!ge.length) return null;              // no pool: a rule about nothing
+        return {
+          total: ge.length,
+          breadth: ge.filter(c => c.geRole === "breadth").length,
+          depth: ge.filter(c => c.geRole === "depth").length,
+        };
+      })(),
       // ── Courses added that the degree never asked for ─────────────
       //
       // `substitutePrereqs` spends a free-elective slot on a prerequisite the degree lists

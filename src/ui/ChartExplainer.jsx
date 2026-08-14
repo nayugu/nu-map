@@ -95,7 +95,11 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
         // backdrop and letting the card size to its content reaches all of it.
         overflowY: "auto", overscrollBehavior: "contain",
         display: "flex", alignItems: "flex-start", justifyContent: "center",
-        background: "rgba(0,0,0,.5)",
+        // Matched to the dialog it sits beside (`SamplePlanOffer`, 0.6) rather than left at 0.45.
+        // A scrim is the one colour that is legitimately theme-independent — it darkens whatever
+        // is behind it on both sides — so this stays a literal, and the only thing worth being
+        // consistent about is the amount.
+        background: "rgba(0,0,0,0.6)",
         padding: isPhone ? "12px 10px" : "32px 24px",
       }}
     >
@@ -103,10 +107,24 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
         onClick={(e) => e.stopPropagation()}
         style={{
           width: "100%", maxWidth: 620,
-          // OPAQUE, with a literal fallback. `--bg-surface-1` is translucent in this
-          // theme, so the card showed the grid straight through it and every line of
-          // text sat on top of a course card.
-          background: "var(--bg-solid, var(--bg-1, #ffffff))",
+          // ── OPAQUE, and with a token that EXISTS ────────────────────
+          //
+          // This read `var(--bg-solid, var(--bg-1, #ffffff))`, and neither `--bg-solid` nor
+          // `--bg-1` is defined anywhere — `src/core/themes.js` has no such token, and those two
+          // names appeared in this file and nowhere else in the app. So the whole chain fell
+          // through to the literal `#ffffff` on EVERY theme, and in dark mode the card was white
+          // while `--text-1` is `#e6edf3`: near-white text on white. That is the dark-mode
+          // complaint, and it is not a contrast tweak — a fallback that always fires is the
+          // fallback becoming the value.
+          //
+          // `--bg-surface` is the real panel token and is themed on both sides (`#161b22` dark,
+          // `#ffffff` light). It is also opaque, which is what the old comment was reaching for:
+          // the concern was that a translucent surface showed the course grid straight through
+          // the card, and `--bg-surface` does not.
+          //
+          // No literal fallback now, deliberately. A fallback here can only mask the next missing
+          // token, and masking is precisely how this survived.
+          background: "var(--bg-surface)",
           color: "var(--text-1)",
           // STATED, because a portal to `document.body` inherits from nothing.
           //
@@ -118,7 +136,11 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           fontFamily: "'Inter', system-ui, sans-serif",
           border: "1px solid var(--border-2)",
           borderRadius: 10, padding: isPhone ? 14 : 22,
-          boxShadow: "0 18px 48px rgba(0,0,0,.45)",
+          // Themed, not fixed. A 0.45-alpha black drop shadow is tuned for a dark surface and
+          // reads as grime under a white card; the theme already carries the right value for each
+          // side (`0 24px 64px rgba(0,0,0,0.65)` dark, `0 8px 32px rgba(0,0,0,0.12)` light), and
+          // `SamplePlanOffer`'s dialog — the modal this one sits beside — already uses it.
+          boxShadow: "var(--shadow-modal)",
           // No maxHeight and no inner scroll: the backdrop above owns scrolling, so the
           // card is as tall as it needs to be and nothing is unreachable.
         }}
@@ -187,9 +209,47 @@ export default function ChartExplainer({ report, program, onClose, isPhone }) {
           * pushed LATER (`generatorBar`, measured against this program's own median), and major
           * electives are pulled EARLIER than terminal requirements — the one deliberate
           * departure from the published plans, and the reason the engine exists. */}
+        {/* ── The free-elective SPLIT, with this degree's own numbers ──
+          *
+          * Rendered between the placement rule and the buffer rule, because those three lines are
+          * one story: what the free credit is FOR, where it goes, and what it gets spent on. The
+          * keys are not renumbered to achieve that — a key is an identifier and the render order
+          * is the reading order, so the list is emitted in two halves with this between them.
+          *
+          * Conditional on the degree HAVING free electives. 178 of 529 undergraduate degrees have
+          * no general-elective pool at all, and stating a rule about a pool that does not exist is
+          * the same defect as telling a master's student about the four-course bar.
+          *
+          * It names counts and never a competency code, which is deliberate and is rule 6: the
+          * cards carry the binding as guidance, and printing `IC` on a card would read as an
+          * instruction about a choice that was never the plan's to make. A COUNT in the explainer
+          * is a different claim from a LABEL on a card — it explains the reasoning without
+          * prescribing the course — and it is the one number here a reader can check against their
+          * own grid.
+          */}
         <Section title={t("chart.contract.soft.h")}>
           <ol style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
-            {["1", "2", "3", "4", "5", "6", "7", "8", "9"].map(n => (
+            {["1", "2", "3", "4", "5", "6"].map(n => (
+              <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.soft.${n}`)}</li>
+            ))}
+            {/* Two strings, because the all-breadth case cannot carry a count grammatically.
+              * `split.all` first read "Sets aside all {total} free electives …" and 9 of the 50
+              * all-breadth degrees have exactly ONE, which renders "all 1 free electives". The
+              * count says almost nothing there — the sentence already means "all of them" — so it
+              * is dropped rather than pluralised, which would have needed a singular form in all
+              * eight locales for a number the grid already shows. */}
+            {report.generalElectives?.total > 0 && (
+              <li style={{ marginBottom: 3 }}>
+                {report.generalElectives.depth > 0
+                  ? t("chart.contract.soft.split", {
+                      n: report.generalElectives.breadth,
+                      total: report.generalElectives.total,
+                      d: report.generalElectives.depth,
+                    })
+                  : t("chart.contract.soft.split.all")}
+              </li>
+            )}
+            {["7", "8", "9"].map(n => (
               <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.soft.${n}`)}</li>
             ))}
           </ol>
