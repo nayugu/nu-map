@@ -65,7 +65,6 @@ export const strings = {
   "bank.placedout.search.placeholder": "⌕ 検索して免除にする",
   "bank.search.empty.typing":     "検索語を入力…",
   "bank.search.empty.none":       "結果がありません",
-  "bank.colors.button":           "色分け",
   "bank.filter.title":            "🔍 フィルター",
   "bank.filter.term":             "通常の開講時期",
   "bank.filter.term.info":        "「通常の開講時期」とは？",

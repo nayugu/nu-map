@@ -64,7 +64,6 @@ export const strings = {
   "bank.placedout.search.placeholder": "⌕ ابحث للمعادلة",
   "bank.search.empty.typing":     "اكتب للبحث…",
   "bank.search.empty.none":       "لا توجد نتائج",
-  "bank.colors.button":           "الألوان",
   "bank.filter.title":            "🔍 عوامل التصفية",
   "bank.filter.term":             "يُطرح عادةً",
   "bank.filter.term.info":        "ماذا يعني «يُطرح عادةً»؟",

@@ -65,7 +65,6 @@ export const strings = {
   "bank.placedout.search.placeholder": "⌕ search to place out",
   "bank.search.empty.typing":     "Type to search\u2026",
   "bank.search.empty.none":       "No results",
-  "bank.colors.button":           "colors",
   "bank.filter.title":            "🔍 FILTERS",
   "bank.filter.term":             "TYPICALLY OFFERED",
   "bank.filter.term.info":        "What does “typically offered” mean?",

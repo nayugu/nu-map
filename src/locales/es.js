@@ -64,7 +64,6 @@ export const strings = {
   "bank.placedout.search.placeholder": "⌕ busca para convalidar",
   "bank.search.empty.typing":     "Escribe para buscar…",
   "bank.search.empty.none":       "Sin resultados",
-  "bank.colors.button":           "colores",
   "bank.filter.title":            "🔍 FILTROS",
   "bank.filter.term":             "SE OFRECE NORMALMENTE",
   "bank.filter.term.info":        "¿Qué significa «se ofrece normalmente»?",

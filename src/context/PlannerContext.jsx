@@ -560,7 +560,6 @@ const { locale, setLocale, locales, t } = useLanguage();
   //   programElec — counts as an elective/choose-from option in one
   const [bankFilters,     setBankFilters]     = useState({ terms: [], level: [], nupath: [], profs: [], programReq: false, programElec: false });
   const [bankWidth,       setBankWidth]       = useState(() => window.innerWidth < 600 ? 88 : Math.min(300, Math.max(200, window.innerWidth * 0.21)));
-  const [showSubjectKeys, setShowSubjectKeys] = useState(false);
   const [wideCatalog, setWideCatalog] = useState(() => { try { const v = localStorage.getItem("wide-catalog"); return v === "true"; } catch { return false; } });
   useEffect(() => { try { localStorage.setItem("wide-catalog", String(wideCatalog)); } catch {} }, [wideCatalog]); // eslint-disable-line react-hooks/exhaustive-deps
   const [wideWidth, setWideWidth] = useState(() => { try { const v = localStorage.getItem("wide-catalog-width"); return v ? Number(v) : null; } catch { return null; } });
@@ -4770,7 +4769,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     showPanel, lines, linesScrollRef, showViolLines,
     prereqDepth, setPrereqDepth, unlockDepth, setUnlockDepth, showPrereqTree,
     // Bank state
-    bankSearch, bankSort, bankTab, bankFilters, bankWidth, showSubjectKeys,
+    bankSearch, bankSort, bankTab, bankFilters, bankWidth,
     wideCatalog, setWideCatalog, wideWidth, setWideWidth,
     starredIds: pv ? new Set(pv.starredIds ?? []) : starredIds,
     bankCourseIds,
@@ -4862,7 +4861,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     setSelectedId, setShowPanel, setDragInfo,
     setHoveredSem, setHoveredZone, setHoveredCardId,
     setShowViolLines,
-    setBankSearch, setBankSort, setBankTab, setBankFilters, setBankWidth, setShowSubjectKeys,
+    setBankSearch, setBankSort, setBankTab, setBankFilters, setBankWidth,
     setCollapsedSubs,
     setShowDisclaimer, setShowSettings,
     showCohortSetup, setShowCohortSetup, onboardingDeferredForShare, finishOnboarding,

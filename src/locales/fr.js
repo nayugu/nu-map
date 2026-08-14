@@ -64,7 +64,6 @@ export const strings = {
   "bank.placedout.search.placeholder": "⌕ rechercher pour valider",
   "bank.search.empty.typing":     "Tapez pour rechercher…",
   "bank.search.empty.none":       "Aucun résultat",
-  "bank.colors.button":           "couleurs",
   "bank.filter.title":            "🔍 FILTRES",
   "bank.filter.term":             "HABITUELLEMENT PROPOSÉ",
   "bank.filter.term.info":        "Que signifie « habituellement proposé » ?",

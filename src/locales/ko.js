@@ -64,7 +64,6 @@ export const strings = {
   "bank.placedout.search.placeholder": "⌕ 검색하여 면제 처리",
   "bank.search.empty.typing":     "검색어를 입력하세요…",
   "bank.search.empty.none":       "결과 없음",
-  "bank.colors.button":           "색상",
   "bank.filter.title":            "🔍 필터",
   "bank.filter.term":             "일반 개설 시기",
   "bank.filter.term.info":        "‘일반 개설 시기’란?",

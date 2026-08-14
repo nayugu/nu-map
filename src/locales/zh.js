@@ -64,7 +64,6 @@ export const strings = {
   "bank.placedout.search.placeholder": "\u2315 \u641c\u7d22\u4ee5\u8bbe\u4e3a\u514d\u4fee",
   "bank.search.empty.typing":     "\u8bf7\u8f93\u5165\u641c\u7d22\u5185\u5bb9\u2026",
   "bank.search.empty.none":       "\u65e0\u7ed3\u679c",
-  "bank.colors.button":           "\u989c\u8272",
   "bank.filter.title":            "🔍 筛选",
   "bank.filter.term":             "\u901a\u5e38\u5f00\u8bbe",
   "bank.filter.term.info":        "\u201c\u901a\u5e38\u5f00\u8bbe\u201d\u662f\u4ec0\u4e48\u610f\u601d\uff1f",

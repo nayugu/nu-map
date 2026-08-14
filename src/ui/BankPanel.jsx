@@ -203,7 +203,7 @@ function SuggestionRow({ alt, course, onApply, onHoverPlus, ready = false, t, is
 
 export default function BankPanel() {
   const {
-    courses, bankCourseIds, subjects, courseMap,
+    courses, bankCourseIds, courseMap,
     placements, SEM_INDEX,
     bankSearch, setBankSearch,
     bankSort,
@@ -211,7 +211,6 @@ export default function BankPanel() {
     bankFilters, setBankFilters,
     bankWidth,
     wideCatalog, setWideCatalog, wideWidth, setWideWidth,
-    showSubjectKeys, setShowSubjectKeys,
     starredIds, collapsedSubs, setCollapsedSubs,
     onDropBank, onDragStart,
     bankRef, bankResizing, isPhone,
@@ -675,36 +674,11 @@ export default function BankPanel() {
             </div>
           )}
 
-        {/* ── Bank-only header controls (desktop: title + subject key + tabs) ── */}
+        {/* ── Bank-only header controls (desktop: title + tabs) ── */}
         {!isPhone && sideMode === "bank" && <>
-          <div style={{ padding: "0px 9px 4px", display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em", flex: 1 }}>{t("bank.title")}</span>
-            <span style={{ fontSize: 9, color: "var(--text-4)", background: "var(--bg-surface)", borderRadius: 99, padding: "1px 6px" }}>
-              {bankCourseIds.size}
-            </span>
-            <button onClick={() => setShowSubjectKeys(v => !v)} title="Subject color key"
-              style={{ background: showSubjectKeys ? "var(--bg-surface)" : "transparent", border: "1px solid var(--border-2)", borderRadius: 4, color: "var(--text-3)", fontSize: 9, cursor: "pointer", padding: "2px 6px" }}>
-              {t("bank.colors.button")}
-            </button>
+          <div style={{ padding: "0px 9px 4px" }}>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-3)", letterSpacing: "0.05em" }}>{t("bank.title")}</span>
           </div>
-
-          {/* Subject colour key */}
-          {showSubjectKeys && (
-              <div style={{ borderTop: "1px solid var(--border-1)", padding: "6px 8px 8px", display: "flex", flexWrap: "wrap", gap: 4, maxHeight: 160, overflowY: "auto" }}>
-              {/* Plain title= here rather than the hover card: each chip is a sized
-                  grid cell, and HoverTip passes its children straight through on
-                  mobile, so a wrapper carrying the width would take the width with
-                  it. The card lives on the section headers, which can keep their
-                  own layout either way. */}
-              {subjects.map(sub => (
-                <div key={sub} title={courseCatalog?.subjectName?.(sub) ?? undefined}
-                     style={{ display: "flex", alignItems: "center", gap: 3, fontSize: 9, color: "var(--text-3)", width: "calc(50% - 2px)" }}>
-                  <div style={{ width: 8, height: 8, borderRadius: 2, background: subjectColor(sub), flexShrink: 0 }} />
-                  <span style={{ color: subjectColor(sub), fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{sub}</span>
-                </div>
-              ))}
-            </div>
-          )}
 
           {/* Tabs */}
           <div style={{ padding: "5px 8px 2px", display: "flex", gap: 4 }}>

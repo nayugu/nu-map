@@ -64,7 +64,6 @@ export const strings = {
   "bank.placedout.search.placeholder": "⌕ छूट के लिए खोजें",
   "bank.search.empty.typing":     "खोजने के लिए टाइप करें…",
   "bank.search.empty.none":       "कोई परिणाम नहीं",
-  "bank.colors.button":           "रंग",
   "bank.filter.title":            "🔍 फ़िल्टर",
   "bank.filter.term":             "आमतौर पर उपलब्ध",
   "bank.filter.term.info":        "«आमतौर पर उपलब्ध» का क्या मतलब है?",
