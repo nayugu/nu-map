@@ -28,18 +28,58 @@ export default function InfoPanel() {
     panelHeight, panelHeightManual, panelResizing, isPhone, isMobile,
     showUnlocks, bankWidth, showPalette, wideCatalog, wideWidth,
   } = usePlanner();
+  const { t } = useLanguage();
 
   // ── InfoPanel nav history (back = Cmd+Z, fwd = Cmd+Shift+Z) ──────
   const navHistory = useRef([]);
   const navFuture  = useRef([]);
+  // The id we ourselves just requested via navTo/goBack/goForward. Lets the
+  // effect below tell "the user drilled in" apart from "selectedId changed
+  // for some unrelated reason" (closing the panel, clicking a different card
+  // on the board, a search result) — those are a fresh trail, not a next
+  // step, so the stack resets instead of quietly keeping an unrelated course.
+  const lastNavTarget = useRef(null);
   const [, forceRender] = useState(0);
+  const [backHover, setBackHover] = useState(null); // rect while hovering the back button
 
   const navTo = useCallback((newId) => {
     navHistory.current = [...navHistory.current, selectedId];
     navFuture.current  = [];
+    lastNavTarget.current = newId;
     forceRender(n => n + 1);
     setSelectedId(newId);
   }, [selectedId, setSelectedId]);
+
+  const goBack = useCallback(() => {
+    if (navHistory.current.length === 0) return;
+    const prev = navHistory.current[navHistory.current.length - 1];
+    navFuture.current  = [...navFuture.current, selectedId];
+    navHistory.current = navHistory.current.slice(0, -1);
+    lastNavTarget.current = prev;
+    forceRender(n => n + 1);
+    setSelectedId(prev);
+  }, [selectedId, setSelectedId]);
+
+  const goForward = useCallback(() => {
+    if (navFuture.current.length === 0) return;
+    const next = navFuture.current[navFuture.current.length - 1];
+    navHistory.current = [...navHistory.current, selectedId];
+    navFuture.current  = navFuture.current.slice(0, -1);
+    lastNavTarget.current = next;
+    forceRender(n => n + 1);
+    setSelectedId(next);
+  }, [selectedId, setSelectedId]);
+
+  // selectedId changed to something other than what navTo/goBack/goForward
+  // just requested — an external reselect. Reset the trail rather than let
+  // an unrelated course inherit someone else's history.
+  useLayoutEffect(() => {
+    if (selectedId !== lastNavTarget.current && (navHistory.current.length || navFuture.current.length)) {
+      navHistory.current = [];
+      navFuture.current  = [];
+      forceRender(n => n + 1);
+    }
+  }, [selectedId]);
 
   useEffect(() => {
     const handler = (e) => {
@@ -48,23 +88,15 @@ export default function InfoPanel() {
       const isRedo = (e.metaKey || e.ctrlKey) && e.key === "z" && e.shiftKey;
       if (isUndo && navHistory.current.length > 0) {
         e.preventDefault(); e.stopImmediatePropagation();
-        const prev = navHistory.current[navHistory.current.length - 1];
-        navFuture.current  = [...navFuture.current, selectedId];
-        navHistory.current = navHistory.current.slice(0, -1);
-        forceRender(n => n + 1);
-        setSelectedId(prev);
+        goBack();
       } else if (isRedo && navFuture.current.length > 0) {
         e.preventDefault(); e.stopImmediatePropagation();
-        const next = navFuture.current[navFuture.current.length - 1];
-        navHistory.current = [...navHistory.current, selectedId];
-        navFuture.current  = navFuture.current.slice(0, -1);
-        forceRender(n => n + 1);
-        setSelectedId(next);
+        goForward();
       }
     };
     window.addEventListener("keydown", handler, true);
     return () => window.removeEventListener("keydown", handler, true);
-  }, [showPanel, selectedId, setSelectedId]);
+  }, [showPanel, goBack, goForward]);
 
   // The RAW course map, deliberately — not the combined view that includes
   // reservations. A reservation selected here therefore yields no panel at all,
@@ -86,6 +118,9 @@ export default function InfoPanel() {
   const selEdges  = selectedId ? getConnections(selectedId, allEdges) : [];
 
   if (!showPanel || !selCourse) return null;
+
+  const prevId     = navHistory.current[navHistory.current.length - 1] ?? null;
+  const prevCourse = prevId ? courseMap[prevId] : null;
 
   return (
     <div
@@ -157,6 +192,30 @@ export default function InfoPanel() {
                   <RelationshipList selCourse={selCourse} selEdges={selEdges} courseMap={courseMap} navTo={navTo} compact />
                 )}
               </div>
+            )}
+
+            {/* Back — only rendered once there's somewhere to go back to */}
+            {prevCourse && (
+              <button
+                onClick={goBack}
+                onMouseEnter={e => setBackHover(e.currentTarget.getBoundingClientRect())}
+                onMouseLeave={() => setBackHover(null)}
+                aria-label={t("info.back.title").replace("{code}", prevCourse.code)}
+                style={{
+                  width: 24, height: 24, borderRadius: "50%", flexShrink: 0,
+                  display: "flex", alignItems: "center", justifyContent: "center",
+                  fontSize: 14, fontWeight: 500, lineHeight: 1, cursor: "pointer",
+                  border: `1px solid ${backHover ? "var(--text-4)" : "var(--border-2)"}`,
+                  color: backHover ? "var(--text-2)" : "var(--text-5)",
+                  background: backHover ? "var(--badge-bg)" : "transparent",
+                  transition: "background 120ms ease, color 120ms ease, border-color 120ms ease",
+                }}
+              >←</button>
+            )}
+            {backHover && prevCourse && (
+              <HoverCard rect={backHover}>
+                {t("info.back.title").replace("{code}", prevCourse.code)}
+              </HoverCard>
             )}
 
             {/* Close */}
