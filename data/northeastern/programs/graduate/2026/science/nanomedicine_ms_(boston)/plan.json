@@ -116,17 +116,7 @@
                 },
                 {
                   "text": "(Co-op option 1: May–Aug.)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "fullSummer": true
@@ -253,27 +243,11 @@
                 },
                 {
                   "text": "(Co-op & reflection option 2: May–Aug.)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "(Co-op & reflection option 3: July-Dec.)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "fullSummer": true
@@ -415,29 +389,11 @@
                 },
                 {
                   "text": "(Co-op & reflection option 2: May–Aug.)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "(Co-op & reflection option 3: July–Dec.)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "fullSummer": true
@@ -576,27 +532,11 @@
                 },
                 {
                   "text": "(Co-op & reflection option 2: May–Aug.)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "(Co-op & reflection option 3: July–Dec.)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "fullSummer": true

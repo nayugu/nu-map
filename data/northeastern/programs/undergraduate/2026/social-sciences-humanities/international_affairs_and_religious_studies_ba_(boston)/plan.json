@@ -52,15 +52,7 @@
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -81,35 +73,17 @@
                 {
                   "text": "Lived religion elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -121,24 +95,12 @@
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -150,24 +112,12 @@
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -193,35 +143,17 @@
                 {
                   "text": "Comparative religion elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -242,46 +174,22 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -293,24 +201,12 @@
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -371,25 +267,12 @@
                 {
                   "text": "PHIL level-2000 elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      7
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -401,24 +284,12 @@
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -470,36 +341,17 @@
                 {
                   "text": "PHIL level-3000 elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      7
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Research Methods course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -559,16 +411,7 @@
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -589,35 +432,17 @@
                 {
                   "text": "Lived religion elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -658,49 +483,22 @@
                 {
                   "text": "Comparative religion elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      7
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -738,24 +536,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -781,36 +567,17 @@
                 {
                   "text": "PHIL level-2000 elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      7
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -848,24 +615,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -891,36 +646,17 @@
                 {
                   "text": "PHIL level-3000 elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      7
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -975,46 +711,22 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1035,35 +747,17 @@
                 {
                   "text": "Research method course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

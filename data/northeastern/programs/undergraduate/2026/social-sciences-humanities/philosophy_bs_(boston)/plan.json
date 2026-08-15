@@ -43,24 +43,12 @@
                 {
                   "text": "PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -90,24 +78,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -119,24 +95,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -165,46 +129,22 @@
                 {
                   "text": "Critical Philosophy Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -225,46 +165,22 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -276,24 +192,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -345,35 +249,17 @@
                 {
                   "text": "Advanced PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Advanced PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -385,24 +271,12 @@
                 {
                   "text": "PHIL undergraduate elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -445,46 +319,22 @@
                 {
                   "text": "PHIL seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -496,24 +346,12 @@
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -564,24 +402,12 @@
                 {
                   "text": "PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -611,24 +437,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -640,24 +454,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -695,46 +497,22 @@
                 {
                   "text": "Critical Philosophy Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -772,24 +550,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -806,46 +572,22 @@
                 {
                   "text": "Advanced PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Advanced PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -883,24 +625,12 @@
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -926,35 +656,17 @@
                 {
                   "text": "PHIL Seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -966,46 +678,22 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1017,24 +705,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1094,13 +770,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1130,24 +800,12 @@
                 {
                   "text": "Ethics elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1159,24 +817,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1205,46 +851,22 @@
                 {
                   "text": "Ethics elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Law-related elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1265,46 +887,22 @@
                 {
                   "text": "Critical PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Law-related Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1316,24 +914,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1394,24 +980,12 @@
                 {
                   "text": "Advanced PHIL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1423,24 +997,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1483,46 +1045,22 @@
                 {
                   "text": "Advanced PHIL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHIL seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1534,24 +1072,12 @@
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1611,13 +1137,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1647,24 +1167,12 @@
                 {
                   "text": "Ethics elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Law-related elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1676,24 +1184,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1731,46 +1227,22 @@
                 {
                   "text": "Critical PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Ethics elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Law-related elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1808,24 +1280,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1851,35 +1311,17 @@
                 {
                   "text": "Law-related Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1917,24 +1359,12 @@
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1969,24 +1399,12 @@
                 {
                   "text": "Law-related elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1998,46 +1416,22 @@
                 {
                   "text": "Advanced PHIL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHIL seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2049,24 +1443,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2126,13 +1508,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2162,24 +1538,12 @@
                 {
                   "text": "Religious studies elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2191,24 +1555,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2246,35 +1598,17 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2295,46 +1629,22 @@
                 {
                   "text": "Religious studies elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2346,24 +1656,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2415,35 +1713,17 @@
                 {
                   "text": "Advanced PHIL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Religious studies elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2455,24 +1735,12 @@
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2515,46 +1783,22 @@
                 {
                   "text": "Religious studies elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHIL seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2566,24 +1810,12 @@
                 {
                   "text": "PHIL undergraduate elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2643,13 +1875,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2679,24 +1905,12 @@
                 {
                   "text": "Religious studies elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2708,24 +1922,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2763,46 +1965,22 @@
                 {
                   "text": "Religious studies elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Religious studies elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2840,24 +2018,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2883,35 +2049,17 @@
                 {
                   "text": "Advanced PHIL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2949,24 +2097,12 @@
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2983,46 +2119,22 @@
                 {
                   "text": "PHIL seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -3034,46 +2146,22 @@
                 {
                   "text": "PHIL undergraduate elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHIL seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -3085,24 +2173,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

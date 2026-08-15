@@ -15,14 +15,7 @@
               "entries": [
                 {
                   "text": "PP1",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOL 1111 and BIOL 1112",
@@ -66,14 +59,7 @@
                 {
                   "text": "Elective/NUpath elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -84,14 +70,7 @@
               "entries": [
                 {
                   "text": "PP1",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOL 1113 and BIOL 1114",
@@ -128,14 +107,7 @@
                 {
                   "text": "Elective/NUpath elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -146,14 +118,7 @@
               "entries": [
                 {
                   "text": "PP1",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Vacation/GEO",
@@ -169,14 +134,7 @@
               "entries": [
                 {
                   "text": "PP1",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Vacation/GEO",
@@ -197,14 +155,7 @@
               "entries": [
                 {
                   "text": "PP2",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CHEM 2313 and CHEM 2314",
@@ -229,26 +180,12 @@
                 {
                   "text": "Elective/NUpath elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective/NUpath elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -259,14 +196,7 @@
               "entries": [
                 {
                   "text": "PP2",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3306",
@@ -299,14 +229,7 @@
                 {
                   "text": "Elective/NUpath elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -317,14 +240,7 @@
               "entries": [
                 {
                   "text": "PP2",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Vacation/GEO",
@@ -340,14 +256,7 @@
               "entries": [
                 {
                   "text": "PP2",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Vacation/GEO",
@@ -368,14 +277,7 @@
               "entries": [
                 {
                   "text": "P1",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHSC 5110",
@@ -440,26 +342,12 @@
               "entries": [
                 {
                   "text": "P1",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "IPPE/Co-op",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -470,26 +358,12 @@
               "entries": [
                 {
                   "text": "P1",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "IPPE/Co-op",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -529,14 +403,7 @@
                   "text": "Elective/NUpath elective",
                   "sh": 2,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 10
@@ -553,14 +420,7 @@
               "entries": [
                 {
                   "text": "P2",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 5240",
@@ -611,14 +471,7 @@
                   "text": "Elective/NUpath elective",
                   "sh": 2,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -630,14 +483,7 @@
               "entries": [
                 {
                   "text": "P2",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 5210",
@@ -688,14 +534,7 @@
                   "text": "Elective/NUpath elective",
                   "sh": 2,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -707,14 +546,7 @@
               "entries": [
                 {
                   "text": "P2",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 5220",
@@ -747,14 +579,7 @@
                   "text": "Elective/NUpath elective",
                   "sh": 2,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 10
@@ -767,14 +592,7 @@
                 {
                   "text": "IPPE/Co-op",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -790,26 +608,12 @@
               "entries": [
                 {
                   "text": "P3",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "IPPE/Co-op",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -820,14 +624,7 @@
               "entries": [
                 {
                   "text": "P3",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 5320",
@@ -878,14 +675,7 @@
                   "text": "Elective/NUPpath elective",
                   "sh": 2,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -897,25 +687,12 @@
               "entries": [
                 {
                   "text": "P4",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -926,25 +703,12 @@
               "entries": [
                 {
                   "text": "P4",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -960,36 +724,17 @@
               "entries": [
                 {
                   "text": "P4",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1000,36 +745,17 @@
               "entries": [
                 {
                   "text": "P4",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

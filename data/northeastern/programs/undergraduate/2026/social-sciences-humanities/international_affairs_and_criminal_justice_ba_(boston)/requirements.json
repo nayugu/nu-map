@@ -2,13 +2,16 @@
   "name": "International Affairs and Criminal Justice, BA (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 11,
     "tablesConsumed": 11,
     "tablesOnPage": 11,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/international-affairs/international-affairs-criminal-justice-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ANTH1101",
       "CRIM1000",
@@ -40,7 +43,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/international-affairs/international-affairs-criminal-justice-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -52,6 +55,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,

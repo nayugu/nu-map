@@ -2,13 +2,16 @@
   "name": "Behavioral Neuroscience and Philosophy, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/behavioral-neuroscience-philosophy-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "BIOL1107",
       "BIOL1108",
@@ -43,7 +46,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/behavioral-neuroscience-philosophy-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -55,6 +58,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
@@ -582,8 +586,7 @@
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "shared": true
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",

@@ -96,15 +96,7 @@
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000",
@@ -125,24 +117,12 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -180,39 +160,17 @@
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -230,13 +188,7 @@
                 {
                   "text": "Elective (online)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -261,34 +213,16 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "or Dialogue of Civilizations",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -305,52 +239,22 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -368,13 +272,7 @@
                 {
                   "text": "Elective (online)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -399,34 +297,16 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "or Dialogue of Civilizations",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -452,37 +332,17 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -494,48 +354,22 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -639,14 +473,7 @@
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000",
@@ -667,24 +494,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -722,36 +537,17 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -763,48 +559,22 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -859,47 +629,22 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -911,24 +656,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -971,48 +704,22 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1067,47 +774,22 @@
                 {
                   "text": "MUSI capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1211,14 +893,7 @@
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000",
@@ -1239,24 +914,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1294,36 +957,17 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1361,24 +1005,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1395,48 +1027,22 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1491,48 +1097,22 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1587,47 +1167,22 @@
                 {
                   "text": "Music in context course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1639,47 +1194,22 @@
                 {
                   "text": "MUSI capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSI elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

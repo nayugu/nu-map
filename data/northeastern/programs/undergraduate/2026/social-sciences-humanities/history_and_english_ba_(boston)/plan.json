@@ -61,13 +61,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -79,24 +73,12 @@
                 {
                   "text": "HIST pre-1800 elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "HIST 1000-level elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL 1160 or 1410",
@@ -113,13 +95,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -190,28 +166,12 @@
                 {
                   "text": "Pre–1850 ENGL",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL theory and methods",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -232,24 +192,12 @@
                 {
                   "text": "HIST intermediate/advanced elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "HIST intermediate/advanced elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL 3400",
@@ -263,15 +211,7 @@
                 {
                   "text": "Post-1850 ENGL",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -283,28 +223,12 @@
                 {
                   "text": "ENGL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -340,15 +264,7 @@
                 {
                   "text": "AWD (online)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      5,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -360,35 +276,17 @@
                 {
                   "text": "HIST intermediate/advanced elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL writing",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL 3710",
@@ -409,24 +307,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -469,46 +355,22 @@
                 {
                   "text": "HIST intermediate/advanced elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL diversity",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "HIST advanced elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -520,24 +382,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

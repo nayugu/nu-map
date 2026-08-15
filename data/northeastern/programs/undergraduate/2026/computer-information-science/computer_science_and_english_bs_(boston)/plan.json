@@ -92,34 +92,12 @@
                 {
                   "text": "Pre-1850 Literature",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -141,13 +119,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -168,13 +140,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -221,39 +187,12 @@
                 {
                   "text": "Post-1850 Literature",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL Theories & Methods",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -291,24 +230,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -337,23 +264,7 @@
                 {
                   "text": "Writing Requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL 3710",
@@ -367,23 +278,7 @@
                 {
                   "text": "Khoury Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -448,86 +343,22 @@
                 {
                   "text": "Computing & Social Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Computing Focus 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -548,44 +379,12 @@
                 {
                   "text": "Computing Focus 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English Diversity Requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CS 4530 or 4535",
@@ -697,34 +496,12 @@
                 {
                   "text": "Pre-1850 Literature",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -746,13 +523,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -773,13 +544,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -817,39 +582,12 @@
                 {
                   "text": "Post-1850 Literature",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL Theories & Methods",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -891,44 +629,12 @@
                 {
                   "text": "Khoury Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Computing & social issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -940,24 +646,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1015,86 +709,22 @@
                 {
                   "text": "Computing Focus 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Writing Requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1139,44 +769,12 @@
                 {
                   "text": "Computing Focus 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English Diversity Requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12,
-                      13,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CS 4530 or 4535",

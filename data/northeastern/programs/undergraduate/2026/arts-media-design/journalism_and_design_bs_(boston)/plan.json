@@ -56,14 +56,7 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 1111",
@@ -113,24 +106,12 @@
                 {
                   "text": "MATH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -152,26 +133,12 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -183,24 +150,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -235,24 +190,12 @@
                 {
                   "text": "Design option level 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -290,24 +233,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -333,36 +264,17 @@
                 {
                   "text": "JRNL elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Design option level 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Art+design elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -400,24 +312,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -443,36 +343,17 @@
                 {
                   "text": "JRNL elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Design elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -496,14 +377,7 @@
                 {
                   "text": "JRNL elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTG 4550",
@@ -517,13 +391,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -577,14 +445,7 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTG 1001 and ARTG 1002",
@@ -635,13 +496,7 @@
                 {
                   "text": "MATH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000",
@@ -655,13 +510,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -683,26 +532,12 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -740,35 +575,17 @@
                 {
                   "text": "Design option level 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -832,36 +649,17 @@
                 {
                   "text": "JRNL elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Design option level 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Art+Design elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -899,13 +697,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3302",
@@ -940,36 +732,17 @@
                 {
                   "text": "JRNL elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1045,24 +818,12 @@
                 {
                   "text": "Design elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1086,14 +847,7 @@
                 {
                   "text": "JRNL elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTG 4550",
@@ -1107,13 +861,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

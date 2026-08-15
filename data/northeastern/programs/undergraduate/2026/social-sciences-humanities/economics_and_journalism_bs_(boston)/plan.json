@@ -128,13 +128,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000 (For CAMD students)",
@@ -155,24 +149,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -184,24 +166,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -236,28 +206,12 @@
                 {
                   "text": "ECON elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      9,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "JRNL elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      9,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -305,15 +259,7 @@
                 {
                   "text": "JRNL elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      9,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -325,24 +271,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -415,15 +349,7 @@
                 {
                   "text": "ECON elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      9,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -456,13 +382,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -529,28 +449,12 @@
                 {
                   "text": "ECON elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      9,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "JRNL elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      9,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

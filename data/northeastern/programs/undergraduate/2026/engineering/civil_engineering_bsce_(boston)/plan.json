@@ -122,13 +122,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -174,24 +168,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -309,13 +291,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -336,13 +312,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -403,24 +373,12 @@
                 {
                   "text": "Civil Project Elective (WI)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENCP 3000",
@@ -453,13 +411,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -517,35 +469,17 @@
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Science Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -675,13 +609,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -727,24 +655,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -857,24 +773,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1014,35 +918,17 @@
                 {
                   "text": "Civil Project Elective (WI)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Science Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "GE 3300",
@@ -1078,35 +964,17 @@
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1236,13 +1104,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1478,24 +1340,12 @@
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Science Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1516,13 +1366,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1595,24 +1439,12 @@
                 {
                   "text": "Civil Project Elective (WI)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1624,24 +1456,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1699,35 +1519,17 @@
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1857,13 +1659,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2158,24 +1954,12 @@
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Science Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2213,24 +1997,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2247,35 +2019,17 @@
                 {
                   "text": "Civil Project Elective (WI)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENCP 3000",
@@ -2320,35 +2074,17 @@
                 {
                   "text": "Civil Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

@@ -107,22 +107,7 @@
                 {
                   "text": "NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      6,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -143,22 +128,7 @@
                 {
                   "text": "NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      6,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -179,18 +149,7 @@
                 {
                   "text": "ECON undergraduate elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      8,
-                      10,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -249,13 +208,7 @@
                 {
                   "text": "Complete one of the approved business core:",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ACCT 2301, INNO 2301, MISM 2301, or SCHM 2301",
@@ -277,18 +230,7 @@
                 {
                   "text": "ECON undergraduate elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      8,
-                      10,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -326,24 +268,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Student may choose to participate in a Dialogue of Civilizations experience",
@@ -399,22 +329,7 @@
                 {
                   "text": "Complete one of the following:",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      6,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "FINA 4320, INTB 3310, INTB 3330, INTB 4983, MKTG 4512, SCHM 3301, or STRT 3301",
@@ -493,13 +408,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -528,49 +437,17 @@
                 {
                   "text": "ECON undergraduate elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      8,
-                      10,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      6,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -591,44 +468,17 @@
                 {
                   "text": "NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      6,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

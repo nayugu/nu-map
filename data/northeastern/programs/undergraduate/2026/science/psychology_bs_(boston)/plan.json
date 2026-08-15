@@ -52,13 +52,7 @@
                 {
                   "text": "Math requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -70,49 +64,22 @@
                 {
                   "text": "PSYC area A elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -124,27 +91,12 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -191,41 +143,17 @@
                 {
                   "text": "PSYC area B elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -237,52 +165,22 @@
                 {
                   "text": "PSYC area A elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC area B elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -294,24 +192,12 @@
                 {
                   "text": "Elective (or AP credit, etc.)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (or AP credit, etc.)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -363,38 +249,17 @@
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC lab elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -406,24 +271,12 @@
                 {
                   "text": "Elective (or AP credit, etc.)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (or AP credit, etc.)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -466,46 +319,22 @@
                 {
                   "text": "PSYC lab elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC seminar elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -517,24 +346,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -594,13 +411,7 @@
                 {
                   "text": "Math requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -612,49 +423,22 @@
                 {
                   "text": "PSYC area A elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -666,27 +450,12 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -733,41 +502,17 @@
                 {
                   "text": "PSYC area B elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -805,24 +550,12 @@
                 {
                   "text": "Elective (or AP credit, etc.)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (or AP credit, etc.)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -839,49 +572,22 @@
                 {
                   "text": "PSYC area A elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC area B elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -919,24 +625,12 @@
                 {
                   "text": "Elective (or AP credit, etc.)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (or AP credit, etc.)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -962,41 +656,17 @@
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC lab",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1008,46 +678,22 @@
                 {
                   "text": "PSYC lab elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC seminar elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1059,24 +705,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1136,13 +770,7 @@
                 {
                   "text": "Math requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1154,49 +782,22 @@
                 {
                   "text": "PSYC area A elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1246,35 +847,17 @@
                 {
                   "text": "PSYC area B elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1295,49 +878,22 @@
                 {
                   "text": "PSYC area A elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC area B elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1401,38 +957,17 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC lab elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1444,24 +979,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1504,52 +1027,22 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC lab elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1561,24 +1054,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1621,52 +1102,22 @@
                 {
                   "text": "PSYC seminar elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1726,13 +1177,7 @@
                 {
                   "text": "Math requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1744,49 +1189,22 @@
                 {
                   "text": "PSYC area A elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1845,35 +1263,17 @@
                 {
                   "text": "PSYC area B elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1911,24 +1311,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1954,35 +1342,17 @@
                 {
                   "text": "PSYC area A elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC area B elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2020,24 +1390,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2054,52 +1412,22 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC lab elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2154,52 +1482,22 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC lab elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2211,52 +1509,22 @@
                 {
                   "text": "PSYC seminar elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC interdisciplinary cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

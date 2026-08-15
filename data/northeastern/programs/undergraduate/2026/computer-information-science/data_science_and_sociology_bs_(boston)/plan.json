@@ -95,27 +95,12 @@
                 {
                   "text": "SOCL elective—introductory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -136,13 +121,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -213,16 +192,7 @@
                 {
                   "text": "SOCL elective - introductory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -260,24 +230,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -312,27 +270,12 @@
                 {
                   "text": "SOCL elective—intermediate",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -385,24 +328,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -428,38 +359,17 @@
                 {
                   "text": "SOCL elective—intermediate",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -480,16 +390,7 @@
                 {
                   "text": "SOCL elective—intermediate",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "DS 4300",
@@ -610,27 +511,12 @@
                 {
                   "text": "SOCL elective—introductory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -651,13 +537,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -707,16 +587,7 @@
                 {
                   "text": "SOCL elective - introductory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "DS 3500",
@@ -758,27 +629,12 @@
                 {
                   "text": "SOCL elective—intermediate",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "DS 3000",
@@ -799,24 +655,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -868,38 +712,17 @@
                 {
                   "text": "SOCL elective—intermediate",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -911,24 +734,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -995,16 +806,7 @@
                 {
                   "text": "SOCL elective—intermediate",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "DS 4300",

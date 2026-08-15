@@ -52,13 +52,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -98,16 +92,7 @@
                 {
                   "text": "Foreign language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000 (For CAMD students)",
@@ -128,27 +113,12 @@
                 {
                   "text": "Foreign language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -160,27 +130,12 @@
                 {
                   "text": "Foreign language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -215,28 +170,12 @@
                 {
                   "text": "Journalism elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Political science elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -275,28 +214,12 @@
                 {
                   "text": "Journalism elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Political science elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -308,24 +231,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -377,40 +288,17 @@
                 {
                   "text": "Political thought requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Journalism elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      6,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Political science elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -422,24 +310,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },

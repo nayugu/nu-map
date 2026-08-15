@@ -52,13 +52,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -91,26 +85,12 @@
                 {
                   "text": "POLS 2400 prerequisite",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -122,24 +102,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -151,24 +119,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -185,36 +141,17 @@
                 {
                   "text": "ENGL pre-1850 requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL theories and methods requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS thought course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS 2399",
@@ -259,26 +196,12 @@
                 {
                   "text": "ENGL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -295,26 +218,12 @@
                 {
                   "text": "ENGL post-1850 requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL 3710",
@@ -328,13 +237,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -370,24 +273,12 @@
                 {
                   "text": "ENGL diversity requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Advanced Writing requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -404,46 +295,22 @@
                 {
                   "text": "ENGL integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -455,48 +322,22 @@
                 {
                   "text": "Capstone requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      12
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -556,13 +397,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -595,37 +430,12 @@
                 {
                   "text": "POLS 2400 prerequisite",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      8,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -666,64 +476,22 @@
                 {
                   "text": "ENGL pre-1850 requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      10,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      10,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      8,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS thought course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      8,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -735,47 +503,17 @@
                 {
                   "text": "ENGL post-1850 requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      10,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL theories and methods requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      10,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS 2400",
@@ -837,19 +575,7 @@
                 {
                   "text": "ENGL diversity requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      10,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL 3710",
@@ -863,13 +589,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS 2399",
@@ -931,55 +651,22 @@
                 {
                   "text": "ENGL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      10,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      8,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1003,62 +690,22 @@
                 {
                   "text": "Capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      8,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      8,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1070,66 +717,22 @@
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English writing requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

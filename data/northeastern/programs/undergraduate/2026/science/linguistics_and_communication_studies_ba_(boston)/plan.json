@@ -86,13 +86,7 @@
                 {
                   "text": "COMM Studies Foundation Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000 (For CAMD students)",
@@ -106,13 +100,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -124,24 +112,12 @@
                 {
                   "text": "COMM Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -153,24 +129,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -205,35 +169,17 @@
                 {
                   "text": "COMM Studies Cluster Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign Language Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistic Structure or Linguistics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -254,35 +200,17 @@
                 {
                   "text": "COMM Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign Language Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistic Structure or Linguistics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -294,24 +222,12 @@
                 {
                   "text": "COMM Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -372,24 +288,12 @@
                 {
                   "text": "Foreign Language Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistic Structure or Linguistics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -401,24 +305,12 @@
                 {
                   "text": "COMM Studies Writing Intensive",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -470,35 +362,17 @@
                 {
                   "text": "COMM Studies Writing Intensive",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative Capstone Experience",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistic Structure or Linguistics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -592,24 +466,12 @@
                 {
                   "text": "COMM Studies Foundation Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -659,36 +521,17 @@
                 {
                   "text": "COMM Studies Cluster Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign Language Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistic Structure or Linguistics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -712,47 +555,22 @@
                 {
                   "text": "COMM Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "COMM Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign Language Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistic Structure or Linguistics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -825,25 +643,12 @@
                 {
                   "text": "Foreign Language Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistic Structure or Linguistics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -855,24 +660,12 @@
                 {
                   "text": "COMM Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -924,35 +717,17 @@
                 {
                   "text": "COMM Studies Writing Intensive",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistic Structure or Linguistics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -964,24 +739,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1033,35 +796,17 @@
                 {
                   "text": "COMM Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative Capstone Experience",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

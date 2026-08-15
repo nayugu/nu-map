@@ -323,13 +323,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -412,13 +406,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -488,13 +476,7 @@
                 {
                   "text": "Advanced physics elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -816,13 +798,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -933,13 +909,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENCP 3000",
@@ -969,13 +939,7 @@
                 {
                   "text": "Advanced Physics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ME 4508 or 4565",
@@ -1471,13 +1435,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1538,24 +1496,12 @@
                 {
                   "text": "Advanced physics elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2002,13 +1948,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2099,24 +2039,12 @@
                 {
                   "text": "Advanced Physics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

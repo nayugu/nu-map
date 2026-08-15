@@ -2,13 +2,22 @@
   "name": "Electrical Engineering and Music with Concentration in Music Technology, BSEE (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/electrical-computer/electrical-engineering-music-concentration-music-technology-bsee/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "Supplemental Credit"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [
       "CHEM1151",
       "CHEM1153",
@@ -46,7 +55,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/electrical-computer/electrical-engineering-music-concentration-music-technology-bsee/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -58,6 +67,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,

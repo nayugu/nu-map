@@ -52,13 +52,7 @@
                 {
                   "text": "Elementary language 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -70,46 +64,22 @@
                 {
                   "text": "Global Asian studies elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Global Asian studies elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elementary language 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -121,24 +91,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -150,24 +108,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -184,46 +130,22 @@
                 {
                   "text": "Global Asian studies elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Intermediate language 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -244,46 +166,22 @@
                 {
                   "text": "Asia in global context elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Intermediate language 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -295,24 +193,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -355,46 +241,22 @@
                 {
                   "text": "Global Asian studies elective 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Global Asian studies elective 5",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -406,24 +268,12 @@
                 {
                   "text": "Advanced Writing in the Discipline",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -475,35 +325,17 @@
                 {
                   "text": "Global Asian studies elective 6",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

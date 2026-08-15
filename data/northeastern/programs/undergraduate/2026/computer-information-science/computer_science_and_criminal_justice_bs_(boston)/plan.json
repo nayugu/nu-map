@@ -98,13 +98,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -126,13 +120,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -144,13 +132,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -206,13 +188,7 @@
                 {
                   "text": "Current Crime and Justice Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -250,24 +226,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -293,35 +257,17 @@
                 {
                   "text": "Crime Problems and Criminal Justice Institutions",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -374,24 +320,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -408,47 +342,22 @@
                 {
                   "text": "CJ Systemic Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "CJ Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      13
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Computing and social issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -481,24 +390,12 @@
                 {
                   "text": "CJ integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -604,13 +501,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -631,13 +522,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -649,24 +534,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -702,24 +575,12 @@
                 {
                   "text": "Current Crime and Justice Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -758,24 +619,12 @@
                 {
                   "text": "Crime Problems and Criminal Justice Institutions",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -787,24 +636,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -847,46 +684,22 @@
                 {
                   "text": "Computing and social issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "CJ Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      13
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CJ Systemic Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -913,13 +726,7 @@
                 {
                   "text": "Khoury elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -983,24 +790,12 @@
                 {
                   "text": "CJ integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury Elective 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

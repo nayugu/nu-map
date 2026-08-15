@@ -193,13 +193,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -211,24 +205,12 @@
                 {
                   "text": "Co-op1",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -262,13 +244,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -312,13 +288,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -330,24 +300,12 @@
                 {
                   "text": "Co-op1",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Advanced Writing in the Discipline NUPath course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -429,13 +387,7 @@
                 {
                   "text": "LAW elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3800, 3801, or 4983 (LAW elective)",
@@ -462,35 +414,17 @@
                 {
                   "text": "Capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3800, 3801, or 4983 (LAW elective)",
@@ -679,13 +613,7 @@
                 {
                   "text": "General electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 2210",
@@ -733,13 +661,7 @@
                 {
                   "text": "General electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -751,13 +673,7 @@
                 {
                   "text": "General electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -787,24 +703,12 @@
                 {
                   "text": "Co-op1",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Advanced Writing in the Discipline NUPath course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -902,24 +806,12 @@
                 {
                   "text": "Co-op1",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3800, 3801, or 4983 (LAW elective)",
@@ -964,24 +856,12 @@
                 {
                   "text": "Capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3800, 3801, or 4983 (LAW elective)",

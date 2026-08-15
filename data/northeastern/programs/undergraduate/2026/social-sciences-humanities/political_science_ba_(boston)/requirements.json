@@ -2,13 +2,16 @@
   "name": "Political Science, BA (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 11,
     "tablesConsumed": 11,
     "tablesOnPage": 11,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "EESH2000",
       "ENGW1111",
@@ -29,7 +32,7 @@
       "level": "verified",
       "kind": "major",
       "score": 0.98,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -41,6 +44,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 3,

@@ -49,22 +49,7 @@
                 {
                   "text": "Take two:",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MGSC 2301 (AD)",
@@ -109,22 +94,7 @@
                 {
                   "text": "Business core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 1111, ECON 1116, or MATH 1231 (FQ)",
@@ -144,22 +114,7 @@
                 {
                   "text": "Take one:",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MGSC 2301 (AD)",
@@ -195,13 +150,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 1111, ECON 1116, or MATH 1231",
@@ -228,33 +177,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -271,73 +199,22 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BUSN 1103",
@@ -384,22 +261,7 @@
                 {
                   "text": "Business core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ORGB 3201 or 3203",
@@ -428,73 +290,22 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -532,24 +343,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -575,53 +374,17 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -642,44 +405,17 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -736,22 +472,7 @@
                 {
                   "text": "Take two:",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MGSC 2301 (AD)",
@@ -796,22 +517,7 @@
                 {
                   "text": "Business core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 1111, ECON 1116, or MATH 1231 (FQ)",
@@ -831,22 +537,7 @@
                 {
                   "text": "Take one:",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MGSC 2301 (AD)",
@@ -882,13 +573,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 1111, ECON 1116, or MATH 1231",
@@ -915,33 +600,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -958,82 +622,22 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1045,53 +649,17 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BUSN 1103",
@@ -1105,13 +673,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1123,33 +685,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1192,22 +733,7 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3304",
@@ -1233,13 +759,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1251,33 +771,12 @@
                 {
                   "text": "NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1329,44 +828,17 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      5,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

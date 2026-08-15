@@ -107,13 +107,7 @@
                 {
                   "text": "Game aesthetics and critical play elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000",
@@ -134,24 +128,12 @@
                 {
                   "text": "Art+design elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -163,24 +145,12 @@
                 {
                   "text": "Art+design elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -225,13 +195,7 @@
                 {
                   "text": "Game aesthetics and critical play elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -269,24 +233,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -321,24 +273,12 @@
                 {
                   "text": "Art+design elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Game design and development elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -376,24 +316,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -428,24 +356,12 @@
                 {
                   "text": "Game aesthetics and critical play elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Game design and development elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -475,24 +391,12 @@
                 {
                   "text": "Game design and development elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

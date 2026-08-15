@@ -67,13 +67,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -128,24 +122,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -207,13 +189,7 @@
                 {
                   "text": "Supporting course in race or gender justice",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -237,37 +213,17 @@
                 {
                   "text": "Statistics and mathematics requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Major elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      6,
-                      7,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -279,24 +235,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -348,37 +292,17 @@
                 {
                   "text": "Major elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      6,
-                      7,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -390,24 +314,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -450,48 +362,22 @@
                 {
                   "text": "Capstone requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      6,
-                      7,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -503,24 +389,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

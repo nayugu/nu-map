@@ -52,16 +52,7 @@
                 {
                   "text": "CRIM thematic elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -119,24 +110,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -148,24 +127,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -209,27 +176,12 @@
                 {
                   "text": "CRIM survey elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Critical philosophy elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -241,41 +193,17 @@
                 {
                   "text": "CRIM thematic elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHIL 2303",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHIL 2301",
@@ -296,24 +224,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -374,38 +290,17 @@
                 {
                   "text": "CRIM systemwide elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHIL 3000, 4000, or 5000 Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHIL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -496,24 +391,12 @@
                 {
                   "text": "PHIL 4000 or 5000 elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

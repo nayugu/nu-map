@@ -54,13 +54,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -101,13 +95,7 @@
                 {
                   "text": "NUPath Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -131,24 +119,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -193,24 +169,12 @@
                 {
                   "text": "ESS concentration 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS Concentration 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -248,24 +212,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUPath Requirement 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -292,35 +244,17 @@
                 {
                   "text": "ESS concentration 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS concentration 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS concentration 5",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -358,13 +292,7 @@
                 {
                   "text": "NUPath Elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3307",
@@ -390,46 +318,22 @@
                 {
                   "text": "ESS concentration 6",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS concentration 7",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS Concentration 8",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -459,24 +363,12 @@
                 {
                   "text": "ESS Concentration 9",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS Concentration 10",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -538,13 +430,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -585,13 +471,7 @@
                 {
                   "text": "NUPath Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -615,24 +495,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -677,24 +545,12 @@
                 {
                   "text": "ESS concentration 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS Concentration 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -716,35 +572,17 @@
                 {
                   "text": "ESS concentration 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS concentration 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS concentration 5",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -756,24 +594,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUPath Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -816,46 +642,22 @@
                 {
                   "text": "ESS concentration 6",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS concentration 7",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS concentration 8",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -867,13 +669,7 @@
                 {
                   "text": "NUPath Elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3307",
@@ -943,24 +739,12 @@
                 {
                   "text": "ESS Concentration 9",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ESS Concentration 10",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

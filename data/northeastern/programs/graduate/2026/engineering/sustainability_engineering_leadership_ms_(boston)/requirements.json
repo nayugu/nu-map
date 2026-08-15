@@ -2,19 +2,22 @@
   "name": "Sustainability Engineering Leadership, MS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/civil-environmental/sustainability-engineering-leadership-ms-bos/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/civil-environmental/sustainability-engineering-leadership-ms-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -110,6 +114,32 @@
         "kind": "cumulative"
       },
       "text": "36 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "The following UCD course will also fulfill this requirement: MEEN40800.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "The following UCD courses must be used to fulfill this requirement: BSEN40550 and BSEN40570.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "3",
+      "text": "The following UCD courses will also fulfill this requirement: BSEN30310, BSEN30560, BSEN40320, BSEN40350, BSEN40560, and BSEN40700.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "4",
+      "text": "The following UCD courses will also fulfill this requirement: BSEN30060, BSEN30360, BSEN40400, BSEN40750, and BSEN40810.",
+      "codes": [],
+      "substitution": null
     }
   ],
   "concentrations": {

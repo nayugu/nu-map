@@ -2,19 +2,22 @@
   "name": "Bioengineering, MSBioE (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/bioengineering/bioengineering-msbioe/",
+    "panes": [
+      "curriculumtextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/bioengineering/bioengineering-msbioe/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -112,6 +116,17 @@
         "kind": "cumulative"
       },
       "text": "Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Principles of Bioengineering (BIOE 6000) and Seminar (BIOE 7390) are not required for students in a PlusOne bioengineering pathway, but students must successfully complete a total of 32 semester hours.",
+      "codes": [
+        "BIOE 6000",
+        "BIOE 7390"
+      ],
+      "substitution": null
     }
   ],
   "concentrations": {

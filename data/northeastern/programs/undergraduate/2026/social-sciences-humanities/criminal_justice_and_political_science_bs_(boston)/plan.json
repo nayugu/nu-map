@@ -77,48 +77,17 @@
                 {
                   "text": "CRIM Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3,
-                      4,
-                      8,
-                      9,
-                      12,
-                      14,
-                      15,
-                      19
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      13,
-                      14,
-                      16,
-                      19
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -130,24 +99,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -159,37 +116,12 @@
                 {
                   "text": "CRIM Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3,
-                      4,
-                      8,
-                      9,
-                      12,
-                      14,
-                      15,
-                      19
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      13,
-                      14,
-                      16,
-                      19
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -224,24 +156,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -277,37 +197,12 @@
                 {
                   "text": "CRIM Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3,
-                      4,
-                      8,
-                      9,
-                      12,
-                      14,
-                      15,
-                      19
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      13,
-                      14,
-                      16,
-                      19
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -342,24 +237,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -395,24 +278,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -429,59 +300,22 @@
                 {
                   "text": "CRIM Advanced Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3,
-                      4,
-                      8,
-                      9,
-                      12,
-                      14,
-                      15,
-                      19
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS Advanced Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      13,
-                      14,
-                      16,
-                      19
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative Course 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      19
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -502,37 +336,17 @@
                 {
                   "text": "Integrative Course 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11,
-                      12,
-                      13,
-                      19
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

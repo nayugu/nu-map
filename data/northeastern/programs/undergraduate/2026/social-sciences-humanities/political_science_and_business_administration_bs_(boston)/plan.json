@@ -120,34 +120,12 @@
                 {
                   "text": "DD NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      8,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -159,24 +137,12 @@
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -215,45 +181,17 @@
                   "text": "Computer Science Requirement",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS thought",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      13,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      13,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -334,55 +272,17 @@
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      13,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      13,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration class 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      8,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -420,39 +320,12 @@
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      13,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ND NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      8,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -484,65 +357,17 @@
                 {
                   "text": "Concentration class 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      8,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration class 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      8,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EI NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      8,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -566,65 +391,17 @@
                 {
                   "text": "Concentration class 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      8,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "IC NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      8,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ER NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      8,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

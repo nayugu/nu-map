@@ -2,19 +2,22 @@
   "name": "Health Sciences Entrepreneurship, Minor",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 2,
     "tablesConsumed": 2,
     "tablesOnPage": 2,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/clinical-rehabilitation-sciences/health-sciences-entrepreneurship-minor/",
+    "panes": [
+      "minorrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/clinical-rehabilitation-sciences/health-sciences-entrepreneurship-minor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -24,6 +27,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 1,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -155,6 +159,14 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students who only complete 11 semester hours of required coursework must take a 4-semester-hour elective for a total of 15 semester hours.",
+      "codes": [],
+      "substitution": null
     }
   ]
 }

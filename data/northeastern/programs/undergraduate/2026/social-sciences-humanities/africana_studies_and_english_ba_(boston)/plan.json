@@ -77,20 +77,7 @@
                 {
                   "text": "Language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "AFCS 2619",
@@ -104,20 +91,7 @@
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -129,37 +103,12 @@
                 {
                   "text": "ENGL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -171,24 +120,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -205,38 +142,12 @@
                 {
                   "text": "Integrative Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Pre-1850 literature course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "AFCS 1113",
@@ -266,19 +177,7 @@
                 {
                   "text": "ENGL diversity course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "AFCS 2355",
@@ -301,20 +200,7 @@
                 {
                   "text": "Post-1850 literature course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -335,13 +221,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -384,31 +264,12 @@
                 {
                   "text": "Advanced Writing in the Disciplines",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL 3710",
@@ -422,13 +283,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -440,30 +295,12 @@
                 {
                   "text": "ENGL writing course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -506,65 +343,22 @@
                 {
                   "text": "Capstone course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL theories and methods course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

@@ -89,13 +89,7 @@
                     {
                       "text": "Complete one of the following:",
                       "sh": 3,
-                      "options": [],
-                      "binding": {
-                        "targets": [
-                          6
-                        ],
-                        "forced": true
-                      }
+                      "options": []
                     },
                     {
                       "text": "PSYC 5120",
@@ -158,25 +152,13 @@
                 {
                   "text": "Elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 2,
                   "shMax": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ],
               "fullSummer": true,
@@ -195,13 +177,7 @@
                 {
                   "text": "Elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Complete the following:",
@@ -238,13 +214,7 @@
                 {
                   "text": "Elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Complete the following:",
@@ -290,13 +260,7 @@
                 {
                   "text": "Elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ],
               "fullSummer": true

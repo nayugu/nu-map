@@ -67,13 +67,7 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -150,24 +144,12 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -224,24 +206,12 @@
                 {
                   "text": "Design option 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Degree-focused elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -279,24 +249,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -322,35 +280,17 @@
                 {
                   "text": "ARTH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Computing and social issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Design option 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -403,24 +343,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -449,35 +377,17 @@
                 {
                   "text": "Art+design elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -498,37 +408,17 @@
                 {
                   "text": "CS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Degree-focused elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -603,13 +493,7 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -686,24 +570,12 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -751,24 +623,12 @@
                 {
                   "text": "Design option 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Degree-focused elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -798,35 +658,17 @@
                 {
                   "text": "ARTH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Computing and social issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Design option 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -838,24 +680,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -910,35 +740,17 @@
                 {
                   "text": "Art+design elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -950,24 +762,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1034,35 +834,17 @@
                 {
                   "text": "Khoury elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Degree-focused elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

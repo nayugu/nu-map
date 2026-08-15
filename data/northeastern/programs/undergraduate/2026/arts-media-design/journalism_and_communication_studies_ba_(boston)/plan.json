@@ -55,17 +55,7 @@
                 {
                   "text": "Language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -99,17 +89,7 @@
                 {
                   "text": "Language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000",
@@ -123,13 +103,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -141,27 +115,12 @@
                 {
                   "text": "COMM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -173,24 +132,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -216,44 +163,17 @@
                 {
                   "text": "COMM foundation course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "JRNL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -291,24 +211,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -325,54 +233,22 @@
                 {
                   "text": "COMM cluster",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "COMM writing-intensive",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "JRNL visual storytelling",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "JRNL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -410,27 +286,12 @@
                 {
                   "text": "COMM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -459,40 +320,17 @@
                 {
                   "text": "COMM writing-intensive",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "JRNL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -504,51 +342,22 @@
                 {
                   "text": "COMM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "JRNL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

@@ -146,24 +146,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -200,25 +188,12 @@
                 {
                   "text": "ENVR skills course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENVR Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -284,24 +259,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -362,26 +325,12 @@
                 {
                   "text": "ENVR Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENVR Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -458,39 +407,17 @@
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      12
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENVR Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -644,24 +571,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -707,28 +622,12 @@
                 {
                   "text": "ENVR Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENVR Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -766,24 +665,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -919,30 +806,12 @@
                 {
                   "text": "ENVR Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Sustainable Planning and Development Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -963,41 +832,17 @@
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      12
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENVR Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

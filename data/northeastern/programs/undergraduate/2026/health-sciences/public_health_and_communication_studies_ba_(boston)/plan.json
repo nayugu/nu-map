@@ -44,31 +44,12 @@
                   "text": "BIOL course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Introductory language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -91,42 +72,17 @@
                   "text": "BIOL course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elementary language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 17
@@ -139,13 +95,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 2350",
@@ -222,17 +172,7 @@
                 {
                   "text": "COMM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -250,13 +190,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -311,35 +245,12 @@
                 {
                   "text": "PH Social science course (introductory)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "COMM foundation course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 2300",
@@ -353,17 +264,7 @@
                 {
                   "text": "COMM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -381,13 +282,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -442,51 +337,18 @@
                 {
                   "text": "COMM cluster course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "COMM writing-intensive course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Capstone Course",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 4540",
@@ -508,69 +370,23 @@
                 {
                   "text": "COMM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "COMM writing-intensive course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social science course",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Intermediate language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 16
@@ -623,31 +439,12 @@
                   "text": "BIOL course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Introductory language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -670,31 +467,12 @@
                   "text": "BIOL course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elementary language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000",
@@ -708,13 +486,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -727,13 +499,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 2350",
@@ -792,32 +558,12 @@
                 {
                   "text": "COMM foundation course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "COMM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -838,35 +584,12 @@
                 {
                   "text": "COMM cluster course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social science course (introductory)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 2300",
@@ -936,13 +659,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -963,50 +680,17 @@
                 {
                   "text": "COMM writing-intensive course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "COMM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Intermediate language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1067,13 +751,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1085,70 +763,24 @@
                 {
                   "text": "COMM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Capstone Course",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "COMM writing-intensive course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social science course (upper)",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 16

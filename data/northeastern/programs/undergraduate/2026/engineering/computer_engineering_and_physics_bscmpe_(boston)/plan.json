@@ -268,16 +268,7 @@
                 {
                   "text": "CE Fundamental",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENCP 2000",
@@ -350,41 +341,17 @@
                 {
                   "text": "CE Fundamental",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CE Fundamental",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -486,16 +453,7 @@
                 {
                   "text": "Technical Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -507,55 +465,22 @@
                 {
                   "text": "Technical Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Advanced Physics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EE Fundamental",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -858,17 +783,7 @@
                 {
                   "text": "CE Fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -918,43 +833,17 @@
                 {
                   "text": "CE Fundamentals",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CE Fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1070,17 +959,7 @@
                 {
                   "text": "Technical Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1092,54 +971,22 @@
                 {
                   "text": "EE Fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Technical Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHYS Advanced Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1535,44 +1382,17 @@
                 {
                   "text": "CE Fundamental",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CE Fundamental",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CE Fundamental",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1631,16 +1451,7 @@
                 {
                   "text": "Technical Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1693,13 +1504,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1711,55 +1516,22 @@
                 {
                   "text": "Technical Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Advanced Physics Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "EE Fundamental",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2126,47 +1898,17 @@
                 {
                   "text": "CE Fundamentals",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CE Fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CE Fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2252,28 +1994,12 @@
                 {
                   "text": "EE Fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2306,17 +2032,7 @@
                 {
                   "text": "Technical Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2368,39 +2084,17 @@
                 {
                   "text": "Technical Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      7,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHYS Advanced Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

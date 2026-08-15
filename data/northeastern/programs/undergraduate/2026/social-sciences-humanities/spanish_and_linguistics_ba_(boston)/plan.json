@@ -55,13 +55,7 @@
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -91,24 +85,12 @@
                 {
                   "text": "LING elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -120,26 +102,12 @@
                 {
                   "text": "SPNS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "SPNS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -151,24 +119,12 @@
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -203,24 +159,12 @@
                 {
                   "text": "LING structure course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "SPNS culture elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -256,35 +200,17 @@
                 {
                   "text": "LING structure course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "LING elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -296,24 +222,12 @@
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -376,35 +290,17 @@
                 {
                   "text": "LING structure course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -416,24 +312,12 @@
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -502,24 +386,12 @@
                 {
                   "text": "SPNS culture elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

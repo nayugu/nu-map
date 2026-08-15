@@ -97,18 +97,7 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -120,25 +109,12 @@
                 {
                   "text": "ECON selective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -159,13 +135,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -211,13 +181,7 @@
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -256,25 +220,12 @@
                 {
                   "text": "Business elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -286,24 +237,12 @@
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -346,56 +285,22 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -416,13 +321,7 @@
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -465,53 +364,23 @@
                 {
                   "text": "Business elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Capstone course",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 16
@@ -625,19 +494,7 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      5,
-                      8,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -696,25 +553,12 @@
                 {
                   "text": "ECON selective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -754,13 +598,7 @@
                 {
                   "text": "PHTH core course",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -824,42 +662,17 @@
                 {
                   "text": "Business elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      5,
-                      8,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -921,25 +734,12 @@
                 {
                   "text": "Business elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -994,41 +794,17 @@
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      5,
-                      8,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1041,41 +817,17 @@
                   "text": "Capstone course",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      5,
-                      8,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 16

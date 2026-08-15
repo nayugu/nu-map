@@ -2,13 +2,16 @@
   "name": "Human Services and Public Health, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 8,
     "tablesConsumed": 8,
     "tablesOnPage": 8,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/human-services-public-health-ba-bos/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "BIOL1111",
       "BIOL1112",
@@ -45,7 +48,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/human-services-public-health-ba-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -57,6 +60,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
@@ -906,6 +910,24 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Must complete 0-semester-hour Health Science Capstone Introduction (HSCI 4700) as prerequisite.",
+      "codes": [
+        "HSCI 4700"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Junior/Senior Honors Project 1 (HSCI 4970)will count as 4-semester-hour general elective.",
+      "codes": [
+        "HSCI 4970"
+      ],
+      "substitution": null
     }
   ]
 }

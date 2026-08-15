@@ -55,24 +55,7 @@
                 {
                   "text": "NUpath Difference and Diversity",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -142,24 +125,7 @@
                 {
                   "text": "Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -171,24 +137,7 @@
                 {
                   "text": "Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "FINA 2201",
@@ -266,46 +215,12 @@
                 {
                   "text": "Business Concentration (1)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business Concentration (2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EESC 2000 or BUSN 1103",
@@ -322,17 +237,7 @@
                 {
                   "text": "PSYC Elective (1)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      6,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -344,13 +249,7 @@
                 {
                   "text": "Elective (3)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "MISM 2301 or SCHM 2301",
@@ -405,17 +304,7 @@
                 {
                   "text": "PSYC Laboratory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      6,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3304 or 3315",
@@ -432,24 +321,7 @@
                 {
                   "text": "Business Concentration (3)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "MKTG 2201",
@@ -470,24 +342,7 @@
                 {
                   "text": "Elective 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ORGB 3201 or 3203",
@@ -542,54 +397,17 @@
                 {
                   "text": "PSYC Seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      6,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC Elective (2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      6,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business Concentration (4)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      "~concentration",
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "STRT 4501",

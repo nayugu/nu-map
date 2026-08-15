@@ -54,13 +54,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -91,27 +85,12 @@
                 {
                   "text": "Presentation Requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -149,24 +128,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -210,16 +177,7 @@
                 {
                   "text": "Cybersecurity Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -261,27 +219,12 @@
                 {
                   "text": "Cybersecurity Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -302,13 +245,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -381,16 +318,7 @@
                 {
                   "text": "Cybersecurity Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -480,30 +408,12 @@
                 {
                   "text": "Cyber and Social Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Cybersecurity elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      4,
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

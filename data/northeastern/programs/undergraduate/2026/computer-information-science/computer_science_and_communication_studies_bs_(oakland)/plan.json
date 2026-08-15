@@ -104,13 +104,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -132,13 +126,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -185,40 +173,12 @@
                 {
                   "text": "Communication Studies Foundation Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -256,24 +216,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -290,78 +238,22 @@
                 {
                   "text": "Communication Studies Cluster Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Communication Studies Writing Intensive Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Communication Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -414,13 +306,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -458,40 +344,12 @@
                 {
                   "text": "Communication Studies Writing Intensive Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Communication Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -512,51 +370,17 @@
                 {
                   "text": "Communication Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Computing and Social Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -568,24 +392,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -697,13 +509,7 @@
                 {
                   "text": "GeneralElective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -725,13 +531,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -766,40 +566,12 @@
                 {
                   "text": "Communication Studies Foundation Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -823,78 +595,22 @@
                 {
                   "text": "Communication Studies Cluster Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Communication Studies Writing Intensive Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Communication Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -906,24 +622,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -987,40 +691,12 @@
                 {
                   "text": "Communication Studies Writing Intensive Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Communication Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1047,13 +723,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1105,51 +775,17 @@
                 {
                   "text": "Communication Studies Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Computing and Social Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      2,
-                      3,
-                      4,
-                      5,
-                      6,
-                      7,
-                      8,
-                      10,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1161,24 +797,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

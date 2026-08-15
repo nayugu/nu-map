@@ -15,13 +15,7 @@
               "entries": [
                 {
                   "text": "Fall A",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 6200",
@@ -43,13 +37,7 @@
                 },
                 {
                   "text": "Fall B",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 5222",
@@ -71,13 +59,7 @@
                 },
                 {
                   "text": "Full Fall",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 5210",
@@ -97,13 +79,7 @@
               "entries": [
                 {
                   "text": "Spring A",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 5212",
@@ -125,13 +101,7 @@
                 },
                 {
                   "text": "Spring B",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 5214",
@@ -144,13 +114,7 @@
                 },
                 {
                   "text": "Full Spring",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 5202",

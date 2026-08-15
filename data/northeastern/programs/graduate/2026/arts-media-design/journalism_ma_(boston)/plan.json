@@ -43,13 +43,7 @@
                 {
                   "text": "Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -79,13 +73,7 @@
                 {
                   "text": "Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -140,35 +128,17 @@
                 {
                   "text": "Elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 5",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

@@ -84,13 +84,7 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOL 2299",
@@ -233,13 +227,7 @@
                 {
                   "text": "Design option course 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -277,35 +265,17 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -340,24 +310,12 @@
                 {
                   "text": "Design option course 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -404,13 +362,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -436,35 +388,17 @@
                 {
                   "text": "A+D elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -485,35 +419,17 @@
                 {
                   "text": "BNS core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -605,13 +521,7 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOL 2299",
@@ -778,24 +688,12 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -840,13 +738,7 @@
                 {
                   "text": "Design option course 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -901,49 +793,22 @@
                 {
                   "text": "ARTH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "A+D elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -990,13 +855,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1031,24 +890,12 @@
                 {
                   "text": "ARTH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Design option level 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1069,38 +916,17 @@
                 {
                   "text": "A+D elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

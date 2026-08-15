@@ -89,24 +89,12 @@
                 {
                   "text": "Personality/social basis of behavior 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -118,30 +106,12 @@
                 {
                   "text": "PYSC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -153,24 +123,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -214,13 +172,7 @@
                 {
                   "text": "Cognitive/biological basis of behavior 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -259,24 +211,12 @@
                 {
                   "text": "Cognitive/biological basis of behavior 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Personality/social basis of behavior 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -288,29 +228,12 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -371,24 +294,12 @@
                 {
                   "text": "PSYC laboratory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      12
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      13
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -415,13 +326,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -473,41 +378,17 @@
                 {
                   "text": "Integrative requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      15
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -604,24 +485,12 @@
                 {
                   "text": "Personality/social basis of behavior 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -633,30 +502,12 @@
                 {
                   "text": "PYSC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -668,24 +519,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -738,13 +577,7 @@
                 {
                   "text": "Cognitive/biological basis of behavior 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -782,24 +615,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -834,24 +655,12 @@
                 {
                   "text": "Cognitive/biological basis of behavior 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Personality/social basis of behavior 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -904,13 +713,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -945,24 +748,12 @@
                 {
                   "text": "PSYC laboratory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      12
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      13
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -983,46 +774,17 @@
                 {
                   "text": "Integrative requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      15
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

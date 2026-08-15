@@ -243,27 +243,12 @@
                 {
                   "text": "PSYC Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      9,
-                      10,
-                      11,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -304,24 +289,12 @@
                 {
                   "text": "Statistics course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -374,24 +347,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -435,34 +396,12 @@
                 {
                   "text": "BNS core 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS core 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      5,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -495,24 +434,12 @@
                 {
                   "text": "Computing and social issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      13
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Upper division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -761,24 +688,12 @@
                 {
                   "text": "Statistics course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -790,27 +705,12 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      9,
-                      10,
-                      11,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -862,43 +762,17 @@
                 {
                   "text": "Computing and Social Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      13
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS core 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS core 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -910,24 +784,12 @@
                 {
                   "text": "Upper-division elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1021,13 +883,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

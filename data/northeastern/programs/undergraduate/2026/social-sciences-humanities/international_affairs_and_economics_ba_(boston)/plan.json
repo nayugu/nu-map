@@ -52,18 +52,7 @@
                 {
                   "text": "Foreign language core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      6,
-                      7,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -133,29 +122,12 @@
                 {
                   "text": "ECON elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      6,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INTL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -167,24 +139,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -225,32 +185,12 @@
                 {
                   "text": "Foreign language core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      6,
-                      7,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INTL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -280,32 +220,12 @@
                 {
                   "text": "Foreign language core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      6,
-                      7,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INTL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -317,26 +237,12 @@
                 {
                   "text": "ECON elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      6,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -397,16 +303,7 @@
                 {
                   "text": "INTL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ECON 3291",
@@ -427,27 +324,12 @@
                 {
                   "text": "INTL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -502,53 +384,21 @@
                 {
                   "text": "ECON elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      6,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INTL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INTL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "or INTL 4700",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

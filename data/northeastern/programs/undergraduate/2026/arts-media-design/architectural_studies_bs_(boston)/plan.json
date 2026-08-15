@@ -43,24 +43,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -99,25 +87,12 @@
                 {
                   "text": "Architecture History Elective (1 of 2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -129,24 +104,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -203,14 +166,7 @@
                 {
                   "text": "Architecture History Elective (2 of 2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -250,13 +206,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -267,14 +217,7 @@
               "entries": [
                 {
                   "text": "Optional Summer Co-op",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -285,14 +228,7 @@
               "entries": [
                 {
                   "text": "Optional Summer Co-op",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -309,26 +245,12 @@
                 {
                   "text": "Semester in Segovia (or Boston)",
                   "sh": 14.4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Language elective",
                   "sh": 1.6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -383,46 +305,22 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -443,35 +341,17 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

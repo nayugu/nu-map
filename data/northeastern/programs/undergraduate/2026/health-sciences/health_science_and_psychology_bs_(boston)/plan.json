@@ -121,13 +121,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -186,24 +180,12 @@
                 {
                   "text": "Area A course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -215,47 +197,22 @@
                 {
                   "text": "Area A course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -267,25 +224,12 @@
                 {
                   "text": "Area B course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      5
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -335,24 +279,12 @@
                 {
                   "text": "PSYC lab",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3306",
@@ -399,24 +331,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -433,36 +353,17 @@
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -489,24 +390,12 @@
                 {
                   "text": "PSYC seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -635,15 +524,7 @@
                 {
                   "text": "PSYC Area A selective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -655,24 +536,12 @@
                 {
                   "text": "PSYC Area B selective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -684,13 +553,7 @@
                 {
                   "text": "General Electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -737,24 +600,12 @@
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -822,50 +673,22 @@
                 {
                   "text": "PSYC Area A selective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -903,13 +726,7 @@
                 {
                   "text": "General Electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -926,50 +743,22 @@
                 {
                   "text": "PSYC lab",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYCH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      4,
-                      8,
-                      9,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -996,37 +785,17 @@
                 {
                   "text": "PSYC seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1155,15 +924,7 @@
                 {
                   "text": "PSYC Area A selective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1175,24 +936,12 @@
                 {
                   "text": "PSYC Area B selective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1204,13 +953,7 @@
                 {
                   "text": "General electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1254,13 +997,7 @@
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1284,50 +1021,22 @@
                 {
                   "text": "PSYC Area A selective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1339,26 +1048,12 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1425,24 +1120,12 @@
                 {
                   "text": "PHTH core",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC lab",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1454,13 +1137,7 @@
                 {
                   "text": "General Electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1503,37 +1180,17 @@
                 {
                   "text": "PSYC seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Electives",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

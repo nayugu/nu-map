@@ -141,15 +141,7 @@
                 {
                   "text": "Nupath DD",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -161,24 +153,12 @@
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -231,13 +211,7 @@
                 {
                   "text": "THTR Texts, Community, & Social Context Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -276,27 +250,12 @@
                 {
                   "text": "THTR Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Nupath ER",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -308,24 +267,12 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -393,14 +340,7 @@
                 {
                   "text": "THTR Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -412,24 +352,12 @@
                 {
                   "text": "PSYC lab",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -479,35 +407,17 @@
                 {
                   "text": "PSYC seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

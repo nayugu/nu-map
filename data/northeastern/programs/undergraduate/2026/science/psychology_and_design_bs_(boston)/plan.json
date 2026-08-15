@@ -37,13 +37,7 @@
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTG 1001 and ARTG 1002",
@@ -137,38 +131,17 @@
                 {
                   "text": "Elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTF elective",
                   "sh": 2,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -180,30 +153,12 @@
                 {
                   "text": "Elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -257,16 +212,7 @@
                 {
                   "text": "Design option course 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -304,30 +250,12 @@
                 {
                   "text": "Elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -362,30 +290,12 @@
                 {
                   "text": "Design option course 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Psychology area B or elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -423,30 +333,12 @@
                 {
                   "text": "Psychology area A or area B or elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -463,55 +355,22 @@
                 {
                   "text": "Psychology laboratory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Psychology area A or elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTH elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -523,16 +382,7 @@
                 {
                   "text": "Psychology seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARTG 4550",
@@ -546,30 +396,12 @@
                 {
                   "text": "Psychology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective/NUpath",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      5,
-                      8,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

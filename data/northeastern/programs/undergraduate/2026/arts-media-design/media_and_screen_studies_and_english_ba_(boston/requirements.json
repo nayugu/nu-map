@@ -2,13 +2,16 @@
   "name": "Media and Screen Studies and English, BA (Boston",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/media-screen-studies-english-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "EEAM2000",
       "ENGL1000",
@@ -29,7 +32,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/communication-studies/media-screen-studies-english-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -41,6 +44,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -677,8 +681,7 @@
           "classId": 3600
         }
       ],
-      "minRequirementCount": 2,
-      "shared": true
+      "minRequirementCount": 2
     }
   ]
 }

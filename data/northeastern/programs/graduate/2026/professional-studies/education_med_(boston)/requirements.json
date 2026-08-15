@@ -2,19 +2,22 @@
   "name": "Education, MEd (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/education-med/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "partial",
       "kind": "grad",
       "score": 0.83,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/education-med/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -24,6 +27,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 1,
         "unknownCourses": 3,
         "planUnexplained": 0,
@@ -99,6 +103,67 @@
         "kind": "cumulative"
       },
       "text": "45 total quarter hours required (additional hours may be required for endorsement for Massachusetts licensure) Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "For students who do not pass or complete their Gateway Performance Task I in EDU 6310 Literacy Development and the Academic Domains, complete EDU 6995 Project to meet programmatic and licensure requirements.",
+      "codes": [
+        "EDU 6310",
+        "EDU 6995"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "For students who do not pass or complete their Gateway II assessment in EDU 6517 Foundations of Teaching English as a Second Language: Research and Practice, or early fieldwork, complete EDU 6995 Project to meet programmatic and licensure requirements.",
+      "codes": [
+        "EDU 6517",
+        "EDU 6995"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "3",
+      "text": "Required for nonlicensure and licensure programs of study except ESL Massachusetts Licensure Pathway. ESL Massachusetts Licensure Pathway students may substitute EDU 6410 Instructional Leadership with the completion of all ESL Massachusetts Licensure Pathway courses .",
+      "codes": [
+        "EDU 6410"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "1",
+      "text": "Complete EDU 6874 Practicum, Portfolio, and Panel Review instead of EDU 6225 Capstone if pursuing Massachusetts ESL Licensure Pathway courses.",
+      "codes": [
+        "EDU 6874",
+        "EDU 6225"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "4",
+      "text": "EDU 6513: For students pursuing emergency secondary teaching licenses or ESL+ licensure in Massachusetts.",
+      "codes": [
+        "EDU 6513"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "1",
+      "text": "For students who do not pass their Gateway Performance Task I in this course, complete EDU 6995 to meet programmatic and endorsement requirements.",
+      "codes": [
+        "EDU 6995"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "For students who do not pass their Gateway Performance Task II in this course, complete EDU 6995 to meet programmatic and endorsement requirements.",
+      "codes": [
+        "EDU 6995"
+      ],
+      "substitution": null
     }
   ],
   "concentrations": {

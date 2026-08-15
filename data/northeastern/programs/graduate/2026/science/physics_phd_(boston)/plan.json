@@ -138,13 +138,7 @@
                 {
                   "text": "Advanced elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 12

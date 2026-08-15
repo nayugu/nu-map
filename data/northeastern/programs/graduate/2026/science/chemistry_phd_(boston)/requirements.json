@@ -2,19 +2,22 @@
   "name": "Chemistry, PhD (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
-    "tablesPresent": 4,
-    "tablesConsumed": 4,
-    "tablesOnPage": 4,
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/science/chemistry-chemical-biology/chemistry-phd/",
+    "panes": [
+      "bachelorsdegreeentrancetextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/science/chemistry-chemical-biology/chemistry-phd/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -109,59 +113,6 @@
               "type": "COURSE",
               "subject": "CHEM",
               "classId": 9996
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Required Core (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CHEM",
-          "classId": 5600
-        },
-        {
-          "type": "COURSE",
-          "subject": "CHEM",
-          "classId": 7750
-        }
-      ],
-      "minRequirementCount": 2,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Seminar (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CHEM",
-          "classId": 8504
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Dissertation (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 9990
-            },
-            {
-              "type": "COURSE",
-              "subject": "CHEM",
-              "classId": 9991
             }
           ]
         }

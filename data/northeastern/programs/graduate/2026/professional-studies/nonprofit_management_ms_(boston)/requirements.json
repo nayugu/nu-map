@@ -2,19 +2,22 @@
   "name": "Nonprofit Management, MS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 8,
     "tablesConsumed": 8,
     "tablesOnPage": 8,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/nonprofit-management-ms/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "partial",
       "kind": "grad",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/nonprofit-management-ms/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -24,6 +27,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 1,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -297,6 +301,16 @@
         "kind": "cumulative"
       },
       "text": "45 total quarter hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Note: Foundations of Project Management (PJM 5900) is for students with fewer than three years of experience directing or leading project tasks. Students who do not complete Foundations of Project Management (PJM 5900) may substitute any additional project management elective to satisfy the required program hours.",
+      "codes": [
+        "PJM 5900"
+      ],
+      "substitution": null
     }
   ],
   "concentrations": {

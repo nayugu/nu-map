@@ -105,13 +105,7 @@
                 {
                   "text": "Architecture history elective (1 of 2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -132,13 +126,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -194,13 +182,7 @@
                 {
                   "text": "Architecture history elective (2 of 2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -241,13 +223,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -259,24 +235,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -319,13 +283,7 @@
                 {
                   "text": "Travel study",
                   "sh": 16,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Students may choose from a variety of approved, off-campus study opportunities and are expected to complete a minimum of 16 credits in the location of their choosing.",
@@ -342,13 +300,7 @@
               "entries": [
                 {
                   "text": "Optional 4-month co-op",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "or",
@@ -357,13 +309,7 @@
                   "children": [
                     {
                       "text": "Dialogue of Civilizations",
-                      "options": [],
-                      "binding": {
-                        "targets": [
-                          10,
-                          "~general"
-                        ]
-                      }
+                      "options": []
                     }
                   ]
                 },
@@ -374,13 +320,7 @@
                   "children": [
                     {
                       "text": "Electives (2)",
-                      "options": [],
-                      "binding": {
-                        "targets": [
-                          "~general"
-                        ],
-                        "forced": true
-                      }
+                      "options": []
                     }
                   ]
                 },
@@ -405,13 +345,7 @@
               "entries": [
                 {
                   "text": "Optional 4-month co-op",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "or",
@@ -420,13 +354,7 @@
                   "children": [
                     {
                       "text": "Dialogue of Civilizations",
-                      "options": [],
-                      "binding": {
-                        "targets": [
-                          10,
-                          "~general"
-                        ]
-                      }
+                      "options": []
                     }
                   ]
                 },
@@ -437,13 +365,7 @@
                   "children": [
                     {
                       "text": "Electives (2)",
-                      "options": [],
-                      "binding": {
-                        "targets": [
-                          "~general"
-                        ],
-                        "forced": true
-                      }
+                      "options": []
                     }
                   ]
                 },
@@ -662,14 +584,7 @@
                 {
                   "text": "Architecture history elective (1 of 2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -690,13 +605,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -743,25 +652,12 @@
                 {
                   "text": "Architecture history elective (2 of 2)1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -802,13 +698,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -819,14 +709,7 @@
               "entries": [
                 {
                   "text": "Optional 4-month co-op",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "or",
@@ -835,14 +718,7 @@
                   "children": [
                     {
                       "text": "Dialogue of Civilizations",
-                      "options": [],
-                      "binding": {
-                        "targets": [
-                          4,
-                          10,
-                          "~general"
-                        ]
-                      }
+                      "options": []
                     }
                   ]
                 },
@@ -853,13 +729,7 @@
                   "children": [
                     {
                       "text": "Electives (2)",
-                      "options": [],
-                      "binding": {
-                        "targets": [
-                          "~general"
-                        ],
-                        "forced": true
-                      }
+                      "options": []
                     }
                   ]
                 },
@@ -885,14 +755,7 @@
                 {
                   "text": "Optional 4-month co-op",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "or",
@@ -901,14 +764,7 @@
                   "children": [
                     {
                       "text": "Dialogue of Civilizations",
-                      "options": [],
-                      "binding": {
-                        "targets": [
-                          4,
-                          10,
-                          "~general"
-                        ]
-                      }
+                      "options": []
                     }
                   ]
                 },
@@ -919,13 +775,7 @@
                   "children": [
                     {
                       "text": "Electives (2)",
-                      "options": [],
-                      "binding": {
-                        "targets": [
-                          "~general"
-                        ],
-                        "forced": true
-                      }
+                      "options": []
                     }
                   ]
                 },
@@ -956,14 +806,7 @@
                 {
                   "text": "Travel study",
                   "sh": 16,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Students may choose from a variety of approved, off-campus study opportunities and are expected to complete a minimum of 16 credits in the location of their choosing.",
@@ -1005,24 +848,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1175,13 +1006,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1229,13 +1054,7 @@
                 {
                   "text": "Architecture history elective (1 of 2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1303,13 +1122,7 @@
                 {
                   "text": "Architecture history elective (2 of 2)1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1350,13 +1163,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1411,13 +1218,7 @@
                 {
                   "text": "Travel study",
                   "sh": 16,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Students may choose from a variety of approved, off-campus study opportunities and are expected to complete a minimum of 16 credits in the location of their choosing.",
@@ -1491,13 +1292,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1536,13 +1331,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1625,13 +1414,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1692,13 +1475,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1719,14 +1496,7 @@
                 {
                   "text": "Architecture history elective (1 of 2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ARCH 2240",
@@ -1821,14 +1591,7 @@
                 {
                   "text": "Architecture history elective (2 of 2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1868,13 +1631,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1915,14 +1672,7 @@
                 {
                   "text": "Travel study",
                   "sh": 16,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Students may choose from a variety of approved, off-campus study opportunities and are expected to complete a minimum of 16 credits in the location of their choosing.",
@@ -2001,24 +1751,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2100,13 +1838,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },

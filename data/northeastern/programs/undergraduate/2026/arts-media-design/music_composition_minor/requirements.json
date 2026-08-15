@@ -2,19 +2,29 @@
   "name": "Music Composition, Minor",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/music/music-composition-minor/",
+    "panes": [
+      "minorrequirementstextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "Required Courses",
+        "Electives"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/music/music-composition-minor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -24,6 +34,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 1,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -204,8 +215,7 @@
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "shared": true
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -263,8 +273,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     }
   ],
   "gpaRequirements": [

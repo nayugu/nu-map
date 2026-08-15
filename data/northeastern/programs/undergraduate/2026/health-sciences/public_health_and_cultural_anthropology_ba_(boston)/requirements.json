@@ -2,13 +2,16 @@
   "name": "Public Health and Cultural Anthropology, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 9,
     "tablesConsumed": 9,
     "tablesOnPage": 9,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/public-health-cultural-anthropology-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ANTH1000",
       "ANTH1101",
@@ -36,7 +39,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/public-health-cultural-anthropology-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -48,6 +51,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
@@ -640,6 +644,33 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Must complete Health Science Capstone Introduction (HSCI 4700) (0 SH) as pre-requisite.",
+      "codes": [
+        "HSCI 4700"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Junior/Senior Honors Project 1 (HSCI 4970) will count as 4 semester hours of general electives.",
+      "codes": [
+        "HSCI 4970"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "*",
+      "text": "Students that choose to complete at least one co-op experience must complete either Professional Development for Bouvé Co-op (HSCI 2000) or Professional Development for Co-op (EESH 2000) (based on home college) prior to co-op.",
+      "codes": [
+        "HSCI 2000",
+        "EESH 2000"
+      ],
+      "substitution": null
     }
   ]
 }

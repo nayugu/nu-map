@@ -82,18 +82,7 @@
                 {
                   "text": "Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -178,18 +167,7 @@
                 {
                   "text": "Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -201,34 +179,12 @@
                 {
                   "text": "Elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -299,18 +255,7 @@
                 {
                   "text": "Elective 5",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -376,34 +321,12 @@
                 {
                   "text": "Elective 6",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 7",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -424,18 +347,7 @@
                 {
                   "text": "Elective 8",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -522,18 +434,7 @@
                 {
                   "text": "Elective 9",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 19
@@ -558,18 +459,7 @@
                 {
                   "text": "Elective 10",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -621,38 +511,17 @@
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -742,18 +611,7 @@
                 {
                   "text": "Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -838,18 +696,7 @@
                 {
                   "text": "Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -861,34 +708,12 @@
                 {
                   "text": "Elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -968,18 +793,7 @@
                 {
                   "text": "Elective 5",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1035,18 +849,7 @@
                 {
                   "text": "Elective 6",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1113,18 +916,7 @@
                 {
                   "text": "Elective 7",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1171,18 +963,7 @@
                 {
                   "text": "Elective 8",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1232,30 +1013,12 @@
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 9",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 19
@@ -1277,42 +1040,17 @@
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 10",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1402,18 +1140,7 @@
                 {
                   "text": "Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1498,18 +1225,7 @@
                 {
                   "text": "Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1592,18 +1308,7 @@
                 {
                   "text": "Elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1669,34 +1374,12 @@
                 {
                   "text": "Elective 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 5",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1708,30 +1391,12 @@
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 6",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1815,18 +1480,7 @@
                 {
                   "text": "Elective 7",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1896,46 +1550,17 @@
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 8",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 9",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -2009,30 +1634,12 @@
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 10",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2119,17 +1726,7 @@
                 {
                   "text": "Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2214,17 +1811,7 @@
                 {
                   "text": "Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2316,17 +1903,7 @@
                 {
                   "text": "Elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2382,17 +1959,7 @@
                 {
                   "text": "Elective 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2459,17 +2026,7 @@
                 {
                   "text": "Elective 5",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2566,17 +2123,7 @@
                 {
                   "text": "Elective 6",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -2632,56 +2179,22 @@
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 7",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 8",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2702,44 +2215,17 @@
                 {
                   "text": "BIOL or CHEM advanced elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 9",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective 10",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7,
-                      10,
-                      11,
-                      12,
-                      16,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

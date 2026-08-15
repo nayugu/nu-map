@@ -2,13 +2,16 @@
   "name": "Political Science and Communication Studies, BA (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 12,
     "tablesConsumed": 12,
     "tablesOnPage": 12,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-communication-studies-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "COMM1000",
       "COMM1101",
@@ -28,7 +31,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-communication-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -40,6 +43,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -348,8 +352,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",

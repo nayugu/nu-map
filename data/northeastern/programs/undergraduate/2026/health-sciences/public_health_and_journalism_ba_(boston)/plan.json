@@ -56,13 +56,7 @@
                   "text": "BIOL course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -94,25 +88,13 @@
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOL course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000 (For CAMD students)",
@@ -134,28 +116,12 @@
                 {
                   "text": "Introductory language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      5,
-                      6,
-                      9,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -167,17 +133,7 @@
                 {
                   "text": "General Electives*",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      5,
-                      6,
-                      9,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -203,40 +159,17 @@
                 {
                   "text": "JRNL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH core course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elementary-level language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      5,
-                      6,
-                      9,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -266,40 +199,17 @@
                 {
                   "text": "JRNL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Intermediate-level language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      5,
-                      6,
-                      9,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Visual storytelling course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -326,13 +236,7 @@
                 {
                   "text": "PH Social science course (introductory)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -375,47 +279,22 @@
                 {
                   "text": "JRNL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH Core Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Law and ethics course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -427,24 +306,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH Core Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -488,48 +355,23 @@
                   "text": "Capstone course",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH Core Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "JRNL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social science course (upper)",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 16

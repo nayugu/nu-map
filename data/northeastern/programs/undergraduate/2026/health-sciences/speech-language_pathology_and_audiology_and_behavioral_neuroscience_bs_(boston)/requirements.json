@@ -2,13 +2,16 @@
   "name": "Speech-Language Pathology and Audiology and Behavioral Neuroscience, BS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/clinical-rehabilitation-sciences/speech-language-pathology-audiology-behavioral-neuroscience-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "BIOL1107",
       "BIOL1108",
@@ -51,7 +54,7 @@
       "level": "verified",
       "kind": "major",
       "score": 0.98,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/clinical-rehabilitation-sciences/speech-language-pathology-audiology-behavioral-neuroscience-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -63,6 +66,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,

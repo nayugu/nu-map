@@ -2,13 +2,16 @@
   "name": "Spanish and Linguistics, BA (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-linguistics-ba-bos/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "CLTR1000",
       "CLTR1120",
@@ -31,7 +34,7 @@
       "level": "verified",
       "kind": "major",
       "score": 0.98,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/world-languages-cultures/spanish-linguistics-ba-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -43,6 +46,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
@@ -426,8 +430,7 @@
           ]
         }
       ],
-      "minRequirementCount": 2,
-      "shared": true
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -492,6 +495,16 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Please visit the linguistics courses page within this catalog to review the list of courses in the LING 3000–4999 range.",
+      "codes": [
+        "LING 3000"
+      ],
+      "substitution": null
     }
   ]
 }

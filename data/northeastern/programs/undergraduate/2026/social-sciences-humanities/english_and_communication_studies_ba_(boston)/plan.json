@@ -58,13 +58,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -88,68 +82,17 @@
                 {
                   "text": "Communication Studies foundational course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English diversity course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English Pre-1850 elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EEAM 2000 (For CAMD students)",
@@ -170,46 +113,12 @@
                 {
                   "text": "Communication Studies cluster course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Communication Studies elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -221,46 +130,12 @@
                 {
                   "text": "Foreign Language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Communication Studies elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -277,79 +152,22 @@
                 {
                   "text": "English Post-1850 elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English Theories and Methods course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign Language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "EESH 2000 (For CSSH students)",
@@ -396,46 +214,12 @@
                 {
                   "text": "Communication Studies writing-intensive",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Communication Studies elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -452,46 +236,12 @@
                 {
                   "text": "Communication Studies writing-intensive",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English Writing elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGL 3710",
@@ -505,24 +255,7 @@
                 {
                   "text": "Foreign Language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -560,24 +293,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -594,79 +315,22 @@
                 {
                   "text": "English elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative ENGL course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -678,68 +342,22 @@
                 {
                   "text": "English capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative COMM Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      5,
-                      6,
-                      7,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

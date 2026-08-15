@@ -16,24 +16,12 @@
                 {
                   "text": "Area course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Readings",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -45,24 +33,12 @@
                 {
                   "text": "Area course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Readings",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -79,24 +55,12 @@
                 {
                   "text": "Area course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Readings",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -108,24 +72,12 @@
                 {
                   "text": "Area course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Readings",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -142,24 +94,12 @@
                 {
                   "text": "Area course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Readings",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -171,24 +111,12 @@
                 {
                   "text": "Area course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Readings",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

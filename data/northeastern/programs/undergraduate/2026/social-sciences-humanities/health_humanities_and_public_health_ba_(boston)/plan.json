@@ -43,25 +43,13 @@
                 {
                   "text": "Introduction to college",
                   "sh": 1,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOL course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -84,37 +72,17 @@
                   "text": "BIOL course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Core humanities course (1)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Introductory language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 17
@@ -152,24 +120,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -204,37 +160,17 @@
                 {
                   "text": "Core humanities course (2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social science course (introductory)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elementary language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -311,26 +247,12 @@
                 {
                   "text": "Core Health Humanities course (1)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Intermediate language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 4202",
@@ -408,48 +330,22 @@
                   "text": "Capstone",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Core digital health humanities elective (1)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Core health humanities course (2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 16
@@ -462,49 +358,23 @@
                 {
                   "text": "Core digital health humanities elective (2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Core health humanities course (3)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social science course (upper-level)",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 16
@@ -566,13 +436,7 @@
                   "text": "BIOL course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 18
@@ -595,36 +459,17 @@
                   "text": "BIOL course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Introductory language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 17
@@ -662,24 +507,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -696,49 +529,22 @@
                 {
                   "text": "Core humanities course (1)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Core humanities elective (2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social Science Course (introductory)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elementary language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -768,26 +574,12 @@
                 {
                   "text": "Core health humanities course (1)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Intermediate language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 2515",
@@ -817,13 +609,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -875,14 +661,7 @@
                 {
                   "text": "Core digital health humanities course (1)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3306",
@@ -896,14 +675,7 @@
                 {
                   "text": "Core health humanities course (2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -971,50 +743,24 @@
                 {
                   "text": "Core digital health humanities course (2)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Capstone",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Core health humanities course (3)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      3
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social Science course (upper)",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5,
-                      6
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 16

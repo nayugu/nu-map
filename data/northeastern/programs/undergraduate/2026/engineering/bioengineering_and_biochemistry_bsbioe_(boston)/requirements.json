@@ -2,13 +2,22 @@
   "name": "Bioengineering and Biochemistry, BSBioE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 7,
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/bioengineering/bioengineering-biochemistry-bsbioe/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "Supplemental Credit"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [
       "BIOE2350",
       "BIOE2355",
@@ -64,7 +73,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/bioengineering/bioengineering-biochemistry-bsbioe/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -76,6 +85,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 4,

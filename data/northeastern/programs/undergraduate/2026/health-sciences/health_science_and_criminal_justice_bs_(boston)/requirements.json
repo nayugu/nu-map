@@ -2,13 +2,16 @@
   "name": "Health Science and Criminal Justice, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 7,
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-criminal-justice-bs-bos/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "BIOL1111",
       "BIOL1112",
@@ -47,7 +50,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-criminal-justice-bs-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -59,6 +62,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
@@ -665,6 +669,24 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Must complete Health Science Capstone Introduction (HSCI 4700) (0 SH) as prerequisite.",
+      "codes": [
+        "HSCI 4700"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Junior/Senior Honors Project 1 (HSCI 4970) will count as 4 SH general elective.",
+      "codes": [
+        "HSCI 4970"
+      ],
+      "substitution": null
     }
   ]
 }

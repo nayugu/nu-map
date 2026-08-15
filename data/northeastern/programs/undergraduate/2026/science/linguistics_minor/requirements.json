@@ -2,19 +2,22 @@
   "name": "Linguistics, Minor",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 2,
     "tablesConsumed": 2,
     "tablesOnPage": 2,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-minor/",
+    "panes": [
+      "minorrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "minor",
       "score": 0.98,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-minor/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -24,6 +27,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 1,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -108,6 +112,17 @@
         "kind": "program"
       },
       "text": "2.000 GPA required in the minor"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Please visit the Linguistics Courses page within this catalog to review the list of courses in the LING 3000 - LING 4999 range.",
+      "codes": [
+        "LING 3000",
+        "LING 4999"
+      ],
+      "substitution": null
     }
   ]
 }

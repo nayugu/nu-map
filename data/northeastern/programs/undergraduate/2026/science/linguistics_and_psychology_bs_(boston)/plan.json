@@ -43,13 +43,7 @@
                 {
                   "text": "Math requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -79,26 +73,12 @@
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -166,15 +146,7 @@
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -186,24 +158,12 @@
                 {
                   "text": "Linguistics structure course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistics elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC 3402",
@@ -217,14 +177,7 @@
                 {
                   "text": "Psychology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EESC 2000",
@@ -288,38 +241,17 @@
                 {
                   "text": "Linguistics structure course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistics or psychology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Psychology laboratory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3315",
@@ -340,24 +272,12 @@
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -400,49 +320,22 @@
                 {
                   "text": "Linguistics structure course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistics elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistics or psychology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Psychology seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -454,24 +347,12 @@
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -514,46 +395,22 @@
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -604,13 +461,7 @@
                 {
                   "text": "Math requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -640,27 +491,12 @@
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11,
-                      12,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -728,16 +564,7 @@
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      10,
-                      11,
-                      12,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -749,24 +576,12 @@
                 {
                   "text": "Linguistics structure course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistics elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC 3402",
@@ -780,14 +595,7 @@
                 {
                   "text": "Psychology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -828,36 +636,17 @@
                 {
                   "text": "Linguistics structure course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistics elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Psychology lab",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3315",
@@ -878,48 +667,22 @@
                 {
                   "text": "Linguistics structure course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Linguistics or psychology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -960,49 +723,22 @@
                 {
                   "text": "Linguistics or psychology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Psychology seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1014,46 +750,22 @@
                 {
                   "text": "NUpath or elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

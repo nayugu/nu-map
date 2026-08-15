@@ -52,17 +52,7 @@
                 {
                   "text": "Introductory language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -104,17 +94,7 @@
                 {
                   "text": "Elementary language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -135,13 +115,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -206,17 +180,7 @@
                 {
                   "text": "Intermediate language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -228,28 +192,12 @@
                 {
                   "text": "Co-op1",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -283,13 +231,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -333,17 +275,7 @@
                 {
                   "text": "PH Social science course (introductory)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -355,32 +287,12 @@
                 {
                   "text": "Co-op1",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Advanced Writing in the Discipline NUPath course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -462,13 +374,7 @@
                 {
                   "text": "LAW elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3800, 3801, or 4983 (LAW elective)",
@@ -495,55 +401,23 @@
                 {
                   "text": "Capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social science course (upper)",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3800, 3801, or 4983 (LAW elective)",
@@ -613,17 +487,7 @@
                 {
                   "text": "Introductory language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC 1101",
@@ -671,17 +535,7 @@
                 {
                   "text": "Elementary language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -702,13 +556,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -746,43 +594,17 @@
                 {
                   "text": "Intermediate language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social science course (introductory)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -812,13 +634,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3102",
@@ -848,13 +664,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHTH 4202",
@@ -893,33 +703,13 @@
                 {
                   "text": "Co-op1",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PH Social science course (upper)",
                   "sh": 3,
                   "shMax": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 4
@@ -941,17 +731,7 @@
                 {
                   "text": "Advanced Writing in the Discipline NUPath course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3120",
@@ -1024,28 +804,12 @@
                 {
                   "text": "Co-op1",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3800, 3801, or 4983 (LAW elective)",
@@ -1081,17 +845,7 @@
                 {
                   "text": "Capstone Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      6,
-                      8,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3235",
@@ -1105,13 +859,7 @@
                 {
                   "text": "LAW elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "LAW 3800, 3801, or 4983 (LAW elective)",

@@ -124,15 +124,7 @@
                 {
                   "text": "ECON elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -197,18 +189,7 @@
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -272,42 +253,17 @@
                 {
                   "text": "ECON elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -319,29 +275,12 @@
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3308",
@@ -355,18 +294,7 @@
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -378,31 +306,12 @@
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ECON elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -440,42 +349,17 @@
                 {
                   "text": "ECON elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -487,53 +371,22 @@
                 {
                   "text": "Capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      13
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ECON elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -665,15 +518,7 @@
                 {
                   "text": "ECON elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -685,29 +530,12 @@
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -760,18 +588,7 @@
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -818,18 +635,7 @@
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -855,42 +661,17 @@
                 {
                   "text": "ECON elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -928,31 +709,12 @@
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ECON elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -978,42 +740,17 @@
                 {
                   "text": "ECON elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1025,53 +762,22 @@
                 {
                   "text": "Capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      13
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      5,
-                      7,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ECON elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      8,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

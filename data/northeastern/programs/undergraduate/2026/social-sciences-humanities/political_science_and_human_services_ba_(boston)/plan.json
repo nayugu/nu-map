@@ -55,13 +55,7 @@
                 {
                   "text": "HUSV elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -100,14 +94,7 @@
                 {
                   "text": "Foreign Language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -157,46 +144,22 @@
                 {
                   "text": "POLS thought",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "HS Diverse Populations Course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Research Methods course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "HUSV elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -234,25 +197,12 @@
                 {
                   "text": "Foreign language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS 2400 supporting course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -278,14 +228,7 @@
                 {
                   "text": "Foreign Language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS 3307",
@@ -341,24 +284,12 @@
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "HUSV elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -375,37 +306,17 @@
                 {
                   "text": "Capstone and Elective Option A or Option B",
                   "sh": 8,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign language",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -417,13 +328,7 @@
                 {
                   "text": "POLS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "HUSV 3570",
@@ -437,24 +342,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -504,24 +397,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

@@ -1,0 +1,423 @@
+{
+  "name": "Psychology, BS (Boston)",
+  "metadata": {
+    "verified": true,
+    "lastEdited": "8/15/2026",
+    "branch": "main",
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
+    "tablesExcluded": 0,
+    "sourceUrl": "https://catalog.northeastern.edu/professional-studies/bachelors-postbaccalaureate/lowell-institute-school/psychology-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "planOfStudyCourses": [
+      "BIO1100",
+      "BIO1101",
+      "CMN1100",
+      "ENG1105",
+      "ENG1106",
+      "ENG1107",
+      "ENG1108",
+      "ENG3107",
+      "ENG3108",
+      "HSV2200",
+      "HSV2240",
+      "ITC2016",
+      "MTH1100",
+      "MTH2310",
+      "PHL2130",
+      "PSY1050",
+      "PSY1100",
+      "PSY2110",
+      "PSY2230",
+      "PSY2500",
+      "PSY3200",
+      "PSY3210",
+      "PSY3220",
+      "PSY3230",
+      "PSY3450",
+      "PSY4230",
+      "PSY4600",
+      "SOC1100"
+    ],
+    "verification": {
+      "level": "verified",
+      "kind": "major",
+      "score": 1,
+      "checkedAt": "2026-08-15",
+      "sourceUrl": "https://catalog.northeastern.edu/professional-studies/bachelors-postbaccalaureate/lowell-institute-school/psychology-bs/",
+      "sourcesAvailable": [
+        "requirement-tables",
+        "stated-total",
+        "plan-of-study",
+        "course-catalog"
+      ],
+      "counters": {
+        "tablesUnaccounted": 0,
+        "leakedMarkers": 0,
+        "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
+        "zeroTotal": 0,
+        "unknownCourses": 0,
+        "planUnexplained": 0,
+        "planUnexplainedInSubject": 0,
+        "impossibleSections": 0
+      },
+      "discrepancies": []
+    }
+  },
+  "totalCreditsRequired": 120,
+  "totalCreditsSource": "stated-total",
+  "yearVersion": 2026,
+  "requirementSections": [
+    {
+      "type": "SECTION",
+      "title": "English",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENG",
+              "classId": 1105
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENG",
+              "classId": 1106
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENG",
+              "classId": 1107
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENG",
+              "classId": 1108
+            }
+          ]
+        },
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "ENG",
+              "classId": 3107
+            },
+            {
+              "type": "COURSE",
+              "subject": "ENG",
+              "classId": 3108
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 3
+    },
+    {
+      "type": "SECTION",
+      "title": "Mathematics",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "MTH",
+          "classId": 1100
+        },
+        {
+          "type": "COURSE",
+          "subject": "MTH",
+          "classId": 2310
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Behavioral and Cognitive Sciences",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 1050
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 1100
+        },
+        {
+          "type": "COURSE",
+          "subject": "PHL",
+          "classId": 2130
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 2110
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 2230
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 3220
+        }
+      ],
+      "minRequirementCount": 6
+    },
+    {
+      "type": "SECTION",
+      "title": "Social Sciences",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "CMN",
+          "classId": 1100
+        },
+        {
+          "type": "COURSE",
+          "subject": "SOC",
+          "classId": 1100
+        }
+      ],
+      "minRequirementCount": 2
+    },
+    {
+      "type": "SECTION",
+      "title": "Biology",
+      "requirements": [
+        {
+          "type": "AND",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "BIO",
+              "classId": 1100
+            },
+            {
+              "type": "COURSE",
+              "subject": "BIO",
+              "classId": 1101
+            }
+          ]
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Information Technology",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "ITC",
+          "classId": 2016
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Human Behavior",
+      "requirements": [
+        {
+          "type": "OR",
+          "courses": [
+            {
+              "type": "COURSE",
+              "subject": "HSV",
+              "classId": 2200
+            },
+            {
+              "type": "COURSE",
+              "subject": "PSY",
+              "classId": 2500
+            }
+          ]
+        },
+        {
+          "type": "COURSE",
+          "subject": "HSV",
+          "classId": 2240
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 3200
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 3210
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 4230
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Cognition and Development",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 3230
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Research",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 3450
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Practicum",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 4600
+        }
+      ],
+      "minRequirementCount": 1
+    },
+    {
+      "type": "SECTION",
+      "title": "Applied Behavioral Analysis Track",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 2500
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 3330
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 3500
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 3700
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 4400
+        }
+      ],
+      "minRequirementCount": 5
+    },
+    {
+      "type": "SECTION",
+      "title": "Clinical Track",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "HSV",
+          "classId": 2200
+        },
+        {
+          "type": "COURSE",
+          "subject": "HSV",
+          "classId": 3200
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 2240
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 3150
+        },
+        {
+          "type": "COURSE",
+          "subject": "PSY",
+          "classId": 4310
+        }
+      ],
+      "minRequirementCount": 5,
+      "shared": true
+    },
+    {
+      "type": "SECTION",
+      "title": "MAT (Education) Track",
+      "requirements": [
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6104
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6107
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6051
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6101
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6102
+        },
+        {
+          "type": "COURSE",
+          "subject": "EDU",
+          "classId": 6086
+        }
+      ],
+      "minRequirementCount": 6
+    }
+  ],
+  "gpaRequirements": [
+    {
+      "title": "Universitywide Requirement",
+      "threshold": 2,
+      "scope": {
+        "kind": "cumulative"
+      },
+      "text": "Minimum 2.000 GPA required"
+    }
+  ]
+}

@@ -2,13 +2,16 @@
   "name": "Data Science and Environmental and Sustainability Sciences, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/data-science-environmental-sustainability-sciences-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "CHEM1211",
       "CHEM1212",
@@ -51,7 +54,7 @@
       "level": "review",
       "kind": "major",
       "score": 0.6,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/data-science-environmental-sustainability-sciences-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -63,6 +66,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 6,

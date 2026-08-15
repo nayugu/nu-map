@@ -16,47 +16,17 @@
                 {
                   "text": "Core area course 1",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Core area course 2",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course 1 or elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -68,47 +38,17 @@
                 {
                   "text": "Core area course 3",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course 2 or elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course 3 or elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
@@ -125,32 +65,12 @@
                 {
                   "text": "Core area course 4",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course 4 or elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
@@ -180,47 +100,17 @@
                 {
                   "text": "Core area course 1",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Core area course 2",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course 1 or elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -232,47 +122,17 @@
                 {
                   "text": "Core area course 3",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course 2 or elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course 3 or elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
@@ -294,32 +154,12 @@
                 {
                   "text": "Core area course 4",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Concentration course 4 or elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",

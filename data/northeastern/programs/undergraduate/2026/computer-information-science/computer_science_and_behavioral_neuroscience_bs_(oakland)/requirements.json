@@ -2,13 +2,16 @@
   "name": "Computer Science and Behavioral Neuroscience, BS (Oakland)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-behavioral-neuroscience-bs-oak/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "BINF6308",
       "BIOL1107",
@@ -56,7 +59,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-behavioral-neuroscience-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -68,6 +71,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
@@ -792,6 +796,24 @@
         ]
       },
       "text": "Minimum cumulative 2.000 GPA required in all CS, CY, DS, and IS courses"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students entering through the behavioral neuroscience program may take Behavioral Neuroscience at Northeastern (BNSC 1000).",
+      "codes": [
+        "BNSC 1000"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Students entering through the behavioral neuroscience program may take Professional Development for Co-op (EESC 2000).",
+      "codes": [
+        "EESC 2000"
+      ],
+      "substitution": null
     }
   ],
   "generalElectiveSH": 16

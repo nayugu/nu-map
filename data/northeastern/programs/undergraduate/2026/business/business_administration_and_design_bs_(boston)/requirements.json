@@ -2,13 +2,16 @@
   "name": "Business Administration and Design, BS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/business-administration-combined-majors/design-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ACCT1201",
       "ARTF1000",
@@ -42,7 +45,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/business-administration-combined-majors/design-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -54,6 +57,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -689,6 +693,25 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "For students interested in the PlusOne in Information Design and Data Visualization, speak with an advisor about an alternative course option to Prototyping with Code (ARTG 2262) and Lab for ARTG 2262 (ARTG 2263).",
+      "codes": [
+        "ARTG 2262",
+        "ARTG 2263"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "For students interested in the PlusOne in Information Design and Data Visualization, speak with an advisor about an alternative course option to Topics in Information Design Inquiry (ARTG 3444).",
+      "codes": [
+        "ARTG 3444"
+      ],
+      "substitution": null
     }
   ],
   "concentrations": {

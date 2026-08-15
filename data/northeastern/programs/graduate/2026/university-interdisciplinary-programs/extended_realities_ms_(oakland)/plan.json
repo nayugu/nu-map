@@ -91,13 +91,7 @@
                 {
                   "text": "XR and Games Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -118,13 +112,7 @@
                 {
                   "text": "XR and Games Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

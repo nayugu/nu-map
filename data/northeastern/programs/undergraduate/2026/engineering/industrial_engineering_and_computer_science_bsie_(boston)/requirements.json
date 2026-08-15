@@ -2,13 +2,22 @@
   "name": "Industrial Engineering and Computer Science, BSIE (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 7,
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/mechanical-industrial/industrial-engineering-computer-science-bsie/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "Supplemental Credit"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [
       "CHEM1151",
       "CHEM1153",
@@ -62,7 +71,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/mechanical-industrial/industrial-engineering-computer-science-bsie/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -74,6 +83,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,

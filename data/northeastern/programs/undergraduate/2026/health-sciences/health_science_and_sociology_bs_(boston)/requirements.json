@@ -2,19 +2,22 @@
   "name": "Health Science and Sociology, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-sociology-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-sociology-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -551,6 +555,33 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Must complete Health Science Capstone Introduction (HSCI 4700) (0 semester hours) as prerequisite.",
+      "codes": [
+        "HSCI 4700"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Junior/Senior Honors Project 1 (HSCI 4970) will count as a 4-semester-hour general elective.",
+      "codes": [
+        "HSCI 4970"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "1",
+      "text": "Students that choose to complete at least one co-op experience must complete either Professional Development for Bouvé Co-op (HSCI 2000) or Professional Development for Co-op (EESH 2000) (based on home college) prior to co-op.",
+      "codes": [
+        "HSCI 2000",
+        "EESH 2000"
+      ],
+      "substitution": null
     }
   ]
 }

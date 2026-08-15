@@ -2,13 +2,22 @@
   "name": "Environmental Engineering and Landscape Architecture, BSEnvE (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/environmental-engineering-landscape-architecture-bsenve/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "Supplemental Credit"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [
       "ARCH1110",
       "ARCH1120",
@@ -58,7 +67,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/environmental-engineering-landscape-architecture-bsenve/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -70,6 +79,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -731,6 +741,14 @@
     }
   ],
   "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students can substitute one Environmental Tech. Elective for Sustainable Urban Site Design (LARC 2130) in approved situations.",
+      "codes": [
+        "LARC 2130"
+      ],
+      "substitution": null
+    },
     {
       "marker": "2",
       "text": "Students can substitute Engineering Design (GE 1110) and Engineering Problem Solving and Computation (GE 1111) for Cornerstone of Engineering 1 (GE 1501) and Cornerstone of Engineering 2 (GE 1502).",

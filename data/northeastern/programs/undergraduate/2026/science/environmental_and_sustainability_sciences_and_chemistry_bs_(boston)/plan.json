@@ -115,24 +115,12 @@
                 {
                   "text": "General elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -180,24 +168,12 @@
                 {
                   "text": "ENVR elective; 1 of 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENVR skill; 1 of 2",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -239,24 +215,12 @@
                 {
                   "text": "ENVR skill; 2 of 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENVR elective; 2 of 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -345,24 +309,12 @@
                 {
                   "text": "Advanced CHEM elective",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENVR elective; 3 of 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -374,24 +326,12 @@
                 {
                   "text": "General elective 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -434,46 +374,22 @@
                 {
                   "text": "General elective 5",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective 6",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative course; 1 of 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative course; 2 of 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

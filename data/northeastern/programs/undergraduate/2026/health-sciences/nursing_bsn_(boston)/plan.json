@@ -28,14 +28,7 @@
                 {
                   "text": "Select ONE of the following CHEM course sequences:",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CHEM 1101 and CHEM 1102 and CHEM 1103",
@@ -155,24 +148,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -402,13 +383,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -530,14 +505,7 @@
                 {
                   "text": "Select ONE of the following CHEM course sequences:",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CHEM 1101 and CHEM 1102 and CHEM 1103",
@@ -647,24 +615,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -883,13 +839,7 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

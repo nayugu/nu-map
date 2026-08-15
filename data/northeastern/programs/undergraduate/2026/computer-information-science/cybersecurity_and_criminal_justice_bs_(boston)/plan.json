@@ -98,13 +98,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -142,24 +136,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -240,52 +222,17 @@
                 {
                   "text": "Crime Problems/CJ Institutions",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      7,
-                      9,
-                      10,
-                      12,
-                      13,
-                      15,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Current Crime and Justice Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      7,
-                      9,
-                      10,
-                      12,
-                      13,
-                      15,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9,
-                      10,
-                      12,
-                      13,
-                      16
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -306,13 +253,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -373,52 +314,17 @@
                 {
                   "text": "CJ Systemic Issues",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      7,
-                      9,
-                      10,
-                      12,
-                      13,
-                      15,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Cybersecurity Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      7,
-                      9,
-                      10,
-                      12,
-                      13,
-                      15,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM Integrative",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      9,
-                      10,
-                      12,
-                      13,
-                      16
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -448,13 +354,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -527,31 +427,12 @@
                 {
                   "text": "Capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      4,
-                      7,
-                      9,
-                      10,
-                      12,
-                      13,
-                      15,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

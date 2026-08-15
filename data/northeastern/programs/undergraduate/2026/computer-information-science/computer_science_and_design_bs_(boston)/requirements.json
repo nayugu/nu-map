@@ -2,13 +2,16 @@
   "name": "Computer Science and Design, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 8,
     "tablesConsumed": 8,
     "tablesOnPage": 8,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-design-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ARTF1000",
       "ARTF1220",
@@ -43,7 +46,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-design-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -55,6 +58,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 2,
@@ -858,6 +862,27 @@
         ]
       },
       "text": "Minimum cumulative 2.000 GPA required in all CS, CY, DS and IS courses"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "In place of Prototyping with Code (ARTG 2262) and Lab for ARTG 2262 (ARTG 2263), Visualization Technologies 1: Fundamentals (ARTG 5330) is recommended for students considering the Plus One pathway to a graduate program in Information Design and Data Visualization.",
+      "codes": [
+        "ARTG 2262",
+        "ARTG 2263",
+        "ARTG 5330"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Instead of ARTG 3444, ARTG 5100 is recommended for students considering the Plus One in Information Design and Data Visualization.",
+      "codes": [
+        "ARTG 3444",
+        "ARTG 5100"
+      ],
+      "substitution": null
     }
   ],
   "generalElectiveSH": 24

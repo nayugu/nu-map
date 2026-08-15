@@ -2,13 +2,16 @@
   "name": "Computer Science and Biology, BS (Oakland)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-biology-bs-oak/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "BIOL1107",
       "BIOL1108",
@@ -52,7 +55,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-biology-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -64,6 +67,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -793,6 +797,24 @@
         ]
       },
       "text": "Minimum cumulative 2.000 GPA required in all CS, CY, DS, and IS courses"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students entering through the Department of Biology may take Biology at Northeastern (BIOL 1000).",
+      "codes": [
+        "BIOL 1000"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Students entering through the Department of Biology may take Professional Development for Co-op (EESC 2000).",
+      "codes": [
+        "EESC 2000"
+      ],
+      "substitution": null
     }
   ],
   "generalElectiveSH": 20

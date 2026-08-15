@@ -2,19 +2,22 @@
   "name": "Health Informatics, MS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/interdisciplinary/health-informatics-ms/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/interdisciplinary/health-informatics-ms/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -73,6 +77,16 @@
         "kind": "cumulative"
       },
       "text": "Minimum 33 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Student may petition director to take a more advanced stats course, such as Applied Regression Analysis (PHTH 6210).",
+      "codes": [
+        "PHTH 6210"
+      ],
+      "substitution": null
     }
   ],
   "concentrations": {

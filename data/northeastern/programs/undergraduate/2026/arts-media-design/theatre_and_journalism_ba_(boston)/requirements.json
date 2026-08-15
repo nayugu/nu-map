@@ -2,13 +2,16 @@
   "name": "Theatre and Journalism, BA (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/theatre/theatre-journalism-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "EEAM2000",
       "ENGW1111",
@@ -34,7 +37,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/theatre/theatre-journalism-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -46,6 +49,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -462,8 +466,7 @@
           "classId": 4702
         }
       ],
-      "minRequirementCount": 3,
-      "shared": true
+      "minRequirementCount": 3
     },
     {
       "type": "SECTION",
@@ -533,6 +536,24 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Complete Visual Storytelling in Journalism (JRNL 2301) with a grade of C or better.",
+      "codes": [
+        "JRNL 2301"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "1",
+      "text": "Visual Storytelling in Journalism (JRNL 2301) may count for both the Visual Storytelling requirement and as the Advanced Writing in the Disciplines option.",
+      "codes": [
+        "JRNL 2301"
+      ],
+      "substitution": null
     }
   ]
 }

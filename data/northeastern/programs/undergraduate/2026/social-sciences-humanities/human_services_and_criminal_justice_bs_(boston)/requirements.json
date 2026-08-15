@@ -2,13 +2,16 @@
   "name": "Human Services and Criminal Justice, BS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/human-services-criminal-justice-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "CRIM1110",
       "CRIM1120",
@@ -35,7 +38,7 @@
       "level": "verified",
       "kind": "major",
       "score": 0.98,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/human-services-criminal-justice-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -47,6 +50,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,

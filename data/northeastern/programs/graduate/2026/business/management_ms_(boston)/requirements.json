@@ -2,13 +2,16 @@
   "name": "Management, MS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 21,
     "tablesConsumed": 21,
     "tablesOnPage": 21,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/business/master-science/management-ms/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "FINA6309",
       "HINF5101",
@@ -37,7 +40,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/business/master-science/management-ms/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -49,6 +52,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -531,6 +535,14 @@
         "kind": "cumulative"
       },
       "text": "Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students will take courses online but will be required to attend an on-campus residency in Boston and/or London.",
+      "codes": [],
+      "substitution": null
     }
   ],
   "concentrations": {

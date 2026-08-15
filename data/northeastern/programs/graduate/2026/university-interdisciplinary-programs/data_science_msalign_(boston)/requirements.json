@@ -2,19 +2,22 @@
   "name": "Data Science, MS—Align (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/university-interdisciplinary-programs/data-science-align-ms-bos/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/university-interdisciplinary-programs/data-science-align-ms-bos/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -576,6 +580,14 @@
         "kind": "cumulative"
       },
       "text": "40–48 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students taking electives worth less than 4 semester hours (i.e., Bouvé courses) should enroll for an accompanying data science project course in the same semester to bring the cumulative semester hours to 4. In order to earn this additional 1 semester hour, students are expected to work with faculty to design an additional project in line with the curricular aims of their chosen elective and the data science core learning outcomes.",
+      "codes": [],
+      "substitution": null
     }
   ]
 }

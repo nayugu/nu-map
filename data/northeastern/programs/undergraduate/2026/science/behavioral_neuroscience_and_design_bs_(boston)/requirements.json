@@ -2,13 +2,16 @@
   "name": "Behavioral Neuroscience and Design, BS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/behavioral-neuroscience-design-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ARTF1000",
       "ARTF1220",
@@ -47,7 +50,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/behavioral-neuroscience-design-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -59,6 +62,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -760,6 +764,24 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students entering through CAMD may take Art and Design at Northeastern (ARTF 1000).",
+      "codes": [
+        "ARTF 1000"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Students entering through CAMD may take Professional Development for Co-op (EEAM 2000).",
+      "codes": [
+        "EEAM 2000"
+      ],
+      "substitution": null
     }
   ],
   "generalElectiveSH": 16

@@ -2,19 +2,22 @@
   "name": "Applied Analytics, Graduate Certificate (Portland)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 1,
     "tablesConsumed": 1,
     "tablesOnPage": 1,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/applied-analytics-graduate-certificate-ptl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "certificate",
       "score": 0.98,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/graduate-certificate-programs/applied-analytics-graduate-certificate-ptl/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -24,6 +27,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 1,
         "unknownCourses": 0,
         "planUnexplained": 0,

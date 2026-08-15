@@ -2,13 +2,22 @@
   "name": "Environmental Engineering and Data Science, BSEnvE (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 7,
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/environmental-engineering-data-science-bsenve/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "Supplemental Credit"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [
       "CHEM1151",
       "CHEM1153",
@@ -52,7 +61,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/environmental-engineering-data-science-bsenve/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -64,6 +73,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -741,6 +751,16 @@
           "GE 1502"
         ]
       }
+    },
+    {
+      "marker": "2",
+      "text": "Mathematics/science requirement: General Chemistry for Engineers (CHEM 1151), Calculus 1 for Science and Engineering (MATH 1341), and Physics for Engineering 1 (PHYS 1151) require a grade of C– or higher.",
+      "codes": [
+        "CHEM 1151",
+        "MATH 1341",
+        "PHYS 1151"
+      ],
+      "substitution": null
     }
   ]
 }

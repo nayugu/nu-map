@@ -171,22 +171,7 @@
                 {
                   "text": "English writing elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -260,22 +245,7 @@
                 {
                   "text": "English diversity elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -323,42 +293,12 @@
                 {
                   "text": "Literary period 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Organismal and evolutionary biology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -370,42 +310,12 @@
                 {
                   "text": "Intermediate/advanced BIOL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -457,82 +367,22 @@
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Intermediate/advanced science elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Literary period 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "English elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -553,22 +403,7 @@
                 {
                   "text": "English theories and methods elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -638,56 +473,17 @@
                 {
                   "text": "BIOL or ENGL capstone",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Integrative course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      3,
-                      4,
-                      7,
-                      8,
-                      9,
-                      10,
-                      12,
-                      13,
-                      14,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

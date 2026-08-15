@@ -2,19 +2,22 @@
   "name": "Mechanical Engineering with Concentration in General Mechanical Engineering, MSME (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/mechanical-engineering-concentration-general-msme/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/engineering/mechanical-industrial/mechanical-engineering-concentration-general-msme/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -274,6 +278,14 @@
         "kind": "cumulative"
       },
       "text": "32 total semester hours required (33 with optional co-op) Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Thesis option is required for all students who receive financial support from the university in the form of a research, teaching, or tuition assistantship.",
+      "codes": [],
+      "substitution": null
     }
   ]
 }

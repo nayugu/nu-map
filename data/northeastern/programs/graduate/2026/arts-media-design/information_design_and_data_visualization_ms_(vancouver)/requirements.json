@@ -2,19 +2,22 @@
   "name": "Information Design and Data Visualization, MS (Vancouver)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 1,
     "tablesConsumed": 1,
     "tablesOnPage": 1,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/art-design/information-design-data-visualization-ms-van/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/art-design/information-design-data-visualization-ms-van/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -93,6 +97,20 @@
         "kind": "cumulative"
       },
       "text": "32 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Summer co-op is optional in consultation with the program coordinator.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Students can choose to do a co-op in the summer between year 1 and year 2.",
+      "codes": [],
+      "substitution": null
     }
   ]
 }

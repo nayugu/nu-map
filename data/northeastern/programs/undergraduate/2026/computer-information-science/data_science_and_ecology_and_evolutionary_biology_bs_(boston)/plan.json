@@ -136,13 +136,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -154,24 +148,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -217,18 +199,7 @@
                 {
                   "text": "EEB Topical Requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      18
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -279,18 +250,7 @@
                 {
                   "text": "EEB Topical Requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      18
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -302,29 +262,12 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      18
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -395,18 +338,7 @@
                 {
                   "text": "EEB Topical Requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      18
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -489,29 +421,12 @@
                 {
                   "text": "EEB Topical Requirement",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      11,
-                      12,
-                      13,
-                      14,
-                      15,
-                      18
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Physics Requirement",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      16
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

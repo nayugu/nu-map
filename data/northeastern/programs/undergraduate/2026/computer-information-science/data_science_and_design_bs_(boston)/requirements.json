@@ -2,13 +2,16 @@
   "name": "Data Science and Design, BS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 7,
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/data-science-design-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ARTF1000",
       "ARTF1220",
@@ -47,7 +50,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/data-science-design-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -59,6 +62,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -601,8 +605,7 @@
           "classId": 4200
         }
       ],
-      "minRequirementCount": 2,
-      "shared": true
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -752,6 +755,26 @@
         ]
       },
       "text": "Minimum cumulative 2.000 GPA required in all CS, CY, DS, and IS courses"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Instead of ARTG 3444, ARTG 5100 is recommended for students considering the PlusOne in Information Design and Data Visualization.",
+      "codes": [
+        "ARTG 3444",
+        "ARTG 5100"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "1",
+      "text": "For students who choose Information Visualization Principles and Practices (ARTG 5150), concurrent registration in Information Design Critique Seminar (ARTG 5151) is recommended. It is suggested students consult with their academic advisor.",
+      "codes": [
+        "ARTG 5150",
+        "ARTG 5151"
+      ],
+      "substitution": null
     }
   ],
   "generalElectiveSH": 20

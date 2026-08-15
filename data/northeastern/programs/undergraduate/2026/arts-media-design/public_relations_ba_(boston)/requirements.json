@@ -2,13 +2,16 @@
   "name": "Public Relations, BA (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 1,
     "tablesConsumed": 1,
     "tablesOnPage": 1,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/journalism/public-relations-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "COMM1000",
       "COMM1113",
@@ -26,7 +29,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/journalism/public-relations-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -38,6 +41,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -282,6 +286,14 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students interested in a PlusOne program in the School of Journalism or Department of Communication Studies should take the graduate version of these courses.",
+      "codes": [],
+      "substitution": null
     }
   ]
 }

@@ -2,13 +2,22 @@
   "name": "Electrical Engineering, BSEE (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/electrical-computer/electrical-engineering-bsee/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "Supplemental Credit"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [
       "CHEM1151",
       "CHEM1153",
@@ -41,7 +50,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/electrical-computer/electrical-engineering-bsee/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -53,6 +62,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -518,6 +528,29 @@
           "GE 1502"
         ]
       }
+    },
+    {
+      "marker": "1",
+      "text": "Computing Fundamentals for Engineers (EECE 2140) can be taken in year 1 spring instead of a general elective by students who are interested in the course in preparation for co-ops involving programming and computing hardware.",
+      "codes": [
+        "EECE 2140"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "The capstone design courses are taken as follows: Electrical and Computer Engineering Capstone 1 (EECE 4791) in summer first half and Electrical and Computer Engineering Capstone 2 (EECE 4792) in spring OR Electrical and Computer Engineering Capstone 1 (EECE 4791) in summer second half and Electrical and Computer Engineering Capstone 2 (EECE 4792) in fall",
+      "codes": [
+        "EECE 4791",
+        "EECE 4792"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "3",
+      "text": "The following sections of this course are approved to count toward the ECE core requirement of the semiconductor concentration: Magnetic Materials and Devices for Microwave Engineering Introduction to Quantum Engineering Biomedical Microsystems",
+      "codes": [],
+      "substitution": null
     }
   ],
   "concentrations": {

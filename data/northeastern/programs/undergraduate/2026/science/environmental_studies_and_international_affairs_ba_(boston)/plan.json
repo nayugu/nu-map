@@ -98,19 +98,7 @@
                 {
                   "text": "Foreign Language Course 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -122,24 +110,12 @@
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -151,36 +127,12 @@
                 {
                   "text": "Regional Analysis course 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign language course 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -207,49 +159,17 @@
                 {
                   "text": "Global Dynamics course 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENVR Elective; 1 of 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      9,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Regional Analysis course 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -270,15 +190,7 @@
                 {
                   "text": "ENVR elective; 2 of 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      9,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENVR 3300 and ENVR 3301",
@@ -293,32 +205,12 @@
                 {
                   "text": "ENVR elective; 3 of 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      9,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign Language Course 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -330,24 +222,12 @@
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -390,15 +270,7 @@
                 {
                   "text": "ENVR Elective; 4 of 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      9,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INTL 3400",
@@ -412,36 +284,12 @@
                 {
                   "text": "Global Dynamics course 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign Language Course 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -453,37 +301,13 @@
                 {
                   "text": "Regional Analysis course 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Quantitative methods course",
                   "sh": 4,
                   "shMax": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      12,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ],
               "hoursMax": 9
@@ -557,17 +381,7 @@
                 {
                   "text": "INTL Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      8,
-                      9,
-                      10,
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

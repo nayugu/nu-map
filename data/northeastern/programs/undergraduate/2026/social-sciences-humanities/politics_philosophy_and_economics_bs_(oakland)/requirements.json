@@ -2,13 +2,16 @@
   "name": "Politics, Philosophy, and Economics, BS (Oakland)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 11,
     "tablesConsumed": 11,
     "tablesOnPage": 11,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/politics-philosophy-economics-bs-oak/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ECON1115",
       "ECON1116",
@@ -36,7 +39,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/interdisciplinary/politics-philosophy-economics-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -48,6 +51,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -576,8 +580,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     }
   ],
   "gpaRequirements": [

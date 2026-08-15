@@ -47,14 +47,7 @@
                 {
                   "text": "Elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -84,14 +77,7 @@
                 {
                   "text": "Elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -158,14 +144,7 @@
                 },
                 {
                   "text": "Optional concentration course",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2,
-                      3,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },

@@ -2,19 +2,22 @@
   "name": "History, PhD (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
-    "tablesPresent": 6,
-    "tablesConsumed": 6,
-    "tablesOnPage": 6,
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/history/history-phd/",
+    "panes": [
+      "bachelorsdegreeentrancetextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/history/history-phd/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -196,165 +200,6 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Theory and Methodology (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "HIST",
-          "classId": 5102
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Digital History (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "HIST",
-          "classId": 7370
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Readings or Directed Study",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "OR",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "HIST",
-                  "classId": 8982
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "HIST",
-                  "classId": 7976
-                }
-              ]
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Research Seminar (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "HIST",
-          "classId": 7314
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Practicum (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "HIST",
-          "classId": 8409
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Electives (2)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "RANGE",
-              "subject": "HIST",
-              "idRangeStart": 7200,
-              "idRangeEnd": 7702,
-              "exceptions": []
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Exam Preparation (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "HIST",
-              "classId": 8960
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Dissertation (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "HIST",
-              "classId": 9990
-            },
-            {
-              "type": "COURSE",
-              "subject": "HIST",
-              "classId": 9991
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Dissertation Continuation (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "HIST",
-              "classId": 9996
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
     }
   ],
   "gpaRequirements": [
@@ -365,6 +210,17 @@
         "kind": "cumulative"
       },
       "text": "45 total semester hours required Minimum 3.500 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students who have completed courses assessed as equivalent to Texts, Maps, and Networks: Readings and Methods for Digital History (HIST 7370) or Practicum in Teaching (HIST 8409) may apply to the program director to substitute other Northeastern courses for these requirements.",
+      "codes": [
+        "HIST 7370",
+        "HIST 8409"
+      ],
+      "substitution": null
     }
   ]
 }

@@ -132,13 +132,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -159,13 +153,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -255,29 +243,12 @@
                 {
                   "text": "Business Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -298,13 +269,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -356,34 +321,12 @@
                 {
                   "text": "Business concentration 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -416,18 +359,7 @@
                 {
                   "text": "Business concentration 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -488,34 +420,12 @@
                 {
                   "text": "Business concentration 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business concentration 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -655,13 +565,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -682,13 +586,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -792,13 +690,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -833,34 +725,12 @@
                 {
                   "text": "Business Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business concentration 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -910,13 +780,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -951,34 +815,12 @@
                 {
                   "text": "Business Concentration 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Khoury Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1008,34 +850,12 @@
                 {
                   "text": "Business concentration 3",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Business concentration 4",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      5,
-                      6,
-                      8,
-                      10,
-                      13,
-                      "~concentration"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

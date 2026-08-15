@@ -2,19 +2,28 @@
   "name": "Health Science and Business Administration, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 7,
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-business-administration-bs/",
+    "panes": [
+      "programtextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "Integrative Requirement"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [],
     "verification": {
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-business-administration-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +34,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -559,6 +569,33 @@
         "text": "all business courses"
       },
       "text": "Minimum 2.000 GPA required in all business courses"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Must complete 0-semester hour Health Science Capstone Introduction (HSCI 4700) course as prerequisite.",
+      "codes": [
+        "HSCI 4700"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Junior/Senior Honors Project 1 (HSCI 4970) will count as 4 semester hours toward general electives.",
+      "codes": [
+        "HSCI 4970"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "1",
+      "text": "Students that choose to complete at least one co-op experience must complete either Professional Development for Bouvé Co-op (HSCI 2000) or Professional Development for Business Co-op (BUSN 1103), based on home college, prior to co-op.",
+      "codes": [
+        "HSCI 2000",
+        "BUSN 1103"
+      ],
+      "substitution": null
     }
   ],
   "concentrations": {

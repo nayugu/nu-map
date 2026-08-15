@@ -112,13 +112,7 @@
                 {
                   "text": "NUpath ER",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -139,13 +133,7 @@
                 {
                   "text": "Music elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -157,24 +145,12 @@
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -218,13 +194,7 @@
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -266,24 +236,12 @@
                 {
                   "text": "Contemporary/ethno course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      8
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath DD",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -295,24 +253,12 @@
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -373,24 +319,12 @@
                 {
                   "text": "Creative music course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      7
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -402,24 +336,12 @@
                 {
                   "text": "PSYC lab",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      2
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -462,46 +384,22 @@
                 {
                   "text": "Music elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      9
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "NUpath WD",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "PSYC seminar",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Open elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

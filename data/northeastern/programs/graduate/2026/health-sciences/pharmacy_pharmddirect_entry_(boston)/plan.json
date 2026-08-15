@@ -15,13 +15,7 @@
               "entries": [
                 {
                   "text": "Professional Year 1 (P1)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 5120",
@@ -86,13 +80,7 @@
               "entries": [
                 {
                   "text": "Professional Year 1 (P1)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 6964 (IPPE)",
@@ -112,13 +100,7 @@
               "entries": [
                 {
                   "text": "Professional Year 1 (P1)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 6964",
@@ -138,13 +120,7 @@
               "entries": [
                 {
                   "text": "Professional Year 1 (P1)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 5115",
@@ -194,13 +170,7 @@
               "entries": [
                 {
                   "text": "Professional Year 2 (P2)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 5240",
@@ -263,13 +233,7 @@
               "entries": [
                 {
                   "text": "Professional Year 2 (P2)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 5210",
@@ -332,13 +296,7 @@
               "entries": [
                 {
                   "text": "Professional Year 2 (P2)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 5220",
@@ -383,13 +341,7 @@
               "entries": [
                 {
                   "text": "Professional Year 2 (P2)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 6964",
@@ -414,13 +366,7 @@
               "entries": [
                 {
                   "text": "Professional Year 3 (P3)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 6964",
@@ -440,13 +386,7 @@
               "entries": [
                 {
                   "text": "Professional Year 3 (P3)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "PHMD 5320",
@@ -509,24 +449,12 @@
               "entries": [
                 {
                   "text": "Professional Year 4 (P4)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -537,24 +465,12 @@
               "entries": [
                 {
                   "text": "Professional Year 4 (P4)",
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -571,24 +487,12 @@
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -600,24 +504,12 @@
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "APPE (choose from PHMD 6440–PHMD 6474)",
                   "sh": 6,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

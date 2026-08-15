@@ -2,19 +2,22 @@
   "name": "Criminology and Justice Policy, PhD (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
-    "tablesPresent": 6,
-    "tablesConsumed": 6,
-    "tablesOnPage": 6,
+    "tablesPresent": 3,
+    "tablesConsumed": 3,
+    "tablesOnPage": 3,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/criminology-criminal-justice/criminology-justice-policy-phd/",
+    "panes": [
+      "bachelorsdegreeentrancetextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/social-sciences-humanities/criminology-criminal-justice/criminology-justice-policy-phd/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -230,207 +234,6 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Pro-Seminar (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CRIM",
-          "classId": 7001
-        },
-        {
-          "type": "COURSE",
-          "subject": "CRIM",
-          "classId": 7002
-        }
-      ],
-      "minRequirementCount": 2,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Criminal Justice Process (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CRIM",
-          "classId": 7203
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Criminological Theory (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CRIM",
-          "classId": 7710
-        },
-        {
-          "type": "COURSE",
-          "subject": "CRIM",
-          "classId": 7711
-        }
-      ],
-      "minRequirementCount": 2,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Analysis & Methods (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "INSH",
-          "classId": 7300
-        },
-        {
-          "type": "COURSE",
-          "subject": "INSH",
-          "classId": 7400
-        },
-        {
-          "type": "COURSE",
-          "subject": "INSH",
-          "classId": 7500
-        }
-      ],
-      "minRequirementCount": 3,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Practicum (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "CRIM",
-          "classId": 7706
-        },
-        {
-          "type": "COURSE",
-          "subject": "CRIM",
-          "classId": 7700
-        }
-      ],
-      "minRequirementCount": 2,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Electives (2)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
-            {
-              "type": "RANGE",
-              "subject": "CRIM",
-              "idRangeStart": 6000,
-              "idRangeEnd": 7999,
-              "exceptions": []
-            },
-            {
-              "type": "RANGE",
-              "subject": "INSH",
-              "idRangeStart": 6000,
-              "idRangeEnd": 7999,
-              "exceptions": []
-            },
-            {
-              "type": "RANGE",
-              "subject": "POLS",
-              "idRangeStart": 6000,
-              "idRangeEnd": 7999,
-              "exceptions": []
-            },
-            {
-              "type": "RANGE",
-              "subject": "PPUA",
-              "idRangeStart": 6000,
-              "idRangeEnd": 7999,
-              "exceptions": []
-            },
-            {
-              "type": "RANGE",
-              "subject": "SOCL",
-              "idRangeStart": 6000,
-              "idRangeEnd": 7999,
-              "exceptions": []
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Exam Preparation (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CRIM",
-              "classId": 8960
-            },
-            {
-              "type": "COURSE",
-              "subject": "CRIM",
-              "classId": 8986
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Dissertation (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CRIM",
-              "classId": 9990
-            },
-            {
-              "type": "COURSE",
-              "subject": "CRIM",
-              "classId": 9991
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Dissertation Continuation (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "CRIM",
-              "classId": 9996
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
     }
   ],
   "gpaRequirements": [

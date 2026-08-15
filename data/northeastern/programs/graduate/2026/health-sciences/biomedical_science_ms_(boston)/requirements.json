@@ -2,19 +2,22 @@
   "name": "Biomedical Science, MS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 3,
     "tablesConsumed": 3,
     "tablesOnPage": 3,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/biomedical-sciences-ms/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/pharmacy/biomedical-sciences-ms/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -130,6 +134,16 @@
         "kind": "cumulative"
       },
       "text": "33 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students who opt to complete 4-credit Pharmaceutical Sciences Laboratory (PHSC 7010) in the core requirements may complete the degree with 17 elective credits; all other students must complete 19 elective credits.",
+      "codes": [
+        "PHSC 7010"
+      ],
+      "substitution": null
     }
   ]
 }

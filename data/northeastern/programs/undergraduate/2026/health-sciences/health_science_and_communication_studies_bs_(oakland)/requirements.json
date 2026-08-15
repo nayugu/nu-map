@@ -2,13 +2,16 @@
   "name": "Health Science and Communication Studies, BS (Oakland)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-communication-studies-bs-oak/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "BIOL1111",
       "BIOL1112",
@@ -35,7 +38,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/community-health-behavioral-sciences/health-science-communication-studies-bs-oak/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -47,6 +50,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -535,6 +539,24 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Must complete 0-semester-hour Health Science Capstone Introduction (HSCI 4700) course as a prerequisite.",
+      "codes": [
+        "HSCI 4700"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Junior/Senior Honors Project 1 (HSCI 4970) will count as a 4-semester-hour general elective.",
+      "codes": [
+        "HSCI 4970"
+      ],
+      "substitution": null
     }
   ]
 }

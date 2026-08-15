@@ -2,19 +2,22 @@
   "name": "Speech-Language Pathology, MS—Connect (Charlotte)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/clinical-rehabilitation-sciences/speech-language-pathology-ms-connect-chl/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/clinical-rehabilitation-sciences/speech-language-pathology-ms-connect-chl/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -289,6 +293,16 @@
         "kind": "cumulative"
       },
       "text": "69-75 total semester hours required (78 with optional thesis) Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students who are assessed not to require Aural Rehabilitation (SLPA 6219) will choose an additional 3 semester hours of electives (below), for a total of 6 semester hours of electives for degree completion.",
+      "codes": [
+        "SLPA 6219"
+      ],
+      "substitution": null
     }
   ]
 }

@@ -2,13 +2,16 @@
   "name": "Business Administration and Communication Studies, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/business-administration-combined-majors/business-administration-communication-studies-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ACCT1201",
       "BUSN1102",
@@ -39,7 +42,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/business/business-administration-combined-majors/business-administration-communication-studies-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -51,6 +54,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 2,
@@ -650,6 +654,22 @@
         }
       ],
       "minRequirementCount": 1
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "It is recommended that students taking Making with Video, Sound, and Animation (ARTF 1240) with Making with Video, Sound, and Animation Tools (ARTF 1241) should also take either Representational Drawing (ARTF 1200), Abstract Drawing (ARTF 1210), Elements of Visual Composition (ARTF 1220), Making with Form and Materials (ARTF 1230), Making with Video, Sound, and Animation (ARTF 1240), or Designing Interactive Experiences (ARTF 1250) in the same term. The other ARTF course may count toward the student's open electives or minor, if they have one.",
+      "codes": [
+        "ARTF 1240",
+        "ARTF 1241",
+        "ARTF 1200",
+        "ARTF 1210",
+        "ARTF 1220",
+        "ARTF 1230",
+        "ARTF 1250"
+      ],
+      "substitution": null
     }
   ],
   "concentrations": {

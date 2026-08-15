@@ -2,13 +2,16 @@
   "name": "Public Health, MPH—Accelerated (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 2,
     "tablesConsumed": 2,
     "tablesOnPage": 2,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/public-health-mph-accelerated/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "PHTH5120",
       "PHTH5202",
@@ -31,7 +34,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/public-health-mph-accelerated/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -43,6 +46,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -238,6 +242,16 @@
         "kind": "cumulative"
       },
       "text": "Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "AI Across the Health Sciences (HLTH 5800) is a 4 credit course.",
+      "codes": [
+        "HLTH 5800"
+      ],
+      "substitution": null
     }
   ]
 }

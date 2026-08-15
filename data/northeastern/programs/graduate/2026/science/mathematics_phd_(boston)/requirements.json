@@ -2,19 +2,22 @@
   "name": "Mathematics, PhD (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
-    "tablesPresent": 14,
-    "tablesConsumed": 14,
-    "tablesOnPage": 14,
+    "tablesPresent": 7,
+    "tablesConsumed": 7,
+    "tablesOnPage": 7,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/science/mathematics/mathematics-phd/",
+    "panes": [
+      "bachelorsdegreeentrancetextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/science/mathematics/mathematics-phd/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -81,239 +85,6 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Analysis",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "MATH",
-          "classId": 5102
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Algebra",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "MATH",
-          "classId": 5112
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Foundational Courses",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5122
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5352
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7202
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7203
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7241
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Algebra (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "MATH",
-          "classId": 5112
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Probability",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "MATH",
-          "classId": 7241
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Foundational Courses (2)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5102
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5111
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5112
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5352
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7202
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7203
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7342
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Analysis (2)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 4,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5102
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7203
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Probability (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7241
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7342
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Foundational Courses (3)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 8,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5102
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5112
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5352
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7202
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7203
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7241
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7342
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
     },
     {
       "type": "SECTION",
@@ -509,257 +280,6 @@
         }
       ],
       "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Milestones",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 16,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5101
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5102
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5111
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 5112
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Dissertation (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 9990
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 9991
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Advanced Coursework List (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7205
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7221
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7223
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7233
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7234
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7243
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7301
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7311
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7315
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7316
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7320
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7321
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7339
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7341
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7343
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7344
-            },
-            {
-              "type": "RANGE",
-              "subject": "MATH",
-              "idRangeStart": 7346,
-              "idRangeEnd": 7361,
-              "exceptions": []
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7371
-            },
-            {
-              "type": "RANGE",
-              "subject": "MATH",
-              "idRangeStart": 7976,
-              "idRangeEnd": 8986,
-              "exceptions": []
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 9984
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Topics (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7362
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7363
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7364
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7375
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7381
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Readings (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7721
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7734
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7735
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7736
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7741
-            },
-            {
-              "type": "COURSE",
-              "subject": "MATH",
-              "classId": 7771
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
     }
   ],
   "gpaRequirements": [
@@ -780,6 +300,16 @@
         "title": "Pure Track",
         "label": "Pure Track",
         "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "MATH",
+            "classId": 5102
+          },
+          {
+            "type": "COURSE",
+            "subject": "MATH",
+            "classId": 5112
+          },
           {
             "type": "XOM",
             "numCreditsMin": 8,
@@ -812,13 +342,23 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 3
       },
       {
         "type": "SECTION",
         "title": "Discrete Track",
         "label": "Discrete Track",
         "requirements": [
+          {
+            "type": "COURSE",
+            "subject": "MATH",
+            "classId": 5112
+          },
+          {
+            "type": "COURSE",
+            "subject": "MATH",
+            "classId": 7241
+          },
           {
             "type": "XOM",
             "numCreditsMin": 8,
@@ -856,6 +396,40 @@
               {
                 "type": "COURSE",
                 "subject": "MATH",
+                "classId": 7342
+              }
+            ]
+          }
+        ],
+        "minRequirementCount": 3
+      },
+      {
+        "type": "SECTION",
+        "title": "Probability and Statistics Track",
+        "label": "Probability and Statistics Track",
+        "requirements": [
+          {
+            "type": "XOM",
+            "numCreditsMin": 4,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "MATH",
+                "classId": 5102
+              },
+              {
+                "type": "COURSE",
+                "subject": "MATH",
+                "classId": 7203
+              }
+            ]
+          },
+          {
+            "type": "OR",
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "MATH",
                 "classId": 7241
               },
               {
@@ -864,15 +438,7 @@
                 "classId": 7342
               }
             ]
-          }
-        ],
-        "minRequirementCount": 1
-      },
-      {
-        "type": "SECTION",
-        "title": "Probability and Statistics Track",
-        "label": "Probability and Statistics Track",
-        "requirements": [
+          },
           {
             "type": "XOM",
             "numCreditsMin": 8,
@@ -915,7 +481,7 @@
             ]
           }
         ],
-        "minRequirementCount": 1
+        "minRequirementCount": 3
       }
     ]
   }

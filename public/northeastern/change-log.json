@@ -1,6 +1,78 @@
 {
   "runs": [
     {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-08-15T18:55:58.562Z",
+      "done": 485,
+      "written": 520,
+      "skipped": 210,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-08-15T18:55:55.950Z",
+      "done": 545,
+      "written": 546,
+      "skipped": 127,
+      "failed": 0
+    },
+    {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-08-15T18:53:48.943Z",
+      "done": 485,
+      "written": 520,
+      "skipped": 210,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-08-15T18:53:45.266Z",
+      "done": 545,
+      "written": 546,
+      "skipped": 127,
+      "failed": 0
+    },
+    {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-08-15T18:51:29.074Z",
+      "done": 485,
+      "written": 520,
+      "skipped": 210,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-08-15T18:44:25.195Z",
+      "done": 545,
+      "written": 546,
+      "skipped": 127,
+      "failed": 0
+    },
+    {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-08-15T18:33:08.405Z",
+      "done": 485,
+      "written": 520,
+      "skipped": 210,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-08-15T18:26:06.331Z",
+      "done": 545,
+      "written": 546,
+      "skipped": 127,
+      "failed": 0
+    },
+    {
       "type": "majors",
       "subject": "🎓 Major Requirements",
       "timestamp": "2026-08-14T02:40:08.321Z",

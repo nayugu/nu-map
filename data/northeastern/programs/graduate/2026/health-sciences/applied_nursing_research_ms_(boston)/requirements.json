@@ -2,19 +2,22 @@
   "name": "Applied Nursing Research, MS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 1,
     "tablesConsumed": 1,
     "tablesOnPage": 1,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/nursing/applied-nursing-research-ms/",
+    "panes": [
+      "newitemtextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/nursing/applied-nursing-research-ms/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,

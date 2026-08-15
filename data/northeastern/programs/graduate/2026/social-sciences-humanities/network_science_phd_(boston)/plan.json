@@ -25,30 +25,12 @@
                 {
                   "text": "Elective course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -78,16 +60,7 @@
                 {
                   "text": "One elective course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -113,16 +86,7 @@
                 {
                   "text": "One elective course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -143,16 +107,7 @@
                 {
                   "text": "One elective course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -305,16 +260,7 @@
                 {
                   "text": "One elective course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      2,
-                      3,
-                      4
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },

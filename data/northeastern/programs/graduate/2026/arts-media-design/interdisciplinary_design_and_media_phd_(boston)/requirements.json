@@ -2,13 +2,16 @@
   "name": "Interdisciplinary Design and Media, PhD (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
-    "tablesPresent": 4,
-    "tablesConsumed": 4,
-    "tablesOnPage": 4,
+    "tablesPresent": 2,
+    "tablesConsumed": 2,
+    "tablesOnPage": 2,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/interdisciplinary-programs/interdisciplinary-design-media-phd/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "INAM7000",
       "INAM7001",
@@ -21,8 +24,8 @@
     "verification": {
       "level": "partial",
       "kind": "grad",
-      "score": 0.7,
-      "checkedAt": "2026-08-08",
+      "score": 0.85,
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/arts-media-design/interdisciplinary-programs/interdisciplinary-design-media-phd/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -34,6 +37,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
@@ -41,20 +45,6 @@
         "impossibleSections": 0
       },
       "discrepancies": [
-        {
-          "check": "total-from-sample-plan",
-          "severity": "medium",
-          "message": "the credit total was taken from the sample four-year plan, not from a stated requirement",
-          "detail": [
-            {
-              "key": "totalFromPlan",
-              "params": {
-                "n": 48
-              }
-            }
-          ],
-          "overflow": 0
-        },
         {
           "check": "plan-witness-unaccounted",
           "severity": "medium",
@@ -73,7 +63,7 @@
     }
   },
   "totalCreditsRequired": 48,
-  "totalCreditsSource": "plan-grid",
+  "totalCreditsSource": "stated-minimum",
   "yearVersion": 2026,
   "requirementSections": [
     {
@@ -194,145 +184,6 @@
     {
       "type": "SECTION",
       "title": "Dissertation",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "INAM",
-              "classId": 9990
-            },
-            {
-              "type": "COURSE",
-              "subject": "INAM",
-              "classId": 9991
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Required Coursework (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "INAM",
-          "classId": 7000
-        },
-        {
-          "type": "COURSE",
-          "subject": "INAM",
-          "classId": 7001
-        },
-        {
-          "type": "COURSE",
-          "subject": "INAM",
-          "classId": 7900
-        },
-        {
-          "type": "COURSE",
-          "subject": "INAM",
-          "classId": 7901
-        }
-      ],
-      "minRequirementCount": 4,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Research Methods Elective (2)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 4,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "ARCH",
-              "classId": 6340
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 5110
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 5120
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 5310
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 5320
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 5620
-            },
-            {
-              "type": "COURSE",
-              "subject": "ARTG",
-              "classId": 6110
-            },
-            {
-              "type": "COURSE",
-              "subject": "GSND",
-              "classId": 5110
-            },
-            {
-              "type": "COURSE",
-              "subject": "GSND",
-              "classId": 5130
-            },
-            {
-              "type": "COURSE",
-              "subject": "GSND",
-              "classId": 6320
-            },
-            {
-              "type": "COURSE",
-              "subject": "GSND",
-              "classId": 6340
-            },
-            {
-              "type": "COURSE",
-              "subject": "GSND",
-              "classId": 6350
-            },
-            {
-              "type": "COURSE",
-              "subject": "GSND",
-              "classId": 6984
-            },
-            {
-              "type": "COURSE",
-              "subject": "INAM",
-              "classId": 6300
-            },
-            {
-              "type": "COURSE",
-              "subject": "JRNL",
-              "classId": 5400
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",

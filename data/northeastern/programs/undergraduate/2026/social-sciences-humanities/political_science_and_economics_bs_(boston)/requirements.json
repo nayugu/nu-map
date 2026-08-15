@@ -2,13 +2,16 @@
   "name": "Political Science and Economics, BS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 13,
     "tablesConsumed": 13,
     "tablesOnPage": 13,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-economics-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "CS1100",
       "ECON1115",
@@ -38,7 +41,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/political-science/political-science-economics-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -50,6 +53,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -397,8 +401,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
@@ -463,6 +466,14 @@
         }
       ],
       "text": "Grades in the following required Economics courses and in Quantitative Techniques (POLS 2400) or Statistics for Economists (ECON 2350) must average to a minimum of C (2.000):"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "See Supporting Courses, Combinations A and B.",
+      "codes": [],
+      "substitution": null
     }
   ],
   "concentrations": {

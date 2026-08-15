@@ -2,13 +2,16 @@
   "name": "Architectural Studies and Design, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/architecture/architectural-studies-design-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ARCH1000",
       "ARCH1110",
@@ -38,7 +41,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/arts-media-design/architecture/architectural-studies-design-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -50,6 +53,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 2,
@@ -455,6 +459,17 @@
       ],
       "minRequirementCount": 1,
       "shared": true
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Successful completion of both Prototyping with Code (ARTG 2262) and Lab for Lab for ARTG 2262 (ARTG 2263) may satisfy this requirement.",
+      "codes": [
+        "ARTG 2262",
+        "ARTG 2263"
+      ],
+      "substitution": null
     }
   ]
 }

@@ -2,13 +2,16 @@
   "name": "Linguistics and Communication Studies, BA (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-communication-studies-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "COMM1101",
       "COMM1112",
@@ -28,7 +31,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/interdisciplinary/linguistics-communication-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -40,6 +43,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -319,8 +323,7 @@
           "classId": 3442
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
@@ -337,8 +340,7 @@
           ]
         }
       ],
-      "minRequirementCount": 1,
-      "shared": true
+      "minRequirementCount": 1
     },
     {
       "type": "SECTION",
@@ -462,6 +464,17 @@
         }
       ],
       "minRequirementCount": 2
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Please visit the Linguistics Courses page within this catalog to review the list of courses in the LING 3000 - LING 4999 range.",
+      "codes": [
+        "LING 3000",
+        "LING 4999"
+      ],
+      "substitution": null
     }
   ]
 }

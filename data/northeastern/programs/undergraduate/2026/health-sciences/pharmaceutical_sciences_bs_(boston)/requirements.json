@@ -2,13 +2,27 @@
   "name": "Pharmaceutical Sciences, BS (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 3,
     "tablesConsumed": 3,
     "tablesOnPage": 3,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/pharmacy/pharmaceutical-sciences-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "SEMESTER 1",
+        "SEMESTER 2",
+        "SEMESTER 3",
+        "SEMESTER 4",
+        "SEMESTER 1",
+        "SEMESTER 8"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [
       "BIOL1111",
       "BIOL1112",
@@ -57,7 +71,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/health-sciences/pharmacy/pharmaceutical-sciences-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -69,6 +83,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,

@@ -2,13 +2,16 @@
   "name": "Physics, PhD (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/science/physics/physics-phd/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "PHYS5318",
       "PHYS7210",
@@ -26,7 +29,7 @@
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/science/physics/physics-phd/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -38,6 +41,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -184,8 +188,7 @@
           "classId": 7741
         }
       ],
-      "minRequirementCount": 2,
-      "shared": true
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -220,8 +223,7 @@
           "classId": 7734
         }
       ],
-      "minRequirementCount": 2,
-      "shared": true
+      "minRequirementCount": 2
     },
     {
       "type": "SECTION",
@@ -293,6 +295,49 @@
         "kind": "cumulative"
       },
       "text": "42 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Methods for Teaching in the Introductory Physics Laboratory 1 (PHYS 7220) and Methods for Teaching Introductory Physics Laboratory 2 (PHYS 7230) are required for students awarded a Teaching Assistantship.",
+      "codes": [
+        "PHYS 7220",
+        "PHYS 7230"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Note that the specialization will not appear on the degree diploma or on the official transcript but can be listed as the field of study on CVs and grant proposals. The two courses under specialization include one of the electives previously listed above.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "3",
+      "text": "By approval of the graduate committee, biological physics students may substitute graduate courses in biology, physics, or chemistry from the following list instead of Physics of Biological Processes and Living Systems 2 (PHYS 7741): Biochemistry (BIOL 6300) Molecular Cell Biology (BIOL 6301) Molecular Modeling (CHEM 5638) Additional appropriate courses may also be substituted by approval of the physics graduate committee.",
+      "codes": [
+        "PHYS 7741",
+        "BIOL 6300",
+        "BIOL 6301",
+        "CHEM 5638"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "4",
+      "text": "Elementary Particle Physics (PHYS 7323) is required for a specialization in particle physics. The advanced elective may be Topics: Elementary Particle Physics and Cosmology (PHYS 7733).",
+      "codes": [
+        "PHYS 7323",
+        "PHYS 7733"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "1",
+      "text": "Program completed with successful submission and defense of dissertation.",
+      "codes": [],
+      "substitution": null
     }
   ]
 }

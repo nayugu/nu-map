@@ -55,21 +55,7 @@
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -108,36 +94,12 @@
                 {
                   "text": "CRIM thematic elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      10,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -149,24 +111,12 @@
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -178,24 +128,12 @@
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -248,21 +186,7 @@
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -300,33 +224,12 @@
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      10,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INTL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      9,
-                      10,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -343,21 +246,7 @@
                 {
                   "text": "Foreign language course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      6,
-                      8,
-                      9,
-                      10,
-                      11,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM 1700",
@@ -434,29 +323,12 @@
                 {
                   "text": "INTL elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      9,
-                      10,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Elective (Dialogue of Civilizations possible)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -500,17 +372,7 @@
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      10,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "POLS 1155",
@@ -543,48 +405,17 @@
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      10,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CRIM elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      10,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INTL elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      0,
-                      1,
-                      3,
-                      9,
-                      10,
-                      13,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

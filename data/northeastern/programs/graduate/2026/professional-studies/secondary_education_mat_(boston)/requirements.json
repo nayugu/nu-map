@@ -2,19 +2,22 @@
   "name": "Secondary Education, MAT (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 4,
     "tablesConsumed": 4,
     "tablesOnPage": 4,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/teaching-secondary-licensure-mat/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "partial",
       "kind": "grad",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/professional-studies/masters-degree-programs/teaching-secondary-licensure-mat/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -24,6 +27,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 1,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -217,8 +221,7 @@
           "classId": 6874
         }
       ],
-      "minRequirementCount": 5,
-      "shared": true
+      "minRequirementCount": 5
     },
     {
       "type": "SECTION",
@@ -262,6 +265,46 @@
         "kind": "cumulative"
       },
       "text": "45 total quarter hours required (additional hours may be required for endorsement for Massachusetts licensure) Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "The Master of Arts in Teaching Secondary Education (grades 5–12 or 8–12 dependent on content area) has been approved at the initial licensure level by the Massachusetts Department of Elementary and Secondary Education.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "For students who do not pass or complete their Gateway Performance Task I in this course, complete Project (EDU 6995) to meet programmatic and endorsement requirements.",
+      "codes": [
+        "EDU 6995"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "3",
+      "text": "For students who do not pass or complete their Gateway Performance Task II in this course, complete Project (EDU 6995) to meet programmatic and endorsement requirements.",
+      "codes": [
+        "EDU 6995"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "1",
+      "text": "For students who do not pass their Gateway Performance Task I in this course, complete EDU 6995 to meet programmatic and endorsement requirements.",
+      "codes": [
+        "EDU 6995"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "For students who do not pass their Gateway Performance Task II in this course, complete EDU 6995 to meet programmatic and endorsement requirements.",
+      "codes": [
+        "EDU 6995"
+      ],
+      "substitution": null
     }
   ]
 }

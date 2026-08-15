@@ -2,19 +2,22 @@
   "name": "Marine and Environmental Sciences, PhD (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
-    "tablesPresent": 12,
-    "tablesConsumed": 12,
-    "tablesOnPage": 12,
+    "tablesPresent": 6,
+    "tablesConsumed": 6,
+    "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/science/marine-environmental-sciences/marine-environmental-sciences-phd/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/science/marine-environmental-sciences/marine-environmental-sciences-phd/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -83,448 +87,7 @@
     },
     {
       "type": "SECTION",
-      "title": "Seminars",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 7102
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7101
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7103
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7104
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Readings",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 8102
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Concentration-Specific Electives",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5130
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5504
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5506
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5508
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5518
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5520
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5210
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5260
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Seminars (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 7103
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7101
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7102
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7104
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 2
-    },
-    {
-      "type": "SECTION",
-      "title": "Readings (2)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 8103
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Concentration-Specific Electives (2)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5130
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5506
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5518
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5115
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5260
-            },
-            {
-              "type": "COURSE",
-              "subject": "INSH",
-              "classId": 5301
-            },
-            {
-              "type": "COURSE",
-              "subject": "INSH",
-              "classId": 5302
-            },
-            {
-              "type": "COURSE",
-              "subject": "INSH",
-              "classId": 6406
-            },
-            {
-              "type": "COURSE",
-              "subject": "POLS",
-              "classId": 7334
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 5261
-            },
-            {
-              "type": "COURSE",
-              "subject": "PPUA",
-              "classId": 7346
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Seminars (3)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 7104
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7101
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7102
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7103
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 2,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Readings (3)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 8104
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Concentration-Specific Electives (3)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5518
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5115
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5190
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5210
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5260
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Seminars (4)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 7101
-        },
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7102
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7103
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 7104
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 2,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
-      "title": "Readings (4)",
-      "requirements": [
-        {
-          "type": "COURSE",
-          "subject": "EEMB",
-          "classId": 8101
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Concentration-Specific Electives (4)",
-      "requirements": [
-        {
-          "type": "XOM",
-          "numCreditsMin": 12,
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5130
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5504
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5506
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5508
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5518
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5520
-            },
-            {
-              "type": "COURSE",
-              "subject": "ENVR",
-              "classId": 5260
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1,
-      "shared": true
-    },
-    {
-      "type": "SECTION",
       "title": "Dissertation",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 9990
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 9991
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Statistics (2)",
-      "requirements": [
-        {
-          "type": "OR",
-          "courses": [
-            {
-              "type": "AND",
-              "courses": [
-                {
-                  "type": "COURSE",
-                  "subject": "ENVR",
-                  "classId": 6500
-                },
-                {
-                  "type": "COURSE",
-                  "subject": "ENVR",
-                  "classId": 6501
-                }
-              ]
-            },
-            {
-              "type": "COURSE",
-              "subject": "EEMB",
-              "classId": 5522
-            }
-          ]
-        }
-      ],
-      "minRequirementCount": 1
-    },
-    {
-      "type": "SECTION",
-      "title": "Dissertation (2)",
       "requirements": [
         {
           "type": "OR",
@@ -592,9 +155,55 @@
             "type": "COURSE",
             "subject": "EEMB",
             "classId": 8102
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5130
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5504
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5506
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5508
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5518
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5520
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5260
+              }
+            ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 4
       },
       {
         "type": "SECTION",
@@ -630,9 +239,70 @@
             "type": "COURSE",
             "subject": "EEMB",
             "classId": 8103
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5130
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5506
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5518
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5115
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5260
+              },
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 5301
+              },
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 5302
+              },
+              {
+                "type": "COURSE",
+                "subject": "INSH",
+                "classId": 6406
+              },
+              {
+                "type": "COURSE",
+                "subject": "POLS",
+                "classId": 7334
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 5261
+              },
+              {
+                "type": "COURSE",
+                "subject": "PPUA",
+                "classId": 7346
+              }
+            ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 4
       },
       {
         "type": "SECTION",
@@ -668,9 +338,40 @@
             "type": "COURSE",
             "subject": "EEMB",
             "classId": 8104
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5518
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5115
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5190
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5210
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5260
+              }
+            ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 4
       },
       {
         "type": "SECTION",
@@ -706,9 +407,50 @@
             "type": "COURSE",
             "subject": "EEMB",
             "classId": 8101
+          },
+          {
+            "type": "XOM",
+            "numCreditsMin": 12,
+            "courses": [
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5130
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5504
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5506
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5508
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5518
+              },
+              {
+                "type": "COURSE",
+                "subject": "EEMB",
+                "classId": 5520
+              },
+              {
+                "type": "COURSE",
+                "subject": "ENVR",
+                "classId": 5260
+              }
+            ]
           }
         ],
-        "minRequirementCount": 3
+        "minRequirementCount": 4
       }
     ]
   }

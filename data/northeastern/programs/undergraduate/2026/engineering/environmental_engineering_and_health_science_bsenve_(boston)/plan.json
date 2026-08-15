@@ -461,14 +461,7 @@
                 {
                   "text": "Environmental Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -501,25 +494,12 @@
                 {
                   "text": "Science Elective (Earth)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Environmental Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -988,14 +968,7 @@
                 {
                   "text": "Environmental Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1028,25 +1001,12 @@
                 {
                   "text": "Science Elective (Earth)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Environmental Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1529,14 +1489,7 @@
                 {
                   "text": "Environmental Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1612,25 +1565,12 @@
                 {
                   "text": "Science Elective (Earth)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Environmental Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3,
-                      9
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2049,13 +1989,7 @@
                 {
                   "text": "Science Elective (Earth)",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      5
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2155,13 +2089,7 @@
                 {
                   "text": "Environmental Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2203,13 +2131,7 @@
                 {
                   "text": "Environmental Tech. Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      3
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }

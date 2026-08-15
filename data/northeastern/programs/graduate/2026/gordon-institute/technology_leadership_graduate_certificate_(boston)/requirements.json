@@ -2,19 +2,22 @@
   "name": "Technology Leadership, Graduate Certificate (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 1,
     "tablesConsumed": 1,
     "tablesOnPage": 1,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/gordon-institute/technology-leadership-graduate-certificate/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "certificate",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/gordon-institute/technology-leadership-graduate-certificate/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -83,6 +87,17 @@
         "kind": "cumulative"
       },
       "text": "16 total semester hours required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "The Scientific Foundations of Technology 1 (TELR 5131) and Scientific Foundations of Technology 2 (TELR 5132) requirements may be met by completion of another course upon approval of the program director.",
+      "codes": [
+        "TELR 5131",
+        "TELR 5132"
+      ],
+      "substitution": null
     }
   ]
 }

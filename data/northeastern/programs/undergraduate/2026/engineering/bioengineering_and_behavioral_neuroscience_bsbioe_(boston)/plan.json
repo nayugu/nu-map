@@ -431,25 +431,12 @@
                 {
                   "text": "BIOE elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
@@ -522,25 +509,12 @@
                 {
                   "text": "BIOE elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOE 4792 (EI, CE, WI)",
@@ -1065,14 +1039,7 @@
                 {
                   "text": "BNS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOE 4792",
@@ -1114,36 +1081,17 @@
                 {
                   "text": "BIOE elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOE elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
@@ -1651,25 +1599,12 @@
                 {
                   "text": "BIOE elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",
@@ -1751,25 +1686,12 @@
                 {
                   "text": "BIOE elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOE 4792",
@@ -2335,14 +2257,7 @@
                 {
                   "text": "BNS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOE 4792",
@@ -2384,36 +2299,17 @@
                 {
                   "text": "BIOE elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BIOE elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~concentration"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "BNS elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      3,
-                      4,
-                      8
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "General elective",

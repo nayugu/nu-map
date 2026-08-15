@@ -98,13 +98,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -355,24 +349,12 @@
                 {
                   "text": "Chemical Engineering Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Advanced CHEM elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      7
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENCP 3000",
@@ -403,13 +385,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -480,13 +456,7 @@
                 {
                   "text": "Advanced BIOL elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -592,13 +562,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -884,13 +848,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -925,24 +883,12 @@
                 {
                   "text": "Chemical Engineering elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Advanced CHEM elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -982,13 +928,7 @@
                 {
                   "text": "Advanced BIOL elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1094,13 +1034,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1357,13 +1291,7 @@
                 {
                   "text": "Advanced CHEM elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1442,13 +1370,7 @@
                 {
                   "text": "Advanced BIOL elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1522,24 +1444,12 @@
                 {
                   "text": "Chemical Engineering Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1645,13 +1555,7 @@
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1892,13 +1796,7 @@
                 {
                   "text": "Advanced CHEM elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2044,13 +1942,7 @@
                 {
                   "text": "Advanced BIOL elective",
                   "sh": 3,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      7
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2081,24 +1973,12 @@
                 {
                   "text": "Chemical Engineering Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      11
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "General Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

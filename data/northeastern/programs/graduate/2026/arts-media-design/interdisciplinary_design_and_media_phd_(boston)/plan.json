@@ -34,14 +34,7 @@
                 {
                   "text": "Discipline-specific coursework",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -62,25 +55,12 @@
                 {
                   "text": "Research methods elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Discipline-specific coursework",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -97,38 +77,17 @@
                 {
                   "text": "Discipline-specific coursework",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Discipline-specific coursework",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Discipline-specific coursework",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -140,26 +99,12 @@
                 {
                   "text": "Discipline-specific coursework",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Discipline-specific coursework",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INAM 7901",
@@ -185,26 +130,12 @@
                 {
                   "text": "Qualifying exams",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Teaching requirement, TA",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INAM 9990",
@@ -224,14 +155,7 @@
                 {
                   "text": "Teaching requirement, TA",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INAM 9991",
@@ -256,14 +180,7 @@
                 {
                   "text": "Teaching requirement, teacher of record",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INAM 9996",
@@ -284,14 +201,7 @@
                 {
                   "text": "Teaching requirement, teacher of record",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      4,
-                      "~general"
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "INAM 9996",

@@ -2,13 +2,16 @@
   "name": "Environmental Studies and Political Science, BA (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 12,
     "tablesConsumed": 12,
     "tablesOnPage": 12,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/marine-environmental/environmental-studies-political-science-ba/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ENGW1111",
       "ENGW3308",
@@ -29,7 +32,7 @@
       "level": "partial",
       "kind": "major",
       "score": 0.85,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/science/marine-environmental/environmental-studies-political-science-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -41,6 +44,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 1,
@@ -611,6 +615,16 @@
         }
       ],
       "minRequirementCount": 2
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Earth and Environmental Science Capstone (ENVR 4900) is also an option to fulfill the capstone requirement of this program. Students who complete 1 semester hour Earth and Environmental Science Capstone (ENVR 4900) must still complete a minimum of 128 semester hours to meet degree requirements.",
+      "codes": [
+        "ENVR 4900"
+      ],
+      "substitution": null
     }
   ],
   "concentrations": {

@@ -2,13 +2,16 @@
   "name": "Computer Science and Game Development, BS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-game-development-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "ARTF1000",
       "CS1200",
@@ -49,7 +52,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-game-development-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -61,6 +64,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -515,6 +519,14 @@
         ]
       },
       "text": "Minimum cumulative 2.000 GPA required in all CS, CY, DS, and IS courses."
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Indicates courses that must be taken in the semester listed.",
+      "codes": [],
+      "substitution": null
     }
   ],
   "generalElectiveSH": 12

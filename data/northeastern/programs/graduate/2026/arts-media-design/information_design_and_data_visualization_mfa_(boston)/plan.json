@@ -694,13 +694,7 @@
                 {
                   "text": "Co-op1",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -712,13 +706,7 @@
                 {
                   "text": "Co-op2",
                   "sh": 0,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }

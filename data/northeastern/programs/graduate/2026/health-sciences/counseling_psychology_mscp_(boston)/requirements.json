@@ -2,19 +2,22 @@
   "name": "Counseling Psychology, MSCP (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 5,
     "tablesConsumed": 5,
     "tablesOnPage": 5,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/counseling-psychology-mscp/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/community-health-behavioral-sciences/counseling-psychology-mscp/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -166,6 +170,16 @@
         "kind": "cumulative"
       },
       "text": "A minimum of 60 total semester hours is required Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "If a student enrolls in Practicum in Counseling Psychology (CAEP 8401) two times, the student may only choose 6 semester hours for electives. In rare cases where the student has chosen a concentration and enrolls in CAEP 8401 two times, the successful completion of Practicum in Counseling Psychology (CAEP 8401) for the second time takes priority. The student then must either forgo the concentration to complete the program with 60 semester hours or may choose to enroll in an additional course to complete the program plus concentration for a total of 63 semester hours.",
+      "codes": [
+        "CAEP 8401"
+      ],
+      "substitution": null
     }
   ],
   "concentrations": {

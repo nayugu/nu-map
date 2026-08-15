@@ -2,13 +2,22 @@
   "name": "Computer Engineering and Computer Science, BSCmpE (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 7,
     "tablesConsumed": 7,
     "tablesOnPage": 7,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/electrical-computer/computer-engineering-computer-science-bscompe/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
+    "titleCollisions": {
+      "sections": [
+        "Supplemental Credit"
+      ],
+      "concentrations": []
+    },
     "planOfStudyCourses": [
       "CHEM1151",
       "CHEM1153",
@@ -56,7 +65,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/electrical-computer/computer-engineering-computer-science-bscompe/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -68,6 +77,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -733,6 +743,15 @@
           "GE 1502"
         ]
       }
+    },
+    {
+      "marker": "1",
+      "text": "The capstone design courses are taken as follows: Electrical and Computer Engineering Capstone 1 (EECE 4791) in summer first half and Electrical and Computer Engineering Capstone 2 (EECE 4792) in spring or Electrical and Computer Engineering Capstone 1 (EECE 4791) in summer second half and Electrical and Computer Engineering Capstone 2 (EECE 4792) in fall.",
+      "codes": [
+        "EECE 4791",
+        "EECE 4792"
+      ],
+      "substitution": null
     }
   ],
   "generalElectiveSH": 8

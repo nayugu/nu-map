@@ -2,19 +2,22 @@
   "name": "Healthcare Leadership, DMSc (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/8/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 11,
     "tablesConsumed": 11,
     "tablesOnPage": 11,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/clinical-rehabilitation-sciences/healthcare-leadership-dmsc/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [],
     "verification": {
       "level": "verified",
       "kind": "grad",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/graduate/health-sciences/clinical-rehabilitation-sciences/healthcare-leadership-dmsc/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -25,6 +28,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -120,6 +124,75 @@
         "kind": "cumulative"
       },
       "text": "Minimum 3.000 GPA required"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Students who have not completed their thesis but have already registered for the required number of thesis hours, and have no remaining coursework to complete the degree, may register for Thesis Continuation—Half-Time (MSCI 7996) in their last semester (including summer term). There is a 1-semester-hour tuition charge for Thesis Continuation—Half-Time (MSCI 7996). Thesis Continuation may be taken only once.",
+      "codes": [
+        "MSCI 7996"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "Anatomy and Physiology I and II or equivalent and an exercise physiology or medical background are strongly recommended for the Concentration in Exercise Science.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "3",
+      "text": "Physical Activity and Exercise: Prescription, Measurement, and Testing (EXSC 5210) is offered online with a four-day, on-campus, hands-on lab component in a low-residency format.",
+      "codes": [
+        "EXSC 5210"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "4",
+      "text": "Courses are offered in partnership with World Extreme Medicine. Additional expenses may be associated with the experience courses. Offered on-ground in a four-day experiential format.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "5",
+      "text": "Some of the optional experiential learning experiences are limited to specific groups of medical or allied health professionals.",
+      "codes": [],
+      "substitution": null
+    },
+    {
+      "marker": "6",
+      "text": "One semester hour of Experiential Reflections: Bridging Theory and Experience (MSCI 5400) must be completed for each experience course. Experiential Reflections: Bridging Theory and Experience (MSCI 5400) may be taken concurrently or after the associated courses.",
+      "codes": [
+        "MSCI 5400"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "7",
+      "text": "Students who select AI Across the Health Sciences (HLTH 5800) (4 semester hours) versus Workforce Metrics: Measuring, Comparing, and Privileging the Interprofessional Healthcare Team (MSCI 6002) (3 semester hours) will incur an additional 1-semester-hour cost beyond the total program credits.",
+      "codes": [
+        "HLTH 5800",
+        "MSCI 6002"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "8",
+      "text": "Students who have completed AI Across the Health Sciences (HLTH 5800) as a core requirement must complete the remaining three courses in the Concentration in AI Applications.",
+      "codes": [
+        "HLTH 5800"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "9",
+      "text": "Students who have completed AI Across the Health Sciences (HLTH 5800) as a core requirement may not select this course as part of the Concentration in Interdisciplinary Healthcare Leadership requirements.",
+      "codes": [
+        "HLTH 5800"
+      ],
+      "substitution": null
     }
   ],
   "concentrations": {

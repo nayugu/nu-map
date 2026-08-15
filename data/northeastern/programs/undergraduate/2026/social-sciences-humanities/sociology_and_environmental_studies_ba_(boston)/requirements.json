@@ -2,13 +2,16 @@
   "name": "Sociology and Environmental Studies, BA (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 8,
     "tablesConsumed": 8,
     "tablesOnPage": 8,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/sociology-anthropology/sociology-environmental-studies-ba/",
+    "panes": [
+      "progrtextcontainer"
+    ],
     "planOfStudyCourses": [
       "EESC2000",
       "EESH2000",
@@ -28,7 +31,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/social-sciences-humanities/sociology-anthropology/sociology-environmental-studies-ba/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -40,6 +43,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -567,6 +571,21 @@
         ]
       },
       "text": "Minimum 2.000 GPA required in ENVR, EEMB"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "With prior approval from the department, students can choose to do a two-semester Honors in the Major project in lieu of Senior Seminar (SOCL 4600) or Senior Thesis (ENVR 4997). In that case, if the student chooses to do Honors in Sociology, they would register for Junior/Senior Honors Project 1 (SOCL 4970) (in lieu of an elective) and Junior/Senior Honors Project 2 (SOCL 4971) (in lieu of Senior Seminar (SOCL 4600)). If they choose to do Honors in Environmental Studies, they would register for Junior/Senior Honors Project 1 (ENVR 4970) (in lieu of an elective) and Junior/Senior Honors Project 2 (ENVR 4971) (in lieu of Senior Thesis (ENVR 4997)).",
+      "codes": [
+        "SOCL 4600",
+        "ENVR 4997",
+        "SOCL 4970",
+        "SOCL 4971",
+        "ENVR 4970",
+        "ENVR 4971"
+      ],
+      "substitution": null
     }
   ]
 }

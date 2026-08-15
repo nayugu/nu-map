@@ -250,13 +250,7 @@
                 {
                   "text": "Select from the following:",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      16
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSC 1001",
@@ -287,24 +281,12 @@
                 {
                   "text": "EE fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EE fundamentals",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -357,35 +339,17 @@
                 {
                   "text": "CE fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EE fundamentals",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Technical elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -467,43 +431,17 @@
                 {
                   "text": "Music technical elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music technical elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4,
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music theory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENCP 3000",
@@ -524,52 +462,22 @@
                 {
                   "text": "Music theory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music in context elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EECE technical elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -836,13 +744,7 @@
                 {
                   "text": "Select from the following:",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      16
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "MUSC 1001",
@@ -864,24 +766,12 @@
                 {
                   "text": "EE fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EE fundamentals",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -957,35 +847,17 @@
                 {
                   "text": "CE fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EE fundamentals",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EECE technical elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1053,41 +925,17 @@
                 {
                   "text": "Music technology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music technology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music theory course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1099,52 +947,22 @@
                 {
                   "text": "EECE technical elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music in context",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music theory course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1514,13 +1332,7 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1546,70 +1358,22 @@
                 {
                   "text": "CE fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EE fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EE fundamentals",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music theory course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1665,19 +1429,7 @@
                 {
                   "text": "ECE technical elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -1703,53 +1455,17 @@
                 {
                   "text": "EE fundamentals",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music technology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music technology elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -1761,70 +1477,22 @@
                 {
                   "text": "ECE technical elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music in context",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music theory course",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2,
-                      4,
-                      6,
-                      8,
-                      9,
-                      11,
-                      16
-                    ]
-                  }
+                  "options": []
                 }
               ]
             }
@@ -2158,49 +1826,22 @@
                 {
                   "text": "EE fundamentals",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EE fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music theory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "CE fundamentals",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2212,27 +1853,12 @@
                 {
                   "text": "General elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      "~general"
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music Technical Elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 }
               ]
             },
@@ -2275,38 +1901,17 @@
                 {
                   "text": "EE fundamentals",
                   "sh": 5,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      1,
-                      2
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music technical elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EECE technical elective 2",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENGW 3302 or 3315 (WD)",
@@ -2339,13 +1944,7 @@
                 {
                   "text": "EECE technical elective 1",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      4
-                    ],
-                    "forced": true
-                  }
+                  "options": []
                 },
                 {
                   "text": "EECE 3468",
@@ -2397,30 +1996,12 @@
                 {
                   "text": "Music theory",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "Music in context elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "EECE 4792",
@@ -2434,16 +2015,7 @@
                 {
                   "text": "Music elective",
                   "sh": 4,
-                  "options": [],
-                  "binding": {
-                    "targets": [
-                      6,
-                      7,
-                      8,
-                      9,
-                      11
-                    ]
-                  }
+                  "options": []
                 },
                 {
                   "text": "ENCP 3000",

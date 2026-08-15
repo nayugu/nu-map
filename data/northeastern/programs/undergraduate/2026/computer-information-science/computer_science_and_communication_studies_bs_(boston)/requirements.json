@@ -2,13 +2,16 @@
   "name": "Computer Science and Communication Studies, BS (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/7/2026",
+    "lastEdited": "8/15/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
     "tablesOnPage": 6,
     "tablesExcluded": 0,
     "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-communication-studies-bs/",
+    "panes": [
+      "programrequirementstextcontainer"
+    ],
     "planOfStudyCourses": [
       "COMM1000",
       "COMM1101",
@@ -40,7 +43,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-08",
+      "checkedAt": "2026-08-15",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/computer-information-science/computer-information-science-combined-majors/computer-science-communication-studies-bs/",
       "sourcesAvailable": [
         "requirement-tables",
@@ -52,6 +55,7 @@
         "tablesUnaccounted": 0,
         "leakedMarkers": 0,
         "duplicateSectionTitles": 0,
+        "duplicateConcentrationTitles": 0,
         "zeroTotal": 0,
         "unknownCourses": 0,
         "planUnexplained": 0,
@@ -634,6 +638,24 @@
         ]
       },
       "text": "Minimum 2.000 GPA required in all COMM courses"
+    }
+  ],
+  "footnotes": [
+    {
+      "marker": "1",
+      "text": "Junior/Senior Honors Project 1 (COMM 4970) is excluded.",
+      "codes": [
+        "COMM 4970"
+      ],
+      "substitution": null
+    },
+    {
+      "marker": "2",
+      "text": "If Advocacy Writing (COMM 3409) is selected it will also satisfy a communication studies elective requirement. One additional general elective will be then required in its place.",
+      "codes": [
+        "COMM 3409"
+      ],
+      "substitution": null
     }
   ],
   "generalElectiveSH": 32
