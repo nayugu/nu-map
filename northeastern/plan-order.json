@@ -1,5 +1,5 @@
 {
- "generated": "2026-08-12",
+ "generated": "2026-08-15",
  "coopPrep": [
   {
    "course": "BIOL1000",
@@ -42,6 +42,1344 @@
    "observations": 9
   }
  ],
+ "positions": {
+  "ACCT1201": {
+   "at": 0,
+   "programs": 29
+  },
+  "ACCT2301": {
+   "at": 0.308,
+   "programs": 16
+  },
+  "AFCS1101": {
+   "at": 0,
+   "programs": 7
+  },
+  "AFCS1270": {
+   "at": 0.077,
+   "programs": 5
+  },
+  "AFCS4526": {
+   "at": 0.692,
+   "programs": 5
+  },
+  "AFCS4700": {
+   "at": 1,
+   "programs": 5
+  },
+  "AMSL1101": {
+   "at": 0,
+   "programs": 5
+  },
+  "AMSL1102": {
+   "at": 0.077,
+   "programs": 5
+  },
+  "AMSL2101": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "AMSL2102": {
+   "at": 0.385,
+   "programs": 5
+  },
+  "AMSL3101": {
+   "at": 0.615,
+   "programs": 5
+  },
+  "ANTH1000": {
+   "at": 0,
+   "programs": 5
+  },
+  "ANTH1101": {
+   "at": 0,
+   "programs": 17
+  },
+  "ANTH2305": {
+   "at": 0.077,
+   "programs": 16
+  },
+  "ANTH3410": {
+   "at": 0.308,
+   "programs": 11
+  },
+  "ANTH3421": {
+   "at": 0.385,
+   "programs": 10
+  },
+  "ARCH1110": {
+   "at": 0.077,
+   "programs": 10
+  },
+  "ARCH1120": {
+   "at": 0.077,
+   "programs": 10
+  },
+  "ARCH1310": {
+   "at": 0,
+   "programs": 9
+  },
+  "ARCH1311": {
+   "at": 0,
+   "programs": 6
+  },
+  "ARCH2130": {
+   "at": 0.083,
+   "programs": 6
+  },
+  "ARCH2340": {
+   "at": 0.385,
+   "programs": 6
+  },
+  "ARCH2341": {
+   "at": 0.385,
+   "programs": 6
+  },
+  "ARTD1001": {
+   "at": 0,
+   "programs": 5
+  },
+  "ARTD1002": {
+   "at": 0,
+   "programs": 5
+  },
+  "ARTD4530": {
+   "at": 1,
+   "programs": 6
+  },
+  "ARTF1000": {
+   "at": 0,
+   "programs": 5
+  },
+  "ARTF1220": {
+   "at": 0,
+   "programs": 17
+  },
+  "ARTF1240": {
+   "at": 0,
+   "programs": 6
+  },
+  "ARTF1241": {
+   "at": 0,
+   "programs": 6
+  },
+  "ARTG1001": {
+   "at": 0,
+   "programs": 16
+  },
+  "ARTG1002": {
+   "at": 0,
+   "programs": 16
+  },
+  "ARTG1270": {
+   "at": 0.077,
+   "programs": 16
+  },
+  "ARTG1271": {
+   "at": 0.077,
+   "programs": 16
+  },
+  "ARTG1290": {
+   "at": 0.154,
+   "programs": 17
+  },
+  "ARTG1291": {
+   "at": 0.154,
+   "programs": 17
+  },
+  "ARTG2262": {
+   "at": 0.308,
+   "programs": 9
+  },
+  "ARTG2263": {
+   "at": 0.308,
+   "programs": 9
+  },
+  "ARTG4550": {
+   "at": 1,
+   "programs": 14
+  },
+  "ARTG5310": {
+   "at": 0.333,
+   "programs": 5
+  },
+  "ARTH1001": {
+   "at": 0,
+   "programs": 6
+  },
+  "ARTH1002": {
+   "at": 0,
+   "programs": 6
+  },
+  "BIOE2355": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "BIOE3210": {
+   "at": 0.647,
+   "programs": 5
+  },
+  "BIOL1107": {
+   "at": 0,
+   "programs": 20
+  },
+  "BIOL1108": {
+   "at": 0,
+   "programs": 20
+  },
+  "BIOL1111": {
+   "at": 0,
+   "programs": 27
+  },
+  "BIOL1112": {
+   "at": 0,
+   "programs": 24
+  },
+  "BIOL1113": {
+   "at": 0.077,
+   "programs": 20
+  },
+  "BIOL1114": {
+   "at": 0.077,
+   "programs": 20
+  },
+  "BIOL1147": {
+   "at": 0.077,
+   "programs": 6
+  },
+  "BIOL2217": {
+   "at": 0,
+   "programs": 7
+  },
+  "BIOL2218": {
+   "at": 0,
+   "programs": 7
+  },
+  "BIOL2219": {
+   "at": 0.077,
+   "programs": 5
+  },
+  "BIOL2220": {
+   "at": 0.077,
+   "programs": 5
+  },
+  "BIOL2299": {
+   "at": 0.077,
+   "programs": 20
+  },
+  "BIOL2301": {
+   "at": 0.235,
+   "programs": 28
+  },
+  "BIOL2302": {
+   "at": 0.235,
+   "programs": 28
+  },
+  "BIOL2309": {
+   "at": 0.308,
+   "programs": 13
+  },
+  "BIOL3611": {
+   "at": 0.538,
+   "programs": 14
+  },
+  "BIOL3612": {
+   "at": 0.538,
+   "programs": 14
+  },
+  "BUSN1102": {
+   "at": 0,
+   "programs": 6
+  },
+  "BUSN1103": {
+   "at": 0.308,
+   "programs": 9
+  },
+  "CHEM1151": {
+   "at": 0,
+   "programs": 35
+  },
+  "CHEM1153": {
+   "at": 0,
+   "programs": 35
+  },
+  "CHEM1161": {
+   "at": 0.077,
+   "programs": 43
+  },
+  "CHEM1162": {
+   "at": 0.077,
+   "programs": 43
+  },
+  "CHEM1163": {
+   "at": 0.077,
+   "programs": 39
+  },
+  "CHEM1211": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "CHEM1212": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "CHEM1213": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "CHEM2311": {
+   "at": 0.294,
+   "programs": 29
+  },
+  "CHEM2312": {
+   "at": 0.294,
+   "programs": 28
+  },
+  "CHEM2313": {
+   "at": 0.385,
+   "programs": 21
+  },
+  "CHEM2314": {
+   "at": 0.385,
+   "programs": 21
+  },
+  "CHME2308": {
+   "at": 0.154,
+   "programs": 8
+  },
+  "CHME2310": {
+   "at": 0.385,
+   "programs": 8
+  },
+  "CHME2320": {
+   "at": 0.308,
+   "programs": 8
+  },
+  "CHME3305": {
+   "at": 0.692,
+   "programs": 8
+  },
+  "CHME3306": {
+   "at": 0.692,
+   "programs": 8
+  },
+  "CHME3312": {
+   "at": 0.615,
+   "programs": 8
+  },
+  "CHME3322": {
+   "at": 0.615,
+   "programs": 8
+  },
+  "CHME4510": {
+   "at": 0.923,
+   "programs": 8
+  },
+  "CHME4512": {
+   "at": 1,
+   "programs": 8
+  },
+  "CHME4701": {
+   "at": 0.923,
+   "programs": 8
+  },
+  "CHME4703": {
+   "at": 1,
+   "programs": 6
+  },
+  "CHME4705": {
+   "at": 1,
+   "programs": 6
+  },
+  "CIVE2221": {
+   "at": 0.154,
+   "programs": 7
+  },
+  "CIVE2222": {
+   "at": 0.154,
+   "programs": 7
+  },
+  "CIVE2300": {
+   "at": 0.308,
+   "programs": 6
+  },
+  "CIVE2301": {
+   "at": 0.308,
+   "programs": 6
+  },
+  "CIVE2331": {
+   "at": 0.385,
+   "programs": 7
+  },
+  "CIVE2334": {
+   "at": 0.308,
+   "programs": 9
+  },
+  "CIVE3430": {
+   "at": 0.385,
+   "programs": 6
+  },
+  "CIVE3435": {
+   "at": 0.615,
+   "programs": 6
+  },
+  "CIVE3464": {
+   "at": 0.538,
+   "programs": 8
+  },
+  "CIVE4534": {
+   "at": 0.923,
+   "programs": 6
+  },
+  "CIVE4535": {
+   "at": 0.923,
+   "programs": 6
+  },
+  "CIVE4765": {
+   "at": 1,
+   "programs": 5
+  },
+  "CLTR1000": {
+   "at": 0,
+   "programs": 7
+  },
+  "COMM1101": {
+   "at": 0,
+   "programs": 23
+  },
+  "CRIM1100": {
+   "at": 0,
+   "programs": 16
+  },
+  "CRIM1110": {
+   "at": 0.077,
+   "programs": 17
+  },
+  "CRIM1120": {
+   "at": 0.077,
+   "programs": 17
+  },
+  "CRIM3000": {
+   "at": 0.692,
+   "programs": 8
+  },
+  "CRIM3600": {
+   "at": 0.308,
+   "programs": 11
+  },
+  "CRIM3700": {
+   "at": 0.615,
+   "programs": 10
+  },
+  "CRIM4000": {
+   "at": 0.923,
+   "programs": 6
+  },
+  "CRIM4949": {
+   "at": 1,
+   "programs": 5
+  },
+  "CS1100": {
+   "at": 0.077,
+   "programs": 8
+  },
+  "CS1200": {
+   "at": 0,
+   "programs": 39
+  },
+  "CS1210": {
+   "at": 0.385,
+   "programs": 49
+  },
+  "CS1800": {
+   "at": 0,
+   "programs": 76
+  },
+  "CS1802": {
+   "at": 0,
+   "programs": 76
+  },
+  "CS2000": {
+   "at": 0,
+   "programs": 76
+  },
+  "CS2001": {
+   "at": 0,
+   "programs": 76
+  },
+  "CS2100": {
+   "at": 0.077,
+   "programs": 48
+  },
+  "CS2101": {
+   "at": 0.077,
+   "programs": 48
+  },
+  "CS2484": {
+   "at": 0.615,
+   "programs": 13
+  },
+  "CS2800": {
+   "at": 0.308,
+   "programs": 6
+  },
+  "CS3000": {
+   "at": 0.308,
+   "programs": 48
+  },
+  "CS3001": {
+   "at": 0.538,
+   "programs": 5
+  },
+  "CS3100": {
+   "at": 0.154,
+   "programs": 48
+  },
+  "CS3101": {
+   "at": 0.154,
+   "programs": 48
+  },
+  "CS3200": {
+   "at": 0.308,
+   "programs": 53
+  },
+  "CS3650": {
+   "at": 0.385,
+   "programs": 11
+  },
+  "CS3800": {
+   "at": 0.692,
+   "programs": 11
+  },
+  "CS4100": {
+   "at": 1,
+   "programs": 5
+  },
+  "CS4120": {
+   "at": 0.857,
+   "programs": 7
+  },
+  "CY2550": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "DEAF1500": {
+   "at": 0,
+   "programs": 5
+  },
+  "DEAF2500": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "DEAF2700": {
+   "at": 0.385,
+   "programs": 5
+  },
+  "DS2500": {
+   "at": 0.077,
+   "programs": 24
+  },
+  "DS2501": {
+   "at": 0.077,
+   "programs": 24
+  },
+  "DS3000": {
+   "at": 0.308,
+   "programs": 29
+  },
+  "DS3500": {
+   "at": 0.308,
+   "programs": 24
+  },
+  "DS4200": {
+   "at": 0.615,
+   "programs": 25
+  },
+  "DS4300": {
+   "at": 0.923,
+   "programs": 25
+  },
+  "DS4400": {
+   "at": 0.923,
+   "programs": 25
+  },
+  "DS4420": {
+   "at": 1,
+   "programs": 10
+  },
+  "ECON1115": {
+   "at": 0,
+   "programs": 33
+  },
+  "ECON1116": {
+   "at": 0.077,
+   "programs": 31
+  },
+  "ECON2315": {
+   "at": 0.308,
+   "programs": 21
+  },
+  "ECON2316": {
+   "at": 0.385,
+   "programs": 23
+  },
+  "ECON2350": {
+   "at": 0.308,
+   "programs": 20
+  },
+  "ECON2560": {
+   "at": 0.692,
+   "programs": 20
+  },
+  "EEAM2000": {
+   "at": 0.077,
+   "programs": 81
+  },
+  "EECE2140": {
+   "at": 0.235,
+   "programs": 8
+  },
+  "EECE2150": {
+   "at": 0.308,
+   "programs": 6
+  },
+  "EECE2160": {
+   "at": 0.385,
+   "programs": 6
+  },
+  "EECE3468": {
+   "at": 0.846,
+   "programs": 8
+  },
+  "EECE4791": {
+   "at": 0.846,
+   "programs": 8
+  },
+  "EECE4792": {
+   "at": 0.941,
+   "programs": 8
+  },
+  "EEMB2302": {
+   "at": 0.077,
+   "programs": 11
+  },
+  "EEMB2303": {
+   "at": 0.077,
+   "programs": 11
+  },
+  "EESC2000": {
+   "at": 0.308,
+   "programs": 40
+  },
+  "EESH2000": {
+   "at": 0.308,
+   "programs": 65
+  },
+  "ENCP2000": {
+   "at": 0.308,
+   "programs": 35
+  },
+  "ENCP3000": {
+   "at": 0.765,
+   "programs": 35
+  },
+  "ENGL1400": {
+   "at": 0,
+   "programs": 16
+  },
+  "ENGL3710": {
+   "at": 0.615,
+   "programs": 15
+  },
+  "ENGL4710": {
+   "at": 1,
+   "programs": 6
+  },
+  "ENGW1111": {
+   "at": 0,
+   "programs": 315
+  },
+  "ENGW3302": {
+   "at": 0.769,
+   "programs": 26
+  },
+  "ENGW3304": {
+   "at": 0.692,
+   "programs": 5
+  },
+  "ENGW3306": {
+   "at": 0.615,
+   "programs": 23
+  },
+  "ENGW3307": {
+   "at": 0.765,
+   "programs": 17
+  },
+  "ENGW3308": {
+   "at": 0.692,
+   "programs": 7
+  },
+  "ENGW3314": {
+   "at": 0.706,
+   "programs": 10
+  },
+  "ENGW3315": {
+   "at": 0.692,
+   "programs": 45
+  },
+  "ENVR1101": {
+   "at": 0,
+   "programs": 6
+  },
+  "ENVR1400": {
+   "at": 0,
+   "programs": 7
+  },
+  "ENVR1401": {
+   "at": 0,
+   "programs": 7
+  },
+  "ENVR2500": {
+   "at": 0.471,
+   "programs": 16
+  },
+  "ENVR2501": {
+   "at": 0.471,
+   "programs": 15
+  },
+  "ENVR2515": {
+   "at": 0.077,
+   "programs": 13
+  },
+  "ENVR3300": {
+   "at": 0.308,
+   "programs": 10
+  },
+  "ENVR3301": {
+   "at": 0.308,
+   "programs": 10
+  },
+  "ENVR4000": {
+   "at": 1,
+   "programs": 5
+  },
+  "FINA2201": {
+   "at": 0.308,
+   "programs": 22
+  },
+  "GE1000": {
+   "at": 0,
+   "programs": 35
+  },
+  "GE1501": {
+   "at": 0,
+   "programs": 35
+  },
+  "GE1502": {
+   "at": 0.077,
+   "programs": 35
+  },
+  "GE3300": {
+   "at": 0.529,
+   "programs": 6
+  },
+  "HIST1000": {
+   "at": 0,
+   "programs": 7
+  },
+  "HIST1200": {
+   "at": 0,
+   "programs": 15
+  },
+  "HIST1201": {
+   "at": 0,
+   "programs": 16
+  },
+  "HIST2301": {
+   "at": 0.308,
+   "programs": 15
+  },
+  "HIST2302": {
+   "at": 0.308,
+   "programs": 14
+  },
+  "HIST4701": {
+   "at": 1,
+   "programs": 5
+  },
+  "HSCI1000": {
+   "at": 0,
+   "programs": 17
+  },
+  "HSCI2000": {
+   "at": 0.308,
+   "programs": 20
+  },
+  "HUSV1101": {
+   "at": 0,
+   "programs": 15
+  },
+  "HUSV2300": {
+   "at": 0.077,
+   "programs": 15
+  },
+  "HUSV2970": {
+   "at": 0.385,
+   "programs": 6
+  },
+  "HUSV3570": {
+   "at": 0.385,
+   "programs": 12
+  },
+  "HUSV3900": {
+   "at": 0.692,
+   "programs": 15
+  },
+  "HUSV4700": {
+   "at": 1,
+   "programs": 5
+  },
+  "HUSV4994": {
+   "at": 0.692,
+   "programs": 9
+  },
+  "INAM2000": {
+   "at": 0.308,
+   "programs": 12
+  },
+  "INSC1000": {
+   "at": 0,
+   "programs": 16
+  },
+  "INTB1203": {
+   "at": 0.077,
+   "programs": 15
+  },
+  "INTL1000": {
+   "at": 0,
+   "programs": 6
+  },
+  "INTL1101": {
+   "at": 0,
+   "programs": 14
+  },
+  "INTL3400": {
+   "at": 0.692,
+   "programs": 14
+  },
+  "INTL4700": {
+   "at": 1,
+   "programs": 9
+  },
+  "INTP3500": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "JRNL1101": {
+   "at": 0.077,
+   "programs": 17
+  },
+  "JRNL1102": {
+   "at": 0.077,
+   "programs": 17
+  },
+  "JRNL1150": {
+   "at": 0,
+   "programs": 17
+  },
+  "JRNL2201": {
+   "at": 0.308,
+   "programs": 17
+  },
+  "JRNL2301": {
+   "at": 0.615,
+   "programs": 9
+  },
+  "JRNL3550": {
+   "at": 0.692,
+   "programs": 5
+  },
+  "JRNL3610": {
+   "at": 0.706,
+   "programs": 8
+  },
+  "JRNL4650": {
+   "at": 1,
+   "programs": 6
+  },
+  "LING1150": {
+   "at": 0,
+   "programs": 15
+  },
+  "LING2350": {
+   "at": 0.077,
+   "programs": 10
+  },
+  "LING3412": {
+   "at": 0.235,
+   "programs": 9
+  },
+  "MATH1215": {
+   "at": 0.059,
+   "programs": 27
+  },
+  "MATH1231": {
+   "at": 0,
+   "programs": 16
+  },
+  "MATH1241": {
+   "at": 0,
+   "programs": 16
+  },
+  "MATH1341": {
+   "at": 0,
+   "programs": 101
+  },
+  "MATH1342": {
+   "at": 0.077,
+   "programs": 61
+  },
+  "MATH1365": {
+   "at": 0,
+   "programs": 11
+  },
+  "MATH2321": {
+   "at": 0.235,
+   "programs": 53
+  },
+  "MATH2331": {
+   "at": 0.308,
+   "programs": 15
+  },
+  "MATH2341": {
+   "at": 0.308,
+   "programs": 53
+  },
+  "MATH3081": {
+   "at": 0.462,
+   "programs": 21
+  },
+  "MATH3175": {
+   "at": 0.923,
+   "programs": 5
+  },
+  "ME2340": {
+   "at": 0.529,
+   "programs": 6
+  },
+  "ME2341": {
+   "at": 0.529,
+   "programs": 6
+  },
+  "ME2350": {
+   "at": 0.235,
+   "programs": 6
+  },
+  "ME2355": {
+   "at": 0.385,
+   "programs": 6
+  },
+  "ME2356": {
+   "at": 0.385,
+   "programs": 6
+  },
+  "ME2380": {
+   "at": 0.385,
+   "programs": 6
+  },
+  "ME2381": {
+   "at": 0.385,
+   "programs": 6
+  },
+  "ME3455": {
+   "at": 0.692,
+   "programs": 6
+  },
+  "ME3456": {
+   "at": 0.692,
+   "programs": 6
+  },
+  "ME4505": {
+   "at": 0.765,
+   "programs": 5
+  },
+  "ME4506": {
+   "at": 0.765,
+   "programs": 5
+  },
+  "MEIE4701": {
+   "at": 0.846,
+   "programs": 9
+  },
+  "MEIE4702": {
+   "at": 1,
+   "programs": 9
+  },
+  "MGSC2301": {
+   "at": 0.077,
+   "programs": 16
+  },
+  "MKTG2201": {
+   "at": 0.231,
+   "programs": 20
+  },
+  "MSCR1000": {
+   "at": 0,
+   "programs": 5
+  },
+  "MSCR1220": {
+   "at": 0,
+   "programs": 12
+  },
+  "MUSC1002": {
+   "at": 0,
+   "programs": 8
+  },
+  "MUSC1003": {
+   "at": 0,
+   "programs": 8
+  },
+  "MUSC1119": {
+   "at": 0,
+   "programs": 8
+  },
+  "MUSC1201": {
+   "at": 0.077,
+   "programs": 10
+  },
+  "MUSC1202": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "MUST1220": {
+   "at": 0.077,
+   "programs": 5
+  },
+  "MUST2431": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "PHIL1000": {
+   "at": 0,
+   "programs": 5
+  },
+  "PHIL1110": {
+   "at": 0,
+   "programs": 9
+  },
+  "PHIL1115": {
+   "at": 0,
+   "programs": 21
+  },
+  "PHIL1145": {
+   "at": 0.077,
+   "programs": 6
+  },
+  "PHIL1160": {
+   "at": 0,
+   "programs": 6
+  },
+  "PHIL1165": {
+   "at": 0.462,
+   "programs": 8
+  },
+  "PHIL2325": {
+   "at": 0.071,
+   "programs": 7
+  },
+  "PHIL2330": {
+   "at": 0.286,
+   "programs": 15
+  },
+  "PHTH1260": {
+   "at": 0,
+   "programs": 29
+  },
+  "PHTH2210": {
+   "at": 0.308,
+   "programs": 31
+  },
+  "PHTH2300": {
+   "at": 0.308,
+   "programs": 24
+  },
+  "PHTH2350": {
+   "at": 0.154,
+   "programs": 20
+  },
+  "PHTH2515": {
+   "at": 0.385,
+   "programs": 20
+  },
+  "PHTH4120": {
+   "at": 0.846,
+   "programs": 22
+  },
+  "PHTH4202": {
+   "at": 0.692,
+   "programs": 22
+  },
+  "PHTH4540": {
+   "at": 0.846,
+   "programs": 23
+  },
+  "PHYS1145": {
+   "at": 0.308,
+   "programs": 14
+  },
+  "PHYS1146": {
+   "at": 0.308,
+   "programs": 14
+  },
+  "PHYS1151": {
+   "at": 0.077,
+   "programs": 33
+  },
+  "PHYS1152": {
+   "at": 0.077,
+   "programs": 33
+  },
+  "PHYS1153": {
+   "at": 0.077,
+   "programs": 33
+  },
+  "PHYS1155": {
+   "at": 0.235,
+   "programs": 15
+  },
+  "PHYS1156": {
+   "at": 0.235,
+   "programs": 15
+  },
+  "PHYS1157": {
+   "at": 0.235,
+   "programs": 15
+  },
+  "PHYS1161": {
+   "at": 0,
+   "programs": 16
+  },
+  "PHYS1162": {
+   "at": 0,
+   "programs": 16
+  },
+  "PHYS1163": {
+   "at": 0,
+   "programs": 12
+  },
+  "PHYS1165": {
+   "at": 0.059,
+   "programs": 13
+  },
+  "PHYS1166": {
+   "at": 0.059,
+   "programs": 13
+  },
+  "PHYS1167": {
+   "at": 0.077,
+   "programs": 9
+  },
+  "PHYS2303": {
+   "at": 0.308,
+   "programs": 12
+  },
+  "PHYS2371": {
+   "at": 0.308,
+   "programs": 9
+  },
+  "PHYS2372": {
+   "at": 0.308,
+   "programs": 9
+  },
+  "PHYS3600": {
+   "at": 0.588,
+   "programs": 12
+  },
+  "PHYS3601": {
+   "at": 0.529,
+   "programs": 6
+  },
+  "PHYS3602": {
+   "at": 0.529,
+   "programs": 12
+  },
+  "PHYS4115": {
+   "at": 0.765,
+   "programs": 6
+  },
+  "PHYS4305": {
+   "at": 0.692,
+   "programs": 10
+  },
+  "PHYS5318": {
+   "at": 1,
+   "programs": 9
+  },
+  "POLS1000": {
+   "at": 0,
+   "programs": 5
+  },
+  "POLS1150": {
+   "at": 0,
+   "programs": 23
+  },
+  "POLS1155": {
+   "at": 0,
+   "programs": 27
+  },
+  "POLS1160": {
+   "at": 0.077,
+   "programs": 40
+  },
+  "POLS2399": {
+   "at": 0.308,
+   "programs": 10
+  },
+  "POLS2400": {
+   "at": 0.385,
+   "programs": 18
+  },
+  "PSYC1101": {
+   "at": 0,
+   "programs": 66
+  },
+  "PSYC2320": {
+   "at": 0.308,
+   "programs": 23
+  },
+  "PSYC3200": {
+   "at": 0.308,
+   "programs": 6
+  },
+  "PSYC3402": {
+   "at": 0.294,
+   "programs": 8
+  },
+  "PSYC3404": {
+   "at": 0.308,
+   "programs": 6
+  },
+  "PSYC3450": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "PSYC3452": {
+   "at": 0.235,
+   "programs": 5
+  },
+  "PSYC3458": {
+   "at": 0.308,
+   "programs": 11
+  },
+  "PSYC3464": {
+   "at": 0.308,
+   "programs": 6
+  },
+  "PSYC3466": {
+   "at": 0.308,
+   "programs": 12
+  },
+  "SLPA1101": {
+   "at": 0.077,
+   "programs": 7
+  },
+  "SLPA1102": {
+   "at": 0.692,
+   "programs": 7
+  },
+  "SLPA1103": {
+   "at": 0.308,
+   "programs": 7
+  },
+  "SLPA1200": {
+   "at": 0.692,
+   "programs": 6
+  },
+  "SLPA1203": {
+   "at": 0.308,
+   "programs": 7
+  },
+  "SLPA1205": {
+   "at": 0.077,
+   "programs": 7
+  },
+  "SLPA4500": {
+   "at": 0.923,
+   "programs": 7
+  },
+  "SLPA4651": {
+   "at": 1,
+   "programs": 7
+  },
+  "SLPA5107": {
+   "at": 0.923,
+   "programs": 7
+  },
+  "SLPA6219": {
+   "at": 1,
+   "programs": 7
+  },
+  "SOCL1000": {
+   "at": 0,
+   "programs": 6
+  },
+  "SOCL1101": {
+   "at": 0,
+   "programs": 22
+  },
+  "SOCL3300": {
+   "at": 0.308,
+   "programs": 17
+  },
+  "SPNS2102": {
+   "at": 0,
+   "programs": 5
+  },
+  "SPNS3101": {
+   "at": 0.077,
+   "programs": 5
+  },
+  "SPNS3102": {
+   "at": 0.308,
+   "programs": 5
+  },
+  "STRT4501": {
+   "at": 1,
+   "programs": 17
+  },
+  "THTR1100": {
+   "at": 0,
+   "programs": 12
+  },
+  "THTR1101": {
+   "at": 0,
+   "programs": 12
+  },
+  "THTR1120": {
+   "at": 0,
+   "programs": 12
+  },
+  "THTR1131": {
+   "at": 0.077,
+   "programs": 12
+  },
+  "THTR1270": {
+   "at": 0.308,
+   "programs": 12
+  },
+  "THTR2000": {
+   "at": 0.308,
+   "programs": 12
+  },
+  "THTR3325": {
+   "at": 0.308,
+   "programs": 12
+  },
+  "THTR4702": {
+   "at": 1,
+   "programs": 8
+  }
+ },
  "source": "published Sample Plans of Study",
  "plans": 678,
  "filters": {
