@@ -46,6 +46,27 @@
  *
  * @property {(specialTermPl: object) => string[]} coopGrantedAttrs
  *   Attribute codes a work term grants (NU: `EX`). Reported, never planned for.
+ *
+ * @property {(courseId: string) => {kind: string, abroad: boolean, halfTime: boolean}|null}
+ *   workExperience
+ *   Is this course RECORDED BY placing a work term rather than attended, and if so
+ *   which block records it? `kind` matches the block's `registersCourse`
+ *   (NU: `"coop"` / `"intern"`). `null` for an ordinary class — the common case.
+ *
+ *   This is the fact that stops CHART scheduling `COOP 3948` as a Year 4 Fall
+ *   lecture, and it arrives here rather than being read off `courseMap[id].coop`
+ *   for the reason at the top of this file: the stamp is written by
+ *   `adapters/northeastern/courseNorm`, so reading it directly made the engine
+ *   depend on Northeastern's spelling of its own idea. `attributes` is the model
+ *   for how this should look — NU's `nuPath` is normalised INTO it, which is why
+ *   `grep nuPath src/engine/` finds nothing.
+ *
+ *   Null-by-default is PERMISSION in the same sense as the rest of this contract,
+ *   though it degrades in the other direction: an engine with no port treats every
+ *   course as attendable and simply schedules work-experience courses as classes,
+ *   which is what CHART did before the port existed. That is the conservative
+ *   choice — an engine that withdrew cells it could not identify would silently
+ *   drop requirements.
  */
 
 /**
@@ -72,6 +93,9 @@ export function permissivePorts(overrides = {}) {
     creditMax: () => Infinity,
     termWeight: () => 1,
     coopGrantedAttrs: () => [],
+    // Nothing is a work-term registration until an institution says so. See the
+    // contract above for why this default schedules rather than withdraws.
+    workExperience: () => null,
     ...overrides,
   };
 }

@@ -1329,7 +1329,10 @@ export function cellsSH(cells) {
  * it already had, so no credit moves at all — only the slot is freed.
  *
  * @param {object[]} cells
- * @param {object} courseMap        `courseMap[key].coop` is the registration stamp
+ * @param {(courseId: string) => object|null} workExperience  see ports.js; null for
+ *   an ordinary class. Injected rather than read off `courseMap[key].coop`: that
+ *   stamp is written by `adapters/northeastern/courseNorm`, and reading it here
+ *   made the engine depend on Northeastern's spelling of its own idea.
  * @param {boolean} shapeHasCoop    does the published plan put the student on co-op
  * @returns {{cells: object[], withdrawn: object[]}}
  */
@@ -1368,20 +1371,20 @@ export function cellsSH(cells) {
  *
  * @param {{keys: string[], title: string, id: string}[]} requirements  withdrawn cells
  * @param {number} runCount   how many separate co-ops the shape carries
- * @param {object} courseMap
+ * @param {(courseId: string) => {kind: string}|null} workExperience  see ports.js
  * @param {string} [kind]     the block's family: "coop" or "intern"
  * @returns {{runIndex: number, key: string, title: string, cell: string}[]}
  */
-export function assignRegistrations(requirements, runCount, courseMap = {}, kind = "coop") {
+export function assignRegistrations(requirements, runCount, workExperience = () => null, kind = "coop") {
   const out = [];
   if (!(runCount > 0)) return out;
   const used = new Set();
-  // Only courses the catalog STAMPS as a work-experience registration of this
-  // block's family. `courseMap[k]?.coop` must exist — an unstamped course is an
-  // ordinary class, and defaulting its kind to "coop" is what proposed an 8 SH
+  // Only courses the INSTITUTION calls a work-term registration of this block's
+  // family. The port must answer non-null — an unrecognised course is an ordinary
+  // class, and defaulting its kind to "coop" is what once proposed an 8 SH
   // practicum as a co-op registration.
   const legal = (r) => (r.keys ?? []).filter(k => {
-    const c = courseMap?.[k]?.coop;
+    const c = workExperience(k);
     return !!c && (c.kind ?? "coop") === kind;
   });
   // Sorted by title so the output does not depend on how the requirement
@@ -1414,13 +1417,13 @@ export function assignRegistrations(requirements, runCount, courseMap = {}, kind
   return out;
 }
 
-export function withdrawWorkTermCells(cells, courseMap = {}, shapeHasCoop = false) {
+export function withdrawWorkTermCells(cells, workExperience = () => null, shapeHasCoop = false) {
   const kept = [];
   const withdrawn = [];
   for (const cell of cells ?? []) {
     const keys = (cell.groups ?? []).flat().filter(Boolean);
     if (!keys.length) { kept.push(cell); continue; }
-    const work = keys.filter(k => courseMap?.[k]?.coop).length;
+    const work = keys.filter(k => workExperience(k)).length;
     if (work === 0) { kept.push(cell); continue; }
     const all = work === keys.length;
     if (all || shapeHasCoop) {

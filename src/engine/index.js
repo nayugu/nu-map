@@ -278,7 +278,7 @@ function generateOnce({
   // beside the four co-op terms its own plan already carries. Withdrawing costs
   // no credit; these cells are charged 0 SH either way. See the function.
   const { cells: schedulable, withdrawn: workTermCells } =
-    withdrawWorkTermCells(cells, courseMap, hasCoop);
+    withdrawWorkTermCells(cells, ports.workExperience, hasCoop);
   cells = schedulable;
   if (workTermCells.length) {
     notes = [...notes, ...workTermCells.map(w => ({
@@ -752,7 +752,7 @@ function generateOnce({
     if (isCoop && !prevCoop) runStarts.push(i);
   });
   const registersAt = new Map();
-  for (const a of assignRegistrations(workTermCells, runStarts.length, courseMap, "coop")) {
+  for (const a of assignRegistrations(workTermCells, runStarts.length, ports.workExperience, "coop")) {
     registersAt.set(runStarts[a.runIndex], a.key);
   }
 

@@ -18,18 +18,29 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { withdrawWorkTermCells, assignRegistrations } from "../../src/engine/demand.js";
+import { permissivePorts } from "../../src/engine/ports.js";
 
-/** A catalog where the COOP/EEBA keys carry the registration stamp and BUSN does not. */
-const MAP = {
-  COOP3945: { id: "COOP3945", sh: 0, coop: { abroad: false, halfTime: false, kind: "coop" } },
-  COOP3946: { id: "COOP3946", sh: 0, coop: { abroad: false, halfTime: true,  kind: "coop" } },
-  COOP3947: { id: "COOP3947", sh: 0, coop: { abroad: true,  halfTime: true,  kind: "coop" } },
-  COOP3948: { id: "COOP3948", sh: 0, coop: { abroad: true,  halfTime: false, kind: "coop" } },
-  COOP3949: { id: "COOP3949", sh: 0, coop: { abroad: false, halfTime: false, kind: "intern" } },
-  EEBA2945: { id: "EEBA2945", sh: 0, coop: { abroad: false, halfTime: false, kind: "intern" } },
-  BUSN4945: { id: "BUSN4945", sh: 8 },          // In-the-Field Practicum — a real class
-  INTB3205: { id: "INTB3205", sh: 4 },
+/**
+ * The `workExperience` PORT, not a courseMap.
+ *
+ * The engine no longer reads `courseMap[id].coop` — that stamp is Northeastern's,
+ * written by `adapters/northeastern/courseNorm`, and reading it made the engine
+ * depend on one institution's spelling of its own idea. Everything here is
+ * therefore expressed the way `ports.js` states it: a lookup returning `null` for
+ * an ordinary class. `BUSN 4945` returning null is the whole of the regression
+ * test below.
+ */
+const WORK = {
+  COOP3945: { abroad: false, halfTime: false, kind: "coop" },
+  COOP3946: { abroad: false, halfTime: true,  kind: "coop" },
+  COOP3947: { abroad: true,  halfTime: true,  kind: "coop" },
+  COOP3948: { abroad: true,  halfTime: false, kind: "coop" },
+  COOP3949: { abroad: false, halfTime: false, kind: "intern" },
+  EEBA2945: { abroad: false, halfTime: false, kind: "intern" },
+  // BUSN 4945 (8 SH In-the-Field Practicum) and INTB 3205 are ordinary classes
+  // and are ABSENT — the port answers null for them.
 };
+const MAP = (courseId) => WORK[courseId] ?? null;
 const cell = (id, title, groups, sh = 0) => ({ id, title, groups, sh });
 
 // ── withdrawal ──────────────────────────────────────────────────────
@@ -86,6 +97,22 @@ test("an empty or malformed cell list does not throw", () => {
   assert.deepEqual(withdrawWorkTermCells([], MAP, true).cells, []);
   assert.deepEqual(withdrawWorkTermCells(undefined, MAP, true).cells, []);
   assert.deepEqual(withdrawWorkTermCells([{ id: "x" }], MAP, true).cells, [{ id: "x" }]);
+});
+
+test("with NO port, nothing is withdrawn and nothing is named", () => {
+  // The degradation the port introduces, and the direction matters. An engine
+  // told nothing about work experience must SCHEDULE these cells — the
+  // behaviour before any of this existed — rather than withdraw cells it cannot
+  // identify, which would silently drop requirements from a plan. `ports.js`
+  // states this as the deliberate exception to "unknown means allowed".
+  const cells = [cell("a", "International Experiential", [["COOP3948"]])];
+  const perm = permissivePorts();
+  assert.equal(withdrawWorkTermCells(cells, perm.workExperience, true).cells.length, 1);
+  assert.deepEqual(withdrawWorkTermCells(cells, perm.workExperience, true).withdrawn, []);
+  assert.deepEqual(assignRegistrations([req("a", "X", ["COOP3948"])], 2, perm.workExperience), []);
+  // And the defaults hold with no argument at all, since both parameters default.
+  assert.equal(withdrawWorkTermCells(cells).cells.length, 1);
+  assert.deepEqual(assignRegistrations([req("a", "X", ["COOP3948"])], 2), []);
 });
 
 // ── the registration, where the requirement forces one ──────────────

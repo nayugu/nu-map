@@ -23,6 +23,7 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { loadCatalog } from "../src/adapters/northeastern/courseCatalog.node.js";
 import { deriveCells, withdrawWorkTermCells } from "../src/engine/demand.js";
+import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import { shapeFromPlan } from "../src/engine/shape.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
@@ -52,7 +53,9 @@ function programs() {
   return out;
 }
 
-const isWorkCourse = (key) => !!courseMap?.[key]?.coop;
+// The real port, from the NU adapter — not a local re-reading of the stamp.
+const { workExperience } = enginePorts(courseMap);
+const isWorkCourse = (key) => !!workExperience(key);
 /** A cell's option groups, flattened to course keys. */
 const keysOf = (cell) => (cell.groups ?? []).flat().filter(Boolean);
 
@@ -89,7 +92,9 @@ for (const { prog, plan } of programs()) {
   const published = !!(plan?.plans ?? []).length;
   // Run the real withdrawal, so the numbers below come from the shipped
   // function rather than from this script's own idea of it.
-  const { withdrawn } = withdrawWorkTermCells(cells, courseMap, workTerms > 0);
+  // Through the same port the engine uses, so this probe cannot answer a
+  // question the engine would answer differently.
+  const { withdrawn } = withdrawWorkTermCells(cells, workExperience, workTerms > 0);
   for (const w of withdrawn) {
     if (w.sh > 0) { withdrawnSH += w.sh; overCharged.push(`${prog.name}:${w.keys[0]}=${w.sh}SH`); }
   }
