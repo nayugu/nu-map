@@ -21,7 +21,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { IAcceleratedPathway } from "../ports/IAcceleratedPathway.js";
 import { isEligibleFor } from "../core/pathway/select.js";
-import { computeGrantedAttrs, workTermGrants, coopOptionsInPrograms } from "../core/specialTermUtils.js";
+import { computeGrantedAttrs, workTermGrants } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { cohortCatalogYear, programIdFromPath } from "../data/programPaths.js";
 import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
@@ -286,17 +286,7 @@ function XomGroupHeader({ title, style }) {
   return <span style={style}>{scaleLatinRuns(text)}</span>;
 }
 
-/**
- * `abroadOnly` — set by a parent whose every course option is an ABROAD
- * work-experience variant, i.e. a requirement no domestic co-op can satisfy.
- * Only such a node may offer to mark a work term as international. Without it
- * the offer appears on every unmet abroad option anywhere, including
- * International Business's `Business Experiential Learning`, which lists
- * COOP 3947 and 3948 among seven — and acting there would consume the co-op
- * for the OTHER section. Undefined at the root means a bare COURSE
- * requirement, where the course IS the whole requirement.
- */
-function ReqNode({ r, depth = 0, dimmed = false, abroadOnly }) {
+function ReqNode({ r, depth = 0, dimmed = false }) {
   const [open, setOpen]  = useState(true);
   const [hov,  setHov]   = useState(false);
   const { t }            = useLanguage();
@@ -408,10 +398,7 @@ function ReqNode({ r, depth = 0, dimmed = false, abroadOnly }) {
       ? r.children[0]
       : null;
     if (singleCourse) {
-      // Forwards `abroadOnly` rather than defaulting it: this collapse stands in
-      // for the pool, so if a parent already said other routes exist, the
-      // single course inherits that and does not offer to flag a co-op.
-      return <ReqNode r={{ ...singleCourse, sat: r.sat }} depth={depth} dimmed={dimmed} abroadOnly={abroadOnly} />;
+      return <ReqNode r={{ ...singleCourse, sat: r.sat }} depth={depth} dimmed={dimmed} />;
     }
 
     const has = r.children?.length > 0;
@@ -437,10 +424,10 @@ function ReqNode({ r, depth = 0, dimmed = false, abroadOnly }) {
                   <div style={{ paddingLeft: baseIndent + (depth + 1) * (isPhone ? 4 : 10), marginTop: gi > 0 ? 4 : 0, marginBottom: 2 }}>
                     <XomGroupHeader title={g.title} style={{ fontSize: nodeFz - 1, fontWeight: 600, color: "var(--text-4)", textTransform: "uppercase", letterSpacing: "0.04em" }} />
                   </div>
-                  {g.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} abroadOnly={false} />)}
+                  {g.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} />)}
                 </div>
               ))
-            : r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} abroadOnly={false} />)
+            : r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} />)
           }
         </div>}
       </div>
@@ -458,19 +445,6 @@ function ReqNode({ r, depth = 0, dimmed = false, abroadOnly }) {
     r.type === "OR"  ? t("grad.oneOf", { count: r.satCount ?? 0, total: r.total ?? 0 }) :
     sectionHeading || (r.label ?? "");
 
-  // True when every course this node offers is an abroad work-experience
-  // variant — i.e. no domestic co-op can satisfy it. Only then may a child row
-  // offer to mark a work term international. An OR with even one other route
-  // (International Business's Business Experiential Learning has seven) must
-  // not, because marking there would consume the co-op for a different
-  // section. AND nodes never qualify: their options are all required, so
-  // flagging one co-op cannot be the answer.
-  const courseKids = (r.children ?? []).filter(c => c.type === "COURSE");
-  const allOptionsAbroad = r.type === "OR"
-    && courseKids.length > 0
-    && courseKids.length === (r.children ?? []).length
-    && courseKids.every(c => courseMap?.[c.key]?.coop?.abroad === true);
-
   return (
     <div style={{ paddingLeft: pl, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
       <div onClick={(e) => { e.stopPropagation(); has && setOpen(v => !v); }}
@@ -480,7 +454,7 @@ function ReqNode({ r, depth = 0, dimmed = false, abroadOnly }) {
         {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>}
       </div>
       {open && has && <div style={{ marginTop: 3 }}>
-        {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.type === "OR" && r.sat && !c.sat} abroadOnly={allOptionsAbroad} />)}
+        {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.type === "OR" && r.sat && !c.sat} />)}
       </div>}
     </div>
   );
@@ -1636,13 +1610,6 @@ export default function GradPanel({ wideCatalog = false }) {
   // A work term registers a real course (COOP 3945), which 37 undergraduate
   // programs name as a requirement. It joins placedSet ONLY — realPlacedSet
   // below feeds General Electives and must stay what the student placed.
-  // Which work-term courses this student's programs accept. Majors only:
-  // measured over the corpus, 0 of 172 minors name one.
-  const coopOptions = useMemo(
-    () => coopOptionsInPrograms([major, major2Data], courseMap),
-    [major, major2Data, courseMap]
-  );
-
   /**
    * Course key → the work term that registered it.
    *
@@ -1652,16 +1619,16 @@ export default function GradPanel({ wideCatalog = false }) {
    * checked course that does not exist in their plan.
    */
   const workTermSource = useMemo(
-    () => workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, null, coopOptions).source,
-    [specialTermPl, specialTerms, SEM_INDEX, coopOptions]);
+    () => workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX).source,
+    [specialTermPl, specialTerms, SEM_INDEX]);
 
   const placedSet = useMemo(
     () => {
       const set = buildPlacedKeySet(filterInTimeline(applySubstitutions(dropVoidTakes(placements, grades), effectiveSubstitutions), SEM_INDEX), placedOut, courseMap);
-      for (const k of workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, null, coopOptions).planned) set.add(k);
+      for (const k of workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX).planned) set.add(k);
       return set;
     },
-    [placements, effectiveSubstitutions, placedOut, courseMap, SEM_INDEX, grades, specialTermPl, specialTerms, coopOptions]
+    [placements, effectiveSubstitutions, placedOut, courseMap, SEM_INDEX, grades, specialTermPl, specialTerms]
   );
 
   // Real-only placed set: excludes virtual substitution-target entries from effectivePlacements.
@@ -1685,9 +1652,9 @@ export default function GradPanel({ wideCatalog = false }) {
     // merely planned — otherwise the requirement row reads as still pending
     // for a student who finished the co-op two years ago.
     const isDone = (semId) => getSemStatus(semId) === "completed";
-    for (const k of workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, isDone, coopOptions).completed) set.add(k);
+    for (const k of workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, isDone).completed) set.add(k);
     return set;
-  }, [placements, effectiveSubstitutions, placedOut, courseMap, getSemStatus, grades, specialTermPl, specialTerms, SEM_INDEX, coopOptions]);
+  }, [placements, effectiveSubstitutions, placedOut, courseMap, getSemStatus, grades, specialTermPl, specialTerms, SEM_INDEX]);
 
   const concGroups = useMemo(() => {
     const opts = (major?.concentrations?.concentrationOptions ?? []).map(c => ({ path: c.title, label: c.title }));

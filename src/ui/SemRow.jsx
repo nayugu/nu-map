@@ -68,7 +68,7 @@ export default function SemRow({ sem }) {
 
   // Work-term instance → the course it registers. From RelevanceContext, which
   // loads the programs app-wide; the Graduation panel is not always mounted.
-  const { workTermCourse } = useRelevance();
+  const { workTermCourse, coopProgramOptions } = useRelevance();
 
   const isLive = semTrackingMode === "live";
   const onNowClick = () => { if (!isLive) setCurrentSemId(sem.id); };
@@ -121,14 +121,20 @@ export default function SemRow({ sem }) {
   // COOP 3948 for an abroad co-op in International Business. Resolved app-wide
   // in RelevanceContext so the board and the audit cannot disagree.
   const registers  = workTermCourse?.[termStartId] ?? null;
-  // Every work-experience course, the student's own program's options first.
-  // Ordering is a hint; the list is deliberately NOT restricted to them.
+  // The work-experience courses THIS block could register, the student's own
+  // program's options first. Scoped by kind — an internship card must not offer
+  // COOP 3945, and a co-op card must not offer COOP 3949 Internship Exchange;
+  // the block the student dragged is itself a statement about which they did.
+  // Within the kind the list is deliberately NOT restricted to their program:
+  // ordering is a hint, choosing is theirs.
   const workTermCourseOptions = useMemo(() => {
-    const all = Object.values(courseMap ?? {}).filter(c => c.coop);
-    const mine = new Set(Object.values(workTermCourse ?? {}));
+    const kind = termStartType?.registersCourse;
+    if (!kind) return [];
+    const all  = Object.values(courseMap ?? {}).filter(c => c.coop?.kind === kind);
+    const mine = coopProgramOptions ?? new Set();
     return all.sort((a, b) =>
       (mine.has(b.id) - mine.has(a.id)) || a.id.localeCompare(b.id));
-  }, [courseMap, workTermCourse]);
+  }, [courseMap, coopProgramOptions, termStartType]);
   // shVoided takes carry sh 0 (a failed grade earns nothing) but must stay
   // as full cards — vanishing into the low-credit subline would hide the
   // very course whose failure the user just recorded.
@@ -387,7 +393,10 @@ export default function SemRow({ sem }) {
                     guess misfires on trackpads and touch. So the arrow is its
                     own small target and the input is another; drag the card,
                     click the arrow, type in the field. Nothing has to guess. */}
-                {registers && !privateCoop && (
+                {/* Gated on the TYPE registering a course at all — not on one
+                    having been chosen. Gating on the choice made the field to
+                    make the choice appear only after it was made. */}
+                {termStartType?.registersCourse && !privateCoop && (
                   <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 1 }}
                        onMouseDown={e => e.stopPropagation()}
                        onClick={e => e.stopPropagation()}>

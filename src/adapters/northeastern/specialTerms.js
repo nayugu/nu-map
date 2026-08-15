@@ -23,18 +23,20 @@ const _types = [
       { id: "6mo", label: "6-month", duration: 6, weight: 2.0 },
     ],
     attributeGrants: ["EX"],
-    // A co-op block IS a registration for COOP 3945 (Co-op Work Experience) —
-    // students really do register for it, and 37 undergraduate programs name
-    // a COOP course as a requirement. Without this bridge a student with two
-    // co-ops on the board was told the experiential requirement was unmet.
+    // A co-op block IS a course registration — students really do register for
+    // one, and 140 programs name such a course as a requirement. So the card
+    // carries a course field, scoped to the 87 catalog courses stamped
+    // `kind: "coop"` by scripts/derive-coop-courses.js.
     //
-    // Only 3945, deliberately. Measured over the corpus: all 37 of those
-    // programs list 3945 among the options, so one key satisfies every one of
-    // them. The others are NOT interchangeable — 3946/3947 are half-time and
-    // 3947/3948 are abroad — and exactly one section (International Business's
-    // "International Experiential Learning") requires 3948 alone. An ordinary
-    // co-op must leave that one unmet rather than claim experience abroad.
-    courseGrants:    ["COOP3945"],
+    // It registers NOTHING until the student picks. This used to grant
+    // COOP 3945 from any placed co-op, on the reasoning that all 37 COOP-naming
+    // undergraduate programs list 3945 among their options — but the variants
+    // are not interchangeable (3946/3947 are half-time, 3947/3948 abroad), and
+    // the inference picked an option that FIT rather than the one that was
+    // true. A student whose co-op registered something a section does not
+    // accept saw it tick anyway. The field is the honest answer to the question
+    // the inference was guessing at.
+    registersCourse: "coop",
     occupiesSlot:    true,
     creditValue:     0,
     // A full-time co-op is 32+ hours a week, and NU permits ONE course
@@ -57,13 +59,27 @@ const _types = [
   },
   {
     id:    "intern",
-    label: "Full-Time Internship",
+    label: "Internship",
     color: "#9ca3af",
     durations: [
       { id: "2mo", label: "2-month", duration: 2, weight: 0.5 },
       { id: "4mo", label: "4-month", duration: 4, weight: 1.0 },
     ],
     attributeGrants: [],
+    // Same bridge as co-op, and it needs the same care about WHICH courses.
+    // NEU registers two different things under the word "internship":
+    //
+    //   • 5 zero-credit registrations — `COOP 3949 Internship Exchange`,
+    //     `EEBA 2945/2948 Internship Experience`, `COP 5002`, `PPUA 6861`.
+    //     These record a work term, exactly like COOP 3945.
+    //   • 35 credit-bearing `*994 Internship` courses, 4 SH each, one per
+    //     department. A student pays tuition and earns credit for those, so
+    //     they are ordinary courses you place on the board — NOT this block.
+    //
+    // Only the first group is stamped `kind: "intern"`, so only it appears in
+    // this card's picker. Hiding the second group would have cost 35 courses
+    // 4 SH apiece.
+    registersCourse: "intern",
     occupiesSlot:    true,
     creditValue:     0,
     // Deliberately no concurrentCap. A full-time internship is the same

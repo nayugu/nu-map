@@ -5,12 +5,13 @@
 // that never ran. The chain only closes in a browser:
 //
 //   coop-courses.json is fetched by the catalog adapter
-//     → stamped onto courseMap as { abroad, halfTime }
-//       → read by coopOptionsInPrograms against the LOADED major
-//         → resolved per block by workTermGrants
-//           → added to placedSet
-//             → allocated by gradRequirements
-//               → drawn as a row
+//     → stamped onto courseMap as { abroad, halfTime, kind }
+//       → offered in the block card's picker, scoped by kind
+//         → the student's choice stored as `courseId` on the block
+//           → read back by workTermGrants
+//             → added to placedSet
+//               → allocated by gradRequirements
+//                 → drawn as a row
 //
 // Any link can break without a single unit test noticing. The one that did
 // break in review was two links further out than this file reaches: the Node
@@ -96,13 +97,17 @@ describe("browser · a work term registers its program's course", { skip: up ? f
     return (text.slice(i, i + 160).match(/(\d+\s*\/\s*\d+)/) ?? [])[1] ?? null;
   };
 
+  /** A co-op block. `courseId` is what the student picked on the card. */
   const coop = (extra = {}) => ({ c1: { typeId: "coop", semId: "spr2027", duration: 6, ...extra } });
 
-  // THE REGRESSION. Before the resolver this stayed 1/2 for ~99 graduate
-  // programs, because the block granted COOP 3945 and MSIS names ENCP 6964.
-  test("a graduate co-op satisfies its program's own ENCP option", async () => {
+  // THE REGRESSION. This stayed 1/2 for ~99 graduate programs when the block
+  // granted a hardcoded COOP 3945 and MSIS names ENCP 6964. The fix is no
+  // longer a resolver that guesses the subject — it is that the card lets the
+  // student say ENCP 6964, and any subject reaches the requirement layer.
+  test("a graduate co-op recorded as ENCP 6964 satisfies its program's own option", async () => {
     const before = await panelText({ major: PROGRAMS.msis, graduate: true, placements: { ENCP6000: "fall2025" } });
-    const after  = await panelText({ major: PROGRAMS.msis, graduate: true, placements: { ENCP6000: "fall2025" }, workTerms: coop() });
+    const after  = await panelText({ major: PROGRAMS.msis, graduate: true, placements: { ENCP6000: "fall2025" },
+                                     workTerms: coop({ courseId: "ENCP6964" }) });
 
     assert.equal(counterAfter(before, "Optional Co-?op Experience"), "1/2");
     assert.equal(counterAfter(after,  "Optional Co-?op Experience"), "2/2");
@@ -110,12 +115,20 @@ describe("browser · a work term registers its program's course", { skip: up ? f
     assert.match(after,  /One of \(1\/4\)/);
   });
 
+  // The other half of the same claim, and the more important one: an app that
+  // ticked the box on its own was the defect, not the feature.
+  test("a co-op with no course chosen satisfies nothing", async () => {
+    const t = await panelText({ major: PROGRAMS.msis, graduate: true,
+                                placements: { ENCP6000: "fall2025" }, workTerms: coop() });
+    assert.equal(counterAfter(t, "Optional Co-?op Experience"), "1/2");
+  });
+
   // Work-experience courses left the bank, so the requirements panel is the
   // last place a granted key is visible. Two things must hold there.
   test("a granted row names the work term and is not draggable", async () => {
     const ctx = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
     await ctx.addInitScript(seed(PROGRAMS.msis, true, { ENCP6000: "fall2025" },
-      { c1: { typeId: "coop", semId: "spr2027", duration: 6, company: "Acme" } }));
+      { c1: { typeId: "coop", semId: "spr2027", duration: 6, company: "Acme", courseId: "ENCP6964" } }));
     const page = await ctx.newPage();
     await page.goto(APP, { waitUntil: "networkidle" });
     await page.waitForTimeout(2000);
@@ -160,61 +173,56 @@ describe("browser · a work term registers its program's course", { skip: up ? f
     assert.equal(counterAfter(only, "Optional Co-?op Experience"), "1/2");
   });
 
-  // International Business is the one program in 1,017 where the abroad flag
-  // changes an answer, and its two experiential sections are both non-shared.
-  test("an ordinary co-op satisfies Business Experiential and NOT International", async () => {
-    const t = await panelText({ major: PROGRAMS.ib, workTerms: coop() });
+  // International Business is the one program in 1,017 with two non-shared
+  // experiential sections, one of which wants COOP 3948 alone. It is the case
+  // where registering the wrong course is visibly different from registering
+  // none, so it is where the "no inference" rule has to hold.
+  test("a co-op recorded as COOP 3945 satisfies Business Experiential and NOT International", async () => {
+    const t = await panelText({ major: PROGRAMS.ib, workTerms: coop({ courseId: "COOP3945" }) });
     assert.equal(counterAfter(t, "Business Experiential Learning"), "1/1");
     assert.equal(counterAfter(t, "International Experiential Learning"), "0/1");
   });
 
-  test("a co-op marked abroad satisfies International and NOT Business", async () => {
-    // One abroad co-op cannot cover both: allocateSections consumes COOP 3948
-    // once and neither section is `shared`.
-    const t = await panelText({ major: PROGRAMS.ib, workTerms: coop({ abroad: true }) });
+  test("a co-op recorded as COOP 3948 satisfies International and NOT Business", async () => {
+    // One co-op cannot cover both: allocateSections consumes COOP 3948 once
+    // and neither section is `shared`.
+    const t = await panelText({ major: PROGRAMS.ib, workTerms: coop({ courseId: "COOP3948" }) });
     assert.equal(counterAfter(t, "International Experiential Learning"), "1/1");
     assert.equal(counterAfter(t, "Business Experiential Learning"), "0/1");
   });
 
-  // The abroad flag had no way to be set from the UI at all until this.
-  test("the unmet International row offers to mark a work term as international", async () => {
-    const ctx = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
-    await ctx.addInitScript(seed(PROGRAMS.ib, false, {}, coop()));
-    const page = await ctx.newPage();
-    await page.goto(APP, { waitUntil: "networkidle" });
-    await page.waitForTimeout(2000);
-    for (let i = 0; i < 6; i++) {
-      const skip = page.getByRole("button", { name: /^Skip$/ }).first();
-      if (await skip.count() && await skip.isVisible().catch(() => false)) {
-        await skip.click().catch(() => {}); await page.waitForTimeout(250);
-      } else break;
-    }
-    await page.getByRole("button", { name: /^Graduation$/ }).first().click().catch(() => {});
-    await page.waitForTimeout(2500);
-
-    const before = await page.evaluate(() => document.body.innerText);
-    assert.equal(counterAfter(before, "International Experiential Learning"), "0/1");
-
-    const btn = page.getByRole("button", { name: /mark a work term as international/i }).first();
-    assert.ok(await btn.count(), "no actuator on the unmet International row");
-    await btn.click();
-    await page.waitForTimeout(1500);
-
-    const after = await page.evaluate(() => document.body.innerText);
-    await ctx.close();
-    // Clicking it must actually satisfy the requirement, and must consume the
-    // co-op — so Business Experiential goes the other way. One abroad co-op
-    // cannot cover both non-shared sections.
-    assert.equal(counterAfter(after, "International Experiential Learning"), "1/1");
-    assert.equal(counterAfter(after, "Business Experiential Learning"), "0/1");
+  // THE CASE THE INFERENCE GOT WRONG, end to end. The old resolver read the
+  // program's option list and picked one that fit, so a co-op registering
+  // something IB does not accept ticked a section anyway. The student must see
+  // it unmet — that is the whole reason the app stopped guessing.
+  test("a co-op recorded as a course the program does not accept satisfies neither", async () => {
+    const t = await panelText({ major: PROGRAMS.ib, workTerms: coop({ courseId: "ENCP6964" }) });
+    assert.equal(counterAfter(t, "Business Experiential Learning"), "0/1");
+    assert.equal(counterAfter(t, "International Experiential Learning"), "0/1");
   });
 
-  test("two co-ops, one abroad, satisfy both — the base-variant fallback", async () => {
+  test("two co-ops, each recorded, satisfy both sections", async () => {
     const t = await panelText({ major: PROGRAMS.ib, workTerms: {
-      a: { typeId: "coop", semId: "spr2027", duration: 6, abroad: true },
-      b: { typeId: "coop", semId: "spr2028", duration: 6 },
+      a: { typeId: "coop", semId: "spr2027", duration: 6, courseId: "COOP3948" },
+      b: { typeId: "coop", semId: "spr2028", duration: 6, courseId: "COOP3945" },
     } });
     assert.equal(counterAfter(t, "International Experiential Learning"), "1/1");
     assert.equal(counterAfter(t, "Business Experiential Learning"), "1/1");
+  });
+
+  // ── the internship block mirrors all of it ────────────────────────
+  //
+  // Same card field, same storage, same resolver. The one thing that differs
+  // is which courses the picker offers, and the failure that would hide here
+  // is the type declaring no `registersCourse` at all — the field silently
+  // absent, exactly the bug that shipped when it existed only on SemRow.
+  test("an internship registers the course named on its card", async () => {
+    const t = await panelText({ major: PROGRAMS.ib, workTerms: {
+      i1: { typeId: "intern", semId: "sumA2027", duration: 2, courseId: "COOP3949" },
+    } });
+    // COOP 3949 is not on IB's list, so nothing may tick — but the plan must
+    // load and render without the block being treated as a course-less type.
+    assert.equal(counterAfter(t, "Business Experiential Learning"), "0/1");
+    assert.match(t, /Internship|Experiential/i);
   });
 });

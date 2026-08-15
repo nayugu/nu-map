@@ -49,40 +49,6 @@ export function computeGrantedAttrs(specialTermPl, types, semIndex) {
 }
 
 /**
- * Compute the Set of COURSE KEYS granted by all placed special terms.
- *
- * The sibling of computeGrantedAttrs, and it exists for the same reason: a
- * work term is not only an attribute, it can be a registration. At NU a co-op
- * block is a real enrolment in COOP 3945, and programs name that course as a
- * requirement — so without this, a plan with two co-ops on the board reported
- * its experiential requirement unmet.
- *
- * The result belongs in `placedSet` ONLY, never `realPlacedSet`: these keys
- * satisfy requirements but are not courses the student dragged onto the grid,
- * so they must not surface as General Electives. That is the same split the
- * virtual substitution targets already use.
- *
- * Same timeline rule as computeGrantedAttrs — a co-op parked outside the
- * cohort range grants nothing.
- *
- * @param {Object}   specialTermPl - { [id]: { typeId, semId, ... } }
- * @param {Object[]} types         - specialTerms.types array from ISpecialTerms
- * @param {Object}   [semIndex]    - SEM_INDEX (semId → ordinal)
- * @returns {Set<string>}
- */
-export function computeGrantedCourses(specialTermPl, types, semIndex) {
-  const granted  = new Set();
-  const typeById = Object.fromEntries((types ?? []).map(t => [t.id, t]));
-  for (const data of Object.values(specialTermPl ?? {})) {
-    if (!data?.semId) continue;
-    if (semIndex && semIndex[data.semId] === undefined) continue;
-    const type = typeById[data.typeId];
-    if (type?.courseGrants) type.courseGrants.forEach(k => granted.add(k));
-  }
-  return granted;
-}
-
-/**
  * The course keys a plan's work terms grant, split into PLANNED and COMPLETED.
  *
  * ── Why this exists ────────────────────────────────────────────────
@@ -110,12 +76,12 @@ export function computeGrantedCourses(specialTermPl, types, semIndex) {
  * @param {(semId: string) => boolean} [isCompleted]
  * @returns {{ planned: Set<string>, completed: Set<string> }}
  */
-export function workTermGrants(specialTermPl, types, semIndex, isCompleted, coopOptions) {
-  const planned = resolveGrants(specialTermPl, types, semIndex, coopOptions);
+export function workTermGrants(specialTermPl, types, semIndex, isCompleted) {
+  const planned = resolveGrants(specialTermPl, types, semIndex);
   const finished = Object.fromEntries(
     Object.entries(specialTermPl ?? {}).filter(([, d]) => d?.semId && isCompleted?.(d.semId))
   );
-  const completed = resolveGrants(finished, types, semIndex, coopOptions);
+  const completed = resolveGrants(finished, types, semIndex);
   return {
     planned:   new Set(planned.keys()),
     completed: new Set(completed.keys()),
@@ -127,27 +93,25 @@ export function workTermGrants(specialTermPl, types, semIndex, isCompleted, coop
   };
 }
 
-/** No flags set: a full-time, domestic work term. The default a block carries. */
-const BASE_VARIANT = { abroad: false, halfTime: false };
-
 /**
  * The work-term course options a set of programs names, with their variants.
  *
- * This is what lets a block resolve to the right course WITHOUT anyone naming
- * one. Graduate co-op registers under the program's own subject — `ENCP 6964`
- * for engineering, `CS 6964` for Khoury, `PPUA 6964` for policy — and only 10
- * of the 86 work-experience courses are in subject `COOP`, so no fixed key and
- * no subject-based lookup can work. But each requirement node already lists
- * exactly the courses its own program accepts, so the program answers the
- * subject question for us and the student is never asked.
+ * NOT a grant, and no longer used as one. Graduate co-op registers under the
+ * program's own subject — `ENCP 6964` for engineering, `CS 6964` for Khoury,
+ * `PPUA 6964` for policy — and only 11 of the 92 work-experience courses are in
+ * subject `COOP`/`COP`, so a Khoury student scrolling an alphabetical list
+ * reaches theirs somewhere around `E`. Each requirement node already names
+ * exactly the courses its own program accepts, so the program can put those at
+ * the top of the picker. Ordering is a hint; choosing is still the student's.
  *
  * `courseMap[key].coop` is stamped by the catalog adapter from
  * `coop-courses.json`. A course without it is an ordinary class and is skipped
- * here — which is how the 26 co-op-TITLED seminars stay placeable.
+ * here — which is how the 76 co-op- and internship-TITLED classes stay
+ * placeable, including the 35 credit-bearing `*994 Internship` courses.
  *
  * @param {Object[]} programs  - loaded major/minor requirement JSON
  * @param {Object}   courseMap - key → Course
- * @returns {{key: string, abroad: boolean, halfTime: boolean}[]} sorted, unique
+ * @returns {{key: string, abroad: boolean, halfTime: boolean, kind: string}[]} sorted, unique
  */
 export function coopOptionsInPrograms(programs, courseMap) {
   const seen = new Map();
@@ -157,7 +121,9 @@ export function coopOptionsInPrograms(programs, courseMap) {
     if (node.type === "COURSE" && node.subject != null && node.classId != null) {
       const key  = `${node.subject}${node.classId}`;
       const coop = courseMap?.[key]?.coop;
-      if (coop && !seen.has(key)) seen.set(key, { key, abroad: !!coop.abroad, halfTime: !!coop.halfTime });
+      if (coop && !seen.has(key)) {
+        seen.set(key, { key, abroad: !!coop.abroad, halfTime: !!coop.halfTime, kind: coop.kind ?? "coop" });
+      }
       return;
     }
     Object.values(node).forEach(walk);
@@ -169,65 +135,43 @@ export function coopOptionsInPrograms(programs, courseMap) {
 /**
  * Which course keys a set of placed work terms registers.
  *
- * ── Why a block emits the BASE variant when its own is taken ────────
- *
- * The requirement layer is a Set of base course keys — `buildPlacedKeySet`
- * maps every placement through `courseMap` and emits `courseKey(subject,
- * number)` — so `COOP3948#2` is not representable and repeat instances cannot
- * express "two co-ops". Two identically-flagged blocks would collapse onto one
- * key and a program wanting two experiences would see one.
- *
- * Falling back to the base variant prevents that, and it is *true* rather than
- * convenient: a second co-op abroad, with nothing abroad-specific left to
- * claim, is still a co-op. Verified against the real allocator on
- * International Business, whose two experiential sections are both non-shared:
- * one abroad co-op satisfies the international section and NOT the business
- * one; an abroad plus a domestic satisfies both; two abroad also satisfies
- * both. See docs/coop-design.md.
+ * Only types that declare `registersCourse` are considered at all: a block that
+ * is not a course registration cannot produce one however it is filled in.
  *
  * Blocks resolve in timeline order so the answer does not depend on the order
  * a student happened to drag them.
- *
- * With no options — no program chosen, a program naming no work-term course,
- * or a catalog missing the `coop` stamps — this degrades to the type's static
- * `courseGrants`, which is exactly the behaviour before any of this existed.
  */
-function resolveGrants(specialTermPl, types, semIndex, coopOptions) {
+function resolveGrants(specialTermPl, types, semIndex) {
   /** @type {Map<string, string>} course key → the instance id that registered it */
   const granted  = new Map();
   const typeById = Object.fromEntries((types ?? []).map(t => [t.id, t]));
 
   const eligible = Object.entries(specialTermPl ?? {})
     .filter(([, d]) => d?.semId && !(semIndex && semIndex[d.semId] === undefined))
-    .filter(([, d]) => typeById[d.typeId]?.courseGrants?.length)
+    .filter(([, d]) => typeById[d.typeId]?.registersCourse)
     .sort(([, a], [, b]) => (semIndex?.[a.semId] ?? 0) - (semIndex?.[b.semId] ?? 0));
 
-  if (!coopOptions?.length) {
-    for (const [id, d] of eligible) {
-      for (const k of typeById[d.typeId].courseGrants) if (!granted.has(k)) granted.set(k, id);
-    }
-    return granted;
-  }
-
+  // A work term registers the course the student SAID it registers, and
+  // nothing otherwise.
+  //
+  // ── Why this no longer infers ───────────────────────────────────────
+  //
+  // The old bridge granted COOP 3945 from any placed co-op, and its reason was
+  // sound at the time: "a student with two co-ops on the board was told the
+  // experiential requirement was unmet", and there was no way for them to say
+  // which course they had registered. That justification is gone — the card
+  // now has a course field — and what remains is an assertion the app makes on
+  // the student's behalf and cannot support.
+  //
+  // It is also wrong in a way that matters. International Business accepts
+  // seven courses for `Business Experiential Learning`; a student whose co-op
+  // registers something not on that list would have seen the requirement tick
+  // anyway, because the inference picked an option that fit rather than the
+  // one that was true. Degrade to less information, never to wrong
+  // information: an untouched co-op grants `EX` — which is a property of doing
+  // a co-op at all — and no course.
   for (const [id, d] of eligible) {
-    // An explicit choice WINS over anything inferred, and is not restricted to
-    // the courses the student's program happens to name.
-    //
-    // The measurement behind the default — 147 of 152 requirement nodes are
-    // satisfied by a plain full-time domestic co-op — argues for defaulting,
-    // and says nothing about forbidding a choice. Conflating those two was a
-    // real error: a student may register for a work-experience course their
-    // program does not list, and this codebase already settled how to treat
-    // that case ("NU Map trusts the user: the repeat limit is never enforced,
-    // only reported" — core/repeatInstances.js).
-    if (d.courseId) { granted.set(d.courseId, id); continue; }
-    const pick = (f) => coopOptions.find(
-      o => o.abroad === f.abroad && o.halfTime === f.halfTime && !granted.has(o.key));
-    // No match for this block's own variant AND none for the base variant means
-    // the program's options are exhausted. Granting an unrelated key would be
-    // worse than granting nothing.
-    const hit = pick({ abroad: !!d.abroad, halfTime: !!d.halfTime }) ?? pick(BASE_VARIANT);
-    if (hit) granted.set(hit.key, id);
+    if (d.courseId) granted.set(d.courseId, id);
   }
   return granted;
 }

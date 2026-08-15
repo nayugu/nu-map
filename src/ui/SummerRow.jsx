@@ -48,14 +48,25 @@ export default function SummerRow({ semA, semB }) {
   } = usePlanner();
   // Which course each work term registers — resolved app-wide, same source the
   // fall/spring card and the audit read.
-  const { workTermCourse } = useRelevance();
-  const workTermCourseOptions = useMemo(
+  const { workTermCourse, coopProgramOptions } = useRelevance();
+  // Work-experience courses grouped by which BLOCK registers them, so a co-op
+  // card offers co-op registrations and an internship card offers internship
+  // ones. Keyed rather than filtered inline because this row renders two
+  // half-slots and `termStartType` is per-slot, below.
+  const workTermCoursesByKind = useMemo(
     () => {
-      const mine = new Set(Object.values(workTermCourse ?? {}));
-      return Object.values(courseMap ?? {}).filter(c => c.coop)
-        .sort((a, b) => (mine.has(b.id) - mine.has(a.id)) || a.id.localeCompare(b.id));
+      const mine = coopProgramOptions ?? new Set();
+      const by = {};
+      for (const c of Object.values(courseMap ?? {})) {
+        if (!c.coop) continue;
+        (by[c.coop.kind ?? "coop"] ??= []).push(c);
+      }
+      for (const list of Object.values(by)) {
+        list.sort((a, b) => (mine.has(b.id) - mine.has(a.id)) || a.id.localeCompare(b.id));
+      }
+      return by;
     },
-    [courseMap, workTermCourse]
+    [courseMap, coopProgramOptions]
   );
 
   const isLive = semTrackingMode === "live";
@@ -120,7 +131,7 @@ export default function SummerRow({ semA, semB }) {
     const termStartType = termStartData ? (specialTerms?.getTypes() ?? []).find(t => t.id === termStartData.typeId) : null;
     const termStartDur  = termStartType ? resolveTermByDuration(termStartType.durations, termStartData.duration) : null;
     if (termStartDur) {
-      const displayLabel = isPhone && termStartType.label === "Full-Time Internship" ? "Internship" : termStartType.label;
+      const displayLabel = termStartType.label;
       const registers = workTermCourse?.[termStartId] ?? null;
       return (
         <div key={sem.id} data-sem-id={sem.id} style={{
@@ -174,13 +185,15 @@ export default function SummerRow({ semA, semB }) {
                 <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termStartData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termStartData.typeId === "coop" ? "uppercase" : "none", whiteSpace: "nowrap" }}>
                   <TText>{displayLabel}</TText> {termNum(termStartData.typeId, termStartId)}
                 </div>
-                {registers && !privateCoop && (
+                {/* The TYPE registering a course, not a course having been
+                    chosen — otherwise the field appears only once used. */}
+                {termStartType?.registersCourse && !privateCoop && (
                   <div style={{ display: "flex", alignItems: "center", gap: 4, maxWidth: isPhone ? 62 : 108 }}
                        onMouseDown={e => e.stopPropagation()}
                        onClick={e => e.stopPropagation()}>
                     <CoopCourseSearch
                       value={termStartData.courseId ?? ""}
-                      courses={workTermCourseOptions}
+                      courses={workTermCoursesByKind[termStartType.registersCourse] ?? []}
                       color="var(--text-4)"
                       emptyColor={placeholderColor}
                       fontSize={isPhone ? 5 : 9}

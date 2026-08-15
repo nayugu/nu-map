@@ -28,7 +28,7 @@ import {
 import { baseId } from "../../core/repeatInstances.js";
 import { buildCohortSemesters, deriveSemMaps } from "../../core/semGrid.js";
 import { getSemSH, getOrderedCourses, filterInTimeline } from "../../core/planModel.js";
-import { computeGrantedAttrs, workTermGrants, coopOptionsInPrograms, resolveTermByDuration, termSpans } from "../../core/specialTermUtils.js";
+import { computeGrantedAttrs, workTermGrants, resolveTermByDuration, termSpans } from "../../core/specialTermUtils.js";
 import { applyChangeset, completedCourseIds } from "./plannerActionAdapter.js";
 
 /**
@@ -466,8 +466,7 @@ export function createPlannerQuery(deps) {
     // the panel on screen cannot disagree about the experiential requirement.
     const workTerms = plan.workExperience ?? {};
     const grants = workTermGrants(workTerms, specialTerms.getTypes(), semIdx,
-      (semId) => status(semId) === "completed",
-      coopOptionsInPrograms([majorJson], courseMap));
+      (semId) => status(semId) === "completed");
     for (const k of grants.planned)   placedSet.add(k);
     for (const k of grants.completed) doneSet.add(k);
 

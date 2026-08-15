@@ -363,8 +363,11 @@ export default function BankPanel() {
     // block already grants that exact key. Across 385 published sample plans,
     // all 39 cells naming one sit in a term that also holds a co-op block, so
     // no department has ever meant "a card in a study term" either.
-    // The 26 co-op-TITLED classes (ENCP 2000, CS 1210) carry no `coop` stamp
-    // and stay placeable. See docs/coop-design.md.
+    // The same holds for the 5 zero-credit internship registrations (COOP 3949,
+    // EEBA 2945/2948, COP 5002, PPUA 6861), which the internship block records.
+    // The 76 co-op- and internship-TITLED classes carry no `coop` stamp and stay
+    // placeable — including the 35 credit-bearing `*994 Internship` courses,
+    // which are 4 SH each and really are placed. See docs/coop-design.md.
     list = list.filter(c => !c.coop);
     // Phone has no starring, so never apply the starred filter there even if
     // bankTab was set to "starred" (carried over from desktop or via a command).
@@ -422,7 +425,7 @@ export default function BankPanel() {
       return tokens.every(tok => hay.includes(tok));
     });
     if (!hit.length) return [];
-    // ONE line, not one per match. A bare "co-op" matches all 86 and six
+    // ONE line, not one per match. A bare "co-op" matches all 92 and six
     // near-identical notices is worse than none. Name the course the student
     // actually typed when they typed one; otherwise the canonical
     // undergraduate registration, which is what "co-op" means unqualified —

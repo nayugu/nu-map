@@ -50,7 +50,7 @@ export const ISpecialTerms = "specialTerms";
  * @property {string}                id              - Machine-readable ID stored in plan state,
  *                                                    e.g. "coop", "intern", "exchange", "research".
  * @property {string}                label           - Display name shown in UI and exports,
- *                                                    e.g. "Co-op", "Full-Time Internship",
+ *                                                    e.g. "Co-op", "Internship",
  *                                                    "Exchange Semester", "Undergraduate Research".
  * @property {string}                color           - CSS hex color for the term chip in the grid,
  *                                                    e.g. "#f87171".
@@ -71,13 +71,20 @@ export const ISpecialTerms = "specialTerms";
  *                                                    0 for unpaid co-ops and non-credit internships.
  *                                                    Use a positive value for thesis, research, or
  *                                                    programs that grant academic credit.
- * @property {string[]}              [courseGrants]  - Course keys this term REGISTERS. A work term is
- *                                                    not only an attribute: at NU a co-op block is a
- *                                                    real enrolment, and programs name that course as
- *                                                    a requirement. Treated as a fallback — when the
- *                                                    student's program names work-term courses of its
- *                                                    own, core/specialTermUtils resolves against those
- *                                                    instead. The keys satisfy requirements but must
+ * @property {string}                [registersCourse] - That this term IS a course registration, and
+ *                                                    which family of courses it may register. A work
+ *                                                    term is not only an attribute: at NU a co-op
+ *                                                    block is a real enrolment, and programs name that
+ *                                                    course as a requirement. The value matches the
+ *                                                    `kind` a catalog adapter stamps onto the course
+ *                                                    ("coop" / "intern"), which is what scopes the
+ *                                                    card's picker to the right list.
+ *                                                    Present means the block card offers a course
+ *                                                    field; absent means it does not, and the term
+ *                                                    grants attributes only.
+ *                                                    NOTHING is registered until the student picks —
+ *                                                    the app does not choose a course on their behalf.
+ *                                                    A chosen key satisfies requirements but must
  *                                                    never reach General Electives.
  * @property {{courses: number, sh: number}} [concurrentCap]
  *                                                  - How much coursework may sit in a term this block

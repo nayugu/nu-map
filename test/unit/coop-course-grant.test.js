@@ -1,17 +1,22 @@
-// A co-op block IS a registration for COOP 3945.
+// A work-term block IS a course registration — but only the one the student
+// named on the card.
 //
-// The defect this file exists for: a work term granted only ATTRIBUTES (NUPath
+// The defect this file started for: a work term granted only ATTRIBUTES (NUPath
 // EX) and there was no bridge from the block to a course key. 37 undergraduate
 // programs name a COOP course as a requirement, so a student with two co-ops
 // on the board was told the experiential requirement was unmet. An advisor
 // sees that once.
 //
-// The conservative half matters as much as the fix. Only 3945 is granted:
-// 3946/3947 are half-time and 3947/3948 are abroad, and they are not
-// interchangeable. Degrade to less information, never to wrong information.
+// The bridge it originally grew — grant COOP 3945 from any placed co-op — is
+// gone, and these tests now pin its absence. It was defensible only while the
+// student had no way to say which course they had registered; once the card
+// carried a course field, the inference was the app asserting something it
+// could not support. It picked an option that FIT rather than the one that was
+// true: a co-op registering a course a section does not accept ticked it
+// anyway. Degrade to less information, never to wrong information.
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { computeGrantedCourses, computeGrantedAttrs } from "../../src/core/specialTermUtils.js";
+import { workTermGrants, computeGrantedAttrs } from "../../src/core/specialTermUtils.js";
 import { derivePlanSets } from "../../src/core/planModel.js";
 import { allocateSections, calculateGeneralElectives } from "../../src/core/gradRequirements.js";
 import specialTerms from "../../src/adapters/northeastern/specialTerms.js";
@@ -19,43 +24,81 @@ import specialTerms from "../../src/adapters/northeastern/specialTerms.js";
 const TYPES = specialTerms.getTypes();
 const SEM_IDX = { sem1: 0, sem2: 1, sem3: 2, sem4: 3 };
 
-const coopAt = semId => ({ c1: { typeId: "coop", semId, duration: 6 } });
+/** A co-op block. `courseId` omitted = the student never touched the field. */
+const coopAt = (semId, courseId) =>
+  ({ c1: { typeId: "coop", semId, duration: 6, ...(courseId ? { courseId } : {}) } });
+
+const keysAt = (pl) => workTermGrants(pl, TYPES, SEM_IDX).planned;
 
 // ── the grant itself ────────────────────────────────────────────────
 
-test("a placed co-op grants COOP 3945", () => {
-  const granted = computeGrantedCourses(coopAt("sem2"), TYPES, SEM_IDX);
-  assert.deepEqual([...granted], ["COOP3945"]);
+test("a co-op with no course chosen registers NOTHING", () => {
+  assert.equal(keysAt(coopAt("sem2")).size, 0);
+  // …but it is still a co-op: EX is a property of doing one at all, and does
+  // not depend on which course records it.
+  assert.ok(computeGrantedAttrs(coopAt("sem2"), TYPES, SEM_IDX).has("EX"));
 });
 
-test("only 3945 — half-time and abroad co-ops are not interchangeable", () => {
+test("a co-op registers exactly the course the student named", () => {
+  assert.deepEqual([...keysAt(coopAt("sem2", "COOP3945"))], ["COOP3945"]);
+  assert.deepEqual([...keysAt(coopAt("sem2", "COOP3948"))], ["COOP3948"]);
+});
+
+test("nothing is inferred from a chosen course — the variants stay distinct", () => {
   // Exactly one section in the corpus (International Business's
-  // "International Experiential Learning") requires 3948 alone. An ordinary
-  // co-op must leave it unmet rather than claim experience abroad.
-  const granted = computeGrantedCourses(coopAt("sem2"), TYPES, SEM_IDX);
+  // "International Experiential Learning") requires 3948 alone. A student who
+  // recorded an ordinary 3945 must leave it unmet rather than have the app
+  // claim experience abroad on their behalf — and vice versa: an abroad co-op
+  // does not silently also count as the domestic one.
+  const granted = keysAt(coopAt("sem2", "COOP3945"));
   for (const wrong of ["COOP3946", "COOP3947", "COOP3948", "COOP3949"]) {
-    assert.ok(!granted.has(wrong), `${wrong} was granted by an ordinary co-op`);
+    assert.ok(!granted.has(wrong), `${wrong} was granted by a co-op recorded as 3945`);
   }
+  assert.ok(!keysAt(coopAt("sem2", "COOP3948")).has("COOP3945"));
 });
 
-test("an internship grants no course — only co-op is a COOP registration", () => {
-  const granted = computeGrantedCourses({ i1: { typeId: "intern", semId: "sem2", duration: 4 } }, TYPES, SEM_IDX);
-  assert.equal(granted.size, 0);
+test("an internship registers its own course, and only if named", () => {
+  const at = (courseId) =>
+    keysAt({ i1: { typeId: "intern", semId: "sem2", duration: 4, ...(courseId ? { courseId } : {}) } });
+  assert.equal(at().size, 0);
+  assert.deepEqual([...at("COOP3949")], ["COOP3949"]);
+  // An internship grants no attribute — unlike co-op it carries no EX.
+  assert.equal(computeGrantedAttrs({ i1: { typeId: "intern", semId: "sem2" } }, TYPES, SEM_IDX).size, 0);
+});
+
+test("two work terms each register their own course", () => {
+  // The multiplicity the old inference could not express: two blocks used to
+  // collapse onto one key. Naming them separately is what makes International
+  // Business's two non-shared experiential sections both reachable.
+  const both = keysAt({
+    c1: { typeId: "coop",   semId: "sem1", duration: 4, courseId: "COOP3945" },
+    c2: { typeId: "coop",   semId: "sem3", duration: 4, courseId: "COOP3948" },
+  });
+  assert.deepEqual([...both].sort(), ["COOP3945", "COOP3948"]);
 });
 
 test("no work terms grants nothing, and the empty case is safe", () => {
-  assert.equal(computeGrantedCourses({}, TYPES, SEM_IDX).size, 0);
-  assert.equal(computeGrantedCourses(undefined, TYPES, SEM_IDX).size, 0);
-  assert.equal(computeGrantedCourses(coopAt("sem2"), [], SEM_IDX).size, 0);
+  assert.equal(keysAt({}).size, 0);
+  assert.equal(keysAt(undefined).size, 0);
+  assert.equal(workTermGrants(coopAt("sem2", "COOP3945"), [], SEM_IDX).planned.size, 0);
 });
 
 test("an unplaced or out-of-timeline co-op grants nothing", () => {
   // Same rule computeGrantedAttrs already applies: a co-op parked outside the
   // cohort range stays in state, uncounted.
-  assert.equal(computeGrantedCourses({ c1: { typeId: "coop" } }, TYPES, SEM_IDX).size, 0);
-  assert.equal(computeGrantedCourses(coopAt("__overflow:1"), TYPES, SEM_IDX).size, 0);
+  assert.equal(keysAt({ c1: { typeId: "coop", courseId: "COOP3945" } }).size, 0);
+  assert.equal(keysAt(coopAt("__overflow:1", "COOP3945")).size, 0);
   // …and it is the same rule, not a parallel one.
   assert.equal(computeGrantedAttrs(coopAt("__overflow:1"), TYPES, SEM_IDX).size, 0);
+});
+
+test("a block type that registers no course cannot register one", () => {
+  // Not reachable through the UI — the field only renders for a type that
+  // declares `registersCourse` — but state outlives the UI that wrote it, and
+  // a share link carries `courseId` verbatim.
+  const fake = [{ id: "study", label: "Study Abroad", durations: [], attributeGrants: [], occupiesSlot: true, creditValue: 0 }];
+  const pl   = { s1: { typeId: "study", semId: "sem2", courseId: "COOP3945" } };
+  assert.equal(workTermGrants(pl, fake, SEM_IDX).planned.size, 0);
 });
 
 // ── the reason the split exists: no phantom credits ─────────────────
@@ -66,7 +109,7 @@ test("the granted course satisfies requirements but is NOT a general elective", 
   const courseMap = { CS2500: { subject: "CS", number: "2500", sh: 4 } };
   const { placedSet, realPlacedSet } = derivePlanSets({
     placements: { CS2500: "sem1" }, courseMap, dynSemIdx: SEM_IDX, curIdx: 2,
-    specialTermPl: coopAt("sem2"), specialTermTypes: TYPES,
+    specialTermPl: coopAt("sem2", "COOP3945"), specialTermTypes: TYPES,
   });
   assert.ok(placedSet.has("COOP3945"), "the co-op did not satisfy its course");
   assert.ok(!realPlacedSet.has("COOP3945"), "the granted course leaked into the real set");
@@ -84,14 +127,14 @@ test("a co-op in a past semester is completed; a future one is only planned", ()
   const courseMap = {};
   const past = derivePlanSets({
     placements: {}, courseMap, dynSemIdx: SEM_IDX, curIdx: 2,
-    specialTermPl: coopAt("sem1"), specialTermTypes: TYPES,
+    specialTermPl: coopAt("sem1", "COOP3945"), specialTermTypes: TYPES,
   });
   assert.ok(past.placedSet.has("COOP3945"));
   assert.ok(past.doneKeys.has("COOP3945"), "a finished co-op still reads as pending");
 
   const future = derivePlanSets({
     placements: {}, courseMap, dynSemIdx: SEM_IDX, curIdx: 2,
-    specialTermPl: coopAt("sem4"), specialTermTypes: TYPES,
+    specialTermPl: coopAt("sem4", "COOP3945"), specialTermTypes: TYPES,
   });
   assert.ok(future.placedSet.has("COOP3945"));
   assert.ok(!future.doneKeys.has("COOP3945"), "a future co-op already counts as done");

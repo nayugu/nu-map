@@ -1,9 +1,35 @@
 # Co-op: the work term and the course it registers
 
-Status: design, not built. Measured 2026-08-15 against the 2026 catalog
-(7,966 courses) and the 1,017-program requirement corpus.
+Status: **built**, and it does not do what the first draft of this document
+designed. Measured 2026-08-15 against the 2026 catalog (7,966 courses) and the
+1,017-program requirement corpus.
 
 Every number below is reproducible with `scripts/coop-probe.js`.
+
+## What changed after the design, and why
+
+Two things in this document were designed, built, and then removed. Both are
+described in place below with the correction attached, so a reader arriving at
+the old reasoning meets the answer rather than the mistake.
+
+1. **The resolver that inferred the course is gone.** It read the student's
+   program, took the work-term courses that program names, and picked one per
+   block by matching flags. It was clever and it was wrong: it chose an option
+   that *fit* rather than the one that was *true*, so a student whose co-op
+   registered something their section does not accept saw the requirement tick
+   anyway. A co-op now registers **only** the course the student names on the
+   card, and an unfilled block registers nothing. This also retired the
+   `courseGrants: ["COOP3945"]` default, which is the same error at smaller
+   scale.
+2. **The requirement-row actuator is gone.** *Mark a work term as
+   international* was one button in one place, and it was the wrong shape: it
+   made the student answer a question about a requirement when what they
+   actually know is a course number. The card's course field answers it
+   directly.
+
+The classification, the bank change, the concurrent-course rules and the
+provenance rendering all shipped as designed. **Internships mirror co-op**
+throughout — see §6.
 
 ---
 
@@ -25,20 +51,43 @@ That string is one cell of a table with 86 entries.
 
 ## What the catalog actually contains
 
-**86 work-experience courses**, every one of them **0 SH**, partitioning
-perfectly along two flags carried in the title, across 30 subject prefixes:
+**92 work-experience courses**, every one of them **0 SH**, partitioning
+perfectly along two flags carried in the title, across 31 subject prefixes:
 
 |            | domestic | abroad |
 |------------|---------:|-------:|
-| full-time  |       33 |     19 |
-| half-time  |       19 |     15 |
+| full-time  |       37 |     20 |
+| half-time  |       20 |     15 |
 
-A separate **26 courses** are co-op-*titled* but are ordinary classes you sit
-in — `ENCP 2000 Introduction to Engineering Co-op Education`, `CS 1210
-Professional Development for Khoury Co-op`, the CRIM integration seminars.
-**The split is by title, not by number**: `ENCP 6100` and `ENCP 6954` differ
-only in what the title says they are. These 26 are untouched by everything
-below.
+87 are recorded by the **co-op** block, 5 by the **internship** block (§6).
+
+A separate **76 courses** are co-op- or internship-*titled* but are ordinary
+classes you sit in — `ENCP 2000 Introduction to Engineering Co-op Education`,
+`CS 1210 Professional Development for Khoury Co-op`, the CRIM integration
+seminars, and the 35 departmental `*994 Internship` courses. **The split is by
+title, not by number**: `ENCP 6100` and `ENCP 6954` differ only in what the
+title says they are. These 76 are untouched by everything below.
+
+**Is the split real, or are we hiding classes?** Asked directly, and the answer
+is measurable: of the 113 co-op-titled courses in the catalog, **23 carry
+credit and every one of them is placeable** — the professional-development
+seminars (1 SH), the CRIM integration seminars, and `EXED 6959 Cooperative
+Education Integrated Experience` (4 SH), which is a *companion* class taken
+alongside a co-op and is exactly the concurrent-course case of §5. **Zero
+credit-bearing courses are hidden**, and the zero-credit guard in
+`derive-coop-courses.js` is what keeps that true on every monthly run. The
+partition holds in both directions: registrations are 0 SH, classes carry
+credit.
+
+**Asking it the other way round found a real miss.** "Are we leaving a
+registration placeable?" turned up `CS 8948/8949 Research Work Experience`
+(0 SH, PhD), whose description reads "Doctoral students register for this
+course before starting their off-campus internship". No program names them, so
+nothing was ever reported wrong — they were simply two draggable cards that
+record a work term. Now classified. The remaining judged exclusion is
+`BUSN 6970 Professional Projects` (0 SH), which is 10–40 hours of remote
+micro-internship *alongside* coursework — explicitly not a full-time block, so
+it stays a placeable course.
 
 **Where the boundary is genuinely hard**, and why `derive-coop-courses.js`
 prints its exclusions on every run: `EESC 6400 "Pre-co-op Work Experience"`
@@ -51,11 +100,23 @@ classroom pattern therefore takes precedence, and the first run of the guard
 caught exactly this. (An earlier draft of this document said 87 and 34; those
 counts included `EESC 6400`.)
 
+**One title the catalog cannot decide on its own**, and the single place credit
+enters the classification: a bare `Internship`. 37 courses carry it — two are
+0 SH registrations (`COP 5002`, `PPUA 6861`, the latter "an approved public- or
+nonprofit-sector internship that fulfills academic degree requirements"), and
+35 are the departmental `*994 Internship` courses at 4 SH each, which a student
+pays tuition for and really does place. No wording separates them. That branch
+therefore consults credit, which is a deliberate weakening of "classify by
+title": the alternative is hiding 35 credit-bearing courses (140 SH between
+them) or leaving two registrations placeable. It does not weaken the zero-credit
+guard, which still governs everything matched by title.
+
 Undergraduate co-op registers under one central `COOP` subject. **Graduate
 co-op registers under the program's own prefix** — `ENCP 6964` for all of the
 College of Engineering, `CS 6964` for Khoury, `PPUA 6964` for policy. Only
-**10 of the 86** are in subject `COOP` or `COP`, which is why no lookup keyed
-on the co-op subject can work.
+**11 of the 92** are in subject `COOP` or `COP`, which is why no lookup keyed
+on the co-op subject can work — and why the picker orders a student's own
+program's options first.
 
 ---
 
@@ -122,9 +183,14 @@ is 39. The conclusion is unchanged; the number was not.)
 The scrape emits `public/northeastern/coop-courses.json`:
 
 ```json
-{ "COOP3948": { "abroad": true,  "halfTime": false },
-  "ENCP6954": { "abroad": false, "halfTime": true  } }
+{ "COOP3948": { "abroad": true,  "halfTime": false, "kind": "coop"   },
+  "ENCP6954": { "abroad": false, "halfTime": true,  "kind": "coop"   },
+  "COOP3949": { "abroad": false, "halfTime": false, "kind": "intern" } }
 ```
+
+`kind` says which BLOCK records the course, and is what scopes each card's
+picker. A file written before the field existed reads as `coop`, which is the
+pre-internship behaviour unchanged.
 
 A sibling file, not a field on `catalog-courses.json` — that file is loaded by
 the browser, the MCP server and the Cloudflare worker, and none of them need
@@ -140,32 +206,39 @@ undergraduate and graduate paths) so the monthly run cannot undo it.
 Absent means domestic. One share-schema key, one `UPDATE_WORK_TERM` field.
 Half-time is deliberately **not** here — see *Out of scope*.
 
-### 3. Resolution — N blocks yield N keys
+### 3. Resolution — the student names the course, or there is none
 
-Replace the constant with a resolver over placed, in-timeline blocks:
+**This section replaces a design that was built and removed.** The original is
+kept below the rule, because the reason it failed is the most useful thing in
+this document.
 
-> Each block emits the variant, **from the set of co-op courses this program
-> names**, that matches its flags. If no such variant exists, or that key was
-> already emitted, it emits the program's base (full-time domestic) variant
-> instead.
+> A placed, in-timeline block whose type declares `registersCourse` emits the
+> single key stored in its `courseId`. A block with no `courseId` emits
+> nothing. Blocks resolve in timeline order, so the answer never depends on the
+> order they were dragged.
 
-Two properties matter and both were verified by running the real allocator.
+That is the whole rule. `EX` is unaffected — it is a property of *doing* a
+co-op, not of which course records it, so an unfilled block still grants it.
 
-**The subject is never asked and never stored.** Each requirement node lists
+<details>
+<summary>The resolver that was removed, and why</summary>
+
+It emitted, per block, the variant **from the set of co-op courses this program
+names** that matched the block's flags — falling back to the program's base
+(full-time domestic) variant when the matching key was already taken. Two
+properties were verified against the real allocator, and both were true:
+
+*The subject was never asked and never stored.* Each requirement node lists
 only the subjects its program uses, so matching by flags against the node's own
-options picks `CS 6964` for a Khoury student and `ENCP 6954` for an engineer,
-by elimination. That is what covers all ~99 graduate programs for free, and it
-is the same by-elimination move slot binding already uses for placeholders.
+options picked `CS 6964` for a Khoury student and `ENCP 6954` for an engineer,
+by elimination — covering all ~99 graduate programs without a question.
 
-**The base fallback is what makes multiple co-ops representable.** The
-requirement layer is a `Set` of *base* course keys — `buildPlacedKeySet` maps
-every placement through `courseMap` and emits `courseKey(subject, number)`, so
-`COOP3948#2` is not representable and `repeatInstances` cannot help here. Two
-identically-flagged blocks would collapse to one key. Emitting the base variant
-for the second block is what prevents that, and it is *true*: a second abroad
-co-op with nothing abroad-specific left to claim is still a co-op.
-
-Verified against `allocateMajorSections` on International Business:
+*The base fallback made multiple co-ops representable.* The requirement layer
+is a `Set` of *base* course keys — `buildPlacedKeySet` maps every placement
+through `courseMap` and emits `courseKey(subject, number)`, so `COOP3948#2` is
+not representable and `repeatInstances` cannot help. Two identically-flagged
+blocks collapsed to one key; emitting the base variant for the second prevented
+that.
 
 | plan | keys | International Experiential | Business Experiential |
 |---|---|---|---|
@@ -175,31 +248,91 @@ Verified against `allocateMajorSections` on International Business:
 | 1 abroad + 1 domestic | `3948, 3945` | **MET** | **MET** |
 | 2 abroad (base fallback) | `3948, 3945` | **MET** | **MET** |
 
-Every row is correct. One abroad co-op never satisfies both — `allocateSections`
-runs a single global `used` set and neither IB section is `shared`, so the key
-is consumed once. This was *run*, not read; a naive `.some()` harness reported
-"1 abroad ⇒ both MET" and was wrong.
+Every row there is correct, and the table is still the reason to trust
+`allocateSections`: one abroad co-op never satisfies both, because a single
+global `used` set consumes the key once and neither IB section is `shared`.
+This was *run*, not read — a naive `.some()` harness reported "1 abroad ⇒ both
+MET" and was wrong.
+
+**So what was the defect?** Every row above assumes the student's co-op
+registered one of the courses their program names. The corpus does not
+guarantee that, and the resolver could not tell the difference. International
+Business accepts seven courses for `Business Experiential Learning`; a student
+whose co-op registered an eighth got a tick, because the resolver picked from
+the program's list by construction. There was no plan state in which a
+wrongly-registered co-op could show as unmet — the one answer a student most
+needs to see before an advisor sees it for them.
+
+The fix is not a better inference. It is that the question — *which course is
+your co-op?* — has exactly one authority, and it is the student. Once the card
+carries the field, keeping a default is the app asserting something it cannot
+support. Degrade to less information, never to wrong information.
+
+What survives of it: `coopOptionsInPrograms` still walks the program tree, but
+only to **order the picker**, putting a Khoury student's `CS 6964` at the top
+instead of somewhere around `E` in an alphabetical list of 85. Suggesting is a
+different act from ticking.
+
+</details>
+
+Verified against the real allocator on International Business, after the
+change:
+
+| plan | keys | International Experiential | Business Experiential |
+|---|---|---|---|
+| 1 co-op, field empty | — | unmet | unmet |
+| 1 recorded `COOP3945` | `COOP3945` | unmet | **MET** |
+| 1 recorded `COOP3948` | `COOP3948` | **MET** | unmet |
+| 1 recorded `ENCP6964` (off-list) | `ENCP6964` | unmet | unmet |
+| 2 recorded, `3948` + `3945` | `3948, 3945` | **MET** | **MET** |
+| 2 recorded, both `ENCP6964`/`CS6964` | both | unmet | unmet |
+
+The fourth and sixth rows are the ones the old resolver could not produce.
 
 ### 4. UI — three surfaces, one of them new
 
-**Bank.** The 87 stop being listed. Searching `co-op` or `COOP 3948` returns the
-**Co-op** work-term chip carrying one line: *COOP 3948 is recorded by placing a
-work term.* Hiding them outright is the trap — a student told to register for
-3948 must not conclude the app doesn't have it.
+**Bank.** The 92 stop being listed. Searching `co-op` or `COOP 3948` returns
+one line: *COOP 3948 is recorded by placing a work term — drag one from WORK
+EXPERIENCE above.* Hiding them outright is the trap — a student told to
+register for 3948 must not conclude the app doesn't have it.
 
-**Block card.** No new control. For 1,008 of 1,017 programs the card is
-identical to today. A block flagged abroad shows an `International` tag,
-display only.
+**Block card — the course field.** Below `CO-OP 1`, a search input mirroring
+`CompanySearch`: subtle placeholder, empty by default, and showing the whole
+list on focus the way the concentration search does. Typing filters; selecting
+sets the block's `courseId` and prints the code as the subline. It is scoped by
+`kind`, so an internship card cannot offer `COOP 3945`. Present on **both**
+`SemRow` and `SummerRow` — it shipped on only the first once, which made it
+invisible for summer co-ops, and NU's own default patterns put co-ops in
+summer.
 
-**Requirement row — the single actuator.** The unmet
-`International Experiential Learning` row offers *mark a work term as
-international*, setting the flag on the chosen block (asking which, when there
-are several). One place to set it, in the place the need is discovered. Not a
-novel pattern here: the requirements panel is already a mutating surface —
-`repeatInstances.js` treats a drag out of it as an add.
+Clicking the card opens the course info panel, exactly like a course, but
+**only when a course was chosen** — there is nothing to open otherwise. Drag
+still drags: the field and the company/role inputs stop propagation, so no
+gesture has to be guessed.
 
-Location as a card field was considered and **rejected**: coupling it to
-satisfaction means free-text silently deciding whether a degree is met.
+<details>
+<summary>Rejected: the requirement-row actuator (built, then removed)</summary>
+
+The unmet `International Experiential Learning` row offered *mark a work term
+as international*, setting the `abroad` flag on the chosen block. One place to
+set it, in the place the need is discovered, and not a novel pattern —
+`repeatInstances.js` already treats a drag out of the requirements panel as an
+add.
+
+It was removed for two reasons. It asked the student to answer a question about
+a **requirement** ("is this one international?") when what they actually hold
+is a course number; and it could only ever express the one distinction the
+corpus happened to need, so every further one would want another button. A card
+field answers all of them at once. The `abroad` flag survives as metadata the
+student can set for their own reading — it no longer selects a course.
+
+The original note here read: *"Location as a card field was considered and
+rejected: coupling it to satisfaction means free-text silently deciding whether
+a degree is met."* That is exactly what the field does, and it is right rather
+than dangerous — the student deciding whether their degree is met is the
+correct authority, and the audit is then free to tell them it is not.
+
+</details>
 
 **The grant must render as the co-op.** Today the key lands in `placedSet`
 anonymously, so the row shows a checked course that exists nowhere in the plan.
@@ -212,26 +345,21 @@ precondition for the bank change, not a follow-up.**
 carries a line — `Registers CS 6964 ↗` — that opens the ordinary course info
 panel.
 
-The reason is **inspectability, not richness.** Measured across the 86: **zero
-carry offering sections, one has a prerequisite, one a corequisite, four carry
-any NUPath**, and the 31 "distinct" descriptions are near-identical boilerplate
-("Provides eligible students with an opportunity for work experience"). A co-op
-course unlocks nothing — no course in the catalog depends on one. So the panel
-is not worth opening for its content.
+The reason is **inspectability, not richness.** Measured across the 86 then
+classified: **zero carry offering sections, one has a prerequisite, one a
+corequisite, four carry any NUPath**, and the 31 "distinct" descriptions are
+near-identical boilerplate ("Provides eligible students with an opportunity for
+work experience"). A co-op course unlocks nothing — no course in the catalog
+depends on one. So the panel is not worth opening for its content.
 
-It is worth opening for two other things. The **repeat limit** is real,
-program-relevant information and lives nowhere else: `repeatMax` on 25 of the
-86, and titles that say "may be repeated up to five times" — which is exactly
-the question *how many co-ops does my program allow?* And naming the resolved
-course is what makes the derivation **checkable**: the student can see that the
-app decided `CS 6964`, and go read it, without ever being asked to choose it.
+It is worth opening for the **repeat limit**, which is real, program-relevant
+information living nowhere else: `repeatMax` on 25 of them, and titles that say
+"may be repeated up to five times" — exactly the question *how many co-ops does
+my program allow?*
 
-This also settles the surface question left open earlier. The link works from
-the block and from the requirement row, so the resolved course is visible in
-both places without a control being added to either. The one risk is
-re-importing the two-object confusion the bank change removes; the framing
-carries it — *"Registers CS 6964"* is a fact **about** the block, not a second
-thing to place.
+The one risk is re-importing the two-object confusion the bank change removes;
+the framing carries it — *"Registers CS 6964"* is a fact **about** the block,
+not a second thing to place.
 
 ### 5. Courses during co-op
 
@@ -305,6 +433,44 @@ exactly: courses stay parked, contribute 0, and cannot be dropped in. The
 one-course rule is published as *co-op* policy and nothing sourced says it
 governs internships, so guessing a number onto a student's credit total was
 the worse error.
+
+### 6. Internships mirror all of it
+
+Same card field, same `courseId`, same resolver, same bank hiding. The type
+declares `registersCourse: "intern"` and the picker is scoped to the courses
+stamped with that kind. Nothing in the resolution layer knows or cares which
+block it is looking at.
+
+**What differs is which courses belong to it, and that turns on credit.**
+Northeastern registers two different things under the word *internship*, and
+the official policies say so plainly:
+
+- **Co-op carries no academic credit.** "No tuition is charged while a student
+  is on co-op only", and the student receives Satisfactory/Unsatisfactory. The
+  registration course is 0 SH.
+- **An internship is credit-bearing and tuition-charged.** A student "must work
+  at least 12 hours per week to earn academic credit for an internship in a
+  term". Departments publish these as the 4 SH `*994 Internship` courses —
+  `BIOL 4994`, `COMM 4994`, `HIST 4994`, 35 of them.
+
+So the 35 credit-bearing ones are **ordinary courses you place on the board**,
+and the block does not touch them. Only the 5 zero-credit registrations —
+`COOP 3949 Internship Exchange`, `EEBA 2945/2948 Internship Experience`,
+`COP 5002`, `PPUA 6861` — are recorded by the block, because those are the ones
+that record a work term rather than award credit for one.
+
+This is the same partition as co-op, arrived at from the other side: for co-op
+the *title* decides and the zero-credit guard verifies it, because no
+credit-bearing co-op course exists. For internships a bare `Internship` title
+decides nothing, so credit is consulted directly (§*What the catalog actually
+contains*).
+
+**The label dropped its qualifier.** "Full-Time Internship" became
+"Internship" in all 8 locales. The qualifier described the block accurately but
+was doing no work — nothing on the board is a part-time internship, and the
+phone card already truncated it to *Internship* to fit, so the short name was
+the one most students saw. The concurrent-course asymmetry it hinted at is
+recorded above, where it belongs, rather than in a chip label.
 
 ---
 
@@ -520,3 +686,5 @@ rewriting it is the decision, not a test fix.
 - <https://www.khoury.northeastern.edu/undergraduate-co-op-policies/>
 - <https://damore-mckim.northeastern.edu/resources/petition-registration-form/>
 - <https://coe.northeastern.edu/academics-experiential-learning/co-op-experiential-learning/co-op/undergraduate-co-op/>
+- <https://catalog.northeastern.edu/undergraduate/university-academics/undergraduate-internships/>
+  — the 12 hrs/week minimum, and that internships earn credit where co-op does not

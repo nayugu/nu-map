@@ -104,12 +104,23 @@ export function RelevanceProvider({ children }) {
    * `workTermGrants` was extracted to fix.
    */
   const workTermCourse = useMemo(() => {
-    const opts = coopOptionsInPrograms([majorData, major2Data], courseMap);
-    const src  = workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, null, opts).source;
+    const src = workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX).source;
     const byInstance = {};
     for (const [key, instanceId] of src) byInstance[instanceId] = key;
     return byInstance;
-  }, [majorData, major2Data, courseMap, specialTermPl, specialTerms, SEM_INDEX]);
+  }, [specialTermPl, specialTerms, SEM_INDEX]);
+
+  /**
+   * The work-experience courses the student's programs name.
+   *
+   * No longer used to GRANT anything — a work term registers what the student
+   * said and nothing otherwise. It survives as an ordering hint for the card's
+   * course picker: showing a Khoury student `CS 6964` near the top is helpful,
+   * and is a different act from ticking it on their behalf.
+   */
+  const coopProgramOptions = useMemo(
+    () => new Set(coopOptionsInPrograms([majorData, major2Data], courseMap).map(o => o.key)),
+    [majorData, major2Data, courseMap]);
 
   const value = useMemo(() => {
     const majorKeys = new Set();
@@ -196,12 +207,12 @@ export function RelevanceProvider({ children }) {
       return roles.length ? roles : [{ type: "free" }];
     };
 
-    return { active, majorKeys, minorKeys, hasProgram, courseRole, workTermCourse };
+    return { active, majorKeys, minorKeys, hasProgram, courseRole, workTermCourse, coopProgramOptions };
     // `workTermCourse` MUST be listed. Without it this memo keeps the object it
     // closed over on first render — when the plan has not loaded and there are
     // no work terms — so dragging a co-op onto the board recomputed the map and
     // published nothing, and the card's course field never appeared.
-  }, [majorData, major2Data, minor1Data, minor2Data, conc, placedSet, courseMap, workTermCourse]);
+  }, [majorData, major2Data, minor1Data, minor2Data, conc, placedSet, courseMap, workTermCourse, coopProgramOptions]);
 
   return <RelevanceContext.Provider value={value}>{children}</RelevanceContext.Provider>;
 }

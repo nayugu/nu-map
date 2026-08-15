@@ -15,7 +15,7 @@ import { readdirSync, statSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { ROOT } from "../helpers/paths.js";
 import { allocateSections } from "../../src/core/gradRequirements.js";
-import { computeGrantedCourses } from "../../src/core/specialTermUtils.js";
+import { workTermGrants } from "../../src/core/specialTermUtils.js";
 import specialTerms from "../../src/adapters/northeastern/specialTerms.js";
 
 /** Every COOP-bearing requirement section in the live undergraduate tree. */
@@ -48,11 +48,16 @@ const SECTIONS = loadCoopSections();
 // be invented for a course carrying no `sh`.
 const COURSE_MAP = { COOP3945: { subject: "COOP", number: "3945", sh: 0 } };
 
-const GRANTED = computeGrantedCourses(
-  { c1: { typeId: "coop", semId: "s1", duration: 6 } },
+// A co-op the student RECORDED as COOP 3945 — the ordinary case, and the one
+// the old inference used to assume. Nothing is granted without the courseId;
+// see test/unit/coop-course-grant.test.js for why the default was removed.
+// What this file measures is unchanged by that: given the key, which of the
+// corpus's real sections does it actually satisfy.
+const GRANTED = workTermGrants(
+  { c1: { typeId: "coop", semId: "s1", duration: 6, courseId: "COOP3945" } },
   specialTerms.getTypes(),
   { s1: 0 },
-);
+).planned;
 
 const satisfies = (sec, placed) =>
   allocateSections([sec], placed, new Set(), COURSE_MAP)[0]?.sat === true;

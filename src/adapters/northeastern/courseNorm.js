@@ -194,7 +194,10 @@ export function stampCoopVariants(courses, coopJson) {
   if (!table || typeof table !== "object") return courses;
   for (const c of courses) {
     const f = table[c.id];
-    if (f) c.coop = { abroad: !!f.abroad, halfTime: !!f.halfTime };
+    // `kind` says which BLOCK records the course — a co-op or an internship.
+    // Files written before the field existed carry only the two flags, so it
+    // defaults to "coop": the pre-internship behaviour, unchanged.
+    if (f) c.coop = { abroad: !!f.abroad, halfTime: !!f.halfTime, kind: f.kind === "intern" ? "intern" : "coop" };
   }
   return courses;
 }

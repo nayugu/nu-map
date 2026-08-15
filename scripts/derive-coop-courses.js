@@ -60,8 +60,39 @@ const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const IN   = path.join(REPO, "public/northeastern/catalog-courses.json");
 const OUT  = path.join(REPO, "public/northeastern/coop-courses.json");
 
-/** A registration row for a work term. */
-const WORK = /co-?op work experience|internship exchange|work experience abroad/i;
+/**
+ * A registration row for a work term, decidable from the title alone.
+ *
+ * `research work experience` is CS 8948/8949, found by asking the sceptical
+ * question the other way round — not "are we hiding a class?" but "are we
+ * leaving a registration placeable?". Their description settles it: "Doctoral
+ * students register for this course before starting their off-campus
+ * internship." No program names them, so nothing was reported wrong; they were
+ * simply two draggable cards that record a work term.
+ */
+const WORK = /co-?op work experience|research work experience|internship exchange|internship experience|work experience abroad/i;
+
+/**
+ * The one title the corpus cannot decide on its own: a bare `Internship`.
+ *
+ * 37 courses carry it. Two of them (`COP 5002`, `PPUA 6861`) are 0 SH
+ * registrations — COP is literally the co-op subject, and PPUA 6861's
+ * description is "an approved public- or nonprofit-sector internship that
+ * fulfills academic degree requirements". The other 35 are the departmental
+ * `*994 Internship` courses, 4 SH each, which a student really does place and
+ * really does earn credit for.
+ *
+ * No wording separates them, so this branch — and ONLY this branch — consults
+ * credit. That is a weakening of "classify by title" and it is deliberate:
+ * the alternative is either hiding 35 credit-bearing courses from the bank
+ * (losing a student 140 SH between them) or leaving two work registrations
+ * placeable as if they were classes.
+ *
+ * Note what it does NOT weaken: the zero-credit guard below still governs
+ * everything matched by WORK, which is where a new credit-bearing title would
+ * actually show up.
+ */
+const BARE_INTERN = /^\s*internship\s*$/i;
 
 /**
  * A class you sit in — this WINS over WORK when both match.
@@ -75,7 +106,23 @@ const WORK = /co-?op work experience|internship exchange|work experience abroad/
  */
 const CLASSROOM = /professional development|introduction to|integration seminar|reflection seminar|preparing for|pre-?.?co-?op/i;
 
-const isWork = (title) => WORK.test(title ?? "") && !CLASSROOM.test(title ?? "");
+const isWork = (c) => {
+  const title = c.title ?? "";
+  if (CLASSROOM.test(title)) return false;
+  if (WORK.test(title)) return true;
+  return BARE_INTERN.test(title) && (c.credits ?? 0) === 0;
+};
+
+/**
+ * Which BLOCK records this course.
+ *
+ * The card's picker is scoped by it: an internship block offers internship
+ * registrations, a co-op block offers co-op registrations. Both are work terms
+ * and both hide from the bank, but they are not the same claim — `COOP 3949
+ * Internship Exchange` is not a co-op, and a student who dragged an internship
+ * should not be shown `COOP 3945` as if it were theirs to pick.
+ */
+const kindOf = (title) => (/intern/i.test(title) ? "intern" : "coop");
 
 const flagsOf = (title) => ({
   abroad:   /abroad|global|international/i.test(title),
@@ -86,7 +133,7 @@ const catalog = JSON.parse(readFileSync(IN, "utf8"));
 const courses = Array.isArray(catalog) ? catalog : (catalog.courses ?? Object.values(catalog));
 const keyOf   = (c) => c.subject + c.number;
 
-const work     = courses.filter(c => isWork(c.title));
+const work     = courses.filter(isWork);
 const excluded = courses.filter(c => WORK.test(c.title ?? "") && CLASSROOM.test(c.title ?? ""));
 
 // The boundary between "registration" and "class" is the only judgement this
@@ -119,21 +166,26 @@ if (existsSync(OUT)) {
 
 // ── Report ────────────────────────────────────────────────────────────
 const byFlags = {};
+const byKind  = {};
 const map = {};
 for (const c of work.sort((a, b) => keyOf(a).localeCompare(keyOf(b)))) {
-  const f = flagsOf(c.title ?? "");
-  map[keyOf(c)] = f;
+  const f    = flagsOf(c.title ?? "");
+  const kind = kindOf(c.title ?? "");
+  map[keyOf(c)] = { ...f, kind };
   const bucket = `${f.halfTime ? "half" : "full"}/${f.abroad ? "abroad" : "domestic"}`;
   byFlags[bucket] = (byFlags[bucket] ?? 0) + 1;
+  byKind[kind]    = (byKind[kind] ?? 0) + 1;
 }
 
 console.log(`work-experience courses: ${work.length}  across ${new Set(work.map(c => c.subject)).size} subjects`);
 for (const [k, v] of Object.entries(byFlags).sort()) console.log(`  ${k.padEnd(14)} ${String(v).padStart(3)}`);
+console.log(`  by block:`);
+for (const [k, v] of Object.entries(byKind).sort()) console.log(`    ${k.padEnd(12)} ${String(v).padStart(3)}`);
 const inCoopSubject = work.filter(c => c.subject === "COOP" || c.subject === "COP").length;
 console.log(`  in subject COOP/COP: ${inCoopSubject} — the other ${work.length - inCoopSubject} are why a `
   + `subject-based lookup cannot work`);
 
-const classroom = courses.filter(c => /co-?op|cooperative/i.test(c.title ?? "") && !isWork(c.title));
+const classroom = courses.filter(c => /co-?op|cooperative|internship/i.test(c.title ?? "") && !isWork(c));
 console.log(`\nco-op-titled ordinary classes, left placeable: ${classroom.length}`);
 
 if (problems.length) {
@@ -147,6 +199,7 @@ if (problems.length) {
     note: "Courses recorded by placing a work term rather than by being placed. See docs/coop-design.md.",
     count: work.length,
     byFlags,
+    byKind,
     courses: map,
   };
   writeFileSync(OUT, JSON.stringify(doc, null, 1) + "\n");

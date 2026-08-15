@@ -58,14 +58,17 @@ export const GLOSSARY = {
     hi: "को-ऑप",
     ar: "التدريب التعاوني",
   },
-  "Full-Time Internship": {
-    zh: "全职实习",
-    ja: "フルタイム・インターンシップ",
-    ko: "풀타임 인턴십",
-    es: "Prácticas a tiempo completo",
-    fr: "Stage à temps plein",
-    hi: "पूर्णकालिक इंटर्नशिप",
-    ar: "تدريب بدوام كامل",
+  // Was "Full-Time Internship". The qualifier was doing no work — nothing on
+  // the board is a part-time internship, and the phone card already dropped it
+  // to fit, so the shorter name was the one most students saw anyway.
+  "Internship": {
+    zh: "实习",
+    ja: "インターンシップ",
+    ko: "인턴십",
+    es: "Prácticas",
+    fr: "Stage",
+    hi: "इंटर्नशिप",
+    ar: "تدريب",
   },
 
   // ── Term month ranges (calendar adapter `semType.sub`) ───────────
