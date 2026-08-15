@@ -175,14 +175,24 @@ function withPackerRetry(args) {
   if (args.trace) args.trace.stage("retry", { because: "fails-hard-criteria" });
   const packed = generateOnce({ ...args, packOnly: true });
   if (!packed.refused) return packed;
-  // ── The recording now describes a pass we are NOT returning ─────────
+  // ── Both passes refused, and the recording is still worth keeping ───
   //
-  // `first`'s plan is the answer, and the packer retry has already reset the recording (a second
-  // pass re-derives the cells, so the old card indices point at courses that no longer exist —
-  // see `trace.roster`). The recording is therefore of the discarded pass, and the honest move is
-  // to mark it unusable rather than let the panel walk a reader through a plan they are not
-  // looking at. `deriveModel` returns null on this and the panel says nothing was recorded.
-  if (args.trace) args.trace.stage("stale", { because: "an earlier pass produced the answer" });
+  // This line used to mark the recording `stale`, on the reasoning that "`first`'s plan is the
+  // answer" and the panel must not walk a reader through a plan they are not looking at. That
+  // reasoning cannot apply HERE: we only reach this line because `packed.refused` as well, so
+  // neither pass produced a plan and there is nothing for the recording to misrepresent. The
+  // marker fired exclusively in the one case it did not describe, and `deriveModel` returned
+  // null for it — blanking the process view for a refused degree, which is precisely the case
+  // where the process is the only account there is.
+  //
+  // What the recording holds is the packer pass, end to end and internally consistent:
+  // `narrowing-done → packer → packer-done → search-done → improve-done → refused`, ending in
+  // the SAME reason this function returns. Measured on cyber-physical_systems_ms_(boston):
+  // returned `fails-hard-criteria`, recorded `fails-hard-criteria`. Keeping it costs nothing
+  // and is the only explanation the student gets.
+  //
+  // `first`'s refusal is still the one reported, for the reason given above — it describes what
+  // the search found rather than what the packer did.
   return first;
 }
 

@@ -104,12 +104,17 @@ test("chart/coop › the co-op blocks it builds satisfy the forced requirement",
 
   // The end of the chain: does the audit agree?
   //
-  // Allocated ALL SECTIONS AT ONCE, against one `used` set, because that is
-  // what the Graduation panel does and the difference is the whole answer here.
-  // COOP 3948 appears in BOTH of International Business's experiential
-  // sections; allocate them separately and it satisfies each, which is a result
-  // no student can have. The first draft of this test did exactly that and
-  // reported a plan more complete than the app would ever show.
+  // Allocated ALL SECTIONS AT ONCE, because that is what the Graduation panel
+  // does. Both of International Business's experiential sections name COOP
+  // 3948 — International requires it, Business lists it among seven — and
+  // since `1434dbc5` one course answers every requirement that names it while
+  // being credited once. So the single forced registration satisfies both.
+  //
+  // This test asserted the opposite two hours ago, and was right then: a
+  // shared `used` set consumed the key for whichever section was declared
+  // first. That rule changed underneath it, deliberately, and IB is the case
+  // the change was made for. Worth keeping the history in view — the number
+  // that moved was not CHART's.
   const granted = workTermGrants(applied.specialTermPl, specialTerms.getTypes(), SEM_INDEX).planned;
   const sections = program.requirementSections ?? [];
   const results = allocateSections(sections, granted, new Set(), courseMap);
@@ -121,14 +126,17 @@ test("chart/coop › the co-op blocks it builds satisfy the forced requirement",
 
   assert.equal(satOf("International Experiential"), true,
     "the generated plan's co-ops do not satisfy International Experiential Learning");
+  assert.equal(satOf("Business Experiential"), true,
+    "COOP 3948 no longer answers the section that lists it — see gradRequirements' "
+    + "one-course-one-requirement rule");
 
-  // And the other half: Business Experiential accepts four co-op registrations
-  // differing by abroad and half-time, so CHART names none of them. It is left
-  // UNMET on purpose — one registration cannot cover two non-shared sections,
-  // and choosing the second would be deciding the student's term abroad. This
-  // is the same state the app shows for a hand-entered COOP 3948.
-  assert.equal(satOf("Business Experiential"), false,
-    "CHART chose one of four co-op variants on the student's behalf");
+  // What CHART must still NOT do: invent the second registration. Business
+  // Experiential accepts four co-op variants differing by abroad and half-time,
+  // and choosing one would be deciding the student's term abroad. It is
+  // satisfied here as a consequence of the forced COOP 3948, not because
+  // anything was picked for them — so exactly ONE block carries a course.
+  assert.equal(registered.length, 1,
+    `CHART named ${registered.length} registrations; only the forced one is legitimate`);
 });
 
 test("chart/coop › reapplying the plan does not add a second registration",

@@ -250,6 +250,37 @@ export function satisfiedByTarget(programData, placedSet, courseMap = {}) {
  * Both sides are measured with the same function, so the subtraction is
  * meaningful rather than two estimates differenced.
  *
+ * ── UNBUILT, and there is a hazard waiting for whoever builds it ─────
+ *
+ * `resolveAnswers` does not exist. This function has no callers anywhere in
+ * src, scripts or test — checked, not assumed — so nothing below has ever run
+ * against real state. That is the only reason the following is a note rather
+ * than a bug.
+ *
+ * Since `1434dbc5`, one course answers EVERY requirement that names it while
+ * being credited once. `satisfiedByTarget` sums satisfied credit PER TARGET, so
+ * a single 4 SH course named by two sections contributes 4 SH to each: 8 SH of
+ * satisfaction from 4 SH of coursework. Divide by the unit and this retires a
+ * reservation in both.
+ *
+ * Retiring both is CORRECT as a statement about requirements — both really are
+ * met. The hazard is credit: the plan loses two reservations' worth of expected
+ * future coursework for one course, and if nothing puts that credit back the
+ * student is short by the difference. Whether it is real depends entirely on
+ * the consumer — if general electives are re-derived after retirement they
+ * absorb it, since `used` still claims the course exactly once for credit.
+ *
+ * So: before wiring this up, check the degree TOTAL after retirement, not the
+ * per-target counts. The counts will look right while the total is short.
+ *
+ * (A first attempt to measure this compared retired-reservation credit against
+ * placed credit across the corpus and reported 34 programs "over". That metric
+ * was meaningless: placing every named course legitimately meets every
+ * requirement and legitimately retires every reservation, and shared courses
+ * make per-target credit exceed coursework BY DESIGN. Two different currencies.
+ * The measurement that would settle it needs a real CHART plan and a re-derived
+ * elective bucket.)
+ *
  * @param {object} programData
  * @param {Iterable<string>} placedKeys      what the student has placed
  * @param {Iterable<string>} planNamedKeys   what the plan names outright

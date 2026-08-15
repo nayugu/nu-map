@@ -1395,10 +1395,17 @@ export function assignRegistrations(requirements, runCount, courseMap = {}, kind
   for (const { r, opts } of forced) {
     if (run >= runCount) break;
     const key = opts[0];
-    // One key per plan: `allocateSections` consumes each course key once against
-    // a single global `used` set, so two co-ops both registering COOP 3945
-    // satisfy ONE section, not two. A second run naming it would look like
-    // progress and audit as none.
+    // One key per plan. The original reason was that `allocateSections`
+    // consumed each course key once against a global `used` set, so a second
+    // run naming COOP 3945 would look like progress and audit as none. That
+    // stopped being true when one course began answering every requirement
+    // that names it — and International Business is the case that change was
+    // made for, so this function's own example moved with it.
+    //
+    // The rule outlives its reason. Proposing the SAME registration for two
+    // different work terms states nothing the first did not; a student reading
+    // two co-ops both labelled COOP 3945 learns less than one labelled and one
+    // left open for them to fill in.
     if (used.has(key)) continue;
     used.add(key);
     out.push({ runIndex: run, key, title: r.title, cell: r.id });

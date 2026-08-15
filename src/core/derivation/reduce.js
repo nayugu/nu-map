@@ -45,10 +45,19 @@ export const SATURATED_NODES = 2000;
  */
 export function deriveModel(snapshot) {
   if (!snapshot || !(snapshot.roster?.length)) return null;
-  // A recording that describes a pass whose plan was thrown away. See `withPackerRetry`: the
-  // answer can come from an earlier pass than the one the recording holds, and a walkthrough of
-  // the wrong plan is worse than no walkthrough at all.
-  if ((snapshot.stages ?? []).some(x => x.name === "stale")) return null;
+  // ── There was a `stale` guard here, and it was wrong ────────────────
+  //
+  // It returned null for any recording marked `stale`, to stop the panel walking a reader
+  // through a plan that had been thrown away. But `withPackerRetry` — the only place that ever
+  // marked it — reached that line ONLY when both of its passes refused, so there was never a
+  // plan involved and never anything to misrepresent. The guard fired exclusively on refused
+  // degrees and blanked the one view they have. See the note there; the marker is gone.
+  //
+  // Nothing replaces it. A recording that genuinely described a discarded plan would be a real
+  // hazard, but no path produces one: every caller that returns a PLAN returns the pass the
+  // recording holds. A guard against a state the code cannot reach, encoding a belief that is
+  // false, is worse than no guard — this one cost every refused-with-a-retry degree its
+  // explanation for as long as it existed.
 
   const profile = searchProfile(snapshot);
   const marks = attemptMarks(snapshot, profile);

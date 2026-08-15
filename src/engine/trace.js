@@ -215,7 +215,21 @@ export function createTrace({ maxNodes = 200_000 } = {}) {
       if (roster.length) {
         n = 0; cuts = 0; cutsThisAttempt = 0;
         truncated = false; cutsTruncated = false;
+        // ── `retry` survives, because it is ABOUT the seam ────────────
+        //
+        // The reset wiped every stage, including the `retry` marker that `generatePlan` and
+        // `withPackerRetry` push immediately BEFORE starting the second pass — so the marker
+        // was destroyed by the very pass it announces, every time, and the spine could never
+        // draw the seam it has a `note` kind for. `buildSpine`'s own comment says a retry "is
+        // shown rather than folded away"; it never was.
+        //
+        // Safe to carry where the others are not: the reset exists because card indices are
+        // rebuilt, and a stage holds no card index — the node stream, the attempts and the
+        // domain rows do, and those still go. `retry` is the one stage that describes the
+        // PIPELINE rather than the pass, so it is the one that should outlive a pass.
+        const carried = stages.filter(s => s.name === "retry");
         stages.length = 0; attempts.length = 0;
+        stages.push(...carried);
         domainRows = []; assignment = null; moveLog = [];
         passes += 1;
       }
