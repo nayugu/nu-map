@@ -83,6 +83,42 @@ export function computeGrantedCourses(specialTermPl, types, semIndex) {
 }
 
 /**
+ * The course keys a plan's work terms grant, split into PLANNED and COMPLETED.
+ *
+ * ── Why this exists ────────────────────────────────────────────────
+ *
+ * Three places needed both halves of this and each wrote its own: the printed
+ * report (`planModel.derivePlanSets`), the live audit (`GradPanel`) and the MCP
+ * query adapter. They agreed only by inspection — and `derivePlanSets` is
+ * itself the function whose docstring says it exists so that "two derivations
+ * disagree" cannot happen, while two of the three never called it.
+ *
+ * That was survivable while a grant was one hardcoded string. It stops being
+ * survivable the moment the grant depends on the student's PROGRAM, which is
+ * what resolving `ENCP 6964` for an engineer and `CS 6964` for a Khoury
+ * student requires (see docs/coop-design.md). A rule that has to learn a new
+ * input must have exactly one place to learn it.
+ *
+ * `isCompleted` stays a parameter for the same reason `derivePlanSets` takes
+ * one: the callers genuinely disagree about which semesters count as done, and
+ * that disagreement is not this function's to settle. Omit it and nothing is
+ * reported as completed, which is the conservative direction.
+ *
+ * @param {Object}   specialTermPl - { [id]: { typeId, semId, ... } }
+ * @param {Object[]} types         - specialTerms.types array from ISpecialTerms
+ * @param {Object}   [semIndex]    - SEM_INDEX (semId → ordinal)
+ * @param {(semId: string) => boolean} [isCompleted]
+ * @returns {{ planned: Set<string>, completed: Set<string> }}
+ */
+export function workTermGrants(specialTermPl, types, semIndex, isCompleted) {
+  const planned = computeGrantedCourses(specialTermPl, types, semIndex);
+  const finished = Object.fromEntries(
+    Object.entries(specialTermPl ?? {}).filter(([, d]) => d?.semId && isCompleted?.(d.semId))
+  );
+  return { planned, completed: computeGrantedCourses(finished, types, semIndex) };
+}
+
+/**
  * Returns true when a special term placed in a semester of the given
  * weight would spill into the following semester.
  *

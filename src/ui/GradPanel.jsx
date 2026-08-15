@@ -21,7 +21,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { IAcceleratedPathway } from "../ports/IAcceleratedPathway.js";
 import { isEligibleFor } from "../core/pathway/select.js";
-import { computeGrantedAttrs, computeGrantedCourses } from "../core/specialTermUtils.js";
+import { computeGrantedAttrs, workTermGrants } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { cohortCatalogYear, programIdFromPath } from "../data/programPaths.js";
 import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
@@ -1577,7 +1577,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const placedSet = useMemo(
     () => {
       const set = buildPlacedKeySet(filterInTimeline(applySubstitutions(dropVoidTakes(placements, grades), effectiveSubstitutions), SEM_INDEX), placedOut, courseMap);
-      for (const k of computeGrantedCourses(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX)) set.add(k);
+      for (const k of workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX).planned) set.add(k);
       return set;
     },
     [placements, effectiveSubstitutions, placedOut, courseMap, SEM_INDEX, grades, specialTermPl, specialTerms]
@@ -1603,10 +1603,8 @@ export default function GradPanel({ wideCatalog = false }) {
     // A co-op that has already happened makes its course COMPLETED, not
     // merely planned — otherwise the requirement row reads as still pending
     // for a student who finished the co-op two years ago.
-    const finished = Object.fromEntries(
-      Object.entries(specialTermPl).filter(([, d]) => d?.semId && getSemStatus(d.semId) === "completed")
-    );
-    for (const k of computeGrantedCourses(finished, specialTerms?.getTypes() ?? [], SEM_INDEX)) set.add(k);
+    const isDone = (semId) => getSemStatus(semId) === "completed";
+    for (const k of workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, isDone).completed) set.add(k);
     return set;
   }, [placements, effectiveSubstitutions, placedOut, courseMap, getSemStatus, grades, specialTermPl, specialTerms, SEM_INDEX]);
 

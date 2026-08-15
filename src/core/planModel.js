@@ -2,7 +2,7 @@
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
 import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
-import { resolveTermByDuration, termSpans, computeGrantedAttrs, computeGrantedCourses } from "./specialTermUtils.js";
+import { resolveTermByDuration, termSpans, computeGrantedAttrs, workTermGrants } from "./specialTermUtils.js";
 import { dropVoidTakes, dropUnearnedTakes } from "./gradeSystem.js";
 import { resolveCompanyLogo } from "./companyLogo.js";
 
@@ -366,14 +366,12 @@ export function derivePlanSets({
   // requirements but was never dragged onto the grid, so it joins placedSet
   // ALONE — realPlacedSet feeds General Electives and must stay what the
   // student actually placed. Same split the virtual substitution targets use.
-  for (const k of computeGrantedCourses(specialTermPl, specialTermTypes, dynSemIdx)) placedSet.add(k);
-
+  //
   // …and a co-op that has already happened makes its course COMPLETED, not
-  // merely planned. Derived here rather than by the caller for the same
-  // reason as everything else in this function: two derivations disagree.
-  const finishedTerms = Object.fromEntries(
-    Object.entries(specialTermPl).filter(([, d]) => d?.semId && done(d.semId))
-  );
+  // merely planned. Both halves come from one call, shared with GradPanel and
+  // the MCP adapter, so the three cannot drift — see workTermGrants.
+  const grants = workTermGrants(specialTermPl, specialTermTypes, dynSemIdx, done);
+  for (const k of grants.planned) placedSet.add(k);
 
   // A course in a completed semester is DONE only if its grade yielded credit
   // (or none was entered).
@@ -383,7 +381,7 @@ export function derivePlanSets({
     ),
     placedOut, courseMap
   );
-  for (const k of computeGrantedCourses(finishedTerms, specialTermTypes, dynSemIdx)) doneKeys.add(k);
+  for (const k of grants.completed) doneKeys.add(k);
 
   return { projected, earned, placedSet, realPlacedSet, doneKeys };
 }
