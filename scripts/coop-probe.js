@@ -27,6 +27,10 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { allocateMajorSections } from "../src/core/gradRequirements.js";
+import { workTermGrants } from "../src/core/specialTermUtils.js";
+import specialTerms from "../src/adapters/northeastern/specialTerms.js";
+
+const COOP_TYPES = specialTerms.getTypes();
 
 const REPO = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -134,15 +138,21 @@ const eachProgram = function* () {
 // still a co-op.
 const BASE = { abroad: false, halfTime: false };
 
+/**
+ * Calls the SHIPPED resolver rather than modelling it.
+ *
+ * This file previously carried its own copy, which meant the numbers in
+ * docs/coop-design.md could agree with a model and disagree with the code.
+ * That is the drift the doc exists to prevent, so the instrument imports what
+ * runs. `specialTermPl` is synthesised here because the probe reasons about
+ * hypothetical plans ("one abroad co-op") rather than real ones.
+ */
 export function resolveGrants(blocks, programKeys) {
-  const emitted = new Set();
-  for (const b of blocks) {
-    const pick = (f) => programKeys.find(k =>
-      WORK_BY_KEY[k].abroad === f.abroad && WORK_BY_KEY[k].halfTime === f.halfTime && !emitted.has(k));
-    const k = pick(b) ?? pick(BASE);
-    if (k) emitted.add(k);
-  }
-  return emitted;
+  const options = programKeys.map(k => ({ key: k, ...WORK_BY_KEY[k] }));
+  const pl = Object.fromEntries(blocks.map((f, i) =>
+    [`c${i}`, { typeId: "coop", semId: `s${i}`, duration: 6, abroad: !!f.abroad, halfTime: !!f.halfTime }]));
+  const semIndex = Object.fromEntries(blocks.map((_, i) => [`s${i}`, i]));
+  return workTermGrants(pl, COOP_TYPES, semIndex, null, options).planned;
 }
 
 const programKeysOf = (nodes) =>

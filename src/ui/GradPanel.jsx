@@ -21,7 +21,7 @@ import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { IInstitution }       from "../ports/IInstitution.js";
 import { IAcceleratedPathway } from "../ports/IAcceleratedPathway.js";
 import { isEligibleFor } from "../core/pathway/select.js";
-import { computeGrantedAttrs, workTermGrants } from "../core/specialTermUtils.js";
+import { computeGrantedAttrs, workTermGrants, coopOptionsInPrograms } from "../core/specialTermUtils.js";
 import { resolveConcentration } from "../core/concentrationResolve.js";
 import { cohortCatalogYear, programIdFromPath } from "../data/programPaths.js";
 import { filterInTimeline, applySubstitutions } from "../core/planModel.js";
@@ -1574,13 +1574,20 @@ export default function GradPanel({ wideCatalog = false }) {
   // A work term registers a real course (COOP 3945), which 37 undergraduate
   // programs name as a requirement. It joins placedSet ONLY — realPlacedSet
   // below feeds General Electives and must stay what the student placed.
+  // Which work-term courses this student's programs accept. Majors only:
+  // measured over the corpus, 0 of 172 minors name one.
+  const coopOptions = useMemo(
+    () => coopOptionsInPrograms([major, major2Data], courseMap),
+    [major, major2Data, courseMap]
+  );
+
   const placedSet = useMemo(
     () => {
       const set = buildPlacedKeySet(filterInTimeline(applySubstitutions(dropVoidTakes(placements, grades), effectiveSubstitutions), SEM_INDEX), placedOut, courseMap);
-      for (const k of workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX).planned) set.add(k);
+      for (const k of workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, null, coopOptions).planned) set.add(k);
       return set;
     },
-    [placements, effectiveSubstitutions, placedOut, courseMap, SEM_INDEX, grades, specialTermPl, specialTerms]
+    [placements, effectiveSubstitutions, placedOut, courseMap, SEM_INDEX, grades, specialTermPl, specialTerms, coopOptions]
   );
 
   // Real-only placed set: excludes virtual substitution-target entries from effectivePlacements.
@@ -1604,9 +1611,9 @@ export default function GradPanel({ wideCatalog = false }) {
     // merely planned — otherwise the requirement row reads as still pending
     // for a student who finished the co-op two years ago.
     const isDone = (semId) => getSemStatus(semId) === "completed";
-    for (const k of workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, isDone).completed) set.add(k);
+    for (const k of workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, isDone, coopOptions).completed) set.add(k);
     return set;
-  }, [placements, effectiveSubstitutions, placedOut, courseMap, getSemStatus, grades, specialTermPl, specialTerms, SEM_INDEX]);
+  }, [placements, effectiveSubstitutions, placedOut, courseMap, getSemStatus, grades, specialTermPl, specialTerms, SEM_INDEX, coopOptions]);
 
   const concGroups = useMemo(() => {
     const opts = (major?.concentrations?.concentrationOptions ?? []).map(c => ({ path: c.title, label: c.title }));

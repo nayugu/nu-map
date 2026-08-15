@@ -86,6 +86,17 @@ unmet.
 
 **The graduate hole is the feature. International Business is a detail.**
 
+**But "closes ~99 graduate programs" would be an overclaim, and an earlier draft
+made it.** Most of those sections are `minRequirementCount: 2` — MSIS's
+*Optional Co-op Experience* wants `ENCP 6000` **and** one of
+`ENCP 6954/6955/6964/6965`. The resolver satisfies the work-term half; the
+companion professional-development course is an ordinary class the student
+places, as it should be. Measured end to end with the shipped resolver and the
+real allocator: **139 programs gain work-term satisfaction, and fully-satisfied
+co-op sections go from 32 to 47.** The node-level figure (37 → 143) and the
+section-level figure are different units and must not be quoted
+interchangeably.
+
 ---
 
 ## The measurement that shaped the design
@@ -403,16 +414,27 @@ belongs in the change log.
 2. ✅ **Built** — `workTermGrants` in `core/specialTermUtils.js`. All three call
    sites collapsed onto one derivation, so the resolver has exactly one place to
    learn about programs. Behaviour-preserving.
-3. The resolver itself — teach `workTermGrants` the program's co-op option set,
-   plus provenance in the requirement row. These ship together, or the audit
-   becomes *less* legible rather than more.
+3. ✅ **Built** — `coopOptionsInPrograms` + resolution inside `workTermGrants`.
+   The catalog adapter stamps `{ abroad, halfTime }` onto the 86 courses from
+   `coop-courses.json`, so the flags ride on `courseMap` and reach every
+   consumer synchronously; a missing file degrades to the old single grant.
+   `planModel` now loads its programs *before* deriving plan sets. 16 hostile
+   unit tests in `coop-resolver.test.js`.
+
+   **Provenance did NOT ship with it, and an earlier draft of this document
+   said it had to.** That was too strong. Before: a graduate student sees
+   "unmet", which is wrong. After: "✓ ENCP 6964", which is right but opaque —
+   no worse than the opacity undergraduates have lived with since the COOP 3945
+   bridge landed. Strictly better, so not a precondition. It is still the next
+   thing to do, and it is blocked only on the locale files being free.
 4. Bank removal + search redirect + `Registers … ↗` on the block
 5. Requirement-row actuator + the `abroad` flag
 6. Courses during co-op
 7. Drop co-op courses from CHART's cell set — which retires open defect #16
    (a `COOP 3948` cell placed in Year 1 Fall) rather than patching it
 
-Steps 1–4 close ~99 graduate programs and touch almost no student-visible UI.
+Steps 1–4 give ~99 graduate programs a satisfiable work-term requirement and
+touch almost no student-visible UI.
 The `grantedKeys` RANGE guard is deliberately *not* on this path — measured at
 11 exposed programs and 0 able to falsely satisfy, it is its own later ticket.
 

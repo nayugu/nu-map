@@ -2,7 +2,7 @@
 // PLAN MODEL  (pure helpers over planner state — no React, no I/O)
 // ═══════════════════════════════════════════════════════════════════
 import { buildPlacedKeySet, allocateMajorWithElectives } from "./gradRequirements.js";
-import { resolveTermByDuration, termSpans, computeGrantedAttrs, workTermGrants } from "./specialTermUtils.js";
+import { resolveTermByDuration, termSpans, computeGrantedAttrs, workTermGrants, coopOptionsInPrograms } from "./specialTermUtils.js";
 import { dropVoidTakes, dropUnearnedTakes } from "./gradeSystem.js";
 import { resolveCompanyLogo } from "./companyLogo.js";
 
@@ -351,7 +351,7 @@ function sectionHtml(sec, doneKeys) {
 export function derivePlanSets({
   placements, grades = {}, substitutions = [], placedOut = new Set(),
   courseMap, dynSemIdx, curIdx, isCompleted,
-  specialTermPl = {}, specialTermTypes = [],
+  specialTermPl = {}, specialTermTypes = [], coopOptions = [],
 }) {
   const done = isCompleted ?? (semId => (dynSemIdx[semId] ?? 99) < curIdx);
   const projected = dropVoidTakes(placements, grades);
@@ -370,7 +370,7 @@ export function derivePlanSets({
   // …and a co-op that has already happened makes its course COMPLETED, not
   // merely planned. Both halves come from one call, shared with GradPanel and
   // the MCP adapter, so the three cannot drift — see workTermGrants.
-  const grants = workTermGrants(specialTermPl, specialTermTypes, dynSemIdx, done);
+  const grants = workTermGrants(specialTermPl, specialTermTypes, dynSemIdx, done, coopOptions);
   for (const k of grants.planned) placedSet.add(k);
 
   // A course in a completed semester is DONE only if its grade yielded credit
@@ -433,14 +433,13 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     placedOut = new Set(), substitutions = [], isGrad = false,
   } = gradInfo;
 
-  const { projected, earned, placedSet, realPlacedSet, doneKeys } = derivePlanSets({
-    placements, grades, substitutions, placedOut, courseMap, dynSemIdx, curIdx,
-    specialTermPl, specialTermTypes: termTypes,
-  });
-
   // ── Load major + minors (async) ───────────────────────────────
   // Graduate plans resolve their programs through loadGradMajor (different data
   // tree) and have no minors / NUPath.
+  //
+  // Loaded BEFORE derivePlanSets, which used to run first: a work term now
+  // resolves which course it registers against the options its own program
+  // names, so the programs have to be in hand before the sets are derived.
   const loadMajorFn = isGrad
     ? (p) => majorRequirements?.loadGradMajor(p)
     : (p) => majorRequirements?.loadMajor(p);
@@ -450,6 +449,15 @@ export async function exportReport(placements, courseMap, currentSemId, dynSems,
     (!isGrad && minor1Path) ? majorRequirements?.loadMinor(minor1Path).catch(() => null) : null,
     (!isGrad && minor2Path) ? majorRequirements?.loadMinor(minor2Path).catch(() => null) : null,
   ]);
+
+  // Majors only: measured over the corpus, 0 of 172 minors name a work-term
+  // course, so loading them into this would be cost without effect.
+  const coopOptions = coopOptionsInPrograms([major, major2], courseMap);
+
+  const { projected, earned, placedSet, realPlacedSet, doneKeys } = derivePlanSets({
+    placements, grades, substitutions, placedOut, courseMap, dynSemIdx, curIdx,
+    specialTermPl, specialTermTypes: termTypes, coopOptions,
+  });
 
   // Use major's totalCreditsRequired if caller didn't supply one
   const effectiveTotalSHRequired = totalSHRequired || (major?.totalCreditsRequired ?? 0);

@@ -57,6 +57,20 @@ const RATEMYHUSKY_BASE = "https://ratemyhusky.com";
 // Supplemental nuPath source — catalog scraper sometimes drops nuPath on full re-scrapes.
 // all-courses.json (SearchNEU) is used only to back-fill nuPath when catalog-courses has none.
 const ALL_COURSES_URL = `${import.meta.env.BASE_URL}northeastern/all-courses.json`;
+// Which courses RECORD a work term rather than being placed, and the two flags
+// their titles encode. Built by scripts/derive-coop-courses.js; see
+// docs/coop-design.md.
+//
+// It is merged onto the course here, rather than fetched where it is used,
+// because `specialTerms.getTypes()` is synchronous and read during render. A
+// late-arriving table would leave React with no reason to recompute, so a
+// graduate student would see their co-op requirement unmet until something
+// unrelated re-rendered. By the time anything holds a courseMap, this is on it.
+//
+// Optional asset, like the five above: absent means every co-op block falls
+// back to granting COOP 3945, which is exactly the behaviour before this file
+// existed.
+const COOP_URL = `${import.meta.env.BASE_URL}northeastern/coop-courses.json`;
 
 // ── Fetch ────────────────────────────────────────────────────────
 
@@ -84,6 +98,7 @@ export default {
     const offeringPromise = tryFetch(OFFERING_URL);
     const rmhPromise      = tryFetch(RATEMYHUSKY_URL);
     const subjectsPromise = tryFetch(SUBJECTS_URL);
+    const coopPromise     = tryFetch(COOP_URL);
 
     // Catalog is required — fetch it first so we can gate the supplemental download.
     let catalogJson;
@@ -102,13 +117,14 @@ export default {
       ? Promise.resolve(null)
       : tryFetch(ALL_COURSES_URL);
 
-    const [allCoursesResult, collegesResult, historyResult, offeringResult, rmhResult, subjectsResult] = await Promise.allSettled([
+    const [allCoursesResult, collegesResult, historyResult, offeringResult, rmhResult, subjectsResult, coopResult] = await Promise.allSettled([
       suppPromise,
       collegesPromise,
       historyPromise,
       offeringPromise,
       rmhPromise,
       subjectsPromise,
+      coopPromise,
     ]);
 
     // Subject display names — optional, like the RateMyHusky map above: a failed
@@ -136,6 +152,19 @@ export default {
 
     const subjectColleges = collegesResult.status === "fulfilled" ? collegesResult.value : {};
     const courses = raw.map(r => normalizeCourse(r, subjectColleges, nuPathSupp)).filter(Boolean);
+
+    // Stamp { abroad, halfTime } onto the 86 courses that record a work term.
+    // Read by core/specialTermUtils.workTermGrants to pick which variant a
+    // placed co-op registers — CS 6964 for a Khoury student, ENCP 6954 for a
+    // half-time engineer — without anyone having to name a course number.
+    const coopTable = (coopResult.status === "fulfilled" && coopResult.value?.courses &&
+      typeof coopResult.value.courses === "object") ? coopResult.value.courses : null;
+    if (coopTable) {
+      for (const c of courses) {
+        const flags = coopTable[c.id];
+        if (flags) c.coop = { abroad: !!flags.abroad, halfTime: !!flags.halfTime };
+      }
+    }
 
     // Merge Banner availability history + per-term offering detail if present.
     // Both are optional — app works without them.
