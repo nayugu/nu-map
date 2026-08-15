@@ -428,6 +428,9 @@ export function improve({
   // Catalog-wide foundationality, from the shared depth index. Absent, `tradeFoundations`
   // returns its input untouched, so a caller that does not supply it gets the old pipeline.
   catalogUnlock = null,
+  // Where the departments put each course (`plan-order.json`). A floor for `reclaimFromFiller`,
+  // never a target — see `cellPosition` there.
+  positions = null,
 }) {
   // Chain height drives the leading objective, and it is a property of the
   // precedence graph rather than of any one arrangement, so it is computed once.
@@ -584,7 +587,7 @@ export function improve({
   // availability, because a course actually running in a season is closer to a hard fact than
   // earliness is, so it gets the last word between the two swaps. See `reclaimFromFiller`.
   const reclaimed = reclaimFromFiller(current, {
-    plans, terms, cap, fullLegal, courseMap, studentType, cal,
+    plans, terms, cap, fullLegal, courseMap, studentType, cal, positions,
   });
   note("reclaim-from-filler", current, reclaimed.termOf);
   current = reclaimed.termOf;
@@ -1199,6 +1202,9 @@ export function tradeFoundations(termOf, {
 export function reclaimFromFiller(termOf, {
   plans, terms, cap, fullLegal, courseMap, studentType = "undergraduate",
   cal = DEFAULT_CALIBRATION,
+  // Where departments actually put each course, from `plan-order.json`. A floor only; absent,
+  // the level band alone applies, which is what shipped before.
+  positions = null,
 }) {
   const fillers = plans.filter(p => p.candidates === null);
   const bounded = plans.filter(p => p.candidates !== null);
@@ -1268,8 +1274,40 @@ export function reclaimFromFiller(termOf, {
   // below, used for a different job: the floor says how early a cell MAY go, this says who gets
   // there first when they compete. A 1000-level science pool outranks `AFCS 2600 or CY 4170`,
   // whose group maximum is 4000-level and whose home is therefore late.
-  const homeOf = new Map(bounded.map(p =>
-    [p.cell.id, cellLevelTarget(p, courseMap, studentType) ?? 1]));
+  // ── The course's OWN convention beats its level band's ─────────────
+  //
+  // `cellLevelTarget` is a median over every course of a level band, and for the courses this
+  // pass moves that is too coarse in a way a student notices. `ENGW 3302` is 3000-level, so the
+  // band says 0.64 — and the 26 departments that place it put it at 0.769. This pass duly
+  // reclaimed it to study term 5 of 10, inside the band's one-term slack, and the plan showed
+  // Advanced Writing before the first co-op. The guard reported itself satisfied throughout.
+  //
+  // `positions` is the departments' own record, injected like `observedOrder` is: derived data
+  // with a support count, passed in rather than imported, so the engine stays pure and a caller
+  // may plan without it. Used as a FLOOR and nothing else — it can refuse a placement for being
+  // in front of what every department does, and it can never choose one. That is the whole
+  // licence for reading this corpus at all, since the same plans violate prerequisite order in
+  // 7.7% of cases and season in 31.9%.
+  //
+  // The LATER of the two bounds, because both are floors and neither excuses the other: the band
+  // carries the level convention for courses the corpus has never placed, and the corpus carries
+  // the course itself where it has.
+  const cellPosition = (p) => {
+    const ids = p.cell.groups?.flat() ?? [];
+    let at = null;
+    for (const id of ids) {
+      const rec = positions?.[id];
+      // The MINIMUM across a group's courses: a cell is ready when its earliest member is, and
+      // claiming the latest would bar a corequisite pair from a term one half of it can occupy.
+      if (rec && typeof rec.at === "number") at = at == null ? rec.at : Math.min(at, rec.at);
+    }
+    return at;
+  };
+  const homeOf = new Map(bounded.map(p => {
+    const band = cellLevelTarget(p, courseMap, studentType) ?? 1;
+    const corpus = cellPosition(p);
+    return [p.cell.id, corpus == null ? band : Math.max(band, corpus)];
+  }));
   const pairs = [];
   for (const want of bounded) {
     for (const filler of fillers) {
@@ -1323,7 +1361,11 @@ export function reclaimFromFiller(termOf, {
     // the erosion actually happens.
     //
     // Earliness is only worth having where it is also conventional.
-    const home = cellLevelTarget(want, courseMap, studentType);
+    // `homeOf`, not the band: the two were computed differently and the ORDERING used the
+    // combined floor while the CHECK used the band, so a cell could be ranked by one rule and
+    // admitted by another. That is the same two-names-for-one-judgement defect that put calculus
+    // in Year 4, so both now read the one map.
+    const home = homeOf.get(want.cell.id);
     if (home != null && beforeConvention(i, home)) continue;
     if (!fullLegal(trial)) continue;
     current = trial;

@@ -46,6 +46,14 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const argv = process.argv.slice(2);
 const jsonOut = argv.includes("--json") ? argv[argv.indexOf("--json") + 1] : null;
 
+// ── `--no-positions`: measure what the corpus FLOOR is worth ────────
+//
+// The floor in `reclaimFromFiller` is fed from the same `plan-order.json` this script judges
+// against, which makes "did the floor help" a question the script cannot answer by default —
+// both runs would have it. This turns it off for the engine while leaving the WITNESS intact,
+// so a before/after is one flag rather than two checkouts.
+const noPositions = argv.includes("--no-positions");
+
 /** Distinct programs that must place a course before its position is believed. */
 const MIN_PROGRAMS = 5;
 /** How far from the corpus a placement may sit before it is a DRIFT, as a share of the plan. */
@@ -120,6 +128,7 @@ for (const d of degrees) {
       out = generatePlan({
         program: d.data, publishedPlan: variant, courseMap, ports, depthIndex,
         observedOrder: observed.edges,
+        positions: noPositions ? null : (observed.positions ?? null),
         coopPrep: (observed.coopPrep ?? []).map(x => x.course),
         studentType, calibration: chartCalibration, timeBudgetMs: 5000,
       });

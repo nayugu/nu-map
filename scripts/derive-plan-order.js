@@ -273,13 +273,69 @@ function coopPrep(plans) {
     .sort((a, b) => a.course.localeCompare(b.course));
 }
 
+/**
+ * Where each course SITS, as a fraction through the plan — the departments' own convention.
+ *
+ * ── Why this is a floor and not a target ────────────────────────────
+ *
+ * The engine already has a position convention, `LEVEL_POSITION`, and it is a median over every
+ * course of a level band. That is too coarse for the courses it matters most for. `ENGW 3302`
+ * is 3000-level, so the band says 0.64 — and the departments that place it put it at 0.78. The
+ * band permits year two; the course itself says year three or four, and the difference is a
+ * plan that puts advanced writing before the first co-op.
+ *
+ * Measured, leave-one-PROGRAM-out over 11,325 held-out placements: the per-course median
+ * predicts position at MAE 0.071 against the band's 0.128.
+ *
+ * It is emitted so a placement can be REFUSED for being in front of it, never so a placement can
+ * be chosen by it. That distinction is the whole licence for using this corpus at all — these
+ * same plans violate prerequisite order in 7.7% of cases and season in 31.9%, which is what
+ * CHART exists to beat. A witness can prove we got something wrong; it cannot tell us what to
+ * do. Same stance CLAUDE.md already takes on the Sample Plan of Study, applied to ordering
+ * rather than to content.
+ *
+ * `MIN_PROGRAMS` support throughout, exactly as the edges use, so one department's habit is not
+ * evidence. Positions are counted over ALL terms including co-op ones, and a course's FIRST
+ * appearance is its position — a repeated course would otherwise average against itself.
+ */
+function coursePositions(plans) {
+  const at = new Map();
+  for (const plan of plans) {
+    const n = plan.terms.length;
+    if (n < 2) continue;
+    const seen = new Set();
+    plan.terms.forEach((t, i) => {
+      for (const id of t.named) {
+        if (seen.has(id)) continue;
+        seen.add(id);
+        if (!at.has(id)) at.set(id, []);
+        at.get(id).push({ pos: i / (n - 1), program: plan.program });
+      }
+    });
+  }
+  const med = (xs) => { const s = [...xs].sort((a, b) => a - b); return s[Math.floor((s.length - 1) / 2)]; };
+  const out = {};
+  for (const [id, xs] of [...at.entries()].sort((a, b) => a[0].localeCompare(b[0]))) {
+    const programs = new Set(xs.map(x => x.program)).size;
+    if (programs < MIN_PROGRAMS) continue;
+    out[id] = { at: +med(xs.map(x => x.pos)).toFixed(3), programs };
+  }
+  return out;
+}
+
 const prep = coopPrep(plans);
 console.log(`\nco-op preparation courses (always before the first co-op): ${prep.length}`);
 console.log("  " + prep.map(p => `${p.course}(${p.observations})`).join("  "));
 
+const positions = coursePositions(plans);
+console.log(`\ncourses with a believed position (>=${MIN_PROGRAMS} programs): ${Object.keys(positions).length}`);
+
 const doc = {
   generated: new Date().toISOString().slice(0, 10),
   coopPrep: prep,
+  // Where departments put each course, as a FLOOR the engine may refuse a placement against —
+  // never a target it may aim at. See `coursePositions`.
+  positions,
   source: "published Sample Plans of Study",
   plans: plans.length,
   filters: { minPrograms: MIN_PROGRAMS, maxSameTermShare: MAX_SAME_TERM_SHARE,

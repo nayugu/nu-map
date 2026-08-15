@@ -45,8 +45,9 @@ function observedOrder() {
   if (!_orderPromise) {
     _orderPromise = fetch(PLAN_ORDER_URL)
       .then(r => (r.ok ? r.json() : null))
-      .then(d => ({ edges: d?.edges ?? [], coopPrep: (d?.coopPrep ?? []).map(x => x.course) }))
-      .catch(() => ({ edges: [], coopPrep: [] }));
+      .then(d => ({ edges: d?.edges ?? [], coopPrep: (d?.coopPrep ?? []).map(x => x.course),
+                    positions: d?.positions ?? null }))
+      .catch(() => ({ edges: [], coopPrep: [], positions: null }));
   }
   return _orderPromise;
 }
@@ -101,6 +102,9 @@ export default {
       depthIndex: depthIndexFor(courseMap),
       observedOrder: order.edges,
       coopPrep: order.coopPrep,
+      // Where departments put each course — a floor on how early a requirement may be
+      // reclaimed, never a target. See `reclaimFromFiller`.
+      positions: order.positions,
       studentType: type,
       // Resolved by title inside the engine, through `concentrationResolve` — the title is a
       // concentration's only identity across saved plans, share links and MCP, and a stale one

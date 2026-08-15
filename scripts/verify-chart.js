@@ -181,6 +181,7 @@ for (const d of degrees) {
       out = generatePlan({
         program: d.data, publishedPlan: variant, courseMap, ports, depthIndex,
         observedOrder: observed.edges,
+        positions: observed.positions ?? null,
         coopPrep: (observed.coopPrep ?? []).map(x => x.course),
         studentType, calibration: chartCalibration, timeBudgetMs: 5000,
       });

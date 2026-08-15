@@ -197,6 +197,11 @@ function generateOnce({
   studentType = "undergraduate", preferences = DEFAULT_PREFERENCES,
   depthIndex = null, repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, observedOrder = [], coopPrep = [],
+  // Where the departments put each course, from `public/northeastern/plan-order.json`. Injected
+  // like `observedOrder` and for the same reason: derived data carrying a support count, which a
+  // caller is entitled to plan without. It is a FLOOR on how early a requirement may be
+  // reclaimed and never a target — see `reclaimFromFiller`.
+  positions = null,
   // Set only by `withPackerRetry`, after the ladder's plan was refused by the criteria.
   packOnly = false,
   now = () => Date.now(),
@@ -677,6 +682,7 @@ function generateOnce({
     // The same index the search reads, so phase 1 and phase 2 cannot disagree about which
     // courses the rest of the university is built on. See `tradeFoundations`.
     catalogUnlock: depth.catalogUnlock,
+    positions,
   });
   // ── Hill climbing is recorded from its RESULT, not instrumented ────
   //
