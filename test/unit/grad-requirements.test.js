@@ -335,6 +335,214 @@ test("allocate › an unrequired placed course lands in General Electives with i
   assert.equal(generalElectives.placedSH, 4);
 });
 
+// ── Consumption caps and contention ───────────────────────────────────
+//
+// The reported bug: a section that needs three courses counted four, because a
+// RANGE claimed every course in its window regardless of what its parent asked
+// for. These assert the cap in each shape that can carry one, that the surplus
+// reaches General Electives rather than vanishing, and that capping does not
+// let a flexible pool strand a requirement with no substitute.
+
+const bioMap = {
+  BIOL2500: { subject: "BIOL", number: "2500", sh: 4 },
+  BIOL2600: { subject: "BIOL", number: "2600", sh: 4 },
+  BIOL2700: { subject: "BIOL", number: "2700", sh: 4 },
+  BIOL2800: { subject: "BIOL", number: "2800", sh: 4 },
+};
+
+test("allocate › a RANGE with no credit cap claims ONE course, not its whole window", () => {
+  // "Intermediate/Advanced Biology Electives" in Computer Science and Biology BS:
+  // minRequirementCount 1 over a bare OR of RANGEs, under no XOM at all. It used
+  // to claim every placed biology course in range, so the surplus never reached
+  // General Electives and no later section could use it.
+  const major = { requirementSections: [
+    { title: "Bio Elective", minRequirementCount: 1, requirements: [
+      { type: "OR", courses: [
+        { type: "RANGE", subject: "BIOL", idRangeStart: 2000, idRangeEnd: 4999 },
+      ] },
+    ] },
+  ] };
+  const placedSet = set("BIOL2500", "BIOL2600", "BIOL2700");
+  const { sections, generalElectives } =
+    allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+  assert.equal(sections[0].sat, true);
+  assert.equal(sections[0].allocatedCourses.size, 1, "one course claimed, not three");
+  assert.equal(generalElectives.placedSH, 8, "the other two are free credit, not swallowed");
+});
+
+test("allocate › a `choose N of M` section stops at N, and the surplus is general-elective credit", () => {
+  const major = { requirementSections: [
+    { title: "Pick two", minRequirementCount: 2, requirements: [
+      { type: "COURSE", subject: "BIOL", classId: "2500" },
+      { type: "COURSE", subject: "BIOL", classId: "2600" },
+      { type: "COURSE", subject: "BIOL", classId: "2700" },
+      { type: "COURSE", subject: "BIOL", classId: "2800" },
+    ] },
+  ] };
+  const placedSet = set("BIOL2500", "BIOL2600", "BIOL2700", "BIOL2800");
+  const { sections, generalElectives } =
+    allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+  assert.equal(sections[0].allocatedCourses.size, 2, "claims exactly the two it asked for");
+  assert.equal(generalElectives.placedSH, 8,
+    "the other two must land in General Electives, not disappear from the audit");
+});
+
+test("allocate › every placed course is claimed exactly once, or is general-elective credit — never neither", () => {
+  // The partition invariant. A course released by a capped pool that no other
+  // section lists must still be accounted for; losing it is worse than
+  // over-counting it, because the student's credit total silently drops.
+  const major = { requirementSections: [
+    { title: "Pick one", minRequirementCount: 1, requirements: [
+      { type: "RANGE", subject: "BIOL", idRangeStart: 2000, idRangeEnd: 4999 },
+    ] },
+  ] };
+  const placedSet = set("BIOL2500", "BIOL2600", "BIOL2700", "BIOL2800");
+  const { sections, generalElectives, allocatedSet } =
+    allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+  const accounted = new Set([...allocatedSet, ...generalElectives.allocatedCourses]);
+  assert.deepEqual([...placedSet].filter(k => !accounted.has(k)), [],
+    "no placed course may be claimed by nothing");
+  assert.equal(sections[0].allocatedCourses.size + generalElectives.children.length, 4);
+});
+
+test("allocate › a flexible range does not eat the only course an inflexible section can use", () => {
+  // Computer Science and History BS: "Intermediate/Advanced History Course" is a
+  // bare RANGE over HIST 2000–2999 and is declared BEFORE "Integrative Course
+  // Requirement", which names HIST 2211 and has no alternative. Greedy
+  // declaration order gave the range HIST 2211 and told a student who had taken
+  // exactly the right course that they had not.
+  const cm = {
+    HIST2211: { subject: "HIST", number: "2211", sh: 4 },
+    HIST2500: { subject: "HIST", number: "2500", sh: 4 },
+  };
+  const major = { requirementSections: [
+    { title: "Any intermediate history", minRequirementCount: 1, requirements: [
+      { type: "RANGE", subject: "HIST", idRangeStart: 2000, idRangeEnd: 2999 },
+    ] },
+    { title: "Integrative", minRequirementCount: 1, requirements: [
+      { type: "COURSE", subject: "HIST", classId: "2211" },
+    ] },
+  ] };
+  const placedSet = set("HIST2211", "HIST2500");
+  const { sections } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  const byTitle = Object.fromEntries(sections.map(s => [s.title, s]));
+  assert.equal(byTitle["Integrative"].sat, true,
+    "the course only one section can use must go to that section");
+  assert.equal(byTitle["Any intermediate history"].sat, true,
+    "and the range takes the substitute it has, so BOTH are met");
+});
+
+test("allocate › a course two sections equally cannot do without is not reserved to either", () => {
+  // Reservation is only sound when exactly one requirement has no substitute.
+  // With two, there is no evidence to prefer one, so it must fall back to the
+  // ordinary greedy pass rather than reserve arbitrarily and strand the other.
+  const cm = { HIST2211: { subject: "HIST", number: "2211", sh: 4 } };
+  const major = { requirementSections: [
+    { title: "A", minRequirementCount: 1, requirements: [
+      { type: "COURSE", subject: "HIST", classId: "2211" },
+    ] },
+    { title: "B", minRequirementCount: 1, requirements: [
+      { type: "COURSE", subject: "HIST", classId: "2211" },
+    ] },
+  ] };
+  const placedSet = set("HIST2211");
+  const { sections } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  assert.equal(sections[0].sat, true, "the first section still gets it");
+  assert.equal(sections[1].sat, false, "and it is not double-counted into the second");
+});
+
+test("allocate › the verdict does not depend on the order courses were added to the plan", () => {
+  // A Set iterates in insertion order, so before the allocation order was made
+  // explicit, WHICH three of four equally eligible electives counted — and
+  // therefore which one showed under General Electives — changed when the
+  // student reordered a term. Same plan, six orderings, one answer.
+  const major = { requirementSections: [
+    { title: "Electives", minRequirementCount: 1, requirements: [
+      { type: "XOM", numCreditsMin: 12, courses: [
+        { type: "RANGE", subject: "BIOL", idRangeStart: 2000, idRangeEnd: 4999 },
+      ] },
+    ] },
+  ] };
+  const keys = ["BIOL2500", "BIOL2600", "BIOL2700", "BIOL2800"];
+  const orderings = [
+    keys, [...keys].reverse(),
+    ["BIOL2700", "BIOL2500", "BIOL2800", "BIOL2600"],
+    ["BIOL2800", "BIOL2700", "BIOL2500", "BIOL2600"],
+    ["BIOL2600", "BIOL2800", "BIOL2500", "BIOL2700"],
+    ["BIOL2500", "BIOL2800", "BIOL2600", "BIOL2700"],
+  ];
+  const verdicts = orderings.map(order => {
+    const placedSet = new Set(order);
+    const { sections, generalElectives } =
+      allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+    return JSON.stringify({
+      claimed: [...sections[0].allocatedCourses].sort(),
+      general: generalElectives.children.map(c => c.key).sort(),
+    });
+  });
+  assert.equal(new Set(verdicts).size, 1, `order changed the verdict: ${verdicts.join(" | ")}`);
+  assert.equal(JSON.parse(verdicts[0]).claimed.length, 3, "12 SH is three 4 SH courses");
+});
+
+test("allocate › a credit pool overshoots its threshold as little as the courses allow", () => {
+  // An 8 SH pool offered {4, 3, 4} took 4+3+4 = 11 under a by-key order, keeping
+  // a course out of General Electives that it never needed.
+  const cm = {
+    CS2502: { subject: "CS", number: "2502", sh: 3 },
+    CS2503: { subject: "CS", number: "2503", sh: 4 },
+    CS2504: { subject: "CS", number: "2504", sh: 4 },
+  };
+  const major = { requirementSections: [
+    { title: "Khoury Elective", minRequirementCount: 1, requirements: [
+      { type: "XOM", numCreditsMin: 8, courses: [
+        { type: "RANGE", subject: "CS", idRangeStart: 2500, idRangeEnd: 9999 },
+      ] },
+    ] },
+  ] };
+  const placedSet = set("CS2502", "CS2503", "CS2504");
+  const { sections, generalElectives } =
+    allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  assert.equal(sections[0].sat, true);
+  assert.deepEqual([...sections[0].allocatedCourses].sort(), ["CS2503", "CS2504"]);
+  assert.equal(generalElectives.placedSH, 3, "the 3 SH course was never needed");
+});
+
+test("allocate › capping a pool never strands a course a nested SECTION still needs", () => {
+  // Sections nest, and a nested one is allocated through the same node walk. A
+  // cap applied at the outer level must not consume what the inner one names.
+  const cm = {
+    PHYS2303: { subject: "PHYS", number: "2303", sh: 4 },
+    PHYS2304: { subject: "PHYS", number: "2304", sh: 4 },
+  };
+  const major = { requirementSections: [
+    { title: "Outer", minRequirementCount: 2, requirements: [
+      { type: "RANGE", subject: "PHYS", idRangeStart: 2000, idRangeEnd: 2999 },
+      { type: "SECTION", title: "Inner", minRequirementCount: 1, requirements: [
+        { type: "COURSE", subject: "PHYS", classId: "2304" },
+      ] },
+    ] },
+  ] };
+  const placedSet = set("PHYS2303", "PHYS2304");
+  const { sections } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  assert.equal(sections[0].sat, true, "range takes 2303, nested section keeps 2304");
+});
+
+test("allocate › a malformed requirement node still allocates the rest of the section", () => {
+  // Every input here is scraped. A null child, a scalar, and an unknown type
+  // must not take the requirements panel down or swallow a placed course.
+  const major = { requirementSections: [
+    { title: "Junk", minRequirementCount: 1, requirements: [
+      null, 42, { type: "constructor" }, { type: "RANGE", subject: "BIOL", idRangeStart: 2000, idRangeEnd: 4999 },
+    ] },
+  ] };
+  const placedSet = set("BIOL2500", "BIOL2600");
+  const { sections, generalElectives } =
+    allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+  assert.equal(sections[0].sat, true);
+  assert.equal(sections[0].allocatedCourses.size, 1);
+  assert.equal(generalElectives.placedSH, 4);
+});
+
 // ── Credit totals ─────────────────────────────────────────────────────
 test("getTotalPlacedSH › sums each placed course's sh once", () => {
   const placements = { CS2000: "fall", CS3000: "spring", CS3001: "spring" };

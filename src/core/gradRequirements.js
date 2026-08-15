@@ -407,12 +407,211 @@ export function collectCandidateKeys(sections, placedSet) {
   return keys;
 }
 
+// ── Contention: how contested each placed course is ──────────────
+//
+// Allocation is greedy and runs in declaration order, so whichever requirement
+// reaches a course first keeps it. That is fine when the course is wanted by
+// one requirement and wrong when it is wanted by two, because the FLEXIBLE
+// requirement usually comes first and swallows the course the INFLEXIBLE one
+// has no substitute for.
+//
+// Measured on shipped data: 25 sections across the corpus were reported unmet
+// even though the program's own published Sample Plan of Study places every
+// course they name. Computer Science and History BS is the clean example —
+// "Intermediate/Advanced History Course" is a bare RANGE over HIST 2000–2999
+// and ate HIST 2211, which "Integrative Course Requirement" names outright and
+// has no alternative for. The student took exactly the right course and the
+// audit told them they had not.
+//
+// ── What contention is NOT for ────────────────────────────────────
+//
+// Spending the least contested course first LOOKS like the fix and is not one.
+// Built and measured, it closed none of those 25 and opened a 26th: in
+// International Affairs and Cultural Anthropology BA, "Global Dynamics" may
+// take ANTH 1101 (wanted by 2 requirements) or ANTH 2305 (wanted by 4), so
+// least-contested takes ANTH 1101 and strands "Cultural Anthropology", which
+// names it and has no substitute — while ANTH 2305's other claimants are wide
+// ranges with substitutes to spare. A raw count cannot tell "wanted by many"
+// from "needed by one". `buildReserved` below is what actually fixes this, and
+// it asks the second question directly.
+//
+// So contention survives only as the FIRST key of the allocation order: among
+// courses a range may equally take, prefer ones nothing else lists. It decides
+// nothing on its own, and no correctness claim rests on it.
+
+/**
+ * How many distinct requirement nodes in this program could consume each placed
+ * course. Only placed courses are counted: an unplaced course cannot be
+ * contested by anybody.
+ */
+function buildContention(sections, placedSet, courseMap) {
+  const counts = new Map();
+  const bump = (k) => counts.set(k, (counts.get(k) ?? 0) + 1);
+  const visit = (node) => {
+    if (!node || typeof node !== "object") return;
+    if (node.type === "COURSE") {
+      const key = courseKey(node.subject, node.classId);
+      if (placedSet.has(key)) bump(key);
+      return;
+    }
+    if (node.type === "RANGE") {
+      for (const key of rangeMatches(node, placedSet, courseMap)) bump(key);
+      return;
+    }
+    (node.courses ?? node.requirements ?? []).forEach(visit);
+  };
+  (sections ?? []).forEach(visit);
+  return counts;
+}
+
+/** Placed keys a RANGE node could match, ignoring what is already used. */
+function rangeMatches(node, placedSet, courseMap) {
+  const out = [];
+  for (const key of placedSet) {
+    const c = courseMap[key];
+    if (!c || c.subject !== node.subject) continue;
+    const num = parseInt(c.number, 10);
+    if (Number.isNaN(num)) continue;
+    if (num < node.idRangeStart || num > node.idRangeEnd) continue;
+    if ((node.exceptions ?? []).some(ex => courseKey(ex.subject, ex.classId) === key)) continue;
+    out.push(key);
+  }
+  return out;
+}
+
+/**
+ * The order a RANGE considers placed courses in: least contested first, then by
+ * key.
+ *
+ * The tie-break is what makes the panel STABLE. Without it a RANGE consumed
+ * `placedSet` in insertion order, so which three of four equally eligible
+ * electives counted — and therefore which one appeared under General Electives
+ * — depended on the order the student happened to drag them onto the plan, and
+ * changed when they reordered a term.
+ */
+function allocationOrder(placedSet, contention, courseMap) {
+  return [...placedSet].sort((a, b) =>
+    // 1. Least contested first — spend what nobody else can use.
+    (contention.get(a) ?? 0) - (contention.get(b) ?? 0) ||
+    // 2. Largest first, so a credit pool overshoots its threshold as little as
+    //    possible. An 8 SH pool offered {4, 3, 4} took 4+3+4 = 11 under a
+    //    by-key order, claiming a course it did not need and keeping it out of
+    //    General Electives; largest-first takes 4+4 and stops. Exact subset-sum
+    //    would do better still on adversarial inputs and is not worth it — pools
+    //    are near-uniform 4 SH in practice.
+    (courseMap[b]?.sh ?? DEFAULT_SH) - (courseMap[a]?.sh ?? DEFAULT_SH) ||
+    // 3. By key, purely so the result never depends on plan insertion order.
+    (a < b ? -1 : a > b ? 1 : 0));
+}
+
+// ── Reservation: a course that is somebody's ONLY option ─────────
+//
+// Counting how many requirements want a course says nothing about whether any
+// of them can do without it, which is the only question that matters. So
+// instead of ranking by contention, identify the courses a requirement has NO
+// substitute for and keep flexible consumers — ranges and pools — off them.
+//
+// This is "naked single" propagation: if a requirement's satisfiable options
+// number exactly one, that option is forced, and spending it anywhere else
+// cannot be right. Computer Science and History BS is the case: HIST 2211 is
+// the sole course "Integrative Course Requirement" names, so it is reserved,
+// and the bare RANGE over HIST 2000–2999 that used to swallow it now takes any
+// other 2000-level history course instead. Both requirements end up met.
+//
+// A course forced by two different sections is genuinely contested — neither
+// can be preferred on this evidence — so it is left unreserved and the ordinary
+// greedy pass decides, exactly as before.
+
+/**
+ * Placed keys that could satisfy a requirement node, or null when the node is
+ * flexible enough that nothing it lists is forced (a RANGE, a credit pool).
+ */
+function forcedOptions(node, placedSet, courseMap) {
+  if (!node || typeof node !== "object") return null;
+  switch (node.type) {
+    case "COURSE": {
+      const key = courseKey(node.subject, node.classId);
+      return placedSet.has(key) ? [key] : [];
+    }
+    case "AND": {
+      // Every conjunct is required, so each one's forced keys are forced.
+      const out = [];
+      for (const child of node.courses ?? []) {
+        const sub = forcedOptions(child, placedSet, courseMap);
+        if (sub === null) return null;
+        out.push(...sub);
+      }
+      return out;
+    }
+    case "OR": {
+      // Forced only when exactly one alternative is satisfiable at all.
+      const live = [];
+      for (const child of node.courses ?? []) {
+        const sub = forcedOptions(child, placedSet, courseMap);
+        if (sub === null) return null;      // a flexible alternative exists
+        if (sub.length) live.push(sub);
+      }
+      return live.length === 1 ? live[0] : [];
+    }
+    default:
+      return null;                          // RANGE, XOM, SECTION, unknown
+  }
+}
+
+/**
+ * course key → index of the one section that cannot do without it.
+ *
+ * Only sections that require every child (`minRequirementCount >=` child count)
+ * force anything: in a "choose N of M" section no single child has to be the
+ * one that answers it.
+ */
+function buildReserved(sections, placedSet, courseMap) {
+  const claims = new Map();               // key → Set of section indices
+  (sections ?? []).forEach((section, i) => {
+    if (!section || typeof section !== "object") return;
+    const reqs = section.requirements ?? [];
+    if ((section.minRequirementCount ?? 0) < reqs.length) return;
+    for (const req of reqs) {
+      for (const key of forcedOptions(req, placedSet, courseMap) ?? []) {
+        if (!claims.has(key)) claims.set(key, new Set());
+        claims.get(key).add(i);
+      }
+    }
+  });
+  const reserved = new Map();
+  for (const [key, owners] of claims) {
+    if (owners.size === 1) reserved.set(key, [...owners][0]);
+  }
+  return reserved;
+}
+
+/** Shared per-run context: computed once per allocation, read all the way down. */
+function buildContext(sections, placedSet, courseMap) {
+  const contention = buildContention(sections, placedSet, courseMap);
+  return {
+    contention,
+    order: allocationOrder(placedSet, contention, courseMap),
+    reserved: buildReserved(sections, placedSet, courseMap),
+    owner: null,   // section index currently allocating; set by allocateSections
+  };
+}
+
 /**
  * Allocate courses to an array of sections, sharing the same used set.
+ *
+ * `ctx` is threaded so a caller allocating a concentration AFTER the major
+ * (GradPanel, plannerQueryAdapter) can reuse the major's contention model
+ * instead of building a second one that cannot see the sections it is
+ * competing with. Omitted, it is derived from `sections` alone.
  */
-export function allocateSections(sections, placedSet, globalUsed, courseMap) {
+export function allocateSections(sections, placedSet, globalUsed, courseMap, ctx = null) {
+  ctx ??= buildContext(sections, placedSet, courseMap);
   const results = [];
-  for (const section of sections) {
+  for (const [index, section] of sections.entries()) {
+    // Which section is allocating, so a RANGE can tell a course reserved FOR IT
+    // from one reserved for somebody else. Sections are allocated strictly in
+    // sequence, so a single mutable field is safe here.
+    ctx.owner = index;
     // A hole in the array yields a placeholder rather than a crash. Index alignment
     // with `requirementSections` is load-bearing — `requirementDemand` and
     // `requirementBinding` both read `alloc[i]` against `sections[i]` — so the
@@ -429,13 +628,13 @@ export function allocateSections(sections, placedSet, globalUsed, courseMap) {
     // the global used set. Its allocatedCourses still exclude those courses from General
     // Electives, so credit is not double-counted toward the total.
     if (section.shared) {
-      results.push(allocateSection(section, placedSet, new Set(), new Set(), courseMap));
+      results.push(allocateSection(section, placedSet, new Set(), new Set(), courseMap, ctx));
       continue;
     }
     // Make a working copy of the global used set for this section
     const workingUsed = new Set(globalUsed);
     // Process the section with its own working set, and pass the original global set as 'originalUsed'
-    const sectionResult = allocateSection(section, placedSet, workingUsed, globalUsed, courseMap);
+    const sectionResult = allocateSection(section, placedSet, workingUsed, globalUsed, courseMap, ctx);
     results.push(sectionResult);
     // After the section, commit its new allocations to the global set
     workingUsed.forEach(key => globalUsed.add(key));
@@ -540,7 +739,15 @@ export function normalizePooledSection(section) {
   return section;
 }
 
-export function allocateSection(section, placedSet, used, originalUsed, courseMap) {
+export function allocateSection(section, placedSet, used, originalUsed, courseMap, ctx = null) {
+  if (!ctx) {
+    // Called directly rather than through `allocateSections`, so this section is
+    // the only one there is — and therefore the owner of every reservation it
+    // makes. Leaving `owner` null would make its own ranges skip the courses
+    // reserved FOR it.
+    ctx = buildContext([section], placedSet, courseMap);
+    ctx.owner = 0;
+  }
   // Normalize pooled sections (flatten choice nodes in "pick N" structures)
   const normalized = normalizePooledSection(section);
 
@@ -560,10 +767,33 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
     isPool = true;
   }
   if (isPool) {
+    // A "choose N of these" section stops consuming once N of its children are
+    // satisfied — the count-based twin of the credit cap inside XOM, and for the
+    // same reason. Without it a section that needs one course claimed every
+    // course it could match: "Intermediate/Advanced Biology Electives" (min 1,
+    // a bare OR of three RANGEs) claimed BOTH placed biology electives, so the
+    // second never reached General Electives and no later section could use it.
+    //
+    // Children past the cap are evaluated on a throwaway clone of `used` so
+    // nothing they match is committed, and a satisfied plain child is forced
+    // honest and marked `released` — exactly as the XOM cap does, and for the
+    // identical reason: `collectCandidateKeys` must be able to tell a course a
+    // full pool let go from one still pending inside an incomplete requirement,
+    // or the released course is held out of General Electives too and genuinely
+    // disappears from the audit.
+    const need = normalized.minRequirementCount ?? 0;
     satCount = 0;
     total = 0;
     children = reqs.map(req => {
-      const child = allocateNode(req, placedSet, used, originalUsed, courseMap, true);
+      const remaining = need - satCount;
+      if (remaining <= 0) {
+        const dry = allocateNode(req, placedSet, new Set(used), originalUsed, courseMap,
+                                 true, Infinity, ctx, 0);
+        total += typeof dry.total === 'number' ? dry.total : 1;
+        return releaseNode(dry);
+      }
+      const child = allocateNode(req, placedSet, used, originalUsed, courseMap,
+                                 true, Infinity, ctx, remaining);
       if (typeof child.satCount === 'number' && typeof child.total === 'number') {
         satCount += child.satCount;
         total += child.total;
@@ -574,7 +804,10 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
       return child;
     });
   } else {
-    children = reqs.map(req => allocateNode(req, placedSet, used, originalUsed, courseMap, false));
+    // Every child must be satisfied, and a RANGE child is satisfied by ONE
+    // match — so it may claim one course, not every course in its window.
+    children = reqs.map(req => allocateNode(req, placedSet, used, originalUsed, courseMap,
+                                            false, Infinity, ctx, 1));
     satCount = children.filter(c => c.sat).length;
     total = children.length;
   }
@@ -594,7 +827,22 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
   };
 }
 
-function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContext = false, creditBudget = Infinity) {
+/**
+ * Force a node evaluated past its parent's cap to report honestly.
+ *
+ * A RANGE given a zero budget already returns empty and unsatisfied, but a bare
+ * COURSE is an atomic, budget-unaware checker and still reports itself
+ * satisfied on the throwaway clone. `released` distinguishes "the pool had
+ * enough and let this go" from "still pending inside an unfinished compound
+ * requirement", which is the distinction `collectCandidateKeys` turns on.
+ */
+function releaseNode(result) {
+  if (!result.sat) return result;
+  return { ...result, sat: false, satCount: 0, allocatedCourses: new Set(), released: true };
+}
+
+function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContext = false,
+                      creditBudget = Infinity, ctx = null, countBudget = Infinity) {
   // A hole or a scalar where a requirement node belongs. Unsatisfied and
   // contributing nothing is the honest reading; crashing would take out the whole
   // requirements panel over one bad entry.
@@ -633,9 +881,22 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
       // `matched`/`used` — so they stay free for whatever other section/pool also lists
       // them, instead of this node greedily claiming every match it can find. Infinity
       // (the default for any non-XOM-budgeted call) preserves today's behavior exactly.
+      //
+      // `countBudget` is the same cap stated in COURSES rather than credits, for
+      // the parents that count instead of adding up: an OR needs one satisfied
+      // child, a plain section needs each child satisfied once, a "choose N"
+      // section needs N. 54 RANGE nodes in the shipped corpus sit under no
+      // credit-bearing XOM at all, and every one of them used to claim its
+      // entire window — the "you can go past the limit" report.
+      //
+      // Candidates are taken in `ctx.order` (least contested first, then by key)
+      // rather than in `placedSet` insertion order, so this node spends the
+      // courses nobody else can use before the ones another requirement needs,
+      // and picks the same ones regardless of the order the plan was built in.
       let budget = creditBudget;
-      for (const key of placedSet) {
-        if (budget <= 0) break;
+      let slots = countBudget;
+      for (const key of (ctx?.order ?? placedSet)) {
+        if (budget <= 0 || slots <= 0) break;
         const c = courseMap[key];
         if (!c || c.subject !== node.subject) continue;
         const num = parseInt(c.number, 10);
@@ -645,6 +906,10 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
           ex => courseKey(ex.subject, ex.classId) === key
         );
         if (isExc) continue;
+        // Reserved for a requirement that has no other way to be satisfied.
+        // A range always has somewhere else to look; that requirement does not.
+        const holder = ctx?.reserved.get(key);
+        if (holder !== undefined && holder !== ctx.owner) continue;
         if (!originalUsed.has(key)) {
           const coreqKeys = getCorequisiteKeys(c, courseMap);
           const anyCoreqUsedInOriginal = coreqKeys.some(k => originalUsed.has(k));
@@ -655,6 +920,7 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
             used.add(key);
             coreqKeys.forEach(k => { if (placedSet.has(k)) used.add(k); });
             budget -= (c.sh ?? 4);
+            slots -= 1;
           }
         }
       }
@@ -780,7 +1046,7 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
       const children = (node.courses ?? []).map(child => {
         if (remainingSh <= 0) {
           capped.push(true);
-          const dry = allocateNode(child, placedSet, new Set(used), originalUsed, courseMap, true, 0);
+          const dry = allocateNode(child, placedSet, new Set(used), originalUsed, courseMap, true, 0, ctx, 0);
           // A bare COURSE child is an atomic, budget-unaware checker (unlike RANGE, which
           // already reports empty/unsatisfied once its own budget is 0) — force it honest
           // here too, so the UI never shows the same physical course as "satisfied" under
@@ -796,7 +1062,8 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
           return dry;
         }
         capped.push(false);
-        const childResult = allocateNode(child, placedSet, used, originalUsed, courseMap, true, remainingSh);
+        const childResult = allocateNode(child, placedSet, used, originalUsed, courseMap,
+                                         true, remainingSh, ctx);
         remainingSh -= sumSatisfiedCredits(childResult);
         return childResult;
       });
@@ -854,7 +1121,10 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
       const children = [];
       let allSat = true;
       for (const child of node.courses ?? []) {
-        const childResult = allocateNode(child, placedSet, usedClone, originalUsed, courseMap);
+        // Each conjunct has to be satisfied exactly once, so a RANGE conjunct
+        // claims one course rather than its whole window.
+        const childResult = allocateNode(child, placedSet, usedClone, originalUsed, courseMap,
+                                         false, Infinity, ctx, 1);
         children.push(childResult);
         if (!childResult.sat) allSat = false;
       }
@@ -894,22 +1164,40 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
     case 'OR': {
       // Always render all children so users can see and interact with all options
       const children = [];
-      let satisfiedChild = null;
-      let allocatedCourses = new Set();
+      const candidates = [];
 
       for (const child of node.courses ?? []) {
         const usedClone = new Set(used);
-        const childResult = allocateNode(child, placedSet, usedClone, originalUsed, courseMap);
-
-        // Keep track of the first satisfied child for allocation
-        if (!satisfiedChild && childResult.sat) {
-          satisfiedChild = childResult;
-          usedClone.forEach(k => used.add(k));
-          allocatedCourses = new Set(childResult.allocatedCourses);
-        }
-
+        // An OR is satisfied by ONE child, so a RANGE alternative claims one
+        // course, not every course in its window.
+        const childResult = allocateNode(child, placedSet, usedClone, originalUsed, courseMap,
+                                         false, Infinity, ctx, 1);
+        if (childResult.sat) candidates.push({ result: childResult, usedClone });
         // Always add to children array for display
         children.push(childResult);
+      }
+
+      // Commit the FIRST satisfied alternative.
+      //
+      // Ranking alternatives by how contested their courses are was built and
+      // measured, and it is not defensible: it fixed none of the 25 corpus
+      // contention cases and broke one. International Affairs and Cultural
+      // Anthropology BA is why — "Global Dynamics" can take ANTH 1101 (wanted by
+      // 2 requirements) or ANTH 2305 (wanted by 4), so least-contested picks
+      // ANTH 1101 and strands "Cultural Anthropology", which names ANTH 1101 and
+      // has no substitute, while ANTH 2305's other claimants are wide ranges
+      // with substitutes to spare. A raw count cannot see that difference. What
+      // can is `ctx.reserved` (see buildReserved), which keeps a course out of
+      // flexible hands when it is somebody's ONLY option — so by the time an OR
+      // chooses, the choice that would have stranded a requirement is already
+      // off the table and the ranking has nothing left to add.
+      let satisfiedChild = null;
+      let allocatedCourses = new Set();
+      if (candidates.length) {
+        const [best] = candidates;
+        satisfiedChild = best.result;
+        best.usedClone.forEach(k => used.add(k));
+        allocatedCourses = new Set(best.result.allocatedCourses);
       }
 
       return {
@@ -924,7 +1212,7 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
     }
 
     case 'SECTION':
-      return allocateSection(node, placedSet, used, originalUsed, courseMap);
+      return allocateSection(node, placedSet, used, originalUsed, courseMap, ctx);
 
     default:
       return {
