@@ -585,16 +585,27 @@ function buildReserved(sections, placedSet, courseMap) {
   return reserved;
 }
 
-/** Shared per-run context: computed once per allocation, read all the way down. */
+/**
+ * Shared per-run context: computed once per allocation, read all the way down.
+ *
+ * Read-only. `owner` — which section is currently allocating — is NOT stored
+ * here and mutated per section, because this module's contract is that its
+ * functions are pure: mutating a caller-supplied ctx would reach outside the
+ * call, and would make `allocateSections` non-reentrant. Each section gets a
+ * cheap shallow copy carrying its own `owner` instead (see `sectionContext`).
+ */
 function buildContext(sections, placedSet, courseMap) {
   const contention = buildContention(sections, placedSet, courseMap);
   return {
     contention,
     order: allocationOrder(placedSet, contention, courseMap),
     reserved: buildReserved(sections, placedSet, courseMap),
-    owner: null,   // section index currently allocating; set by allocateSections
+    owner: null,
   };
 }
+
+/** The same context, viewed as one section: `reserved` entries it owns are its own. */
+const sectionContext = (ctx, owner) => ({ ...ctx, owner });
 
 /**
  * Allocate courses to an array of sections, sharing the same used set.
@@ -609,9 +620,8 @@ export function allocateSections(sections, placedSet, globalUsed, courseMap, ctx
   const results = [];
   for (const [index, section] of sections.entries()) {
     // Which section is allocating, so a RANGE can tell a course reserved FOR IT
-    // from one reserved for somebody else. Sections are allocated strictly in
-    // sequence, so a single mutable field is safe here.
-    ctx.owner = index;
+    // from one reserved for somebody else.
+    const secCtx = sectionContext(ctx, index);
     // A hole in the array yields a placeholder rather than a crash. Index alignment
     // with `requirementSections` is load-bearing — `requirementDemand` and
     // `requirementBinding` both read `alloc[i]` against `sections[i]` — so the
@@ -628,13 +638,13 @@ export function allocateSections(sections, placedSet, globalUsed, courseMap, ctx
     // the global used set. Its allocatedCourses still exclude those courses from General
     // Electives, so credit is not double-counted toward the total.
     if (section.shared) {
-      results.push(allocateSection(section, placedSet, new Set(), new Set(), courseMap, ctx));
+      results.push(allocateSection(section, placedSet, new Set(), new Set(), courseMap, secCtx));
       continue;
     }
     // Make a working copy of the global used set for this section
     const workingUsed = new Set(globalUsed);
     // Process the section with its own working set, and pass the original global set as 'originalUsed'
-    const sectionResult = allocateSection(section, placedSet, workingUsed, globalUsed, courseMap, ctx);
+    const sectionResult = allocateSection(section, placedSet, workingUsed, globalUsed, courseMap, secCtx);
     results.push(sectionResult);
     // After the section, commit its new allocations to the global set
     workingUsed.forEach(key => globalUsed.add(key));
@@ -745,8 +755,7 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
     // the only one there is — and therefore the owner of every reservation it
     // makes. Leaving `owner` null would make its own ranges skip the courses
     // reserved FOR it.
-    ctx = buildContext([section], placedSet, courseMap);
-    ctx.owner = 0;
+    ctx = sectionContext(buildContext([section], placedSet, courseMap), 0);
   }
   // Normalize pooled sections (flatten choice nodes in "pick N" structures)
   const normalized = normalizePooledSection(section);

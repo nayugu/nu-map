@@ -125,7 +125,22 @@ label.
 
 ## Out of scope
 
-Allocation — assigning each placed course to at most one requirement, handling
-`shared` sections, absorbing corequisites, and computing general electives — is
-specified by the implementation from `allocateMajor` downward and is not part of
-this document. Those functions are independent of the three specified here.
+Allocation — deciding which requirement each placed course is claimed for,
+handling `shared` sections, absorbing corequisites, and computing general
+electives — is specified by the implementation from `allocateMajor` downward and
+is not part of this document. Those functions are independent of the three
+specified here.
+
+Allocation used to assign each placed course to **at most one** requirement.
+It no longer does, and the distinction is worth stating because it is easy to
+carry the old sentence forward: a course now satisfies **every requirement that
+NAMES it**, while its **credit** is still claimed exactly once — so it stays out
+of General Electives and no `XOM` credit pool may re-spend it. Naming one course
+in two sections is the catalog saying that course answers both (International
+Business BSIB requires `COOP 3948` outright and also lists it among the seven
+options of "Business Experiential Learning"). A pool accumulating toward
+`numCreditsMin` is measuring distinct credit and keeps the exclusive rule.
+
+None of this affects `checkReq` / `checkSection` / `validateMajor`, which never
+consulted a used set: they answer "is this requirement satisfied by this placed
+set", one requirement at a time.
