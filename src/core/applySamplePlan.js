@@ -70,6 +70,8 @@ export function applySamplePlan(plan, {
   // Co-op cells are collected first and merged afterwards: a run cannot be
   // recognised one cell at a time.
   const coopCells = [];
+  /** semId → the work-experience course the plan says that co-op registers. */
+  const coopRegisters = new Map();
   const nextReservations = { ...reservations };
   const nextSpecial = { ...specialTermPl };
   // Cards this plan already put in the student's plan. Re-applying must add
@@ -111,7 +113,16 @@ export function applySamplePlan(plan, {
       const walk = (entries) => {
         for (const e of entries ?? []) {
           if (e.vacation || e.heading || e.either) { walk(e.children); continue; }
-          if (e.coop) { coopCells.push(sem); walk(e.children); continue; }
+          // `registers` is CHART naming the work-experience course this co-op
+          // enrols in, and it is carried on the SEMESTER because that is the
+          // key the run-merge below works in. Only set where the requirement
+          // left exactly one legal answer — see engine/demand.assignRegistrations.
+          if (e.coop) {
+            coopCells.push(sem);
+            if (e.registers) coopRegisters.set(sem.id, e.registers);
+            walk(e.children);
+            continue;
+          }
 
           if (isOpen(e)) {
             const requirement = requirementOf(e);
@@ -278,8 +289,15 @@ export function applySamplePlan(plan, {
       notes.push({ kind: "coop-kept", semId: start.id });
     } else {
       const id = coopId(start.id, coopTypeId);
-      nextSpecial[id] = { typeId: coopTypeId, semId: start.id, duration };
-      coops.push({ id, semId: start.id, duration, spans: run.map(s => s.id) });
+      // Any term of the run may carry it — a six-month co-op is two grid
+      // columns and the marker sits on the first — so the whole run is asked
+      // rather than just `start`, and the first answer wins. Without this the
+      // applied plan produces a block that registers nothing, and the
+      // experiential requirement the plan was built to satisfy reads unmet.
+      const registers = run.map(s => coopRegisters.get(s.id)).find(Boolean) ?? null;
+      nextSpecial[id] = { typeId: coopTypeId, semId: start.id, duration,
+                          ...(registers ? { courseId: registers } : {}) };
+      coops.push({ id, semId: start.id, duration, spans: run.map(s => s.id), registers });
     }
     run = [];
   };

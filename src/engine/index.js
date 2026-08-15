@@ -28,7 +28,7 @@
 // outcome, and the official plan still loads beside it.
 // ═══════════════════════════════════════════════════════════════════
 
-import { deriveCells, cellsSH, substitutePrereqs, GENERAL_ELECTIVE } from "./demand.js";
+import { deriveCells, cellsSH, substitutePrereqs, withdrawWorkTermCells, assignRegistrations, GENERAL_ELECTIVE } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
 import { seedFromPlan } from "./seed.js";
 import { buildDomains, wideAtFor } from "./domains.js";
@@ -261,7 +261,22 @@ function generateOnce({
   let { cells, notes, reconciliation } =
     deriveCells(program, { courseMap, repeatable, concentration, grantedAttributes,
                            breadthGuidance });
-  if (trace) trace.stage("demand-done", { cells: cells.length, sh: cellsSH(cells) });
+  // A work-experience requirement is RECORDED by a co-op block, not attended.
+  // Taken out here — before precedence, domains or the search see it — because
+  // every one of those layers would otherwise treat it as a course to schedule,
+  // and did: International Business booked COOP 3948 as a Year 4 Fall class
+  // beside the four co-op terms its own plan already carries. Withdrawing costs
+  // no credit; these cells are charged 0 SH either way. See the function.
+  const { cells: schedulable, withdrawn: workTermCells } =
+    withdrawWorkTermCells(cells, courseMap, hasCoop);
+  cells = schedulable;
+  if (workTermCells.length) {
+    notes = [...notes, ...workTermCells.map(w => ({
+      kind: "work-term-requirement", cell: w.id, title: w.title, keys: w.keys, why: w.why,
+    }))];
+  }
+  if (trace) trace.stage("demand-done", { cells: cells.length, sh: cellsSH(cells),
+                                          workTermCells: workTermCells.length });
   // Reported on every refusal so `generatePlan` can tell a program that was handicapped by
   // breadth binding from one that was never bound at all, without re-deriving to find out.
   const breadthBound = cells.filter(c => c.nupath).length;
@@ -714,9 +729,26 @@ function generateOnce({
   }
 
   // ── 8. The artifact ────────────────────────────────────────────
+  //
+  // Which course each co-op registers. Computed against the FINAL shape, not the
+  // base one: `extendShape` can add years, and an index taken before that would
+  // name the wrong term. A run is a maximal stretch of consecutive co-op terms —
+  // the same merge `applySamplePlan` performs when it turns the grid back into
+  // blocks — so Spring + Summer 1 is one six-month co-op, not two.
+  const runStarts = [];
+  shape.terms.forEach((t, i) => {
+    const isCoop = !!(t.work || t.coop);
+    const prevCoop = i > 0 && !!(shape.terms[i - 1].work || shape.terms[i - 1].coop);
+    if (isCoop && !prevCoop) runStarts.push(i);
+  });
+  const registersAt = new Map();
+  for (const a of assignRegistrations(workTermCells, runStarts.length, courseMap, "coop")) {
+    registersAt.set(runStarts[a.runIndex], a.key);
+  }
+
   const plan = emitPlan({
     shape, plans, termOf: improved.termOf, program, courseMap,
-    reasons: improved.reasons,
+    reasons: improved.reasons, registersAt,
   });
 
   // ── 9. The criteria are HARD, so a plan that fails one is not offered ──

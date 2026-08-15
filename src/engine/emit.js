@@ -47,6 +47,11 @@ import { GENERATED_PLAN_LABEL } from "../core/planLabels.js";
 export function emitPlan({
   shape, plans, termOf, program, courseMap = {}, reasons = new Map(),
   label = GENERATED_PLAN_LABEL,
+  // shape-term index → the course key the co-op STARTING there registers.
+  // Keyed on the run's first term because that is the term `applySamplePlan`
+  // creates the block in; the continuation terms of a six-month co-op merge
+  // into the same block and must not carry a second registration.
+  registersAt = new Map(),
 }) {
   // `termOf` indexes STUDY terms; the grid needs every term the shape has,
   // including the work and unused ones. Mapping between the two is the one place
@@ -100,7 +105,15 @@ export function emitPlan({
     // one block; a work term followed by a mixed one is exactly that case, and merging
     // them is correct rather than incidental.
     if (t.work || t.coop) {
-      entries.push({ text: "Co-op", coop: true });
+      // `registers` names the work-experience course this co-op is proposed to
+      // register for. Without it the plan sends the student on a co-op that
+      // satisfies nothing: the requirement was withdrawn from the schedule
+      // (correctly — it is not a class) and nothing put it back, so applying an
+      // International Business plan produced two co-op blocks and two unmet
+      // experiential sections. The student reads it and can change it, which is
+      // what makes proposing one legitimate where inferring one is not.
+      const registers = registersAt.get(i) ?? null;
+      entries.push({ text: "Co-op", coop: true, ...(registers ? { registers } : {}) });
     }
     if (!t.work) {
       // Unused terms are emitted too, now that a cell may legitimately land in one.

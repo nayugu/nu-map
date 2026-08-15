@@ -1287,3 +1287,146 @@ function pooledTitle(cell, lostTargets, sections) {
 export function cellsSH(cells) {
   return (cells ?? []).reduce((n, c) => n + (c.sh ?? 0), 0);
 }
+
+/**
+ * Take the work-experience requirements out of the cells to SCHEDULE.
+ *
+ * ── The defect ──────────────────────────────────────────────────────
+ *
+ * A work-experience course is recorded by placing a co-op or internship block;
+ * it is not a class anyone attends. `deriveCells` cannot know that — it reads
+ * requirement trees, and `COOP 3948` is a COURSE node like any other — so it
+ * emitted one cell per experiential requirement and the search scheduled them.
+ * International Business came out sending the student on four co-op terms in
+ * years 2 and 3 and then ALSO booking `COOP 3948` as a Year 4 Fall class, plus
+ * a `BUSN 4945 or COOP 3945 or COOP 3946` cell as coursework in Year 3 Fall.
+ *
+ * Measured over 1,066 programs: 103 emit such a cell — 73 whose every option is
+ * a registration, 37 mixing one with a real course — and 35 of those publish a
+ * plan that already puts the student on co-op.
+ *
+ * ── Two rules, because the two cases are not equally certain ────────
+ *
+ * A cell whose EVERY option is a registration is withdrawn always. There is no
+ * class among its options, so scheduling it in a study term cannot be right in
+ * any program, with or without a published co-op. That is a fact about the
+ * options, not a guess about the calendar.
+ *
+ * A MIXED cell — International Business's `BUSN 4945` (an 8 SH practicum) or a
+ * co-op — is withdrawn only when the shape carries a co-op. Then the department
+ * has said which route this plan takes and booking the class too is double
+ * counting. Without a co-op in the shape the class route is the only reading
+ * left, so the cell stays and CHART schedules it, exactly as before.
+ *
+ * ── Why WITHDRAW and not prune the options ──────────────────────────
+ *
+ * Dropping the co-op options out of a mixed cell and leaving the class was the
+ * obvious repair and it is a measured regression. A choice cell is charged its
+ * CHEAPEST option (see the `OR` case above), which is 0 SH precisely because the
+ * co-ops are; prune them and the cheapest becomes `BUSN 4945` at 8 SH, the
+ * general electives shrink by 8 SH to compensate, and the plan graduates the
+ * student eight credits short. Withdrawing the whole cell keeps the 0 SH charge
+ * it already had, so no credit moves at all — only the slot is freed.
+ *
+ * @param {object[]} cells
+ * @param {object} courseMap        `courseMap[key].coop` is the registration stamp
+ * @param {boolean} shapeHasCoop    does the published plan put the student on co-op
+ * @returns {{cells: object[], withdrawn: object[]}}
+ */
+/**
+ * Name the course a co-op registers, but ONLY where the requirement leaves no
+ * choice.
+ *
+ * ── Why this is deliberately not an assignment algorithm ────────────
+ *
+ * Withdrawing the cell (above) is a fact about its options: nothing among them
+ * is a class, so nothing can be attended. Choosing WHICH registration a
+ * particular co-op makes is a different act, and mostly a guess. International
+ * Business shows both in one program:
+ *
+ *   International Experiential Learning   COOP 3948 and nothing else
+ *   Business Experiential Learning        COOP 3945 / 3946 / 3947 / 3948
+ *
+ * The first names one legal answer, so writing it down is reading the
+ * requirement out loud. The second is four ways to satisfy one section, and
+ * they are not interchangeable — 3946/3947 are half-time and 3947/3948 are
+ * abroad. Picking one is CHART deciding whether the student spends a term in
+ * another country. That is the same over-reach the planner's inference was
+ * removed for, and a proposal the student can edit does not make an invented
+ * fact true.
+ *
+ * A ranked assignment WAS built first — most-constrained requirement first, one
+ * key per run, domestic preferred — and its first run over International
+ * Business proposed that the second co-op register `BUSN 4945`, an 8 SH
+ * classroom practicum, because the kind filter defaulted unstamped courses to
+ * "co-op". The machinery that produced that is exactly the machinery this rule
+ * does not need.
+ *
+ * So: exactly one option, or nothing. Where nothing is chosen the requirement
+ * is still reported (`work-term-requirement` notes), and the student picks on
+ * the block's own course field.
+ *
+ * @param {{keys: string[], title: string, id: string}[]} requirements  withdrawn cells
+ * @param {number} runCount   how many separate co-ops the shape carries
+ * @param {object} courseMap
+ * @param {string} [kind]     the block's family: "coop" or "intern"
+ * @returns {{runIndex: number, key: string, title: string, cell: string}[]}
+ */
+export function assignRegistrations(requirements, runCount, courseMap = {}, kind = "coop") {
+  const out = [];
+  if (!(runCount > 0)) return out;
+  const used = new Set();
+  // Only courses the catalog STAMPS as a work-experience registration of this
+  // block's family. `courseMap[k]?.coop` must exist — an unstamped course is an
+  // ordinary class, and defaulting its kind to "coop" is what proposed an 8 SH
+  // practicum as a co-op registration.
+  const legal = (r) => (r.keys ?? []).filter(k => {
+    const c = courseMap?.[k]?.coop;
+    return !!c && (c.kind ?? "coop") === kind;
+  });
+  // Sorted by title so the output does not depend on how the requirement
+  // sections happened to be walked: same program, same plan, every time.
+  const forced = (requirements ?? [])
+    .map(r => ({ r, opts: legal(r) }))
+    .filter(({ opts }) => opts.length === 1)
+    .sort((a, b) => String(a.r.title).localeCompare(String(b.r.title)));
+
+  let run = 0;
+  for (const { r, opts } of forced) {
+    if (run >= runCount) break;
+    const key = opts[0];
+    // One key per plan: `allocateSections` consumes each course key once against
+    // a single global `used` set, so two co-ops both registering COOP 3945
+    // satisfy ONE section, not two. A second run naming it would look like
+    // progress and audit as none.
+    if (used.has(key)) continue;
+    used.add(key);
+    out.push({ runIndex: run, key, title: r.title, cell: r.id });
+    run++;
+  }
+  return out;
+}
+
+export function withdrawWorkTermCells(cells, courseMap = {}, shapeHasCoop = false) {
+  const kept = [];
+  const withdrawn = [];
+  for (const cell of cells ?? []) {
+    const keys = (cell.groups ?? []).flat().filter(Boolean);
+    if (!keys.length) { kept.push(cell); continue; }
+    const work = keys.filter(k => courseMap?.[k]?.coop).length;
+    if (work === 0) { kept.push(cell); continue; }
+    const all = work === keys.length;
+    if (all || shapeHasCoop) {
+      withdrawn.push({
+        id: cell.id, title: cell.title ?? "", keys,
+        sh: cell.sh ?? 0,
+        // Which rule took it, so a report can tell "this is never a class" from
+        // "your department's plan says the co-op covers this".
+        why: all ? "every-option-is-a-registration" : "satisfied-by-the-plans-coop",
+      });
+    } else {
+      kept.push(cell);
+    }
+  }
+  return { cells: kept, withdrawn };
+}
