@@ -5,7 +5,7 @@ import { useMemo, useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { usePlanner }  from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
-import { subjectColor } from "../core/courseModel.js";
+import { subjectInk } from "../core/courseModel.js";
 import { takesUsed } from "../core/repeatInstances.js";
 import { alternativesFor, programIndexSet, programAllowedSwaps, readyToApply,
          unmetSetRequirement }
@@ -405,6 +405,32 @@ export default function BankPanel() {
     return list;
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [courses, bankCourseIds.size, bankTab, starredIds, q, bankSort, placedIds.size, bankFilters, courseRole, hasProgram]);
+
+  /**
+   * Work-experience courses matching the current query.
+   *
+   * Only while SEARCHING: at rest the bank is the student's own list and these
+   * were never in it. Matched on code and title the same way the main list is,
+   * so "co-op", "COOP 3948" and "work experience" all land.
+   */
+  const coopMatches = useMemo(() => {
+    const tokens = q.split(/\s+/).filter(Boolean);
+    if (!tokens.length) return [];
+    const hit = courses.filter(c => {
+      if (!c.coop) return false;
+      const hay = `${c.subject} ${c.number} ${c.title}`.toLowerCase();
+      return tokens.every(tok => hay.includes(tok));
+    });
+    if (!hit.length) return [];
+    // ONE line, not one per match. A bare "co-op" matches all 86 and six
+    // near-identical notices is worse than none. Name the course the student
+    // actually typed when they typed one; otherwise the canonical
+    // undergraduate registration, which is what "co-op" means unqualified —
+    // rather than whichever subject happens to sort first (ARTE 6964).
+    const typedCode = hit.find(c => tokens.some(tok => `${c.subject}${c.number}`.toLowerCase() === tok.replace(/\s/g, "")))
+      ?? (tokens.length > 1 ? hit.find(c => tokens.every(tok => `${c.subject} ${c.number}`.toLowerCase().includes(tok))) : null);
+    return [typedCode ?? hit.find(c => c.subject === "COOP") ?? hit[0]];
+  }, [courses, q]);
 
   const bankBySubject = useMemo(() => {
     if (q || (bankTab === "starred" && !anyFilter)) return null;
@@ -1286,7 +1312,7 @@ export default function BankPanel() {
         {/* Course list */}
         {bankBySubject ? (
           Object.entries(bankBySubject).sort(([a], [b]) => a.localeCompare(b)).map(([sub, crs]) => {
-            const col   = subjectColor(sub);
+            const col   = subjectInk(sub, themeName === "dark");
             const isCol = collapsedSubs[sub] !== false;
             const sortedCrs =
               bankSort === "sh↓" ? [...crs].sort((a, b) => b.sh - a.sh || a.code.localeCompare(b.code))
@@ -1328,7 +1354,20 @@ export default function BankPanel() {
           })
         ) : (
           <div style={{ padding: "4px 6px 6px", display: "flex", flexDirection: "column", gap: 3 }}>
-            {bankCourses.length === 0 ? (
+            {/* Work-experience courses are not placeable, so they are filtered
+                out of the list above — but a student told by an advisor to
+                "register for COOP 3948" types exactly that, and an empty result
+                reads as "this app does not have it". Say where it went. Not
+                draggable: the whole point is that the block records it. */}
+            {coopMatches.map(c => (
+              <div key={c.id} style={{
+                fontSize: 9, color: "var(--text-5)", lineHeight: "calc(1.5 * var(--lh-scale, 1))",
+                border: "1px dashed var(--border-1)", borderRadius: 5, padding: "5px 7px",
+              }}>
+                {t("bank.coop.recorded", { code: c.code ?? `${c.subject} ${c.number}` })}
+              </div>
+            ))}
+            {bankCourses.length === 0 && coopMatches.length === 0 ? (
               <div style={{ padding: "18px 8px", fontSize: 10, color: "var(--text-6)", textAlign: "center", lineHeight: "calc(1.6 * var(--lh-scale, 1))" }}>
                 {bankTab === "starred" && !isPhone && !anyFilter ? (
                   <><div style={{ fontSize: 20, marginBottom: 6 }}>☆</div>{t("bank.empty.saved")}<br /><span style={{ fontSize: 9 }}>{t("bank.empty.saved.hint")}</span></>

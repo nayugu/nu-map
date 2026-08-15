@@ -33,6 +33,7 @@ export const strings = {
   "bank.section.placedout":       "\u21aa \u514d\u4fee\u8bfe\u7a0b",
   "bank.section.substitutions":   "\u21c4 \u8bfe\u7a0b\u66ff\u6362",
   "bank.section.work":            "\u5b9e\u4e60\u7ecf\u5386",
+  "bank.coop.recorded":           "{code} \u901a\u8fc7\u653e\u7f6e\u5de5\u4f5c\u5b66\u671f\u6765\u767b\u8bb0 \u2014\u2014 \u8bf7\u4ece\u4e0a\u65b9\u201c\u5b9e\u4e60\u7ecf\u5386\u201d\u4e2d\u62d6\u5165\u4e00\u4e2a\u3002",
   "bank.sub.query.placeholder":     "例如 PHYS 1163，或 A B 进行替换",
   "bank.sub.manual":               "手动输入",
   "bank.sub.add.button":          "\u6dfb\u52a0\u66ff\u6362",
@@ -102,6 +103,7 @@ export const strings = {
   "sem.term.remove":           "\u79fb\u9664 {type}",
   "sem.work.company.placeholder": "\u516c\u53f8",
   "sem.work.role.placeholder": "\u804c\u4f4d",
+  "sem.work.course.placeholder": "\u8bfe\u7a0b",
   "sem.override.label":        "+ \u8986\u76d6\u9650\u5236",
 
   // ── Grad panel ─────────────────────────────────────────────────

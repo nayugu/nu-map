@@ -10,7 +10,9 @@ import { resolveConcentration } from "../core/concentrationResolve.js";
 import { usePlanner }         from "./PlannerContext.jsx";
 import { usePort }            from "./InstitutionContext.jsx";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
+import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { filterInTimeline }   from "../core/planModel.js";
+import { workTermGrants, coopOptionsInPrograms } from "../core/specialTermUtils.js";
 import {
   buildPlacedKeySet,
   allocateMajorWithElectives,
@@ -68,9 +70,10 @@ function useProgram(loader, path) {
 export function RelevanceProvider({ children }) {
   const {
     effectivePlacements, placedOut, courseMap, SEM_INDEX,
-    major, major2, conc, minor1, minor2, studentType,
+    major, major2, conc, minor1, minor2, studentType, specialTermPl,
   } = usePlanner();
   const majorRequirements = usePort(IMajorRequirements);
+  const specialTerms      = usePort(ISpecialTerms);
   const isGrad = studentType === "graduate";
 
   const loadMajor = useMemo(
@@ -90,6 +93,23 @@ export function RelevanceProvider({ children }) {
     () => buildPlacedKeySet(filterInTimeline(effectivePlacements, SEM_INDEX), placedOut, courseMap),
     [effectivePlacements, placedOut, courseMap, SEM_INDEX]
   );
+
+  /**
+   * Work-term instance id → the course key it registers.
+   *
+   * Lives here, not in SemRow or GradPanel, for the reason this whole provider
+   * exists: GradPanel only mounts while its tab is open, and the board needs
+   * the answer whether or not anyone is looking at the audit. Deriving it in
+   * both places is how the two come to disagree — the same mistake
+   * `workTermGrants` was extracted to fix.
+   */
+  const workTermCourse = useMemo(() => {
+    const opts = coopOptionsInPrograms([majorData, major2Data], courseMap);
+    const src  = workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, null, opts).source;
+    const byInstance = {};
+    for (const [key, instanceId] of src) byInstance[instanceId] = key;
+    return byInstance;
+  }, [majorData, major2Data, courseMap, specialTermPl, specialTerms, SEM_INDEX]);
 
   const value = useMemo(() => {
     const majorKeys = new Set();
@@ -176,8 +196,12 @@ export function RelevanceProvider({ children }) {
       return roles.length ? roles : [{ type: "free" }];
     };
 
-    return { active, majorKeys, minorKeys, hasProgram, courseRole };
-  }, [majorData, major2Data, minor1Data, minor2Data, conc, placedSet, courseMap]);
+    return { active, majorKeys, minorKeys, hasProgram, courseRole, workTermCourse };
+    // `workTermCourse` MUST be listed. Without it this memo keeps the object it
+    // closed over on first render — when the plan has not loaded and there are
+    // no work terms — so dragging a co-op onto the board recomputed the map and
+    // published nothing, and the card's course field never appeared.
+  }, [majorData, major2Data, minor1Data, minor2Data, conc, placedSet, courseMap, workTermCourse]);
 
   return <RelevanceContext.Provider value={value}>{children}</RelevanceContext.Provider>;
 }

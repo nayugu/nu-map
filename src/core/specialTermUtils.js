@@ -210,6 +210,17 @@ function resolveGrants(specialTermPl, types, semIndex, coopOptions) {
   }
 
   for (const [id, d] of eligible) {
+    // An explicit choice WINS over anything inferred, and is not restricted to
+    // the courses the student's program happens to name.
+    //
+    // The measurement behind the default — 147 of 152 requirement nodes are
+    // satisfied by a plain full-time domestic co-op — argues for defaulting,
+    // and says nothing about forbidding a choice. Conflating those two was a
+    // real error: a student may register for a work-experience course their
+    // program does not list, and this codebase already settled how to treat
+    // that case ("NU Map trusts the user: the repeat limit is never enforced,
+    // only reported" — core/repeatInstances.js).
+    if (d.courseId) { granted.set(d.courseId, id); continue; }
     const pick = (f) => coopOptions.find(
       o => o.abroad === f.abroad && o.halfTime === f.halfTime && !granted.has(o.key));
     // No match for this block's own variant AND none for the base variant means

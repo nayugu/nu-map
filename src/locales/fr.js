@@ -33,6 +33,7 @@ export const strings = {
   "bank.section.placedout":       "↪ COURS VALIDÉS",
   "bank.section.substitutions":   "⇄ SUBSTITUTIONS",
   "bank.section.work":            "EXPÉRIENCE PROFESSIONNELLE",
+  "bank.coop.recorded":           "{code} s’enregistre en plaçant une période de travail : faites-en glisser une depuis EXPÉRIENCE PROFESSIONNELLE ci-dessus.",
   "bank.sub.desc":                "Placer le cours A satisfait également aux exigences du cours B. Les crédits ne comptent qu'une fois (A seulement). Le semestre s'applique.",
   "bank.sub.query.placeholder":     "ex. PHYS 1163, ou A B pour permuter",
   "bank.sub.manual":               "Saisir manuellement",
@@ -101,6 +102,7 @@ export const strings = {
   "sem.term.remove":        "Supprimer {type}",
   "sem.work.company.placeholder": "Entreprise",
   "sem.work.role.placeholder": "Rôle",
+  "sem.work.course.placeholder": "Cours",
   "sem.override.label":     "+ outrepasser la limite",
   "sem.intern.petition":    "nécessite une demande pour absence",
 

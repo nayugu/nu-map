@@ -33,6 +33,7 @@ export const strings = {
   "bank.section.placedout":       "↪ CURSOS CONVALIDADOS",
   "bank.section.substitutions":   "⇄ SUSTITUCIONES",
   "bank.section.work":            "EXPERIENCIA LABORAL",
+  "bank.coop.recorded":           "{code} se registra al colocar un periodo de trabajo: arrastra uno desde EXPERIENCIA LABORAL arriba.",
   "bank.sub.desc":                "Colocar el curso A también satisface los requisitos del curso B. Los créditos cuentan una sola vez (solo A). Aplica el semestre correspondiente.",
   "bank.sub.query.placeholder":     "ej. PHYS 1163, o A B para cambiar",
   "bank.sub.manual":               "Introducir manualmente",
@@ -101,6 +102,7 @@ export const strings = {
   "sem.term.remove":        "Eliminar {type}",
   "sem.work.company.placeholder": "Empresa",
   "sem.work.role.placeholder": "Rol",
+  "sem.work.course.placeholder": "Curso",
   "sem.override.label":     "+ sobrescribir límite",
   "sem.intern.petition":    "requiere petición por no asistencia",
 

@@ -34,6 +34,7 @@ export const strings = {
   "bank.section.placedout":       "↪ 免除コース",
   "bank.section.substitutions":   "⇄ 代替コース",
   "bank.section.work":            "職務経験",
+  "bank.coop.recorded":           "{code} は就業学期を配置すると登録されます。上の「職務経験」からドラッグしてください。",
   "bank.sub.desc":                "コースAを配置するとコースBの要件も満たします。単位は一度だけ（Aのみ）カウントされます。学期のタイミングが適用されます。",
   "bank.sub.query.placeholder":     "例: PHYS 1163、または A B で置換",
   "bank.sub.manual":               "手動で入力",
@@ -102,6 +103,7 @@ export const strings = {
   "sem.term.remove":        "{type} を削除",
   "sem.work.company.placeholder": "会社",
   "sem.work.role.placeholder": "役割",
+  "sem.work.course.placeholder": "科目",
   "sem.override.label":     "+ 上限を上書き",
   "sem.intern.petition":    "出席不要の申請が必要",
 

@@ -2,8 +2,9 @@
 // SEM ROW  — renders a single non-summer semester row (fall/spring/special)
 // ═══════════════════════════════════════════════════════════════════
 import { usePlanner } from "../context/PlannerContext.jsx";
+import { useRelevance } from "../context/RelevanceContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { TYPE_BG } from "../core/constants.js";
 import { hexRgb, getSemStudySH, getOrderedCourses } from "../core/planModel.js";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
@@ -42,6 +43,7 @@ function StackedSemLabel({ sem }) {
   ));
 }
 import CompanySearch from "./CompanySearch.jsx";
+import CoopCourseSearch from "./CoopCourseSearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
 import { FadeInput } from "./FadeText.jsx";
 
@@ -49,6 +51,7 @@ export default function SemRow({ sem }) {
   const {
     placements, semOrders, courseMap, effectiveCourseMap,
     semesterCards, semesterLoad, concurrentCap,
+    setSelectedId, setShowPanel,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -62,6 +65,10 @@ export default function SemRow({ sem }) {
     studentType,
     claudePreview,
   } = usePlanner();
+
+  // Work-term instance → the course it registers. From RelevanceContext, which
+  // loads the programs app-wide; the Graduation panel is not always mounted.
+  const { workTermCourse } = useRelevance();
 
   const isLive = semTrackingMode === "live";
   const onNowClick = () => { if (!isLive) setCurrentSemId(sem.id); };
@@ -110,6 +117,18 @@ export default function SemRow({ sem }) {
   // a fourth year that is entirely electives reads as full rather than empty.
   const sh         = semesterLoad(sem.id);
   const workCap    = concurrentCap?.(sem.id) ?? null;
+  // Which course this block actually registers — CS 6964 for a Khoury student,
+  // COOP 3948 for an abroad co-op in International Business. Resolved app-wide
+  // in RelevanceContext so the board and the audit cannot disagree.
+  const registers  = workTermCourse?.[termStartId] ?? null;
+  // Every work-experience course, the student's own program's options first.
+  // Ordering is a hint; the list is deliberately NOT restricted to them.
+  const workTermCourseOptions = useMemo(() => {
+    const all = Object.values(courseMap ?? {}).filter(c => c.coop);
+    const mine = new Set(Object.values(workTermCourse ?? {}));
+    return all.sort((a, b) =>
+      (mine.has(b.id) - mine.has(a.id)) || a.id.localeCompare(b.id));
+  }, [courseMap, workTermCourse]);
   // shVoided takes carry sh 0 (a failed grade earns nothing) but must stay
   // as full cards — vanishing into the low-credit subline would hide the
   // very course whose failure the user just recorded.
@@ -328,8 +347,59 @@ export default function SemRow({ sem }) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em", textTransform: "uppercase", whiteSpace: "nowrap", flexShrink: 0 }}>
-                <TText>{termStartType?.label ?? termStartData.typeId}</TText> {termNum(termStartData.typeId, termStartId)}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1, flexShrink: 0 }}>
+                <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em", textTransform: "uppercase", whiteSpace: "nowrap" }}>
+                  <TText>{termStartType?.label ?? termStartData.typeId}</TText> {termNum(termStartData.typeId, termStartId)}
+                </div>
+                {/* The course this block registers, as its own target.
+                    ── Why not make the whole card clickable ────────────
+                    The card is draggable and holds two text inputs and a ✕.
+                    A card that is both dragged and clicked everywhere has to
+                    guess which gesture happened — timing and movement
+                    thresholds that misfire on trackpads and touch. A distinct
+                    link needs no guess: drag the card, click the code. It
+                    stops its own mousedown so grabbing the text cannot start a
+                    card drag, and draggable={false} so it is not a drag handle
+                    itself. */}
+                {/* The registered course, as a subtitle under CO-OP n —
+                    mirroring the company search directly above it. Subtle when
+                    empty, which is the normal state: leaving it blank keeps the
+                    resolved default. The CODE is what shows; the title is one
+                    click away.
+                    ── Two targets, not one ──
+                    The card is draggable. A card that is also clickable
+                    everywhere has to guess which gesture happened, and that
+                    guess misfires on trackpads and touch. So the arrow is its
+                    own small target and the input is another; drag the card,
+                    click the arrow, type in the field. Nothing has to guess. */}
+                {registers && !privateCoop && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 1 }}
+                       onMouseDown={e => e.stopPropagation()}>
+                    <CoopCourseSearch
+                      value={termStartData.courseId ?? registers}
+                      courses={workTermCourseOptions}
+                      color="var(--text-4)"
+                      emptyColor={placeholderColor}
+                      fontSize={isPhone ? 6 : 9}
+                      placeholder={t("sem.work.course.placeholder")}
+                      onChange={id => {
+                        pushUndo();
+                        setSpecialTermPl(p => ({ ...p, [termStartId]: id
+                          ? { ...p[termStartId], courseId: id }
+                          : (({ courseId, ...rest }) => rest)(p[termStartId]) }));
+                      }}
+                    />
+                    <button
+                      draggable={false}
+                      onClick={e => { e.stopPropagation(); setSelectedId?.(registers); setShowPanel?.(true); }}
+                      title={courseMap?.[registers]?.title ?? registers}
+                      style={{
+                        background: "none", border: "none", padding: 0, cursor: "pointer",
+                        fontSize: isPhone ? 6 : 9, color: "var(--text-5)", flexShrink: 0,
+                      }}
+                    >↗</button>
+                  </div>
+                )}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 10 : 20 }}>
                 {privateCoop ? null : (

@@ -114,7 +114,11 @@ export const SHARE_INNER_KEYS = {
   // International Business's `International Experiential Learning` — the one
   // requirement in 1,017 programs that turns on this flag — would read unmet
   // for the recipient of a plan that satisfied it for the sender.
-  specialTerm: { typeId: 't', semId: 's', duration: 'd', company: 'c', companyDomain: 'cd', subline: 'sl', abroad: 'ab' },
+  //
+  // `courseId` is the student's explicit override of which work-experience
+  // course this block registers. Same reasoning as `abroad`: a key missing
+  // from this map survives a reload but vanishes from every share link.
+  specialTerm: { typeId: 't', semId: 's', duration: 'd', company: 'c', companyDomain: 'cd', subline: 'sl', abroad: 'ab', courseId: 'ci' },
   // substitutions array entries
   substitution: { from: 'f', to: 't' },
 };

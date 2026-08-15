@@ -128,8 +128,16 @@ describe("browser · a work term registers its program's course", { skip: up ? f
     await page.getByRole("button", { name: /^Graduation$/ }).first().click().catch(() => {});
     await page.waitForTimeout(2500);
 
+    // Scoped to the requirements tree. The co-op BLOCK also prints
+    // "ENCP 6964 ↗" now (its link into the info panel), and an unscoped
+    // "shortest div containing ENCP 6964" finds that instead — which is
+    // draggable, because the block is.
     const row = await page.evaluate(() => {
-      const el = [...document.querySelectorAll("div")]
+      const section = [...document.querySelectorAll("div")]
+        .filter(d => /Optional Co-?op Experience/i.test(d.textContent || "") && /ENCP 6964/.test(d.textContent || ""))
+        .sort((a, b) => (a.textContent || "").length - (b.textContent || "").length)[0];
+      if (!section) return null;
+      const el = [...section.querySelectorAll("div")]
         .filter(d => /ENCP 6964/.test(d.textContent || ""))
         .sort((a, b) => (a.textContent || "").length - (b.textContent || "").length)[0];
       return el ? { text: el.textContent, draggable: !!el.closest('[draggable="true"]') } : null;

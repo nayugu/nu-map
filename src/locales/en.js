@@ -34,6 +34,7 @@ export const strings = {
   "bank.section.placedout":       "\u21aa PLACED OUT",
   "bank.section.substitutions":   "\u21c4 SUBSTITUTIONS",
   "bank.section.work":            "WORK EXPERIENCE",
+  "bank.coop.recorded":           "{code} is recorded by placing a work term — drag one from WORK EXPERIENCE above.",
   "bank.sub.desc":                "Placing course A also satisfies course B\u2019s requirements. Credits count once (A only). Term timing applies.",
   "bank.sub.query.placeholder":     "e.g. PHYS 1163, or A B to swap",
   "bank.sub.manual":               "Enter manually",
@@ -102,6 +103,7 @@ export const strings = {
   "sem.term.remove":        "Remove {type}",
   "sem.work.company.placeholder": "Company",
   "sem.work.role.placeholder": "Role",
+  "sem.work.course.placeholder": "Course",
   "sem.override.label":     "+ override limit",
   "sem.intern.petition":    "requires petition for non-attendance",
 

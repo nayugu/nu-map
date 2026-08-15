@@ -33,6 +33,7 @@ export const strings = {
   "bank.section.placedout":       "↪ مقررات معادلة",
   "bank.section.substitutions":   "⇄ مقررات بديلة",
   "bank.section.work":            "الخبرة العملية",
+  "bank.coop.recorded":           "يُسجَّل {code} بوضع فترة عمل — اسحب واحدة من الخبرة العملية أعلاه.",
   "bank.sub.desc":                "إضافة المقرر A يفي أيضًا بمتطلبات المقرر B. تُحسب الساعات مرة واحدة (A فقط). يُطبق توقيت الفصل الدراسي.",
   "bank.sub.query.placeholder":     "مثال: PHYS 1163، أو A B للتبديل",
   "bank.sub.manual":               "الإدخال يدوياً",
@@ -101,6 +102,7 @@ export const strings = {
   "sem.term.remove":        "إزالة {type}",
   "sem.work.company.placeholder": "الشركة",
   "sem.work.role.placeholder": "الدور",
+  "sem.work.course.placeholder": "المقرر",
   "sem.override.label":     "+ تجاوز الحد",
   "sem.intern.petition":    "يتطلب طلب استثناء للغياب",
 

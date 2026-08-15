@@ -33,6 +33,7 @@ export const strings = {
   "bank.section.placedout":       "↪ छूट कोर्स",
   "bank.section.substitutions":   "⇄ प्रतिस्थापन",
   "bank.section.work":            "कार्य अनुभव",
+  "bank.coop.recorded":           "{code} कार्य अवधि रखने पर दर्ज होता है — ऊपर कार्य अनुभव से एक खींचें।",
   "bank.sub.desc":                "कोर्स A रखने से कोर्स B की आवश्यकताएँ भी पूरी होती हैं। क्रेडिट केवल एक बार (A के लिए) गिने जाते हैं। सेमेस्टर का समय लागू होता है।",
   "bank.sub.query.placeholder":     "उदा. PHYS 1163, या बदलने हेतु A B",
   "bank.sub.manual":               "स्वयं दर्ज करें",
@@ -101,6 +102,7 @@ export const strings = {
   "sem.term.remove":        "{type} हटाएँ",
   "sem.work.company.placeholder": "कंपनी",
   "sem.work.role.placeholder": "भूमिका",
+  "sem.work.course.placeholder": "पाठ्यक्रम",
   "sem.override.label":     "+ सीमा ओवरराइड करें",
   "sem.intern.petition":    "गैर-हाजिरी के लिए याचिका आवश्यक",
 
