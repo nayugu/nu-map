@@ -50,7 +50,21 @@ const DEGREES = {
   minor: 'Minor',
 };
 
-/** Delivery variants the catalog appends with an em dash ("MSCS—Align"). */
+/**
+ * Delivery variants the catalog appends with an em dash ("MSCS—Align").
+ *
+ * Two sources feed this list and they mean the same thing. Most entries are
+ * spellings NEU itself puts in a program's TITLE. The four marked below are
+ * ours: NEU publishes those alternate paths as a second requirement pane on one
+ * page instead of as a separate program, so the scraper splits them out and
+ * names them here (scripts/lib/program-variants.js). Either way the concept is
+ * identical — the same degree reached by a different route — so they share one
+ * mechanism rather than getting a parallel one.
+ *
+ * Anything in PANE_DECISIONS must have its `modality` registered here, or the
+ * variant's folder will not parse back into a label. That is asserted by
+ * test/unit/program-variants.test.js.
+ */
 const MODALITIES = {
   align:              'Align',
   online:             'Online',
@@ -69,7 +83,21 @@ const MODALITIES = {
   'one-year':         'One-Year',
   'two-year':         'Two-Year',
   'three-year':       'Three-Year',
+  // Pane-derived variants (see scripts/lib/program-variants.js).
+  advancedentry:      'Advanced Entry',
+  parttime:           'Part-Time',
+  exchange:           'Exchange',
+  experiential:       'Experiential',
 };
+
+/**
+ * Degree stems, exposed so the scraper can tell whether a folder's last token
+ * is a degree code before welding a modality onto it. Kept here rather than
+ * duplicated, so the two can never disagree about what "phd" is.
+ */
+export function isDegreeToken(token) {
+  return Object.hasOwn(DEGREES, String(token).toLowerCase());
+}
 
 /**
  * The em dash also falls *inside* a program's name — "Applied AI—Connect",

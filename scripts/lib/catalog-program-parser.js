@@ -530,6 +530,25 @@ function requirementsRoots(pageRoot) {
 }
 
 /**
+ * The requirement panes on a page, in document order, with their ids.
+ *
+ * Exposed because a page can be more than one PROGRAM: the scrapers adjudicate
+ * these ids against scripts/lib/program-variants.js and parse each group
+ * separately, instead of flattening an alternate curriculum into the primary
+ * one. Same selection as partitionPanes, so what is adjudicated is exactly what
+ * would otherwise be merged.
+ *
+ * @returns {{id: string, el: object, tables: number}[]}
+ */
+export function listRequirementPanes(pageRoot) {
+  return partitionPanes(pageRoot).included.map(el => ({
+    id: el.getAttribute?.('id') ?? '',
+    el,
+    tables: el.querySelectorAll('table.sc_courselist').length,
+  }));
+}
+
+/**
  * Split the page's tab panes into the ones we parse and the ones we skip, with
  * a reason for every skip.
  *
@@ -583,13 +602,21 @@ function requirementsRoot(pageRoot) {
  *
  * Never matches "N semester hours in the major" — that is a major-only subtotal
  * (Philosophy says 89, POLS 52) and is not the degree total.
+ *
+ * @param {object} [opts]
+ * @param {object[]} [opts.panes]  Read the total from THESE panes only.
+ *        A page carrying two curricula states two totals, and taking the first
+ *        hands the variant the wrong one: Electrical Engineering PhD is 48 SH
+ *        by standard entry and 16 SH by advanced entry, and both used to ship
+ *        as 48. Measured over the 2026 catalog, 42 of the 46 multi-pane pages
+ *        state a different total in each pane.
  */
-export function parseTotalCredits(pageRoot, profile) {
+export function parseTotalCredits(pageRoot, profile, opts = {}) {
   const [lo, hi] = profile.creditWindow;
   const inWindow = n => Number.isFinite(n) && n > lo && n < hi;
 
   // Read across every requirement pane — PhD pages split them.
-  const text = requirementsRoots(pageRoot).map(r => r.text).join(' ')
+  const text = (opts.panes ?? requirementsRoots(pageRoot)).map(r => r.text).join(' ')
     .replace(/\u00a0/g, ' ').replace(/\s+/g, ' ');
 
   // Ordered by how explicitly the phrasing claims to be the DEGREE total.
@@ -859,9 +886,24 @@ export function normalizeConcentrationHref(href, base = 'https://catalog.northea
   return base + h.replace(/\/?$/, '/');
 }
 
-/** Deterministic de-duplication — titles are user-visible keys, so order matters. */
-function uniquify(title, used) {
+/**
+ * Deterministic de-duplication — titles are user-visible keys, so order matters.
+ *
+ * Every collision is also RECORDED, because the rename is not free. A title is
+ * the identity of a concentration across saved plans, share links and MCP
+ * SET_CONCENTRATION, and major-verify has a high-severity
+ * `duplicate-concentration-titles` check for exactly that. That check used to
+ * compare finished titles — by which point this function had already renamed
+ * the collision to something legal, so it never fired. Public Policy PhD
+ * shipped `{"level":"verified","issues":0}` while carrying two concentrations
+ * of the same name whose credit requirements differed by 8 SH.
+ *
+ * The renamer must therefore hand the verifier the evidence rather than
+ * laundering it away.
+ */
+function uniquify(title, used, collisions) {
   if (!used.has(title)) { used.add(title); return title; }
+  collisions?.push(title);
   for (let n = 2; ; n++) {
     const candidate = `${title} (${n})`;
     if (!used.has(candidate)) { used.add(candidate); return candidate; }
@@ -1123,8 +1165,31 @@ export function parseFootnotes(pageRoot) {
   return out;
 }
 
+/**
+ * @param {object} pageRoot
+ * @param {object} profile
+ * @param {object} [ctx]
+ * @param {(href: string) => (object|null)} [ctx.resolveExternal]
+ * @param {object[]} [ctx.panes]
+ *        Parse only THESE panes rather than every pane on the page. A catalog
+ *        page can hold more than one program — an alternate entry path, a
+ *        part-time route — and merging those into one record is what produced
+ *        duplicate concentrations and phantom requirement sections. The
+ *        scrapers group panes with scripts/lib/program-variants.js and call
+ *        this once per program.
+ *
+ *        Table reconciliation follows the scope: with `panes` the numbers
+ *        describe that subset, and it is the CALLER's job to check that the
+ *        subsets together cover the page exactly once. The scrapers do
+ *        (`assertPaneCoverage`), which is a strictly stronger invariant than
+ *        the page-wide one — it catches double-counting, which counting
+ *        consumption alone never could.
+ */
 export function parseRequirements(pageRoot, profile, ctx = {}) {
-  const { included: roots, excluded: excludedPanes } = partitionPanes(pageRoot);
+  const scoped = Array.isArray(ctx.panes);
+  const { included: roots, excluded: excludedPanes } = scoped
+    ? { included: ctx.panes, excluded: [] }
+    : partitionPanes(pageRoot);
   const blocks = roots.flatMap(r => blockStream(r));
   const anchors  = anchorMap(roots, blocks);
   const gateways = findGateways(blocks, anchors);
@@ -1136,7 +1201,9 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
   // pane selection was wrong, PhD pages reported a tidy 3/3 while half the
   // page went unread. Every table on the page must end up consumed or
   // explicitly excluded.
-  const tablesOnPage = pageRoot.querySelectorAll('table.sc_courselist').length;
+  const tablesOnPage = scoped
+    ? roots.reduce((n, r) => n + r.querySelectorAll('table.sc_courselist').length, 0)
+    : pageRoot.querySelectorAll('table.sc_courselist').length;
   const tablesExcluded = excludedPanes.reduce((n, p) => n + p.tables, 0);
   const consumed = new Set();
 
@@ -1163,6 +1230,16 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
   // Concentration (Optional)" being rendered as mandatory.
   const concHeadings = new Map();    // heading index → link label
   const externalLinks = [];
+  // One TARGET is one concentration, however many menus point at it. A page can
+  // repeat the same menu — International Business, BSIB lists all 15 business
+  // concentrations under its own requirements and again under the exchange-
+  // student curriculum — and this list used to take both copies, so the page
+  // produced 30 options where 15 exist. De-duplicating on the normalized href
+  // rather than on the finished title matters twice over: it is the only form
+  // in which the three spellings the catalog emits (bare, trailing slash,
+  // /index.html) are comparable, and it happens BEFORE the scrapers' fetch cap
+  // (MAX_EXTERNAL_CONCENTRATIONS), which was being spent on duplicates.
+  const seenExternal = new Set();
   const gatewayIdx = new Set(gateways.map(g => g.headingIdx));
   for (const gw of gateways) {
     for (const link of gw.links) {
@@ -1170,6 +1247,9 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
         const idx = anchors.get(link.href.slice(1));
         if (idx !== undefined) concHeadings.set(idx, link.label);
       } else {
+        const key = normalizeConcentrationHref(link.href);
+        if (key && seenExternal.has(key)) continue;
+        if (key) seenExternal.add(key);
         externalLinks.push(link);
       }
     }
@@ -1187,6 +1267,12 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
   const concentrationOptions = [];
   const usedSectionTitles    = new Set();
   const usedConcTitles       = new Set();
+  // Titles that collided and had to be renamed. Reported, not hidden — see
+  // uniquify. Sections legitimately share generic names ("Required Courses",
+  // "Electives") within one pane, so a section collision is informational;
+  // a CONCENTRATION collision is not, and major-verify treats it as high.
+  const sectionCollisions    = [];
+  const concCollisions       = [];
   let generalElectiveSH = 0;
 
   // GPA rules are CONSTRAINTS over grades, not requirements a course can
@@ -1266,7 +1352,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
   for (const tb of orphanTables) {
     for (const sec of parseTable(tb.el, 'Requirements')) {
       if (extractGpa(sec)) continue;
-      sec.title = uniquify(sec.title, usedSectionTitles);
+      sec.title = uniquify(sec.title, usedSectionTitles, sectionCollisions);
       requirementSections.push(sec);
     }
     consumed.add(tb);
@@ -1298,7 +1384,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
           type: 'SECTION',
           // Strip a trailing "—College of …" tag; em/en-dash only, so hyphenated
           // names like "Agent-Based" survive.
-          title: uniquify(title.split(/\s*[—–]\s*/)[0].trim(), usedConcTitles),
+          title: uniquify(title.split(/\s*[—–]\s*/)[0].trim(), usedConcTitles, concCollisions),
           label: concHeadings.get(headingIdx) || undefined,
           requirements: reqs,
           minRequirementCount: reqs.length,
@@ -1312,7 +1398,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
       consumed.add(tb);
       for (const s of sections) {
         if (extractGpa(s, GPA_HEADING.test(title) ? adjacentParas(headingIdx) : [])) continue;
-        s.title = uniquify(s.title, usedSectionTitles);
+        s.title = uniquify(s.title, usedSectionTitles, sectionCollisions);
         requirementSections.push(s);
       }
     }
@@ -1350,7 +1436,7 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
       if (!reqs.length) continue;
       concentrationOptions.push({
         type: 'SECTION',
-        title: uniquify(title, usedConcTitles),
+        title: uniquify(title, usedConcTitles, concCollisions),
         label: link.label || undefined,
         requirements: reqs,
         minRequirementCount: reqs.length,
@@ -1384,6 +1470,13 @@ export function parseRequirements(pageRoot, profile, ctx = {}) {
            footnotes: parseFootnotes(pageRoot),
            tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
            excludedPanes, unconsumedHeadings, warnings,
+           // Titles that had to be renamed to stay unique, BEFORE the rename.
+           // major-verify reads these; comparing finished titles cannot see a
+           // collision that uniquify has already resolved.
+           titleCollisions: { sections: sectionCollisions, concentrations: concCollisions },
+           // Which panes this parse actually covered, so the caller can prove
+           // the per-variant parses partition the page rather than overlap it.
+           panesParsed: roots.map(r => r.getAttribute?.('id') ?? ''),
            // Concentrations hosted on their own pages. Parsing is synchronous
            // and fetching is not, so the caller pre-fetches these and calls
            // again with ctx.resolveExternal. Empty once resolved.

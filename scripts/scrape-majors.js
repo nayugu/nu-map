@@ -35,9 +35,13 @@ import { extractPlanGrid, verifyPlanGrid, planGridCourseKeys } from './lib/plan-
 import { parseEditionArg, editionBasePath, assertEdition,
          isFatalScrapeError }        from './lib/catalog-edition.js';
 import { parseRequirements, parseTotalCredits, findLeakedMarkers,
-         extractPlanOfStudyCourses,
+         extractPlanOfStudyCourses, listRequirementPanes,
          normalizeConcentrationHref, parseCatalogEdition,
          UNDERGRAD_PROFILE as PROFILE } from './lib/catalog-program-parser.js';
+import { planPanes, assertPaneCoverage, variantSlug,
+         UnadjudicatedPaneError }       from './lib/program-variants.js';
+import { fmtProgramLabel, fmtLocation, isDegreeToken }
+                                        from '../src/adapters/northeastern/programNaming.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
@@ -343,8 +347,11 @@ function listCommittedPlans(year = YEAR) {
  */
 const MAX_EXTERNAL_CONCENTRATIONS = 40;
 
-async function parseRequirementsResolvingExternals(root) {
-  const first = parseRequirements(root, PROFILE);
+async function parseRequirementsResolvingExternals(root, panes) {
+  const first = parseRequirements(root, PROFILE, { panes });
+  // pendingExternal is de-duplicated by target inside the parser, so the cap
+  // now bounds DISTINCT concentration pages. It used to bound raw links, and a
+  // page that repeated its menu spent the budget twice over.
   const pending = (first.pendingExternal ?? []).slice(0, MAX_EXTERNAL_CONCENTRATIONS);
   if (!pending.length) return first;
 
@@ -355,9 +362,21 @@ async function parseRequirementsResolvingExternals(root) {
     try { resolved.set(url, parseHTML(await fetchPage(url))); }
     catch { /* a missing concentration page must not fail the program */ }
   }
-  return parseRequirements(root, PROFILE, { resolveExternal: u => resolved.get(u) ?? null });
+  return parseRequirements(root, PROFILE, { panes, resolveExternal: u => resolved.get(u) ?? null });
 }
 
+/**
+ * Every program on one catalog page.
+ *
+ * Usually exactly one. But a page can publish an ALTERNATE CURRICULUM in a
+ * second requirement pane — advanced entry, part-time, exchange — and folding
+ * that into the primary program is how 139 phantom requirement sections and 22
+ * duplicate concentrations shipped. Panes are adjudicated by
+ * scripts/lib/program-variants.js and parsed one group at a time; an
+ * unrecognised pane stops the run rather than defaulting to a merge.
+ *
+ * @returns {object[]} one record per program, primary first, `[]` if none
+ */
 async function scrapeProgram(url) {
   const html = await fetchPage(url);
   const root = parseHTML(html);
@@ -368,11 +387,51 @@ async function scrapeProgram(url) {
     ?.replace(/\s+/g, ' ')
     ?? '';
 
-  const { value: totalCreditsRequired, source: totalCreditsSource } = parseTotalCredits(root, PROFILE);
+  const panes = listRequirementPanes(root);
+  const { primary, variants } = planPanes(panes, url);   // throws on an unknown pane
+
+  const out = [];
+  const covered = [];
+  for (const group of [{ modality: null, label: null, panes: primary }, ...variants]) {
+    if (!group.panes.length) continue;
+    const rec = await buildProgram(root, url, name, group);
+    if (rec) { out.push(rec); covered.push(rec.metadata.panes); }
+  }
+  // Every pane read exactly once — see assertPaneCoverage for why consumption
+  // counting alone could never have caught the duplication.
+  if (out.length) assertPaneCoverage(panes, covered, url);
+  return out;
+}
+
+/**
+ * One program record, scoped to one group of panes.
+ *
+ * @param {{modality: string|null, label: string|null, panes: object[]}} group
+ */
+async function buildProgram(root, url, pageName, group) {
+  const paneEls = group.panes.map(p => p.el);
+  const isVariant = group.modality != null;
+
+  // A variant's name and folder both come from its SLUG, through the same
+  // parser the picker uses, so the two can never disagree: the folder
+  // `public_policy_phdadvancedentry_(boston)` and the label
+  // "Public Policy, PhD—Advanced Entry (Boston)" are one derivation.
+  const baseSlug = slugify(pageName);
+  const slug = isVariant ? variantSlug(baseSlug, group.modality, isDegreeToken) : baseSlug;
+  const campus = fmtLocation(slug);
+  const name = isVariant
+    ? fmtProgramLabel(slug) + (campus ? ` (${campus})` : '')
+    : pageName;
+
+  // Scoped to this program's panes: a page with two curricula states two
+  // totals, and the variant must not inherit the primary's.
+  const { value: totalCreditsRequired, source: totalCreditsSource } =
+    parseTotalCredits(root, PROFILE, { panes: paneEls });
   const { requirementSections, concentrations, generalElectiveSH, gpaConstraints,
           footnotes,
           tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
-          unconsumedHeadings } = await parseRequirementsResolvingExternals(root);
+          unconsumedHeadings, titleCollisions, panesParsed } =
+    await parseRequirementsResolvingExternals(root, paneEls);
 
   // A program can be entirely concentrations: Philosophy BA's whole major is
   // five mutually-exclusive options and has no base requirement section.
@@ -396,17 +455,33 @@ async function scrapeProgram(url) {
       // advisor straight to the source — the whole point of saying "we copied
       // the catalog" is that they can go check the catalog.
       sourceUrl: url,
+      // Which panes this record was read from, and — for a variant — which
+      // alternate path it is. Both are how a reader (or the next scrape) can
+      // tell a split program from a page that simply has one pane.
+      panes: panesParsed,
+      ...(isVariant ? { variant: { modality: group.modality, label: group.label } } : {}),
+      // Titles that collided before being renamed unique. Surfaced rather than
+      // swallowed: major-verify's duplicate-concentration check reads these,
+      // because by the time a title reaches the JSON the collision is gone.
+      ...(titleCollisions?.sections?.length || titleCollisions?.concentrations?.length
+        ? { titleCollisions } : {}),
       ...(unconsumedHeadings?.length ? { unconsumedHeadings } : {}),
       // Courses the department's own sample plan names. A one-directional
       // witness: anything here that matches no requirement means we dropped
       // something. Never the reverse — the plan picks one branch per choice.
-      planOfStudyCourses: extractPlanOfStudyCourses(root),
+      //
+      // The plan pane describes the PRIMARY curriculum only, so a variant gets
+      // none of it. Handing the advanced-entry record the standard-entry plan
+      // would make the verifier report every standard-only course as dropped —
+      // a witness pointed at the wrong program is worse than no witness.
+      planOfStudyCourses: isVariant ? [] : extractPlanOfStudyCourses(root),
     },
     // The same pane read as STRUCTURE — years, terms, entries — so the plan can
     // be offered to a student rather than only counted against. Split into
     // plan.json at write time and never stored here; see planPath().
     // Null for the many programs that publish no plan, which is normal.
-    planGrid: extractPlanGrid(root),
+    // Never offered for a variant, for the reason above.
+    planGrid: isVariant ? null : extractPlanGrid(root),
     totalCreditsRequired,
     // Which phrasing produced the number — 'stated-total' and friends come
     // from what the page says is required; 'plan-grid' means we fell back to
@@ -438,6 +513,9 @@ async function scrapeProgram(url) {
   // otherwise be impossible to satisfy under single-use allocation. See lib/major-integrity.js.
   markSharedSections(data);
 
+  // The folder this record must be written to. Carried on the record rather
+  // than recomputed by the caller, so the name and the path stay one decision.
+  Object.defineProperty(data, '_slug', { value: slug, enumerable: false });
   return data;
 }
 
@@ -521,30 +599,46 @@ async function main() {
   for (const prog of programs) {
     process.stdout.write(`  ${prog.url} … `);
     try {
-      const data = await scrapeProgram(prog.url);
+      const records = await scrapeProgram(prog.url);
 
-      if (!data) {
+      if (!records.length) {
         console.log('SKIP (no requirements found)');
         skipped++;
       } else {
-        const slug = slugify(data.name || prog.college);
-        const path = outPath(prog.college, slug);
-        const concCount = data.concentrations?.concentrationOptions?.length ?? 0;
-        const { tablesPresent: tp, tablesConsumed: tc } = data.metadata;
-        const gap = tp > tc ? `  ⚠ DROPPED ${tp - tc}/${tp} tables` : '';
-        console.log(`OK  "${data.name}" — ${data.requirementSections.length} sections${concCount ? ` + ${concCount} concentrations` : ''}, ${data.totalCreditsRequired} SH${gap}`);
+        // A page yields one program normally and more when it publishes an
+        // alternate curriculum; each gets its own folder, the primary keeping
+        // the one it has always had.
+        if (records.length > 1) console.log(`${records.length} programs on this page`);
+        for (const data of records) {
+          const slug = data._slug || slugify(data.name || prog.college);
+          const path = outPath(prog.college, slug);
+          const concCount = data.concentrations?.concentrationOptions?.length ?? 0;
+          const { tablesPresent: tp, tablesConsumed: tc } = data.metadata;
+          const gap = tp > tc ? `  ⚠ DROPPED ${tp - tc}/${tp} tables` : '';
+          const tag = data.metadata.variant ? '  ↳ ' : 'OK  ';
+          console.log(`${tag}"${data.name}" — ${data.requirementSections.length} sections${concCount ? ` + ${concCount} concentrations` : ''}, ${data.totalCreditsRequired} SH${gap}`);
 
-        const leaks = findLeakedMarkers(data);
-        if (leaks.length) {
-          console.warn(`  ⚠  _CHOOSE markers not converted at: ${leaks.join(', ')}`);
+          const leaks = findLeakedMarkers(data);
+          if (leaks.length) {
+            console.warn(`  ⚠  _CHOOSE markers not converted at: ${leaks.join(', ')}`);
+          }
+
+          // Two programs must never land in one folder. This cannot happen via
+          // variantSlug, but a catalog page whose <h1> duplicates another's
+          // could — and silently overwriting is precisely the failure the
+          // PharmD id collision taught (see programRegistry.node.js).
+          if (pending.has(path)) {
+            throw new Error(`two programs claim the same folder: ${path}\n` +
+                            `    "${pending.get(path).name}" and "${data.name}"`);
+          }
+
+          // metadata.verification is deliberately NOT carried over from the
+          // previous file. The requirements just changed, so an old verdict
+          // would be a stale claim — worse than no claim. verify-majors.js
+          // recomputes it immediately after the scrape; both workflows run it
+          // in that order.
+          pending.set(path, data);
         }
-
-        // metadata.verification is deliberately NOT carried over from the
-        // previous file. The requirements just changed, so an old verdict
-        // would be a stale claim — worse than no claim. verify-majors.js
-        // recomputes it immediately after the scrape; both workflows run it
-        // in that order.
-        pending.set(path, data);
         done++;
       }
     } catch (err) {
@@ -552,7 +646,12 @@ async function main() {
       // program, so it must not be absorbed into the fetch-failure count —
       // that rail tolerates 2%, which would let a handful of wrong-edition
       // pages land while the run reported itself healthy.
-      if (isFatalScrapeError(err)) {
+      // Likewise an unadjudicated pane. The fetch-failure rail tolerates 2%,
+      // which is exactly the wrong treatment: this is not a flaky request, it
+      // is a page shape nobody has decided about, and the whole point of the
+      // decision table is that the unknown case stops the run instead of
+      // silently defaulting to the merge that shipped the duplicates.
+      if (isFatalScrapeError(err) || err instanceof UnadjudicatedPaneError) {
         console.log('FAIL');
         console.error(`\n❌  ${err.message}\n\n    Nothing was written.\n`);
         process.exit(1);
