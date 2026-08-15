@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { usePlanner } from "../context/PlannerContext.jsx";
 import { useLanguage } from "../context/LanguageContext.jsx";
+import { useCourseInkFn } from "./useSubjectInk.js";
 
 export default function PalettePanel() {
   const {
@@ -10,6 +11,7 @@ export default function PalettePanel() {
     effectiveCourseMap,
   } = usePlanner();
   const { t } = useLanguage();
+  const courseInk = useCourseInkFn();
   const [hovered, setHovered] = useState(false);
 
   const canDrop = dragInfo?.type === "course" && !palette.includes(dragInfo.id);
@@ -82,6 +84,7 @@ export default function PalettePanel() {
         {palette.map(courseId => {
           const course = effectiveCourseMap[courseId];
           if (!course) return null;
+          const col = courseInk(course);
           return (
             <div
               key={courseId}
@@ -101,8 +104,8 @@ export default function PalettePanel() {
                 minHeight: 22, overflow: "hidden",
               }}
             >
-              <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: course.color, borderRadius: "3px 0 0 3px" }} />
-              <span style={{ fontSize: 9, fontWeight: 800, color: course.color, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
+              <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 3, background: col, borderRadius: "3px 0 0 3px" }} />
+              <span style={{ fontSize: 9, fontWeight: 800, color: col, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
                 {course.code}
               </span>
               <button

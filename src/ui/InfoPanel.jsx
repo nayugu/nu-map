@@ -16,6 +16,7 @@ import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
 import { conditionStatus } from "../core/prereqConditions.js";
 import { baseId } from "../core/repeatInstances.js";
+import { useCourseInk } from "./useSubjectInk.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTranslation, useCourseTranslation, TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { SemLabel } from "./SemLabel.jsx";
@@ -116,6 +117,8 @@ export default function InfoPanel() {
   // one wearing a course's frame.
   const selCourse = selectedId ? courseMap[selectedId] : null;
   const selEdges  = selectedId ? getConnections(selectedId, allEdges) : [];
+  // Before the early return — it is a hook.
+  const selColor  = useCourseInk(selCourse);
 
   if (!showPanel || !selCourse) return null;
 
@@ -134,7 +137,7 @@ export default function InfoPanel() {
         left: isPhone ? 0 : (showPalette ? 100 : 18),
         right: isPhone ? 0 : (wideCatalog ? (wideWidth ?? Math.min(340, Math.max(240, window.innerWidth * 0.24))) : bankWidth),
         background: "var(--bg-surface)",
-        borderTop: `2px solid ${selCourse.color}50`,
+        borderTop: `2px solid ${selColor}50`,
         // Default: maxHeight so the panel hugs its content (short content
         // leaves no dead space). Once the user drags the handle, the height
         // becomes explicit and may stretch past the content.
@@ -251,6 +254,7 @@ export default function InfoPanel() {
 
 function CourseInfo({ selCourse, navTo }) {
   const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX } = usePlanner();
+  const subjColor = useCourseInk(selCourse);
   const attributeSystem = usePort(IAttributeSystem);
   const creditSystem    = usePort(ICreditSystem);
   const calendar        = usePort(ICalendar);
@@ -287,9 +291,9 @@ function CourseInfo({ selCourse, navTo }) {
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 5, flexWrap: "wrap" }}>
         {/* The pill has room for the code only, so hovering it names the subject
             in full — the same card chrome as the availability popovers. */}
-        <SubjectTip subject={selCourse.subject} color={selCourse.color}
+        <SubjectTip subject={selCourse.subject} color={subjColor}
                     name={courseCatalog?.subjectName?.(selCourse.subject) ?? null}>
-          <span style={{ fontSize: 10, background: selCourse.color, color: "var(--badge-bg)", borderRadius: 3, padding: "2px 8px", fontWeight: 800, letterSpacing: "0.04em" }}>
+          <span style={{ fontSize: 10, background: subjColor, color: "var(--badge-bg)", borderRadius: 3, padding: "2px 8px", fontWeight: 800, letterSpacing: "0.04em" }}>
             {selCourse.isCps ? `${selCourse.subject} · CPS` : selCourse.subject}
           </span>
         </SubjectTip>
@@ -807,6 +811,7 @@ function CourseInstructors({ selCourse, compact = false }) {
   const cal   = usePort(ICalendar);
   const courseCatalog = usePort(ICourseCatalog);
   const { t } = useLanguage();
+  const subjColor = useCourseInk(selCourse);
   const prof = selCourse.offering?.prof ?? {};
   const monthKey = s => (s.months?.length ? Math.min(...s.months.map(Number)) : 99);
   const rows = [...cal.getSemesterTypes()]
@@ -829,7 +834,7 @@ function CourseInstructors({ selCourse, compact = false }) {
           const peak = Math.max(1, ...entries.map(([, p]) => p));
           return (
             <div key={st.id}>
-              <div style={{ fontSize: 8.5, fontWeight: 700, color: selCourse.color || "var(--text-5)", letterSpacing: "0.03em", marginBottom: 1 }}>
+              <div style={{ fontSize: 8.5, fontWeight: 700, color: subjColor || "var(--text-5)", letterSpacing: "0.03em", marginBottom: 1 }}>
                 {/* Reuse the hand-written semester-name translations (claude.sem.*)
                     rather than the auto-translation engine. */}
                 {SEM_NAME_KEY[st.id]

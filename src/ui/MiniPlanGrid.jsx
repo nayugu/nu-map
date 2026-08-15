@@ -41,6 +41,7 @@ import { SEM_NAME_KEY }       from "./SemLabel.jsx";
 import { semName }            from "../core/semGrid.js";
 import { TYPE_BG }            from "../core/constants.js";
 import { cardsIn, loadIn }    from "../core/semesterView.js";
+import { useCourseInk }       from "./useSubjectInk.js";
 import { reservationNameSource, reservationSubline } from "../core/reservations.js";
 
 /**
@@ -443,6 +444,9 @@ export function MiniCard({ card, small = false, state, dense = false }) {
   const ghost = state === "ghost";
   // Unconditional, as hooks must be: null asks for no translation.
   const name = useTranslatedText(held ? null : reservationNameSource(card));
+  // Resolved here rather than read off `card.color`: co-op and internship
+  // courses follow the theme, and this grid renders in both.
+  const cardColor = useCourseInk(card);
   return (
     <div style={{
       // The second line is for one- and two-credit cards, so they take the room they are worth
@@ -472,7 +476,7 @@ export function MiniCard({ card, small = false, state, dense = false }) {
     }}>
       <div style={{
         position: "absolute", left: 0, top: 0, bottom: 0, width: 4,
-        background: ghost ? "var(--error)" : card.color, borderRadius: "5px 0 0 5px",
+        background: ghost ? "var(--error)" : cardColor, borderRadius: "5px 0 0 5px",
         opacity: held || ghost ? 1 : 0.5,
       }} />
       {/* ── One line in dense, and one line only ─────────────────────
@@ -488,7 +492,7 @@ export function MiniCard({ card, small = false, state, dense = false }) {
         * complete name is worth more than a flat baseline. */}
       <div title={held ? undefined : (name ?? card.title ?? "")} style={{
         fontSize: dense && !held ? TYPE.meta : TYPE.body, fontWeight: 800,
-        color: ghost ? "var(--error-text)" : held ? card.color : "var(--text-4)",
+        color: ghost ? "var(--error-text)" : held ? cardColor : "var(--text-4)",
         letterSpacing: "0.02em", lineHeight: "calc(1.3 * var(--lh-scale, 1))",
         overflow: "hidden", textOverflow: "ellipsis",
         whiteSpace: held || dense ? "nowrap" : "normal",

@@ -10,6 +10,7 @@ import { ICalendar }      from "../ports/ICalendar.js";
 import { ICourseOffering } from "../ports/ICourseOffering.js";
 import { REL_STYLE } from "../core/constants.js";
 import { baseId, takesUsed } from "../core/repeatInstances.js";
+import { courseInk } from "../core/courseModel.js";
 import { reservationNameSource, reservationSubline } from "../core/reservations.js";
 import GradePopover from "./GradePopover.jsx";
 import { takeConsumesSlot } from "../core/gradeSystem.js";
@@ -258,14 +259,18 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   // card's identity, so it should stay closer to full strength.
   const { active: relevanceOn, majorKeys, minorKeys } = useRelevance();
   const { themeName } = useTheme();
-  let stripeColor = course.color, codeColor = course.color;
+  const isDarkTheme = themeName === "dark";
+  // Co-op and internship courses are drawn in the theme's ink rather than a
+  // palette hue (see courseInk) — everything below, fades and glow included,
+  // works off this instead of the baked-in `course.color`.
+  const baseColor = courseInk(course, isDarkTheme);
+  let stripeColor = baseColor, codeColor = baseColor;
   if (inSem && relevanceOn && !isSel && !isConn) {
     const key = `${course.subject}${course.number}`;
     if (!majorKeys.has(key)) {
       const isMinor = minorKeys.has(key);
-      const isDark  = themeName === "dark";
-      stripeColor = fadeSubjectColor(course.color, isMinor ? 0.2 : 0.35, isDark);
-      codeColor   = fadeSubjectColor(course.color, isMinor ? 0.1 : 0.175, isDark);
+      stripeColor = fadeSubjectColor(baseColor, isMinor ? 0.2 : 0.35, isDarkTheme);
+      codeColor   = fadeSubjectColor(baseColor, isMinor ? 0.1 : 0.175, isDarkTheme);
     }
   }
   // A definitively failed take (F/U/W) is VOID — the slot is spent, the
@@ -276,9 +281,8 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   // and from red (violation).
   const voidTake = inSem && grades[course.id] != null && !takeConsumesSlot(grades[course.id]);
   if (voidTake) {
-    const isDark = themeName === "dark";
-    stripeColor = fadeSubjectColor(course.color, 0.8, isDark);
-    codeColor   = fadeSubjectColor(course.color, 0.65, isDark);
+    stripeColor = fadeSubjectColor(baseColor, 0.8, isDarkTheme);
+    codeColor   = fadeSubjectColor(baseColor, 0.65, isDarkTheme);
   }
 
   // Selection glow — tinted with the course's own subject colour. Only the
@@ -289,9 +293,11 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   // dark/muted subjects (maroon, grey math) still glow lively, while preserving
   // saturation so vivid subjects (e.g. CS green) stay rich instead of washing
   // out to pastel (mixing toward white was the cause of the pastel look).
-  // (course.color is a 6-digit hex from SUBJECT_PALETTE.)
+  // (baseColor is a 6-digit hex — a SUBJECT_PALETTE slot, or the theme's ink.
+  // Ink is achromatic, so the lightness floor alone carries it: white glows
+  // white, black glows the neutral grey the floor lifts it to.)
   const _rgb = (() => {
-    const n = parseInt(course.color.slice(1), 16);
+    const n = parseInt(baseColor.slice(1), 16);
     const r = ((n >> 16) & 255) / 255, g = ((n >> 8) & 255) / 255, b = (n & 255) / 255;
     const max = Math.max(r, g, b), min = Math.min(r, g, b), d = max - min;
     let l = (max + min) / 2;
@@ -336,8 +342,8 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           boxShadow: isSel ? selGlow : isCardHov ? "var(--shadow-card-hov)" : "none",
         }}
       >
-        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 4, background: course.color, borderRadius: "4px 0 0 4px" }} />
-        <span style={{ fontSize: 8, fontWeight: 800, color: course.color, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 4, background: stripeColor, borderRadius: "4px 0 0 4px" }} />
+        <span style={{ fontSize: 8, fontWeight: 800, color: codeColor, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
           {noSubject ? course.code.replace(/^[A-Z]+ /, "") : course.code}
         </span>
       </div>

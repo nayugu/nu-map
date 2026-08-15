@@ -20,7 +20,8 @@ import { IAttributeSystem }   from "../ports/IAttributeSystem.js";
 import { ICreditSystem }      from "../ports/ICreditSystem.js";
 import { ISpecialTerms }      from "../ports/ISpecialTerms.js";
 import { IMajorRequirements } from "../ports/IMajorRequirements.js";
-import { subjectColor } from "../core/courseModel.js";
+import { subjectColor, isInkGroup, INK } from "../core/courseModel.js";
+import { useCourseInk, useIsDark } from "./useSubjectInk.js";
 import { enteredGPA, countsInGPA } from "../core/gradeSystem.js";
 import { getSemStudySH, inTimeline, filterInTimeline } from "../core/planModel.js";
 import { computeGrantedAttrs, resolveTermByDuration } from "../core/specialTermUtils.js";
@@ -269,11 +270,19 @@ function useDominantColor(domain, name, fallback) {
   return color;
 }
 
+// A department bucket's colour: its subject hue, unless every course in the
+// bucket is a work term — the COOP/COP groups — in which case it inks with
+// the theme, like the cards inside it.
+function useDeptInkFn(cmap) {
+  const isDark = useIsDark();
+  return g => (isInkGroup((g.ids ?? []).map(id => cmap?.[id])) ? INK(isDark) : subjectColor(g.subject));
+}
+
 // A clickable course pill (opens the course info panel). Coloured by its
 // department; grad-level courses pulse with a glow in that same dept colour.
 function ClassChip({ id, cmap, onOpen, faded, fz = 11 }) {
   const c = cmap[id];
-  const deptColor = subjectColor(c?.subject ?? "");
+  const deptColor = useCourseInk(c);
   // Same visual language as a course card: coloured course code on grey card
   // chrome (the previous full-saturation coloured borders read neon in dark
   // mode). Hover matches the card hover tint.
@@ -430,6 +439,7 @@ function CourseGroup({ title, sub, badge, badgeSlot = false, ids, cmap, onOpen, 
 const ZOOM_MIN = 0.45, ZOOM_MAX = 1.6;
 function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
   const { t } = useLanguage();
+  const subjInk = useDeptInkFn(cmap);
   // The width below which the grid's columns stop shrinking — one number for
   // both the grid's own `minWidth` and the auto-fit's horizontal term, so the
   // two can never drift apart: 78px gutter + 92px min column + 8px gap each.
@@ -673,7 +683,7 @@ function Skyline({ byDept, cmap, unit, onOpen, fadedIds }) {
           {byDept.map(g => (
             <div key={g.subject} style={{ position: "sticky", top: 0, zIndex: 2,
               background: "var(--bg-surface-2)", padding: "8px 0 7px 2px" }}>
-              <div style={{ fontSize: 13, fontWeight: 800, color: subjectColor(g.subject) }}>{g.subject}</div>
+              <div style={{ fontSize: 13, fontWeight: 800, color: subjInk(g) }}>{g.subject}</div>
               <div style={{ fontSize: 10.5, color: "var(--text-4)", fontVariantNumeric: "tabular-nums", marginTop: 1 }}>
                 {g.sh} {unit} · {g.count}
               </div>
@@ -897,6 +907,7 @@ export default function StatsPanel() {
     semesterLoad,
     major, studentType, isPhone, grades, privateCoop,
   } = usePlanner();
+  const subjInk = useDeptInkFn(effectiveCourseMap ?? courseMap);
 
   const attributeSystem = usePort(IAttributeSystem);
   const creditSystem    = usePort(ICreditSystem);
@@ -1279,7 +1290,7 @@ export default function StatsPanel() {
                 ) : (
                   <>
                     <StackBar unit={unit} segments={byDept.map(g => ({
-                      value: g.sh, color: subjectColor(g.subject), name: g.subject,
+                      value: g.sh, color: subjInk(g), name: g.subject,
                       title: `${g.subject}: ${g.sh} ${unit}`,
                     }))} />
                     {byDept.map(g => (
@@ -1304,7 +1315,7 @@ export default function StatsPanel() {
                         // until there are two — see GpaMeter.
                         badge={g.gpa != null && g.graded >= 1 ? {
                           value: g.gpa,
-                          color: subjectColor(g.subject),
+                          color: subjInk(g),
                           provisional: g.graded < 2,
                           floor: gpaScaleFloor,
                           title: t("stats.dept.gpa", { gpa: g.gpa.toFixed(3), n: g.graded, total: g.count })

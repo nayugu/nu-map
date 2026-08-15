@@ -84,7 +84,7 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
   // load an undergraduate one has room in, and an empty slot is a claim about room.
   // `SEM_INDEX` because a co-op run is a stretch of ADJACENT semesters, and only the planner's own
   // ordering knows which those are.
-  const { SEMESTERS, SEM_INDEX, studentType } = usePlanner();
+  const { SEMESTERS, SEM_INDEX, studentType, courseMap } = usePlanner();
   const credit  = usePort(ICreditSystem);
   const special = usePort(ISpecialTerms);
   const fz  = isPhone ? 9 : 11;
@@ -180,7 +180,12 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
           // The COURSE's title, not the requirement's. `title` is what the card is FOR and this
           // is what it IS, and the planner's second line prints the latter.
           title: c.title ?? "", sh: c.sh ?? 0,
+          subject: steps.subjects?.[i] ?? String(c.code ?? "").split(" ")[0],
           color: subjectColor(steps.subjects?.[i] ?? String(c.code ?? "").split(" ")[0]),
+          // Carried through from the real course so the walkthrough draws a work
+          // term the way the board does — in ink. The roster is a recording and
+          // does not carry it; the catalog does.
+          coop: courseMap?.[c.id]?.coop ?? null,
         };
       }
       // A reservation resolves to no course, so it stays one card — and a named cell whose

@@ -13,6 +13,69 @@ export function subjectColor(subject) {
   return SUBJECT_PALETTE[h % SUBJECT_PALETTE.length];
 }
 
+// ── Ink courses: a work term is not a department ─────────────────
+//
+// A course you REGISTER for to record a work term is the plan's own structure
+// showing up as a course, so it is drawn in the theme's ink — white on dark,
+// black on light — which takes it out of the subject-hue competition. A course
+// you SIT IN keeps its department's hue, however co-op-ish its title.
+//
+// The test is `course.coop`, stamped by `stampCoopVariants` from
+// `public/northeastern/coop-courses.json` — the SAME table the co-op grant
+// resolves against, so the colour and the requirement can never disagree about
+// what a work term is. Nothing here re-derives it:
+//
+//  - a title regex was the first attempt and it was wrong in both directions.
+//    It swept in the 22 prep seminars (`CS 1210 Professional Development for
+//    Khoury Co-op` is a 1 SH class you attend) and `ENCP 6100 Introduction to
+//    Cooperative Education`, which sits one number away from a registration in
+//    the same subject.
+//  - a subject rule (`COOP`/`COP`) was wrong too: `COP 3940 Personal and
+//    Career Development` is an ordinary class inside the co-op subject.
+//  - the NUPath EX attribute is far too broad — 217 courses across 88
+//    subjects, including "Boston in Literature". Colour would then mean two
+//    things at once: which department, and which NUPath.
+//
+// The table is derived by `scripts/derive-coop-courses.js` behind three guards
+// (every work term must be 0 SH, no >20% shrink, no overlap with the prep
+// titles), so the classification is adjudicated once, in the pipeline, not
+// re-guessed per render. It is also an OPTIONAL asset: if it fails to load,
+// no course is stamped, nothing inks, and every card keeps its palette hue —
+// less information, never wrong information.
+
+/**
+ * True when this course is drawn in ink. Reservations are exempt: a
+ * placeholder for a requirement named "Co-op" is still an empty slot, and it
+ * has its own neutral grey.
+ */
+export function isInkCourse(course) {
+  return !!(course && !course.isReservation && course.coop);
+}
+
+/**
+ * True when a whole GROUP inks — a subject header or a stats bucket whose
+ * every course is a work term. Read from the courses rather than from the
+ * subject name, because no subject is uniformly one or the other.
+ */
+export function isInkGroup(courses) {
+  return Array.isArray(courses) && courses.length > 0 && courses.every(isInkCourse);
+}
+
+/**
+ * Theme-aware colour for a course: ink for a work term, otherwise the
+ * palette hue already on the record.
+ *
+ * Kept as a hex — callers do arithmetic on it (relevance fade, selection
+ * glow, `${col}50` alpha suffixes), so a CSS variable would not do.
+ */
+export function courseInk(course, isDark) {
+  if (isInkCourse(course)) return INK(isDark);
+  return course?.color ?? subjectColor(course?.subject ?? "");
+}
+
+/** The ink itself, for a group header that has no course record to pass. */
+export const INK = isDark => (isDark ? "#ffffff" : "#000000");
+
 // ── Edge extraction ──────────────────────────────────────────────
 
 /**
