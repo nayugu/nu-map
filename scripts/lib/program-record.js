@@ -127,8 +127,15 @@ async function buildOne(root, url, pageName, group, deps) {
   // totals, and 42 of the 46 multi-pane pages state a DIFFERENT one in each —
   // Electrical Engineering PhD is 48 SH standard entry and 16 SH advanced
   // entry, and both used to ship as 48.
+  //
+  // Only the PRIMARY may fall back to page-wide evidence. That fallback reads
+  // the sample-plan grid, which describes the primary curriculum, so a variant
+  // reaching it gets the other program's number — Interdisciplinary Design and
+  // Media, PhD—Advanced Entry did exactly that and reported 48 SH for a 28 SH
+  // degree. Three programs in the catalog depend on the fallback, all of them
+  // single-pane, so restricting it to the primary costs nothing.
   const { value: totalCreditsRequired, source: totalCreditsSource } =
-    parseTotalCredits(root, profile, { panes: paneEls });
+    parseTotalCredits(root, profile, { panes: paneEls, allowPageFallback: !isVariant });
 
   const { requirementSections, concentrations, generalElectiveSH, gpaConstraints,
           footnotes,

@@ -128,6 +128,56 @@ test('parser › Public Policy PhD is two programs with DIFFERENT credit totals'
   }
 });
 
+test('parser › a scoped total never falls back to page-wide evidence', () => {
+  // Scoping the regex search but not the fallbacks is a half-measure: the
+  // fallback reads the sample-plan grid, which describes the PRIMARY
+  // curriculum, so the variant gets handed the other program's number.
+  // Interdisciplinary Design and Media, PhD—Advanced Entry shipped 48 SH for a
+  // degree its own pane calls "a minimum of 28 semester hours".
+  const root = load('public-policy-phd');
+  const panes = listRequirementPanes(root);
+  const scoped = parseTotalCredits(root, GRAD_PROFILE, { panes: [panes[0].el] });
+  assert.notEqual(scoped.source, 'plan-grid');
+  assert.notEqual(scoped.source, 'total-hours-row');
+
+  // A pane that states nothing must report nothing, not the page's guess.
+  const empty = parseTotalCredits(root, GRAD_PROFILE, { panes: [] });
+  assert.deepEqual(empty, { value: 0, source: null });
+
+  // …while an unscoped call keeps the fallbacks 3 programs still rely on.
+  const whole = parseTotalCredits(root, GRAD_PROFILE);
+  assert.ok(whole.value > 0);
+});
+
+test('parser › reads the doctoral "a minimum of N semester hours" form', () => {
+  // The phrasing that carries the two different totals on a PhD page. Words
+  // sit between the unit and "required", so `N UNIT required` cannot see it.
+  const html = t => parse(`<div id="programrequirementstextcontainer">` +
+    `<table class="sc_courselist"><tr><td>x</td></tr></table><p>${t}</p></div>`);
+  const read = t => parseTotalCredits(html(t), GRAD_PROFILE).value;
+  assert.equal(read('A minimum of 28 semester hours of coursework beyond the graduate degree is required.'), 28);
+  assert.equal(read('A minimum of 48 semester hours of coursework beyond the undergraduate degree is required.'), 48);
+  // Must not swallow a GPA sentence that also starts "a minimum of".
+  assert.equal(read('A minimum 3.000 cumulative GPA is required.'), 0);
+});
+
+test('parser › "a minimum of N" must NOT capture a major-only subtotal', () => {
+  // The regression guard for this pattern. Written loosely as
+  // "a minimum of N semester hours", it matches "A minimum of 89 semester
+  // hours is required in the major" on Computer Science and Theatre and
+  // overwrites the real 133 SH degree total. Anchoring on "beyond the …
+  // degree" is what keeps a subtotal out.
+  const html = t => parse(`<div id="programrequirementstextcontainer">` +
+    `<table class="sc_courselist"><tr><td>x</td></tr></table><p>${t}</p></div>`);
+  const read = t => parseTotalCredits(html(t), UNDERGRAD_PROFILE);
+  assert.equal(read('A minimum of 89 semester hours is required in the major.').value, 0,
+    'a major subtotal must not be read as the degree total');
+  assert.equal(read('Students are strongly encouraged to take AWD before they have accrued 96 semester hours.').value, 0,
+    'incidental prose must not be read as a total');
+  // The real total on that page still wins when both sentences are present.
+  assert.equal(read('133 total semester hours required. A minimum of 89 semester hours is required in the major.').value, 133);
+});
+
 test('parser › a continuation pane still MERGES into one program', () => {
   // The other half of the decision. Nursing CAGS opens with a prerequisite
   // pane feeding a core pane: one degree, two panes, and splitting it would be

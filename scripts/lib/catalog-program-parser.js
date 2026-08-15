@@ -54,11 +54,24 @@ export const UNDERGRAD_PROFILE = {
 export const GRAD_PROFILE = {
   level: 'grad',
   pathPrefix: '/graduate/',
-  // Floor is 8, not 20: graduate certificates are 12–17 semester hours, and a
-  // 20 floor silently zeroed 156 of them. Safe because parseTotalCredits only
-  // matches phrasings containing "total" or "required" — a bare "Complete 8
-  // semester hours from the following" cannot reach it.
-  creditWindow: [8, 150],
+  // Floor is 4, and has come down twice for the same reason: each time, a
+  // smaller class of real program turned out to exist below it.
+  //   20 → 8  graduate certificates are 12–17 semester hours; a 20 floor
+  //           silently zeroed 156 of them.
+  //    8 → 4  advanced-entry doctoral programs are smaller still, because the
+  //           master's already covered the coursework. Chemistry, PhD—Advanced
+  //           Entry states "7 total semester hours required" and an 8 floor
+  //           threw it away. These only became separate records when program
+  //           variants were split out (docs/program-variants.md), so nothing
+  //           below 8 had been visible before.
+  // Measured before changing: across all 520 graduate programs, moving the
+  // floor from 8 to 2 changes exactly ONE total — that Chemistry variant,
+  // 0 → 7. The band is genuinely empty otherwise, so this is not a loosening
+  // that lets noise in.
+  // Safe for the same reason it always was: parseTotalCredits only matches
+  // phrasings containing "total" or "required", so a bare "Complete 8 semester
+  // hours from the following" cannot reach it.
+  creditWindow: [4, 150],
 };
 
 function parseHoursCell(tr) {
@@ -610,10 +623,20 @@ function requirementsRoot(pageRoot) {
  *        by standard entry and 16 SH by advanced entry, and both used to ship
  *        as 48. Measured over the 2026 catalog, 42 of the 46 multi-pane pages
  *        state a different total in each pane.
+ * @param {boolean} [opts.allowPageFallback=false when panes is set]
+ *        Whether a pane that states no total may fall back to page-wide
+ *        evidence (the sample-plan grid, a legacy "Total Hours" row). Scoping
+ *        the regex search but not the fallbacks is a half-measure — the
+ *        fallback simply reintroduces the primary's number. Callers parsing a
+ *        whole page keep the fallbacks; callers parsing one program of several
+ *        do not.
  */
 export function parseTotalCredits(pageRoot, profile, opts = {}) {
   const [lo, hi] = profile.creditWindow;
   const inWindow = n => Number.isFinite(n) && n > lo && n < hi;
+  // Default the fallbacks OFF exactly when a scope was requested, so a caller
+  // cannot ask for one program and silently receive the page's answer.
+  opts = { allowPageFallback: !Array.isArray(opts.panes), ...opts };
 
   // Read across every requirement pane — PhD pages split them.
   const text = (opts.panes ?? requirementsRoots(pageRoot)).map(r => r.text).join(' ')
@@ -629,6 +652,24 @@ export function parseTotalCredits(pageRoot, profile, opts = {}) {
   //   "A total of 42 semester hours are required"   inverted word order
   //   "39 minimum semester hours required"
   //   "129 overall semester hours required"    when a major subtotal also appears
+  //   "A minimum of 28 semester hours of coursework beyond the graduate degree
+  //    is required"                            the doctoral form
+  //
+  // That last one matters more than its rarity suggests. It is how the two
+  // curricula on a PhD page state their DIFFERENT totals — Interdisciplinary
+  // Design and Media reads "a minimum of 48 … beyond the undergraduate degree"
+  // in one pane and "a minimum of 28 … beyond the graduate degree" in the
+  // other. Unmatched, the advanced-entry program fell through to the page-wide
+  // fallback below and shipped 48: a confident wrong number for a 28 SH degree.
+  // The words between the unit and "required" are why `N UNIT required` misses
+  // it.
+  //
+  // It is anchored on "beyond the … degree" and NOT written as a general
+  // "a minimum of N semester hours", because the looser form is how the major
+  // SUBTOTAL is phrased: Computer Science and Theatre says "A minimum of 89
+  // semester hours is required in the major" while the degree needs 133. A
+  // first attempt at this pattern matched that sentence and overwrote 133 with
+  // 89 — the same class of error it was added to fix, pointing the other way.
   //
   // UNIT is deliberately "semester hours" or "credits" only — never "quarter
   // hours", which CPS states alongside and which is not the same unit.
@@ -640,6 +681,8 @@ export function parseTotalCredits(pageRoot, profile, opts = {}) {
     [new RegExp(`${N}\\s+overall\\s+${UNIT}\\s+required`, 'i'),  'stated-overall'],
     [new RegExp(`${N}\\s+total\\s+${UNIT}`, 'i'),                'stated-total'],
     [new RegExp(`${N}\\s+minimum\\s+${UNIT}\\s+required`, 'i'),  'stated-minimum'],
+    [new RegExp(`a\\s+minimum\\s+of\\s+${N}\\s+${UNIT}[^.]*?beyond\\s+the\\s+(?:under)?graduate\\s+degree`, 'i'),
+                                                                 'stated-minimum'],
     [new RegExp(`${N}\\s+${UNIT}\\s+required`, 'i'),             'stated-required'],
   ];
   for (const [re, source] of patterns) {
@@ -648,6 +691,21 @@ export function parseTotalCredits(pageRoot, profile, opts = {}) {
       const n = parseInt(m[1], 10);
       if (inWindow(n)) return { value: n, source };
     }
+  }
+
+  // Both remaining fallbacks read the WHOLE page, which is right for a page
+  // that holds one program and dangerous for one that holds two: the sample
+  // plan describes the primary curriculum, so letting a variant reach it hands
+  // that variant the other program's number. Interdisciplinary Design and
+  // Media, PhD—Advanced Entry did exactly that and shipped 48 SH instead of
+  // 28 — the precise failure the pane scoping exists to prevent, arriving
+  // through the back door.
+  //
+  // So a caller that asked for one program's panes gets no page-wide guess.
+  // Returning 0 is not a great answer, but "no total stated" is honest and an
+  // unknown is cheap; a confident wrong total is what costs a student a term.
+  if (!opts.allowPageFallback) {
+    return { value: 0, source: null };
   }
 
   // Fall back to the sample plan only when the page states nothing. Scan the
