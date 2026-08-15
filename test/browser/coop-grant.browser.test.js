@@ -168,6 +168,39 @@ describe("browser · a work term registers its program's course", { skip: up ? f
     assert.equal(counterAfter(t, "Business Experiential Learning"), "0/1");
   });
 
+  // The abroad flag had no way to be set from the UI at all until this.
+  test("the unmet International row offers to mark a work term as international", async () => {
+    const ctx = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
+    await ctx.addInitScript(seed(PROGRAMS.ib, false, {}, coop()));
+    const page = await ctx.newPage();
+    await page.goto(APP, { waitUntil: "networkidle" });
+    await page.waitForTimeout(2000);
+    for (let i = 0; i < 6; i++) {
+      const skip = page.getByRole("button", { name: /^Skip$/ }).first();
+      if (await skip.count() && await skip.isVisible().catch(() => false)) {
+        await skip.click().catch(() => {}); await page.waitForTimeout(250);
+      } else break;
+    }
+    await page.getByRole("button", { name: /^Graduation$/ }).first().click().catch(() => {});
+    await page.waitForTimeout(2500);
+
+    const before = await page.evaluate(() => document.body.innerText);
+    assert.equal(counterAfter(before, "International Experiential Learning"), "0/1");
+
+    const btn = page.getByRole("button", { name: /mark a work term as international/i }).first();
+    assert.ok(await btn.count(), "no actuator on the unmet International row");
+    await btn.click();
+    await page.waitForTimeout(1500);
+
+    const after = await page.evaluate(() => document.body.innerText);
+    await ctx.close();
+    // Clicking it must actually satisfy the requirement, and must consume the
+    // co-op — so Business Experiential goes the other way. One abroad co-op
+    // cannot cover both non-shared sections.
+    assert.equal(counterAfter(after, "International Experiential Learning"), "1/1");
+    assert.equal(counterAfter(after, "Business Experiential Learning"), "0/1");
+  });
+
   test("two co-ops, one abroad, satisfy both — the base-variant fallback", async () => {
     const t = await panelText({ major: PROGRAMS.ib, workTerms: {
       a: { typeId: "coop", semId: "spr2027", duration: 6, abroad: true },

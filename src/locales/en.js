@@ -551,6 +551,7 @@ export const strings = {
   "grad.nupath.satisfiedBy":      "satisfied by {courses}",
   "grad.nupath.satisfiedByLabel": "Satisfied by",
   "grad.nupath.granted":          "satisfied by a placed term (e.g. co-op)",
+  "grad.req.markAbroad":    "mark a work term as international",
   "grad.nupath.unsatisfied":      "not yet satisfied (no class placed)",
   "grad.stale.program":     "This program is no longer in the catalog. It may have been renamed or discontinued.",
   "grad.stale.minor":       "{label}: this program is no longer in the catalog. It may have been renamed or discontinued.",

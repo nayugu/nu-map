@@ -286,12 +286,22 @@ function XomGroupHeader({ title, style }) {
   return <span style={style}>{scaleLatinRuns(text)}</span>;
 }
 
-function ReqNode({ r, depth = 0, dimmed = false }) {
+/**
+ * `abroadOnly` — set by a parent whose every course option is an ABROAD
+ * work-experience variant, i.e. a requirement no domestic co-op can satisfy.
+ * Only such a node may offer to mark a work term as international. Without it
+ * the offer appears on every unmet abroad option anywhere, including
+ * International Business's `Business Experiential Learning`, which lists
+ * COOP 3947 and 3948 among seven — and acting there would consume the co-op
+ * for the OTHER section. Undefined at the root means a bare COURSE
+ * requirement, where the course IS the whole requirement.
+ */
+function ReqNode({ r, depth = 0, dimmed = false, abroadOnly }) {
   const [open, setOpen]  = useState(true);
   const [hov,  setHov]   = useState(false);
   const { t }            = useLanguage();
   const { courseMap, onDragStart, setSelectedId, setShowPanel, selectedId, isPhone, wideCatalog,
-          workTermSource, specialTermPl, specialTerms } = useContext(GradCtx);
+          workTermSource, specialTermPl, setSpecialTermPl, specialTerms, SEM_INDEX, pushUndo } = useContext(GradCtx);
   const pl               = depth * (isPhone ? 4 : 10);
   const rowMB            = isPhone ? 1 : 3;
   const nodeFz           = isPhone ? 8 : 10;
@@ -316,6 +326,21 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
     const grantData = grantedBy ? specialTermPl?.[grantedBy] : null;
     const grantType = grantData ? (specialTerms?.getTypes?.() ?? []).find(x => x.id === grantData.typeId) : null;
     const draggable = !!course && !grantedBy;
+    // An unmet requirement that ONLY an abroad work term can satisfy, plus a
+    // placed work term not yet marked international. Earliest first, so the
+    // answer does not depend on the order blocks were dragged.
+    //
+    // The block filter asks which types REGISTER a course rather than testing
+    // for the id "coop": the type list is the institution's to define, and a
+    // hardcoded id here would be NU leaking into a shared component.
+    const wantsAbroad = !r.sat && course?.coop?.abroad === true && (abroadOnly ?? true);
+    const grantingTypeIds = new Set((specialTerms?.getTypes?.() ?? [])
+      .filter(x => x.courseGrants?.length).map(x => x.id));
+    const abroadCandidate = wantsAbroad
+      ? (Object.entries(specialTermPl ?? {})
+          .filter(([, d]) => d?.semId && grantingTypeIds.has(d.typeId) && !d.abroad)
+          .sort(([, a], [, b]) => (SEM_INDEX?.[a.semId] ?? 0) - (SEM_INDEX?.[b.semId] ?? 0))[0]?.[0] ?? null)
+      : null;
     return (
       <div style={{ paddingLeft: pl + baseIndent, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
         <div
@@ -350,6 +375,21 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
               student typed — so this needs no new string, and the tooltip
               reuses grad.nupath.granted ("satisfied by a placed term"), which
               is the sentence this situation already had a translation for. */}
+          {abroadCandidate && (
+            <button
+              onClick={e => {
+                e.stopPropagation();
+                pushUndo?.();
+                setSpecialTermPl?.(prev => ({ ...prev, [abroadCandidate]: { ...prev[abroadCandidate], abroad: true } }));
+              }}
+              style={{
+                fontSize: isPhone ? 7 : 9, color: "var(--link-1)", background: "none",
+                border: "1px solid var(--border-1)", borderRadius: 4,
+                padding: isPhone ? "0 3px" : "1px 5px", cursor: "pointer",
+                whiteSpace: "nowrap", flexShrink: 0,
+              }}
+            >{t("grad.req.markAbroad")}</button>
+          )}
           {grantType && (
             <span style={{
               fontSize: isPhone ? 7 : 9, color: "var(--text-5)", userSelect: "none",
@@ -394,7 +434,10 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
       ? r.children[0]
       : null;
     if (singleCourse) {
-      return <ReqNode r={{ ...singleCourse, sat: r.sat }} depth={depth} dimmed={dimmed} />;
+      // Forwards `abroadOnly` rather than defaulting it: this collapse stands in
+      // for the pool, so if a parent already said other routes exist, the
+      // single course inherits that and does not offer to flag a co-op.
+      return <ReqNode r={{ ...singleCourse, sat: r.sat }} depth={depth} dimmed={dimmed} abroadOnly={abroadOnly} />;
     }
 
     const has = r.children?.length > 0;
@@ -420,10 +463,10 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
                   <div style={{ paddingLeft: baseIndent + (depth + 1) * (isPhone ? 4 : 10), marginTop: gi > 0 ? 4 : 0, marginBottom: 2 }}>
                     <XomGroupHeader title={g.title} style={{ fontSize: nodeFz - 1, fontWeight: 600, color: "var(--text-4)", textTransform: "uppercase", letterSpacing: "0.04em" }} />
                   </div>
-                  {g.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} />)}
+                  {g.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} abroadOnly={false} />)}
                 </div>
               ))
-            : r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} />)
+            : r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.sat && !c.sat} abroadOnly={false} />)
           }
         </div>}
       </div>
@@ -441,6 +484,19 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
     r.type === "OR"  ? t("grad.oneOf", { count: r.satCount ?? 0, total: r.total ?? 0 }) :
     sectionHeading || (r.label ?? "");
 
+  // True when every course this node offers is an abroad work-experience
+  // variant — i.e. no domestic co-op can satisfy it. Only then may a child row
+  // offer to mark a work term international. An OR with even one other route
+  // (International Business's Business Experiential Learning has seven) must
+  // not, because marking there would consume the co-op for a different
+  // section. AND nodes never qualify: their options are all required, so
+  // flagging one co-op cannot be the answer.
+  const courseKids = (r.children ?? []).filter(c => c.type === "COURSE");
+  const allOptionsAbroad = r.type === "OR"
+    && courseKids.length > 0
+    && courseKids.length === (r.children ?? []).length
+    && courseKids.every(c => courseMap?.[c.key]?.coop?.abroad === true);
+
   return (
     <div style={{ paddingLeft: pl, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
       <div onClick={(e) => { e.stopPropagation(); has && setOpen(v => !v); }}
@@ -450,7 +506,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
         {has && <span style={{ fontSize: nodeFz - 1, color: "var(--text-5)" }}>{open ? "▼" : "▶"}</span>}
       </div>
       {open && has && <div style={{ marginTop: 3 }}>
-        {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.type === "OR" && r.sat && !c.sat} />)}
+        {r.children.map((c, i) => <ReqNode key={i} r={c} depth={depth + 1} dimmed={r.type === "OR" && r.sat && !c.sat} abroadOnly={allOptionsAbroad} />)}
       </div>}
     </div>
   );
@@ -1399,7 +1455,7 @@ export default function GradPanel({ wideCatalog = false }) {
   });
   const {
     placements, placedOut, effectivePlacements, substitutions, effectiveSubstitutions, courseMap, totalSHPlaced, totalSHDone, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile,
-    specialTermPl, SEM_INDEX,
+    specialTermPl, setSpecialTermPl, SEM_INDEX, pushUndo,
     major: majorPath, setMajor: setMajorPath,
     major2: major2Path, setMajor2: setMajor2Path,
     plusOne, setPlusOne,
@@ -1834,7 +1890,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
 
   return (
-    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile, attributeSystem, majorRequirements, wideCatalog, workTermSource, specialTermPl, specialTerms }}>
+    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile, attributeSystem, majorRequirements, wideCatalog, workTermSource, specialTermPl, setSpecialTermPl, specialTerms, SEM_INDEX, pushUndo }}>
       <div style={{ overflowY: "auto", overflowX: "hidden", height: "100%", padding: isPhone ? "6px 5px 40px" : "9px 9px 40px" }}>
 
         {/* ── Program selection (collapsible) ─────────────────── */}

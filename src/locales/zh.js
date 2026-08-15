@@ -471,6 +471,7 @@ export const strings = {
   "grad.nupath.satisfiedBy":      "\u7531 {courses} \u6ee1\u8db3",
   "grad.nupath.satisfiedByLabel": "\u6ee1\u8db3\u8bfe\u7a0b",
   "grad.nupath.granted":          "\u7531\u5df2\u5b89\u6392\u7684\u5b66\u671f\u6ee1\u8db3\uff08\u5982\u5b9e\u4e60\uff09",
+  "grad.req.markAbroad":    "将某个工作学期标记为海外",
   "grad.nupath.unsatisfied":      "\u5c1a\u672a\u6ee1\u8db3\uff08\u672a\u5b89\u6392\u8bfe\u7a0b\uff09",
   "grad.stale.program":      "\u8be5\u9879\u76ee\u5df2\u4e0d\u5728\u8bfe\u7a0b\u76ee\u5f55\u4e2d\u3002\u53ef\u80fd\u5df2\u66f4\u540d\u6216\u505c\u529e\u3002",
   "grad.stale.minor":        "{label}\uff1a\u8be5\u9879\u76ee\u5df2\u4e0d\u5728\u8bfe\u7a0b\u76ee\u5f55\u4e2d\u3002\u53ef\u80fd\u5df2\u66f4\u540d\u6216\u505c\u529e\u3002",

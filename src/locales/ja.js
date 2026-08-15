@@ -472,6 +472,7 @@ export const strings = {
   "grad.nupath.satisfiedBy":      "{courses} で充足",
   "grad.nupath.satisfiedByLabel": "充足する科目",
   "grad.nupath.granted":          "配置された学期で充足（例：コープ）",
+  "grad.req.markAbroad":    "就業学期を海外勤務として設定",
   "grad.nupath.unsatisfied":      "未充足（科目が未配置）",
   "grad.stale.program":     "このプログラムはカタログに存在しません。名称が変更されたか、廃止された可能性があります。",
   "grad.stale.minor":       "{label}：このプログラムはカタログに存在しません。名称が変更されたか、廃止された可能性があります。",

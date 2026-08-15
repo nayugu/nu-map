@@ -471,6 +471,7 @@ export const strings = {
   "grad.nupath.satisfiedBy":      "{courses}(으)로 충족",
   "grad.nupath.satisfiedByLabel": "충족 과목",
   "grad.nupath.granted":          "배치된 학기로 충족 (예: 코업)",
+  "grad.req.markAbroad":    "근무 학기를 해외 근무로 표시",
   "grad.nupath.unsatisfied":      "아직 충족되지 않음 (배치된 과목 없음)",
   "grad.stale.program":     "이 프로그램은 더 이상 카탈로그에 없습니다. 이름이 변경되었거나 폐지되었을 수 있습니다.",
   "grad.stale.minor":       "{label}: 이 프로그램은 더 이상 카탈로그에 없습니다. 이름이 변경되었거나 폐지되었을 수 있습니다.",
