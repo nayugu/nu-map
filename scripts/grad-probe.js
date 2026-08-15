@@ -291,19 +291,14 @@ export function crossCount(courseMap) {
       // pool / open range? Only the first is the catalog saying "one course
       // answers both"; a pool is accumulating distinct credit and must not be
       // allowed to count the same 4 SH twice.
-      // Ask of the section that ACTUALLY took the course, not of any section
-      // that happens to mention it — otherwise a pool grab is excused by an
-      // unrelated third section naming the same course.
-      const namedElsewhere = taken.some((k) => {
-        const holder = exclusive.find(s => s !== seq && s.allocatedCourses?.has(k));
-        if (!holder) return false;
-        const src = (major.requirementSections ?? []).find(s => s?.title === holder.title);
-        return !!src && namedKeys(src).has(k);
-      });
-      rows.push({
-        program: path.relative(ROOT, p), section: section.title,
-        kind: namedElsewhere ? "named-in-both" : "taken-by-a-pool",
-      });
+      // Classify by what the BLOCKED section needs the course FOR. If it names
+      // the course, the catalog is saying that course answers this requirement
+      // too, and cross-counting is right. If it only matches the course through
+      // a RANGE or a credit pool, it wants *some* course of that shape and must
+      // take a different one — being blocked is correct, not a defect.
+      const named = namedKeys(section);
+      const kind = taken.some(k => named.has(k)) ? "named-here" : "range-or-pool-here";
+      rows.push({ program: path.relative(ROOT, p), section: section.title, kind });
     }
   }
   return rows;
@@ -328,10 +323,11 @@ if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const courseMap = loadCourseMap();
   if (args[0] === "--crosscount") {
     const rows = crossCount(courseMap);
-    const named = rows.filter(r => r.kind === "named-in-both");
+    const named = rows.filter(r => r.kind === "named-here");
     console.log(`${rows.length} sections a course could satisfy but is not allowed to`);
-    console.log(`  ${named.length} where BOTH sections name the course outright`);
-    console.log(`  ${rows.length - named.length} where a credit pool / open range took it\n`);
+    console.log(`  ${named.length} that NAME the course (cross-counting is right here)`);
+    console.log(`  ${rows.length - named.length} that only match it via a range/credit pool ` +
+                `(staying blocked is right)\n`);
     for (const r of named) console.log(`${r.section}  ${r.program}`);
   } else if (args[0] === "--plan") {
     // Probe one program against its OWN published sample plan.

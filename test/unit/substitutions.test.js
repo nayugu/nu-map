@@ -95,9 +95,12 @@ test("substitution › credits count once — total SH uses real placements only
   assert.ok(effKeys.has("CS2000"), "effective placed set includes it for satisfaction");
 });
 
-test("substitution › one substitution fills at most one of two identical requirements (no double-fill)", () => {
-  // Two separate sections both require CS2000. A single (substituted) CS2000 can
-  // satisfy exactly one — the allocator's used-set must starve the second.
+test("substitution › a substituted course satisfies every requirement that NAMES it, but is credited once", () => {
+  // Two separate sections both require CS2000. A substituted CS2000 answers both,
+  // exactly as a really-placed one now does (see gradRequirements' COURSE case):
+  // naming a course in two sections is the catalog saying it answers both. What
+  // must NOT double is the credit — and the virtual substitution target must
+  // still stay out of General Electives, since the student never placed it.
   const major = {
     requirementSections: [
       { title: "Section A", minRequirementCount: 1, requirements: [{ type: "COURSE", subject: "CS", classId: "2000" }] },
@@ -107,7 +110,9 @@ test("substitution › one substitution fills at most one of two identical requi
   const ep = applySubstitutions({ CS1000: "fall" }, [{ from: "CS1000", to: "CS2000" }]);
   const placedSet = buildPlacedKeySet(ep, new Set(), courseMap);
   const realPlacedSet = buildPlacedKeySet({ CS1000: "fall" }, new Set(), courseMap);
-  const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, null, realPlacedSet);
-  const satCount = sections.filter(s => s.sat).length;
-  assert.equal(satCount, 1, "exactly one section should be satisfied, not both");
+  const { sections, generalElectives } =
+    allocateMajorWithElectives(major, placedSet, courseMap, null, realPlacedSet);
+  assert.equal(sections.filter(s => s.sat).length, 2, "both sections name CS2000, so both are met");
+  assert.equal(generalElectives.children.some(c => c.key === "CS2000"), false,
+    "the virtual target is never free elective credit — it was never placed");
 });

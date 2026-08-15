@@ -115,14 +115,67 @@ test("checkSection › satisfied iff satCount ≥ minRequirementCount, with corr
 });
 
 // ── Allocation: each course counted at most once ──────────────────────
-test("allocate › a course cannot satisfy two separate (non-shared) sections", () => {
+test("allocate › a course NAMED by two sections satisfies both, and its credit is still counted once", () => {
+  // Satisfaction and credit are different questions. Naming one course in two
+  // sections is the catalog saying that course answers both — International
+  // Business BSIB requires COOP 3948 outright and also lists it among the seven
+  // options of "Business Experiential Learning", so one international co-op
+  // genuinely answers both. Counting its CREDIT twice would still be wrong, and
+  // is what `used` and General Electives continue to prevent.
   const major = { requirementSections: [
     { title: "A", minRequirementCount: 1, requirements: [{ type: "COURSE", subject: "CS", classId: "2000" }] },
     { title: "B", minRequirementCount: 1, requirements: [{ type: "COURSE", subject: "CS", classId: "2000" }] },
   ] };
   const placedSet = set("CS2000");
+  const { sections, generalElectives } =
+    allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
+  assert.equal(sections.filter(s => s.sat).length, 2, "both sections name it, so both are met");
+  assert.equal(generalElectives.placedSH, 0, "and it is not ALSO free elective credit");
+});
+
+test("allocate › a credit pool may not spend a course another section already claimed", () => {
+  // The limit of the rule above. An XOM accumulating toward numCreditsMin is
+  // measuring DISTINCT credit, so letting the same 4 SH answer two thresholds
+  // really would be double-counting. Measured: of 155 sections the exclusive
+  // rule blocked, 102 match their course only through a range or credit pool
+  // and are correctly blocked.
+  const major = { requirementSections: [
+    { title: "Core", minRequirementCount: 1, requirements: [
+      { type: "COURSE", subject: "CS", classId: "2000" },
+    ] },
+    { title: "Elective credit", minRequirementCount: 1, requirements: [
+      { type: "XOM", numCreditsMin: 4, courses: [
+        { type: "COURSE", subject: "CS", classId: "2000" },
+        { type: "COURSE", subject: "CS", classId: "3500" },
+      ] },
+    ] },
+  ] };
+  const placedSet = set("CS2000");
   const { sections } = allocateMajorWithElectives(major, placedSet, courseMap, null, placedSet);
-  assert.equal(sections.filter(s => s.sat).length, 1, "only one section may consume the single CS2000");
+  const byTitle = Object.fromEntries(sections.map(s => [s.title, s]));
+  assert.equal(byTitle["Core"].sat, true);
+  assert.equal(byTitle["Elective credit"].sat, false,
+    "the pool must find its own 4 SH, not re-spend the core course's");
+});
+
+test("allocate › a `choose N` section counts slots, not credit, so a named course may still cross-count", () => {
+  // A "choose 2 of these 4" section is counting satisfied children, not summing
+  // credit toward a threshold, so a course answering one of its slots AND a
+  // named requirement elsewhere costs nothing — it still fills a single slot.
+  const major = { requirementSections: [
+    { title: "Named", minRequirementCount: 1, requirements: [
+      { type: "COURSE", subject: "BIOL", classId: "2500" },
+    ] },
+    { title: "Choose two", minRequirementCount: 2, requirements: [
+      { type: "COURSE", subject: "BIOL", classId: "2500" },
+      { type: "COURSE", subject: "BIOL", classId: "2600" },
+      { type: "COURSE", subject: "BIOL", classId: "2700" },
+      { type: "COURSE", subject: "BIOL", classId: "2800" },
+    ] },
+  ] };
+  const placedSet = set("BIOL2500", "BIOL2600");
+  const { sections } = allocateMajorWithElectives(major, placedSet, bioMap, null, placedSet);
+  assert.equal(sections.every(s => s.sat), true, "both met from two courses");
 });
 
 test("allocate › a `shared` section cross-counts without starving a normal section", () => {
@@ -435,7 +488,8 @@ test("allocate › a flexible range does not eat the only course an inflexible s
 test("allocate › a course two sections equally cannot do without is not reserved to either", () => {
   // Reservation is only sound when exactly one requirement has no substitute.
   // With two, there is no evidence to prefer one, so it must fall back to the
-  // ordinary greedy pass rather than reserve arbitrarily and strand the other.
+  // ordinary pass rather than reserve arbitrarily. Both sections NAME the
+  // course, so both are met — and the credit is still counted once.
   const cm = { HIST2211: { subject: "HIST", number: "2211", sh: 4 } };
   const major = { requirementSections: [
     { title: "A", minRequirementCount: 1, requirements: [
@@ -446,9 +500,10 @@ test("allocate › a course two sections equally cannot do without is not reserv
     ] },
   ] };
   const placedSet = set("HIST2211");
-  const { sections } = allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
-  assert.equal(sections[0].sat, true, "the first section still gets it");
-  assert.equal(sections[1].sat, false, "and it is not double-counted into the second");
+  const { sections, generalElectives } =
+    allocateMajorWithElectives(major, placedSet, cm, null, placedSet);
+  assert.equal(sections[0].sat && sections[1].sat, true, "both name it, so both are met");
+  assert.equal(generalElectives.placedSH, 0, "its credit is not ALSO free elective credit");
 });
 
 test("allocate › the verdict does not depend on the order courses were added to the plan", () => {

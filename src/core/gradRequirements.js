@@ -856,7 +856,42 @@ function allocateNode(node, placedSet, used, originalUsed, courseMap, poolContex
       // Check if any coreq is already used in the original used set (outside this transaction)
       const coreqKeys = getCorequisiteKeys(course, courseMap);
       const anyCoreqUsedInOriginal = coreqKeys.some(k => originalUsed.has(k));
-      const sat = placedSet.has(key) && !originalUsed.has(key) && !anyCoreqUsedInOriginal;
+      // ── Satisfaction is not credit ────────────────────────────────
+      //
+      // A single `used` set used to answer both "has this credit been counted?"
+      // and "may this course answer this requirement?". They are different
+      // questions. Counting credit twice is always wrong; ANSWERING two
+      // requirements with one course is what the catalog means when it names
+      // that course in both places. International Business BSIB is the case:
+      // "International Experiential Learning" requires COOP 3948 and "Business
+      // Experiential Learning" lists it among seven options, so one
+      // international co-op genuinely answers both — and used to answer only
+      // whichever section was declared first.
+      //
+      // Measured across every program with a published plan, 155 sections were
+      // reported unmet purely because an earlier section had consumed a course
+      // they also list. 154 of the 155 are this shape: both sections NAME the
+      // course. Exactly one was a credit pool absorbing it, which is why the
+      // relaxation stops at `poolContext` — a pool is accumulating DISTINCT
+      // credit toward a threshold, so letting the same 4 SH answer two
+      // thresholds really would be double-counting.
+      //
+      // The course is still added to `used` below, so it is claimed once for
+      // credit: it stays out of General Electives, and no pool can spend it.
+      // The degree total is summed from the placed set rather than from section
+      // allocations, so it is unaffected either way.
+      //
+      // The line is drawn at a CREDIT pool, not at any pool. A "choose 3 of
+      // these 5" section counts satisfied children rather than credit hours, so
+      // one course answering one of its slots and also answering a named
+      // requirement elsewhere costs nothing — it still fills a single slot. Only
+      // an XOM summing toward `numCreditsMin` is measuring distinct credit, and
+      // only the XOM branch ever passes a finite `creditBudget`, which is what
+      // identifies it here.
+      const inCreditPool = poolContext && Number.isFinite(creditBudget);
+      const sat = inCreditPool
+        ? placedSet.has(key) && !originalUsed.has(key) && !anyCoreqUsedInOriginal
+        : placedSet.has(key);
       if (sat) {
         used.add(key);
         // Mark all placed coreqs as used in this transaction (they cannot be used elsewhere later)
