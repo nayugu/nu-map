@@ -72,14 +72,22 @@ export default function CoopCourseSearch({ value, courses, onChange, color, empt
 
   // Local list, so no debounce and no network: matches on code and title, and
   // tolerates the space a student types in "COOP 3945".
+  //
+  // An EMPTY query lists everything rather than nothing, the same call
+  // SearchCombo makes for concentrations and against majors: a ~1,500-option
+  // list has to render nothing on focus, a short one is better shown. 86 is the
+  // short case, and the student's own program's options are sorted first, so
+  // the top of an unfiltered list is already the likely answer. A student who
+  // does not know these course numbers exist — which is most of them — has no
+  // query to type.
   const search = (q) => {
     const toks = q.toLowerCase().split(/\s+/).filter(Boolean);
-    if (!toks.length) return [];
+    if (!toks.length) return courses;
     return courses.filter(c => {
       const hay = `${c.subject} ${c.number} ${c.title}`.toLowerCase();
       const flat = `${c.subject}${c.number}`.toLowerCase();
       return toks.every(tk => hay.includes(tk) || flat.includes(tk));
-    }).slice(0, 8);
+    });
   };
 
   const select = (c) => {
@@ -126,7 +134,7 @@ export default function CoopCourseSearch({ value, courses, onChange, color, empt
       <FadeInput
         value={query}
         onChange={handleChange}
-        onFocus={() => { if (results.length) { openAt(); setOpen(true); } }}
+        onFocus={() => { const hits = search(query); setResults(hits); if (hits.length) { openAt(); setOpen(true); } }}
         onMouseDown={e => e.stopPropagation()}
         placeholder={placeholder}
         style={{
@@ -147,8 +155,9 @@ export default function CoopCourseSearch({ value, courses, onChange, color, empt
     setQuery(v);
     // Clearing returns the block to the resolved default rather than to
     // "no course" — the co-op still registers something, we just stop
-    // overriding which.
-    if (!v.trim()) { setResults([]); setOpen(false); onChange(null); return; }
+    // overriding which. The list stays open on the full set, so clearing is a
+    // way to browse rather than a dead end.
+    if (!v.trim()) onChange(null);
     const hits = search(v);
     setResults(hits);
     if (hits.length) { openAt(); setOpen(true); } else setOpen(false);

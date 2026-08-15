@@ -375,8 +375,12 @@ export default function SemRow({ sem }) {
                 {registers && !privateCoop && (
                   <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 1 }}
                        onMouseDown={e => e.stopPropagation()}>
+                    {/* Empty unless the student chose. The resolver's answer is
+                        a DEFAULT, and pre-filling it as text would read as
+                        their input and invite them to curate something they
+                        never set. The ↗ still opens whatever is in force. */}
                     <CoopCourseSearch
-                      value={termStartData.courseId ?? registers}
+                      value={termStartData.courseId ?? ""}
                       courses={workTermCourseOptions}
                       color="var(--text-4)"
                       emptyColor={placeholderColor}

@@ -168,7 +168,7 @@ export default function SummerRow({ semA, semB }) {
                   <div style={{ display: "flex", alignItems: "center", gap: 4, maxWidth: isPhone ? 62 : 108 }}
                        onMouseDown={e => e.stopPropagation()}>
                     <CoopCourseSearch
-                      value={termStartData.courseId ?? registers}
+                      value={termStartData.courseId ?? ""}
                       courses={workTermCourseOptions}
                       color="var(--text-4)"
                       emptyColor={placeholderColor}
