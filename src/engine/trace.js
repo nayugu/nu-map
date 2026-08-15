@@ -223,9 +223,22 @@ export function createTrace({ maxNodes = 200_000 } = {}) {
         id: c.id, title: c.title ?? "", target: c.target ?? null,
         sh: c.sh ?? 0, kind: c.kind ?? null, geRole: c.geRole ?? null,
         subject: c.subject ?? null,
-        // The course this cell names, when it names exactly one. Null for a choice or a pool,
-        // where there is no single course to print and the requirement's name is the honest label.
-        code: c.code ?? null,
+        // ── How this card READS, straight from `emit.cellText` ──────────
+        //
+        // `code` stood here — "the course this cell names, when it names exactly one" — and this
+        // whitelist is where that limitation became invisible. The engine can compute the card's
+        // real wording, but a field the recorder does not copy does not exist downstream, so the
+        // view fell back to the requirement's title and drew "Computer Science Fundamental
+        // Courses" beside a preview reading `CS 1800 and CS 1802`.
+        //
+        // Three fields, because the planner's card has three parts and the walkthrough draws the
+        // planner's card: what it says, whether the plan decided it, and the course's own title
+        // for the second line.
+        text: c.text ?? null,
+        named: !!c.named,
+        // The individual courses a named cell resolves to, which the view draws as separate
+        // cards exactly as the board does. Null for a reservation, which resolves to none.
+        courses: c.courses ?? null,
         candidates: c.candidates ?? null,
       }));
       termLabels = terms.map(t => ({

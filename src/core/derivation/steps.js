@@ -49,7 +49,17 @@ export function buildSteps(snapshot, model) {
   if (!snapshot?.roster?.length) return null;
   const roster = snapshot.roster;
   const terms = snapshot.terms ?? [];
-  const title = (c) => roster[c]?.title ?? "";
+  // How the PROSE names a card, and it is the same string the grid draws on it.
+  //
+  // This read the requirement title, so the sentences and the plan beside them named the same
+  // card differently: "placing Computer Science Fundamental Courses" under a preview showing
+  // `CS 1800 and CS 1802`, and "Mathematics Electives" — plural, the whole requirement — for a
+  // card that is one of them. `text` is `emit.cellText`, which is what every other surface in
+  // the app prints, including the singularised label for a pool.
+  //
+  // Falls back to the requirement title, so a snapshot recorded before the roster carried `text`
+  // still reads as it did rather than blank.
+  const title = (c) => roster[c]?.text || roster[c]?.title || "";
 
   const spine = winningSpine(snapshot);
   const place = [];
@@ -126,7 +136,7 @@ export function buildSteps(snapshot, model) {
   const ranking = (won?.order ?? []).map((card, i) => ({
     card,
     title: title(card),
-    code: roster[card]?.code ?? null,
+    text: roster[card]?.text ?? null,
     ...(won.keys?.[i] ?? {}),
   }));
 
@@ -164,7 +174,12 @@ export function buildSteps(snapshot, model) {
     // out, so without this the walkthrough draws a co-op degree with no co-ops in it.
     work: (snapshot.workTerms ?? []).map(t => ({ ...t, full: labelOf(t) })),
     roster: roster.map((r, i) => ({
-      card: i, title: r.title, sh: r.sh, target: r.target, code: r.code ?? null,
+      card: i, title: r.title, sh: r.sh, target: r.target,
+      // The card as the PREVIEW prints it, plus whether the plan decided it and the course's own
+      // title for the second line. All three come from the engine, which has the cell and the
+      // catalog in hand; deriving any of them here would be the second derivation that let the
+      // walkthrough and the preview disagree in the first place.
+      text: r.text ?? null, named: !!r.named, courses: r.courses ?? null,
     })),
     // Subject per card, by roster index. Computed in the engine by `cellSubject` rather than
     // scraped from the title here: a pool spanning several departments has NO one subject, and a

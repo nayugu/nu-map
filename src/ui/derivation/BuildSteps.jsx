@@ -151,21 +151,50 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
   const cards = useMemo(() => {
     const out = {};
     (steps?.roster ?? []).forEach((r, i) => {
-      const code = spaced(r.code);
-      const named = !!code;
-      out[cardId(i)] = named
-        ? {
-            id: cardId(i), isReservation: false, code,
-            title: r.title ?? "", sh: r.sh ?? 0,
-            color: subjectColor(steps.subjects?.[i] ?? code.split(" ")[0]),
-          }
-        : {
-            id: cardId(i), isReservation: true,
-            // `code` is the plan's own wording and `title` the requirement's. A generated cell has
-            // only the one string, so it is the name and there is no second line to print.
-            code: "", title: r.title ?? "", sh: r.sh ?? 0,
-            color: RESERVATION_COLOUR,
-          };
+      // ── Both strings come from the ENGINE, and that is the fix ──────
+      //
+      // This used to read a course code and decide `named` by whether a regex could parse it,
+      // which made the view the second author of a fact the preview already owns. It disagreed
+      // exactly where a cell names more than one course: `CS 1800 and CS 1802` failed the regex,
+      // so the walkthrough drew a dashed placeholder titled "Computer Science Fundamental
+      // Courses" next to a preview showing the two courses.
+      //
+      // `text` is `emit`'s own `cellText` and `named` is the cell's kind, so the two panes cannot
+      // drift again — which is what this file's own header promises about itself.
+      const text = r.text ?? "";
+      // ── One card per COURSE, which is what the board holds ──────────
+      //
+      // A named cell can name several courses — `CS 1800 and CS 1802` is a corequisite pair the
+      // catalog prints as one cell — and `applySamplePlan` writes a placement for each of them.
+      // `MiniPlanGrid` then splits by credit, so the preview shows CS 1800 in a main slot and
+      // CS 1802 in the small "other credits" strip. Drawing the pair as ONE card, which this did,
+      // was matching the plan.json entry rather than the plan the student gets: it also drew the
+      // 1 SH `CS 1200` at full size, in a slot the board never gives it.
+      //
+      // The cell remains one entry in the recording — see `courses` in the engine's roster — so
+      // no card index moves. Only the picture expands, at the same boundary `applySamplePlan`
+      // expands it.
+      for (const [j, c] of (r.named ? (r.courses ?? []) : []).entries()) {
+        out[cardId(i, j)] = {
+          id: cardId(i, j), isReservation: false, code: c.code ?? "",
+          // The COURSE's title, not the requirement's. `title` is what the card is FOR and this
+          // is what it IS, and the planner's second line prints the latter.
+          title: c.title ?? "", sh: c.sh ?? 0,
+          color: subjectColor(steps.subjects?.[i] ?? String(c.code ?? "").split(" ")[0]),
+        };
+      }
+      // A reservation resolves to no course, so it stays one card — and a named cell whose
+      // courses the catalog has lost falls back to one too, rather than vanishing from the grid.
+      if (!r.named || !r.courses?.length) {
+        out[cardId(i)] = {
+          id: cardId(i), isReservation: true,
+          // `code` is the plan's own wording and `title` the requirement's. A generated
+          // reservation prints the wording the preview prints — `CS 4300 or 4100` for a choice,
+          // the requirement's label for an open pool — and has no second line.
+          code: "", title: text || r.title || "", sh: r.sh ?? 0,
+          color: RESERVATION_COLOUR,
+        };
+      }
     });
     return out;
   }, [steps]);
@@ -188,7 +217,13 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
     const occupants = {};
     for (const [c, term] of where) {
       const semId = semIds[term];
-      if (semId) occupants[cardId(c)] = semId;
+      if (!semId) continue;
+      // Every card the cell resolves to lands in the SAME term, which is the whole content of a
+      // corequisite: `CS 1800` and `CS 1802` are two cards and one decision. Placing only the
+      // first would have drawn the pair half-placed for the rest of the walkthrough.
+      const n = steps?.roster?.[c]?.courses?.length ?? 0;
+      if (n > 1) for (let j = 0; j < n; j++) occupants[cardId(c, j)] = semId;
+      else occupants[cardId(c)] = semId;
     }
     const cur = n === 0 ? null
       : n <= place.length ? { kind: "place", step: place[n - 1] }
@@ -204,7 +239,9 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
     const placedBefore = new Set();
     for (let i = 0; i < Math.min(upto, place.length); i++) placedBefore.add(place[i].card);
     return { view: { occupants, cards }, cur, done: n >= total, placedBefore };
-  }, [at, total, place, swaps, semIds, cards]);
+    // `steps` joins the list because `occupants` now reads the roster to know how many cards a
+    // cell resolves to. Omitting it would freeze the expansion at whatever the first render saw.
+  }, [at, total, place, swaps, semIds, cards, steps]);
 
   // ── Work terms, as the runs the planner draws them as ───────────────
   //
@@ -448,9 +485,13 @@ function RankQueue({ ranking, cards, placed, liveCard, t, fz, totalTerms }) {
   // The key that separates the front card from the one immediately behind it — the reason it is
   // first rather than second, and so the reason this step is about this course.
   const principal = live ? orderReason(live, left[left.indexOf(live) + 1])?.key : null;
+  // The queue names a card the way the grid does. Reservations read off the card too rather
+  // than off the requirement title, so a choice queued as `CS 4300 or 4100` is not announced
+  // here as "Computer Science Required Courses" and then drawn as something else.
   const name = (r) => {
     const card = cards[cardId(r.card)];
-    return card?.isReservation === false ? card.code : (r.title || "—");
+    if (!card) return r.text || r.title || "—";
+    return card.isReservation === false ? card.code : (card.title || r.title || "—");
   };
 
   return (
@@ -638,17 +679,22 @@ const RUNGS = ORDER_KEYS.filter(k => k !== "tie");
  */
 const portal = (node, slot) => (slot ? createPortal(node, slot) : node);
 
-/** The roster index as an id the planner's own helpers can key on. */
-const cardId = (i) => `deriv-${i}`;
-
 /**
- * "CS1800" → "CS 1800", the way the catalog prints it — and "" for a cell that names no single
- * course, which is what tells the card apart from a reservation.
+ * A card id the planner's own helpers can key on.
+ *
+ * Keyed on the roster index, plus which COURSE of that cell when it names more than one — a
+ * corequisite pair is one cell and two cards. `j = 0` keeps the bare `deriv-3` form so a lookup
+ * by cell alone (the rank queue's, which asks about a cell rather than a course) still resolves,
+ * and so a card's identity does not change for the cells that name a single course.
  */
-function spaced(code) {
-  const m = /^([A-Z]{2,5})\s*(\d{3,4})$/.exec(String(code ?? "").trim());
-  return m ? `${m[1]} ${m[2]}` : "";
-}
+const cardId = (i, j = 0) => (j ? `deriv-${i}-${j}` : `deriv-${i}`);
+
+// `spaced` stood here — "CS1800" → "CS 1800", and "" for anything it could not parse, which the
+// card builder above used as its test for "is this a course". Deleted rather than left unused:
+// both jobs now come from the engine, which formats the code in `emit.cellText` and states
+// decidedness as `named`, and a regex that answers a question nothing asks any more is the trap
+// this codebase records as `getOfferedFromTerms` — dead, weaker than the live path, and waiting
+// for a new caller.
 
 /**
  * A term's name for the CAPTION, composed exactly as the row above it composes its own.

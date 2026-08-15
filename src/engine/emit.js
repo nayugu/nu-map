@@ -29,7 +29,7 @@
 
 import { GENERAL_ELECTIVE, CONCENTRATION } from "../core/requirementDemand.js";
 import { materialize } from "../core/candidateSpec.js";
-import { GENERATED_PLAN_LABEL } from "../core/planTemplate.js";
+import { GENERATED_PLAN_LABEL } from "../core/planLabels.js";
 
 /**
  * Turn an assignment into a plan.json grid.
@@ -265,6 +265,31 @@ function choiceText(groups, courseMap) {
   return shown.map(g => g.map(id => spaced(id, courseMap)).join(" and ")).join(" or ") + overflow;
 }
 
+/**
+ * What a cell READS AS on a card — the one derivation, for every reader.
+ *
+ * Exported because the derivation view draws the same plan and was deriving this
+ * SECOND time, worse: its roster carried a course code only when a cell named exactly
+ * one course, so `CS 1800 and CS 1802` — a corequisite pair the catalog prints as one
+ * cell — fell through to the requirement's title and the walkthrough showed
+ * "Computer Science Fundamental Courses" where the preview beside it showed the two
+ * courses. A choice cell was worse again: the preview reads `CS 4300 or 4100` and the
+ * step-through read the section title.
+ *
+ * The rule this restores is the one `BuildSteps` states about itself — "whatever the
+ * preview does, this does, because it is the same code". Two derivations of one string
+ * are two things to get wrong, and this pair had already drifted.
+ */
+export function cellText(cell, courseMap = {}) {
+  if (cell?.kind === "named" && cell.groups?.[0]) {
+    return cell.groups[0].map(id => spaced(id, courseMap)).join(" and ");
+  }
+  if (cell?.kind === "choice" && cell.groups?.length) {
+    return choiceText(cell.groups, courseMap);
+  }
+  return cellLabel(cell?.title);
+}
+
 /** One grid entry, in the catalog's own vocabulary. */
 function entryFor(plan, courseMap, reasons) {
   const cell = plan.cell;
@@ -281,7 +306,7 @@ function entryFor(plan, courseMap, reasons) {
     // grid. Omitting it discarded `alsoAnswers` for every merged cell.
     return {
       ...base,
-      text: cell.groups[0].map(id => spaced(id, courseMap)).join(" and "),
+      text: cellText(cell, courseMap),
       options: [cell.groups[0]],
       ...bindingFor(cell),
       // Which members of the group are here for the registrar rather than for the
@@ -294,7 +319,7 @@ function entryFor(plan, courseMap, reasons) {
   if (cell.kind === "choice" && cell.groups?.length) {
     return {
       ...base,
-      text: choiceText(cell.groups, courseMap),
+      text: cellText(cell, courseMap),
       options: cell.groups.map(g => [...g]),
       // A choice cell carries its binding too. No published plan does — the
       // scraper only binds cells with no options — but generation KNOWS the
@@ -313,7 +338,7 @@ function entryFor(plan, courseMap, reasons) {
   // would arrive knowing nothing, and a cell drawing on six named colleges would
   // offer all 8,000 courses. Naming them keeps the precision the derivation had.
   const enumerated = cell.spec ? [...materialize(cell.spec, courseMap)].sort() : [];
-  const text = cellLabel(cell.title);
+  const text = cellText(cell, courseMap);
   if (enumerated.length && enumerated.length <= MAX_NAMED_OPTIONS) {
     return { ...base, text, options: enumerated.map(id => [id]), ...bindingFor(cell) };
   }
