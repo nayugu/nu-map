@@ -17,7 +17,7 @@ import { evalPrereqTree } from "../core/prereqEval.js";
 import { pruneSemOrders } from "../core/planSchema.js";
 import { RATINGS_KEY, readRatings, setRatingField, getRating } from "../core/ratingStore.js";
 import { planConditions } from "../core/prereqConditions.js";
-import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline } from "../core/planModel.js";
+import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline, concurrentCapOf } from "../core/planModel.js";
 import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
 import { reservationEdges } from "../core/reservationEdges.js";
 import { satisfiedUnderEveryOption } from "../core/reservationPrereqs.js";
@@ -1977,9 +1977,18 @@ const { locale, setLocale, locales, t } = useLanguage();
   /** Their ids, for consumers that key by id. */
   const semesterCardIds = useCallback(
     (semId) => cardIdsIn(semId, semView, semOrders), [semView, semOrders]);
+  /**
+   * A term's concurrent-course allowance, or null when the block occupying it
+   * permits none. NU allows one class alongside a full-time co-op; an
+   * internship declares no cap, so courses there stay parked as before.
+   */
+  const concurrentCap = useMemo(
+    () => concurrentCapOf(specialTermPl, specialTerms?.getTypes() ?? [], specialTermStartMap, specialTermContMap),
+    [specialTermPl, specialTerms, specialTermStartMap, specialTermContMap]);
+
   /** A semester's study load, reservations included — term load, never degree credit. */
   const semesterLoad = useCallback(
-    (semId) => loadIn(semId, semView, specialTermStartMap, specialTermContMap),
+    (semId) => loadIn(semId, semView, specialTermStartMap, specialTermContMap, concurrentCap),
     [semView, specialTermStartMap, specialTermContMap]);
 
   // Kept for the drop resolver, which needs the raw pair to compute against a
@@ -2221,8 +2230,14 @@ const { locale, setLocale, locales, t } = useLanguage();
     if (dragInfo.type === "specialTerm") {
       return specialTermDropValid(dragInfo.typeId, dragInfo.duration, semId, dragInfo.id).valid;
     }
-    // Course drop — blocked by any occupying special term
-    if (specialTermStartMap[semId] || specialTermContMap[semId]) return false;
+    // Course drop onto a term a work block occupies. Allowed only when that
+    // block's type declares a concurrentCap — NU permits one class during a
+    // full-time co-op. The cap itself is advisory and is NOT checked here:
+    // refusing the drop would enforce a limit the university grants with
+    // approvals, and this codebase already trusts the user on repeat limits.
+    if (specialTermStartMap[semId] || specialTermContMap[semId]) {
+      if (!concurrentCap(semId)) return false;
+    }
     return !!SEMESTERS.find(s => s.id === semId);
   };
 
@@ -4767,7 +4782,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     // DEGREE keeps reading `placements`, which cannot contain one.
     reservations, setReservations,
     appliedTemplate, setAppliedTemplate,
-    semesterCards, semesterCardIds, semesterLoad, semView,
+    semesterCards, semesterCardIds, semesterLoad, semView, concurrentCap,
     applySamplePlanToPlan,
     // Load state
     loading, loadErr, loadPct,

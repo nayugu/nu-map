@@ -48,7 +48,7 @@ import { FadeInput } from "./FadeText.jsx";
 export default function SemRow({ sem }) {
   const {
     placements, semOrders, courseMap, effectiveCourseMap,
-    semesterCards, semesterLoad,
+    semesterCards, semesterLoad, concurrentCap,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -102,12 +102,14 @@ export default function SemRow({ sem }) {
   // work on it with no cases here.
   const crs        = semesterCards(sem.id);
   const courseIds  = crs.map(c => c.id);
-  // Co-op terms are work terms: parked courses stay (recoverable) but don't
-  // count toward this term's load. getSemStudySH returns 0 when a co-op occupies
-  // the term (via the start/continuation maps).
+  // A work term whose type declares a `concurrentCap` (NU: one class alongside
+  // a full-time co-op) lets courses in the term COUNT. One that declares none —
+  // an internship — keeps the old behaviour: parked courses stay in the plan,
+  // recoverable, and contribute 0. See core/planModel.getSemStudySH.
   // Combined view: a reservation carries the credit the department printed, so
   // a fourth year that is entirely electives reads as full rather than empty.
   const sh         = semesterLoad(sem.id);
+  const workCap    = concurrentCap?.(sem.id) ?? null;
   // shVoided takes carry sh 0 (a failed grade earns nothing) but must stay
   // as full cards — vanishing into the low-credit subline would hide the
   // very course whose failure the user just recorded.
@@ -301,7 +303,10 @@ export default function SemRow({ sem }) {
             );
           })}
         {termStartId ? (
-          // Full-width special term card (co-op, internship, or any custom type)
+          // Column so a concurrent-course strip can sit UNDER the block rather
+          // than beside it — the parent row is a flex row, and a bare fragment
+          // would lay the strip out as a sibling column of the card.
+          <div style={{ flex: 1, minWidth: 200, display: "flex", flexDirection: "column", gap: 4 }}>
           <div
             ref={el => { cardRefs.current[termStartId] = el; }}
             draggable
@@ -373,6 +378,40 @@ export default function SemRow({ sem }) {
               </div>
             )}
           </div>
+            {/* Coursework taken DURING the block. Rendered only when the type
+                permits it (NU: one class alongside a full-time co-op) — an
+                internship declares no cap, so its parked courses stay hidden
+                and uncounted exactly as before.
+                Shown while dragging too, so there is a visible target: the
+                block fills the slot row, and without this there is nowhere for
+                a drop indicator to go. The cap is ADVISORY — over it the strip
+                warns with the numbers and still accepts the course. */}
+            {workCap && (crs.length > 0 || dragInfo?.type === "course") && (
+              <div
+                onDragOver={e => {
+                  if (!dragInfo || dragInfo.type !== "course") return;
+                  e.preventDefault(); e.stopPropagation();
+                  setHoveredZone({ semId: sem.id, zone: "append" }); setHoveredSem(null);
+                }}
+                onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
+                onDrop={e => { e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id); }}
+                style={{
+                  display: "flex", flexWrap: "wrap", alignItems: "center", gap: 4,
+                  padding: crs.length ? "4px 6px" : "6px",
+                  borderRadius: 6,
+                  border: `1px dashed ${sh > workCap.sh ? "#facc15" : "var(--border-1)"}`,
+                  background: hoveredZone?.semId === sem.id ? "var(--bg-surface-2)" : "transparent",
+                }}
+              >
+                {crs.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
+                {sh > workCap.sh && (
+                  <span style={{ fontSize: isPhone ? 7 : 9, color: "#facc15", whiteSpace: "nowrap" }}>
+                    ⚠ {sh} / {workCap.sh} {unitName}
+                  </span>
+                )}
+              </div>
+            )}
+          </div>
 
         ) : termContId ? (
           // A term that CONTINUES into this semester gets the SAME bounded card
@@ -381,6 +420,7 @@ export default function SemRow({ sem }) {
           // lost its own frame and seasonal tint, the co-op stopped looking like
           // a card at all, and a spring co-op and the fall it ran into looked
           // like two unrelated things.
+          <div style={{ flex: 1, minWidth: 200, display: "flex", flexDirection: "column", gap: 4 }}>
           <div style={{
             flex: 1, minHeight: 58, minWidth: 200,
             background: "var(--card-bg)",
@@ -405,6 +445,40 @@ export default function SemRow({ sem }) {
               </div>
             </div>
             {showContLogo && <CompanyLogo key={termContData?.companyDomain || ""} domain={termContData?.companyDomain} name={termContData?.company} size={isPhone ? 20 : 40} />}
+          </div>
+            {/* Coursework taken DURING the block. Rendered only when the type
+                permits it (NU: one class alongside a full-time co-op) — an
+                internship declares no cap, so its parked courses stay hidden
+                and uncounted exactly as before.
+                Shown while dragging too, so there is a visible target: the
+                block fills the slot row, and without this there is nowhere for
+                a drop indicator to go. The cap is ADVISORY — over it the strip
+                warns with the numbers and still accepts the course. */}
+            {workCap && (crs.length > 0 || dragInfo?.type === "course") && (
+              <div
+                onDragOver={e => {
+                  if (!dragInfo || dragInfo.type !== "course") return;
+                  e.preventDefault(); e.stopPropagation();
+                  setHoveredZone({ semId: sem.id, zone: "append" }); setHoveredSem(null);
+                }}
+                onDragLeave={e => { if (!e.currentTarget.contains(e.relatedTarget)) setHoveredZone(null); }}
+                onDrop={e => { e.stopPropagation(); setHoveredZone(null); onDrop(e, sem.id); }}
+                style={{
+                  display: "flex", flexWrap: "wrap", alignItems: "center", gap: 4,
+                  padding: crs.length ? "4px 6px" : "6px",
+                  borderRadius: 6,
+                  border: `1px dashed ${sh > workCap.sh ? "#facc15" : "var(--border-1)"}`,
+                  background: hoveredZone?.semId === sem.id ? "var(--bg-surface-2)" : "transparent",
+                }}
+              >
+                {crs.map(c => <CourseCard key={c.id} course={c} inSem semId={sem.id} />)}
+                {sh > workCap.sh && (
+                  <span style={{ fontSize: isPhone ? 7 : 9, color: "#facc15", whiteSpace: "nowrap" }}>
+                    ⚠ {sh} / {workCap.sh} {unitName}
+                  </span>
+                )}
+              </div>
+            )}
           </div>
 
         ) : mainSlots === null ? (

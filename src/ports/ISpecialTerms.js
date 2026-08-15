@@ -71,6 +71,22 @@ export const ISpecialTerms = "specialTerms";
  *                                                    0 for unpaid co-ops and non-credit internships.
  *                                                    Use a positive value for thesis, research, or
  *                                                    programs that grant academic credit.
+ * @property {string[]}              [courseGrants]  - Course keys this term REGISTERS. A work term is
+ *                                                    not only an attribute: at NU a co-op block is a
+ *                                                    real enrolment, and programs name that course as
+ *                                                    a requirement. Treated as a fallback — when the
+ *                                                    student's program names work-term courses of its
+ *                                                    own, core/specialTermUtils resolves against those
+ *                                                    instead. The keys satisfy requirements but must
+ *                                                    never reach General Electives.
+ * @property {{courses: number, sh: number}} [concurrentCap]
+ *                                                  - How much coursework may sit in a term this block
+ *                                                    occupies. ABSENT means none, and courses already
+ *                                                    there stay parked and uncounted — the behaviour
+ *                                                    before this field existed. Present means courses
+ *                                                    in the term COUNT toward its load, and the cap is
+ *                                                    the point past which the UI warns. Advisory only:
+ *                                                    never enforced, matching the repeat limit.
  */
 
 /**

@@ -108,15 +108,50 @@ export function getSemSH(semId, placements, courseMap) {
 /**
  * Semester hours that count toward the term's *course load*.
  *
- * A term occupied by a co-op / work term (its id appears in the start or
- * continuation map) is a work term, not a study term: any courses parked there
- * stay in the plan and are recoverable when the co-op is removed, but they do
- * NOT count toward this term's load. Everywhere else this is identical to
- * getSemSH. startMap / contMap are the per-semester special-term maps.
+ * A term occupied by a work term is not an ordinary study term. What happens
+ * to coursework in it depends on whether that KIND of block permits any:
+ *
+ *   no `concurrentCap` on the type  → courses stay parked and uncounted. They
+ *                                     remain in the plan and come back when
+ *                                     the block is removed. This is what every
+ *                                     block did before the field existed.
+ *   a `concurrentCap`               → courses COUNT. NU permits one class
+ *                                     alongside a full-time co-op, and 88 of
+ *                                     88 legitimate mixed terms in the
+ *                                     published plans are ≤4 SH.
+ *
+ * Counting is all-or-nothing on purpose. Counting only the first 4 SH and
+ * silently dropping the rest would invent a number the student cannot see; the
+ * cap is ADVISORY, so everything counts and the UI warns above it. See
+ * docs/coop-design.md.
+ *
+ * `capOf` maps a semester id to that term's `concurrentCap` (or null). Omitted,
+ * every occupied term reads as 0 — the old behaviour — so a caller that has not
+ * been taught about caps cannot start counting by accident.
  */
-export function getSemStudySH(semId, placements, courseMap, startMap = {}, contMap = {}) {
-  if (startMap[semId] || contMap[semId]) return 0;
+export function getSemStudySH(semId, placements, courseMap, startMap = {}, contMap = {}, capOf = null) {
+  const occupied = startMap[semId] || contMap[semId];
+  if (!occupied) return getSemSH(semId, placements, courseMap);
+  if (!capOf?.(semId)) return 0;
   return getSemSH(semId, placements, courseMap);
+}
+
+/**
+ * Build the `capOf` getSemStudySH wants, from plan state and the type list.
+ *
+ * @param {Object}   specialTermPl
+ * @param {Object[]} types
+ * @param {Object}   startMap  semId → instance id
+ * @param {Object}   contMap   semId → instance id
+ * @returns {(semId: string) => {courses: number, sh: number}|null}
+ */
+export function concurrentCapOf(specialTermPl = {}, types = [], startMap = {}, contMap = {}) {
+  const typeById = Object.fromEntries((types ?? []).map(t => [t.id, t]));
+  return (semId) => {
+    const inst = startMap[semId] ?? contMap[semId];
+    const data = inst ? specialTermPl[inst] : null;
+    return data ? (typeById[data.typeId]?.concurrentCap ?? null) : null;
+  };
 }
 
 /**

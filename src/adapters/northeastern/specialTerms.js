@@ -37,6 +37,23 @@ const _types = [
     courseGrants:    ["COOP3945"],
     occupiesSlot:    true,
     creditValue:     0,
+    // A full-time co-op is 32+ hours a week, and NU permits ONE course
+    // alongside it: no petition when it does not conflict (after 5pm Mon–Fri,
+    // weekends, or asynchronous), and the Petition Registration form beyond
+    // 4 credits. Two courses needs the co-op coordinator, the academic
+    // advisor and the job supervisor, and fall/spring only.
+    //
+    // The corpus says the same number independently: of the 90 mixed co-op
+    // terms across 42 published plans, 88 of the 88 legitimate ones are ≤4 SH
+    // (the two 16 SH outliers are parse artifacts — a full four-course load
+    // printed beside a co-op cell).
+    //
+    // ADVISORY, never enforced. Two courses IS permitted with approvals, so an
+    // app that refused to draw it would be wrong about the policy as well as
+    // paternalistic — and this codebase already settled that argument:
+    // "NU Map trusts the user: the repeat limit is never enforced, only
+    // reported" (core/repeatInstances.js).
+    concurrentCap:   { courses: 1, sh: 4 },
   },
   {
     id:    "intern",
@@ -49,6 +66,12 @@ const _types = [
     attributeGrants: [],
     occupiesSlot:    true,
     creditValue:     0,
+    // Deliberately no concurrentCap. A full-time internship is the same
+    // situation as a full-time co-op, but the ≤4 SH / one-course rule is
+    // published as CO-OP policy and I have no source saying it governs
+    // internships. Absent means courses in the term stay parked and uncounted,
+    // which is today's behaviour — so this omission changes nothing rather
+    // than guessing a number onto a student's credit total.
   },
 ];
 

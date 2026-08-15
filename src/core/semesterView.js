@@ -81,6 +81,6 @@ export function cardsIn(semId, view, semOrders = {}) {
  * full as the department printed, not empty. This is TERM load — it is not the
  * credit anyone has earned, and nothing here reaches the degree.
  */
-export function loadIn(semId, view, specialTermStartMap = {}, specialTermContMap = {}) {
-  return getSemStudySH(semId, view.occupants, view.cards, specialTermStartMap, specialTermContMap);
+export function loadIn(semId, view, specialTermStartMap = {}, specialTermContMap = {}, capOf = null) {
+  return getSemStudySH(semId, view.occupants, view.cards, specialTermStartMap, specialTermContMap, capOf);
 }

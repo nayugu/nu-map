@@ -286,10 +286,25 @@ working.
 *other special terms*, never courses, so a co-op can be dropped onto a term
 already holding a full load — parked courses are creatable today, not
 hypothetical. State cannot distinguish "parked under a co-op" from
-"deliberately taken during it": both are `courseId → semId`. So on first load
-after this ships, up to 4 SH per co-op term begins counting. The strip makes
-those courses *visible* rather than silently hidden, which is the mitigation,
-but it is still a change to saved plans and belongs in the change log.
+"deliberately taken during it": both are `courseId → semId`.
+
+**Counting is therefore all-or-nothing, which reverses an earlier decision in
+this document.** The first draft said the first ≤4 SH would count and the
+remainder would render greyed as parked. That contradicts making the cap
+advisory: truncating at 4 invents a number the student cannot see, and it
+disagrees with the term header, which sums what is actually there. So every
+course in a capped term counts, and the strip warns above the cap
+(`⚠ 8 / 4 SH`) while still accepting the drop. The cost is a larger migration
+than the first draft implied — a plan with three courses parked under a co-op
+gains all of their credit on first load, not four hours of it — but the courses
+are now visible in the strip and removable, where before they were invisible
+and uncounted. Belongs in the change log either way.
+
+A type with **no** `concurrentCap` — the internship — keeps the old behaviour
+exactly: courses stay parked, contribute 0, and cannot be dropped in. The
+one-course rule is published as *co-op* policy and nothing sourced says it
+governs internships, so guessing a number onto a student's credit total was
+the worse error.
 
 ---
 
@@ -452,9 +467,9 @@ locale files are contended, and a string is not a reason to stall the rest.
 
 | | needs a locale string? |
 |---|---|
-| Bank hides the 86 work-experience courses | no |
+| ✅ Bank hides the 86 work-experience courses | no |
+| ✅ Courses during co-op: `canDropSem`, `getSemStudySH`, the 1 course / 4 SH cap | no |
 | CHART: drop them from `deriveCells` (retires defect #16) | no |
-| Courses during co-op: `canDropSem`, `getSemStudySH`, the 1 course / 4 SH cap | no |
 | Course info panel says how a work-term course is recorded | no |
 | Bank search redirect to the work-term chip | **yes** |
 | `Registers CS 6964 ↗` on the block | **yes** |
@@ -464,6 +479,15 @@ locale files are contended, and a string is not a reason to stall the rest.
 
 Deliberately deferred, each with a measured reason above: the `grantedKeys`
 RANGE guard, and half-time co-op.
+
+CHART is unstarted for a second reason beyond ordering: `engine/demand.js` is
+contended, and the change is subtle. Pruning work-experience options out of a
+`choice` cell would raise that cell's cheapest option — and International
+Business's `Business Experiential Learning` is exactly the case the 8 SH
+under-credit fix turns on, where the 0 SH co-ops are what keep `min` at zero.
+The correct shape is to drop the whole node as already-satisfied when the shape
+carries a co-op, mirroring how `grantedAttributes` handles `EX`, not to filter
+options.
 
 Blocked on a human: wiring `derive-coop-courses.js` into `update-courses.yml`
 (it pushes to main unattended), and a worker redeploy for the MCP changes.
