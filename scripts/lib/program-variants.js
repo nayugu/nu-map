@@ -156,9 +156,18 @@ export function planPanes(panes, url = '') {
   const unknown = [];
 
   for (const pane of panes.slice(1)) {
-    const decision = PANE_DECISIONS[pane.id];
+    // Own properties only. A plain object inherits from Object.prototype, so
+    // `PANE_DECISIONS['toString']` is a function and `['__proto__']` is an
+    // object — both truthy, both sailing straight past the "is this
+    // adjudicated?" test. The ratchet is the whole design, and a guard that a
+    // pane id can walk around by being named after a builtin is not a guard.
+    const decision = Object.hasOwn(PANE_DECISIONS, pane.id) ? PANE_DECISIONS[pane.id] : undefined;
     if (!decision) { unknown.push(pane.id); continue; }
     if (decision.kind === 'merge') { primary.push(pane); continue; }
+    // Anything that is not exactly 'split' is a malformed table entry, not a
+    // licence to invent a program. Falling through here produced a variant
+    // with `modality: undefined`, whose folder was "…llmundefined".
+    if (decision.kind !== 'split') { unknown.push(pane.id); continue; }
     // Two panes could in principle carry the same modality; keep them together
     // in one variant rather than inventing a second folder for the same path.
     if (!byModality.has(decision.modality)) {

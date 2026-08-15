@@ -264,7 +264,15 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
   // ── 4. Credit total.
   const total = program.totalCreditsRequired ?? 0;
   counters.zeroTotal = total > 0 ? 0 : 1;
-  if (!total) {
+  if (!total && program.totalCreditsSource === 'variable') {
+    // Not a gap in our reading — the catalog published "Variable total
+    // semester hours required", which is a statement, not a silence. Filing it
+    // as "states no total" would put words in the page's mouth, so it gets its
+    // own check and stays informational: nothing here needs fixing.
+    add('variable-total-credits', 'info',
+      'the catalog states the total credit requirement varies rather than giving a number',
+      [{ key: 'variableTotal' }]);
+  } else if (!total) {
     // Minors legitimately state no degree total.
     // Minors and certificates routinely state no degree total; for a full
     // program its absence is worth surfacing.

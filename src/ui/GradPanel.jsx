@@ -1292,6 +1292,13 @@ export function MajorCard({ label, name, subtitle, verified, verification, progr
         {!isPhone && progress.requiredSH > 0 && (
           <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{progress.requiredSH} SH</span>
         )}
+        {/* The catalog can say the total VARIES rather than omit it — Biology,
+            PhD—Advanced Entry publishes "Variable total semester hours
+            required". Saying so beats the silence a 0 would otherwise produce,
+            which reads as "we could not find one". */}
+        {!isPhone && progress.requiredSH === 0 && progress.variableSH && (
+          <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0 }}>{t("grad.credits.variable")} SH</span>
+        )}
         {!isPhone && <span style={{ fontSize: 9, color: "var(--text-5)", marginTop: 2, flexShrink: 0, marginLeft: 4 }}>{expanded ? "▼" : "▶"}</span>}
       </div>
 
@@ -1730,7 +1737,13 @@ export default function GradPanel({ wideCatalog = false }) {
         if (ds) doneSat += isPool ? Math.min(ds.satCount ?? 0, sec.minRequired) : (ds.satCount ?? 0);
       }
     }
-    return { totalSat, totalReq, doneSat, completedSH: totalSHDone, plannedSH: totalSHPlaced - totalSHDone, requiredSH: major?.totalCreditsRequired ?? 0 };
+    // `variableSH` distinguishes "the catalog publishes no total" from "the
+    // catalog says the total VARIES" — Biology, PhD—Advanced Entry states
+    // "Variable total semester hours required". Both leave requiredSH at 0, so
+    // without this the header is equally silent about two different facts.
+    return { totalSat, totalReq, doneSat, completedSH: totalSHDone, plannedSH: totalSHPlaced - totalSHDone,
+             requiredSH: major?.totalCreditsRequired ?? 0,
+             variableSH: major?.totalCreditsSource === "variable" };
   }, [majorSections, major1DoneSections, totalSHDone, totalSHPlaced, major]);
 
   // ── Second major allocation (courses double-count freely per NU policy) ─
@@ -1775,7 +1788,9 @@ export default function GradPanel({ wideCatalog = false }) {
         if (ds) doneSat += isPool ? Math.min(ds.satCount ?? 0, sec.minRequired) : (ds.satCount ?? 0);
       }
     }
-    return { totalSat, totalReq, doneSat, completedSH: totalSHDone, plannedSH: totalSHPlaced - totalSHDone, requiredSH: major2Data?.totalCreditsRequired ?? 0 };
+    return { totalSat, totalReq, doneSat, completedSH: totalSHDone, plannedSH: totalSHPlaced - totalSHDone,
+             requiredSH: major2Data?.totalCreditsRequired ?? 0,
+             variableSH: major2Data?.totalCreditsSource === "variable" };
   }, [major2Sections, major2DoneSections, totalSHDone, totalSHPlaced, major2Data]);
 
   const satSections = majorSections.filter(s => s.sat).length;

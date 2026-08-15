@@ -8,14 +8,14 @@ Generated 2026-08-15 by `npm run data:verify`.
 > the per-page PDF is the same render as the HTML. These checks confirm we
 > parsed the catalog faithfully. They cannot confirm the catalog is right.
 
-**1066 programs** — 916 verified · 142 partial · 8 review · 0 unverified
+**1066 programs** — 917 verified · 141 partial · 8 review · 0 unverified
 
 ## Findings by root cause
 
 Grouped by check rather than by program: one parser bug usually wears many
 names, and a list of every affected program is not a work order.
 
-### `missing-total-credits` · 269 program(s) · medium
+### `missing-total-credits` · 268 program(s) · medium
 
 the catalog page states no total credit requirement
 
@@ -29,7 +29,7 @@ the catalog page states no total credit requirement
 - Art, Minor — `undergraduate/2026/arts-media-design/art_minor`
 - Cinema Studies, Minor — `undergraduate/2026/arts-media-design/cinema_studies_minor`
 - Communication Studies, Minor — `undergraduate/2026/arts-media-design/communication_studies_minor`
-- …and 259 more
+- …and 258 more
 
 ### `plan-witness-unaccounted` · 114 program(s) · medium
 
@@ -74,3 +74,9 @@ the credit total was taken from the sample four-year plan, not from a stated req
 3 course(s) this program requires are absent from our course list, so those requirements can never be ticked off in the planner
 
 - Education, MEd (Boston) — `graduate/2026/professional-studies/education_med_(boston)`
+
+### `variable-total-credits` · 1 program(s) · info
+
+the catalog states the total credit requirement varies rather than giving a number
+
+- Biology, PhD—Advanced Entry (Boston) — `graduate/2026/science/biology_phdadvancedentry_(boston)`

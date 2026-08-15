@@ -3,6 +3,24 @@
     {
       "type": "grad-majors",
       "subject": "🎓 Graduate Program Requirements",
+      "timestamp": "2026-08-15T19:23:02.388Z",
+      "done": 485,
+      "written": 520,
+      "skipped": 210,
+      "failed": 0
+    },
+    {
+      "type": "majors",
+      "subject": "🎓 Major Requirements",
+      "timestamp": "2026-08-15T19:22:59.524Z",
+      "done": 545,
+      "written": 546,
+      "skipped": 127,
+      "failed": 0
+    },
+    {
+      "type": "grad-majors",
+      "subject": "🎓 Graduate Program Requirements",
       "timestamp": "2026-08-15T18:55:58.562Z",
       "done": 485,
       "written": 520,

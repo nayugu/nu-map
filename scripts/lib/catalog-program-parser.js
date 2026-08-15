@@ -693,6 +693,22 @@ export function parseTotalCredits(pageRoot, profile, opts = {}) {
     }
   }
 
+  // The catalog sometimes states, in the same breath and the same slot, that
+  // there IS no fixed number: Biology, PhD—Advanced Entry reads "Variable total
+  // semester hours required". That is a different fact from a page that simply
+  // never mentions a total, and flattening the two loses information the
+  // catalog took the trouble to publish — so it is reported as its own source
+  // rather than as silence.
+  //
+  // Anchored on the same "total … required" shape as the numeric patterns
+  // above, because "Variable" is otherwise a common word in this corpus:
+  // matching it loosely would catch course titles like "Complex Variable
+  // Theory and Differential Equations". Exactly one page in the 2026 catalog
+  // uses this phrasing, and this is it.
+  if (new RegExp(`variable\\s+(?:total\\s+)?${UNIT}\\s+required`, 'i').test(text)) {
+    return { value: 0, source: 'variable' };
+  }
+
   // Both remaining fallbacks read the WHOLE page, which is right for a page
   // that holds one program and dangerous for one that holds two: the sample
   // plan describes the primary curriculum, so letting a variant reach it hands

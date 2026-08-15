@@ -558,6 +558,13 @@ export const strings = {
   "grad.credits.done":      "{unit} done",
   "grad.credits.planned":   " + planned",
   "grad.credits.required":  " / required",
+  // Stands where the number would in "128 SH", when the catalog states the
+  // total VARIES rather than omitting it — Biology, PhD—Advanced Entry
+  // publishes "Variable total semester hours required". Saying nothing would
+  // read as "we could not find a total", a different and wrong claim. The unit
+  // is appended by the caller exactly as it is for a number, because "SH" is
+  // the institution's unit name, not an English word.
+  "grad.credits.variable":  "Variable",
   "grad.requirements.title":"REQUIREMENTS",
   "grad.verified":          "verified",
   "grad.verify.checked":      "checked",
@@ -581,6 +588,7 @@ export const strings = {
   "verify.pop.check.choose-marker-leak": "Some requirements could not be interpreted",
   "verify.pop.check.empty-program": "No requirements could be read for this program",
   "verify.pop.totalNone": "The catalog states no total credit count",
+  "verify.pop.totalVariable": "The catalog states the total credit count varies",
   "verify.pop.caveat": "This checks that we copied the catalog correctly — not that the catalog is correct. Always confirm with your advisor.",
   "verify.pop.openCatalog":  "Open the catalog page",
   "verify.detail.planMissingCourse": "{course} — the catalog's four-year plan includes it, but no requirement here asks for it",
@@ -592,6 +600,7 @@ export const strings = {
   "verify.detail.impossibleSection": "\"{title}\" — every course it accepts is already claimed by another requirement",
   "verify.detail.totalFromPlan": "{n} SH is what that one sample path adds up to; the real minimum may be lower",
   "verify.detail.noTotal": "Progress here counts requirements, not credits — check the total with your advisor",
+  "verify.detail.variableTotal": "The catalog says this total varies by student rather than giving a number — your advisor sets yours",
   "verify.detail.noPlanUnusual": "Almost every major publishes one, so its absence here is unusual",
   "verify.detail.markerLeak": "A \"choose N of the following\" rule was left unresolved — treat that section as unreliable",
   "verify.detail.emptyProgram": "The catalog page may have changed shape — treat this program as unavailable",

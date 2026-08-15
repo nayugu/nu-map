@@ -42,6 +42,37 @@ test('planPanes › reports EVERY unknown pane, not just the first', () => {
   }
 });
 
+test('planPanes › a pane named after an Object builtin cannot walk past the ratchet', () => {
+  // PANE_DECISIONS is a plain object, so it inherits from Object.prototype:
+  // `['toString']` is a function and `['__proto__']` is an object. Both are
+  // truthy, and a lookup that does not check ownership treats them as
+  // adjudicated. `toString` then failed the `kind === 'merge'` test and fell
+  // through to the SPLIT branch with modality undefined, producing a program
+  // whose folder was "…undefined". The ratchet has to be unwalkaroundable.
+  for (const id of ['__proto__', 'toString', 'constructor', 'valueOf', 'hasOwnProperty']) {
+    assert.throws(
+      () => planPanes([pane('programrequirementstextcontainer'), pane(id)], 'http://x'),
+      err => err instanceof UnadjudicatedPaneError && err.paneIds.includes(id),
+      `pane id "${id}" slipped past the adjudication check`);
+  }
+});
+
+test('planPanes › a malformed decision is refused, not treated as a split', () => {
+  // Defence in depth for the table itself. A typo'd `kind` used to fall
+  // through to the variant branch and emit modality `undefined`; it must be
+  // indistinguishable from "not adjudicated".
+  const saved = Object.getOwnPropertyDescriptor(PANE_DECISIONS, 'zzztesttextcontainer');
+  try {
+    PANE_DECISIONS.zzztesttextcontainer = { kind: 'splitt', modality: 'x', label: 'X' };
+    assert.throws(
+      () => planPanes([pane('textcontainer'), pane('zzztesttextcontainer')], 'http://x'),
+      err => err instanceof UnadjudicatedPaneError);
+  } finally {
+    if (saved) Object.defineProperty(PANE_DECISIONS, 'zzztesttextcontainer', saved);
+    else delete PANE_DECISIONS.zzztesttextcontainer;
+  }
+});
+
 test('planPanes › a single unknown pane is fine when it is the FIRST', () => {
   // The first pane is primary whatever it is called; NEU has already shipped
   // two typo'd ids ("cirriculum", "progra") and inventing a failure for a

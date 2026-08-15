@@ -40,6 +40,7 @@ export const DETAIL_EN = {
   impossibleSection: p => `"${p.title}" — every course it accepts is already claimed by another requirement`,
   totalFromPlan:     p => `${p.n} SH is what that one sample path adds up to; the real minimum may be lower`,
   noTotal:           () => 'Progress here counts requirements, not credits — check the total with your advisor',
+  variableTotal:     () => 'The catalog says this total varies by student rather than giving a number — your advisor sets yours',
   noPlanUnusual:     () => 'Almost every major publishes one, so its absence here is unusual',
   markerLeak:        () => 'A "choose N of the following" rule was left unresolved — treat the affected section as unreliable',
   emptyProgram:      () => 'The catalog page may have changed shape — treat this program as unavailable',
@@ -75,6 +76,7 @@ export function stateForSeverity(severity, fallback = "pass") {
 const OWNED = new Set([
   "requirement-table-parity", "plan-witness-unaccounted", "unknown-course",
   "missing-total-credits", "no-sample-plan", "total-from-sample-plan",
+  "variable-total-credits",
 ]);
 
 /**
@@ -104,6 +106,7 @@ export function buildCheckRows(verification) {
   const course   = of("unknown-course");
   const noTotal  = of("missing-total-credits");
   const fromPlan = of("total-from-sample-plan");
+  const varTotal = of("variable-total-credits");
 
   const rows = [
     { state: stateForSeverity(tables.severity), textKey: "verify.pop.complete", ...tables },
@@ -119,14 +122,18 @@ export function buildCheckRows(verification) {
 
     { state: stateForSeverity(course.severity), textKey: "verify.pop.courses", ...course },
 
-    // Three distinct outcomes need three distinct sentences. Claiming the
+    // Four distinct outcomes need four distinct sentences. Claiming the
     // catalog stated a total when the number came from the sample plan was
-    // simply false.
-    num("zeroTotal") !== 0
-      ? { state: stateForSeverity(noTotal.severity, "na"), textKey: "verify.pop.totalNone", ...noTotal }
-      : fromPlan.severity
-        ? { state: stateForSeverity(fromPlan.severity), textKey: "verify.pop.totalFromPlan", ...fromPlan }
-        : { state: "pass", textKey: "verify.pop.total", detail: [], overflow: 0 },
+    // simply false — and so is claiming it stated NO total when what it
+    // actually published was "Variable total semester hours required".
+    // Saying "none stated" there attributes a silence to a page that spoke.
+    varTotal.severity
+      ? { state: stateForSeverity(varTotal.severity, "na"), textKey: "verify.pop.totalVariable", ...varTotal }
+      : num("zeroTotal") !== 0
+        ? { state: stateForSeverity(noTotal.severity, "na"), textKey: "verify.pop.totalNone", ...noTotal }
+        : fromPlan.severity
+          ? { state: stateForSeverity(fromPlan.severity), textKey: "verify.pop.totalFromPlan", ...fromPlan }
+          : { state: "pass", textKey: "verify.pop.total", detail: [], overflow: 0 },
   ];
 
   // Findings without a dedicated row — duplicate titles, an impossible
