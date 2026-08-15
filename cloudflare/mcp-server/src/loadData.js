@@ -6,7 +6,7 @@
 // Loaded once per isolate (module-global promise); ~15 MB of JSON parsed
 // on cold start, cached in memory thereafter.
 
-import { normalizeCourse, mergeHistoryAndOffering } from "../../../src/adapters/northeastern/courseNorm.js";
+import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants } from "../../../src/adapters/northeastern/courseNorm.js";
 import { parseMajorPathParts, resolveInMap } from "../../../src/data/programPaths.js";
 import calendar from "../../../src/adapters/northeastern/calendar.js";
 import attributeSystem from "../../../src/adapters/northeastern/attributeSystem.js";
@@ -30,7 +30,7 @@ async function fetchJson(origin, path) {
 }
 
 async function build(origin) {
-  const [catalogJson, subjectColleges, history, offering, termDetails, bundle, dataMeta] =
+  const [catalogJson, subjectColleges, history, offering, termDetails, bundle, dataMeta, coopJson] =
     await Promise.all([
       fetchJson(origin, "/northeastern/catalog-courses.json"),
       fetchJson(origin, "/northeastern/subject-colleges.json"),
@@ -39,12 +39,15 @@ async function build(origin) {
       fetchJson(origin, "/northeastern/term-details.json"),
       fetchJson(origin, "/northeastern/programs-bundle.json"),
       fetchJson(origin, "/data-meta.json"),
+      fetchJson(origin, "/northeastern/coop-courses.json"),
     ]);
 
   if (!catalogJson) throw new Error(`Could not load catalog from ${origin}`);
   const raw = Array.isArray(catalogJson) ? catalogJson : Object.values(catalogJson).flat();
   const normalized = raw.map(r => normalizeCourse(r, subjectColleges ?? {}, {})).filter(Boolean);
   const courses = mergeHistoryAndOffering(normalized, history, offering);
+  // Same stamp the browser applies, so a Claude audit and the panel agree.
+  stampCoopVariants(courses, coopJson);
   const courseMap = {};
   for (const c of courses) courseMap[c.id] = c;
 

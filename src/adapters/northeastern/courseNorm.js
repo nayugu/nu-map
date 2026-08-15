@@ -165,6 +165,40 @@ export function normalizeCourse(raw, subjectColleges = {}, nuPathSupp = {}) {
  * @param {Record<string,Record<string,boolean>>|null} history  term-history.json
  * @param {Record<string,object>|null}  offering                offering-summary.json
  */
+/**
+ * Mark the courses that RECORD a work term, with the variant each one is.
+ *
+ * Read by core/specialTermUtils to resolve which course a placed co-op
+ * registers — `CS 6964` for a Khoury student, `ENCP 6954` for a half-time
+ * engineer — without the student naming a course number.
+ *
+ * ── Why this is shared rather than done at each loader ──────────────
+ *
+ * There are THREE catalog loaders: the browser adapter, the Node one behind
+ * the dev MCP server, and the Cloudflare worker's. `plannerQueryAdapter`
+ * promises in its own comments that an audit read over MCP and the panel on
+ * screen "cannot disagree about the experiential requirement" — and they would
+ * have, silently: a loader that skips the stamp resolves nothing, falls back
+ * to the old single COOP 3945 grant, and reports a graduate student's co-op
+ * requirement unmet while the app beside it reports it met.
+ *
+ * Mutates in place, matching the loaders' existing style. A null table leaves
+ * every course untouched, which degrades to that same old single grant.
+ *
+ * @param {object[]} courses    normalized Course records
+ * @param {object|null} coopJson  parsed coop-courses.json ({ courses: {...} })
+ * @returns {object[]} the same array
+ */
+export function stampCoopVariants(courses, coopJson) {
+  const table = coopJson?.courses;
+  if (!table || typeof table !== "object") return courses;
+  for (const c of courses) {
+    const f = table[c.id];
+    if (f) c.coop = { abroad: !!f.abroad, halfTime: !!f.halfTime };
+  }
+  return courses;
+}
+
 export function mergeHistoryAndOffering(courses, history, offering) {
   if (!history && !offering) return courses;
 

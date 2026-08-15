@@ -26,7 +26,7 @@
 // Raw term codes: NEU Banner — YYYY = AY end year; 10=Fall, 30=Spring,
 //                 40=Summer 1, 60=Summer 2  (decoded during normalization)
 // ═══════════════════════════════════════════════════════════════════
-import { normalizeCourse, mergeHistoryAndOffering } from "./courseNorm.js";
+import { normalizeCourse, mergeHistoryAndOffering, stampCoopVariants } from "./courseNorm.js";
 
 // Verified RateMyHusky link directory, populated by fetchAll() and read by the
 // URL builders below. Module-level so the singleton adapter can expose
@@ -153,18 +153,9 @@ export default {
     const subjectColleges = collegesResult.status === "fulfilled" ? collegesResult.value : {};
     const courses = raw.map(r => normalizeCourse(r, subjectColleges, nuPathSupp)).filter(Boolean);
 
-    // Stamp { abroad, halfTime } onto the 86 courses that record a work term.
-    // Read by core/specialTermUtils.workTermGrants to pick which variant a
-    // placed co-op registers — CS 6964 for a Khoury student, ENCP 6954 for a
-    // half-time engineer — without anyone having to name a course number.
-    const coopTable = (coopResult.status === "fulfilled" && coopResult.value?.courses &&
-      typeof coopResult.value.courses === "object") ? coopResult.value.courses : null;
-    if (coopTable) {
-      for (const c of courses) {
-        const flags = coopTable[c.id];
-        if (flags) c.coop = { abroad: !!flags.abroad, halfTime: !!flags.halfTime };
-      }
-    }
+    // Which courses record a work term. Shared with the Node and worker
+    // loaders — see stampCoopVariants for why all three must do this.
+    stampCoopVariants(courses, coopResult.status === "fulfilled" ? coopResult.value : null);
 
     // Merge Banner availability history + per-term offering detail if present.
     // Both are optional — app works without them.
