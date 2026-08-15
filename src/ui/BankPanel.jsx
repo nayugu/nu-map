@@ -5,7 +5,7 @@ import { useMemo, useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { usePlanner }  from "../context/PlannerContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
-import { subjectInk } from "../core/courseModel.js";
+import { subjectColor } from "../core/courseModel.js";
 import { takesUsed } from "../core/repeatInstances.js";
 import { alternativesFor, programIndexSet, programAllowedSwaps, readyToApply,
          unmetSetRequirement }
@@ -258,6 +258,21 @@ export default function BankPanel() {
   // Diacritic- and case-insensitive fold — mirrors the MCP search adapter so
   // "garcia" finds "García" (plannerQueryAdapter.searchCourses).
   const fold = s => String(s).normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+
+  /**
+   * Hyphen-blind fold for course text.
+   *
+   * The catalog writes "Co-op" and students type "coop". Measured: `coop`
+   * returned **3** placeable results and `co-op` returned **23** — the same
+   * search, one keystroke apart, and the short form is the one people use. It
+   * read as "NU Map has hidden all the co-op classes", which is a conclusion
+   * about the bank filter drawn from a bug in the matcher.
+   *
+   * Applied to both sides, so the two spellings are one query. Substring
+   * matching then also reaches "Cooperative Education" — that is ordinary
+   * substring behaviour, not a new looseness, and it is the right answer here.
+   */
+  const unhyphen = s => String(s).replace(/[-–—]/g, "");
   const courseLevel = c => {
     const n = parseInt(String(c.number).match(/\d+/)?.[0] ?? "", 10);
     return Number.isFinite(n) && n >= 5000 ? "grad" : "undergrad";
@@ -386,8 +401,8 @@ export default function BankPanel() {
         const subj    = c.subject.toLowerCase();
         const num     = c.number.toLowerCase();
         const codeHay = `${subj} ${num}`;
-        const fullHay = `${codeHay} ${c.title.toLowerCase()}`;
-        if (!tokens.every(tok => fullHay.includes(tok))) return;
+        const fullHay = unhyphen(`${codeHay} ${c.title.toLowerCase()}`);
+        if (!tokens.every(tok => fullHay.includes(unhyphen(tok)))) return;
         const score = tokens.reduce((s, tok) => {
           if (subj === tok)             return s + 8;
           if (subj.startsWith(tok))    return s + 6;
@@ -421,8 +436,8 @@ export default function BankPanel() {
     if (!tokens.length) return [];
     const hit = courses.filter(c => {
       if (!c.coop) return false;
-      const hay = `${c.subject} ${c.number} ${c.title}`.toLowerCase();
-      return tokens.every(tok => hay.includes(tok));
+      const hay = unhyphen(`${c.subject} ${c.number} ${c.title}`.toLowerCase());
+      return tokens.every(tok => hay.includes(unhyphen(tok)));
     });
     if (!hit.length) return [];
     // ONE line, not one per match. A bare "co-op" matches all 92 and six
@@ -1279,9 +1294,6 @@ export default function BankPanel() {
 
           {(specialTerms?.getTypes() ?? []).map((type, idx) => {
             const collapsed = typeCollapsed[type.id] ?? (idx > 0);
-            const attrText  = type.attributeGrants?.length
-              ? `satisfies ${type.attributeGrants.join(", ")}`
-              : "no attribute grants";
             return (
               <div key={type.id} style={{ marginTop: idx > 0 ? 6 : 0 }}>
                 <div
@@ -1300,10 +1312,14 @@ export default function BankPanel() {
                     onDragStart={e => onDragStart(e, null, "specialTerm", null, { duration: d.duration, typeId: type.id })}
                     style={{ background: "var(--card-bg)", border: "1px solid var(--border-card)", borderRadius: 6, padding: "6px 8px", cursor: "grab", marginBottom: 5 }}
                   >
+                    {/* Duration only. `satisfies EX` sat under every co-op
+                        chip and was never English the app writes elsewhere —
+                        it named an attribute code at a student who has not met
+                        one yet, on a card whose whole job is "drag me". The
+                        grant is still shown where it means something: the
+                        NUPath row in the Graduation panel, once the co-op is
+                        actually placed. */}
                     <div style={{ fontSize: 10, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: "0.05em" }}>{d.label}</div>
-                    {!isPhone && type.attributeGrants?.length > 0 && (
-                      <div style={{ fontSize: 7, color: "var(--text-3)", marginTop: 1 }}>{attrText}</div>
-                    )}
                   </div>
                 ))}
               </div>
@@ -1315,7 +1331,7 @@ export default function BankPanel() {
         {/* Course list */}
         {bankBySubject ? (
           Object.entries(bankBySubject).sort(([a], [b]) => a.localeCompare(b)).map(([sub, crs]) => {
-            const col   = subjectInk(sub, themeName === "dark");
+            const col   = subjectColor(sub);
             const isCol = collapsedSubs[sub] !== false;
             const sortedCrs =
               bankSort === "sh↓" ? [...crs].sort((a, b) => b.sh - a.sh || a.code.localeCompare(b.code))

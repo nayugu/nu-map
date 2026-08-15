@@ -33,7 +33,7 @@ export const strings = {
   "bank.section.placedout":       "↪ CURSOS CONVALIDADOS",
   "bank.section.substitutions":   "⇄ SUSTITUCIONES",
   "bank.section.work":            "EXPERIENCIA LABORAL",
-  "bank.coop.recorded":           "{code} se registra al colocar un periodo de trabajo: arrastra uno desde EXPERIENCIA LABORAL arriba.",
+  "bank.coop.recorded":           "{code} es una matrícula de 0 SH, no una clase: regístrala colocando un co-op o unas prácticas desde EXPERIENCIA LABORAL arriba. Las clases sobre co-op y las prácticas con créditos son cursos normales y sí aparecen en los resultados.",
   "bank.sub.desc":                "Colocar el curso A también satisface los requisitos del curso B. Los créditos cuentan una sola vez (solo A). Aplica el semestre correspondiente.",
   "bank.sub.query.placeholder":     "ej. PHYS 1163, o A B para cambiar",
   "bank.sub.manual":               "Introducir manualmente",

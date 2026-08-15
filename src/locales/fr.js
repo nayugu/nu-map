@@ -33,7 +33,7 @@ export const strings = {
   "bank.section.placedout":       "↪ COURS VALIDÉS",
   "bank.section.substitutions":   "⇄ SUBSTITUTIONS",
   "bank.section.work":            "EXPÉRIENCE PROFESSIONNELLE",
-  "bank.coop.recorded":           "{code} s’enregistre en plaçant une période de travail : faites-en glisser une depuis EXPÉRIENCE PROFESSIONNELLE ci-dessus.",
+  "bank.coop.recorded":           "{code} est une inscription de 0 SH, pas un cours : enregistrez-la en plaçant un co-op ou un stage depuis EXPÉRIENCE PROFESSIONNELLE ci-dessus. Les cours sur le co-op et les stages crédités sont des cours ordinaires et figurent bien dans les résultats.",
   "bank.sub.desc":                "Placer le cours A satisfait également aux exigences du cours B. Les crédits ne comptent qu'une fois (A seulement). Le semestre s'applique.",
   "bank.sub.query.placeholder":     "ex. PHYS 1163, ou A B pour permuter",
   "bank.sub.manual":               "Saisir manuellement",

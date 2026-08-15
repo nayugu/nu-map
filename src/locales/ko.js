@@ -33,7 +33,7 @@ export const strings = {
   "bank.section.placedout":       "↪ 면제 코스",
   "bank.section.substitutions":   "⇄ 대체 코스",
   "bank.section.work":            "업무 경험",
-  "bank.coop.recorded":           "{code}은(는) 근무 학기를 배치하면 등록됩니다. 위의 업무 경험에서 끌어다 놓으세요.",
+  "bank.coop.recorded":           "{code}은(는) 수업이 아니라 0 SH 등록입니다. 위의 업무 경험에서 코옵이나 인턴십을 배치해 기록하세요. 코옵 관련 수업과 학점이 있는 인턴십은 일반 과목이며 검색 결과에 표시됩니다.",
   "bank.sub.desc":                "코스 A를 배치하면 코스 B의 요건도 충족됩니다. 학점은 한 번만(A만) 계산됩니다. 학기 순서가 적용됩니다.",
   "bank.sub.query.placeholder":     "예: PHYS 1163, 또는 A B로 대체",
   "bank.sub.manual":               "직접 입력",

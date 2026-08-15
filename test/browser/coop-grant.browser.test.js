@@ -210,6 +210,70 @@ describe("browser · a work term registers its program's course", { skip: up ? f
     assert.equal(counterAfter(t, "Business Experiential Learning"), "1/1");
   });
 
+  // ── the bank search: what is hidden, and what only LOOKED hidden ──
+  //
+  // The report was "we block CS 1210 from the bank". We do not — the hidden
+  // set is exactly the 92 stamped registrations, which is exactly the union of
+  // the two cards' pickers. What was actually broken is one keystroke away:
+  // the catalog writes "Co-op" and students type "coop", and plain substring
+  // matching made those different searches (3 results vs 23). A matcher bug
+  // that reads as a policy decision is worth a test of its own.
+  async function bankSearch(query) {
+    const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
+    await ctx.addInitScript(seed(PROGRAMS.ib, false, {}, {}));
+    const page = await ctx.newPage();
+    await page.goto(APP, { waitUntil: "networkidle" });
+    await page.waitForTimeout(2000);
+    for (let i = 0; i < 6; i++) {
+      const skip = page.getByRole("button", { name: /^Skip$/ }).first();
+      if (await skip.count() && await skip.isVisible().catch(() => false)) {
+        await skip.click().catch(() => {}); await page.waitForTimeout(250);
+      } else break;
+    }
+    const box = page.locator('input[placeholder*="earch" i]').first();
+    await box.fill(query);
+    await page.waitForTimeout(1200);
+    const text = await page.evaluate(() => document.body.innerText);
+    await ctx.close();
+    return text;
+  }
+
+  test("searching `coop` and `co-op` find the same co-op classes", async () => {
+    const short = await bankSearch("coop");
+    const long  = await bankSearch("co-op");
+    for (const text of [short, long]) {
+      // A 1 SH class ABOUT co-op. Placeable, and it must be findable both ways.
+      assert.match(text, /CS\s*1210/, "CS 1210 is missing from the bank results");
+      assert.match(text, /ENCP\s*2000/, "ENCP 2000 is missing from the bank results");
+    }
+  });
+
+  test("the registrations stay hidden, and say why", async () => {
+    const text = await bankSearch("COOP 3945");
+    assert.match(text, /registration/i, "no notice explaining where COOP 3945 went");
+    // Not as a draggable card in the list — the notice is the only mention.
+    const cards = await (async () => {
+      const ctx = await browser.newContext({ viewport: { width: 1500, height: 1000 } });
+      await ctx.addInitScript(seed(PROGRAMS.ib, false, {}, {}));
+      const page = await ctx.newPage();
+      await page.goto(APP, { waitUntil: "networkidle" });
+      await page.waitForTimeout(2000);
+      for (let i = 0; i < 6; i++) {
+        const skip = page.getByRole("button", { name: /^Skip$/ }).first();
+        if (await skip.count() && await skip.isVisible().catch(() => false)) {
+          await skip.click().catch(() => {}); await page.waitForTimeout(250);
+        } else break;
+      }
+      await page.locator('input[placeholder*="earch" i]').first().fill("COOP 3945");
+      await page.waitForTimeout(1200);
+      const n = await page.evaluate(() => [...document.querySelectorAll('[draggable="true"]')]
+        .filter(d => /COOP\s*3945/.test(d.textContent || "")).length);
+      await ctx.close();
+      return n;
+    })();
+    assert.equal(cards, 0, "COOP 3945 is still draggable out of the bank");
+  });
+
   // ── the internship block mirrors all of it ────────────────────────
   //
   // Same card field, same storage, same resolver. The one thing that differs

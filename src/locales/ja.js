@@ -34,7 +34,7 @@ export const strings = {
   "bank.section.placedout":       "↪ 免除コース",
   "bank.section.substitutions":   "⇄ 代替コース",
   "bank.section.work":            "職務経験",
-  "bank.coop.recorded":           "{code} は就業学期を配置すると登録されます。上の「職務経験」からドラッグしてください。",
+  "bank.coop.recorded":           "{code} は授業ではなく 0 SH の履修登録です。上の「職務経験」からコープまたはインターンシップを配置して記録してください。コープ関連の授業や単位のあるインターンシップは通常の科目で、検索結果に表示されます。",
   "bank.sub.desc":                "コースAを配置するとコースBの要件も満たします。単位は一度だけ（Aのみ）カウントされます。学期のタイミングが適用されます。",
   "bank.sub.query.placeholder":     "例: PHYS 1163、または A B で置換",
   "bank.sub.manual":               "手動で入力",

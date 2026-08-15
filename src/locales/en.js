@@ -34,7 +34,7 @@ export const strings = {
   "bank.section.placedout":       "\u21aa PLACED OUT",
   "bank.section.substitutions":   "\u21c4 SUBSTITUTIONS",
   "bank.section.work":            "WORK EXPERIENCE",
-  "bank.coop.recorded":           "{code} is recorded by placing a work term — drag one from WORK EXPERIENCE above.",
+  "bank.coop.recorded":           "{code} is a 0 SH registration, not a class — record it by placing a co-op or internship from WORK EXPERIENCE above. Co-op classes and credit-bearing internships are ordinary courses and appear in the results.",
   "bank.sub.desc":                "Placing course A also satisfies course B\u2019s requirements. Credits count once (A only). Term timing applies.",
   "bank.sub.query.placeholder":     "e.g. PHYS 1163, or A B to swap",
   "bank.sub.manual":               "Enter manually",
