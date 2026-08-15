@@ -18,7 +18,15 @@ const course = (id, attributes = [], extra = {}) => ({
 });
 const mapOf = (...cs) => Object.fromEntries(cs.map(c => [c.id, c]));
 const named = (id, ids) => ({ id, kind: "named", groups: [ids], sh: 4, title: id });
-const choice = (id, ids) => ({ id, kind: "choice", groups: [ids], sh: 4, title: id });
+// ── A choice's OPTIONS are separate groups, and the old helper said otherwise ──
+//
+// This read `groups: [ids]` — every alternative inside ONE group, which is the shape of a
+// corequisite pair taken together, not of a choice between them. It was harmless while
+// `breadthCodes` skipped choice cells outright and became load-bearing the moment the ∀-option
+// rule landed: a fixture that says "take both" cannot test "take either". Options now go in one
+// group each, and `coreqChoice` below is for the case where an option really is several courses.
+const choice = (id, ...options) =>
+  ({ id, kind: "choice", groups: options.map(o => (Array.isArray(o) ? o : [o])), sh: 4, title: id });
 
 // Supply is deliberately unequal and never tied, so the ordering assertion tests RARITY
 // rather than the alphabetical tie-break behind it. Mirrors the real spread, where WF has
@@ -44,13 +52,89 @@ test("breadth › a code a NAMED course already carries is not asked for again",
   assert.deepEqual(got.map(c => c.code), ["WF", "EX"]);
 });
 
-test("breadth › a CHOICE cell guarantees nothing and must not count as covered", () => {
-  // "AAA1 or BBB1" carries IC on one branch and WF on the other. Counting it would let a
-  // degree read as covered by a competency no student is obliged to take, and the
-  // student finds out at graduation.
-  const got = breadthCodes([choice("c", ["AAA1", "BBB1"])], CM, []);
+test("breadth › a CHOICE whose branches DIFFER guarantees neither", () => {
+  // "AAA1 or BBB1" carries IC on one branch and WF on the other. Counting either would let a
+  // degree read as covered by a competency no student is obliged to take, and the student
+  // finds out at graduation.
+  const got = breadthCodes([choice("c", "AAA1", "BBB1")], CM, []);
   assert.deepEqual(got.map(c => c.code), ["WF", "EX", "IC"],
     "neither branch may be assumed");
+});
+
+// ── The ∀-option rule: what a choice DOES guarantee ─────────────────
+//
+// The rule this replaces counted named cells only, on the reasoning that a choice "may carry
+// different codes, so it guarantees neither" — right when the options differ and wrong when they
+// do not. Measured on `computer_science_and_mathematics_bs`, four of its nine supposedly-unmet
+// codes are carried by EVERY option of a choice it requires (WF by `ENGW 1111 or 1102`, WD by
+// `ENGW 3302/3307/3315`, CE and WI by both of its 4000-level pairs), so it reserved SIX of seven
+// free electives for breadth against four under the correct reading. Corpus-wide the ∀ reading
+// changes 253 of 354 programs and returns 393 elective slots to students.
+
+test("breadth › a CHOICE whose branches AGREE guarantees the code", () => {
+  // Whichever branch the student takes, they get IC. Refusing to count it reserves a free
+  // elective for a competency the degree already delivers — and the two this went wrong on in
+  // the corpus are the scarcest codes there are: WF is carried by 5 courses catalog-wide.
+  const got = breadthCodes([choice("c", "AAA1", "AAA2")], CM, []);
+  assert.ok(!got.some(c => c.code === "IC"), "every option carries IC, so IC is guaranteed");
+  assert.deepEqual(got.map(c => c.code), ["WF", "EX"]);
+});
+
+test("breadth › a choice guarantees the INTERSECTION, not the union", () => {
+  // The failure mode in the other direction, and the more expensive one: reading `∃` here would
+  // mark a code covered because ONE branch carries it, and a student taking the other branch
+  // reaches graduation short. Over-reserving costs a free choice; under-reserving costs a year.
+  const cm = mapOf(
+    course("PP1", ["IC", "EX"]), course("PP2", ["IC", "WF"]), course("PP3", ["IC"]),
+  );
+  const got = breadthCodes([choice("c", "PP1", "PP2", "PP3")], cm, []);
+  assert.ok(!got.some(c => c.code === "IC"), "IC is on every branch");
+  assert.deepEqual(got.map(c => c.code).sort(), ["EX", "WF"],
+    "EX and WF are each on ONE branch and must still be asked for");
+});
+
+test("breadth › an option the scrape has not labelled makes NO claim", () => {
+  // `attributes` covers 1,516 of 7,966 courses, so an unlabelled option is our data being
+  // partial rather than the course carrying nothing. The intersection with an empty set is
+  // empty, which is the right way for partial data to fail: it weakens the guarantee instead of
+  // inventing one. DDD1 carries no attributes at all.
+  const got = breadthCodes([choice("c", "AAA1", "DDD1")], CM, []);
+  assert.deepEqual(got.map(c => c.code), ["WF", "EX", "IC"],
+    "an unlabelled branch must not be read as agreeing");
+});
+
+test("breadth › within one option, corequisites are taken TOGETHER", () => {
+  // A group is courses taken together, so it delivers all of their codes — union inside a group,
+  // intersection across groups. `(AAA1 and BBB1) or CCC1` guarantees nothing, but
+  // `(AAA1 and BBB1) or (AAA2 and BBB1)` guarantees both IC and WF.
+  const both = breadthCodes([choice("c", ["AAA1", "BBB1"], ["AAA2", "BBB1"])], CM, []);
+  assert.deepEqual(both.map(c => c.code), ["EX"], "IC and WF are on every branch");
+  const neither = breadthCodes([choice("c", ["AAA1", "BBB1"], ["CCC1"])], CM, []);
+  assert.deepEqual(neither.map(c => c.code), ["WF", "EX", "IC"],
+    "the second branch shares nothing with the first");
+});
+
+test("breadth › a one-option choice is not a special case", () => {
+  // `emitPool` produces single-option choices, and an intersection over one set is that set —
+  // so this must behave exactly like a named cell rather than falling into a guard.
+  assert.deepEqual(breadthCodes([choice("c", "AAA1")], CM, []).map(c => c.code), ["WF", "EX"]);
+});
+
+test("breadth › a choice with junk groups does not throw or over-claim", () => {
+  // These reach `breadthCodes` from scraped requirement trees, and a throw here refuses the
+  // whole degree over one malformed node.
+  for (const cell of [
+    { id: "x", kind: "choice", groups: [] },
+    { id: "x", kind: "choice", groups: [[]] },
+    { id: "x", kind: "choice", groups: [["AAA1"], []] },
+    { id: "x", kind: "choice", groups: [["GONE9999"], ["AAA1"]] },
+    { id: "x", kind: "choice" },
+  ]) {
+    assert.doesNotThrow(() => breadthCodes([cell], CM, []), JSON.stringify(cell));
+    const got = breadthCodes([cell], CM, []).map(c => c.code);
+    assert.ok(got.includes("IC"),
+      `an empty or unreadable branch must not guarantee IC: ${JSON.stringify(cell)}`);
+  }
 });
 
 test("breadth › a granted code is not spent on an elective", () => {

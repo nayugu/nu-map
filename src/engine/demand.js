@@ -1051,14 +1051,38 @@ function concentrationSpec(programData, chosen = null) {
  * `nuPath` onto `courseMap[id].attributes`, so `grep nuPath src/engine/` finds nothing while
  * 1,516 of 7,966 courses carry a code.
  *
- * ── Only NAMED cells count as covered ───────────────────────────────
+ * ── A CHOICE cell guarantees what EVERY option carries ──────────────
  *
- * A `choice` cell is one course OR another, and the two may carry different codes, so it
- * guarantees neither. Counting it would let a program read as covered by a code no student is
- * obliged to take. Named cells are the only guarantee, which makes the unmet set an
- * OVER-estimate — some codes will in practice be covered by whatever fills a pool. That is
- * the conservative direction: it binds a cell we might not have needed, and a student who
- * takes an extra course carrying a real competency has lost nothing.
+ * This counted named cells only, reasoning that "a choice cell is one course or another, and
+ * the two may carry different codes, so it guarantees neither". That is right when the options
+ * differ and wrong when they do not, and the difference is most of the pool:
+ *
+ *   CS 4300 or CS 4100        every option carries  CE, WI
+ *   ENGW 1111 or ENGW 1102    every option carries  WF
+ *   ENGW 3302/3307/3315       every option carries  WD
+ *   AFCS 2600 or CY 4170 or … every option carries  nothing   <- still guarantees nothing
+ *
+ * Whichever branch the student takes, Computer Science and Mathematics delivers WF, WD, CE and
+ * WI. Counting them as unmet reserved SIX of that degree's seven free electives for breadth,
+ * against four under the correct reading — and the two it was worst on are the two that cost
+ * the most: `WF` is carried by 5 courses in the whole catalog and `WD` by 16, so an elective
+ * set aside for WF spends the student's scarcest choice on a competency their required writing
+ * course already delivers. Measured over the 354 programs with a free-elective pool, the ∀
+ * reading changes 253 of them (71.5%) and returns 393 elective slots.
+ *
+ * This is the same quantifier the rest of the engine already uses — `∀ option, ∃ a filling`
+ * for a concentration, the cheapest option for a choice cell's credit, the weakest option in
+ * `guaranteedUnlock`. Naming a code covered because ONE branch carries it would be the `∃`
+ * reading, and that is the error this file is careful about everywhere else.
+ *
+ * ── It still degrades in the safe direction ─────────────────────────
+ *
+ * `attributes` covers 1,516 of 7,966 courses, so an option our scrape has not labelled
+ * contributes an empty set, the intersection is empty, and nothing is claimed. An unlabelled
+ * option therefore weakens the guarantee rather than inventing one, which is the right way for
+ * partial data to fail. The unmet set remains an OVER-estimate — a pool may in practice be
+ * filled by a course carrying a code — and over-reserving costs a free choice while
+ * under-reserving costs a graduation.
  *
  * @returns {{code: string, ids: string[]}[]} unmet codes, rarest first
  */
@@ -1079,9 +1103,21 @@ export function breadthCodes(cells, courseMap, granted = []) {
 
   const covered = new Set(granted);
   for (const c of cells) {
-    if (c.kind !== "named" || !c.groups?.[0]) continue;
-    for (const id of c.groups[0]) {
-      for (const a of codesOf(courseMap[id])) covered.add(a);
+    if (!c.groups?.length) continue;
+    // A named cell is one group taken together, so everything in it is delivered.
+    if (c.kind === "named") {
+      if (!c.groups[0]) continue;
+      for (const id of c.groups[0]) for (const a of codesOf(courseMap[id])) covered.add(a);
+      continue;
+    }
+    if (c.kind !== "choice") continue;
+    // A choice cell delivers ONE group, and the student picks which — so the guarantee is the
+    // intersection over groups. Within a group the courses are taken together, hence a union
+    // there and an intersection across.
+    const perGroup = c.groups.map(g => new Set(g.flatMap(id => codesOf(courseMap[id]))));
+    if (!perGroup.length) continue;
+    for (const a of perGroup[0]) {
+      if (perGroup.every(s => s.has(a))) covered.add(a);
     }
   }
   return [...byCode.entries()]
