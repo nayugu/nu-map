@@ -11,6 +11,9 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { createReservation, originKey, originsOf } from "./reservations.js";
+// A leaf module by design — see `planLabels.js`. `planTemplate.js` re-exports these and also
+// imports THIS file, so reading them from there would make a cycle out of two string constants.
+import { isGeneratedPlanLabel, GENERATED_ORIGIN_NS } from "./planLabels.js";
 
 /** A cell the plan left open: no courses, and not a co-op, vacation or label. */
 const isOpen = (e) =>
@@ -72,7 +75,17 @@ export function applySamplePlan(plan, {
   // Cards this plan already put in the student's plan. Re-applying must add
   // nothing a second time — the same guarantee an already-placed course gets.
   const seenOrigins = originsOf(reservations);
-  const planLabel = plan?.label ?? "";
+  // ── Provenance is keyed on a STABLE token, not on the caption ──────
+  //
+  // `originKey` embeds this string, and `seenOrigins` uses the result to know a card is already
+  // here. Reading the display label directly makes every reservation's identity hostage to the
+  // wording: renaming the generated plan's label doubled a student's cards, measured at 3 -> 6,
+  // with nothing reported. A department's variant label is genuinely the identity of its plan
+  // and stays as it is; OUR label is a caption we are free to reword, so it is replaced by a
+  // constant that never changes. See `GENERATED_ORIGIN_NS`.
+  const planLabel = isGeneratedPlanLabel(plan?.label)
+    ? GENERATED_ORIGIN_NS
+    : (plan?.label ?? "");
   const placed = [], reserved = [], coops = [], notes = [];
   const held = new Set(Object.keys(placements).map(k => String(k).split("#")[0]));
   const sections = programData?.requirementSections ?? [];
