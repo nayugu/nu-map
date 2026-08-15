@@ -315,7 +315,15 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
     const grantedBy = workTermSource?.get?.(r.key) ?? null;
     const grantData = grantedBy ? specialTermPl?.[grantedBy] : null;
     const grantType = grantData ? (specialTerms?.getTypes?.() ?? []).find(x => x.id === grantData.typeId) : null;
-    const draggable = !!course && !grantedBy;
+    // Gated on the course BEING a work-experience registration, not on it
+    // being granted right now. Those came apart the moment nothing was
+    // inferred: an UNMET row — International Business's `COOP 3948`, which is
+    // unmet until the student records it — has no `grantedBy`, so the old
+    // `!grantedBy` test made it draggable. That was the last door left open to
+    // the phantom card the bank change closed, and it stood open on exactly the
+    // rows a student is most likely to reach for, because unmet is why they are
+    // looking. The row still opens the info panel on click.
+    const draggable = !!course && !course.coop;
     // The abroad flag is set on the CARD, in the course field beside the
     // employer — not from here. An actuator in the audit was tried and pulled:
     // a requirement list should report, and a button wedged into a row reads as

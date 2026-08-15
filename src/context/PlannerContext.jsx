@@ -2033,6 +2033,18 @@ const { locale, setLocale, locales, t } = useLanguage();
    */
   const revealCourse = useCallback((rawId) => {
     if (!rawId) return false;
+    // A work-term block is a card too: SemRow and SummerRow both register
+    // `cardRefs.current[termStartId]`, so App's scroll effect can reach one by
+    // its instance id with no new machinery. This branch exists because a
+    // work-experience course is never in `placements` — the block registers it
+    // — so the lookup below would find nothing and the info panel's repeat
+    // cycle would have nowhere to send a student with three co-ops.
+    const wt = specialTermPl?.[rawId];
+    if (wt) {
+      if (!wt.semId || !inTimeline(wt.semId, SEM_INDEX)) return false;
+      setRevealTarget(prev => ({ pid: rawId, n: (prev?.n ?? 0) + 1 }));
+      return true;
+    }
     let pid = null;
     if (gridPlacements[rawId] !== undefined) pid = rawId;
     else {
@@ -2071,7 +2083,11 @@ const { locale, setLocale, locales, t } = useLanguage();
     // state would not re-run the effect.
     setRevealTarget(prev => ({ pid, n: (prev?.n ?? 0) + 1 }));
     return true;
-  }, [gridPlacements, SEM_INDEX, SEMESTERS, collapsedSubs]);
+    // `specialTermPl` MUST be listed. Omitting it is the same defect that made
+    // the card's course field never appear: the callback would close over the
+    // work terms as they were on first render — none — and revealing a co-op
+    // would silently do nothing for exactly the plans that have one.
+  }, [gridPlacements, SEM_INDEX, SEMESTERS, collapsedSubs, specialTermPl]);
 
   // Every course-identifying click already sets `selectedId` — that is what
   // "the user pointed at this course" means here. Hanging the reveal off it

@@ -254,8 +254,13 @@ export default function InfoPanel() {
 }
 
 function CourseInfo({ selCourse, navTo }) {
-  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX, specialTermPl } = usePlanner();
+  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX, specialTermPl, revealCourse } = usePlanner();
   const specialTerms = usePort(ISpecialTerms);
+  // Where the ↻ cycle is, when the panel's own `selCourse.id` cannot say.
+  // A work-term take is not a course id, so cycling onto one leaves selCourse
+  // unchanged and the next click would otherwise start over from the same
+  // place. Keyed by course so opening a different one resets it.
+  const cycleRef = useRef({ courseId: null, pid: null });
   const subjColor = useCourseInk(selCourse);
   const attributeSystem = usePort(IAttributeSystem);
   const creditSystem    = usePort(ICreditSystem);
@@ -365,14 +370,27 @@ function CourseInfo({ selCourse, navTo }) {
               onMouseEnter={e => setRepHover(e.currentTarget.getBoundingClientRect())}
               onMouseLeave={() => setRepHover(null)}
               onClick={takes.length > 1 ? (e) => {
-                // Cycle: select the next take. Selecting it is all this needs
-                // to do — bringing the card into view follows from selection
-                // everywhere in the app now (PlannerContext → revealCourse),
-                // and doing it again here would race that scroll.
+                // Cycle to the next take.
+                //
+                // For a PLACEMENT, selecting it is all this needs to do —
+                // bringing the card into view follows from selection everywhere
+                // in the app (PlannerContext → revealCourse), and doing it again
+                // here would race that scroll.
+                //
+                // A WORK-TERM take has no course id of its own to select: the
+                // block registers this same course, so there is nothing for the
+                // panel to navigate to. It is still a card on the board, so it
+                // is revealed directly by its instance id. Without this branch
+                // the cycle called navTo("wt_…") and landed on nothing — which
+                // is what counting work terms as takes would otherwise have
+                // introduced.
                 e.stopPropagation();
-                const i = takes.findIndex(tk => tk.pid === selCourse.id);
+                const from = cycleRef.current.courseId === selCourse.id ? cycleRef.current.pid : selCourse.id;
+                const i    = takes.findIndex(tk => tk.pid === from);
                 const next = takes[(i + 1) % takes.length];
-                navTo(next.pid);
+                cycleRef.current = { courseId: selCourse.id, pid: next.pid };
+                if (next.via) revealCourse(next.pid);
+                else navTo(next.pid);
               } : undefined}
               style={{
                 fontSize: 9,
