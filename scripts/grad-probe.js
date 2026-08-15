@@ -21,7 +21,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import {
-  allocateMajorWithElectives, allocateMajorSections, collectCandidateKeys,
+  allocateMajorWithElectives, allocateMajorSections, allocateSection, collectCandidateKeys,
 } from "../src/core/gradRequirements.js";
 import { demandOf } from "../src/core/requirementDemand.js";
 
@@ -247,6 +247,68 @@ export function planSatisfaction(courseMap) {
   return rows;
 }
 
+// ── Corpus sweep: what "one course, one requirement" costs ───────
+//
+// Satisfaction and credit are two different questions and the allocator answers
+// them with one mechanism: a single global `used` set, which stops a course
+// being COUNTED twice and therefore also stops it SATISFYING two requirements.
+// `shared: true` is the only escape hatch, set on 33 of the 236 sections whose
+// title contains "Integrative".
+//
+// This measures the gap: how many sections a program's own sample plan would
+// satisfy if satisfaction were many-to-many (each section allocated against the
+// full placed set, which is exactly what `shared` already does) but are
+// reported unmet under the single used set today.
+
+export function crossCount(courseMap) {
+  const rows = [];
+  for (const p of allProgramPaths()) {
+    const planFile = path.join(path.dirname(p), "plan.json");
+    if (!fs.existsSync(planFile)) continue;
+    let major, placed;
+    try {
+      major = JSON.parse(fs.readFileSync(p, "utf8"));
+      placed = planPlacements(planFile);
+    } catch { continue; }
+    if (!placed) continue;
+    for (const k of placed.keys) if (!courseMap[k]) placed.keys.delete(k);
+
+    // Sequential: the shipped rule, one global used set across all sections.
+    const { sections: exclusive } = allocateMajorSections(major, placed.keys, courseMap);
+    const byTitle = new Map(exclusive.map(s => [s.title, s]));
+    // Alone: the section against the full placed set, nothing consumed by
+    // anybody — what `shared: true` already grants the 33 sections that have it.
+    for (const section of major.requirementSections ?? []) {
+      if (!section?.title || section.shared) continue;
+      const alone = allocateSection(
+        section, placed.keys, new Set(), new Set(), courseMap);
+      const seq = byTitle.get(section.title);
+      if (!(alone?.sat && seq && !seq.sat)) continue;
+      // Which courses this section needed and an earlier one took.
+      const taken = [...(alone.allocatedCourses ?? [])]
+        .filter(k => !seq.allocatedCourses?.has(k));
+      // Did the section that took them NAME them, or absorb them into a credit
+      // pool / open range? Only the first is the catalog saying "one course
+      // answers both"; a pool is accumulating distinct credit and must not be
+      // allowed to count the same 4 SH twice.
+      // Ask of the section that ACTUALLY took the course, not of any section
+      // that happens to mention it — otherwise a pool grab is excused by an
+      // unrelated third section naming the same course.
+      const namedElsewhere = taken.some((k) => {
+        const holder = exclusive.find(s => s !== seq && s.allocatedCourses?.has(k));
+        if (!holder) return false;
+        const src = (major.requirementSections ?? []).find(s => s?.title === holder.title);
+        return !!src && namedKeys(src).has(k);
+      });
+      rows.push({
+        program: path.relative(ROOT, p), section: section.title,
+        kind: namedElsewhere ? "named-in-both" : "taken-by-a-pool",
+      });
+    }
+  }
+  return rows;
+}
+
 /** Every COURSE key a requirement subtree names outright (RANGEs name nothing). */
 function namedKeys(section) {
   const out = new Set();
@@ -264,7 +326,14 @@ function namedKeys(section) {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const args = process.argv.slice(2);
   const courseMap = loadCourseMap();
-  if (args[0] === "--plan") {
+  if (args[0] === "--crosscount") {
+    const rows = crossCount(courseMap);
+    const named = rows.filter(r => r.kind === "named-in-both");
+    console.log(`${rows.length} sections a course could satisfy but is not allowed to`);
+    console.log(`  ${named.length} where BOTH sections name the course outright`);
+    console.log(`  ${rows.length - named.length} where a credit pool / open range took it\n`);
+    for (const r of named) console.log(`${r.section}  ${r.program}`);
+  } else if (args[0] === "--plan") {
     // Probe one program against its OWN published sample plan.
     const file = findProgram(args[1]);
     const placed = planPlacements(path.join(path.dirname(file), "plan.json"));
