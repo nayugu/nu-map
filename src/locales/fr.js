@@ -473,7 +473,6 @@ export const strings = {
   "grad.nupath.satisfiedBy":      "satisfait par {courses}",
   "grad.nupath.satisfiedByLabel": "Satisfait par",
   "grad.nupath.granted":          "satisfait par un semestre placé (p. ex. co-op)",
-  "grad.req.markAbroad":    "marquer une période de travail comme internationale",
   "grad.nupath.unsatisfied":      "pas encore satisfait (aucun cours placé)",
   "grad.stale.program":     "Ce programme ne figure plus dans le catalogue. Il a peut-être été renommé ou supprimé.",
   "grad.stale.minor":       "{label} : ce programme ne figure plus dans le catalogue. Il a peut-être été renommé ou supprimé.",

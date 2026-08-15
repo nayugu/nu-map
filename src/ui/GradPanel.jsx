@@ -326,21 +326,10 @@ function ReqNode({ r, depth = 0, dimmed = false, abroadOnly }) {
     const grantData = grantedBy ? specialTermPl?.[grantedBy] : null;
     const grantType = grantData ? (specialTerms?.getTypes?.() ?? []).find(x => x.id === grantData.typeId) : null;
     const draggable = !!course && !grantedBy;
-    // An unmet requirement that ONLY an abroad work term can satisfy, plus a
-    // placed work term not yet marked international. Earliest first, so the
-    // answer does not depend on the order blocks were dragged.
-    //
-    // The block filter asks which types REGISTER a course rather than testing
-    // for the id "coop": the type list is the institution's to define, and a
-    // hardcoded id here would be NU leaking into a shared component.
-    const wantsAbroad = !r.sat && course?.coop?.abroad === true && (abroadOnly ?? true);
-    const grantingTypeIds = new Set((specialTerms?.getTypes?.() ?? [])
-      .filter(x => x.courseGrants?.length).map(x => x.id));
-    const abroadCandidate = wantsAbroad
-      ? (Object.entries(specialTermPl ?? {})
-          .filter(([, d]) => d?.semId && grantingTypeIds.has(d.typeId) && !d.abroad)
-          .sort(([, a], [, b]) => (SEM_INDEX?.[a.semId] ?? 0) - (SEM_INDEX?.[b.semId] ?? 0))[0]?.[0] ?? null)
-      : null;
+    // The abroad flag is set on the CARD, in the course field beside the
+    // employer — not from here. An actuator in the audit was tried and pulled:
+    // a requirement list should report, and a button wedged into a row reads as
+    // clutter next to the thing it is describing.
     return (
       <div style={{ paddingLeft: pl + baseIndent, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
         <div
@@ -375,21 +364,6 @@ function ReqNode({ r, depth = 0, dimmed = false, abroadOnly }) {
               student typed — so this needs no new string, and the tooltip
               reuses grad.nupath.granted ("satisfied by a placed term"), which
               is the sentence this situation already had a translation for. */}
-          {abroadCandidate && (
-            <button
-              onClick={e => {
-                e.stopPropagation();
-                pushUndo?.();
-                setSpecialTermPl?.(prev => ({ ...prev, [abroadCandidate]: { ...prev[abroadCandidate], abroad: true } }));
-              }}
-              style={{
-                fontSize: isPhone ? 7 : 9, color: "var(--link-1)", background: "none",
-                border: "1px solid var(--border-1)", borderRadius: 4,
-                padding: isPhone ? "0 3px" : "1px 5px", cursor: "pointer",
-                whiteSpace: "nowrap", flexShrink: 0,
-              }}
-            >{t("grad.req.markAbroad")}</button>
-          )}
           {grantType && (
             <span style={{
               fontSize: isPhone ? 7 : 9, color: "var(--text-5)", userSelect: "none",

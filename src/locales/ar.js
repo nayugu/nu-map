@@ -473,7 +473,6 @@ export const strings = {
   "grad.nupath.satisfiedBy":      "مُستوفى بواسطة {courses}",
   "grad.nupath.satisfiedByLabel": "مُستوفى بواسطة",
   "grad.nupath.granted":          "مُستوفى بواسطة فصل مُدرج (مثل التدريب التعاوني)",
-  "grad.req.markAbroad":    "وضع علامة على فترة عمل بأنها دولية",
   "grad.nupath.unsatisfied":      "لم يُستوفَ بعد (لا يوجد مقرر مُدرج)",
   "grad.stale.program":     "لم يعد هذا البرنامج موجوداً في الدليل. ربما أُعيدت تسميته أو تم إيقافه.",
   "grad.stale.minor":       "{label}: لم يعد هذا البرنامج موجوداً في الدليل. ربما أُعيدت تسميته أو تم إيقافه.",

@@ -473,7 +473,6 @@ export const strings = {
   "grad.nupath.satisfiedBy":      "{courses} द्वारा पूरा",
   "grad.nupath.satisfiedByLabel": "पूरा करता है",
   "grad.nupath.granted":          "एक रखे गए टर्म द्वारा पूरा (जैसे को-ऑप)",
-  "grad.req.markAbroad":    "किसी कार्य अवधि को अंतर्राष्ट्रीय के रूप में चिह्नित करें",
   "grad.nupath.unsatisfied":      "अभी तक पूरा नहीं (कोई कक्षा नहीं रखी गई)",
   "grad.stale.program":     "यह प्रोग्राम अब कैटलॉग में नहीं है। हो सकता है इसका नाम बदल दिया गया हो या इसे बंद कर दिया गया हो।",
   "grad.stale.minor":       "{label}: यह प्रोग्राम अब कैटलॉग में नहीं है। हो सकता है इसका नाम बदल दिया गया हो या इसे बंद कर दिया गया हो।",

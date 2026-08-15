@@ -2,8 +2,9 @@
 // SUMMER ROW  — renders sumA + sumB as a single combined visual block
 // ═══════════════════════════════════════════════════════════════════
 import { usePlanner } from "../context/PlannerContext.jsx";
+import { useRelevance } from "../context/RelevanceContext.jsx";
 import { useTheme } from "../context/ThemeContext.jsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { TYPE_BG } from "../core/constants.js";
 import { getSemStudySH, getOrderedCourses } from "../core/planModel.js";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
@@ -14,6 +15,7 @@ import { TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { semName } from "../core/semGrid.js";
 import CourseCard from "./CourseCard.jsx";
 import CompanySearch from "./CompanySearch.jsx";
+import CoopCourseSearch from "./CoopCourseSearch.jsx";
 import CompanyLogo from "./CompanyLogo.jsx";
 import { FadeInput } from "./FadeText.jsx";
 
@@ -42,7 +44,19 @@ export default function SummerRow({ semA, semB }) {
     semTrackingMode,
     studentType,
     privateCoop,
+    courseMap, setSelectedId, setShowPanel,
   } = usePlanner();
+  // Which course each work term registers — resolved app-wide, same source the
+  // fall/spring card and the audit read.
+  const { workTermCourse } = useRelevance();
+  const workTermCourseOptions = useMemo(
+    () => {
+      const mine = new Set(Object.values(workTermCourse ?? {}));
+      return Object.values(courseMap ?? {}).filter(c => c.coop)
+        .sort((a, b) => (mine.has(b.id) - mine.has(a.id)) || a.id.localeCompare(b.id));
+    },
+    [courseMap, workTermCourse]
+  );
 
   const isLive = semTrackingMode === "live";
   const onNowClick = () => { if (!isLive) setCurrentSemId(semA.id); };
@@ -107,6 +121,7 @@ export default function SummerRow({ semA, semB }) {
     const termStartDur  = termStartType ? resolveTermByDuration(termStartType.durations, termStartData.duration) : null;
     if (termStartDur) {
       const displayLabel = isPhone && termStartType.label === "Full-Time Internship" ? "Internship" : termStartType.label;
+      const registers = workTermCourse?.[termStartId] ?? null;
       return (
         <div key={sem.id} data-sem-id={sem.id} style={{
           flex: 1, minWidth: 0, overflow: "hidden",
@@ -140,8 +155,40 @@ export default function SummerRow({ semA, semB }) {
                   step ABOVE the continuation. The two were the wrong way round:
                   the term merely passing through a semester was set larger than
                   the term that begins in one. */}
-              <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termStartData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termStartData.typeId === "coop" ? "uppercase" : "none", whiteSpace: "nowrap", flexShrink: 0 }}>
-                <TText>{displayLabel}</TText> {termNum(termStartData.typeId, termStartId)}
+              {/* Same stack as SemRow's card: the label, and under it the
+                  course this work term registers. NU's two default co-op
+                  patterns both put a co-op in summer, so a field that exists
+                  only on the fall/spring card is invisible to most students —
+                  which is exactly how it shipped the first time. */}
+              <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1, flexShrink: 0, minWidth: 0 }}>
+                <div style={{ fontSize: isPhone ? 7 : 14, fontWeight: 600, color: companyColor, fontFamily: "'Inter', sans-serif", letterSpacing: termStartData.typeId === "coop" ? "0.08em" : "0.03em", textTransform: termStartData.typeId === "coop" ? "uppercase" : "none", whiteSpace: "nowrap" }}>
+                  <TText>{displayLabel}</TText> {termNum(termStartData.typeId, termStartId)}
+                </div>
+                {registers && !privateCoop && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 4, maxWidth: isPhone ? 62 : 108 }}
+                       onMouseDown={e => e.stopPropagation()}>
+                    <CoopCourseSearch
+                      value={termStartData.courseId ?? registers}
+                      courses={workTermCourseOptions}
+                      color="var(--text-4)"
+                      emptyColor={placeholderColor}
+                      fontSize={isPhone ? 5 : 9}
+                      placeholder={t("sem.work.course.placeholder")}
+                      onChange={id => {
+                        pushUndo();
+                        setSpecialTermPl(p => ({ ...p, [termStartId]: id
+                          ? { ...p[termStartId], courseId: id }
+                          : (({ courseId, ...rest }) => rest)(p[termStartId]) }));
+                      }}
+                    />
+                    <button
+                      draggable={false}
+                      onClick={e => { e.stopPropagation(); setSelectedId?.(registers); setShowPanel?.(true); }}
+                      title={courseMap?.[registers]?.title ?? registers}
+                      style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: isPhone ? 5 : 9, color: "var(--text-5)", flexShrink: 0 }}
+                    >↗</button>
+                  </div>
+                )}
               </div>
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 8 : 17 }}>
                 {privateCoop ? null : (
