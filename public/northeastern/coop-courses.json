@@ -1,0 +1,358 @@
+{
+ "generated": "2026-08-15",
+ "source": "catalog course titles",
+ "note": "Courses recorded by placing a work term rather than by being placed. See docs/coop-design.md.",
+ "count": 86,
+ "byFlags": {
+  "full/domestic": 33,
+  "half/domestic": 19,
+  "full/abroad": 19,
+  "half/abroad": 15
+ },
+ "courses": {
+  "ARTE6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "BINF6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "BINF6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "BINF6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "BIOT6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "BIOT6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "BIOT6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "BIOT6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "BUSN6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "BUSN6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "BUSN6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "BUSN6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "CNET6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "COOP3945": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "COOP3946": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "COOP3947": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "COOP3948": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "COOP3949": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "COP3944": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "COP3945": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "COP4946": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "COP6945": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "COP6946": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "CRIM6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "CRIM6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "CRIM6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "CRIM6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "CS6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "CS6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "CS6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "CS6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "ECON6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "ECON6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "ECON6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "ECON6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "EEAM6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "EEAM6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "EEAM6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "EEAM6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "EESC6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "EESC6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "EESC6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "ENCP6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "ENCP6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "ENCP6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "ENCP6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "ENGL6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "ENGL6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "ENGL6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "ENGL6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "ENVR6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "ENVR6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "HIST6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "HIST6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "HIST6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "HIST6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "HLTH6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "INSH6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "JRNL6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "LAW7954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "LAW7955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "LAW7956": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "LAW7957": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "LAW7964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "LAW7965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "LAW7966": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "LAW7967": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "MATH6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "MATH6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "MATH6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "MATH6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "MUSI6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "NRSG6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "PHMD6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "PHSC6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "POLS6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "POLS6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "POLS6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "POLS6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "PPUA6954": {
+   "abroad": false,
+   "halfTime": true
+  },
+  "PPUA6955": {
+   "abroad": true,
+   "halfTime": true
+  },
+  "PPUA6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "PPUA6965": {
+   "abroad": true,
+   "halfTime": false
+  },
+  "PT6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "SLPA6964": {
+   "abroad": false,
+   "halfTime": false
+  },
+  "SUEN6964": {
+   "abroad": false,
+   "halfTime": false
+  }
+ }
+}
