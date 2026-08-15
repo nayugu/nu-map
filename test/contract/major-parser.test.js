@@ -15,9 +15,10 @@ import { parse } from 'node-html-parser';
 
 import {
   parseRequirements, parseTotalCredits, findLeakedMarkers,
-  extractPlanOfStudyCourses, normalizeConcentrationHref,
+  extractPlanOfStudyCourses, normalizeConcentrationHref, listRequirementPanes,
   UNDERGRAD_PROFILE, GRAD_PROFILE,
 } from '../../scripts/lib/catalog-program-parser.js';
+import { planPanes, assertPaneCoverage } from '../../scripts/lib/program-variants.js';
 
 const DIR = join(dirname(fileURLToPath(import.meta.url)), '../fixtures/catalog');
 const load = name => parse(readFileSync(join(DIR, `${name}.html`), 'utf8'));
@@ -52,6 +53,102 @@ test('parser › titles are unique, so they can serve as keys', () => {
     const s = titles(r), c = concTitles(r);
     assert.equal(new Set(s).size, s.length, `${name} has duplicate section titles`);
     assert.equal(new Set(c).size, c.length, `${name} has duplicate concentration titles`);
+  }
+});
+
+// ── One page, one-or-more programs ───────────────────────────────────────────
+//
+// The test above is satisfied by a broken page, because uniquify renames the
+// second "Concentration in Accounting" to "… (2)" before it looks. Public
+// Policy PhD shipped `{"level":"verified","issues":0}` that way, carrying two
+// same-named concentrations whose credit requirements differed by 8 SH. These
+// parse each fixture the way the SCRAPERS do — one program at a time — and
+// assert on evidence the rename cannot launder.
+
+/** Every program on a fixture page, as scrape-majors would read them. */
+function programsOf(name, profile) {
+  const root = load(name);
+  const panes = listRequirementPanes(root);
+  const { primary, variants } = planPanes(panes, name);
+  return [{ modality: null, panes: primary }, ...variants]
+    .filter(g => g.panes.length)
+    .map(g => ({
+      modality: g.modality,
+      panes: g.panes.map(p => p.id),
+      r: parseRequirements(root, profile, { panes: g.panes.map(p => p.el) }),
+      sh: parseTotalCredits(root, profile, { panes: g.panes.map(p => p.el) }).value,
+    }));
+}
+
+const PROFILE_OF = name => (/-ms$|-phd$|-cags$|-llm$/.test(name) ? GRAD_PROFILE : UNDERGRAD_PROFILE);
+
+test('parser › no program carries a disambiguated duplicate title', () => {
+  for (const f of readdirSync(DIR).filter(f => f.endsWith('.html'))) {
+    const name = f.replace(/\.html$/, '');
+    for (const p of programsOf(name, PROFILE_OF(name))) {
+      const who = `${name}${p.modality ? ` [${p.modality}]` : ''}`;
+      assert.deepEqual(p.r.titleCollisions.concentrations, [],
+        `${who}: concentration titles collided and were silently renamed`);
+      for (const t of (p.r.concentrations?.concentrationOptions ?? []).map(c => c.title)) {
+        assert.doesNotMatch(t, / \(\d+\)$/, `${who}: "${t}" is a renamed duplicate`);
+      }
+    }
+  }
+});
+
+test('parser › the per-program parses PARTITION the page', () => {
+  // Counting consumption can only prove nothing was dropped. International
+  // Business reported a spotless 8/8 while reading every pane twice.
+  for (const f of readdirSync(DIR).filter(f => f.endsWith('.html'))) {
+    const name = f.replace(/\.html$/, '');
+    const panes = listRequirementPanes(load(name));
+    const covered = programsOf(name, PROFILE_OF(name)).map(p => p.r.panesParsed);
+    assert.doesNotThrow(() => assertPaneCoverage(panes, covered, name));
+  }
+});
+
+test('parser › Public Policy PhD is two programs with DIFFERENT credit totals', () => {
+  // The concrete regression. Both curricula used to merge into one record
+  // holding 14 sections, six concentrations (three of them "… (2)") and the
+  // standard-entry total, with nothing to say the twins differed by 8 SH.
+  const progs = programsOf('public-policy-phd', GRAD_PROFILE);
+  assert.equal(progs.length, 2);
+
+  const [std, adv] = progs;
+  assert.equal(std.modality, null);
+  assert.equal(adv.modality, 'advancedentry');
+  assert.equal(std.sh, 55, 'standard entry should state its own total');
+  assert.equal(adv.sh, 47, 'advanced entry states a different total');
+  assert.notEqual(std.sh, adv.sh, 'the variant must not inherit the primary total');
+
+  for (const p of progs) {
+    assert.equal(p.r.concentrations.concentrationOptions.length, 3,
+      `${p.modality ?? 'primary'} should offer 3 concentrations, not 6`);
+    assert.equal(p.r.requirementSections.length, 7);
+  }
+});
+
+test('parser › a continuation pane still MERGES into one program', () => {
+  // The other half of the decision. Nursing CAGS opens with a prerequisite
+  // pane feeding a core pane: one degree, two panes, and splitting it would be
+  // just as wrong as merging Public Policy's two curricula.
+  const progs = programsOf('nursing-agnp-cags', GRAD_PROFILE);
+  assert.equal(progs.length, 1, 'prerequisites are not a separate program');
+  assert.deepEqual(progs[0].panes,
+    ['textcontainer', 'programrequirementstextcontainer']);
+  assert.equal(progs[0].sh, 24);
+});
+
+test('parser › International Business lists each concentration once per program', () => {
+  // 15 concentrations were reaching the JSON 30 times, because the exchange
+  // pane repeats the whole menu and externalLinks took both copies.
+  const progs = programsOf('international-business-bsib', UNDERGRAD_PROFILE);
+  assert.equal(progs.length, 2);
+  assert.equal(progs[1].modality, 'exchange');
+  for (const p of progs) {
+    const hrefs = p.r.pendingExternal.map(l => normalizeConcentrationHref(l.href));
+    assert.equal(hrefs.length, 15, 'the menu should resolve to 15 distinct pages');
+    assert.equal(new Set(hrefs).size, hrefs.length, 'duplicate concentration targets');
   }
 });
 

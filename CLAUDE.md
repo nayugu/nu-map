@@ -96,11 +96,46 @@ Facts that follow from this:
   PDF is the same render as the HTML, and `sandboxnu/graduatenu` is GPL-3.0
   (incompatible with the Option B commercial licence) with known errors. The
   catalog's Program Requirements pane is the single authority. Don't re-hunt.
-- Both scrapers share `scripts/lib/catalog-program-parser.js`. Requirement
-  tables live under **27 different container ids** including NEU's own typos,
-  52 pages spread them across more than one pane, and the Sample Plan of Study
-  pane is excluded deliberately. Match `*textcontainer` + "has tables"; never
-  hard-code `programrequirementstextcontainer`.
+- Both scrapers share `scripts/lib/catalog-program-parser.js` for parsing and
+  `scripts/lib/program-record.js` for building records — the latter because the
+  two scripts used to carry a byte-identical `scrapeProgram`, which is how a
+  data fix lands in one path and not the other. Requirement tables live under
+  **27 different container ids** including NEU's own typos, 52 pages spread them
+  across more than one pane, and the Sample Plan of Study pane is excluded
+  deliberately. Match `*textcontainer` + "has tables"; never hard-code
+  `programrequirementstextcontainer`.
+- **One page can be more than one PROGRAM** — see `docs/program-variants.md`.
+  NEU publishes variants either as separate URLs (campus) or as a second
+  requirement pane on one page (advanced entry, part-time, exchange). The
+  scrapers used to flatten the second kind into the primary program, which cost
+  **159 phantom requirement sections across 35 programs**, gave 42 pages the
+  wrong credit total (Electrical Engineering PhD is 48 SH by standard entry and
+  16 SH by advanced entry, and both shipped as 48), duplicated three whole
+  concentration menus, and left ~36 variant programs unreachable. Rules:
+  1. Panes are adjudicated by hand in `scripts/lib/program-variants.js`. An
+     unadjudicated pane is a **hard scrape failure**, never a default merge —
+     that hard stop *is* the fix. Do not add a fallback.
+  2. Do not replace the table with a classifier. Both obvious ones were built
+     and measured: heading overlap misfiles 8 real advanced-entry variants
+     (Cybersecurity PhD scores 0.2), and credit arithmetic disagrees on 16 of 45
+     and calls PharmD's sequential phases "alternatives".
+  3. The first pane is always primary and **keeps its existing folder**, so the
+     change is additive and no saved plan, share link or MCP `programId` moves.
+  4. Variants are named with the modality mechanism NEU already uses
+     (`MSCS—Align`), so a folder is `public_policy_phdadvancedentry_(boston)`.
+     Every modality in the table must be registered in `programNaming.MODALITIES`.
+  5. A variant gets **no** sample plan and no plan-of-study witness — the plan
+     pane describes the primary curriculum, and a witness pointed at the wrong
+     program is worse than no witness.
+- **A guard that runs after a repair cannot see what it repaired.**
+  `duplicate-concentration-titles` is severity `high` and never once fired,
+  because it compared finished titles and `uniquify` had already renamed the
+  collision to `… (2)`. Public Policy PhD shipped `verified, 0 issues` while
+  carrying two same-named concentrations differing by 8 SH. It now reads
+  `metadata.titleCollisions`, recorded at the rename. Likewise
+  `tablesConsumed === tablesOnPage` proves only that nothing was *dropped* and
+  is blind to double-**counting**; `assertPaneCoverage` is the partition check
+  that catches it.
 - **The Sample Plan of Study is a witness, not a source.** It is one valid
   path, so it can prove we dropped requirements and can never prove we have
   them all. Never assert parsed ⊆ plan — the plan takes one branch of every

@@ -27,21 +27,16 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync, statSy
 import { join, dirname, sep }       from 'path';
 import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
-import { markSharedSections }       from './lib/major-integrity.js';
 import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
 import { checkScrapeRails, checkPlanRail } from './lib/scrape-rails.js';
-import { extractPlanGrid, verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
+import { verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
 import { parseEditionArg, editionBasePath, assertEdition,
          isFatalScrapeError }        from './lib/catalog-edition.js';
-import { parseRequirements, parseTotalCredits, findLeakedMarkers,
-         extractPlanOfStudyCourses, listRequirementPanes,
-         normalizeConcentrationHref, parseCatalogEdition,
+import { findLeakedMarkers, parseCatalogEdition,
          UNDERGRAD_PROFILE as PROFILE } from './lib/catalog-program-parser.js';
-import { planPanes, assertPaneCoverage, variantSlug,
-         UnadjudicatedPaneError }       from './lib/program-variants.js';
-import { fmtProgramLabel, fmtLocation, isDegreeToken }
-                                        from '../src/adapters/northeastern/programNaming.js';
+import { UnadjudicatedPaneError }    from './lib/program-variants.js';
+import { buildProgramsForPage, slugify } from './lib/program-record.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
@@ -128,15 +123,8 @@ const URL_ARG = (() => { const i = process.argv.indexOf('--url'); return i >= 0 
 // configured delay. Set CATALOG_HTML_CACHE to reuse pages across local runs.
 const fetchPage = url => politeFetch(url, { delayMs: DELAY_MS });
 
-/** "Computer Science, BSCS (Boston)" → "computer_science_bscs_(boston)" */
-function slugify(str) {
-  return str.toLowerCase()
-    .replace(/[,]/g, '')
-    .replace(/\s+/g, '_')
-    .replace(/[^a-z0-9_()\-]/g, '')
-    .replace(/_+/g, '_')
-    .trim();
-}
+// slugify lives in lib/program-record.js, beside the variant slug it must
+// agree with.
 
 // ── Program list ──────────────────────────────────────────────────────────────
 
@@ -337,36 +325,7 @@ function listCommittedPlans(year = YEAR) {
 // ── Scrape one program ────────────────────────────────────────────────────────
 
 /**
- * Parse a page, then resolve any concentrations that live on their own pages.
- *
- * Business programs list ~17 concentrations as links rather than inline
- * tables. Those pages were already being fetched every run and thrown away as
- * "no requirements found", so resolving them costs no extra requests once the
- * page cache is warm. Only /concentrations/ paths are followed, and the count
- * is capped, so a markup change can't turn the scraper into a crawler.
- */
-const MAX_EXTERNAL_CONCENTRATIONS = 40;
-
-async function parseRequirementsResolvingExternals(root, panes) {
-  const first = parseRequirements(root, PROFILE, { panes });
-  // pendingExternal is de-duplicated by target inside the parser, so the cap
-  // now bounds DISTINCT concentration pages. It used to bound raw links, and a
-  // page that repeated its menu spent the budget twice over.
-  const pending = (first.pendingExternal ?? []).slice(0, MAX_EXTERNAL_CONCENTRATIONS);
-  if (!pending.length) return first;
-
-  const resolved = new Map();
-  for (const link of pending) {
-    const url = normalizeConcentrationHref(link.href);
-    if (!url) continue;
-    try { resolved.set(url, parseHTML(await fetchPage(url))); }
-    catch { /* a missing concentration page must not fail the program */ }
-  }
-  return parseRequirements(root, PROFILE, { panes, resolveExternal: u => resolved.get(u) ?? null });
-}
-
-/**
- * Every program on one catalog page.
+ * Every program published on one catalog page.
  *
  * Usually exactly one. But a page can publish an ALTERNATE CURRICULUM in a
  * second requirement pane — advanced entry, part-time, exchange — and folding
@@ -375,148 +334,16 @@ async function parseRequirementsResolvingExternals(root, panes) {
  * scripts/lib/program-variants.js and parsed one group at a time; an
  * unrecognised pane stops the run rather than defaulting to a merge.
  *
+ * The record building itself lives in scripts/lib/program-record.js, shared
+ * with scrape-grad-majors.js. Those two scripts used to carry a byte-identical
+ * copy of it — exactly how a data fix lands in one path and not the other.
+ *
  * @returns {object[]} one record per program, primary first, `[]` if none
  */
 async function scrapeProgram(url) {
-  const html = await fetchPage(url);
-  const root = parseHTML(html);
+  const root = parseHTML(await fetchPage(url));
   resolveYearFrom(root, url);   // edition year, before any outPath() call
-
-  const name = root.querySelector('#page-title h1, h1.page-title, h1')
-    ?.text?.trim()
-    ?.replace(/\s+/g, ' ')
-    ?? '';
-
-  const panes = listRequirementPanes(root);
-  const { primary, variants } = planPanes(panes, url);   // throws on an unknown pane
-
-  const out = [];
-  const covered = [];
-  for (const group of [{ modality: null, label: null, panes: primary }, ...variants]) {
-    if (!group.panes.length) continue;
-    const rec = await buildProgram(root, url, name, group);
-    if (rec) { out.push(rec); covered.push(rec.metadata.panes); }
-  }
-  // Every pane read exactly once — see assertPaneCoverage for why consumption
-  // counting alone could never have caught the duplication.
-  if (out.length) assertPaneCoverage(panes, covered, url);
-  return out;
-}
-
-/**
- * One program record, scoped to one group of panes.
- *
- * @param {{modality: string|null, label: string|null, panes: object[]}} group
- */
-async function buildProgram(root, url, pageName, group) {
-  const paneEls = group.panes.map(p => p.el);
-  const isVariant = group.modality != null;
-
-  // A variant's name and folder both come from its SLUG, through the same
-  // parser the picker uses, so the two can never disagree: the folder
-  // `public_policy_phdadvancedentry_(boston)` and the label
-  // "Public Policy, PhD—Advanced Entry (Boston)" are one derivation.
-  const baseSlug = slugify(pageName);
-  const slug = isVariant ? variantSlug(baseSlug, group.modality, isDegreeToken) : baseSlug;
-  const campus = fmtLocation(slug);
-  const name = isVariant
-    ? fmtProgramLabel(slug) + (campus ? ` (${campus})` : '')
-    : pageName;
-
-  // Scoped to this program's panes: a page with two curricula states two
-  // totals, and the variant must not inherit the primary's.
-  const { value: totalCreditsRequired, source: totalCreditsSource } =
-    parseTotalCredits(root, PROFILE, { panes: paneEls });
-  const { requirementSections, concentrations, generalElectiveSH, gpaConstraints,
-          footnotes,
-          tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
-          unconsumedHeadings, titleCollisions, panesParsed } =
-    await parseRequirementsResolvingExternals(root, paneEls);
-
-  // A program can be entirely concentrations: Philosophy BA's whole major is
-  // five mutually-exclusive options and has no base requirement section.
-  // Dropping it for having no sections lost the program altogether.
-  if (!requirementSections.length && !concentrations) return null;
-
-  const data = {
-    name,
-    metadata:  {
-      verified: false,
-      lastEdited: new Date().toLocaleDateString('en-US'),
-      branch: 'main',
-      // Parse coverage — how many requirement tables the page offered vs how
-      // many we actually turned into requirements. Any gap means content was
-      // dropped on the floor; scripts/verify-majors.js gates on it.
-      tablesPresent,
-      tablesConsumed,
-      tablesOnPage,
-      tablesExcluded,
-      // The catalog page this was read from. Stored so the UI can send an
-      // advisor straight to the source — the whole point of saying "we copied
-      // the catalog" is that they can go check the catalog.
-      sourceUrl: url,
-      // Which panes this record was read from, and — for a variant — which
-      // alternate path it is. Both are how a reader (or the next scrape) can
-      // tell a split program from a page that simply has one pane.
-      panes: panesParsed,
-      ...(isVariant ? { variant: { modality: group.modality, label: group.label } } : {}),
-      // Titles that collided before being renamed unique. Surfaced rather than
-      // swallowed: major-verify's duplicate-concentration check reads these,
-      // because by the time a title reaches the JSON the collision is gone.
-      ...(titleCollisions?.sections?.length || titleCollisions?.concentrations?.length
-        ? { titleCollisions } : {}),
-      ...(unconsumedHeadings?.length ? { unconsumedHeadings } : {}),
-      // Courses the department's own sample plan names. A one-directional
-      // witness: anything here that matches no requirement means we dropped
-      // something. Never the reverse — the plan picks one branch per choice.
-      //
-      // The plan pane describes the PRIMARY curriculum only, so a variant gets
-      // none of it. Handing the advanced-entry record the standard-entry plan
-      // would make the verifier report every standard-only course as dropped —
-      // a witness pointed at the wrong program is worse than no witness.
-      planOfStudyCourses: isVariant ? [] : extractPlanOfStudyCourses(root),
-    },
-    // The same pane read as STRUCTURE — years, terms, entries — so the plan can
-    // be offered to a student rather than only counted against. Split into
-    // plan.json at write time and never stored here; see planPath().
-    // Null for the many programs that publish no plan, which is normal.
-    // Never offered for a variant, for the reason above.
-    planGrid: isVariant ? null : extractPlanGrid(root),
-    totalCreditsRequired,
-    // Which phrasing produced the number — 'stated-total' and friends come
-    // from what the page says is required; 'plan-grid' means we fell back to
-    // the sample plan and the value may exceed the true minimum.
-    ...(totalCreditsSource ? { totalCreditsSource } : {}),
-    yearVersion: YEAR,
-    requirementSections,
-    // GPA rules are constraints over grades, not satisfiable requirements —
-    // they render as info in the graduation panel and are evaluated only
-    // against grades the user chose to enter (src/core/gradeSystem.js).
-    ...(gpaConstraints?.length ? { gpaRequirements: gpaConstraints } : {}),
-    // Every footnote parseFootnotes found is kept. This used to filter down to
-    // `f.substitution` only, which silently dropped footnotes shaped as a
-    // WAIVER ("Principles of Bioengineering (BIOE 6000) and Seminar (BIOE 7390)
-    // are not required for students in a PlusOne bioengineering pathway") or a
-    // table-wide note with no course codes to parse at all ("Graduate courses
-    // that may be used toward the MS in Computer Science when part of the
-    // PlusOne program" — a real rule, attached to a whole concentration table,
-    // naming no course in its own text). Neither has a `substitution`, and the
-    // second has no `codes` either, so no code-based filter can catch it —
-    // only keeping everything does. parseFootnotes already drops near-empty
-    // text (< 8 chars) and de-dupes repeats, so nothing here is unbounded.
-    ...(footnotes?.length ? { footnotes } : {}),
-    ...(concentrations ? { concentrations } : {}),
-    ...(generalElectiveSH > 0 ? { generalElectiveSH } : {}),
-  };
-
-  // Mark cross-count sections (integrative / GPA re-lists / shared credit) that would
-  // otherwise be impossible to satisfy under single-use allocation. See lib/major-integrity.js.
-  markSharedSections(data);
-
-  // The folder this record must be written to. Carried on the record rather
-  // than recomputed by the caller, so the name and the path stay one decision.
-  Object.defineProperty(data, '_slug', { value: slug, enumerable: false });
-  return data;
+  return buildProgramsForPage(root, url, { profile: PROFILE, fetchPage, year: YEAR });
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────

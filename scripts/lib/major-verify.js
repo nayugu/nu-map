@@ -240,7 +240,21 @@ export function verifyProgram({ program, id, courseIndex = null, policy = {} }) 
       `${dupSections.length} section name(s) appear twice, and the two get merged — which can hide a requirement`,
       dupSections.map(t => ({ key: 'duplicateSection', params: { title: t } })));
   }
-  const dupConc = duplicates(concOpts.map(c => c.title));
+  // Read the collisions the PARSER recorded, not the titles that survived it.
+  //
+  // This check compared finished titles, and could therefore never fire: by
+  // the time a title reaches this JSON, uniquify has already renamed the
+  // second one to "… (2)" and the two no longer match. Public Policy PhD
+  // shipped `{"level":"verified","issues":0}` while carrying two
+  // concentrations of the same name whose credit requirements differed by
+  // 8 SH — the rename laundered the evidence away before the guard looked.
+  //
+  // Falls back to the old comparison for records scraped before
+  // metadata.titleCollisions existed, so an un-rescraped program is still
+  // checked, just less sharply.
+  const recorded = meta.titleCollisions?.concentrations;
+  const dupConc = recorded ?? duplicates(concOpts.map(c => c.title));
+  counters.duplicateConcentrationTitles = dupConc.length;
   if (dupConc.length) {
     add('duplicate-concentration-titles', 'high',
       'two concentrations share a name, so one of them cannot be selected',

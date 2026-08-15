@@ -28,17 +28,16 @@ import { writeFileSync, readFileSync, existsSync, mkdirSync, readdirSync, statSy
 import { join, dirname, sep }       from 'path';
 import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
-import { markSharedSections }       from './lib/major-integrity.js';
 import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
 import { checkScrapeRails, checkPlanRail } from './lib/scrape-rails.js';
-import { extractPlanGrid, verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
+import { verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
 import { parseEditionArg, editionBasePath, assertEdition,
          isFatalScrapeError }        from './lib/catalog-edition.js';
-import { parseRequirements, parseTotalCredits, findLeakedMarkers,
-         extractPlanOfStudyCourses,
-         normalizeConcentrationHref, parseCatalogEdition,
+import { findLeakedMarkers, parseCatalogEdition,
          GRAD_PROFILE as PROFILE } from './lib/catalog-program-parser.js';
+import { UnadjudicatedPaneError }    from './lib/program-variants.js';
+import { buildProgramsForPage, slugify } from './lib/program-record.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT      = join(__dirname, '..');
@@ -125,15 +124,8 @@ const URL_ARG = (() => { const i = process.argv.indexOf('--url'); return i >= 0 
 // configured delay. Set CATALOG_HTML_CACHE to reuse pages across local runs.
 const fetchPage = url => politeFetch(url, { delayMs: DELAY_MS });
 
-/** "Computer Science, MS" → "computer_science_ms" */
-function slugify(str) {
-  return str.toLowerCase()
-    .replace(/[,]/g, '')
-    .replace(/\s+/g, '_')
-    .replace(/[^a-z0-9_()\-]/g, '')
-    .replace(/_+/g, '_')
-    .trim();
-}
+// slugify lives in lib/program-record.js, beside the variant slug it must
+// agree with.
 
 // ── Program list ──────────────────────────────────────────────────────────────
 
@@ -321,112 +313,25 @@ function listCommittedPlans(year = YEAR) {
 // ── Scrape one program ────────────────────────────────────────────────────────
 
 /**
- * Parse a page, then resolve any concentrations that live on their own pages.
+ * Every program published on one catalog page.
  *
- * Business programs list ~17 concentrations as links rather than inline
- * tables. Those pages were already being fetched every run and thrown away as
- * "no requirements found", so resolving them costs no extra requests once the
- * page cache is warm. Only /concentrations/ paths are followed, and the count
- * is capped, so a markup change can't turn the scraper into a crawler.
+ * Usually exactly one. But a page can publish an ALTERNATE CURRICULUM in a
+ * second requirement pane — this tree is where most of them live, since 32 of
+ * the 46 multi-pane pages are doctoral programs with an advanced-entry route
+ * for applicants who already hold a master's. Folding that into the primary
+ * program is how 139 phantom requirement sections shipped, and how every one
+ * of those programs advertised the standard-entry credit total.
+ *
+ * The record building lives in scripts/lib/program-record.js, shared with
+ * scrape-majors.js. Those two scripts used to carry a byte-identical copy of
+ * it — exactly how a data fix lands in one path and not the other.
+ *
+ * @returns {object[]} one record per program, primary first, `[]` if none
  */
-const MAX_EXTERNAL_CONCENTRATIONS = 40;
-
-async function parseRequirementsResolvingExternals(root) {
-  const first = parseRequirements(root, PROFILE);
-  const pending = (first.pendingExternal ?? []).slice(0, MAX_EXTERNAL_CONCENTRATIONS);
-  if (!pending.length) return first;
-
-  const resolved = new Map();
-  for (const link of pending) {
-    const url = normalizeConcentrationHref(link.href);
-    if (!url) continue;
-    try { resolved.set(url, parseHTML(await fetchPage(url))); }
-    catch { /* a missing concentration page must not fail the program */ }
-  }
-  return parseRequirements(root, PROFILE, { resolveExternal: u => resolved.get(u) ?? null });
-}
-
 async function scrapeProgram(url) {
-  const html = await fetchPage(url);
-  const root = parseHTML(html);
+  const root = parseHTML(await fetchPage(url));
   resolveYearFrom(root, url);   // edition year, before any outPath() call
-
-  const name = root.querySelector('#page-title h1, h1.page-title, h1')
-    ?.text?.trim()
-    ?.replace(/\s+/g, ' ')
-    ?? '';
-
-  const { value: totalCreditsRequired, source: totalCreditsSource } = parseTotalCredits(root, PROFILE);
-  const { requirementSections, concentrations, generalElectiveSH, gpaConstraints,
-          footnotes,
-          tablesPresent, tablesConsumed, tablesOnPage, tablesExcluded,
-          unconsumedHeadings } = await parseRequirementsResolvingExternals(root);
-
-  // A program can be entirely concentrations: Philosophy BA's whole major is
-  // five mutually-exclusive options and has no base requirement section.
-  // Dropping it for having no sections lost the program altogether.
-  if (!requirementSections.length && !concentrations) return null;
-
-  const data = {
-    name,
-    metadata:  {
-      verified: false,
-      lastEdited: new Date().toLocaleDateString('en-US'),
-      branch: 'main',
-      // Parse coverage — how many requirement tables the page offered vs how
-      // many we actually turned into requirements. Any gap means content was
-      // dropped on the floor; scripts/verify-majors.js gates on it.
-      tablesPresent,
-      tablesConsumed,
-      tablesOnPage,
-      tablesExcluded,
-      // The catalog page this was read from. Stored so the UI can send an
-      // advisor straight to the source — the whole point of saying "we copied
-      // the catalog" is that they can go check the catalog.
-      sourceUrl: url,
-      ...(unconsumedHeadings?.length ? { unconsumedHeadings } : {}),
-      // Courses the department's own sample plan names. A one-directional
-      // witness: anything here that matches no requirement means we dropped
-      // something. Never the reverse — the plan picks one branch per choice.
-      planOfStudyCourses: extractPlanOfStudyCourses(root),
-    },
-    // The same pane read as STRUCTURE — years, terms, entries — so the plan can
-    // be offered to a student rather than only counted against. Split into
-    // plan.json at write time and never stored here; see planPath().
-    // Null for the many programs that publish no plan, which is normal.
-    planGrid: extractPlanGrid(root),
-    totalCreditsRequired,
-    // Which phrasing produced the number — 'stated-total' and friends come
-    // from what the page says is required; 'plan-grid' means we fell back to
-    // the sample plan and the value may exceed the true minimum.
-    ...(totalCreditsSource ? { totalCreditsSource } : {}),
-    yearVersion: YEAR,
-    requirementSections,
-    // GPA rules are constraints over grades, not satisfiable requirements —
-    // they render as info in the graduation panel and are evaluated only
-    // against grades the user chose to enter (src/core/gradeSystem.js).
-    ...(gpaConstraints?.length ? { gpaRequirements: gpaConstraints } : {}),
-    // Every footnote parseFootnotes found is kept. This used to filter down to
-    // `f.substitution` only, which silently dropped footnotes shaped as a
-    // WAIVER ("Principles of Bioengineering (BIOE 6000) and Seminar (BIOE 7390)
-    // are not required for students in a PlusOne bioengineering pathway") or a
-    // table-wide note with no course codes to parse at all ("Graduate courses
-    // that may be used toward the MS in Computer Science when part of the
-    // PlusOne program" — a real rule, attached to a whole concentration table,
-    // naming no course in its own text). Neither has a `substitution`, and the
-    // second has no `codes` either, so no code-based filter can catch it —
-    // only keeping everything does. parseFootnotes already drops near-empty
-    // text (< 8 chars) and de-dupes repeats, so nothing here is unbounded.
-    ...(footnotes?.length ? { footnotes } : {}),
-    ...(concentrations ? { concentrations } : {}),
-    ...(generalElectiveSH > 0 ? { generalElectiveSH } : {}),
-  };
-
-  // Mark cross-count sections (integrative / GPA re-lists / shared credit) that would
-  // otherwise be impossible to satisfy under single-use allocation. See lib/major-integrity.js.
-  markSharedSections(data);
-
-  return data;
+  return buildProgramsForPage(root, url, { profile: PROFILE, fetchPage, year: YEAR });
 }
 
 // ── Main ──────────────────────────────────────────────────────────────────────
@@ -504,30 +409,46 @@ async function main() {
   for (const prog of programs) {
     process.stdout.write(`  ${prog.url} … `);
     try {
-      const data = await scrapeProgram(prog.url);
+      const records = await scrapeProgram(prog.url);
 
-      if (!data) {
+      if (!records.length) {
         console.log('SKIP (no requirements found)');
         skipped++;
       } else {
-        const slug = slugify(data.name || prog.college);
-        const path = outPath(prog.college, slug);
-        const concCount = data.concentrations?.concentrationOptions?.length ?? 0;
-        const { tablesPresent: tp, tablesConsumed: tc } = data.metadata;
-        const gap = tp > tc ? `  ⚠ DROPPED ${tp - tc}/${tp} tables` : '';
-        console.log(`OK  "${data.name}" — ${data.requirementSections.length} sections${concCount ? ` + ${concCount} concentrations` : ''}, ${data.totalCreditsRequired} SH${gap}`);
+        // A page yields one program normally, and more when it publishes an
+        // alternate curriculum. Each gets its own folder; the primary keeps
+        // the one it has always had, so the change is additive.
+        if (records.length > 1) console.log(`${records.length} programs on this page`);
+        for (const data of records) {
+          const slug = data._slug || slugify(data.name || prog.college);
+          const path = outPath(prog.college, slug);
+          const concCount = data.concentrations?.concentrationOptions?.length ?? 0;
+          const { tablesPresent: tp, tablesConsumed: tc } = data.metadata;
+          const gap = tp > tc ? `  ⚠ DROPPED ${tp - tc}/${tp} tables` : '';
+          const tag = data.metadata.variant ? '  ↳ ' : 'OK  ';
+          console.log(`${tag}"${data.name}" — ${data.requirementSections.length} sections${concCount ? ` + ${concCount} concentrations` : ''}, ${data.totalCreditsRequired} SH${gap}`);
 
-        const leaks = findLeakedMarkers(data);
-        if (leaks.length) {
-          console.warn(`  ⚠  _CHOOSE markers not converted at: ${leaks.join(', ')}`);
+          const leaks = findLeakedMarkers(data);
+          if (leaks.length) {
+            console.warn(`  ⚠  _CHOOSE markers not converted at: ${leaks.join(', ')}`);
+          }
+
+          // Two programs must never land in one folder. variantSlug cannot
+          // cause it, but two catalog pages with the same <h1> could — and
+          // silently overwriting is exactly the PharmD id collision recorded
+          // in src/adapters/northeastern/programRegistry.node.js.
+          if (pending.has(path)) {
+            throw new Error(`two programs claim the same folder: ${path}\n` +
+                            `    "${pending.get(path).name}" and "${data.name}"`);
+          }
+
+          // metadata.verification is deliberately NOT carried over from the
+          // previous file. The requirements just changed, so an old verdict
+          // would be a stale claim — worse than no claim. verify-majors.js
+          // recomputes it immediately after the scrape; both workflows run it
+          // in that order.
+          pending.set(path, data);
         }
-
-        // metadata.verification is deliberately NOT carried over from the
-        // previous file. The requirements just changed, so an old verdict
-        // would be a stale claim — worse than no claim. verify-majors.js
-        // recomputes it immediately after the scrape; both workflows run it
-        // in that order.
-        pending.set(path, data);
         done++;
       }
     } catch (err) {
@@ -535,7 +456,12 @@ async function main() {
       // program, so it must not be absorbed into the fetch-failure count —
       // that rail tolerates 2%, which would let a handful of wrong-edition
       // pages land while the run reported itself healthy.
-      if (isFatalScrapeError(err)) {
+      //
+      // Likewise an unadjudicated pane: that is not a flaky request, it is a
+      // page shape nobody has decided about, and the whole point of the
+      // decision table is that the unknown case stops the run instead of
+      // silently defaulting to the merge that shipped the duplicates.
+      if (isFatalScrapeError(err) || err instanceof UnadjudicatedPaneError) {
         console.log('FAIL');
         console.error(`\n❌  ${err.message}\n\n    Nothing was written.\n`);
         process.exit(1);
