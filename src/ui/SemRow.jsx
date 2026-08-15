@@ -51,7 +51,7 @@ export default function SemRow({ sem }) {
   const {
     placements, semOrders, courseMap, effectiveCourseMap,
     semesterCards, semesterLoad, concurrentCap,
-    setSelectedId, setShowPanel,
+    selectedId, setSelectedId, setShowPanel,
     getSemStatus, setCurrentSemId,
     dragInfo, hoveredSem, hoveredZone,
     onDragOver, onDragLeave, onDrop,
@@ -335,6 +335,21 @@ export default function SemRow({ sem }) {
             data-drag-duration={termStartData.duration}
             data-drag-from={sem.id}
             onDragStart={e => onDragStart(e, termStartId, "specialTerm", sem.id, { duration: termStartData.duration, typeId: termStartData.typeId })}
+            // Click opens the course, drag moves the block — the same pair
+            // CourseCard uses, and for the same reason: a browser does not
+            // fire click after a drag, so neither gesture needs a threshold.
+            // The controls inside (company, role, course, ✕) stop their own
+            // clicks so they keep their own behaviour.
+            //
+            // Only when the student CHOSE a course. The resolver's default is
+            // an inference, and opening a course page off the back of it would
+            // present a guess as a fact.
+            onClick={termStartData.courseId ? e => {
+              e.stopPropagation();
+              const id = termStartData.courseId;
+              if (selectedId === id) { setSelectedId(null); setShowPanel(false); }
+              else { setSelectedId(id); setShowPanel(true); }
+            } : undefined}
             style={{
               flex: 1, minHeight: 58, minWidth: 200,
               position: "relative",
@@ -374,11 +389,13 @@ export default function SemRow({ sem }) {
                     click the arrow, type in the field. Nothing has to guess. */}
                 {registers && !privateCoop && (
                   <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 1 }}
-                       onMouseDown={e => e.stopPropagation()}>
+                       onMouseDown={e => e.stopPropagation()}
+                       onClick={e => e.stopPropagation()}>
                     {/* Empty unless the student chose. The resolver's answer is
                         a DEFAULT, and pre-filling it as text would read as
                         their input and invite them to curate something they
-                        never set. The ↗ still opens whatever is in force. */}
+                        never set. Clicking the CARD opens whatever is in
+                        force. */}
                     <CoopCourseSearch
                       value={termStartData.courseId ?? ""}
                       courses={workTermCourseOptions}
@@ -393,19 +410,14 @@ export default function SemRow({ sem }) {
                           : (({ courseId, ...rest }) => rest)(p[termStartId]) }));
                       }}
                     />
-                    <button
-                      draggable={false}
-                      onClick={e => { e.stopPropagation(); setSelectedId?.(registers); setShowPanel?.(true); }}
-                      title={courseMap?.[registers]?.title ?? registers}
-                      style={{
-                        background: "none", border: "none", padding: 0, cursor: "pointer",
-                        fontSize: isPhone ? 6 : 9, color: "var(--text-5)", flexShrink: 0,
-                      }}
-                    >↗</button>
                   </div>
                 )}
               </div>
-              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 10 : 20 }}>
+              {/* Stops the card's click reaching the panel: focusing the
+                  company or role field is editing this block, not asking to
+                  read the course it registers. */}
+              <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", alignItems: "stretch", gap: 1, paddingLeft: isPhone ? 10 : 20 }}
+                   onClick={e => e.stopPropagation()}>
                 {privateCoop ? null : (
                   // Company + role are hidden by omitting the inputs entirely,
                   // so a viewer can't read them and edits can't overwrite the

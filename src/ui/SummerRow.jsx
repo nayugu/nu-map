@@ -44,7 +44,7 @@ export default function SummerRow({ semA, semB }) {
     semTrackingMode,
     studentType,
     privateCoop,
-    courseMap, setSelectedId, setShowPanel,
+    courseMap, selectedId, setSelectedId, setShowPanel,
   } = usePlanner();
   // Which course each work term registers — resolved app-wide, same source the
   // fall/spring card and the audit read.
@@ -142,6 +142,16 @@ export default function SummerRow({ semA, semB }) {
             data-drag-duration={termStartData.duration}
             data-drag-from={sem.id}
             onDragStart={e => onDragStart(e, termStartId, "specialTerm", sem.id, { duration: termStartData.duration, typeId: termStartData.typeId })}
+            // Click opens the course, drag moves the block — the same pair
+            // CourseCard uses. Only when the student CHOSE one: opening a
+            // course page off the resolver's inference would present a guess
+            // as a fact.
+            onClick={termStartData.courseId ? e => {
+              e.stopPropagation();
+              const id = termStartData.courseId;
+              if (selectedId === id) { setSelectedId(null); setShowPanel(false); }
+              else { setSelectedId(id); setShowPanel(true); }
+            } : undefined}
             style={{
               width: "100%", minHeight: SLOT_H(isPhone),
               background: "var(--card-bg)",
@@ -166,7 +176,8 @@ export default function SummerRow({ semA, semB }) {
                 </div>
                 {registers && !privateCoop && (
                   <div style={{ display: "flex", alignItems: "center", gap: 4, maxWidth: isPhone ? 62 : 108 }}
-                       onMouseDown={e => e.stopPropagation()}>
+                       onMouseDown={e => e.stopPropagation()}
+                       onClick={e => e.stopPropagation()}>
                     <CoopCourseSearch
                       value={termStartData.courseId ?? ""}
                       courses={workTermCourseOptions}
@@ -181,12 +192,6 @@ export default function SummerRow({ semA, semB }) {
                           : (({ courseId, ...rest }) => rest)(p[termStartId]) }));
                       }}
                     />
-                    <button
-                      draggable={false}
-                      onClick={e => { e.stopPropagation(); setSelectedId?.(registers); setShowPanel?.(true); }}
-                      title={courseMap?.[registers]?.title ?? registers}
-                      style={{ background: "none", border: "none", padding: 0, cursor: "pointer", fontSize: isPhone ? 5 : 9, color: "var(--text-5)", flexShrink: 0 }}
-                    >↗</button>
                   </div>
                 )}
               </div>
