@@ -356,6 +356,16 @@ export default function BankPanel() {
     // A text query OR any active filter searches the whole catalog; otherwise
     // the view is the user's bank (grouped by subject below).
     let list = (q || anyFilter) ? [...courses] : courses.filter(c => bankCourseIds.has(c.id));
+    // A work-experience course (COOP 3945, ENCP 6964, CS 6964 …) is RECORDED
+    // BY placing a work term, not by being placed. Dragging the card is
+    // strictly worse than dragging the block: 0 SH, no EX, no co-op
+    // rendering, and a term the load calculation thinks is free — while the
+    // block already grants that exact key. Across 385 published sample plans,
+    // all 39 cells naming one sit in a term that also holds a co-op block, so
+    // no department has ever meant "a card in a study term" either.
+    // The 26 co-op-TITLED classes (ENCP 2000, CS 1210) carry no `coop` stamp
+    // and stay placeable. See docs/coop-design.md.
+    list = list.filter(c => !c.coop);
     // Phone has no starring, so never apply the starred filter there even if
     // bankTab was set to "starred" (carried over from desktop or via a command).
     if (bankTab === "starred" && !isPhone && !q && !anyFilter) list = list.filter(c => starredIds.has(c.id));
