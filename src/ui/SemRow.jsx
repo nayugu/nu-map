@@ -396,7 +396,12 @@ export default function SemRow({ sem }) {
                 {/* Gated on the TYPE registering a course at all — not on one
                     having been chosen. Gating on the choice made the field to
                     make the choice appear only after it was made. */}
-                {termStartType?.registersCourse && !privateCoop && (
+                {/* NOT gated on privateCoop, unlike the company and role
+                    fields below. The registration is not an employer detail —
+                    it survives redaction (COOP_PRIVATE_FIELDS), so hiding only
+                    the control would mean a student in private mode could not
+                    edit a value their own share links still carry. */}
+                {termStartType?.registersCourse && (
                   <div style={{ display: "flex", alignItems: "center", gap: 4, marginTop: 1 }}
                        onMouseDown={e => e.stopPropagation()}
                        onClick={e => e.stopPropagation()}>

@@ -196,6 +196,42 @@ const badSem = (semId) =>
     ? `Invalid semId: ${semId} (expected e.g. "fall2026", "spr2027", "sumA2027", or "incoming")`
     : null;
 
+/**
+ * Validate the course a work term says it registers.
+ *
+ * Absent is always fine and is the default: a work term with no `courseId`
+ * records the experience and registers nothing, which is what the card does
+ * when the student leaves the field empty.
+ *
+ * When present it must be a course the catalog marks as a work-experience
+ * REGISTRATION (`c.coop`, stamped from coop-courses.json), and of the right
+ * family. The UI cannot express either mistake — the picker only lists stamped
+ * courses and is scoped by kind — so without this check MCP would be the one
+ * way into a state the app itself refuses to create: a co-op registering
+ * `MATH 2331`, or registering `COOP 3949 Internship Exchange`.
+ *
+ * The kind check is skipped when the type is not one the stamp can describe,
+ * so a future block type is not rejected for a mismatch nobody defined.
+ */
+const KNOWN_KINDS = new Set(["coop", "intern"]);
+const badRegistration = (courseMap, courseId, typeId) => {
+  if (courseId == null || courseId === "") return null;
+  if (typeof courseId !== "string") return "courseId must be a course id string, or null to clear";
+  const c = courseMap?.[courseId];
+  if (courseMap && !c) return `Unknown course: ${courseId}`;
+  if (c && !c.coop) {
+    return `${courseId} is not a work-experience registration — a work term can only register a `
+      + `course like COOP 3945, ENCP 6964 or CS 6964. To take ${courseId} alongside the work term, `
+      + `use ADD_COURSE.`;
+  }
+  const kind = c?.coop?.kind ?? "coop";
+  if (c && KNOWN_KINDS.has(typeId) && kind !== typeId) {
+    return `${courseId} is ${kind === "intern" ? "an internship" : "a co-op"} registration and cannot be `
+      + `recorded by a '${typeId}' work term. Add the matching block type instead.`;
+  }
+  return null;
+};
+
 const APPLIERS = {
   ADD_COURSE: (plan, a, courseMap) => {
     const err = badCourse(courseMap, a.courseId) ?? badSem(a.semId);
@@ -205,9 +241,10 @@ const APPLIERS = {
     // EX, no co-op rendering, and a term the load calculation thinks is free
     // — and the block already grants this exact key. Refuse and redirect.
     if (courseMap?.[a.courseId]?.coop) {
-      return `${a.courseId} records a co-op; it cannot be placed as a course. `
-        + `Use ADD_WORK_TERM {typeId:'coop', semId, duration}`
-        + `${courseMap[a.courseId].coop.abroad ? ", abroad: true" : ""} instead.`;
+      const kind = courseMap[a.courseId].coop.kind ?? "coop";
+      return `${a.courseId} records a work term; it cannot be placed as a course. `
+        + `Use ADD_WORK_TERM {typeId:'${kind}', semId, duration, courseId:'${a.courseId}'} instead — `
+        + `courseId is what makes the work term satisfy the requirement asking for ${a.courseId}.`;
     }
     // Repeatable course already placed → this ADD is ANOTHER take under a
     // fresh instance id ("ID#2", "ID#3"…). The browser applier runs the same
@@ -259,10 +296,12 @@ const APPLIERS = {
     );
   },
 
-  ADD_WORK_TERM: (plan, a) => {
+  ADD_WORK_TERM: (plan, a, courseMap) => {
     if (!a.typeId || typeof a.typeId !== "string") return "typeId is required (e.g. 'coop', 'intern')";
     if (badSem(a.semId)) return badSem(a.semId);
     if (typeof a.duration !== "number" || a.duration <= 0) return "duration (months, number) is required";
+    const reg = badRegistration(courseMap, a.courseId, a.typeId);
+    if (reg) return reg;
     const id = `wt_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     plan.workExperience[id] = {
       typeId:   a.typeId,
@@ -274,6 +313,11 @@ const APPLIERS = {
       // Absent means domestic — the default 147 of 152 co-op requirement
       // nodes accept. Only International Business discriminates on it.
       ...(a.abroad === true && { abroad: true }),
+      // Absent means the student has not said which course this registers, so
+      // it registers none. That is the correct default over MCP for the same
+      // reason it is in the UI: an assistant that fills it in is asserting
+      // something only the student knows.
+      ...(a.courseId != null && a.courseId !== "" && { courseId: a.courseId }),
     };
   },
   REMOVE_WORK_TERM: (plan, a) => {
@@ -285,13 +329,24 @@ const APPLIERS = {
     if (badSem(a.toSemId)) return badSem(a.toSemId);
     plan.workExperience[a.instanceId].semId = a.toSemId;
   },
-  UPDATE_WORK_TERM: (plan, a) => {
+  UPDATE_WORK_TERM: (plan, a, courseMap) => {
     const wt = plan.workExperience[a.instanceId];
     if (!wt) return `Unknown work term: ${a.instanceId}`;
+    // Validated against the term's OWN type, not the one in the action — this
+    // action cannot change the type, so a co-op block may never come to
+    // register an internship course by editing it after the fact.
+    if (a.courseId != null && a.courseId !== "") {
+      const reg = badRegistration(courseMap, a.courseId, wt.typeId);
+      if (reg) return reg;
+    }
     if (a.company       != null) wt.company       = a.company;
     if (a.companyDomain != null) wt.companyDomain = a.companyDomain;
     if (a.subline       != null) wt.subline       = a.subline;
     if (a.abroad != null) { if (a.abroad) wt.abroad = true; else delete wt.abroad; }
+    // null or "" clears it back to unrecorded, mirroring the card's field
+    // going empty. Deleted rather than stored empty so the shape stays
+    // "absent means none" and no share link carries a redundant key.
+    if (a.courseId != null) { if (a.courseId === "") delete wt.courseId; else wt.courseId = a.courseId; }
   },
 
   // Program ids come from list_programs, which is a CATALOG tool with no
@@ -397,10 +452,10 @@ export const ACTION_DOCS = {
   REMOVE_PLACED_OUT:    { args: "{courseId}", use: "Remove placed-out status." },
   ADD_SUBSTITUTION:     { args: "{fromId, toId}", use: "Course equivalence: placing fromId also satisfies requirements that ask for toId. Both remain real courses; credits count once. NOT for waivers — use ADD_PLACED_OUT for those." },
   REMOVE_SUBSTITUTION:  { args: "{fromId, toId}", use: "Remove a substitution pair. Rejected if that exact from→to pair does not exist (check the plan's substitutions list)." },
-  ADD_WORK_TERM:        { args: "{typeId: 'coop'|'intern', semId, duration (months: coop 4|6, intern 2|4), company?, subline?, abroad?}", use: "Add a co-op or internship starting at a semester. A co-op automatically satisfies whichever work-experience course the student's program names (ENCP 6964, CS 6964, COOP 3945 …) — never place those as courses. Set abroad:true only for an international co-op; one program (International Business) requires it." },
+  ADD_WORK_TERM:        { args: "{typeId: 'coop'|'intern', semId, duration (months: coop 4|6, intern 2|4), company?, subline?, abroad?, courseId?}", use: "Add a co-op or internship starting at a semester. A work term satisfies a work-experience requirement ONLY when courseId names the course it registers (COOP 3945, ENCP 6964, CS 6964 …) — never place those as courses. Omit courseId unless the student said which one; the plan then records the work term and leaves the requirement unmet, which is correct. abroad is a note on the experience, not a course choice." },
   REMOVE_WORK_TERM:     { args: "{instanceId}", use: "Remove a work term (instance ids are the keys of the plan's workExperience)." },
   MOVE_WORK_TERM:       { args: "{instanceId, toSemId}", use: "Move a work term's starting semester." },
-  UPDATE_WORK_TERM:     { args: "{instanceId, company?, companyDomain?, subline?}", use: "Edit a work term's company/role without moving it." },
+  UPDATE_WORK_TERM:     { args: "{instanceId, company?, companyDomain?, subline?, abroad?, courseId?}", use: "Edit a work term without moving it. courseId sets which work-experience course it registers; pass null or \"\" to clear it back to unrecorded." },
   SET_MAJOR:            { args: "{programId}", use: "Set the major (program ids from list_programs). Empty string clears." },
   SET_MAJOR2:           { args: "{programId}", use: "Set the second major (double major)." },
   SET_STUDENT_TYPE:     { args: "{studentType: 'undergrad'|'graduate'}", use: "Switch the plan's program tree. CLEARS major/major2/concentration — follow with SET_MAJOR (and SET_CONCENTRATION) in the same changeset, after this action." },

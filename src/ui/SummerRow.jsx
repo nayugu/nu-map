@@ -187,7 +187,10 @@ export default function SummerRow({ semA, semB }) {
                 </div>
                 {/* The TYPE registering a course, not a course having been
                     chosen — otherwise the field appears only once used. */}
-                {termStartType?.registersCourse && !privateCoop && (
+                {/* Not gated on privateCoop — see SemRow: the registration is
+                    an academic fact, not an employer detail, and it survives
+                    redaction. */}
+                {termStartType?.registersCourse && (
                   <div style={{ display: "flex", alignItems: "center", gap: 4, maxWidth: isPhone ? 62 : 108 }}
                        onMouseDown={e => e.stopPropagation()}
                        onClick={e => e.stopPropagation()}>

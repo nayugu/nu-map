@@ -94,7 +94,11 @@ export const IPlannerAction = "plannerAction";
  * Labelled "WORK EXPERIENCE" in the UI; internally stored in `specialTermPl`.
  * The adapter validates placement rules (duration fit, no slot conflict)
  * using ISpecialTerms.validateDrop().
- * @typedef {{ type: 'ADD_WORK_TERM', typeId: string, semId: string, duration: number, company?: string, companyDomain?: string, subline?: string }} AddWorkTermAction
+ * `courseId` is the work-experience course the term REGISTERS (COOP 3945,
+ * ENCP 6964 …). Absent means none, and the term then satisfies no course
+ * requirement — deliberately, since only the student knows which one they
+ * registered for. `abroad` is a note on the experience and selects nothing.
+ * @typedef {{ type: 'ADD_WORK_TERM', typeId: string, semId: string, duration: number, company?: string, companyDomain?: string, subline?: string, abroad?: boolean, courseId?: string }} AddWorkTermAction
  */
 
 /**
@@ -110,8 +114,10 @@ export const IPlannerAction = "plannerAction";
  */
 
 /**
- * Update metadata on a Work Experience term (company, role) without moving it.
- * @typedef {{ type: 'UPDATE_WORK_TERM', instanceId: string, company?: string, companyDomain?: string, subline?: string }} UpdateWorkTermAction
+ * Update metadata on a Work Experience term (company, role, abroad note, and
+ * the course it registers) without moving it. `courseId: ""` or null clears
+ * the registration back to unrecorded.
+ * @typedef {{ type: 'UPDATE_WORK_TERM', instanceId: string, company?: string, companyDomain?: string, subline?: string, abroad?: boolean, courseId?: string|null }} UpdateWorkTermAction
  */
 
 /**

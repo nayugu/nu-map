@@ -12,6 +12,7 @@ import { ICreditSystem }            from "../ports/ICreditSystem.js";
 import { ICalendar }                from "../ports/ICalendar.js";
 import { ICourseOffering }          from "../ports/ICourseOffering.js";
 import { ICourseCatalog }           from "../ports/ICourseCatalog.js";
+import { ISpecialTerms }            from "../ports/ISpecialTerms.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
 import { conditionStatus } from "../core/prereqConditions.js";
@@ -253,7 +254,8 @@ export default function InfoPanel() {
 }
 
 function CourseInfo({ selCourse, navTo }) {
-  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX } = usePlanner();
+  const { courseMap, onDragStart, placements, SEMESTERS, SEM_INDEX, specialTermPl } = usePlanner();
+  const specialTerms = usePort(ISpecialTerms);
   const subjColor = useCourseInk(selCourse);
   const attributeSystem = usePort(IAttributeSystem);
   const creditSystem    = usePort(ICreditSystem);
@@ -277,13 +279,32 @@ function CourseInfo({ selCourse, navTo }) {
   const dir     = locales.find(l => l.code === locale)?.dir ?? "ltr";
   const isNonEn = locale !== catalogLocale;
 
-  // All placed takes of this course (a repeatable course can appear several
-  // times), in board order. Rendered as jump chips when there's more than one.
+  // All takes of this course, in board order. Rendered as one line each when
+  // there's more than one.
+  //
+  // TWO sources, because a course can be taken two ways. Most are placements.
+  // A work-experience course is never placed — it is REGISTERED by a co-op or
+  // internship block naming it on its card — and those takes are just as real:
+  // COOP 3945 says "may be repeated up to five times" and three co-ops are
+  // three of those five. Counting only placements meant the panel for a
+  // student with three co-ops read "can be taken up to 5 times" and 0 used,
+  // which is the one number they opened it for.
   const semOrder = Object.fromEntries(SEMESTERS.map((s, i) => [s.id, i]));
-  const takes = Object.entries(placements)
+  const base = baseId(selCourse.id);
+  const placedTakes = Object.entries(placements)
     // timeline only — takes parked outside the cohort range don't list
-    .filter(([pid, sid]) => baseId(pid) === baseId(selCourse.id) && SEM_INDEX[sid] !== undefined)
-    .map(([pid, sid]) => ({ pid, sem: SEMESTERS.find(s => s.id === sid) }))
+    .filter(([pid, sid]) => baseId(pid) === base && SEM_INDEX[sid] !== undefined)
+    .map(([pid, sid]) => ({ pid, sem: SEMESTERS.find(s => s.id === sid) }));
+  const workTakes = Object.entries(specialTermPl ?? {})
+    .filter(([, d]) => d?.courseId === base && d.semId && SEM_INDEX[d.semId] !== undefined)
+    .map(([pid, d]) => ({
+      pid,
+      sem: SEMESTERS.find(s => s.id === d.semId),
+      // Names the block, so the line reads "Spring 2027 · Co-op" rather than
+      // looking like a placement the student cannot find on the board.
+      via: (specialTerms?.getTypes() ?? []).find(ty => ty.id === d.typeId)?.label ?? null,
+    }));
+  const takes = [...placedTakes, ...workTakes]
     .sort((a, b) => (semOrder[a.sem?.id] ?? 99) - (semOrder[b.sem?.id] ?? 99));
 
   return (
@@ -388,7 +409,7 @@ function CourseInfo({ selCourse, navTo }) {
                   </div>
                   {/* One take per line — scales to many takes;                       catalog limit render in error red (allowed, flagged). */}
                   <div style={{ marginTop: 3, display: "flex", flexDirection: "column", gap: 2, fontSize: 10.5 }}>
-                    {takes.map(({ pid, sem }, i) => {
+                    {takes.map(({ pid, sem, via }, i) => {
                       const active = pid === selCourse.id;
                       const over   = max != null && i >= max;
                       return (
@@ -405,6 +426,14 @@ function CourseInfo({ selCourse, navTo }) {
                               : pid}
                             {over ? " ⚠" : ""}
                           </span>
+                          {/* Which co-op or internship registered this take.
+                              Without it the line points at a semester holding
+                              no card with this code, and reads as a bug. */}
+                          {via && (
+                            <span style={{ fontSize: 8.5, color: "var(--text-6)" }}>
+                              · <TText>{via}</TText>
+                            </span>
+                          )}
                         </div>
                       );
                     })}

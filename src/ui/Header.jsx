@@ -1017,7 +1017,14 @@ export default function Header() {
           const contPart  = spansNext ? ` (spans into ${semById[nextSemId]?.label ?? nextSemId})` : '';
           const co        = startData.company ? ` @ ${startData.company}` : '';
           const role      = startData.subline ? ` · ${startData.subline}` : '';
-          semLines.push(`  ⤷ ${startType.label}${co}${role}${contPart}`);
+          // The course the block registers. It is the only reason a work term
+          // satisfies a requirement, so a summary that omits it describes a
+          // plan the reader cannot check — and it never appears among the
+          // course lines below, because it is not placed.
+          const regCrs    = startData.courseId ? courseMap[startData.courseId] : null;
+          const reg       = startData.courseId
+            ? ` · registers ${regCrs?.code ?? startData.courseId}` : '';
+          semLines.push(`  ⤷ ${startType.label}${co}${role}${reg}${contPart}`);
         }
       }
 

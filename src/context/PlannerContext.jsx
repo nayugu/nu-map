@@ -80,6 +80,13 @@ const EMPTY_GRADES = Object.freeze({});
 // The identifying detail of a co-op: the employer, its logo, and the role
 // line. The "hide co-op details" privacy toggle strips exactly these while
 // leaving the term's structure (type, semester, length) intact.
+//
+// `courseId` is deliberately NOT here. It is the registration — an academic
+// fact about the student's own record, and since nothing is inferred it is the
+// only reason a work term satisfies a requirement. Redacting it would hand the
+// recipient of a shared plan an audit that disagrees with the sender's, which
+// is precisely the failure the whole no-inference change was made to prevent.
+// It identifies no employer. `abroad` is out for the same reason.
 const COOP_PRIVATE_FIELDS = ["company", "companyDomain", "subline"];
 function redactCoopDetails(stp) {
   if (!stp) return stp;
@@ -1325,6 +1332,10 @@ const { locale, setLocale, locales, t } = useLanguage();
             // Only written when true: absent means a domestic work term, which
             // is the default 147 of 152 co-op requirement nodes want.
             ...(action.abroad === true && { abroad: true }),
+            // Which work-experience course the block registers. Absent means
+            // none — the same default the card's course field starts at.
+            // Validated in plannerActionAdapter before it reaches here.
+            ...(action.courseId != null && action.courseId !== "" && { courseId: action.courseId }),
           };
           break;
         }
@@ -1343,6 +1354,9 @@ const { locale, setLocale, locales, t } = useLanguage();
             // Deleted rather than set false, so the stored shape stays "absent
             // means domestic" and a share link never carries a redundant key.
             if (action.abroad != null) { if (action.abroad) cur.abroad = true; else delete cur.abroad; }
+            // Same rule for the registered course: "" clears it back to
+            // unrecorded, exactly as emptying the card's field does.
+            if (action.courseId != null) { if (action.courseId === "") delete cur.courseId; else cur.courseId = action.courseId; }
             newStp[action.instanceId] = cur;
           }
           break;

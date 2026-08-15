@@ -604,6 +604,13 @@ export function createPlannerQuery(deps) {
         duration: wt.duration,
         company:  wt.company ?? null,
         subline:  wt.subline ?? null,
+        // The course this block registers, and null when the student has not
+        // said. Reported because it is now the ONLY thing that makes a work
+        // term satisfy a requirement: without it here, an assistant looking at
+        // an unmet experiential row has no way to tell "no co-op" from "a
+        // co-op whose course was never recorded" — two states one action apart.
+        registers: wt.courseId ?? null,
+        abroad:    wt.abroad === true,
         spansInto: spans ? (SEM_NEXT[wt.semId] ?? null) : null,
       });
     }
