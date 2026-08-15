@@ -200,6 +200,15 @@ const APPLIERS = {
   ADD_COURSE: (plan, a, courseMap) => {
     const err = badCourse(courseMap, a.courseId) ?? badSem(a.semId);
     if (err) return err;
+    // A work-experience course is RECORDED BY placing a work term, not by
+    // being placed. Dropping the card instead gives a 0 SH phantom with no
+    // EX, no co-op rendering, and a term the load calculation thinks is free
+    // — and the block already grants this exact key. Refuse and redirect.
+    if (courseMap?.[a.courseId]?.coop) {
+      return `${a.courseId} records a co-op; it cannot be placed as a course. `
+        + `Use ADD_WORK_TERM {typeId:'coop', semId, duration}`
+        + `${courseMap[a.courseId].coop.abroad ? ", abroad: true" : ""} instead.`;
+    }
     // Repeatable course already placed → this ADD is ANOTHER take under a
     // fresh instance id ("ID#2", "ID#3"…). The browser applier runs the same
     // resolveAddId over the same placements snapshot, so both sides assign
@@ -262,6 +271,9 @@ const APPLIERS = {
       ...(a.company       != null && { company:       a.company }),
       ...(a.companyDomain != null && { companyDomain: a.companyDomain }),
       ...(a.subline       != null && { subline:       a.subline }),
+      // Absent means domestic — the default 147 of 152 co-op requirement
+      // nodes accept. Only International Business discriminates on it.
+      ...(a.abroad === true && { abroad: true }),
     };
   },
   REMOVE_WORK_TERM: (plan, a) => {
@@ -279,6 +291,7 @@ const APPLIERS = {
     if (a.company       != null) wt.company       = a.company;
     if (a.companyDomain != null) wt.companyDomain = a.companyDomain;
     if (a.subline       != null) wt.subline       = a.subline;
+    if (a.abroad != null) { if (a.abroad) wt.abroad = true; else delete wt.abroad; }
   },
 
   // Program ids come from list_programs, which is a CATALOG tool with no
@@ -384,7 +397,7 @@ export const ACTION_DOCS = {
   REMOVE_PLACED_OUT:    { args: "{courseId}", use: "Remove placed-out status." },
   ADD_SUBSTITUTION:     { args: "{fromId, toId}", use: "Course equivalence: placing fromId also satisfies requirements that ask for toId. Both remain real courses; credits count once. NOT for waivers — use ADD_PLACED_OUT for those." },
   REMOVE_SUBSTITUTION:  { args: "{fromId, toId}", use: "Remove a substitution pair. Rejected if that exact from→to pair does not exist (check the plan's substitutions list)." },
-  ADD_WORK_TERM:        { args: "{typeId: 'coop'|'intern', semId, duration (months: coop 4|6, intern 2|4), company?, subline?}", use: "Add a co-op or internship starting at a semester." },
+  ADD_WORK_TERM:        { args: "{typeId: 'coop'|'intern', semId, duration (months: coop 4|6, intern 2|4), company?, subline?, abroad?}", use: "Add a co-op or internship starting at a semester. A co-op automatically satisfies whichever work-experience course the student's program names (ENCP 6964, CS 6964, COOP 3945 …) — never place those as courses. Set abroad:true only for an international co-op; one program (International Business) requires it." },
   REMOVE_WORK_TERM:     { args: "{instanceId}", use: "Remove a work term (instance ids are the keys of the plan's workExperience)." },
   MOVE_WORK_TERM:       { args: "{instanceId, toSemId}", use: "Move a work term's starting semester." },
   UPDATE_WORK_TERM:     { args: "{instanceId, company?, companyDomain?, subline?}", use: "Edit a work term's company/role without moving it." },

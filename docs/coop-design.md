@@ -427,11 +427,46 @@ belongs in the change log.
    no worse than the opacity undergraduates have lived with since the COOP 3945
    bridge landed. Strictly better, so not a precondition. It is still the next
    thing to do, and it is blocked only on the locale files being free.
-4. Bank removal + search redirect + `Registers … ↗` on the block
-5. Requirement-row actuator + the `abroad` flag
-6. Courses during co-op
-7. Drop co-op courses from CHART's cell set — which retires open defect #16
-   (a `COOP 3948` cell placed in Year 1 Fall) rather than patching it
+4. ✅ **Built** — the `abroad` flag can actually be set and kept: share key
+   `ab` in `planSchema`, plus `ADD_WORK_TERM` / `UPDATE_WORK_TERM` on both the
+   browser reducer and the MCP adapter. Absent means domestic, so a share link
+   never carries a redundant key.
+
+   **This was missed for three commits and it mattered.** The resolver read
+   `d.abroad` from the first, and nothing could write it — so the flag was
+   unreachable by any user action, and because share links map nested keys
+   explicitly it would have been *silently dropped* from every link, export
+   and backup. That is precisely the `conc2` incident this schema's own
+   comments memorialise. Verified by round-trip: `abroad` survives
+   `encodePlan` → `decodePlan`, and a domestic block stays absent.
+5. ✅ **Built** — MCP `ADD_COURSE` refuses a work-experience course and names
+   `ADD_WORK_TERM` instead, with `abroad: true` when the course is an abroad
+   variant. It used to place `COOP 3945` happily, giving a 0 SH phantom card
+   with no `EX`, no co-op rendering, and a term the load calculation thought
+   was free.
+
+### Still to build
+
+Ordered so everything needing no new user-facing string comes first — the
+locale files are contended, and a string is not a reason to stall the rest.
+
+| | needs a locale string? |
+|---|---|
+| Bank hides the 86 work-experience courses | no |
+| CHART: drop them from `deriveCells` (retires defect #16) | no |
+| Courses during co-op: `canDropSem`, `getSemStudySH`, the 1 course / 4 SH cap | no |
+| Course info panel says how a work-term course is recorded | no |
+| Bank search redirect to the work-term chip | **yes** |
+| `Registers CS 6964 ↗` on the block | **yes** |
+| Requirement row renders as the co-op, not a bare key | **yes** |
+| "Mark a work term as international" actuator | **yes** |
+| Over-cap petition warning | **yes** |
+
+Deliberately deferred, each with a measured reason above: the `grantedKeys`
+RANGE guard, and half-time co-op.
+
+Blocked on a human: wiring `derive-coop-courses.js` into `update-courses.yml`
+(it pushes to main unattended), and a worker redeploy for the MCP changes.
 
 Steps 1–4 give ~99 graduate programs a satisfiable work-term requirement and
 touch almost no student-visible UI.

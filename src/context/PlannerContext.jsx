@@ -1322,6 +1322,9 @@ const { locale, setLocale, locales, t } = useLanguage();
             ...(action.company       != null && { company:       action.company }),
             ...(action.companyDomain != null && { companyDomain: action.companyDomain }),
             ...(action.subline       != null && { subline:       action.subline }),
+            // Only written when true: absent means a domestic work term, which
+            // is the default 147 of 152 co-op requirement nodes want.
+            ...(action.abroad === true && { abroad: true }),
           };
           break;
         }
@@ -1337,6 +1340,9 @@ const { locale, setLocale, locales, t } = useLanguage();
             if (action.company       != null) cur.company       = action.company;
             if (action.companyDomain != null) cur.companyDomain = action.companyDomain;
             if (action.subline       != null) cur.subline       = action.subline;
+            // Deleted rather than set false, so the stored shape stays "absent
+            // means domestic" and a share link never carries a redundant key.
+            if (action.abroad != null) { if (action.abroad) cur.abroad = true; else delete cur.abroad; }
             newStp[action.instanceId] = cur;
           }
           break;

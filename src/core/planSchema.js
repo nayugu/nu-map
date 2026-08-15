@@ -105,8 +105,16 @@ export const LIBRARY_BUNDLE_KIND = "map-library-backup";
 
 /** Inner key maps for fields whose values are compacted element-by-element. */
 export const SHARE_INNER_KEYS = {
-  // specialTermPl entry objects
-  specialTerm: { typeId: 't', semId: 's', duration: 'd', company: 'c', companyDomain: 'cd', subline: 'sl' },
+  // specialTermPl entry objects.
+  //
+  // `abroad` earns its place here for the same reason `conc2` did, the hard
+  // way: a key absent from this map survives a reload (specialTermPl is
+  // serialised whole) but is SILENTLY DROPPED from every share link, export
+  // and backup. A co-op marked international would arrive domestic, and
+  // International Business's `International Experiential Learning` — the one
+  // requirement in 1,017 programs that turns on this flag — would read unmet
+  // for the recipient of a plan that satisfied it for the sender.
+  specialTerm: { typeId: 't', semId: 's', duration: 'd', company: 'c', companyDomain: 'cd', subline: 'sl', abroad: 'ab' },
   // substitutions array entries
   substitution: { from: 'f', to: 't' },
 };
