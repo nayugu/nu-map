@@ -138,6 +138,8 @@ export function courseLevel(courseId) {
  * @property {Set<string>} unresolvableBearers courses whose bound used one
  * @property {Set<string>} cyclic             courses in or below a prereq cycle
  * @property {Map<string, number>} depths
+ * @property {Map<string, number>} catalogUnlock  how many catalog courses need this one,
+ *   transitively — foundationality measured against the UNIVERSITY rather than one degree
  */
 
 /**
@@ -222,6 +224,19 @@ export function buildDepthIndex(courseMap = {}, { unresolvedDepth = UNRESOLVED_A
     unresolvableBearers,
     cyclic,
     depths,
+    // ── Foundationality, measured against the CATALOG ────────────────
+    //
+    // The same computation as the per-program unlock the search already uses, over the whole
+    // course universe instead of one degree's. Built here because it belongs to the CATALOG,
+    // like depth does: it is the same for every program, and computing it per attempt would
+    // pay 15 ms once per rung per shape instead of once per run.
+    //
+    // Why both scopes are needed rather than one replacing the other is argued at
+    // `noClaim` in search.js. Briefly: the program scope answers "does this degree's own
+    // structure rest on this course", which is the right question for ranking a degree's
+    // generators against each other; this one answers "does anything at all rest on it",
+    // which is the right question for deciding whether a course is foundational or terminal.
+    catalogUnlock: unlockValues(Object.keys(courseMap), courseMap),
   };
 }
 

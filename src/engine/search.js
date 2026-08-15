@@ -101,6 +101,38 @@ export function unlockOfCell(plan, unlockValue) {
 }
 
 /**
+ * What a cell GUARANTEES it unlocks — the minimum over its options, not the maximum.
+ *
+ * `unlockOfCell` takes the max, which is the right reading for "could this cell be a
+ * generator": if the student picks that branch, the chain opens. It is the wrong reading for
+ * "is this cell terminal", because a choice cell delivers ONE of its options and the student
+ * picks which. A cell offering eleven unrelated courses of which one happens to unlock a
+ * chain guarantees nothing.
+ *
+ * The same asymmetry `deriveCells` already applies to credit — a choice cell is worth its
+ * CHEAPEST option, because over is recoverable and under is not — and the same reasoning
+ * `breadthCodes` applies to competencies: "a `choice` cell is one course OR another, and the
+ * two may carry different codes, so it guarantees neither."
+ *
+ * It is what keeps CS+Math's `Supporting Course` terminal. Its eleven options span seven
+ * subjects; `AFCS 2600` unlocks nothing, so the guarantee is zero however much `DS 1300`
+ * opens up. Under a max reading it would stop being filler and claim an early term, which is
+ * the exact defect the `noClaim` rule was written to fix.
+ */
+export function guaranteedUnlock(plan, unlockValue) {
+  const groups = plan.cell?.groups;
+  if (!groups?.length) return 0;
+  let n = Infinity;
+  for (const g of groups) {
+    let m = 0;
+    // A group is courses taken TOGETHER, so it opens whatever its strongest member opens.
+    for (const id of g) m = Math.max(m, unlockValue.get(id) ?? 0);
+    n = Math.min(n, m);
+  }
+  return Number.isFinite(n) ? n : 0;
+}
+
+/**
  * A cell offering a genuine choice among many courses, rather than naming one.
  *
  * `CS 4300 or CS 4100` is a choice between two named courses and belongs where its level
@@ -488,6 +520,9 @@ export function placeCells({
   repeatable = () => false, nodeBudget = DEFAULT_NODE_BUDGET,
   timeBudgetMs = DEFAULT_TIME_BUDGET_MS, now = () => Date.now(),
   precedence = null, maxRestarts = 40, shape = null, cal = DEFAULT_CALIBRATION,
+  // Catalog-wide foundationality, from the shared depth index. See `noClaim`. Absent, the
+  // terminal test falls back to the program-scoped count, which is what shipped before.
+  catalogUnlock = null,
   // The department's own arrangement, as a branch ordering. Absent for the 62% of programs
   // that publish no plan, which simply search as they did before.
   seed = null,
@@ -606,7 +641,7 @@ export function placeCells({
     const r = attemptPlacement({
       plans: working, terms, ports, studentType, courseMap, repeatable,
       nodeBudget: Math.min(perAttempt, Math.max(1, strictNodes - totalNodes)),
-      precedence, now, shape, cal, propagateChains, seed, trace,
+      precedence, now, shape, cal, propagateChains, seed, trace, catalogUnlock,
       // The GLOBAL deadline only. Each attempt used to get a time slice as well, and that
       // was the last source of non-determinism: how many nodes an attempt explored depended
       // on machine load, so `business_administration_and_public_health_bs` returned
@@ -778,7 +813,7 @@ export function placeCells({
       nodeBudget: Math.max(1, Math.min(
         Math.floor(nodeBudget * (TIER_SHARES.rungs[ri] ?? 0.2)),
         nodeBudget - totalNodes)),
-      precedence, now, deadline, cal, propagateChains, seed, trace,
+      precedence, now, deadline, cal, propagateChains, seed, trace, catalogUnlock,
       shape: rung.shape,
       enforceCardinality: rung.enforceCardinality ?? true,
       preferenceFree: rung.preferenceFree ?? false,
@@ -906,7 +941,7 @@ export function placeCells({
 function attemptPlacement({
   plans, terms, ports, studentType, courseMap,
   repeatable, nodeBudget, deadline, now, precedence, shape = null,
-  enforceCardinality = true, cal = DEFAULT_CALIBRATION,
+  enforceCardinality = true, cal = DEFAULT_CALIBRATION, catalogUnlock = null,
   // The same-requirement bound, overridable by the relaxation ladder. `Infinity` still leaves
   // the slot cap and the credit cap in force; it only stops the corpus MAXIMUM being treated
   // as a limit someone enforces.
@@ -1011,6 +1046,59 @@ function attemptPlacement({
   const rank = new Map(plans.map(p => [p.cell.id, claimRank(p)]));
   const rankOf = (p) => rank.get(p.cell.id) ?? 2;
 
+  /**
+   * Does this cell have an argument for a PARTICULAR term, as opposed to none at all?
+   *
+   * The one judgement behind two rules that used to state it separately — `noClaim` in
+   * `termPreference`, which sends a cell without one to the end of the plan, and rule 5's
+   * index, which lets a general elective yield to a cell that has one. They must agree, or a
+   * plan can simultaneously believe a course belongs in year one and let a placeholder take
+   * year one from it. That is not hypothetical: it is what put calculus in year four of a
+   * business degree the moment only the first of the two was corrected.
+   *
+   * Two ways to have a claim, and they are different kinds of fact:
+   *
+   *   the major   the degree is ABOUT this subject, so its courses are the depth the plan
+   *               exists to sequence. A judgement about the program.
+   *   foundation  something depends on it. Measured over the catalog rather than over this
+   *               degree's own requirement list, because a broad core degree — BSBA names one
+   *               or two courses each of nine business subjects — has almost nothing inside it
+   *               depending on anything else inside it, and read that way nearly every course
+   *               in it is terminal. `ECON 1116` scored 0 against the degree and 37 against
+   *               the university.
+   *
+   * `guaranteedUnlock`, not `unlockOf`: a choice cell is worth its weakest option, so an
+   * eleven-way supporting-course requirement whose options span seven subjects guarantees
+   * nothing and keeps no claim.
+   */
+  const hasPositionalClaim = (plan) =>
+    isMajor(plan)
+    || ((catalogUnlock ? guaranteedUnlock(plan, catalogUnlock) : unlockOf(plan)) > 0
+        // ── Foundationality may RESCUE a course, never PROMOTE one ────
+        //
+        // The scope fix rescued microeconomics, and it also stopped sending `ENGW 3302 or 3307
+        // or 3315` to the end of the plan — Advanced Writing carries 14 catalog dependents, so
+        // it gained a claim and moved from position 1.00 to 0.85 in CS+Math and earlier still
+        // elsewhere. That is the wrong direction for exactly the reason `reclaimFromFiller`
+        // already states about its own floor: late and early are not symmetric. A course later
+        // than convention is harmless; earlier is where the gates nobody recorded bite, and
+        // ENGW 3302's real gate is "junior standing or above", which `RESTRICTION_ONLY`
+        // discards.
+        //
+        // So the claim is granted only where the course's own conventional home is already
+        // early. The bar is the registrar's own line — `levelPosition[2]`, between
+        // "intermediate (sophomore/junior)" and "upper-intermediate (junior)… prerequisites are
+        // normally required" — rather than a fitted constant. MEASURED over the corpus: of the
+        // 1,327 cells the scope fix gave a claim to, 1,093 keep it and 234 revert, and the
+        // reverted set is almost entirely Advanced Writing (86) and co-op work-experience
+        // records (24) — the two complaints, and the second is open defect 16.
+        //
+        // Graduate study is deliberately untouched: `cellLevelTarget` returns 0.3 for a grad
+        // cell against a 0.36 bar, so every grad claim survives. A master's student takes
+        // 5000-level courses in their first term, and a ladder they do not have must not be
+        // invented for them here.
+        && (cellLevelTarget(plan, courseMap, studentType) ?? 1) <= cal.levelPosition[2]);
+
   // Deterministic order before any heuristic reorders: two runs must agree.
   //
   // `fillerOf` is what lets rule 4 reach the ordering at all. `byConstraint`'s first key puts
@@ -1046,24 +1134,44 @@ function attemptPlacement({
 
   const byId = new Map(plans.map(p => [p.cell.id, p]));
   const termOf = new Map();
-  // ── Rule 5's index: which terms a MAJOR NAMED cell could still use ──
+  // ── Rule 5's index: which terms a cell WITH A CLAIM could still use ──
   //
   // Precomputed and then maintained incrementally, because the alternative is a scan. Written
   // first as a loop over `order` inside the term comparator, it was O(cells) per comparison
   // inside a sort that runs at every node — the same ~2,000-operations-per-node cost the Hall
   // propagator above was removed for. A counter per term is O(1) at the only place that reads it.
   //
-  // Named cells only, and major subjects only. A choice cell guarantees neither branch, so it has
-  // no claim to press; and a non-major requirement is not what rule 5 protects — the rule is that
-  // an elective must not displace THE MAJOR, which is the depth a co-op recruiter reads.
-  const majorWants = new Map();
-  const majorUnplacedIn = new Array(terms.length).fill(0);
+  // Named cells only: a choice cell guarantees neither branch, so it has no claim to press.
+  //
+  // ── This index and `noClaim` are ONE judgement, and were two ────────
+  //
+  // It read `isMajor(p)` alone, on the reasoning that "an elective must not displace THE MAJOR,
+  // which is the depth a co-op recruiter reads". That is the right thing to say about rule 5's
+  // PURPOSE and the wrong predicate to say it with, because `termPreference` decides the same
+  // question — does this cell have an argument for a particular term — three hundred lines
+  // below, under a different name and a different test.
+  //
+  // Two names for one judgement drift, and this pair drifted the moment `noClaim` was corrected
+  // to ask about the catalog rather than the degree. MEASURED on
+  // `business_administration_bsba`: `ECON 1116` correctly gained a claim on year one and took
+  // the slot, while `MATH 1231 or 1241 …` — 144 catalog courses rest on it — was still invisible
+  // to this index, so general electives held Year 1 Spring and Year 1 Summer against it and
+  // calculus was pushed to YEAR FOUR. One rule said the cell belonged early and the other let a
+  // placeholder take the term from it.
+  //
+  // So both now read `hasPositionalClaim`, which is exactly `!noClaim`. The rule's purpose is
+  // unchanged and its reach is corrected: a general elective yields to any named cell that has
+  // somewhere it belongs, whether that is the major or the prerequisite structure of the
+  // university. It remains a PREFERENCE — see `yieldsToMajor` — so widening it cannot refuse a
+  // program, only steer one.
+  const claimWants = new Map();
+  const claimantsUnplacedIn = new Array(terms.length).fill(0);
   for (const p of plans) {
-    if (p.cell.kind !== "named" || !isMajor(p)) continue;
+    if (p.cell.kind !== "named" || !hasPositionalClaim(p)) continue;
     const wants = (p.domain ?? []).filter(t => t >= 0 && t < terms.length);
     if (!wants.length) continue;
-    majorWants.set(p.cell.id, wants);
-    for (const t of wants) majorUnplacedIn[t] += 1;
+    claimWants.set(p.cell.id, wants);
+    for (const t of wants) claimantsUnplacedIn[t] += 1;
   }
   const loadSH = new Array(terms.length).fill(0);
   const countIn = new Array(terms.length).fill(0);
@@ -1360,8 +1468,11 @@ function attemptPlacement({
    *
    * Two conditions, both necessary. The term must have no room left for a real course AFTER this
    * elective takes its slot — if it does, nothing is displaced and there is no contest. And some
-   * still-unplaced major named cell must actually be able to use the term; a slot no major course
-   * could occupy is not one an elective is taking from anything.
+   * still-unplaced named cell WITH A CLAIM must actually be able to use the term; a slot nothing
+   * with a reason to be there could occupy is not one an elective is taking from anything.
+   *
+   * "With a claim" was "in the major", and the widening is `hasPositionalClaim` — see there, and
+   * see `claimantsUnplacedIn` for the year-four calculus that the narrow reading produced.
    *
    * ── A PREFERENCE, and this file has already paid for learning that ──
    *
@@ -1380,7 +1491,7 @@ function attemptPlacement({
    */
   const yieldsToMajor = (plan, ti) => {
     if (plan.cell.target !== GENERAL_ELECTIVE) return 0;
-    if (majorUnplacedIn[ti] <= 0) return 0;           // no major course wants this term
+    if (claimantsUnplacedIn[ti] <= 0) return 0;       // no course with a claim wants this term
     const afterSH = loadSH[ti] + (plan.cell.sh ?? 0);
     const afterN = countIn[ti] + coursesInCell(plan.cell);
     // Room for one more real course afterwards means this elective displaces nothing.
@@ -1585,7 +1696,48 @@ function attemptPlacement({
     // 100% of published plans do. `Advanced Writing` unlocks nothing and is nobody's
     // major, so it becomes filler and goes late — where the corpus puts it anyway
     // (median 0.78, p90 0.89).
-    const noClaim = unlockOf(plan) === 0 && !majorSubjects.has(cellSubject(plan, courseMap));
+    // ── Terminal is a question about the CATALOG, not about this degree ──
+    //
+    // This read `unlockOf(plan) === 0`, which is the PROGRAM-scoped count: how many courses
+    // in this degree's own candidate universe transitively need it. That is the right
+    // question for `isGenerator`, which ranks a degree's own courses against each other and
+    // wants a bar calibrated to the degree. It is the wrong question here, and the two had
+    // been answered with one number.
+    //
+    // MEASURED on `business_administration_bsba`. `ECON 1116 Principles of Microeconomics`
+    // is needed by NOTHING else the degree names, so it scored 0 and `want` became 1 — the
+    // last term. Catalog-wide, 37 courses rest on it. `MGSC 2301 Business Statistics` scored
+    // 0 against 56. Both were duly emitted in YEAR FOUR of a plan whose own department puts
+    // them in year one, and the level target that already knew better (`0.00`, a 1000-level
+    // course) was discarded by this line before it could speak.
+    //
+    // The scope was wrong because a broad core degree is exactly the case it breaks on: BSBA
+    // names one or two courses each of ACCT, FINA, MKTG, MGSC, MISM, SCHM, ORGB, STRT and
+    // ECON, so almost nothing inside it depends on anything else inside it, and almost every
+    // course in the degree read as terminal. A degree of long chains never showed the defect.
+    //
+    // ── What this is NOT: the published plans ────────────────────────
+    //
+    // The obvious alternative was a per-course position prior from the 616 published plans,
+    // which measures 1.8x more accurate than the level table over held-out placements
+    // (MAE 0.071 against 0.128). It is not used, and the reason is the whole point of this
+    // engine: it would import the departments' sequencing wholesale, including the 31.9% of
+    // their plans that place a course in a season it never runs and the 7.7% that violate
+    // prereq order. CHART would inherit their conventions and could never beat them.
+    //
+    // The prerequisite closure is the CAUSE their consensus is evidence OF. When thirty-one
+    // programs put microeconomics in year one, what that agreement records is that a great
+    // deal is built on top of it — and that fact is in the prereq graph, measurable directly,
+    // with no convention attached. So the corpus stays what it has always been here: a
+    // witness used to check the answer, never a source used to produce it.
+    //
+    // `guaranteedUnlock`, not `unlockOf`: see there. A choice cell is worth its weakest
+    // option, so CS+Math's eleven-way `Supporting Course` stays terminal and keeps the
+    // behaviour this rule was written for.
+    //
+    // Stated through `hasPositionalClaim` so rule 5's index cannot answer this question
+    // differently — see there for the year-four calculus that came of them disagreeing.
+    const noClaim = !hasPositionalClaim(plan);
     // A cell that carries its own target uses it. General electives USED to — a positional
     // ramp across the pool — and no longer do: see `deriveCells`, where the ramp was deleted
     // because a hand-fitted curve on top of a graph-derived ordering can only disagree with it.
@@ -2085,7 +2237,7 @@ function attemptPlacement({
     // Rule 5's counter. Decremented across the cell's WHOLE domain, not just the term it took:
     // the question `yieldsToMajor` asks is "can a major course still use this term", and a major
     // cell that is now placed can no longer use any of them.
-    if (majorWants.has(c.id)) for (const t of majorWants.get(c.id)) majorUnplacedIn[t] -= 1;
+    if (claimWants.has(c.id)) for (const t of claimWants.get(c.id)) claimantsUnplacedIn[t] -= 1;
   };
   const unplace = (c, ti) => {
     termOf.delete(c.id);
@@ -2093,7 +2245,7 @@ function attemptPlacement({
     countIn[ti] -= coursesInCell(c);
     if ((c.sh ?? 0) >= cal.realCourseSH) { bigIn[ti] -= 1; bigSH[ti] -= c.sh ?? 0; }
     reqIn[ti].set(reqKey(c), reqCount(ti, c) - 1);
-    if (majorWants.has(c.id)) for (const t of majorWants.get(c.id)) majorUnplacedIn[t] += 1;
+    if (claimWants.has(c.id)) for (const t of claimWants.get(c.id)) claimantsUnplacedIn[t] += 1;
   };
 
   // `from` is the term the PARENT committed to reach this node — the label on the edge, and the

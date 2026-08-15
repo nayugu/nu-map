@@ -261,7 +261,13 @@ export const strings = {
   "chart.contract.hard.8": "Co-op length and start season within the university’s rules",
   "chart.contract.soft.h": "Optimization within those hard requirements",
   "chart.contract.soft.1": "Places major electives as early as their prerequisites allow, so co-op recruiting sees advanced work in your major",
-  "chart.contract.soft.2": "Sends a course that unlocks many later ones early, and one that unlocks little later, where its level usually sits",
+  // ── "Anywhere", and that word is the rule ────────────────────────
+  //
+  // This said "unlocks many later ones", which read as "later ones in your degree" — and that
+  // was what the engine measured, which is why microeconomics landed in year four of a business
+  // degree: nothing else the degree names is built on it. Foundations are counted across the
+  // whole catalog now, so the sentence has to say so or it describes behaviour we no longer have.
+  "chart.contract.soft.2": "Sends a foundation early — anything the rest of the university is built on, not just this degree — and sends a course nothing follows to where its level usually sits",
   "chart.contract.soft.3": "Never places a course earlier than a published plan has put one of that level",
   "chart.contract.soft.4": "Avoids more than two cards of the same requirement in one term",
   "chart.contract.soft.5": "Sticks to the terms your department’s plan uses, adding a summer only when the courses will not otherwise fit",
@@ -382,7 +388,12 @@ export const strings = {
   // is tied with on everything above" is a true statement nobody can parse). It sits after the
   // sentence as a quiet count instead, where it can be read or ignored.
   "chart.deriv.rank.why2.filler":  "It is not an open elective, and open electives take whatever is left over.",
-  "chart.deriv.rank.why2.claim.0": "Other courses depend on it, so it cannot wait without making them wait too.",
+  // "in this degree" is load-bearing, not padding. This bullet is the ORDER the cards are taken
+  // in, which counts what depends on a course inside this program; where a course is SENT counts
+  // what depends on it across the catalog. Both are true and they disagree about the same course
+  // — microeconomics ranks low here and is still placed first — so an unqualified "other courses
+  // depend on it" reads as a contradiction the moment a student notices.
+  "chart.deriv.rank.why2.claim.0": "Other courses in this degree depend on it, so it cannot wait without making them wait too.",
   "chart.deriv.rank.why2.claim.1": "It carries the major’s depth — the coursework a co-op employer reads.",
   "chart.deriv.rank.why2.claim.2": "It names a course, rather than being a choice still to make.",
   "chart.deriv.rank.why2.terms":   "Only {n} of the {total} semesters still fit it.",
@@ -398,7 +409,7 @@ export const strings = {
   // Why a row sits above the one below it — the first key on which the two differ, which is the
   // only key that decided them. Written as the winner's advantage, not as a comparison.
   "chart.deriv.rank.why.filler":  "before the open electives",
-  "chart.deriv.rank.why.claim.0": "other courses depend on it",
+  "chart.deriv.rank.why.claim.0": "other courses in this degree depend on it",
   "chart.deriv.rank.why.claim.1": "it carries the major’s depth",
   "chart.deriv.rank.why.claim.2": "it names a course",
   "chart.deriv.rank.why.terms":   "only {n} semesters fit it",

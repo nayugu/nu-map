@@ -40,7 +40,7 @@ import {
 } from "./search.js";
 import { unlockValues } from "./prereqDepth.js";
 import { improve, DEFAULT_PREFERENCES } from "./objective.js";
-import { emitPlan } from "./emit.js";
+import { emitPlan, cellText } from "./emit.js";
 import { buildDepthIndex } from "./prereqDepth.js";
 import { withDefaults } from "./ports.js";
 import { withCalibration, minCoursesFor } from "./calibration.js";
@@ -538,15 +538,55 @@ function generateOnce({
       ...p.cell,
       candidates: p.candidates?.length ?? null,
       subject: cellSubject(p, courseMap),
-      // ── The one course a cell names, or nothing ──────────────────────
+      // ── The card reads EXACTLY as the preview's does ─────────────────
       //
-      // A chip in the walkthrough has room for about four characters, and the honest four are the
-      // course number — the subject is already the colour and the row is already the semester. But
-      // only where the cell NAMES one course: a choice cell and an elective pool name none, and
-      // printing the first candidate's code would assert a decision the plan deliberately leaves
-      // to the student. Those fall back to an abbreviation of the requirement.
-      code: (p.cell.groups?.length === 1 && p.cell.groups[0]?.length === 1)
-        ? p.cell.groups[0][0] : null,
+      // `cellText` is `emit`'s own derivation, imported rather than repeated. This was a second
+      // one — a course code only where a cell named exactly ONE course — and the two had drifted
+      // apart in the way a second derivation always does: `CS 1800 and CS 1802` is a corequisite
+      // pair the catalog prints as one cell, so it named two courses, scored `null`, and the
+      // walkthrough drew a dashed placeholder reading "Computer Science Fundamental Courses"
+      // beside a preview reading the two courses. A choice cell was wrong the same way, with the
+      // section title standing where the preview prints `CS 4300 or 4100`.
+      //
+      // The nuance the old version was reaching for is real and is kept by `cellText` itself: an
+      // elective pool still names nothing, because `cellText` falls through to the requirement's
+      // label for an open cell. What it must not do is treat a cell the plan HAS decided as
+      // undecided.
+      text: cellText(p.cell, courseMap),
+      // Is this a course the plan commits to, or a slot the student fills? The planner draws the
+      // two differently — a coloured card against a dashed ghost — and the walkthrough has to make
+      // the same call from the same fact rather than by parsing the string above. A `choice` cell
+      // is a reservation here exactly as it is in the planner: the plan narrowed it, it did not
+      // decide it.
+      named: p.cell.kind === "named" && !!p.cell.groups?.[0]?.length,
+      // ── ONE ENTRY PER COURSE, because that is what the board holds ───
+      //
+      // A named cell is one decision to the SEARCH — `CS 1800 and CS 1802` is placed as a unit,
+      // and `mergeCoreqCells` exists to keep it that way. It is not one card to the STUDENT:
+      // `applySamplePlan` writes a placement per course id, and both the preview and the
+      // planner then split them by credit — `sh >= 3` to the main slots, `sh <= 2` to the
+      // collapsed "other credits" strip. So the board shows CS 1800 as a course and CS 1802 in
+      // the strip, and drawing them as one card is a picture of a plan nobody gets.
+      //
+      // The cell stays the unit of the recording — every card index in the node stream is a
+      // cell index, and renumbering those is the corruption `trace.roster` documents. This is
+      // the material for the VIEW to expand, which is the same transformation
+      // `applySamplePlan` performs and in the same place: at the boundary between the plan and
+      // the board.
+      //
+      // `title` here is the COURSE's, not the requirement's. Printing the requirement under a
+      // course code reads "CS 1200 / Computer Science Overview" where the planner says
+      // "CS 1200 / First Year Seminar".
+      courses: p.cell.kind === "named"
+        ? (p.cell.groups?.[0] ?? [])
+            .filter(id => courseMap[id])
+            .map(id => ({
+              id,
+              code: cellText({ kind: "named", groups: [[id]] }, courseMap),
+              title: courseMap[id]?.title ?? "",
+              sh: courseMap[id]?.sh ?? 0,
+            }))
+        : null,
       // ── The work terms, which `terms` cannot carry ──────────────────
       //
       // `terms` is `studyTerms(shape)`, and that filters employment out: there is nothing to
@@ -569,6 +609,11 @@ function generateOnce({
   const placed = placeCells({
     plans, terms, ports, studentType, courseMap, repeatable, nodeBudget, timeBudgetMs,
     precedence, shape, cal,
+    // Foundationality against the whole catalog, off the shared depth index. It is what
+    // decides whether a requirement outside the major is a prerequisite the rest of the
+    // university stands on or a terminal course, and the degree's own requirement list
+    // cannot answer that — see `noClaim`.
+    catalogUnlock: depth.catalogUnlock,
     // Where the department puts each course. A branch ORDER, not a constraint: it steers the
     // search toward an arrangement we know exists rather than toward position 0. See
     // `seed.js` — International Business exhausted the budget looking elsewhere.
@@ -629,6 +674,9 @@ function generateOnce({
     repeatable, preferences, precedence, shape, cal,
     boundary: firstWorkBoundary(shape),
     depthOf: depth.depthOf,
+    // The same index the search reads, so phase 1 and phase 2 cannot disagree about which
+    // courses the rest of the university is built on. See `tradeFoundations`.
+    catalogUnlock: depth.catalogUnlock,
   });
   // ── Hill climbing is recorded from its RESULT, not instrumented ────
   //

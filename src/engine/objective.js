@@ -55,7 +55,10 @@ import { courseLevel, cellLevelTarget, LEVEL_POSITION } from "./prereqDepth.js";
 import { witnessPlan } from "./witness.js";
 import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
 import { DEFAULT_CALIBRATION, minCoursesFor, termIsFull } from "./calibration.js";
-import { unlockUniverse, unlockOfCell, isPoolCell, generatorBar, UNGUIDED_PER_TERM_CAP } from "./search.js";
+import {
+  unlockUniverse, unlockOfCell, guaranteedUnlock, isPoolCell, generatorBar,
+  UNGUIDED_PER_TERM_CAP,
+} from "./search.js";
 import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
 import { unlockValues } from "./prereqDepth.js";
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
@@ -422,6 +425,9 @@ export function improve({
   plans, terms, termOf, ports, studentType, courseMap, repeatable,
   preferences = DEFAULT_PREFERENCES, boundary, depthOf, precedence = null,
   trialBudget = DEFAULT_IMPROVE_TRIALS, shape = null, cal = DEFAULT_CALIBRATION,
+  // Catalog-wide foundationality, from the shared depth index. Absent, `tradeFoundations`
+  // returns its input untouched, so a caller that does not supply it gets the old pipeline.
+  catalogUnlock = null,
 }) {
   // Chain height drives the leading objective, and it is a property of the
   // precedence graph rather than of any one arrangement, so it is computed once.
@@ -558,6 +564,19 @@ export function improve({
   note("fill-full-terms", current, packed.termOf);
   current = packed.termOf;
   moves += packed.moves;
+
+  // ── Then let a foundation and a terminal course change places ───
+  //
+  // Before the filler reclaim, because this swap is between two REAL courses and is therefore
+  // credit- and count-neutral, so it cannot undo a reclaim — while a reclaim moves a placeholder
+  // into a term and would change which exchanges still fit. Same ordering argument as the
+  // trade-before-fill above, one step down.
+  const founded = tradeFoundations(current, {
+    plans, terms, cap, fullLegal, courseMap, catalogUnlock, studentType,
+  });
+  note("foundation-trade", current, founded.termOf);
+  current = founded.termOf;
+  moves += founded.moves;
 
   // ── Then take the early terms back from the fillers ─────────────
   //
@@ -1028,6 +1047,155 @@ export function tradeDepth(termOf, { plans, terms, cap, courseMap, fullLegal, ca
  * accepted, and keeps the original when a swap does not verify, it cannot turn a plan into a
  * refusal.
  */
+/**
+ * A foundation and a terminal course exchange terms.
+ *
+ * ── The gap, and why none of the three existing swaps reaches it ─────
+ *
+ * `business_administration_bsba` put `MATH 1231 or 1241 …` in YEAR FOUR while `ECON 1115` and
+ * `ECON 1116` sat in Year 1 Fall. Calculus is needed by 144 catalog courses and macroeconomics
+ * by 20, so the plan had the more foundational of the two last — and every existing operator is
+ * blind to the exchange that fixes it:
+ *
+ *   `tradeDepth`          pool ↔ flat, and both ends here are ordinary named cells
+ *   `reclaimFromFiller`   bounded ↔ filler, and both ends here are bounded
+ *   the hill climber      one cell at a time, and every early term is at its credit target, so
+ *                         moving calculus forward alone overflows the term and is rejected
+ *
+ * `reclaimFromFiller` comes closest and is blocked for a reason worth stating, because it is a
+ * guard doing its job rather than a bug: swapping calculus with a general elective sends that
+ * elective to calculus's term, which already holds two, and `maxFillers` — the non-erosion
+ * ceiling taken from the plan phase 1 handed over — correctly refuses a third. The plan is also
+ * credit-saturated, so relocating the elective anywhere else overflows a term. No swap
+ * involving a filler exists. The swap that exists is between two REAL courses, and nothing was
+ * looking for it.
+ *
+ * ── Why foundationality, and why it is safe to act on ────────────────
+ *
+ * `guaranteedUnlock` over the catalog: how much of the university is built on what this cell
+ * GUARANTEES to deliver. Measured against the degree's own requirement list this signal is
+ * useless for exactly the programs that need it — a broad core degree names one or two courses
+ * per subject, so almost nothing inside it depends on anything else inside it and every course
+ * scores zero. Across the catalog it separates them cleanly: MATH 1231 at 144, ECON 1116 at 37,
+ * ECON 1115 at 20, `STRT 4501` — a senior capstone — at 0.
+ *
+ * The exchange is between two cells that are already placed and already legal, it is credit- and
+ * count-neutral in aggregate, and it is verified by the same `fullLegal` as every other
+ * mutation, so the witness, precedence, availability and the thin-term budget all still hold. It
+ * transforms an accepted plan and keeps the original whenever a swap does not verify, so it
+ * cannot turn a plan into a refusal.
+ *
+ * ── The level convention still bounds it from below ──────────────────
+ *
+ * Reusing `reclaimFromFiller`'s floor rather than restating it, and for the identical reason: a
+ * course sitting later than convention is harmless, sitting earlier is where the gates nobody
+ * recorded bite. Without it this pass would happily pull a 4000-level course with a long
+ * downstream into year one — `RESTRICTION_ONLY` discards the "junior standing or above" prose,
+ * so nothing else would stop it.
+ *
+ * ── Termination ─────────────────────────────────────────────────────
+ *
+ * Let `Φ = Σ unlock(c) · index(c)` over the cells this pass considers. Swapping `a` at `i` with
+ * `b` at `j > i` changes Φ by `(unlock(b) − unlock(a)) · (i − j)`, which is strictly negative
+ * exactly when `unlock(b) > unlock(a)`, the pass's own acceptance test. Φ is a non-negative
+ * integer, so it cannot cycle.
+ */
+export function tradeFoundations(termOf, {
+  plans, terms, cap, fullLegal, courseMap, catalogUnlock = null,
+  studentType = "undergraduate",
+}) {
+  // Nothing to say without the catalog index, and nothing to say about a cell that names no
+  // course — a pool's foundationality is `tradeDepth`'s question, asked differently.
+  if (!catalogUnlock) return { termOf, moves: 0, applied: [] };
+  const cells = plans.filter(p => p.cell.groups?.length);
+  if (cells.length < 2) return { termOf, moves: 0, applied: [] };
+
+  const unlockOf = new Map(cells.map(p => [p.cell.id, guaranteedUnlock(p, catalogUnlock)]));
+  // ── The major is never what gets pushed back ──────────────────────
+  //
+  // Without this the pass is happy to spend major depth on foundationality, and it did:
+  // `INTB 1203 International Business and Global Social Responsibility` — the gateway course of
+  // the degree, 1000-level, which its own department puts in Year 1 — was sent to Year 4 Fall so
+  // that calculus could come forward, because calculus carries 144 catalog dependents and INTB
+  // 1203 carries 4.
+  //
+  // The trade is real and it is the wrong one. Major depth before the first co-op is the thing
+  // this engine exists to protect, and foundationality is a tie-breaker among the courses that
+  // are NOT that. So the pass may pull a foundation forward past a supporting requirement and
+  // never past the major's own coursework — which also keeps it clear of `tradeDepth`, whose
+  // whole subject is where the major's cells sit.
+  const majors = majorSubjectsOf(plans, courseMap);
+  const isMajor = (p) => majors.has(cellSubject(p, courseMap));
+  const span = Math.max(1, terms.length - 1);
+  // The same one-term slack `reclaimFromFiller` allows, for the same reason: `LEVEL_POSITION` is
+  // a median over 12,848 placements and ±1 term is inside its own noise.
+  const beforeConvention = (ti, want) => ti < want * span - 1;
+
+  let current = new Map(termOf);
+  const applied = [];
+  let moves = 0;
+
+  const pairs = [];
+  for (const early of cells) {
+    for (const late of cells) {
+      if (early === late) continue;
+      if (isMajor(early)) continue;                 // never spend major depth for a foundation
+      const i = current.get(early.cell.id), j = current.get(late.cell.id);
+      if (i == null || j == null || i >= j) continue;
+      const gain = (unlockOf.get(late.cell.id) ?? 0) - (unlockOf.get(early.cell.id) ?? 0);
+      if (gain <= 0) continue;
+      pairs.push({ early, late, gain, span: j - i });
+    }
+  }
+  // Largest foundational gain first, then the longest journey, so the most misplaced course is
+  // rescued before a marginal pair consumes the slot. Ids last, for determinism.
+  pairs.sort((a, b) => b.gain - a.gain || b.span - a.span
+    || String(a.late.cell.id).localeCompare(String(b.late.cell.id))
+    || String(a.early.cell.id).localeCompare(String(b.early.cell.id)));
+
+  for (const { early, late } of pairs) {
+    const i = current.get(early.cell.id), j = current.get(late.cell.id);
+    if (i == null || j == null || i >= j) continue;              // moved by an earlier swap
+    if (!late.domain.includes(i) || !early.domain.includes(j)) continue;
+    // Neither end may be pulled in front of where a real plan has ever put a course of its
+    // level. Checked on BOTH, because a swap moves two cells and only one of them is travelling
+    // forward — but the other's new term still has to be one it is allowed to occupy.
+    const homeLate = cellLevelTarget(late, courseMap, studentType);
+    if (homeLate != null && beforeConvention(i, homeLate)) continue;
+    // ── And the DISPLACED cell may not be shoved past its own convention ──
+    //
+    // The comment above this pair used to claim both ends were checked. Only one was, and the
+    // gap is the same defect this repo already records as "the comment that claimed the guard
+    // was enforced" — written again, in a guard I authored the same day I read that note.
+    //
+    // MEASURED, on `computer_engineering_and_physics_bscmpe`: the majors there are EECE and
+    // PHYS, so `CS 1800 and CS 1802` is not major-subject and was therefore eligible to be
+    // pushed back. It went from Year 2 Spring to YEAR 4 FALL to make room for something scoring
+    // higher — a course 82 catalog courses are built on, in the final year, arrived at by a
+    // rule whose entire purpose is putting foundations early.
+    //
+    // The two bounds are not the same rule stated twice. `beforeConvention` is about RISK: a
+    // course earlier than convention meets gates nobody recorded, so it is a floor. This is
+    // about QUALITY: a foundation later than convention is a plan no advisor would sign, even
+    // though it breaks nothing. "Late is harmless" is true of the student's eligibility and
+    // false of the plan's worth, and conflating the two is what let this through.
+    const homeEarly = cellLevelTarget(early, courseMap, studentType);
+    if (homeEarly != null && j > homeEarly * span + 1) continue;
+    const trial = new Map(current);
+    trial.set(late.cell.id, i);
+    trial.set(early.cell.id, j);
+    if (!fitsCapacity(trial, plans, terms, cap)) continue;
+    if (!fullLegal(trial)) continue;
+    current = trial;
+    moves++;
+    applied.push({
+      foundation: late.cell.title ?? "", terminal: early.cell.title ?? "",
+      from: j, to: i,
+    });
+  }
+  return { termOf: current, moves, applied };
+}
+
 export function reclaimFromFiller(termOf, {
   plans, terms, cap, fullLegal, courseMap, studentType = "undergraduate",
   cal = DEFAULT_CALIBRATION,
