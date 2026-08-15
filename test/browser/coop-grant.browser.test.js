@@ -110,6 +110,42 @@ describe("browser · a work term registers its program's course", { skip: up ? f
     assert.match(after,  /One of \(1\/4\)/);
   });
 
+  // Work-experience courses left the bank, so the requirements panel is the
+  // last place a granted key is visible. Two things must hold there.
+  test("a granted row names the work term and is not draggable", async () => {
+    const ctx = await browser.newContext({ viewport: { width: 1600, height: 1000 } });
+    await ctx.addInitScript(seed(PROGRAMS.msis, true, { ENCP6000: "fall2025" },
+      { c1: { typeId: "coop", semId: "spr2027", duration: 6, company: "Acme" } }));
+    const page = await ctx.newPage();
+    await page.goto(APP, { waitUntil: "networkidle" });
+    await page.waitForTimeout(2000);
+    for (let i = 0; i < 6; i++) {
+      const skip = page.getByRole("button", { name: /^Skip$/ }).first();
+      if (await skip.count() && await skip.isVisible().catch(() => false)) {
+        await skip.click().catch(() => {}); await page.waitForTimeout(250);
+      } else break;
+    }
+    await page.getByRole("button", { name: /^Graduation$/ }).first().click().catch(() => {});
+    await page.waitForTimeout(2500);
+
+    const row = await page.evaluate(() => {
+      const el = [...document.querySelectorAll("div")]
+        .filter(d => /ENCP 6964/.test(d.textContent || ""))
+        .sort((a, b) => (a.textContent || "").length - (b.textContent || "").length)[0];
+      return el ? { text: el.textContent, draggable: !!el.closest('[draggable="true"]') } : null;
+    });
+    await ctx.close();
+
+    assert.ok(row, "the ENCP 6964 row did not render");
+    // Provenance: composed from the work term's own localised label and the
+    // employer the student typed, so it needs no new string.
+    assert.match(row.text, /Acme/, `no work-term provenance on the row: "${row.text}"`);
+    // A work-experience course is recorded by placing the block. Dragging it
+    // out of here would be the one remaining way to make the phantom card the
+    // bank change removed.
+    assert.equal(row.draggable, false, "a granted work-experience row is still draggable");
+  });
+
   test("the companion course alone does not satisfy it — the co-op is doing the work", async () => {
     // Guards against the row flipping for an unrelated reason.
     const only = await panelText({ major: PROGRAMS.msis, graduate: true, placements: { ENCP6000: "fall2025" } });

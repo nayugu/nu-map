@@ -115,7 +115,16 @@ export function workTermGrants(specialTermPl, types, semIndex, isCompleted, coop
   const finished = Object.fromEntries(
     Object.entries(specialTermPl ?? {}).filter(([, d]) => d?.semId && isCompleted?.(d.semId))
   );
-  return { planned, completed: resolveGrants(finished, types, semIndex, coopOptions) };
+  const completed = resolveGrants(finished, types, semIndex, coopOptions);
+  return {
+    planned:   new Set(planned.keys()),
+    completed: new Set(completed.keys()),
+    // key → the work-term instance that registered it. Without this the
+    // requirement row shows a checked course that exists nowhere the student
+    // can look — and since work-experience courses left the bank, nowhere at
+    // all. Provenance is what keeps the audit legible.
+    source:    planned,
+  };
 }
 
 /** No flags set: a full-time, domestic work term. The default a block carries. */
@@ -184,27 +193,30 @@ export function coopOptionsInPrograms(programs, courseMap) {
  * `courseGrants`, which is exactly the behaviour before any of this existed.
  */
 function resolveGrants(specialTermPl, types, semIndex, coopOptions) {
-  const granted  = new Set();
+  /** @type {Map<string, string>} course key → the instance id that registered it */
+  const granted  = new Map();
   const typeById = Object.fromEntries((types ?? []).map(t => [t.id, t]));
 
-  const eligible = Object.values(specialTermPl ?? {})
-    .filter(d => d?.semId && !(semIndex && semIndex[d.semId] === undefined))
-    .filter(d => typeById[d.typeId]?.courseGrants?.length)
-    .sort((a, b) => (semIndex?.[a.semId] ?? 0) - (semIndex?.[b.semId] ?? 0));
+  const eligible = Object.entries(specialTermPl ?? {})
+    .filter(([, d]) => d?.semId && !(semIndex && semIndex[d.semId] === undefined))
+    .filter(([, d]) => typeById[d.typeId]?.courseGrants?.length)
+    .sort(([, a], [, b]) => (semIndex?.[a.semId] ?? 0) - (semIndex?.[b.semId] ?? 0));
 
   if (!coopOptions?.length) {
-    for (const d of eligible) typeById[d.typeId].courseGrants.forEach(k => granted.add(k));
+    for (const [id, d] of eligible) {
+      for (const k of typeById[d.typeId].courseGrants) if (!granted.has(k)) granted.set(k, id);
+    }
     return granted;
   }
 
-  for (const d of eligible) {
+  for (const [id, d] of eligible) {
     const pick = (f) => coopOptions.find(
       o => o.abroad === f.abroad && o.halfTime === f.halfTime && !granted.has(o.key));
     // No match for this block's own variant AND none for the base variant means
     // the program's options are exhausted. Granting an unrelated key would be
     // worse than granting nothing.
     const hit = pick({ abroad: !!d.abroad, halfTime: !!d.halfTime }) ?? pick(BASE_VARIANT);
-    if (hit) granted.add(hit.key);
+    if (hit) granted.set(hit.key, id);
   }
   return granted;
 }

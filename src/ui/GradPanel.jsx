@@ -30,7 +30,7 @@ import { baseId } from "../core/repeatInstances.js";
 import { reservedTotals } from "../core/reservations.js";
 import { REL_STYLE } from "../core/constants.js";
 import { useLanguage }          from "../context/LanguageContext.jsx";
-import { useTranslatedText, scaleLatinRuns }    from "../context/TranslationContext.jsx";
+import { TText, useTranslatedText, scaleLatinRuns }    from "../context/TranslationContext.jsx";
 import {
   buildPlacedKeySet,
   allocateMajorWithElectives,
@@ -290,7 +290,8 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
   const [open, setOpen]  = useState(true);
   const [hov,  setHov]   = useState(false);
   const { t }            = useLanguage();
-  const { courseMap, onDragStart, setSelectedId, setShowPanel, selectedId, isPhone, wideCatalog } = useContext(GradCtx);
+  const { courseMap, onDragStart, setSelectedId, setShowPanel, selectedId, isPhone, wideCatalog,
+          workTermSource, specialTermPl, specialTerms } = useContext(GradCtx);
   const pl               = depth * (isPhone ? 4 : 10);
   const rowMB            = isPhone ? 1 : 3;
   const nodeFz           = isPhone ? 8 : 10;
@@ -305,12 +306,22 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
     const course       = courseMap?.[r.key];
     const isSelected   = selectedId === r.key;
     const displayLabel = r.label.split(': ')[0];
+    // Satisfied by a work term rather than by anything the student placed.
+    // Two consequences: it must NOT be draggable — work-experience courses are
+    // recorded by placing the block and were removed from the bank, so offering
+    // a drag here would be the one remaining way to create the phantom card —
+    // and the row has to say where the tick came from, or it reads as a checked
+    // course that exists nowhere in the plan.
+    const grantedBy = workTermSource?.get?.(r.key) ?? null;
+    const grantData = grantedBy ? specialTermPl?.[grantedBy] : null;
+    const grantType = grantData ? (specialTerms?.getTypes?.() ?? []).find(x => x.id === grantData.typeId) : null;
+    const draggable = !!course && !grantedBy;
     return (
       <div style={{ paddingLeft: pl + baseIndent, marginBottom: rowMB, opacity: dimmed ? 0.4 : 1 }}>
         <div
-          style={{ display: "flex", alignItems: "center", gap: rowGap, cursor: course ? "grab" : "default" }}
-          draggable={!!course}
-          onDragStart={course ? e => {
+          style={{ display: "flex", alignItems: "center", gap: rowGap, cursor: draggable ? "grab" : course ? "pointer" : "default" }}
+          draggable={draggable}
+          onDragStart={draggable ? e => {
             e.stopPropagation();
             onDragStart(e, r.key, "course", null);
           } : undefined}
@@ -319,7 +330,7 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
             setSelectedId(r.key);
             setShowPanel(true);
           } : undefined}
-          title={course ? (isPhone ? r.label : `Drag to place • click to preview`) : undefined}
+          title={grantedBy ? t("grad.nupath.granted") : course ? (isPhone ? r.label : `Drag to place • click to preview`) : undefined}
         >
           <CheckBox sat={r.sat} dimmedCheck={dimmed} />
           <span
@@ -334,6 +345,20 @@ function ReqNode({ r, depth = 0, dimmed = false }) {
             }}>
             {displayLabel}
           </span>
+          {/* Where the tick came from. Composed from pieces that are already
+              localised — the work-term type's own label and the employer the
+              student typed — so this needs no new string, and the tooltip
+              reuses grad.nupath.granted ("satisfied by a placed term"), which
+              is the sentence this situation already had a translation for. */}
+          {grantType && (
+            <span style={{
+              fontSize: isPhone ? 7 : 9, color: "var(--text-5)", userSelect: "none",
+              border: "1px solid var(--border-1)", borderRadius: 4,
+              padding: isPhone ? "0 3px" : "1px 5px", whiteSpace: "nowrap", flexShrink: 0,
+            }}>
+              <TText>{grantType.label}</TText>{grantData?.company ? ` · ${grantData.company}` : ""}
+            </span>
+          )}
           {wideCatalog && course?.title && (
             <span style={{
               flex: 1, minWidth: 0, fontSize: nodeFz, color: "var(--text-5)",
@@ -1588,6 +1613,18 @@ export default function GradPanel({ wideCatalog = false }) {
     [major, major2Data, courseMap]
   );
 
+  /**
+   * Course key → the work term that registered it.
+   *
+   * A granted key is checked off in the audit but was never dragged anywhere,
+   * and since work-experience courses left the bank there is nowhere at all
+   * for a student to look one up. Without provenance the row reads as a
+   * checked course that does not exist in their plan.
+   */
+  const workTermSource = useMemo(
+    () => workTermGrants(specialTermPl, specialTerms?.getTypes() ?? [], SEM_INDEX, null, coopOptions).source,
+    [specialTermPl, specialTerms, SEM_INDEX, coopOptions]);
+
   const placedSet = useMemo(
     () => {
       const set = buildPlacedKeySet(filterInTimeline(applySubstitutions(dropVoidTakes(placements, grades), effectiveSubstitutions), SEM_INDEX), placedOut, courseMap);
@@ -1797,7 +1834,7 @@ export default function GradPanel({ wideCatalog = false }) {
   const overallFrac = majorSections.length > 0 ? satSections / majorSections.length : 0;
 
   return (
-    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile, attributeSystem, majorRequirements, wideCatalog }}>
+    <GradCtx.Provider value={{ courseMap, onDragStart, selectedId, setSelectedId, setShowPanel, isPhone, isMobile, attributeSystem, majorRequirements, wideCatalog, workTermSource, specialTermPl, specialTerms }}>
       <div style={{ overflowY: "auto", overflowX: "hidden", height: "100%", padding: isPhone ? "6px 5px 40px" : "9px 9px 40px" }}>
 
         {/* ── Program selection (collapsible) ─────────────────── */}
