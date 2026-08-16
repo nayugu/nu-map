@@ -141,6 +141,12 @@ export const DEFAULT_CALIBRATION = Object.freeze({
   // gets one central target and no floor rather than a fabricated ladder.
   graduateLevelTarget: 0.3,
 
+  // NUPath's Capstone Experience designation, and the earliest a published plan puts one. See
+  // the adapter for the measurement; null disables the rule for an institution with no such
+  // designation, which is the honest default rather than a guess about its curriculum.
+  capstoneAttribute: null,
+  capstoneFloor: 0.85,
+
   slotCapFull: 9,
   slotCapHalf: 5,
 });

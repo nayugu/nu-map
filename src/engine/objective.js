@@ -467,8 +467,12 @@ export function improve({
   // One shared budget across every climb, so total work is bounded regardless of how
   // many objectives are ranked.
   const budget = { left: trialBudget };
-  const climb = (from, score) =>
-    hillClimb(from, score, cheapLegal, fullLegal, plans, terms, cap, { budget, shape });
+  // `extra` is an optional additional acceptance test, folded into `fullLegal` so the climber
+  // needs no new parameter and every existing caller behaves exactly as before.
+  const climb = (from, score, extra = null) =>
+    hillClimb(from, score, cheapLegal,
+      extra ? (a) => fullLegal(a) && extra(a) : fullLegal,
+      plans, terms, cap, { budget, shape });
 
   let current = new Map(termOf);
   let moves = 0;
@@ -603,16 +607,74 @@ export function improve({
   current = settled.termOf;
   moves += settled.moves;
 
+  // ── And LAST, send a capstone back to the end where it belongs ───
+  //
+  // Deliberately the final swap, and it earns that position by being the weakest claim in the
+  // file: every pass above is about correctness or about depth a co-op recruiter reads, and this
+  // is about a plan reading the way a plan should. It only ever fires on what nothing else
+  // wanted to move.
+  const capped = settleCapstones(current, {
+    plans, terms, cap, fullLegal, courseMap, studentType, cal,
+  });
+  note("capstone-settle", current, capped.termOf);
+  current = capped.termOf;
+  moves += capped.moves;
+
   // ── Repair thresholds last ──────────────────────────────────────
   //
   // Last because a threshold is a bar: satisfying it is worth giving up ranked
   // score for, and doing it first would let the ranked passes undo it.
+  // ── The repair may not undo the three passes above it ─────────────
+  //
+  // `climb` here optimises one number — how many thresholds fail — and knows nothing about where
+  // a course belongs. MEASURED on `industrial_engineering_and_computer_science`, five-year
+  // variant: the search had to use the two summers the department marks Vacation, both landed
+  // under the full-time floor at 5 SH against 6, and this repair filled one of them by dragging
+  // `MEIE 4701 Capstone Design 1` from study term 10 to study term 3. Every pass above had it in
+  // the right place; the last pass in the pipeline moved it.
+  //
+  // So the floor those passes enforce is stated once more, here, as a NON-EROSION guard rather
+  // than a new rule: the repair may leave a convention violated exactly as badly as it found it,
+  // and may not make one worse. That is §17.1's sanctioned shape — it cannot block a repair that
+  // was not already degrading a placement, so a degree whose thresholds genuinely need this move
+  // still gets it.
+  //
+  // The floor is the same `max` the other passes use — level band, the corpus position where the
+  // departments have one, and the capstone p10 — so four passes now read one convention instead
+  // of three enforcing it and a fourth ignoring it.
+  const conventionFloor = (p) => {
+    let at = cellLevelTarget(p, courseMap, studentType) ?? 0;
+    for (const id of p.cell.groups?.flat() ?? []) {
+      const rec = positions?.[id];
+      if (rec && typeof rec.at === "number") at = Math.max(at, rec.at);
+      if (cal.capstoneAttribute
+          && (courseMap?.[id]?.attributes ?? []).includes(cal.capstoneAttribute)) {
+        at = Math.max(at, cal.capstoneFloor ?? 0);
+      }
+    }
+    return at;
+  };
+  const convSpan = Math.max(1, terms.length - 1);
+  // Summed, not counted: moving one course four terms too early is worse than moving four
+  // courses one term, and a count cannot tell those apart.
+  const earliness = (assignment) => {
+    let owed = 0;
+    for (const p of plans) {
+      const ti = assignment.get(p.cell.id);
+      if (ti == null) continue;
+      const floorAt = conventionFloor(p) * convSpan - 1;
+      if (ti < floorAt) owed += floorAt - ti;
+    }
+    return owed;
+  };
+  const conventionBudget = earliness(current);
   const before = checkThresholds({ plans, terms, termOf: current, ports, studentType, thresholds, cal });
   let repaired = current;
   if (before.failures.length) {
     const res = climb(
       current,
       (a) => -checkThresholds({ plans, terms, termOf: a, ports, studentType, thresholds, cal }).failures.length,
+      (a) => earliness(a) <= conventionBudget,
     );
     note("threshold-repair", current, res.termOf);
     repaired = res.termOf;
@@ -1195,6 +1257,121 @@ export function tradeFoundations(termOf, {
       foundation: late.cell.title ?? "", terminal: early.cell.title ?? "",
       from: j, to: i,
     });
+  }
+  return { termOf: current, moves, applied };
+}
+
+/**
+ * A capstone goes at the end, because that is what a capstone is.
+ *
+ * ── The defect, and why nothing above reaches it ─────────────────────
+ *
+ * `industrial_engineering_and_computer_science`, five-year variant: `MEIE 4701 Capstone Design 1`
+ * in YEAR ONE SUMMER, in a term the department itself marks Vacation. The plan is
+ * credit-saturated, so the search had to spill into the two blank summers, and once every
+ * ordinary term was full the level target was choosing BETWEEN optional terms and picked an
+ * early one.
+ *
+ * No pass above can undo it. `tradeDepth` is pool↔flat, `reclaimFromFiller` is bounded↔filler
+ * and only ever pulls a cell EARLIER, `tradeFoundations` moves foundations forward, and
+ * `swapForAvailability` is about seasons. Every one of them is aimed at rescuing something from
+ * the end of the plan; none is aimed at sending something back to it.
+ *
+ * ── Why the capstone specifically, and why this is not a heuristic ───
+ *
+ * NUPath's "Capstone Experience" is a designation the registrar publishes, carried by 161
+ * courses — so membership is read, not inferred from a title. And the corpus agrees with the
+ * designation more strongly than with anything else it records:
+ *
+ *     code   median position   p10    p90        (published undergraduate plans)
+ *     CE         1.000        0.85   1.00
+ *     WI         0.692        0.08   1.00
+ *     EI         0.308        0.00   1.00
+ *     ALL        0.308        0.00   0.86
+ *
+ * Nine in ten capstone placements sit in the last 15% of a plan, where every other code is
+ * spread across the whole range. `cal.capstoneFloor` is that p10, used exactly as `levelFloor`
+ * is — the earliest a real plan has ever put one.
+ *
+ * ── A floor, a swap, and the last word ───────────────────────────────
+ *
+ * EVERY option must carry the designation, for the same reason a choice cell guarantees only
+ * what all its branches do: a cell offering a capstone or an ordinary elective is not a capstone
+ * cell, and treating it as one would move a course the student may never take.
+ *
+ * It swaps rather than relocates, because the terms this fires in are full — a one-cell move
+ * would overflow and be rejected, which is why the hill climber never fixed this. The partner is
+ * the cell in the latest term that can legally take the capstone's place, and it must not itself
+ * be dragged in front of its own convention: sending a capstone back must not create the very
+ * defect two other guards in this file exist to prevent.
+ *
+ * Ranked last in `improve`, and it should stay there. It is a statement about how a plan READS,
+ * where everything above it is about correctness or about depth before a co-op.
+ *
+ * Termination: every accepted swap strictly increases the capstone's term index, which is
+ * bounded by the number of terms, and each cell is considered once.
+ */
+export function settleCapstones(termOf, {
+  plans, terms, cap, fullLegal, courseMap, studentType = "undergraduate",
+  cal = DEFAULT_CALIBRATION,
+}) {
+  const code = cal.capstoneAttribute;
+  if (!code) return { termOf, moves: 0, applied: [] };
+
+  const carries = (id) => {
+    const a = courseMap?.[id]?.attributes;
+    return Array.isArray(a) && a.includes(code);
+  };
+  /** Every option of this cell is a capstone — so the student gets one whichever they pick. */
+  const isCapstone = (p) => {
+    const groups = p.cell.groups;
+    if (!groups?.length) return false;
+    return groups.every(g => g.length > 0 && g.some(carries));
+  };
+
+  const span = Math.max(1, terms.length - 1);
+  const floor = Math.floor((cal.capstoneFloor ?? 0.85) * span);
+  const capstones = plans.filter(p => isCapstone(p) && (termOf.get(p.cell.id) ?? Infinity) < floor);
+  if (!capstones.length) return { termOf, moves: 0, applied: [] };
+
+  let current = new Map(termOf);
+  const applied = [];
+  let moves = 0;
+
+  // Earliest capstone first: it has the furthest to travel and the strongest claim on the swap.
+  capstones.sort((a, b) => (current.get(a.cell.id) ?? 0) - (current.get(b.cell.id) ?? 0)
+    || String(a.cell.id).localeCompare(String(b.cell.id)));
+
+  for (const cap0 of capstones) {
+    // The floor is applied once, when `capstones` is built. Re-testing it here was a second
+    // copy of one rule — harmless in effect and actively misleading, since it made the filter
+    // impossible to mutate and so impossible to prove tested.
+    const i = current.get(cap0.cell.id);
+    if (i == null) continue;
+    // Latest partner first — the point is to travel as far as possible, and a swap that moves a
+    // capstone one term is rarely worth the disturbance it causes.
+    const partners = plans
+      .filter(p => p !== cap0 && !isCapstone(p))
+      .map(p => ({ p, j: current.get(p.cell.id) }))
+      .filter(x => x.j != null && x.j > i)
+      .sort((a, b) => b.j - a.j || String(a.p.cell.id).localeCompare(String(b.p.cell.id)));
+
+    for (const { p, j } of partners) {
+      if (!cap0.domain.includes(j) || !p.domain.includes(i)) continue;
+      // The partner must not be dragged in front of ITS convention. Sending a capstone to the end
+      // must not manufacture the defect `reclaimFromFiller` and `tradeFoundations` both guard.
+      const home = cellLevelTarget(p, courseMap, studentType);
+      if (home != null && i < home * span - 1) continue;
+      const trial = new Map(current);
+      trial.set(cap0.cell.id, j);
+      trial.set(p.cell.id, i);
+      if (!fitsCapacity(trial, plans, terms, cap)) continue;
+      if (!fullLegal(trial)) continue;
+      current = trial;
+      moves++;
+      applied.push({ capstone: cap0.cell.title ?? "", from: i, to: j });
+      break;
+    }
   }
   return { termOf: current, moves, applied };
 }

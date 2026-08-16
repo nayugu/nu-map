@@ -77,6 +77,24 @@ export default {
   // every 5000-level course from the first two-thirds of the degree.
   graduateLevelTarget: 0.0,
 
+  // ── The capstone, which the registrar designates and the corpus confirms ──
+  //
+  // NUPath's "Capstone Experience" is a real designation carried on 161 courses, so this is an
+  // institutional fact rather than a heuristic about titles. Measured over the 23 of them the
+  // published plans place, it is the sharpest positional signal in the whole attribute set:
+  //
+  //     code   median position   p10    p90
+  //     CE         1.000        0.85   1.00      <- capstone
+  //     WI         0.692        0.08   1.00
+  //     EI         0.308        0.00   1.00
+  //     ALL        0.308        0.00   0.86
+  //
+  // Nine in ten capstone placements sit in the last 15% of a plan; every other code is
+  // scattered across the whole range. `capstoneFloor` is that p10, used the same way
+  // `levelFloor` is — the earliest a real plan has ever put one — and never as a target.
+  capstoneAttribute: "CE",
+  capstoneFloor: 0.85,
+
   // The worst any published plan does — 9 courses in a full term, 5 in a summer half, across
   // both corpora. The observed MAXIMUM rather than the p90 of 6, because a seven-course term
   // is unusual and real while an eleven-course one is not.
