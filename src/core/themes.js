@@ -14,6 +14,13 @@ const dark = {
   '--bg-surface-2':      '#1a1f26',
   '--bg-card':           '#1e2329',   // desaturated card tint for major/minor frames (lighter than surface-2)
   '--bg-bank':           '#0a0d12',
+  // The RAISED fill for a control sitting on a panel — pickers, segmented
+  // halves, neutral buttons. It was referenced by five controls in the sample
+  // plan panel and defined by no theme, so `var(--bg-2)` resolved to nothing
+  // and every one of them rendered transparent: the source toggle's selected
+  // half had no fill to be selected BY, and the panel read as six identical
+  // outlines. One step above --bg-surface-2, the same relation --bg-card has.
+  '--bg-2':              '#232a33',
 
   // ── Borders ──────────────────────────────────────────────────────
   '--border-1':          '#21262d',   // dividers
@@ -127,6 +134,10 @@ const light = {
   '--bg-surface-2':      '#faf9f8',   // barely-there tint for controls/bank
   '--bg-card':           '#ffffff',   // reserved (cards now use outline border)
   '--bg-bank':           '#faf9f8',
+  // See the dark set for why this exists. White on the #faf9f8 panel is the
+  // light-mode direction of "raised": a control reads as sitting ON the panel
+  // rather than being drawn on it.
+  '--bg-2':              '#ffffff',
 
   // ── Borders ────────────────────────────────────────────────
   '--border-1':          '#eeeeee',   // nearly-neutral light divider

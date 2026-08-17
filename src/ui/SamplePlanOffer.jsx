@@ -28,6 +28,36 @@
 // confirmation (`ReplaceConfirm`, below), not in a red button that reads as an
 // invitation to press it.
 //
+// ── One kind of control per row, one filled button ─────────────────
+//
+// The panel holds two grammatically different things, and for a while the rows did
+// not separate them: SETTINGS that name a plan (which source, which variant) and
+// VERBS that act on it (preview, open as new, replace). Preview sat in the settings
+// row; the two verbs shared a row as equal halves. Every one of the six was a
+// bordered box of the same rank, so nothing said which were which — and the loudest
+// text in the panel was a 700-weight mode label while the buttons that actually do
+// something rendered at 600.
+//
+// It reads top to bottom as the sequence it is now:
+//
+//   Catalog · Generated          flat tabs, no box    — whose plan
+//   [ 4 Years, 2 Co-ops … ▾ ]    full width           — which plan
+//   [      ⊞ Preview        ]    neutral outline      — look at it
+//   [   Open as new plan    ]    FILLED               — do it
+//     Replace my plan            quiet, no box        — or overwrite instead
+//
+// One filled button, because a panel with no default asks a question instead of
+// answering one. One radius (5) and one padding scale across every box, because
+// three of each was visible as a wobble down the left edge before any single
+// control looked wrong.
+//
+// The fill is `--link-bg`/`--link-1`, which is what `NewPlanModal` and
+// `OnboardingModal` already give their primary buttons — not a style invented here.
+// It was not available earlier for a duller reason than taste: every control in this
+// panel filled itself with `var(--bg-2)`, a token neither theme defined, so all five
+// resolved to transparent. The source toggle's "selected" fill in particular did not
+// exist, which is why selection was carried by font weight alone.
+//
 // "Add here" is deliberately gone. A sample plan assumes year 1 is your first
 // year with nothing done, so adding it beside existing work leaves a canvas
 // that is neither the student's nor the department's.
@@ -79,6 +109,8 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
   const {
     major2, appliedTemplate, placements, reservations, specialTermPl, placedOut,
     SEMESTERS, courseMap, applySamplePlanToPlan, createPlan, doUndo,
+    // For undoing "open as new plan", which `doUndo` cannot: see `undoLast`.
+    activePlanId, switchPlan, deleteNodes,
     // The plan LIBRARY's slots, renamed: `plans` below is this component's
     // list of sample-plan variants, which is a different thing entirely.
     plans: planSlots,
@@ -87,7 +119,10 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
 
   const [plans,      setPlans]      = useState(null);
   const [variantIdx, setVariantIdx] = useState(0);
-  const [justDid,    setJustDid]    = useState(null);   // "loaded" | "replaced" | "opened"
+  // "loaded" | "replaced" | "opened" — and, for "opened" only, what to undo:
+  // the plan that was created and the one we were on when we created it.
+  const [justDid,    setJustDid]    = useState(null);
+  const [opened,     setOpened]     = useState(null);   // {id, from} | null
   const [confirming, setConfirming] = useState(false);  // the replace dialog
   const [previewing, setPreviewing] = useState(false);  // the plan preview
 
@@ -135,7 +170,8 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
   const canGenerate = !!path && !!planGenerator?.canGenerate?.(path, isGrad, programData);
 
   useEffect(() => {
-    setPlans(null); setVariantIdx(0); setJustDid(null); setConfirming(false); setPreviewing(false);
+    setPlans(null); setVariantIdx(0); setJustDid(null); setOpened(null);
+    setConfirming(false); setPreviewing(false);
     setGen(null); setGenBusy(false); setShowWhy(false);
     startedRef.current = null;
     // Back to the catalog when the program changes: a source choice is about the
@@ -294,6 +330,7 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
   // touched at all, which is the whole point of this verb.
   const openAsNew = () => {
     setConfirming(false);
+    const from = activePlanId;
     const r = applySamplePlan(chosen, { semesters: SEMESTERS, courseMap, programData, coopDurations });
     const name = planNameFor(path, majorRequirements.fmtProgramLabel, (planSlots ?? []).map(p => p.name));
     const id = createPlan(name, {
@@ -306,7 +343,41 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
     // A SEEDED create aborts and returns null when its slot cannot be written
     // (a full store), having already said so. Announcing "opened" on top of
     // that would claim a plan exists that does not.
-    if (id) setJustDid("opened");
+    if (id) { setOpened({ id, from }); setJustDid("opened"); }
+  };
+
+  /**
+   * Undo whichever of the three verbs just ran.
+   *
+   * `doUndo` was wired to all three and can only serve two. It pops the CANVAS
+   * history, and "open as new plan" does not edit the canvas — it creates a plan
+   * and switches to it, pushing nothing. So the link did nothing on a fresh
+   * session, and before the stack was made per-plan it did something worse:
+   * `restoreSnapshot` would write the previous plan's contents into the new one.
+   *
+   * Un-creating is a plan-library act, so it uses the library's own verb. That
+   * routes it through the single delete implementation, which means the plan is
+   * tombstoned (recoverable for 30 days) rather than erased, and one ⌘Z in the
+   * library brings it back — the same as deleting it there by hand.
+   *
+   * `deleteNodes` reseats the active plan to `remaining[0]`, which is not
+   * necessarily where we came from, so the return trip is stated explicitly.
+   * It refuses on the last remaining plan, and rightly: there is nothing to
+   * switch back TO, and leaving the library empty is not an undo. In that one
+   * case the plan stays and the link simply stops offering.
+   */
+  const undoLast = () => {
+    if (justDid === "opened") {
+      if (opened?.id) {
+        const r = deleteNodes([opened.id]);
+        if (!r?.ok) return;
+        if (opened.from) switchPlan(opened.from);
+      }
+      setOpened(null);
+    } else {
+      doUndo();
+    }
+    setJustDid(null);
   };
 
   const loaded = offer.state === "loaded";
@@ -414,18 +485,16 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
 
       {open && (
         <div style={{ marginTop: 6 }}>
-          {/* Whose plan this is. First, because it changes everything below it.
-              No margin of its own here: `PlanSourceToggle` already carries the
-              same bottom margin the variant-picker/Preview row carries, and
-              adding a second one on top of it here was stacking two margins
-              into a gap nearly twice the size of the one below it. */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap" }}>
-            <PlanSourceToggle
-              value={source} onChange={setSource}
-              hasCatalog={hasSamplePlan} canGenerate={canGenerate}
-              busy={genBusy} isPhone={isPhone}
-            />
-          </div>
+          {/* Whose plan this is. First, because it changes everything below it,
+              and flat — it is the only control here that sets rather than does,
+              so it is the only one without a box. No wrapper: the toggle sizes
+              itself to its labels and carries its own bottom margin, and the
+              `display: flex` div that used to hold it was doing neither job. */}
+          <PlanSourceToggle
+            value={source} onChange={setSource}
+            hasCatalog={hasSamplePlan} canGenerate={canGenerate}
+            busy={genBusy} isPhone={isPhone}
+          />
 
           {/* Generation is the one thing here that takes visible time. */}
           {/* A machine-readable status for the live browser test.
@@ -519,74 +588,78 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
               co-ops and five years with three are different plans, not different views.
               Hiding it meant the student's selection was silently ignored. The list is
               always the CATALOG's variants, because that is what is being chosen. */}
-          {/* One row: which variant on the left, look at it on the right.
-              Preview used to be a full-width button on its own line under the
-              picker, which gave equal weight to "choose the plan" and "look at
-              the plan" and cost a whole row of a panel that has none to spare.
-              It is a small trailing control now — the picker keeps the width,
-              because reading the co-op pattern is the harder job of the two.
-
-              With no picker to sit beside (one variant, nothing to choose),
-              Preview goes back to spanning the row: a spacer holding room for a
-              picker that will not render left it as a small button stranded on
-              the right of empty space, which is worse than the full-width
-              button it replaced. */}
-          {(catalogVariants.length > 1 || chosen) && (
-            <div style={{
-              display: "flex", alignItems: "stretch", gap: 6,
-              marginBottom: isPhone ? 5 : 6,
-            }}>
-              {catalogVariants.length > 1 && (
-                <VariantPicker
-                  variants={catalogVariants}
-                  value={Math.min(variantIdx, catalogVariants.length - 1)}
-                  onChange={setVariantIdx} isPhone={isPhone}
-                />
-              )}
-              {chosen && (
-                <PreviewButton
-                  onClick={() => setPreviewing(true)} isPhone={isPhone} t={t}
-                  fullWidth={catalogVariants.length <= 1}
-                />
-              )}
+          {/* ── One kind of control per row ─────────────────────────
+            *
+            * These two shared a row for a while, picker left and a small trailing
+            * Preview right, on the reasoning that Preview was the lesser job and the
+            * picker should keep the width. Both halves of that turned out to be wrong.
+            *
+            * Preview is not a setting. The row above names the plan and the row below
+            * acts on it, and the panel's own sequence is pick a source, pick a variant,
+            * LOOK at it, act — so a verb sitting inside the settings row was the one
+            * step of that sequence filed under the wrong heading.
+            *
+            * And the width it took was not spare. "4 Years, 2 Co-ops in Spring/Summer
+            * First Half" is the only string in this panel that truncates, it is the
+            * string the student is choosing BETWEEN, and it was being clipped to make
+            * room for a label that never needs to grow. Stacked, the picker gets the
+            * ~70px back and Preview gets a full-width target, which is what actually
+            * gets it seen.
+            */}
+          {catalogVariants.length > 1 && (
+            <div style={{ display: "flex", marginBottom: isPhone ? 4 : 5 }}>
+              <VariantPicker
+                variants={catalogVariants}
+                value={Math.min(variantIdx, catalogVariants.length - 1)}
+                onChange={setVariantIdx} isPhone={isPhone}
+              />
+            </div>
+          )}
+          {chosen && (
+            <div style={{ marginBottom: isPhone ? 5 : 7 }}>
+              <PreviewButton onClick={() => setPreviewing(true)} isPhone={isPhone} t={t} />
             </div>
           )}
 
           {chosen ? (
             <>
 
-              {/* One row, two equal halves. These are the two answers to the
-                  same question — "where does this plan go?" — so they are
-                  read as a pair or not at all. Letting them WRAP stacked them
-                  into what looked like a primary action with an afterthought
-                  underneath, at every panel width narrower than about 200px,
-                  which is most of them. `minWidth: 0` is what lets the halves
-                  shrink instead of forcing the row to wrap.
-                  ── Except on a phone ─────────────────────────────────
-                  There the panel is 88px wide, so a half is ~21px: "Open as
-                  new plan" and "Replace my plan" each came out four lines
-                  tall and one word wide, which is not a pair being compared,
-                  it is two unreadable towers. Stacked DELIBERATELY (not by
-                  wrapping) they are full-width, one line each, and still
-                  adjacent — the comparison survives, the reading does too. */}
-              <div style={{
-                display: "flex", alignItems: "stretch", gap: isPhone ? 4 : 6,
-                flexDirection: isPhone ? "column" : "row",
-              }}>
+              {/* ── Demoted, and now it looks it ────────────────────
+                *
+                * These two were a row of equal halves: same size, same weight, same
+                * colour, same border. The intent was that replace is DEMOTED, and the
+                * only thing carrying that was left-to-right order, which is not enough
+                * to demote a verb that discards the student's work. It also left the
+                * panel with no default — two identical buttons ask a question, they do
+                * not answer one.
+                *
+                * So the safe verb is the app's own primary (the fill `NewPlanModal` and
+                * `OnboardingModal` use for their create buttons — this panel is not
+                * inventing a style), and replace is a quiet line under it.
+                *
+                * Still not red, and still adjacent. Red made it the loudest thing in the
+                * panel, and a destructive action does not need advertising — it needs a
+                * confirmation that says what it costs, which is `ReplaceConfirm`. And
+                * the two remain the two answers to one question ("where does this plan
+                * go?"), stacked and touching, so the pair still reads as a pair; what
+                * changed is which one you land on if you read no further.
+                *
+                * Stacking also ends the phone special case. The halves were side by side
+                * on a desktop and deliberately stacked at 88px, where a half is ~21px and
+                * each label came out four lines tall and one word wide. One layout now,
+                * full width at both sizes.
+                */}
+              <div style={{ display: "flex", flexDirection: "column", gap: isPhone ? 2 : 3 }}>
                 {/* Once loaded, laying out again is not the point — switching
                     variant or branching a comparison is. */}
                 <button
                   onClick={loaded ? openAsNew : primary}
-                  style={{ ...primaryBtn(isPhone), flex: 1, minWidth: 0 }}
+                  style={primaryBtn(isPhone)}
                 >{loaded ? t("grad.plan.newplan") : primaryLabel}</button>
-                {/* Same weight and same colour as its neighbour. Red made it
-                    the loudest thing in the panel — a destructive action does
-                    not need advertising, it needs a confirmation that says
-                    what it costs, which is what the dialog below is for. */}
                 {offer.verbs.includes("replace") && (
                   <button
                     onClick={() => setConfirming(true)}
-                    style={{ ...primaryBtn(isPhone), flex: 1, minWidth: 0 }}
+                    style={quietBtn(isPhone)}
                   >{t("grad.plan.replace")}</button>
                 )}
               </div>
@@ -617,7 +690,7 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
               {(justDid || (usingChart && gen?.report)) && (
                 <div style={{ marginTop: 6, display: "flex", alignItems: "center", gap: 8 }}>
                   {justDid && (
-                    <button onClick={() => { doUndo(); setJustDid(null); }} style={linkBtn(isPhone)}>
+                    <button onClick={undoLast} style={linkBtn(isPhone)}>
                       {t("grad.plan.undo")}
                     </button>
                   )}
@@ -792,7 +865,7 @@ function ReplaceConfirm({ open, onCancel, onConfirm, onOpenAsNew, onPreview, lab
             Same button as the panel's, at full width — this is the moment it
             matters most, so it stops being a 9px link here. */}
         {onPreview && <div style={{ marginTop: 2 }}>
-          <PreviewButton onClick={onPreview} isPhone={false} t={t} fullWidth />
+          <PreviewButton onClick={onPreview} isPhone={false} t={t} />
         </div>}
 
         <div style={{
@@ -858,17 +931,14 @@ function ReplaceConfirm({ open, onCancel, onConfirm, onOpenAsNew, onPreview, lab
  * instead, which costs nothing in urgency and is what actually gets it seen.
  */
 /**
- * Look at the plan. A SMALL trailing control beside the variant picker.
+ * Look at the plan. Full width, on its own row, in both places it appears.
  *
- * `flexShrink: 0` and `whiteSpace: nowrap` are the load-bearing pair: in the
- * row it shares with the picker it must keep its own label intact and let the
- * picker's much longer one do the ellipsizing. Without them the two fought for
- * the same pixels and "Preview" was the one that lost, leaving a button
- * reading "Prev…".
- *
- * `fullWidth` is for the collapsed row, which has no picker to sit beside.
+ * It was briefly a small trailing control beside the variant picker, which needed a
+ * `flexShrink: 0`/`whiteSpace: nowrap` pair to stop the two fighting for the same
+ * pixels — without them "Preview" lost and rendered as "Prev…". That row is gone
+ * (see the panel), so the `fullWidth` prop is gone with it: every caller passed it.
  */
-function PreviewButton({ onClick, isPhone, t, fullWidth = false }) {
+function PreviewButton({ onClick, isPhone, t }) {
   // Through PHONE_FZ like everything else in this frame. Written with its own
   // sizes first, which is how the two buttons beside it ended up smaller than
   // it on a phone — the exact drift the shared scale exists to stop.
@@ -878,9 +948,13 @@ function PreviewButton({ onClick, isPhone, t, fullWidth = false }) {
       onClick={onClick}
       style={{
         display: "flex", alignItems: "center", justifyContent: "center", gap: isPhone ? 3 : 5,
-        ...(fullWidth ? { width: "100%" } : { flexShrink: 0, whiteSpace: "nowrap" }),
+        width: "100%",
         fontSize: fz, fontWeight: 600,
-        padding: isPhone ? "3px 7px" : "4px 9px", borderRadius: 4, cursor: "pointer",
+        // 5, like every other control in this panel. It carried a 4 while the action
+        // buttons carried 5 and the panel frame carried 6 — three radii across
+        // controls of the same rank, which is visible as a wobble down the left edge
+        // even when no single button looks wrong.
+        padding: isPhone ? "4px 7px" : "5px 9px", borderRadius: 5, cursor: "pointer",
         background: "var(--bg-2)", color: "var(--text-2)",
         border: "1px solid var(--border-1)",
       }}
@@ -950,8 +1024,10 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
 
   const fz = PHONE_FZ(isPhone);
   return (
-    // `flex: 1, minWidth: 0` so the picker takes the row's spare width and its
-    // long label ellipsizes, rather than pushing Preview off the end.
+    // The whole row now. It used to share one with Preview, where `flex: 1,
+    // minWidth: 0` was what stopped it pushing that button off the end; with the row
+    // to itself the same declaration simply means full width, and the label — the
+    // only string in the panel long enough to truncate — keeps every pixel of it.
     <div ref={boxRef} style={{ position: "relative", flex: 1, minWidth: 0 }}>
       <button
         type="button"
@@ -962,11 +1038,10 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
           display: "flex", alignItems: "center", gap: 6, width: "100%",
           fontSize: fz, textAlign: "left", cursor: "pointer",
           background: "var(--bg-2)", color: "var(--text-2)",
-          border: "1px solid var(--border-1)", borderRadius: 4,
-          // Same padding as PreviewButton beside it, so the two match height
-          // instead of the picker's tighter box sitting shorter under the
-          // same font size.
-          padding: isPhone ? "3px 7px" : "4px 9px",
+          border: "1px solid var(--border-1)", borderRadius: 5,
+          // Same padding as PreviewButton, so the two stack as one rhythm rather
+          // than as a tighter box above a looser one at the same font size.
+          padding: isPhone ? "4px 7px" : "5px 9px",
         }}
       >
         {/* 700: the same weight the toggle above gives its selected half, and the
@@ -1061,11 +1136,34 @@ function planNameFor(path, fmtProgramLabel, taken) {
   }
 }
 
+/**
+ * The one filled button in the panel.
+ *
+ * Deliberately NOT a new style: this is the fill `NewPlanModal` and `OnboardingModal`
+ * already give their create buttons, so "the primary action of this box" looks the
+ * same wherever the app has one. Blue rather than the accent because CLAUDE.md
+ * reserves orange for the Claude/MCP surfaces.
+ *
+ * The padding grew with the weight. A filled full-width button at the old 3px is a
+ * stripe; the point of promoting it is that the eye lands here first.
+ */
 const primaryBtn = (isPhone) => ({
-  fontSize: PHONE_FZ(isPhone), fontWeight: 600,
-  padding: isPhone ? "2px 7px" : "3px 10px", borderRadius: 5,
-  cursor: "pointer", border: "1px solid var(--border-1)",
-  background: "var(--bg-2)", color: "var(--text-2)",
+  width: "100%", fontSize: PHONE_FZ(isPhone), fontWeight: 700,
+  padding: isPhone ? "4px 7px" : "6px 10px", borderRadius: 5,
+  cursor: "pointer", border: "1px solid var(--link-1)",
+  background: "var(--link-bg)", color: "var(--link-1)",
+});
+/**
+ * Its demoted neighbour — a verb, so still a button with a target the size of the
+ * one above it, but carrying no box of its own. `--text-3` rather than `--link-1`:
+ * link colouring would put it back in competition with the button it sits under,
+ * and this is the option you take having decided against that one.
+ */
+const quietBtn = (isPhone) => ({
+  width: "100%", fontSize: PHONE_FZ(isPhone), fontWeight: 600,
+  padding: isPhone ? "3px 7px" : "5px 10px", borderRadius: 5,
+  cursor: "pointer", border: "1px solid transparent",
+  background: "transparent", color: "var(--text-3)",
 });
 const linkBtn = (isPhone) => ({
   fontSize: PHONE_FZ(isPhone), background: "transparent", border: "none",

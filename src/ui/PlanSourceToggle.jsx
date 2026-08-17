@@ -33,6 +33,20 @@
 // only possibility, when the fact worth conveying is that the department publishes
 // nothing here — which is itself a reason to want the generated one.
 //
+// ── And it is not a BUTTON ─────────────────────────────────────────
+//
+// The two halves used to be bordered, filled, full-width boxes — the same shape as
+// "Preview", "Open as new plan" and "Replace my plan" beneath them. That put six
+// identical rectangles in one 240px panel with nothing to say which two were settings
+// and which three were actions, and it spent the panel's loudest element (a 700-weight
+// label in a box) on a mode rather than on a verb.
+//
+// They are flat tabs now: text, and a 2px rule under the selected one. A mode switch
+// should look like a heading you can change, not like something that happens when you
+// press it. Losing the box also fixes the phone: the halves were stacked there only
+// because a border and 8px of side padding left ~21px of label inside an 88px panel,
+// and two words with no chrome fit side by side.
+//
 // ── Weight, not colour ─────────────────────────────────────────────
 //
 // The CHART half used to be orange on a tinted background, which was backwards. An
@@ -116,18 +130,14 @@ export default function PlanSourceToggle({
   return (
     <div
       role="radiogroup" aria-label={t("chart.source.label")}
-      // Full width, with the same 6px gap between its two halves as the variant-picker/Preview
-      // row and the Lay-out/Replace row beneath it — this used to be ONE merged, bordered strip
-      // with no gap at all, which read as a different kind of control from its neighbours
-      // rather than as the same rhythm repeated three times down the panel.
-      //
-      // And STACKED on a phone, which is a separate finding rather than a competing one. The
-      // panel is 88px there, so side by side each half is ~21px and both labels wrap into
-      // stacks of syllables: seen at once, and legible in neither. Stacked, each label gets
-      // the full width and one line, and the two halves keep their own borders and their gap.
+      // Sized by its LABELS, not by the panel. A full-width mode switch reads as a
+      // full-width control; two words and a rule read as a caption you can change.
+      // `flexWrap` is the phone's safety net rather than its layout — the two names fit
+      // side by side once they are not carrying a border each, but a long translation
+      // may not, and wrapping is a better answer there than two towers of syllables.
       style={{
-        display: "flex", width: "100%", gap: 6, marginBottom: isPhone ? 5 : 6,
-        flexDirection: isPhone ? "column" : "row",
+        display: "flex", gap: isPhone ? 8 : 14, marginBottom: isPhone ? 5 : 7,
+        flexWrap: "wrap", alignItems: "flex-end",
       }}
     >
       {options.map((o) => {
@@ -141,7 +151,7 @@ export default function PlanSourceToggle({
             tip={o.enabled ? o.tip : o.why}
             title={o.enabled ? o.tipTitle : undefined}
             display="flex" width={o.enabled && o.tipTitle ? 290 : 250}
-            style={{ flex: 1, minWidth: 0 }}
+            style={{ flex: "0 0 auto" }}
           >
             <button
               // A stable hook for the live browser test, which cannot select on the label: the
@@ -151,30 +161,34 @@ export default function PlanSourceToggle({
               role="radio" aria-checked={on} disabled={!o.enabled || busy}
               onClick={() => o.enabled && onChange(o.id)}
               style={{
-                width: "100%",
                 fontSize: fz, fontWeight: on ? 700 : 500,
-                // 8px of side padding is a fifth of a phone panel's width, and it was enough
-                // to break "NU Map" across two lines. The names are two words at most; they
-                // never wrap.
-                padding: isPhone ? "4px 2px" : "6px 10px",
+                // Only what the underline needs: a couple of pixels of air above the rule,
+                // and none at the sides at all. Side padding on a flat tab widens the
+                // underline past the word it is underlining.
+                padding: isPhone ? "0 0 2px" : "0 0 3px",
                 whiteSpace: "nowrap",
-                // Its own border and radius, same as every other button in this panel, now that
-                // the two halves are separate pieces rather than one box divided by fill alone.
-                border: "1px solid var(--border-1)", borderRadius: 5,
-                cursor: o.enabled && !busy ? "pointer" : "default",
-                // ── No colour, on either side ──────────────────────────
+                background: "transparent",
+                // ── The rule IS the selection ──────────────────────────
                 //
-                // `--bg-2` is the fill the variant picker and Preview already use, so the
-                // selected half looks like the rest of the panel rather than like a state
-                // this control invented. The earlier `#e9edf3` fallback was a blue-grey,
-                // which is a colour however faint — and any tint on one side is a
-                // recommendation. Selection is carried by fill against transparent and by
-                // text weight, nothing else.
-                background: on ? "var(--bg-2)" : "transparent",
-                color: !o.enabled ? "var(--text-4, #9ca3af)"
-                     : on ? "var(--text-1)" : "var(--text-3)",
+                // No fill, no border box. `--bg-2` used to carry this and resolved to
+                // nothing — the token was referenced here and defined by neither theme, so
+                // for however long that stood, "selected" was conveyed by font weight alone
+                // against an identically transparent neighbour. A 2px rule states it at a
+                // glance and cannot be lost to a missing colour: the unselected side spends
+                // the same 2px on a transparent border, so nothing shifts when it changes.
+                //
+                // Still no colour, on either side. An accent here would read as a
+                // recommendation, and the catalog's plan is the one with authority — what
+                // steers a student to it is that it is first and selected on arrival, not
+                // a tint saying the other one is exciting.
+                border: "none",
+                borderBottom: `2px solid ${on ? "var(--text-1)" : "transparent"}`,
+                borderRadius: 0,
+                cursor: o.enabled && !busy ? "pointer" : "default",
+                color: !o.enabled ? "var(--text-5)"
+                     : on ? "var(--text-1)" : "var(--text-4)",
                 opacity: busy && !on ? 0.6 : 1,
-                transition: "background .12s, color .12s",
+                transition: "border-color .12s, color .12s",
               }}
             >
               {o.label}
