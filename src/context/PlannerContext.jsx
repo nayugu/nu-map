@@ -3519,6 +3519,24 @@ const { locale, setLocale, locales, t } = useLanguage();
   };
 
   useEffect(() => {
+    // ── The undo stack belongs to ONE plan ────────────────────────
+    //
+    // It is a ref, it was never cleared, and switching plans does not touch it —
+    // so after a switch the stack still held snapshots of the plan you LEFT, and
+    // `restoreSnapshot` writes placements, reservations, special terms, grades and
+    // provenance into whatever plan is active NOW. One ⌘Z after switching poured
+    // the old plan's contents into the new one, and the autosave persisted it.
+    //
+    // Found from the other end: "open as new plan" offers an Undo link, and on a
+    // fresh session it appeared to do nothing (empty stack). Doing nothing was the
+    // lucky case.
+    //
+    // Cleared on a genuine SWITCH only — `restoredPlanId.current` is the same
+    // "have we loaded a different plan" test the restore below uses, so a
+    // StrictMode double-run or a remount for the same plan does not throw away
+    // history the user can still legitimately undo.
+    const switched = restoredPlanId.current !== null && restoredPlanId.current !== activePlanId;
+    if (switched) { undoStack.current = []; redoStack.current = []; }
     try {
       const raw = localStorage.getItem(key(`plan-data-${activePlanId}`));
       if (raw) {
