@@ -1044,13 +1044,17 @@ function VariantPicker({ variants, value, onChange, isPhone }) {
           padding: isPhone ? "4px 7px" : "5px 9px",
         }}
       >
-        {/* 700: the same weight the toggle above gives its selected half, and the
-            dropdown below gives its selected row — this text IS the current
-            selection, just collapsed. One weight for "selected" throughout the
-            panel, rather than this being the one spot left unstyled. */}
+        {/* Not bold. It carried 700 to match the toggle's selected half and the
+            dropdown's selected row, on the reasoning that this text IS the
+            current selection just collapsed — but closed, there is nothing here
+            to be selected AGAINST. The weight was only distinguishing it from
+            itself, and a bold 50-character label across the full width of the
+            panel outweighed the button that acts on it. Inside the open list,
+            where there are alternatives to stand out from, 700 still means
+            something and stays. */}
         <span style={{
           flex: 1, minWidth: 0, overflow: "hidden", textOverflow: "ellipsis",
-          whiteSpace: "nowrap", fontWeight: 700,
+          whiteSpace: "nowrap", fontWeight: 500,
         }}>
           {shortVariantLabel(variants[value]?.label)}
         </span>
