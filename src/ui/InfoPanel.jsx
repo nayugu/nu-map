@@ -43,6 +43,11 @@ export default function InfoPanel() {
   const lastNavTarget = useRef(null);
   const [, forceRender] = useState(0);
   const [backHover, setBackHover] = useState(null); // rect while hovering the back button
+  // The panel's content scrolls independently of the board, so swapping to a
+  // different course (via navTo/goBack/goForward, or an external reselect)
+  // must not leave the reader scrolled to wherever the PREVIOUS course's
+  // content happened to be.
+  const contentRef = useRef(null);
 
   const navTo = useCallback((newId) => {
     navHistory.current = [...navHistory.current, selectedId];
@@ -121,6 +126,10 @@ export default function InfoPanel() {
   // Before the early return — it is a hook.
   const selColor  = useCourseInk(selCourse);
 
+  useLayoutEffect(() => {
+    if (contentRef.current) contentRef.current.scrollTop = 0;
+  }, [selectedId]);
+
   if (!showPanel || !selCourse) return null;
 
   const prevId     = navHistory.current[navHistory.current.length - 1] ?? null;
@@ -167,7 +176,7 @@ export default function InfoPanel() {
         <div style={{ width: 32, height: 3, borderRadius: 99, background: "var(--border-2)" }} />
       </div>
 
-      <div style={{ flex: "0 1 auto", overflowY: "auto", padding: "8px 14px 12px" }}>
+      <div ref={contentRef} style={{ flex: "0 1 auto", overflowY: "auto", padding: "8px 14px 12px" }}>
         <div style={{ display: "flex", flexDirection: isPhone ? "column" : "row", alignItems: "flex-start", gap: isPhone ? 8 : 14 }}>
           {/* Top row: course info + right column + close */}
           <div style={{ display: "flex", alignItems: "flex-start", gap: 14, width: "100%" }}>
