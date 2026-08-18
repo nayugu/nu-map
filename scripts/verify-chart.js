@@ -51,6 +51,7 @@ import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
 import { gatePlan } from "./lib/chart-gate.js";
 import { fingerprintPlan, canonicalPlan } from "./lib/chart-fingerprint.js";
 import { specForNode } from "../src/core/programEligibility.js";
+import { programIdentity } from "../src/core/programIdentity.js";
 import { materialize } from "../src/core/candidateSpec.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
@@ -93,6 +94,11 @@ const ports = enginePorts(courseMap);
 const orderFile = join(ROOT, "public/northeastern/plan-order.json");
 const observed = existsSync(orderFile)
   ? JSON.parse(readFileSync(orderFile, "utf8")) : { edges: [], coopPrep: [] };
+// Borrowed first semesters for the shapes whose department publishes no plan. Read off
+// disk rather than fetched, for the same reason the order is: this runs in Node.
+const donorFile = join(ROOT, "public/northeastern/early-donors.json");
+const earlyDonors = existsSync(donorFile)
+  ? (JSON.parse(readFileSync(donorFile, "utf8")).programs ?? {}) : {};
 
 /**
  * `--limit N` checks only the first N degrees.
@@ -183,6 +189,7 @@ for (const d of degrees) {
         observedOrder: observed.edges,
         positions: observed.positions ?? null,
         coopPrep: (observed.coopPrep ?? []).map(x => x.course),
+        donorPlan: variant ? null : (earlyDonors[programIdentity(d.data)]?.plan ?? null),
         studentType, calibration: chartCalibration, timeBudgetMs: 5000,
       });
     } catch (err) {

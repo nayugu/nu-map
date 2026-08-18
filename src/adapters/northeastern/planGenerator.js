@@ -18,14 +18,18 @@
 import { IPlanGenerator } from "../../ports/IPlanGenerator.js";
 import { generatePlan, DEFAULT_PREFERENCES, createTrace } from "../../engine/index.js";
 import { buildDepthIndex } from "../../engine/prereqDepth.js";
+import { programIdentity } from "../../core/programIdentity.js";
 import enginePorts from "./enginePorts.js";
 import chartCalibration from "./chartCalibration.js";
 
 /** Where the recovered order lives. Same origin as the rest of the catalog data. */
 const PLAN_ORDER_URL = "/northeastern/plan-order.json";
+/** First semesters borrowed from similar programs, for the 412 that publish no plan. */
+const EARLY_DONORS_URL = "/northeastern/early-donors.json";
 
 let _depthFor = null;      // { courseMap, index }
 let _orderPromise = null;
+let _donorPromise = null;
 
 function depthIndexFor(courseMap) {
   if (_depthFor?.courseMap === courseMap) return _depthFor.index;
@@ -50,6 +54,23 @@ function observedOrder() {
       .catch(() => ({ edges: [], coopPrep: [], positions: null }));
   }
   return _orderPromise;
+}
+
+/**
+ * A borrowed first four semesters, for a program whose department publishes none.
+ *
+ * Keyed by `programIdentity`, because neither a program's name nor its catalog url is
+ * unique on its own. Degrades to nothing on failure, which is the behaviour before
+ * donors existed and is always a legal answer.
+ */
+function earlyDonors() {
+  if (!_donorPromise) {
+    _donorPromise = fetch(EARLY_DONORS_URL)
+      .then(r => (r.ok ? r.json() : null))
+      .then(d => d?.programs ?? {})
+      .catch(() => ({}));
+  }
+  return _donorPromise;
 }
 
 /** @type {import('../../ports/IPlanGenerator.js').IPlanGenerator} */
@@ -86,6 +107,11 @@ export default {
       return { refused: { reason: "no-catalog", detail: "The course catalog has not loaded yet." } };
     }
     const order = await observedOrder();
+    // Only consulted when the department publishes nothing — its own plan always wins,
+    // and fetching donors for a program that has one is work whose result is discarded.
+    const donorPlan = publishedPlan
+      ? null
+      : ((await earlyDonors())[programIdentity(programData)]?.plan ?? null);
     // Graduate PROGRAMS and graduate STUDENTS are the same thing here, and the
     // distinction matters: it sets the credit envelope (8–16 rather than 12–19) and
     // removes the class-standing floor, because a student admitted to a master's
@@ -97,6 +123,7 @@ export default {
       trace: sink,
       program: programData,
       publishedPlan,
+      donorPlan,
       courseMap,
       ports: enginePorts(courseMap),
       depthIndex: depthIndexFor(courseMap),
