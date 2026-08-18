@@ -515,8 +515,11 @@ function collectKeys(entry, out) {
  *
  * Every term prints its total beside it, which is the department stating what
  * it believes the term adds up to — a free, per-row checksum on the whole
- * parse. Across the shipped corpus it agrees on 9,485 of 9,492 terms (99.93%),
- * and that figure is the regression test for any change to cell reading.
+ * parse. Across the shipped corpus it agrees on all 9,492 terms that state a
+ * total, with one further term stating none (re-measured 2026-08-18; an earlier
+ * 9,485/9,492 in this comment predated a data refresh). Zero disagreements is
+ * the regression test for any change to cell reading, and the contract test
+ * asserts exactly that rather than a percentage.
  *
  * It is worth having because nothing else guards this file: the requirement
  * side has verify-majors, check-major-integrity and the scrape rails, while
@@ -553,8 +556,15 @@ export function verifyPlanGrid(grid, label = "") {
         if (lo <= catHi + 0.01 && hi >= catLo - 0.01) out.agree += 1;
         else {
           out.disagree += 1;
+          // Both sides are ranges, so both are recorded: a bare "stated 16,
+          // parsed 14" reads like a parse error when it is often the department
+          // rounding a 3-4 cell. `parsed` referred to nothing at all here, so
+          // the one path this function exists to report threw a ReferenceError
+          // instead of reporting — and `planGates` in both scrapers calls it
+          // unguarded, which would have aborted an unattended monthly run the
+          // first time a department published a term that did not add up.
           out.worst.push({ program: label, year: year.label, term: term.term,
-                           stated: term.hours, parsed });
+                           stated: catLo, statedMax: catHi, parsed: lo, parsedMax: hi });
         }
       }
     }
