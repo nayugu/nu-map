@@ -338,7 +338,8 @@ function generateOnce({
   // prerequisites, depth and precedence edges of its own, and the index that has to know
   // about them is the one computed from the cells. Patching precedence in place is how the
   // two would drift.
-  const subbed = substitutePrereqs(cells, precedence.unscheduledPrereqs, courseMap, depth);
+  const subbed = substitutePrereqs(cells, precedence.unscheduledPrereqs, courseMap,
+    { depthOf: depth.depthOf, workExperience: ports.workExperience });
   if (subbed.substituted.length) {
     cells = subbed.cells;
     precedence = buildPrecedence(cells, courseMap, { observed: observedOrder });

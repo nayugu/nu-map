@@ -414,7 +414,8 @@ function cellsForSection(section, target, courseMap) {
  */
 export const MAX_PREREQ_SUBSTITUTIONS = 3;
 
-export function substitutePrereqs(cells, unscheduled, courseMap, { depthOf = () => 0 } = {}) {
+export function substitutePrereqs(cells, unscheduled, courseMap,
+    { depthOf = () => 0, workExperience = () => null } = {}) {
   if (!unscheduled?.length) return { cells, substituted: [] };
 
   const out = [...cells];
@@ -457,6 +458,32 @@ export function substitutePrereqs(cells, unscheduled, courseMap, { depthOf = () 
       // is what the student can act on: they are usually a course the degree assumes you
       // arrive with, and no arrangement of THIS degree supplies it.
       .filter(id => depthOf(id) === 0)
+      // ── And nothing that drags a corequisite THIS slot never budgeted ──
+      //
+      // The sibling of the rule above: a chain of prerequisites lengthens the plan, and an
+      // unbudgeted corequisite blows the term it lands in instead. `NRSG 4503` "Clinical for
+      // NRSG 4502" has no prerequisite of its own — passes the filter above — and drags its
+      // 4 SH corequisite in behind it, because `withCoreqPartners` ran earlier, over the
+      // ORIGINAL cells, and has no idea this cell will exist. A term sized at 19 SH for a
+      // 2 SH placeholder arrived at 23. Excluded here rather than budgeted, because a
+      // substituted prerequisite is supposed to be the cheap, self-contained answer to a gap
+      // — one already needs no ladder of its own; needing a co-registered partner is the
+      // same complication wearing the other relation.
+      .filter(id => !(courseMap[id]?.coreqs ?? []).some(r => {
+        if (!r?.subject) return false;
+        const partner = `${String(r.subject).toUpperCase()}${parseInt(r.number, 10)}`;
+        return courseMap[partner] && (courseMap[partner].sh ?? 0) > 0 && !already.has(partner);
+      }))
+      // ── And never a course that is not attended at all ─────────────
+      //
+      // A prerequisite's OR list is prose the parser turned into course ids, and one
+      // program's read `COOP 3945` as an alternative for `ORGB 3201`'s "completion of a
+      // co-op or …" prerequisite — a real reading of real prose, not a scraper error. But
+      // `withdrawWorkTermCells` runs once, over the ORIGINAL cells, before this function
+      // exists to be run again on; a course this port flags is RECORDED by a work term, not
+      // taken, so accepting it here schedules a co-op registration as a Year 1 elective
+      // with none of that withdrawal's care about whether the shape has a co-op at all.
+      .filter(id => !workExperience(id))
       .sort((a, b) => a.localeCompare(b));
     if (!options.length) continue;
     // Already covered — by an earlier substitution, or by a branch of this very OR.
