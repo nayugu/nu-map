@@ -19,12 +19,57 @@ test("seed › a course's term is read from the department's plan", () => {
   assert.equal(s.courseTerm.get("CS2500"), 1);
 });
 
-test("seed › term indices count EVERY term, including co-op and empty ones", () => {
-  // Drift here would aim every hint one term off, because this index is the shape's index.
+test("seed › term indices skip WORK terms, because a domain does", () => {
+  // This asserted the opposite, on the reasoning that the traversal matches
+  // `shapeFromPlan` and so produces the shape's term index. It does, and the shape's
+  // index is the wrong space: a cell's `domain` indexes `studyTerms(shape)`, which
+  // filters employment out — `index.js` says so where it hands the co-ops to the
+  // derivation view as a separate list "so no term index moves".
+  //
+  // The two agree until the first co-op and then diverge by one per work term.
+  // Computer Science and Biology runs domains 0–9 against hints that reached 13, so a
+  // course the department puts in the last term was hinted past the end of the plan —
+  // and `Math.abs(a - seededTerm)` then reads every term as too early, making the last
+  // one always closest. The hint did not merely miss; it pulled late courses later.
+  //
+  // A blank term still counts, because `studyTerms` keeps `unused` terms and only
+  // marks them optional.
   const s = seedFromPlan({
     years: [Y("Year 1", T(named("CS1800")), T({ coop: true }), T(), T(named("CS3500")))],
   });
-  assert.equal(s.courseTerm.get("CS3500"), 3, "the co-op and the blank term still count");
+  assert.equal(s.courseTerm.get("CS3500"), 2,
+    "the blank term counts, the co-op does not");
+});
+
+test("seed › a shape maps terms by year and season, not by position", () => {
+  // Required for a plan that is NOT this program's own — a stand-in borrowed from a
+  // similar program, whose shape is derived rather than published. Positional counting
+  // would land Year 2 Fall on whatever the second slot happens to be, which for a
+  // summer-bearing shape is a summer.
+  const shape = { terms: [
+    { yearIndex: 0, semTypeId: "fall" }, { yearIndex: 0, semTypeId: "spring" },
+    { yearIndex: 0, semTypeId: "sumA" }, { yearIndex: 0, semTypeId: "sumB" },
+    { yearIndex: 1, semTypeId: "fall" }, { yearIndex: 1, semTypeId: "spring" },
+  ] };
+  const plan = { years: [
+    { label: "Year 1", terms: [{ term: "Fall", type: "fall", entries: [named("AA1000")] }] },
+    { label: "Year 2", terms: [{ term: "Fall", type: "fall", entries: [named("BB1000")] }] },
+  ] };
+  const s = seedFromPlan(plan, shape);
+  assert.equal(s.courseTerm.get("AA1000"), 0);
+  assert.equal(s.courseTerm.get("BB1000"), 4, "Year 2 Fall, not the second slot");
+});
+
+test("seed › a term the shape does not have is not hinted at all", () => {
+  // Guessing a neighbouring term would be inventing the department's opinion.
+  const shape = { terms: [{ yearIndex: 0, semTypeId: "fall" }] };
+  const plan = { years: [{ label: "Year 1", terms: [
+    { term: "Fall", type: "fall", entries: [named("AA1000")] },
+    { term: "Summer 1", type: "sumA", entries: [named("BB1000")] },
+  ] }] };
+  const s = seedFromPlan(plan, shape);
+  assert.equal(s.courseTerm.get("AA1000"), 0);
+  assert.equal(s.courseTerm.has("BB1000"), false);
 });
 
 test("seed › reservations are recorded as a spread, one entry per reserved row", () => {

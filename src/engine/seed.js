@@ -53,18 +53,73 @@ function flatten(entries, out = []) {
  * distribution, not an assignment: it says the department put four reservations in term 8 and
  * two in term 11, and our unnamed cells are handed those terms in that order.
  *
+ * ── The index must be a STUDY-term index, not a shape-term index ───
+ *
+ * This counted every term object, on the reasoning that the traversal matches
+ * `shapeFromPlan` and therefore produces the shape's term index. It does — and the
+ * shape's term index is the wrong space. A cell's `domain` holds indices into
+ * `studyTerms`, which FILTERS work terms out, so the two agree only up to the first
+ * co-op and diverge by one per work term after it. Computer Science and Biology:
+ *
+ *     study  6 = shape  6      Year 2 Summer 1
+ *     study  7 = shape  9      Year 3 Spring       off by 2
+ *     study  9 = shape 13      Year 4 Spring       off by 4
+ *
+ * Its domains run 0–9 while the hints ran 0–13, so a course the department puts in
+ * the last term was hinted to 13 — past the end — and `Math.abs(a - seededTerm)`
+ * then reads every term as "too early", making the last one always closest. The hint
+ * did not merely miss, it pulled late courses further back in the plan, which is the
+ * opposite of what it was reading the department's plan to learn.
+ *
+ * So work terms are skipped rather than counted, matching `studyTerms`, and `unused`
+ * terms still count because `studyTerms` keeps them. The work test is the same one
+ * `shapeFromPlan` applies, deliberately duplicated rather than imported: these two
+ * traversals must agree, and a shared helper that changed under one of them would
+ * break the other silently.
+ *
+ * A `shape` may be passed to map by year and season instead of by position, which is
+ * required when the plan being read is NOT the plan the shape came from — a stand-in
+ * borrowed from a similar program, whose shape is derived rather than published.
+ *
  * @param {object} [publishedPlan]  one entry of plan.json `plans[]`
+ * @param {object} [shape]  the shape being solved, when it is not this plan's own
  * @returns {{courseTerm: Map<string, number>, reservationTerms: number[]}}
  */
-export function seedFromPlan(publishedPlan) {
+export function seedFromPlan(publishedPlan, shape = null) {
   const courseTerm = new Map();
   const reservationTerms = [];
+  // Study-term index by year and season, when the shape is someone else's.
+  const slots = new Map();
+  if (shape) {
+    let i = 0;
+    for (const t of (shape.terms ?? [])) {
+      if (t.work) continue;
+      slots.set(`${t.yearIndex}|${t.semTypeId}`, i);
+      i += 1;
+    }
+  }
   let ti = -1;
+  let yearIndex = -1;
   for (const year of publishedPlan?.years ?? []) {
+    yearIndex += 1;
     for (const term of year?.terms ?? []) {
       if (!term || typeof term !== "object") continue;
-      ti += 1;
-      for (const e of flatten(term.entries)) {
+      const entries = flatten(term.entries);
+      // A term that is nothing but co-op is a work term, and `studyTerms` drops it.
+      const coopCells = entries.filter(e => e.coop).length;
+      const courseCells = entries.filter(e =>
+        !e.coop && !e.vacation && !e.heading && !e.either).length;
+      if (coopCells > 0 && courseCells === 0) continue;
+      if (shape) {
+        const at = slots.get(`${yearIndex}|${term.type ?? ""}`);
+        // A term this shape does not have. Nothing to hint, and guessing a
+        // neighbouring term would be inventing the department's opinion.
+        if (at == null) continue;
+        ti = at;
+      } else {
+        ti += 1;
+      }
+      for (const e of entries) {
         if (e.coop || e.vacation || e.heading) continue;
         const ids = e.options?.length === 1 ? e.options[0] : null;
         if (ids?.length === 1) {

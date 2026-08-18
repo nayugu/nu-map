@@ -236,6 +236,16 @@ function generateOnce({
   // Set false by the retry in `generatePlan` when binding electives to unmet competencies is
   // what made the degree unplannable. Not a caller-facing option.
   breadthGuidance = true,
+  // A stand-in arrangement for a program whose department publishes no plan — 365 of the
+  // 1,031 shapes, which until now had nothing for `seed.js` to read and started their
+  // search at position 0.
+  //
+  // Built offline by `scripts/derive-early-donors.js` from structurally similar programs
+  // that DO publish one, and injected for the same reason `observedOrder` is: derived
+  // evidence with a confidence attached, which a caller is entitled to plan without. It
+  // supplies CONTENT only. The shape still comes from `defaultShape`, because the donor's
+  // co-op cycle is the donor's own.
+  donorPlan = null,
   // ── Where the derivation view gets its material ───────────────────
   //
   // A recording sink from `src/engine/trace.js`, or null. Null is the production default for
@@ -647,7 +657,16 @@ function generateOnce({
     // Where the department puts each course. A branch ORDER, not a constraint: it steers the
     // search toward an arrangement we know exists rather than toward position 0. See
     // `seed.js` — International Business exhausted the budget looking elsewhere.
-    seed: seedFromPlan(publishedPlan),
+    //
+    // `shape` is passed so the hint is indexed by year and season rather than by
+    // position, which is what lets a BORROWED plan be read: its terms have to be
+    // located in this program's shape, not in the donor's. It also fixes the same
+    // mapping for a program's own plan, whose work terms used to shift every hint
+    // after the first co-op — see seed.js.
+    //
+    // `donorPlan` is the stand-in for a program whose department publishes nothing,
+    // and the department's own plan always wins where there is one.
+    seed: seedFromPlan(publishedPlan ?? donorPlan, shape),
     // Off only so the claim "a pruning propagator does not move an existing plan" can be
     // TESTED rather than argued — see `chart-propagator-neutral.test.js`. Production never
     // passes false, and the invariant it protects is the whole basis of §17's placement rule.
