@@ -30,7 +30,7 @@
 
 import { deriveCells, cellsSH, substitutePrereqs, withdrawWorkTermCells, assignRegistrations, GENERAL_ELECTIVE } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
-import { seedFromPlan } from "./seed.js";
+import { seedFromPlan, EARLY_SEED_TERMS } from "./seed.js";
 import { buildDomains, wideAtFor } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
 import { preflight, tightestTerms, MAX_DERIVED_GE_SHARE } from "./preflight.js";
@@ -246,6 +246,13 @@ function generateOnce({
   // supplies CONTENT only. The shape still comes from `defaultShape`, because the donor's
   // co-op cycle is the donor's own.
   donorPlan = null,
+  // How many study terms the department's own placement outranks our preferences for.
+  //
+  // A measurement hatch in the spirit of `propagateChains`, not a tuning knob: the claim
+  // "following the department early beats inferring from course level" is a claim about a
+  // corpus, and it can only be checked by running the same corpus both ways. Production
+  // uses the default.
+  earlySeedTerms = EARLY_SEED_TERMS,
   // ── Where the derivation view gets its material ───────────────────
   //
   // A recording sink from `src/engine/trace.js`, or null. Null is the production default for
@@ -667,6 +674,7 @@ function generateOnce({
     // `donorPlan` is the stand-in for a program whose department publishes nothing,
     // and the department's own plan always wins where there is one.
     seed: seedFromPlan(publishedPlan ?? donorPlan, shape),
+    earlySeedTerms,
     // Off only so the claim "a pruning propagator does not move an existing plan" can be
     // TESTED rather than argued — see `chart-propagator-neutral.test.js`. Production never
     // passes false, and the invariant it protects is the whole basis of §17's placement rule.

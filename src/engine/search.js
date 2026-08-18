@@ -180,7 +180,7 @@ export function generatorBar(plans, courseMap, unlockValue, majorSubjects) {
 }
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
 import { GENERAL_ELECTIVE } from "../core/requirementDemand.js";
-import { assignSeedHints } from "./seed.js";
+import { assignSeedHints, EARLY_SEED_TERMS } from "./seed.js";
 import { barsReachable } from "./cardinality.js";
 
 /**
@@ -952,6 +952,10 @@ function attemptPlacement({
   // Where the department puts each course, when it publishes a plan. A branch HINT and
   // nothing else — see `src/engine/seed.js` for why it cannot affect legality.
   seed = null,
+  // How many study terms that hint outranks the sequencing preferences for. A measurement
+  // hatch, so "following the department early beats inferring from course level" can be run
+  // both ways over the same corpus rather than argued.
+  earlySeedTerms = EARLY_SEED_TERMS,
   // See `precedenceRoom`. Test-only when false; production is always true.
   propagateChains = true,
   // Observation only. Nothing below may branch on it except to record.
@@ -1552,8 +1556,36 @@ function attemptPlacement({
     // the preferences up and the alternative is position order — there it is strictly better
     // information, and it is what rescues the saturated instances. Where preferences still
     // apply, they win, because they are measured and this is a guess.
+    // ── Except inside the first four terms, where it is not a guess ────
+    //
+    // The paragraph above is right about the trade and wrong about its scope. What it
+    // measured was a hint applied to the WHOLE plan, together with the reservation spread
+    // that dealt unnamed cells a term by cell-id order — and that spread is what produced
+    // `CS 4530 or 4535` in year one. It has since been removed, and a choice row was never
+    // a course placement here in any case: `seedFromPlan` records only rows naming one
+    // course, so `CS 4530 or 4535` cannot be hinted at all.
+    //
+    // The other half of that symptom argues the opposite way. "CS 3000 at the end of the
+    // degree" is a course the department puts in term 3, and an early hint is precisely
+    // what stops it drifting there.
+    //
+    // So the department wins inside the window its own variants agree on and loses outside
+    // it — see `EARLY_SEED_TERMS` for the 76/73/51/36/4 that draws the line. Within the
+    // first four study terms the preferences are inferring from a course number what the
+    // department has already stated; past it they are the better guide and keep the job.
+    //
+    // Still only an ORDER, so nothing here can make a plan legal that was not. It is also
+    // what "the generator fixes the department's mistakes" reduces to: a seeded term that
+    // availability or a prerequisite chain has excluded is simply absent from `plan.domain`,
+    // and ordering by distance then lands the course in the nearest legal term instead —
+    // one term late rather than four years late, with no repair pass to keep in step.
+    const seededTerm = seedHints.get(plan.cell.id) ?? null;
+    if (seededTerm != null && seededTerm < earlySeedTerms) {
+      return [...plan.domain].sort((a, b) => byOptional(a, b)
+        || Math.abs(a - seededTerm) - Math.abs(b - seededTerm)
+        || a - b);
+    }
     if (preferenceFree) {
-      const seededTerm = seedHints.get(plan.cell.id) ?? null;
       return [...plan.domain].sort((a, b) => byOptional(a, b)
         || (seededTerm == null ? 0 : Math.abs(a - seededTerm) - Math.abs(b - seededTerm))
         || a - b);
