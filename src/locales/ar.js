@@ -278,6 +278,7 @@ export const strings = {
   "chart.early.moved.after-its-prerequisite": "{course} — من {from} إلى {to}، ليبقى بعد مقرر يشترطه",
   "chart.early.moved.term-was-full":          "{course} — من {from} إلى {to}، لأن {from} كان قد بلغ حدّ الساعات المعتمدة",
   "chart.early.unplaced":     "تعذّر وضع {course} في {from} أو في أي فصل بعده، لذلك اختارت هذه الأداة موضعه.",
+  "chart.early.overload":     "يحمل {term} عدد {sh} ساعة معتمدة، أي فوق الحدّ المعتاد البالغ {cap}. هكذا ينشره قسمك، لكن التسجيل قد يحتاج موافقة مرشدك الأكاديمي.",
   // ── صفحة المسار ─────────────────────────────────────────────────
   "chart.explain.tab.text": "القواعد",
   "chart.explain.tab.process": "المسار",

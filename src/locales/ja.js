@@ -279,6 +279,7 @@ export const strings = {
   "chart.early.moved.after-its-prerequisite": "{course} — {from}から{to}へ。前提科目の後に置くため",
   "chart.early.moved.term-was-full":          "{course} — {from}から{to}へ。{from}がすでに単位上限に達していたため",
   "chart.early.unplaced":     "{course} は{from}以降のどの学期にも置けなかったため、配置は本ツールが決めました。",
+  "chart.early.overload":     "{term}は {sh} 単位で、通常の上限 {cap} 単位を超えています。所属学科がそのように公表しているためですが、履修登録にはアドバイザーの承認が必要な場合があります。",
   // ── 過程のページ ────────────────────────────────────────────────
   "chart.explain.tab.text": "ルール",
   "chart.explain.tab.process": "組み立ての過程",

@@ -76,6 +76,17 @@ function EarlyTerms({ early, relaxed, t }) {
           </ul>
         </>
       )}
+      {/* An over-cap first semester is stated, never assumed. `chart-hard-rules` puts the
+        * objection exactly right — it is "an overload petition the plan does not mention" —
+        * and the petition is the student's to file. Drawn as a warning because it is an
+        * action they may have to take, not a detail. */}
+      {!dropped && early.overload && (
+        <p style={{ margin: "9px 0 0", color: "var(--warn)" }}>
+          {t("chart.early.overload", {
+            term: term(early.overload.where), sh: early.overload.sh, cap: early.overload.cap,
+          })}
+        </p>
+      )}
       {!dropped && (early.unplaced ?? []).map((u, i) => (
         <p key={`${u.cell}-${i}`} style={{ margin: "9px 0 0", color: "var(--warn)" }}>
           {t("chart.early.unplaced", { course: u.course, from: term(u.fromWhere) })}

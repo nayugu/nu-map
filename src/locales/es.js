@@ -278,6 +278,7 @@ export const strings = {
   "chart.early.moved.after-its-prerequisite": "{course} — de {from} a {to}, para mantenerla después de una asignatura que requiere",
   "chart.early.moved.term-was-full":          "{course} — de {from} a {to}, porque {from} ya estaba en el límite de créditos",
   "chart.early.unplaced":     "{course} no se pudo colocar en {from} ni en ningún semestre posterior, así que esta herramienta eligió su lugar.",
+  "chart.early.overload":     "{term} tiene {sh} créditos, por encima del límite habitual de {cap}. Así lo publica tu departamento, pero matricularte puede requerir la aprobación de tu asesor.",
   // ── La página del proceso ───────────────────────────────────────
   "chart.explain.tab.text": "Las reglas",
   "chart.explain.tab.process": "El proceso",

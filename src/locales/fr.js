@@ -278,6 +278,7 @@ export const strings = {
   "chart.early.moved.after-its-prerequisite": "{course} — de {from} à {to}, pour le maintenir après un cours dont il dépend",
   "chart.early.moved.term-was-full":          "{course} — de {from} à {to}, car {from} atteignait déjà le plafond de crédits",
   "chart.early.unplaced":     "{course} n’a pu être placé ni en {from} ni dans un semestre ultérieur : cet outil a donc choisi son emplacement.",
+  "chart.early.overload":     "{term} compte {sh} crédits, au-delà du plafond habituel de {cap}. C’est ainsi que votre département le publie, mais l’inscription peut exiger l’accord de votre conseiller.",
   // ── La page du processus ────────────────────────────────────────
   "chart.explain.tab.text": "Les règles",
   "chart.explain.tab.process": "Le processus",

@@ -31,7 +31,9 @@
 import { deriveCells, cellsSH, substitutePrereqs, withdrawWorkTermCells, assignRegistrations, GENERAL_ELECTIVE } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
 import { seedFromPlan } from "./seed.js";
-import { adoptEarlyTerms, applyEarlyTerms, EARLY_TERMS } from "./earlyTerms.js";
+import {
+  adoptEarlyTerms, applyEarlyTerms, EARLY_TERMS, FIRST_TERM_OVERLOAD_MAX,
+} from "./earlyTerms.js";
 import { buildDomains, wideAtFor, termCapacity } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
 import { preflight, tightestTerms, MAX_DERIVED_GE_SHARE } from "./preflight.js";
@@ -624,14 +626,44 @@ function generateOnce({
     ? adoptEarlyTerms({
         publishedPlan: publishedPlan ?? donorPlan, shape, plans, precedence,
         through: earlyTerms,
-        // The SAME capacity the search enforces, read through the same function, because a
-        // published term may be over the registration cap — Computer Science and Biology
-        // publishes 20 SH against 19 — and fixing a term the student could not register for
-        // makes the whole window unsolvable. Any disagreement between this ceiling and the
-        // search's would be silent: we would fix an arrangement it then refuses.
+        // The SAME capacity the search enforces, read through the same function — any
+        // disagreement would be silent, since we would fix an arrangement it then refuses.
+        //
+        // Except in the FIRST semester, where a department publishing over the cap is a
+        // block schedule an advisor signs off rather than a term nobody can register for.
+        // 4.0% of published first terms exceed 19 SH and no later term ever does; see
+        // `FIRST_TERM_OVERLOAD_MAX` for why the allowance is 21 and why it stops there.
         capOf: (ti) => termCapacity(terms[ti], { creditMax: ports.creditMax, studentType }),
+        // The CEILING on that allowance, not the allowance itself — `adoptEarlyTerms` raises
+        // term 0 only as far as this department's own published load, so we can never invent
+        // an overload for a program that publishes a normal first semester.
+        firstTermOverload: FIRST_TERM_OVERLOAD_MAX * (terms[0]?.weight ?? 1),
       })
-    : { placed: new Map(), moves: [], unplaced: [] };
+    : { placed: new Map(), moves: [], unplaced: [], load: new Map() };
+  // ── Let the search hold what the department published ──────────────
+  //
+  // Raised to the load ACTUALLY adopted rather than to the allowance, so an overloaded first
+  // semester carries the department's own courses and not one more of our choosing. Without
+  // this the two ceilings disagree and every one of these programs still refuses: adoption
+  // would fix 20 SH into a term the search caps at 19.
+  //
+  // Mutating the term is the same shape as the critical-path narrowing above, which edits
+  // `plans` in place for the same reason — this is the layout being finalised, and `terms`
+  // is the array the search is about to read.
+  //
+  // Recorded as well as applied, because `chart-hard-rules` puts the objection exactly
+  // right: an over-cap term is "an overload petition the plan does not mention". The
+  // petition is the student's to file and ours to disclose, so a first semester above the
+  // ordinary cap has to SAY it is, in the panel and in the report.
+  let earlyOverload = null;
+  if (terms[0] && (early.load?.get(0) ?? 0) > 0) {
+    const want = early.load.get(0);
+    const base = termCapacity(terms[0], { creditMax: ports.creditMax, studentType });
+    if (want > base) {
+      terms[0].creditCeiling = want;
+      earlyOverload = { term: 0, sh: want, cap: base };
+    }
+  }
   // The exclusion reason is recorded only when something is RECORDING — the same condition
   // the critical-path narrowing above uses. `verify-chart` generates 1,031 plans untraced in
   // the monthly workflow, and an exclusion row per term per fixed cell is pure cost there.
@@ -937,7 +969,7 @@ function generateOnce({
       // modelled on similar programs must never be described as the department's own.
       earlyTerms: earlyTermsReport({
         followDepartment, publishedPlan, donorPlan, earlyTerms, earlyFixed, early,
-        plans, terms, courseMap,
+        plans, terms, courseMap, overload: earlyOverload,
       }),
       // The four-course bar that ACTUALLY applies, after student type. Zero for a graduate
       // degree, which is the whole point of exposing it: the explainer stated "four courses in
@@ -1139,7 +1171,7 @@ function generateOnce({
  */
 function earlyTermsReport({
   followDepartment, publishedPlan, donorPlan, earlyTerms, earlyFixed, early,
-  plans, terms, courseMap,
+  plans, terms, courseMap, overload = null,
 }) {
   // A term as DATA, never as an English phrase. `termLabel` is the catalog's own wording and
   // says "Summer 1", which every locale renders as "Summer A" through `SEM_NAME_KEY` — so
@@ -1174,6 +1206,11 @@ function earlyTermsReport({
     unplaced: (early?.unplaced ?? []).map(u => ({
       ...u, course: name(u.cell), fromWhere: where(u.from),
     })),
+    // A first semester carrying more than the ordinary registration cap, because its
+    // department publishes it that way. Never silent: this is a term the student may need
+    // approval to register for, and a plan that quietly assumes the petition is granted has
+    // told them something it does not know.
+    overload: overload ? { ...overload, where: where(overload.term) } : null,
   };
 }
 

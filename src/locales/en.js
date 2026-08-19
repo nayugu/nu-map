@@ -316,6 +316,7 @@ export const strings = {
   "chart.early.moved.after-its-prerequisite": "{course} — {from} to {to}, to keep it after a course it requires",
   "chart.early.moved.term-was-full":          "{course} — {from} to {to}, because {from} was already at the credit limit",
   "chart.early.unplaced":     "{course} could not be placed in {from} or any semester after it, so this tool chose where it goes.",
+  "chart.early.overload":     "{term} carries {sh} credits, above the usual {cap}-credit limit. That is how your department publishes it, but registering for it may need your advisor’s approval.",
 
   // ── The process page ────────────────────────────────────────────
   // A record of one search rather than prose about every plan. See

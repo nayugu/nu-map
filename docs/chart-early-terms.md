@@ -100,6 +100,50 @@ Three harms it repairs, and where each is decided:
 | **order** | `precedence` | the successor moves, never the prerequisite. Departments do publish courses sitting at or before what they require. |
 | **capacity** | `termCapacity` | the same function the search enforces, so the two cannot disagree. A published term may exceed the registration cap. |
 
+### The first semester may be overloaded, up to 21 SH
+
+A department publishing over the registration cap in semester one is a **block schedule an
+advisor signs off**, not a term nobody can register for. So the first semester — and only
+the first — may carry what its department published, to a ceiling of **21 SH**.
+
+Measured over the 349 published undergraduate plans, counting committed rows only:
+
+| published term | 0 | 1 | 2 | 3 | 4 |
+|---|---|---|---|---|---|
+| over 19 SH | **14 (4.0%)** | 0 | 0 | 0 | 0 |
+| heaviest | 22 SH | 19 SH | 12 SH | 18 SH | 19 SH |
+
+Overload is a first-semester phenomenon and **does not occur once anywhere else**, which is
+why the allowance is scoped to term 0 rather than to the window. Of the 14, thirteen are
+20 SH and one is 22.
+
+All thirteen are Khoury combined majors with the same skeleton — `CS 1800`+`1802`,
+`CS 2000`+`2001`, `ENGW 1111`, the partner subject's intro pair, and `CS 1200`, a one-credit
+seminar on top. 21 covers all thirteen and deliberately leaves the fourteenth: Physics and
+Music with Concentration in Music Technology publishes 22 SH across **nine** courses, and a
+tool that reproduces that without comment is not being helpful. It falls back and says so.
+
+Three details that are load-bearing:
+
+- **The allowance is the department's own load, not the ceiling.** Term 0 is raised to what
+  *this* department published, bounded above by 21 — never to a flat 21. A flat ceiling is a
+  licence rather than an allowance: it lets repair pack a first semester to 21 SH for a
+  program whose department published 15, which is inventing an overload and signing the
+  department's name to it. `business_administration_bsba_(oakland)` did exactly that, and
+  `engine-roundtrip`'s cap check caught it — the guard was right and the first
+  implementation was wrong.
+- The ceiling is scaled by the term's weight, so a half-summer is not handed a full
+  semester's overload.
+- The search's ceiling is raised to the load **actually adopted**, so the allowance cannot
+  licence the search to add a course of its own on top of an already-heavy term. Read in
+  `termCapacity`, the one function every consumer already asks, so `preflight` cannot refuse
+  a degree the search would have placed.
+
+`engine-roundtrip`'s "no term over the cap once loaded" now asserts this rule rather than
+the old one, and deliberately narrowly: **one** term, the earliest the plan occupies, and a
+hard 21 SH rather than "whatever CHART produced". Every other term is checked exactly as
+before, which is what stops the exemption reading as permission to overfill.
+
 > **Capacity was missed in the first version, and it mattered more than the other two.**
 > Computer Science and Biology publishes a **20 SH** first term against a **19 SH** cap.
 > One credit of overshoot made the window unsolvable, the all-or-nothing fallback discarded

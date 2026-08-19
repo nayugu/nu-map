@@ -20,6 +20,7 @@ import { loadCatalog } from "../../src/adapters/northeastern/courseCatalog.node.
 import enginePorts from "../../src/adapters/northeastern/enginePorts.js";
 import { buildDepthIndex } from "../../src/engine/prereqDepth.js";
 import { generatePlan } from "../../src/engine/index.js";
+import { FIRST_TERM_OVERLOAD_MAX } from "../../src/engine/earlyTerms.js";
 import { evalPrereqTree } from "../../src/core/prereqEval.js";
 import { specForNode, courseEligible } from "../../src/core/programEligibility.js";
 
@@ -223,11 +224,24 @@ function readPlan(plan) {
 }
 
 test("corpus › no term exceeds the registration cap", () => {
+  // ── Except a DISCLOSED first-semester overload ────────────────────
+  //
+  // A department publishing over the cap in semester one is a block schedule an advisor
+  // signs off; 4.0% of published first terms do it and no later term ever does. It is
+  // permitted only when `report.earlyTerms.overload` is set, which is what makes the
+  // explainer tell the student the term needs approval — an undisclosed over-cap term is
+  // still a failure, and that is the property this test is really protecting.
   const bad = [];
   for (const { p, out } of made) {
     const max = ports.creditMax(p.lvl === "graduate" ? "graduate" : "undergraduate");
-    for (const t of readPlan(out.plan)) {
-      const cap = max * ports.termWeight(t.semTypeId);
+    const disclosed = out.report?.earlyTerms?.overload ?? null;
+    const terms = readPlan(out.plan);
+    const first = terms[0] ?? null;
+    for (const t of terms) {
+      const base = max * ports.termWeight(t.semTypeId);
+      const cap = (disclosed && t === first)
+        ? Math.max(base, FIRST_TERM_OVERLOAD_MAX * ports.termWeight(t.semTypeId))
+        : base;
       const sh = t.entries.reduce((n, e) => n + (e.sh ?? 0), 0);
       if (sh > cap) bad.push(`${p.key} ${t.label}: ${sh} SH > ${cap}`);
     }

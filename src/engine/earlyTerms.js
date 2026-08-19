@@ -78,6 +78,35 @@ export const MOVED_PREREQ = "after-its-prerequisite";
  */
 export const MOVED_CAPACITY = "term-was-full";
 
+/**
+ * The most credit a FIRST semester may carry when its department published it that way.
+ *
+ * 21, and both the number and the fact that it applies to term 0 alone are measured rather
+ * than chosen. Over the 349 published undergraduate plans, counting only committed rows:
+ *
+ *     term            0       1       2       3       4
+ *     over 19 SH     14      0       0       0       0        <- 4.0%, then nothing
+ *     heaviest       22 SH  19 SH   12 SH   18 SH   19 SH
+ *
+ * An overloaded published term is a FIRST-SEMESTER phenomenon and does not occur once
+ * anywhere else, so the allowance is scoped to where the evidence is. Of the 14, thirteen
+ * are 20 SH and one is 22.
+ *
+ * All thirteen are Khoury combined majors with the same skeleton — `CS 1800`+`1802`,
+ * `CS 2000`+`2001`, `ENGW 1111`, the partner subject's intro pair, and `CS 1200`, a
+ * one-credit seminar sitting on top. That is a block schedule an advisor signs off, not a
+ * degree nobody can register for, and refusing to reproduce it cost every one of those
+ * programs its department's entire first two years.
+ *
+ * 21 covers thirteen and deliberately leaves the fourteenth. Physics and Music with
+ * Concentration in Music Technology publishes 22 SH across NINE courses in one semester;
+ * a tool that reproduces that without comment is not being helpful, so it keeps falling
+ * back and says so.
+ *
+ * Scaled by the term's weight, so a half-summer is not handed a full semester's overload.
+ */
+export const FIRST_TERM_OVERLOAD_MAX = 21;
+
 /** Every entry in a term, including the nested children of an `either`. */
 function flatten(entries, out = []) {
   for (const e of entries ?? []) {
@@ -220,10 +249,15 @@ function repair(intended, plans, precedence, capOf) {
     || (shOf(b) - shOf(a))
     || (a < b ? -1 : a > b ? 1 : 0));
 
+  // The last pass's load, which is the arrangement actually returned. Declared out here so
+  // the caller can read it: a term the department overloads has to have the SEARCH's ceiling
+  // raised to match, and raising it to a blanket maximum instead of to what was really fixed
+  // would licence the search to add a course of its own on top.
+  let load = new Map();
   for (let pass = 0; pass < 8; pass += 1) {
     // Rebuilt every pass rather than patched, because a cell that moves frees the credit it
     // was holding. A stale load would keep charging a term for a course that left it.
-    const load = new Map();
+    load = new Map();
     let moved = false;
     for (const id of order) {
       if (!placed.has(id)) continue;
@@ -271,7 +305,7 @@ function repair(intended, plans, precedence, capOf) {
     }
     if (!moved) break;
   }
-  return { placed, unplaced, reasons };
+  return { placed, unplaced, reasons, load };
 }
 
 /**
@@ -289,6 +323,7 @@ function repair(intended, plans, precedence, capOf) {
  */
 export function adoptEarlyTerms({
   publishedPlan, shape, plans, precedence, through = EARLY_TERMS, capOf = null,
+  firstTermOverload = 0,
 } = {}) {
   const empty = { placed: new Map(), moves: [], unplaced: [] };
   if (!publishedPlan || !plans?.length) return empty;
@@ -315,14 +350,32 @@ export function adoptEarlyTerms({
   }
   if (!intended.size) return empty;
 
-  const { placed, unplaced, reasons } = repair(intended, plans, precedence, capOf);
+  // ── The first semester's allowance is the DEPARTMENT'S own load ────
+  //
+  // Bounded by what this department published for term 0, not by a flat ceiling. A flat 21
+  // is a licence rather than an allowance: it lets repair pack a first semester to 21 SH for
+  // a program whose department published 18, which is us inventing an overload and signing
+  // the department's name to it. `business_administration_bsba_(oakland)` did exactly that
+  // and the roundtrip invariant caught it.
+  //
+  // So: raise term 0 to what the department asked for, and no further — capped by
+  // `firstTermOverload` so a 22 SH nine-course term is still refused.
+  const byIdSH = new Map(plans.map(p => [p.cell.id, p.cell?.sh ?? 0]));
+  let wanted0 = 0;
+  for (const [id, ti] of intended) if (ti === 0) wanted0 += byIdSH.get(id) ?? 0;
+  const base0 = capOf ? capOf(0) : Infinity;
+  const cap0 = Math.max(base0, Math.min(wanted0, firstTermOverload));
+  const effectiveCap = capOf ? ((t) => (t === 0 ? cap0 : capOf(t))) : null;
+
+  const { placed, unplaced, reasons, load } =
+    repair(intended, plans, precedence, effectiveCap);
   const moves = [];
   for (const [id, at] of placed) {
     const from = intended.get(id);
     if (at !== from) moves.push({ cell: id, from, to: at, why: reasons.get(id) ?? null });
   }
   moves.sort((a, b) => a.from - b.from || (a.cell < b.cell ? -1 : 1));
-  return { placed, moves, unplaced };
+  return { placed, moves, unplaced, load };
 }
 
 /**

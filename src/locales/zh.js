@@ -278,6 +278,7 @@ export const strings = {
   "chart.early.moved.after-its-prerequisite": "{course} —— 由{from}移至{to}，以确保排在其先修课之后",
   "chart.early.moved.term-was-full":          "{course} —— 由{from}移至{to}，因为{from}已达到学分上限",
   "chart.early.unplaced":     "{course} 无法安排在{from}或其后的任何学期，因此由本工具决定其位置。",
+  "chart.early.overload":     "{term}共 {sh} 学分，超过通常 {cap} 学分的上限。你所在系就是这样公布的，但选课可能需要导师批准。",
   // ── 过程页 ──────────────────────────────────────────────────────
   "chart.explain.tab.text": "规则",
   "chart.explain.tab.process": "编排过程",

@@ -278,6 +278,7 @@ export const strings = {
   "chart.early.moved.after-its-prerequisite": "{course} — {from}에서 {to}(으)로. 선수 과목 뒤에 오도록 하기 위해서입니다",
   "chart.early.moved.term-was-full":          "{course} — {from}에서 {to}(으)로. {from}이(가) 이미 학점 상한에 도달했기 때문입니다",
   "chart.early.unplaced":     "{course}은(는) {from} 및 그 이후 어느 학기에도 배치할 수 없어, 이 도구가 위치를 정했습니다.",
+  "chart.early.overload":     "{term}은(는) {sh}학점으로, 통상 상한인 {cap}학점을 넘습니다. 학과가 그렇게 공개하고 있기 때문이지만, 수강 신청에는 지도교수의 승인이 필요할 수 있습니다.",
   // ── 과정 페이지 ─────────────────────────────────────────────────
   "chart.explain.tab.text": "규칙",
   "chart.explain.tab.process": "만들어진 과정",

@@ -278,6 +278,7 @@ export const strings = {
   "chart.early.moved.after-its-prerequisite": "{course} — {from} से {to}, ताकि यह अपनी पूर्वापेक्षा के बाद रहे",
   "chart.early.moved.term-was-full":          "{course} — {from} से {to}, क्योंकि {from} पहले ही क्रेडिट सीमा पर था",
   "chart.early.unplaced":     "{course} को {from} या उसके बाद किसी भी सेमेस्टर में नहीं रखा जा सका, इसलिए इस टूल ने इसका स्थान चुना।",
+  "chart.early.overload":     "{term} में {sh} क्रेडिट हैं, जो सामान्य {cap}-क्रेडिट सीमा से अधिक है। आपका विभाग इसे इसी तरह प्रकाशित करता है, पर पंजीकरण के लिए आपके सलाहकार की स्वीकृति ज़रूरी हो सकती है।",
   // ── प्रक्रिया वाला पृष्ठ ──────────────────────────────────────────
   "chart.explain.tab.text": "नियम",
   "chart.explain.tab.process": "प्रक्रिया",

@@ -656,5 +656,17 @@ export function buildDomains(cells, terms, {
  */
 export function termCapacity(term, { creditMax, studentType, slack = 0 }) {
   const cap = creditMax(studentType) * (term.weight ?? 1);
-  return Number.isFinite(cap) ? cap + slack : Infinity;
+  if (!Number.isFinite(cap)) return Infinity;
+  // ── A term the DEPARTMENT itself publishes over the cap ────────────
+  //
+  // `creditCeiling` is set by `earlyTerms.js` on a first semester whose published load
+  // exceeds the registration cap, and only ever to the load actually adopted — never to a
+  // blanket maximum, which would licence the search to add a course of its own on top of an
+  // already-overloaded term.
+  //
+  // Read HERE, in the one function every consumer already asks, rather than at the search's
+  // two call sites: `preflight` sizes the whole degree through this as well, and a ceiling
+  // the search honoured but pre-flight did not would refuse the degree before the search
+  // ever saw that the term fits.
+  return Math.max(cap, term.creditCeiling ?? 0) + slack;
 }

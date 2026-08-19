@@ -351,6 +351,85 @@ test("early › capacity never moves a course EARLIER to make room", () => {
   }
 });
 
+test("early › the first semester may carry the overload its department published", () => {
+  // The Khoury combined-major shape: 19 SH of real courses plus a 1 SH seminar. Thirteen
+  // programs publish exactly this, and capping it at 19 cost every one of them their
+  // department's whole first two years. The caller grants term 0 the wider ceiling.
+  const shape = shapeOf(3);
+  const plan = planOf([["A", "B", "C", "D", "T"]]);
+  const plans = [
+    sized("b1", ["A"], 5, wide()), sized("b2", ["B"], 5, wide()),
+    sized("b3", ["C"], 5, wide()), sized("b4", ["D"], 4, wide()),
+    sized("seminar", ["T"], 1, wide()),
+  ];
+  const { placed, moves } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC,
+    capOf: () => 19, firstTermOverload: 21,
+  });
+  assert.equal(placed.size, 5);
+  for (const [, at] of placed) assert.equal(at, 0, "the whole published term is kept");
+  assert.deepEqual(moves, [], "nothing needs repairing when the overload is allowed");
+});
+
+test("early › the allowance never exceeds what the DEPARTMENT published", () => {
+  // The defect the roundtrip invariant caught. A flat ceiling let repair pack a first
+  // semester to 21 SH for a program whose department published 15 — inventing an overload
+  // and signing the department's name to it. The allowance is bounded by their own term.
+  const shape = shapeOf(3);
+  // Term 0 is published at 15 SH; term 1 is heavy and wants somewhere to spill.
+  const plan = planOf([["A", "B", "C"], ["D", "E", "F", "G"]]);
+  const plans = [
+    sized("a", ["A"], 5, wide()), sized("b", ["B"], 5, wide()), sized("c", ["C"], 5, wide()),
+    sized("d", ["D"], 5, wide()), sized("e", ["E"], 5, wide()),
+    sized("f", ["F"], 5, wide()), sized("g", ["G"], 5, wide()),
+  ];
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC,
+    capOf: () => 19, firstTermOverload: 21,
+  });
+  const inT0 = [...placed.entries()].filter(([, at]) => at === 0)
+    .reduce((n, [id]) => n + plans.find(p => p.cell.id === id).cell.sh, 0);
+  assert.equal(inT0, 15, `term 0 was fixed at ${inT0} SH; its department published 15`);
+});
+
+test("early › the overload is a CEILING, not a licence — 22 SH still sheds", () => {
+  // Physics and Music publishes 22 SH across nine courses. 21 deliberately does not cover
+  // it: a tool that reproduces that silently is not being helpful.
+  const shape = shapeOf(3);
+  const plan = planOf([["A", "B", "C", "D", "E"]]);
+  const plans = [
+    sized("b1", ["A"], 5, wide()), sized("b2", ["B"], 5, wide()),
+    sized("b3", ["C"], 5, wide()), sized("b4", ["D"], 5, wide()),
+    sized("b5", ["E"], 2, wide()),
+  ];
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC,
+    capOf: () => 19, firstTermOverload: 21,
+  });
+  const inT0 = [...placed.entries()].filter(([, at]) => at === 0)
+    .reduce((n, [id]) => n + plans.find(p => p.cell.id === id).cell.sh, 0);
+  assert.ok(inT0 <= 21, `term 0 was fixed at ${inT0} SH, past the 21 ceiling`);
+});
+
+test("early › a later term gets no overload allowance, however it was published", () => {
+  // Measured: no published term past the first has ever exceeded the cap. The allowance is
+  // scoped to where the evidence is, and this is the guard on that scope.
+  const shape = shapeOf(3);
+  const plan = planOf([[], ["A", "B", "C", "D", "T"]]);
+  const plans = [
+    sized("b1", ["A"], 5, wide()), sized("b2", ["B"], 5, wide()),
+    sized("b3", ["C"], 5, wide()), sized("b4", ["D"], 4, wide()),
+    sized("seminar", ["T"], 1, wide()),
+  ];
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC,
+    capOf: () => 19, firstTermOverload: 21,
+  });
+  const inT1 = [...placed.entries()].filter(([, at]) => at === 1)
+    .reduce((n, [id]) => n + plans.find(p => p.cell.id === id).cell.sh, 0);
+  assert.ok(inT1 <= 19, `term 1 was fixed at ${inT1} SH, over the ordinary cap`);
+});
+
 test("early › with no capacity function nothing is capped — the old behaviour", () => {
   const shape = shapeOf(2);
   const plan = planOf([["A", "B", "C"]]);
