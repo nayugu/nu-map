@@ -7,6 +7,7 @@ import { useTheme } from "../context/ThemeContext.jsx";
 import { useState, useEffect, useMemo } from "react";
 import { TYPE_BG } from "../core/constants.js";
 import { hexRgb, getSemStudySH, getOrderedCourses } from "../core/planModel.js";
+import { loadState, LOAD_OVER, LOAD_UNDER } from "../core/creditLoad.js";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
@@ -211,15 +212,21 @@ export default function SemRow({ sem }) {
   const isRegularSem = sem.type === "fall" || sem.type === "spring";
   const shMin = isRegularSem ? creditSystem.getFullTimeMin(studentType) : 0;
   const shMax = creditSystem.getSemesterMax(studentType);
-  const shColor = sh > shMax ? "var(--error)" : (sh > 0 && sh < shMin && isRegularSem) ? "var(--warn-bright)" : "var(--success)";
+  // The verdict comes from core so the preview, the walkthrough, the summer row and MCP
+  // cannot reach a different one about the same term — see `creditLoad.js`. The COLOURS stay
+  // here: this row is live and green means "keep going", which is not what a document wants.
+  const shState = loadState(sh, { cap: shMax, min: shMin });
+  const overCap = shState === LOAD_OVER;
+  const shColor = overCap ? "var(--error)"
+    : shState === LOAD_UNDER ? "var(--warn-bright)" : "var(--success)";
   const shEl = sh > 0 ? (
     <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: shColor }}>
-      {sh} SH{sh > shMax ? " ⚠" : ""}
+      {sh} SH{overCap ? " ⚠" : ""}
     </span>
   ) : null;
   const shElPhone = sh > 0 ? (
     <span style={{ fontSize: 7, fontWeight: 700, color: shColor, lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}>
-      {sh} SH{sh > shMax ? " ⚠" : ""}
+      {sh} SH{overCap ? " ⚠" : ""}
     </span>
   ) : null;
 

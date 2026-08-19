@@ -28,6 +28,7 @@ import {
 import { baseId } from "../../core/repeatInstances.js";
 import { buildCohortSemesters, deriveSemMaps } from "../../core/semGrid.js";
 import { getSemSH, getOrderedCourses, filterInTimeline } from "../../core/planModel.js";
+import { isOverCap } from "../../core/creditLoad.js";
 import { computeGrantedAttrs, workTermGrants, resolveTermByDuration, termSpans } from "../../core/specialTermUtils.js";
 import { applyChangeset, completedCourseIds } from "./plannerActionAdapter.js";
 
@@ -615,6 +616,27 @@ export function createPlannerQuery(deps) {
       });
     }
 
+    // ── Summer's cap is on the two halves TOGETHER ────────────────────
+    //
+    // `overMax` was `sem.weight === 1 && sh > shMax`, so a summer half could never report an
+    // overload at all — the same blind spot the summer row had, reached by a different route.
+    // A half is not judged against the full cap either; summer is capped as a whole, so both
+    // halves report the verdict for the combined load, which is what the planner draws on the
+    // row in front of them. See `creditLoad.js`.
+    const summerSH = new Map();
+    for (const sem of sems) {
+      if (sem.weight === 1 || sem.type === "special") continue;
+      const key = String(sem.label).match(/\d{4}/)?.[0] ?? sem.label;
+      summerSH.set(key, (summerSH.get(key) ?? 0)
+        + getSemSH(sem.id, plan.placements ?? {}, map));
+    }
+    const judgedSH = (sem) => {
+      if (sem.weight === 1 || sem.type === "special") {
+        return getSemSH(sem.id, plan.placements ?? {}, map);
+      }
+      return summerSH.get(String(sem.label).match(/\d{4}/)?.[0] ?? sem.label) ?? 0;
+    };
+
     return sems.map(sem => {
       const courseIds = getOrderedCourses(sem.id, plan.placements ?? {}, plan.semOrders ?? {}, map);
       const sh = getSemSH(sem.id, plan.placements ?? {}, map);
@@ -626,7 +648,7 @@ export function createPlannerQuery(deps) {
           id, code: map[id]?.code ?? id, title: map[id]?.title ?? "", sh: map[id]?.sh ?? 4,
         })),
         totalSH: sh,
-        overMax: sem.weight === 1 && sh > shMax,
+        overMax: isOverCap(judgedSH(sem), shMax),
         underFullTime: sem.weight === 1 && sem.type !== "special" && sh > 0 && sh < shMin,
         workTerms: workBySem[sem.id] ?? [],
       };

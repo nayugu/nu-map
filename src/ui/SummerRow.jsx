@@ -7,9 +7,11 @@ import { useTheme } from "../context/ThemeContext.jsx";
 import { useState, useEffect, useMemo } from "react";
 import { TYPE_BG } from "../core/constants.js";
 import { getSemStudySH, getOrderedCourses } from "../core/planModel.js";
+import { isOverCap } from "../core/creditLoad.js";
 import { resolveTermByDuration } from "../core/specialTermUtils.js";
 import { usePort }        from "../context/InstitutionContext.jsx";
 import { ISpecialTerms }  from "../ports/ISpecialTerms.js";
+import { ICreditSystem }  from "../ports/ICreditSystem.js";
 import { useLanguage }    from "../context/LanguageContext.jsx";
 import { TText, scaleLatinRuns } from "../context/TranslationContext.jsx";
 import { semName } from "../core/semGrid.js";
@@ -74,6 +76,7 @@ export default function SummerRow({ semA, semB }) {
 
   const { themeName } = useTheme();
   const specialTerms = usePort(ISpecialTerms);
+  const creditSystem = usePort(ICreditSystem);
   const { t } = useLanguage();
   const companyColor = themeName === "dark" ? "#b0bbc5" : "var(--text-3)";
   const placeholderColor = themeName === "dark" ? "#3e4856" : "#e4e4e4";
@@ -102,6 +105,17 @@ export default function SummerRow({ semA, semB }) {
   // component than fall/spring, which is how the previous attempt taught one
   // and had reservations silently vanish from the other.
   const combinedSH     = sems.reduce((sum, s) => sum + semesterLoad(s.id), 0);
+  // ── Summer is capped too, and used not to be ──────────────────────
+  //
+  // This number was drawn `var(--success)` unconditionally, so a summer holding 30 SH was
+  // green and a fall holding 20 was red — the one row in the planner that could not report an
+  // overload. Judged as a WHOLE against the ordinary cap, which is the number the combined
+  // total was already computed for: two 12 SH halves are 24 SH of summer, and checking each
+  // half alone passed both. No full-time MINIMUM here — SemRow has always exempted summer,
+  // and a 4 SH summer is a normal thing to plan, not a part-time semester.
+  const shMax          = creditSystem.getSemesterMax(studentType);
+  const summerOverCap  = isOverCap(combinedSH, shMax);
+  const summerSHColor  = summerOverCap ? "var(--error)" : "var(--success)";
   const tb         = TYPE_BG.summer;
   const rowBg      = tb.bg;
   const rowBorder  = combinedActive ? "1px solid var(--active-now-border)" : `1px solid ${tb.border}`;
@@ -399,7 +413,7 @@ export default function SummerRow({ semA, semB }) {
               engine-translated "Summer" is as ambiguous as the "Fall"→落下 bug. */}
           <span style={{ fontSize: 7, fontWeight: 700, color: "var(--text-2)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center", fontFamily: "'InterTight', 'Inter', system-ui, sans-serif" }}>{scaleLatinRuns(t("sem.summer.abbr"), { tight: true })}</span>
           <span style={{ fontSize: 7, fontWeight: 500, color: "var(--text-4)", lineHeight: "calc(1.2 * var(--lh-scale, 1))" }}>{year}</span>
-          {combinedSH > 0 && <span style={{ fontSize: 7, fontWeight: 700, color: "var(--success)", lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}>{combinedSH} SH</span>}
+          {combinedSH > 0 && <span style={{ fontSize: 7, fontWeight: 700, color: summerSHColor, lineHeight: "calc(1.2 * var(--lh-scale, 1))", textAlign: "center" }}>{combinedSH} SH{summerOverCap ? " ⚠" : ""}</span>}
         </div>
       ) : (
         <div onClick={onNowClick} style={{ width: "clamp(100px,13vw,148px)", flexShrink: 0, cursor: isLive ? "not-allowed" : "pointer" }}>
@@ -417,7 +431,7 @@ export default function SummerRow({ semA, semB }) {
             )}
           </div>
           <div style={{ fontSize: 10, color: "var(--text-4)", paddingLeft: 19, marginBottom: 2 }}><TText>May – Aug</TText></div>
-          {combinedSH > 0 && <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: "var(--success)" }}>{combinedSH} SH</span>}
+          {combinedSH > 0 && <span style={{ fontSize: 10, fontWeight: 700, marginLeft: 19, color: summerSHColor }}>{combinedSH} SH{summerOverCap ? " ⚠" : ""}</span>}
         </div>
       )}
 

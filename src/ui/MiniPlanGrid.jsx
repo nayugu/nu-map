@@ -42,6 +42,7 @@ import { SEM_NAME_KEY }       from "./SemLabel.jsx";
 import { semName }            from "../core/semGrid.js";
 import { TYPE_BG }            from "../core/constants.js";
 import { cardsIn, loadIn }    from "../core/semesterView.js";
+import { isOverCap }          from "../core/creditLoad.js";
 import { useCourseInk }       from "./useSubjectInk.js";
 import { reservationNameSource, reservationSubline, optionGroupsText, cardOptionGroups } from "../core/reservations.js";
 import { CardHover }          from "./HoverCard.jsx";
@@ -151,7 +152,7 @@ export function MiniTermRow({ sem, view, startMap, contMap, laid, types, unit, i
       transition: "background 120ms linear, border-color 120ms linear",
     }}>
       <SemLabelCol sem={sem} sh={loadIn(sem.id, view, startMap, contMap)} unit={unit}
-                   isPhone={isPhone} t={t} dense={dense} />
+                   isPhone={isPhone} t={t} dense={dense} cap={termMax} />
       <TermBody cards={cards} sem={sem} tb={tb} run={run} types={types} t={t}
                 termMax={termMax} oneCourse={oneCourse} decor={decor} dense={dense} />
     </div>
@@ -260,7 +261,7 @@ export function MiniSummerRow({ sems, view, startMap, contMap, laid, types, unit
       transition: "background 120ms linear, border-color 120ms linear",
     }}>
       <SummerLabelCol sems={sems} year={year} sh={sh} unit={unit} isPhone={isPhone} t={t}
-                      dense={dense} />
+                      dense={dense} cap={termMax} />
       <div style={{ display: "flex", alignItems: "stretch", gap: 6, flex: 1, minWidth: 0 }}>
       {sems.map(sem => {
         const cards = cardsIn(sem.id, view);
@@ -300,7 +301,38 @@ export function MiniSummerRow({ sems, view, startMap, contMap, laid, types, unit
  * CJK while this one reads season-first. That is a bug on the row, not here, and fixing it there is
  * a one-line swap to this same key.)
  */
-function SummerLabelCol({ sems, year, sh, unit, isPhone, t, dense }) {
+/**
+ * A term's load — quiet by default, marked when it is over the cap.
+ *
+ * ── Why only the exception is coloured ─────────────────────────────
+ *
+ * The planner paints this number green when the term is fine, because there it is a live value
+ * the student is changing and green says "keep going". Here it is a document: the preview is
+ * read once and the walkthrough is watched, and forty coloured rows is forty things competing
+ * with the one card that just moved. So an ordinary term keeps the surrounding `--text-5` and
+ * only an over-cap term speaks up.
+ *
+ * That asymmetry is deliberate and it is not a drift, because the JUDGEMENT is shared — both
+ * surfaces ask `creditLoad.js`. What differs is the palette, which is a property of the
+ * surface. What must never differ is the verdict, and before this the preview had none: a 20
+ * SH first semester was drawn exactly like a 16 SH one, so the reader could not see the very
+ * thing the panel two sections down was warning them about.
+ *
+ * `color: undefined` rather than a literal grey, so the number keeps inheriting whatever its
+ * container uses and this does not become a second place to update the type scale.
+ */
+function LoadSH({ sh, cap = Infinity, unit }) {
+  const over = isOverCap(sh, cap);
+  return (
+    <span style={{
+      color: over ? "var(--error)" : undefined,
+      fontWeight: over ? 700 : undefined,
+      whiteSpace: "nowrap",
+    }}>{sh} {unit}{over ? " ⚠" : ""}</span>
+  );
+}
+
+function SummerLabelCol({ sems, year, sh, unit, isPhone, t, dense, cap }) {
   const first = sems[0].sub ?? "";
   const last  = sems[sems.length - 1].sub ?? "";
   const from  = first.split("–")[0].trim();
@@ -321,7 +353,8 @@ function SummerLabelCol({ sems, year, sh, unit, isPhone, t, dense }) {
         fontSize: TYPE.meta, color: "var(--text-5)", marginTop: dense ? 0 : 2,
         lineHeight: "calc(1.35 * var(--lh-scale, 1))",
       }}>
-        {!dense && <TText>{span}</TText>}{!!sh && <>{dense ? "" : " · "}{sh} {unit}</>}
+        {!dense && <TText>{span}</TText>}
+        {!!sh && <>{dense ? "" : " · "}<LoadSH sh={sh} cap={cap} unit={unit} /></>}
       </div>
     </div>
   );
@@ -340,7 +373,13 @@ function SummerLabelCol({ sems, year, sh, unit, isPhone, t, dense }) {
  * the same year twice. The half keeps its own months for the same reason the planner's halves do —
  * the split is the only thing the row cannot say for both at once.
  */
-function SemLabelCol({ sem, sh, unit, isPhone, t, inline = false, dense = false }) {
+/**
+ * `cap` is the term's registration cap, or omitted where the load must not be judged HERE.
+ * The `inline` variant is a summer HALF, and a half is never judged alone: summer is capped as
+ * a whole, so the row's shared column in front of the two halves carries the verdict for both.
+ * Judging each half against the full cap passed a 12 + 12 summer twice over.
+ */
+function SemLabelCol({ sem, sh, unit, isPhone, t, inline = false, dense = false, cap }) {
   const cal  = usePort(ICalendar);
   const st   = cal.getSemesterTypes().find(s => s.id === sem.semTypeId);
   const year = sem.label.match(/\d{4}/)?.[0] ?? "";
@@ -364,7 +403,11 @@ function SemLabelCol({ sem, sh, unit, isPhone, t, inline = false, dense = false 
           overflow: "hidden", textOverflow: "ellipsis",
         }}><TText>{sem.sub}</TText></span>
         <span style={{ flex: 1 }} />
-        {!!sh && <span style={{ fontSize: TYPE.meta, color: "var(--text-5)", whiteSpace: "nowrap" }}>{sh} {unit}</span>}
+        {/* No `cap`: a summer half is not judged alone — see this function's note. Still routed
+          * through `LoadSH` so all four load sites are one component and cannot drift apart. */}
+        {!!sh && <span style={{ fontSize: TYPE.meta, color: "var(--text-5)", whiteSpace: "nowrap" }}>
+          <LoadSH sh={sh} unit={unit} />
+        </span>}
       </div>
     );
   }
@@ -382,7 +425,7 @@ function SemLabelCol({ sem, sh, unit, isPhone, t, inline = false, dense = false 
           overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
         }}>{name}</span>
         {!!sh && <span style={{ fontSize: TYPE.meta, color: "var(--text-5)", whiteSpace: "nowrap" }}>
-          {sh} {unit}
+          <LoadSH sh={sh} cap={cap} unit={unit} />
         </span>}
       </div>
     );
@@ -399,7 +442,7 @@ function SemLabelCol({ sem, sh, unit, isPhone, t, inline = false, dense = false 
         fontSize: TYPE.meta, color: "var(--text-5)", marginTop: 2,
         lineHeight: "calc(1.35 * var(--lh-scale, 1))",
       }}>
-        <TText>{sem.sub}</TText>{!!sh && <> · {sh} {unit}</>}
+        <TText>{sem.sub}</TText>{!!sh && <> · <LoadSH sh={sh} cap={cap} unit={unit} /></>}
       </div>
     </div>
   );
