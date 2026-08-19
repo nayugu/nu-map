@@ -324,6 +324,53 @@ export function reservationSubline(card, translatedName) {
 }
 
 /**
+ * A placeholder's choices, written so the precedence is unambiguous.
+ *
+ * ── Why the card's own string will not do ───────────────────────────
+ *
+ * A card says `PHYS 1161 and PHYS 1162 and PHYS 1163 or PHYS 1191 and PHYS 1192 and
+ * PHYS 1193`, and read aloud that is six courses joined by a coin-flip: nothing in it says
+ * whether the `or` splits the whole list or only the pair beside it. It is two lab sequences
+ * and you take one of them, which is not recoverable from the sentence.
+ *
+ * A card also TRUNCATES — `MAX_TITLED_OPTIONS` shows three and appends `(+12)` — because a
+ * card is one line in a grid. A hover has room, so it shows every option and the marker
+ * stops being needed. `(+12)` was the most confusing thing on these cards precisely because
+ * the number counted something the reader could not see.
+ *
+ * ── Brackets only where they DISAMBIGUATE ───────────────────────────
+ *
+ * Around a group of several, never around a lone course. `(MUSC 2101) or (MUSC 2150)` is
+ * punctuation pretending to be information, and this line already has too much of that.
+ * With one group there is no `or` at all, so nothing needs bracketing either.
+ *
+ * @param {string[][]} groups  option groups: take every course in ONE group
+ * @returns {string} "" when there is nothing a reader would not already know
+ */
+/**
+ * A card's option groups, wherever they are on it.
+ *
+ * `occupantCards` builds the card view field by field and does not copy `options` up — it
+ * carries the whole `reservation` instead, so the groups live one level down. A card built
+ * some other way may carry them directly. Reading both here means a caller cannot pick the
+ * wrong one, which is exactly what happened: the hover fell back to the card's truncated
+ * wording on every planner card, because it looked only at `card.options` and found nothing.
+ */
+export function cardOptionGroups(card) {
+  const g = card?.reservation?.options ?? card?.options;
+  return Array.isArray(g) ? g : [];
+}
+
+export function optionGroupsText(groups) {
+  const gs = (groups ?? []).filter(g => Array.isArray(g) && g.length);
+  if (!gs.length) return "";
+  const spaced = (id) => String(id).replace(/([A-Za-z])(\d)/g, "$1 $2");
+  const one = (g) => g.map(spaced).join(" and ");
+  if (gs.length === 1) return one(gs[0]);
+  return gs.map(g => (g.length > 1 ? `(${one(g)})` : one(g))).join(" or ");
+}
+
+/**
  * How much of the plan is still undecided, as a plain count.
  *
  * The requirements panel reads `placements`, so a section shows `0/2` whether

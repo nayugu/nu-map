@@ -11,8 +11,9 @@ import { ICourseOffering } from "../ports/ICourseOffering.js";
 import { REL_STYLE } from "../core/constants.js";
 import { baseId, takesUsed } from "../core/repeatInstances.js";
 import { courseInk } from "../core/courseModel.js";
-import { reservationNameSource, reservationSubline } from "../core/reservations.js";
+import { reservationNameSource, reservationSubline, optionGroupsText, cardOptionGroups } from "../core/reservations.js";
 import GradePopover from "./GradePopover.jsx";
+import HoverCard from "./HoverCard.jsx";
 import { takeConsumesSlot } from "../core/gradeSystem.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTheme }    from "../context/ThemeContext.jsx";
@@ -165,6 +166,28 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
 
   const [editingSh, setEditingSh] = useState(false);
   const [gradePop, setGradePop]   = useState(null); // grade popover anchor rect while open
+  // ── A placeholder's full wording, on hover ────────────────────────
+  //
+  // The name sits in the code slot and is clipped there — a course code is four characters
+  // and "Select ONE of the following CHEM course sequences:" is not. It had no tooltip of
+  // any kind, native or otherwise, so the only way to read a long one was to drop it into a
+  // wider column. Anchored to the TEXT rather than the card, so it cannot interfere with the
+  // drag the card itself is listening for.
+  const [nameHov, setNameHov] = useState(null);
+  // Built from the reservation's OPTION GROUPS where it has them, not from the card's own
+  // string. The card is truncated to three options with a `(+12)` after it, and its `or`s
+  // carry no precedence — see `optionGroupsText`, which brackets the groups and lists them
+  // all. Falls back to the card's wording for a placeholder with no options to expand, which
+  // is most of them: a free elective names nothing.
+  const optionsText = course.isReservation ? optionGroupsText(cardOptionGroups(course)) : "";
+  const fullName = course.isReservation
+    ? [title || course.code, optionsText || reservationSubline(course, title)]
+        .map(s => (s ?? "").trim()).filter(Boolean).join(" — ")
+    : null;
+  const nameHoverProps = fullName ? {
+    onMouseEnter: (e) => setNameHov(e.currentTarget.getBoundingClientRect()),
+    onMouseLeave: () => setNameHov(null),
+  } : {};
   const [isMouseHov, setIsMouseHov] = useState(false);
   // Closing the popover also drops hover: the pointer may have travelled to
   // the popover (or off the card entirely) while the portal was up, and the
@@ -491,9 +514,13 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
         letterSpacing: "0.02em", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
         display: "flex", alignItems: "baseline", gap: 3,
       }}>
-        <span style={{ overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>
+        <span {...nameHoverProps}
+              style={{ overflow: "hidden", textOverflow: "ellipsis", minWidth: 0 }}>
           {course.isReservation ? (title || course.code) : course.code}
         </span>
+        {nameHov && fullName && (
+          <HoverCard rect={nameHov} maxWidth={280}>{fullName}</HoverCard>
+        )}
         {course.isCps && <span style={{ fontWeight: 500, fontSize: 8, color: "var(--text-4)", flexShrink: 0 }}>· CPS</span>}
         {multiTake && (
           <span

@@ -34,6 +34,7 @@
 // preview always did — which is the property that keeps the extraction honest, and is what
 // `test/unit/mini-plan-grid.test.js` pins.
 // ═══════════════════════════════════════════════════════════════════
+import { useState }           from "react";
 import { usePort }            from "../context/InstitutionContext.jsx";
 import { ICalendar }          from "../ports/ICalendar.js";
 import { TText, useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -42,7 +43,8 @@ import { semName }            from "../core/semGrid.js";
 import { TYPE_BG }            from "../core/constants.js";
 import { cardsIn, loadIn }    from "../core/semesterView.js";
 import { useCourseInk }       from "./useSubjectInk.js";
-import { reservationNameSource, reservationSubline } from "../core/reservations.js";
+import { reservationNameSource, reservationSubline, optionGroupsText, cardOptionGroups } from "../core/reservations.js";
+import HoverCard              from "./HoverCard.jsx";
 
 /**
  * ── Type scale ─────────────────────────────────────────────────────
@@ -447,8 +449,33 @@ export function MiniCard({ card, small = false, state, dense = false }) {
   // Resolved here rather than read off `card.color`: co-op and internship
   // courses follow the theme, and this grid renders in both.
   const cardColor = useCourseInk(card);
+
+  // ── A placeholder's full wording, on hover ────────────────────────
+  //
+  // These cards are the ones whose text does not fit: a course is "PHYS 1161" and a
+  // placeholder is "Select ONE of the following CHEM course sequences:". Clipped to the
+  // card, that reads as "Select ONE of the follo…" and the student cannot see what the
+  // choice even is. The native `title` did carry it and waits about a second, which is long
+  // enough that it was effectively never read — the reason `HoverCard` exists at all.
+  //
+  // Only for placeholders. A held course already shows its code in full and its title on the
+  // second line, so a card explaining itself would be noise on every card in the grid.
+  //
+  // Built from the reservation's OPTION GROUPS where it has them: the card's own string is
+  // truncated to three with a `(+12)` after it and its `or`s carry no precedence. See
+  // `optionGroupsText`. Falls back to the card's wording when there is nothing to expand.
+  const [hover, setHover] = useState(null);
+  const opts = held ? "" : optionGroupsText(cardOptionGroups(card));
+  const full = held ? null : [name ?? card.title ?? card.code, opts || subline(card, name)]
+    .map(s => (s ?? "").trim()).filter(Boolean).join(" — ");
+
   return (
-    <div style={{
+    <div
+      // Bound only where there is something clipped to reveal, so an ordinary course card
+      // does not carry two listeners and a state update per hover across a whole grid.
+      onMouseEnter={full ? (e) => setHover(e.currentTarget.getBoundingClientRect()) : undefined}
+      onMouseLeave={full ? () => setHover(null) : undefined}
+      style={{
       // The second line is for one- and two-credit cards, so they take the room they are worth
       // rather than a full slot each.
       flex: small ? "0 1 auto" : `1 1 ${m.basis}px`,
@@ -490,7 +517,11 @@ export function MiniCard({ card, small = false, state, dense = false }) {
         * So dense clips to one line at a slightly smaller size, and the full name is on the card's
         * `title`. The preview keeps wrapping: it is a document, it is read once, and there the
         * complete name is worth more than a flat baseline. */}
-      <div title={held ? undefined : (name ?? card.title ?? "")} style={{
+      {/* No native `title` on a placeholder any more — `HoverCard` below carries the same
+        * words instantly instead of after the browser's one-second wait. Kept off entirely
+        * rather than left as a fallback: two tooltips for one card is one of them arriving
+        * late, over the top of the other. */}
+      <div style={{
         fontSize: dense && !held ? TYPE.meta : TYPE.body, fontWeight: 800,
         color: ghost ? "var(--error-text)" : held ? cardColor : "var(--text-4)",
         letterSpacing: "0.02em", lineHeight: "calc(1.3 * var(--lh-scale, 1))",
@@ -510,6 +541,10 @@ export function MiniCard({ card, small = false, state, dense = false }) {
           display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
         }}>{held ? <TText>{card.title}</TText> : subline(card, name)}</div>
       )}
+      {/* Wrapped at 300px so a long "Select ONE of the following CHEM course sequences:"
+        * becomes two readable lines rather than one strip running off the viewport —
+        * `HoverCard` stays on a single line unless given a `maxWidth`. */}
+      {hover && full && <HoverCard rect={hover} maxWidth={300}>{full}</HoverCard>}
     </div>
   );
 }
