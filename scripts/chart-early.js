@@ -129,6 +129,10 @@ const observed = existsSync(orderFile)
 const per = Array.from({ length: EARLY_TERMS }, () => (
   { judged: 0, agree: 0, late1: 0, late2: 0, early: 0, missing: 0 }));
 let generated = 0, refused = 0, relaxed = 0, movedTotal = 0, unplacedTotal = 0;
+// Cells repaired PAST the window and fixed there — see the note at the increment.
+let escaped = 0;
+const escapedBy = new Map();
+const escapedEx = [];
 const worst = [];
 
 for (const p of PROGRAMS) {
@@ -149,6 +153,19 @@ for (const p of PROGRAMS) {
   if ((out.report?.relaxed ?? []).includes("department-early-terms")) relaxed += 1;
   movedTotal += out.report?.earlyTerms?.moves?.length ?? 0;
   unplacedTotal += out.report?.earlyTerms?.unplaced?.length ?? 0;
+  // ── Does anything get FIXED outside the window? ───────────────────
+  //
+  // The stated rule is "semesters 1-4 are the department's, 5 on are CHART's", and repair
+  // is the one thing that could quietly break it: it slides a course later until the term
+  // works, and nothing in it stops at the window edge. A cell adopted from term 2 that has
+  // to move three times is then pinned to a unit domain in CHART's own territory.
+  for (const m of (out.report?.earlyTerms?.moves ?? [])) {
+    if (m.to >= EARLY_TERMS) {
+      escaped += 1;
+      escapedBy.set(m.to, (escapedBy.get(m.to) ?? 0) + 1);
+      if (escapedEx.length < 6) escapedEx.push(`${p.key}: ${m.course} ${m.from}->${m.to}`);
+    }
+  }
 
   const ours = studyTermsOf(out.plan.plans[0]);
   const theirs = studyTermsOf(p.variant);
@@ -197,7 +214,14 @@ console.log(`\nCHART early terms — ${PROGRAMS.length} programs, `
   + `${generated} generated, ${refused} refused`
   + (has("--off") ? "   [department's arrangement OFF]" : ""));
 console.log(`${relaxed} plans fell back to CHART's own arrangement · `
-  + `${movedTotal} courses repaired · ${unplacedTotal} left to the search\n`);
+  + `${movedTotal} courses repaired · ${unplacedTotal} left to the search`);
+console.log(`${escaped} courses were fixed OUTSIDE the ${EARLY_TERMS}-term window`
+  + (escaped
+    ? ` — at ${[...escapedBy.entries()].sort((a, b) => a[0] - b[0])
+        .map(([t, n]) => `term ${t + 1}: ${n}`).join(", ")}`
+    : " (the window is airtight)") + "\n");
+for (const e of escapedEx) console.log(`    ${e}`);
+if (escapedEx.length) console.log("");
 console.log("  term   judged    agree    late1    late2+   missing");
 per.forEach((b, i) => {
   console.log(`   ${i + 1}   ${String(b.judged).padStart(6)}   ${pct(b.agree, b.judged).padStart(6)}`

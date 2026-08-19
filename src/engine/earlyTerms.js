@@ -226,7 +226,7 @@ function answerableGroup(cell, offers) {
  * department stacked in one term, each requiring the last, come out in three consecutive
  * terms. Monotone — a term only ever moves later — so it converges and cannot cycle.
  */
-function repair(intended, plans, precedence, capOf) {
+function repair(intended, plans, precedence, capOf, through = EARLY_TERMS) {
   const byId = new Map(plans.map(p => [p.cell.id, p]));
   const domainOf = new Map(plans.map(p => [p.cell.id, [...p.domain].sort((a, b) => a - b)]));
   const shOf = (id) => byId.get(id)?.cell?.sh ?? 0;
@@ -277,7 +277,18 @@ function repair(intended, plans, precedence, capOf) {
         const cap = capOf ? capOf(t) : Infinity;
         return (load.get(t) ?? 0) + sh <= cap + 0.01;
       };
-      const legal = (domainOf.get(id) ?? []).filter(t => t >= floor);
+      // ── Repair may not leave the WINDOW ───────────────────────────
+      //
+      // Bounded above as well as below, and the upper bound is the whole point of the rule.
+      // Sliding is unbounded on its own — a course adopted in semester 2 that cannot legally
+      // sit there would slide to semester 6 and be FIXED there, which is us pinning a cell in
+      // the half of the plan we said belongs to CHART. Measured before this bound existed:
+      // 40 courses across the corpus, 37 in semester 5 and 3 in semester 6.
+      //
+      // Past the window we have strictly less information than the search does — we know
+      // only about the cells we adopted, it knows the whole arrangement — so the honest move
+      // is to hand the course back rather than to guess with less.
+      const legal = (domainOf.get(id) ?? []).filter(t => t >= floor && t < through);
       // Room first. A term that is legal but already at its registration cap is a term the
       // student cannot actually add this course to, so it is no more usable than one the
       // course is not offered in.
@@ -288,9 +299,10 @@ function repair(intended, plans, precedence, capOf) {
         because = legal[0] === at ? MOVED_AVAILABILITY : MOVED_CAPACITY;
       }
       if (at == null) {
-        // Nothing this side of the plan's end has both legality and room. Hand it back to
-        // the search, which sees the whole arrangement and is the right thing to resolve a
-        // capacity problem — this module only ever knows about the cells it fixed.
+        // No term inside the window has both legality and room. Hand it back to the search,
+        // which sees the whole arrangement and is the right thing to resolve both a capacity
+        // problem and a course that belongs past the window — this module only ever knows
+        // about the cells it fixed.
         unplaced.push({ cell: id, from: intended.get(id) });
         placed.delete(id);
         moved = true;
@@ -368,7 +380,7 @@ export function adoptEarlyTerms({
   const effectiveCap = capOf ? ((t) => (t === 0 ? cap0 : capOf(t))) : null;
 
   const { placed, unplaced, reasons, load } =
-    repair(intended, plans, precedence, effectiveCap);
+    repair(intended, plans, precedence, effectiveCap, through);
   const moves = [];
   for (const [id, at] of placed) {
     const from = intended.get(id);

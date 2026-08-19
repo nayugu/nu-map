@@ -161,6 +161,15 @@ dropped cell returns to the general search, whose measured bias on exactly these
 is late — so a first-year course published in an unavailable term would be "safely"
 relocated to the fourth year.
 
+**Repair is bounded above as well as below, and the upper bound is the rule itself.**
+Sliding is unbounded on its own, so a course adopted in semester 2 whose only legal terms
+are 6 and 7 was slid there and *fixed* — pinning a cell in the half of the plan that
+belongs to CHART. Measured before the bound existed: **40 courses** across the corpus, 37
+in semester 5 and 3 in semester 6, including `CS 2800` in Computer Science and Mathematics.
+Past the window this module has strictly *less* information than the search — it knows only
+the cells it adopted, the search knows the whole arrangement — so a course that cannot fit
+inside the window is handed back rather than guessed at with less.
+
 **General electives are never fixed.** They are the search's slack, and holding them still
 is what would turn a heavy published term into a refusal.
 

@@ -186,6 +186,42 @@ test("early › a chain stacked in one term comes out in consecutive terms", () 
   assert.deepEqual([placed.get("a"), placed.get("b"), placed.get("c")], [0, 1, 2]);
 });
 
+test("early › repair may not slide a course OUT of the window", () => {
+  // The rule's other half, and the one that leaked. Sliding is unbounded on its own, so a
+  // course adopted in term 1 whose only legal terms are 5 and 6 was slid there and FIXED —
+  // pinning a cell in the half of the plan that belongs to CHART. Measured before this
+  // bound: 40 courses across the corpus, 37 in semester 5 and 3 in semester 6.
+  const shape = shapeOf(4);
+  const plan = planOf([[], ["A"]]);
+  const plans = [named("a", ["A"], [5, 6])];
+  const { placed, unplaced } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC });
+  assert.equal(placed.size, 0, "term 5 is CHART's, so nothing may be fixed there");
+  assert.deepEqual(unplaced, [{ cell: "a", from: 1 }]);
+});
+
+test("early › EVERY fixed cell lands inside the window, whatever repair did", () => {
+  // The property stated directly, over a shape where availability, precedence and capacity
+  // all push at once. `EARLY_TERMS` is the boundary of this module's authority.
+  const shape = shapeOf(5);
+  const plan = planOf([["A", "B"], ["C"], ["D"], ["E"]]);
+  const plans = [
+    sized("a", ["A"], 9, [0, 1, 2, 3, 4, 5]), sized("b", ["B"], 9, [2, 3, 4, 5]),
+    sized("c", ["C"], 9, [3, 4, 5]), sized("d", ["D"], 9, [4, 5]),
+    sized("e", ["E"], 9, [5, 6]),
+  ];
+  const precedence = {
+    before: new Map([["b", new Set(["a"])], ["c", new Set(["b"])], ["d", new Set(["c"])]]),
+    concurrentOk: new Set(),
+  };
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence, capOf: () => 12,
+  });
+  for (const [id, at] of placed) {
+    assert.ok(at < EARLY_TERMS, `${id} was fixed at term ${at}, outside the window`);
+  }
+});
+
 test("early › a course with no legal term at or after is handed back, never forced", () => {
   const shape = shapeOf(3);
   const plan = planOf([[], ["A"]]);            // department says term 1
