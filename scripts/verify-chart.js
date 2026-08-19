@@ -166,6 +166,7 @@ let thin = 0, fullTerms = 0, emptyFull = 0;
 const Q = {
   clumped: 0, studyTerms: 0, fillerCount: 0, fillerPositionSum: 0,
   loadSpreadSum: 0, longestEmptyRun: 0, plansWithGap: 0,
+  summerCount: 0, summerLopsided: 0, summerWorstGap: 0,
   choicePairs: 0, choiceCollapsed: 0, choiceTight: 0, plansWithForcedChoice: 0,
   choiceP10s: [],
   unguidedMax: 0, unguidedOver2: 0, unguidedOver3: 0,
@@ -296,6 +297,9 @@ for (const d of degrees) {
     Q.fillerCount += g.quality.fillerCount;
     Q.fillerPositionSum += g.quality.fillerPositionSum;
     Q.loadSpreadSum += g.quality.loadSpread;
+    Q.summerCount += g.quality.summerCount;
+    Q.summerLopsided += g.quality.summerLopsided;
+    Q.summerWorstGap = Math.max(Q.summerWorstGap, g.quality.summerWorstGap);
     Q.longestEmptyRun = Math.max(Q.longestEmptyRun, g.quality.longestEmptyRun);
     Q.plansWithGap += g.quality.longestEmptyRun > 0 ? 1 : 0;
     Q.choicePairs += g.quality.choicePairs;
@@ -362,6 +366,9 @@ console.log(`  mean placeholder position                `
   + `                    departments: 0.601`);
 console.log(`  mean credit spread within a plan         `
   + `${(Q.loadSpreadSum / Math.max(1, made)).toFixed(1)} SH`);
+console.log(`  summers lopsided by a whole COURSE       `
+  + `${Q.summerLopsided} of ${Q.summerCount} (${pct(Q.summerLopsided, Q.summerCount)})`
+  + `   worst gap ${Q.summerWorstGap} SH`);
 console.log(`  plans with an empty-semester GAP         ${Q.plansWithGap} of ${made} `
   + `(${pct(Q.plansWithGap, made)})   longest run ${Q.longestEmptyRun} terms`);
 // ── A reservation that is fillable but not choosable ────────────────

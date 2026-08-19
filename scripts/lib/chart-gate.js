@@ -86,6 +86,40 @@ export const isUnguided = (text) => {
 };
 
 /**
+ * The two halves of each summer, paired and compared.
+ *
+ * A summer is two consecutive HALF rows. Pairing them positionally rather than by session
+ * name is deliberate: the catalog writes "Summer 1"/"Summer 2" and the UI says "Summer A"/
+ * "Summer B", and a matcher keyed on either wording breaks the moment the other is passed in.
+ * Adjacency in `rows` is the fact; the names are presentation.
+ *
+ * ── The threshold is a whole COURSE, not any difference ─────────────
+ *
+ * Counting every unequal summer measured 85.7% and meant nothing: a 4 SH half beside a 5 SH
+ * half differs, and no student would call that lopsided. The question worth asking is whether
+ * one session carries a whole course more than the other, so the bar is `realCourseSH`. The
+ * raw worst gap is reported beside it, because a single 9 SH gap is a different problem from
+ * a hundred 4 SH ones and one number cannot say which is happening.
+ */
+function summerPairs(rows, realCourseSH) {
+  const bar = realCourseSH > 0 ? realCourseSH : 4;
+  let summerCount = 0, summerLopsided = 0, summerWorstGap = 0;
+  for (let i = 0; i + 1 < rows.length; i += 1) {
+    const a = rows[i], b = rows[i + 1];
+    if (!a.half || !b.half) continue;
+    // A pair with nothing in EITHER half is not a lopsided summer, it is an unused one —
+    // that is `emptyFull`'s business and counting it here would double-report it.
+    if (a.cells === 0 && b.cells === 0) { i += 1; continue; }
+    summerCount += 1;
+    const gap = Math.abs((a.sh ?? 0) - (b.sh ?? 0));
+    if (gap >= bar - 0.01) summerLopsided += 1;
+    if (gap > summerWorstGap) summerWorstGap = gap;
+    i += 1;                       // consumed as a pair; a third half row would not be a summer
+  }
+  return { summerCount, summerLopsided, summerWorstGap };
+}
+
+/**
  * @param {object} args
  * @param {object} args.plan          one entry of `plans[]` from a generated document
  * @param {Record<string,object>} args.courseMap
@@ -336,6 +370,18 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
     // legal on every term cap can still be 19 SH then 8 SH, which no student would choose.
     loadSpread: studyRows.length
       ? Math.max(...studyRows.map(r => r.sh)) - Math.min(...studyRows.map(r => r.sh)) : 0,
+    // ── The two halves of ONE summer ─────────────────────────────────
+    //
+    // `termCapacity` sizes each half independently — 19 × 0.5 = 9.5 apiece — so nothing
+    // relates a summer's two sessions to each other and one can come out 5 SH against 9 SH.
+    // That is legal on every rule we have and reads as a lopsided year.
+    //
+    // Counted rather than fixed, deliberately. The obvious remedy is to balance the halves,
+    // and it is not obviously right: courses are not interchangeable between sessions, so a
+    // rule that evens the credits could move a course into a session it is not offered in.
+    // Before any of that is worth building, the size of the problem has to be a number —
+    // which it never has been. This is that number.
+    ...summerPairs(rows, realCourseSH),
     // ── How many cells a term leaves UNSAID ──────────────────────────
     //
     // The corpus bound, over 5,978 published undergraduate study terms: cells that name
