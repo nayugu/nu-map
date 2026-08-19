@@ -152,6 +152,11 @@ const degrees = Number.isFinite(LIMIT) ? all.slice(0, LIMIT) : all;
 // Fidelity per early term: how many published courses we placed, and how many in the term
 // the department named. Indexed by position in the published plan's study-term list.
 const fid = Array.from({ length: EARLY_TERMS }, () => ({ placed: 0, same: 0 }));
+// Credit weight we put into a published term against what the department printed there.
+// Fidelity cannot see this: it counts a course landing in the right term as a success even
+// when the department only asked for one course from the row it came out of.
+const bloat = Array.from({ length: EARLY_TERMS },
+  () => ({ terms: 0, over: 0, sh: 0, worst: 0, worstAt: null }));
 const moveReasons = new Map();
 const rows = [];
 const overPublished = [], overHeadroom = [], undisclosed = [];
@@ -217,6 +222,7 @@ for (const d of degrees) {
     // ── Fidelity ──────────────────────────────────────────────────────
     if (variant) {
       withPublished += 1;
+      const genByKey = new Map(gen.map(t => [t.key, t]));
       pub.slice(0, EARLY_TERMS).forEach((pt, i) => {
         for (const id of pt.offers) {
           const at = genAt.get(id);
@@ -224,6 +230,23 @@ for (const d of degrees) {
           fid[i].placed += 1;
           if (at === pt.key) fid[i].same += 1;
         }
+        // ── Did we put MORE in this term than the department printed? ──
+        //
+        // The check fidelity cannot make. A published row offering three courses says WHEN
+        // one requirement happens, not that all three belong there — but `earlyTermsOf`
+        // offers every option of every row, so a degree separately requiring two of them
+        // pins both. Fidelity SCORES that as 2 of 2 correct, which is why it has to be
+        // measured as credit weight instead: the department's own printed SH for the term
+        // is the number they published, and ours should not exceed it.
+        //
+        // Matched by calendar key, never by position — a published plan may leave a summer
+        // blank that the shape keeps, so the i-th study term of each is not the same term.
+        const gt = genByKey.get(pt.key);
+        if (!gt || !(pt.sh > 0)) return;
+        const d = gt.sh - pt.sh;
+        bloat[i].terms += 1;
+        if (d > 0.01) { bloat[i].over += 1; bloat[i].sh += d; }
+        if (d > bloat[i].worst) { bloat[i].worst = d; bloat[i].worstAt = `${label} ${pt.label}`; }
       });
     }
   });
@@ -241,6 +264,12 @@ fid.forEach((f, i) => {
 });
 const tot = fid.reduce((a, f) => ({ same: a.same + f.same, placed: a.placed + f.placed }), { same: 0, placed: 0 });
 console.log(`    ALL 1–4  ${String(tot.same).padStart(5)} / ${String(tot.placed).padStart(5)} placed   ${pct(tot.same, tot.placed)}`);
+
+console.log(`\n  ── credit weight vs what the department PRINTED in that term ──`);
+bloat.forEach((b, i) => {
+  console.log(`    term ${i + 1}   ${String(b.over).padStart(4)} of ${String(b.terms).padStart(4)} terms heavier  ${pct(b.over, b.terms)}`
+    + `   +${b.sh.toFixed(0)} SH total, worst +${b.worst} (${b.worstAt ?? "—"})`);
+});
 
 console.log(`\n  ── corrections applied (why a course left its published term) ──`);
 if (!moveReasons.size) console.log("    none");
