@@ -124,6 +124,34 @@ const prints = {};
 const degrees = Number.isFinite(LIMIT) ? degreePrograms().slice(0, LIMIT) : degreePrograms();
 const violations = [];
 const refusals = new Map();
+/** `fails-hard-criteria` split by the criterion that actually failed. See `criteriaKinds`. */
+const criteria = new Map();
+
+/**
+ * The distinct kinds of hard-criteria failure one refusal represents.
+ *
+ * The criterion NUMBER is not enough on its own: criterion 1 covers both "this semester is
+ * empty" and "this term carries fewer than four real courses", which are different defects
+ * with different fixes and were measured at 59 and 0 respectively. So the empty case is
+ * split out by the detail text `criteriaFailures` writes for it.
+ *
+ * Returns a Set, so a plan failing five terms the same way counts once.
+ */
+function criteriaKinds(refused) {
+  const out = new Set();
+  if (refused?.reason !== "fails-hard-criteria") return out;
+  const failures = refused.data?.failures ?? [];
+  for (const f of failures) {
+    if (/is empty/.test(f?.detail ?? "")) out.add("1: a semester with nothing in it");
+    else if (f?.criterion === 1) out.add("1: fewer than four real courses");
+    else if (f?.criterion === 3) out.add("3: nothing but unlabelled electives");
+    else out.add(`${f?.criterion ?? "?"}: unclassified`);
+  }
+  // `data.failures` is capped at four entries by the engine, so a refusal that recorded none
+  // is possible in principle and must not vanish silently into a zero.
+  if (!failures.length) out.add("(no failure detail recorded)");
+  return out;
+}
 const gave = new Map();
 let shapes = 0, made = 0, threw = 0, relaxed = 0;
 let thin = 0, fullTerms = 0, emptyFull = 0;
@@ -212,6 +240,21 @@ for (const d of degrees) {
     }
     if (out.refused) {
       refusals.set(out.refused.reason, (refusals.get(out.refused.reason) ?? 0) + 1);
+      // ── WHICH hard criterion, not just that one failed ────────────────
+      //
+      // `fails-hard-criteria` is the second-largest refusal class and said nothing about
+      // itself: 96 plans arrived as one line reading "broke a hard requirement". Two
+      // distinct defects were hiding in it — 59 plans that cannot fill a semester and 59
+      // whose term is nothing but unlabelled electives — and neither was visible until the
+      // bucket was split by hand. A count that cannot name what it counts sends the next
+      // reader to the wrong file.
+      //
+      // Counted per DISTINCT criterion per plan, because a plan failing three terms the same
+      // way is one defect and not three; the totals therefore exceed the refusal count where
+      // a plan fails on more than one kind, which is stated in the printout.
+      for (const kind of criteriaKinds(out.refused)) {
+        criteria.set(kind, (criteria.get(kind) ?? 0) + 1);
+      }
       return;
     }
     made++;
@@ -337,6 +380,15 @@ if (Q.choicePairs) {
 if (refusals.size) {
   console.log(`  refusals: ${[...refusals.entries()].sort((a, b) => b[1] - a[1])
     .map(([k, n]) => `${k} ${n}`).join(", ")}`);
+}
+if (criteria.size) {
+  // Printed on its own lines rather than inline: this is the largest refusal class that is
+  // actionable, and it was invisible for as long as it was one word on a shared line.
+  console.log(`    …of which fails-hard-criteria, by criterion `
+    + `(a plan may fail on more than one):`);
+  for (const [k, n] of [...criteria.entries()].sort((a, b) => b[1] - a[1])) {
+    console.log(`      ${String(n).padStart(4)}  ${k}`);
+  }
 }
 
 if (FINGERPRINT) {
