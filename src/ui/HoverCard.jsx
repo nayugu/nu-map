@@ -59,3 +59,39 @@ export default function HoverCard({ children, rect, maxWidth }) {
     document.body
   );
 }
+
+/**
+ * A placeholder card, uncropped: its NAME on one line and the courses that answer it below.
+ *
+ * ── Why two lines and not an em-dash ────────────────────────────────
+ *
+ * They are different kinds of thing. "Introductory Physics" is what the requirement is
+ * called; "(PHYS 1161 and PHYS 1162 and PHYS 1163) or (…)" is what satisfies it. Joined by
+ * a dash they read as one sentence, and at this width the join also wrapped the title
+ * mid-phrase — "Introductory Physics — (PHYS 1161 and" — so the name was never legible as a
+ * unit, which is the one thing a reader scans for first.
+ *
+ * Stacked, it also matches the CARD, which already puts the name above its detail line. The
+ * hover is then the same object with nothing clipped, rather than a second way of saying it.
+ *
+ * One shared component because both the planner card and the preview card draw this, and
+ * two copies of a two-line layout is two copies to drift.
+ */
+export function CardHover({ rect, title, detail, maxWidth = 300 }) {
+  // A colon, because it says the next line ANSWERS this one — which a dash did not.
+  //
+  // Not appended blindly: plenty of these titles are already a sentence ending in one.
+  // "Select one of the following:" is the commonest placeholder wording in the corpus, and
+  // "Select one of the following::" is the kind of detail that makes a tool look unfinished.
+  const head = !detail ? title
+    : /[:：]\s*$/.test(String(title ?? "")) ? title
+    : `${title}:`;
+  return (
+    <HoverCard rect={rect} maxWidth={maxWidth}>
+      <div style={{ fontWeight: 600, color: "var(--text-1)" }}>{head}</div>
+      {!!detail && (
+        <div style={{ marginTop: 3, color: "var(--text-4)", fontSize: 12.5 }}>{detail}</div>
+      )}
+    </HoverCard>
+  );
+}

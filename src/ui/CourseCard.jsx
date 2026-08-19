@@ -13,7 +13,7 @@ import { baseId, takesUsed } from "../core/repeatInstances.js";
 import { courseInk } from "../core/courseModel.js";
 import { reservationNameSource, reservationSubline, optionGroupsText, cardOptionGroups } from "../core/reservations.js";
 import GradePopover from "./GradePopover.jsx";
-import HoverCard from "./HoverCard.jsx";
+import { CardHover } from "./HoverCard.jsx";
 import { takeConsumesSlot } from "../core/gradeSystem.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTheme }    from "../context/ThemeContext.jsx";
@@ -180,10 +180,12 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   // all. Falls back to the card's wording for a placeholder with no options to expand, which
   // is most of them: a free elective names nothing.
   const optionsText = course.isReservation ? optionGroupsText(cardOptionGroups(course)) : "";
-  const fullName = course.isReservation
-    ? [title || course.code, optionsText || reservationSubline(course, title)]
-        .map(s => (s ?? "").trim()).filter(Boolean).join(" — ")
-    : null;
+  // Kept as two fields rather than one joined string: `CardHover` stacks them, the name on
+  // its own line and what answers it below.
+  const hoverTitle = course.isReservation ? (title || course.code || "").trim() : "";
+  const hoverDetail = course.isReservation
+    ? (optionsText || reservationSubline(course, title) || "").trim() : "";
+  const fullName = hoverTitle || hoverDetail || null;
   const nameHoverProps = fullName ? {
     onMouseEnter: (e) => setNameHov(e.currentTarget.getBoundingClientRect()),
     onMouseLeave: () => setNameHov(null),
@@ -519,7 +521,8 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           {course.isReservation ? (title || course.code) : course.code}
         </span>
         {nameHov && fullName && (
-          <HoverCard rect={nameHov} maxWidth={280}>{fullName}</HoverCard>
+          <CardHover rect={nameHov} title={hoverTitle || hoverDetail}
+                     detail={hoverTitle ? hoverDetail : ""} maxWidth={280} />
         )}
         {course.isCps && <span style={{ fontWeight: 500, fontSize: 8, color: "var(--text-4)", flexShrink: 0 }}>· CPS</span>}
         {multiTake && (

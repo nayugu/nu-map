@@ -44,7 +44,7 @@ import { TYPE_BG }            from "../core/constants.js";
 import { cardsIn, loadIn }    from "../core/semesterView.js";
 import { useCourseInk }       from "./useSubjectInk.js";
 import { reservationNameSource, reservationSubline, optionGroupsText, cardOptionGroups } from "../core/reservations.js";
-import HoverCard              from "./HoverCard.jsx";
+import { CardHover }          from "./HoverCard.jsx";
 
 /**
  * ── Type scale ─────────────────────────────────────────────────────
@@ -466,8 +466,10 @@ export function MiniCard({ card, small = false, state, dense = false }) {
   // `optionGroupsText`. Falls back to the card's wording when there is nothing to expand.
   const [hover, setHover] = useState(null);
   const opts = held ? "" : optionGroupsText(cardOptionGroups(card));
-  const full = held ? null : [name ?? card.title ?? card.code, opts || subline(card, name)]
-    .map(s => (s ?? "").trim()).filter(Boolean).join(" — ");
+  // Two fields, not one joined string: `CardHover` stacks the name over what answers it.
+  const hoverTitle  = held ? "" : String(name ?? card.title ?? card.code ?? "").trim();
+  const hoverDetail = held ? "" : String(opts || subline(card, name) || "").trim();
+  const full = held ? null : (hoverTitle || hoverDetail || null);
 
   return (
     <div
@@ -544,7 +546,10 @@ export function MiniCard({ card, small = false, state, dense = false }) {
       {/* Wrapped at 300px so a long "Select ONE of the following CHEM course sequences:"
         * becomes two readable lines rather than one strip running off the viewport —
         * `HoverCard` stays on a single line unless given a `maxWidth`. */}
-      {hover && full && <HoverCard rect={hover} maxWidth={300}>{full}</HoverCard>}
+      {hover && full && (
+        <CardHover rect={hover} title={hoverTitle || hoverDetail}
+                   detail={hoverTitle ? hoverDetail : ""} maxWidth={300} />
+      )}
     </div>
   );
 }
