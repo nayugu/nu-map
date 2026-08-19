@@ -11,8 +11,14 @@ Two sections matter as much as the defect list and are easy to skip:
 re-hunts them, and **§Dead ends** records fixes that were built, measured, and
 removed.
 
-Corpus figures come from `node scripts/verify-chart.js`: **774 plans generated of
-1,031 shapes (75.1%)**, 257 refused, 0 thrown.
+Corpus figures come from `node scripts/verify-chart.js`. The audit's own baseline was
+**774 of 1,031 shapes (75.1%)**, 257 refused, 0 thrown. As of **2026-08-19** the corpus
+is larger and the figure is **787 of 1,078 (73.0%)**, 291 refused, 0 thrown — the rate
+fell because the denominator grew, not because fewer plans are produced.
+
+⚠ Individual entries below quote whichever corpus was current when they were written.
+Where an entry has been re-measured since, it says so in a blockquote; where it does
+not, treat its numbers as historical rather than current.
 
 > **Worked through on 2026-08-13, later the same day.** Defects 1–4 are closed, and
 > one of them was closed by finding it did not exist. The headline change: the
@@ -297,6 +303,22 @@ Root cause unknown after **two** attempts, both measured and reverted: a propaga
 (−7 plans) and a graduate level-target (empty 355 → 364, 157 plans moved). Do not
 retry either without a new hypothesis.
 
+> **Re-scoped 2026-08-19 — this is NOT closed, and the headline number is misleading.**
+> `verify-chart` now reports `EMPTY full terms 0` and `plans with an empty-semester GAP
+> 0 of 787`, which reads like a fix and is not one. An empty term is criterion 1, so a
+> plan with one is **refused** rather than emitted: the defect moved from shipped plans
+> into the refusal pile, where the new criterion breakdown finds **58 plans refused for
+> "a semester with nothing in it"**.
+>
+> That is a genuine improvement — 269 of 774 shipped with a hole, now 0 do — and it is
+> a different bargain, not a solved problem: those 58 degrees produce no plan at all.
+> The underlying inability to fill a semester is untouched, and the two prior attempts
+> above still stand as warnings.
+>
+> Anyone picking this up should start from those 58, which are now nameable for the
+> first time. 22 of them also fail criterion 3 (§below), so the two overlap and may
+> share a cause.
+
 ### 7. Requirement clumping, 10× the departments
 
 **3+ cells of one requirement in a term: 347 of 5,000 terms (6.9%)** against a
@@ -313,7 +335,46 @@ come out **Summer A 5 SH against Summer B 9 SH** with nothing balancing them. A
 half-term also carries `maxSlots` 2, so the preview draws the shortfall as empty
 dashed cards, which is correct rendering of a lopsided plan.
 
-### 9. Coverage: 257 refusals
+> **Now measured, 2026-08-19.** `chart-gate` counts summer pairs every run and
+> `verify-chart` prints them, so this can no longer drift unobserved.
+>
+> The first threshold — *any* difference between the halves — read **85.7%** and was
+> useless: a 4 SH half beside a 5 SH half differs and nobody would call it lopsided.
+> At a whole `realCourseSH` course the figure is **77.1% of summers, worst gap 9 SH**.
+> Still high, and now a number rather than an anecdote.
+>
+> **Deliberately not fixed.** Balancing the halves is the obvious remedy and is not
+> obviously right: courses are not interchangeable between sessions, so a rule that
+> evens the credits can move a course into a session it is not offered in. Anyone
+> taking this on should check that first — the constraint is availability, not
+> arithmetic, and the metric above is what will say whether a fix helped.
+
+### 9. Coverage: 291 refusals
+
+> **Re-measured 2026-08-19**, and `fails-hard-criteria` is no longer one opaque word —
+> `verify-chart` now splits it by criterion (see `criteriaKinds`).
+>
+> ```
+> mostly-unlabelled 126    fails-hard-criteria 95    over-subscribed 19
+> cell-has-no-legal-term 13  no-candidate 12         concentration-unfillable 9
+> search-budget-exhausted 8  named-prereq 5          does-not-fit 2   term-at-credit-cap 2
+>
+>   fails-hard-criteria, by criterion (a plan may fail on more than one):
+>     58  a semester with nothing in it
+>     58  nothing but unlabelled electives
+>      0  fewer than four real courses
+> ```
+>
+> Two things follow. `search-budget-exhausted` fell **64 → 8**, which is the fourth
+> independent sign that the time budget is not the binding constraint here. And the
+> whole of `fails-hard-criteria` is two defects, both about a term we could not fill —
+> not the four-course bar, which contributes **zero**. See §6, which those 58 empty-term
+> refusals belong to.
+>
+> `mostly-unlabelled` at 126 is still the largest block and is **not addressable** —
+> see §Not defects.
+
+### (historical) 257 refusals
 
 ```
 mostly-unlabelled 105    search-budget-exhausted 64    full-term-cannot-reach-four 16
@@ -420,6 +481,27 @@ property needs a stratified sample; a uniform one reports "clean" on tails.**
 
 ## Not defects — do not re-hunt
 
+- **`mostly-unlabelled` is not a parser failure.** Measured 2026-08-19 over the 106
+  programs it refuses (45 graduate, 61 undergraduate): **`tablesUnaccounted > 0` in 0,
+  `tablesConsumed < tablesPresent` in 0, `unconsumedHeadings > 0` in 0**, and the
+  verifier calls 93 of them `verified`. We are not dropping content — the pages
+  publish a median of **4** requirement sections for a whole degree, and the thinnest
+  publish **one**: `cultural_anthropology_ba` states 1 section against 128 SH, and the
+  advanced-entry PhDs state 1 against 16. The 0.5 threshold's own knee analysis
+  (§`MAX_DERIVED_GE_SHARE`) already said this and the parser signals now confirm it
+  independently. **59 of the 106 publish a sample plan**, and `SamplePlanOffer`'s
+  source toggle shows it when CHART refuses, so those students are not left with
+  nothing. Do not go looking for a parsing bug here; the remedy, if one is ever
+  wanted, is a product decision about what to show for a degree the catalog barely
+  specifies.
+- **A COOP course is not a requirement cell.** 12 programs name one (`COOP 3945`,
+  `3946`, `3948`), and in every case it appears only in `metadata.planOfStudyCourses`
+  — never in a requirement section. Generated across all 12 (15 shapes), the COOP cell
+  is placed in **0**. Co-op is modelled as `work: true` terms in the shape, which do
+  exist, and `verify-majors` deliberately excludes these courses from its
+  plan-witness check. This is why §16's symptom cannot currently reproduce: there is
+  no cell to place, so the `firstAllowed` bound described there would constrain
+  nothing. Re-check this before building it.
 - **`wideAt` does not null a cell's candidate list.** It truncates the per-season
   `seasonOk` lists only (`src/engine/domains.js`). `candidates === null` means one
   thing: the cell admits any course. The conflation was found and deliberately fixed
