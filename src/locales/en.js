@@ -472,6 +472,9 @@ export const strings = {
   "chart.deriv.pass.reclaim-from-filler": "{title} moved from {from} to {to}, taking an early semester back from a free elective.",
   "chart.deriv.pass.availability-swap": "{title} moved from {from} to {to}, into a season it actually runs in.",
   "chart.deriv.pass.threshold-repair": "{title} moved from {from} to {to}, to clear a bar the plan was missing.",
+  // A pass moves as many courses as it needs to and they all move at once — most often because
+  // the move is an exchange, and half of one would put two courses in the same seat.
+  "chart.deriv.pass.together": "{n} other course(s) moved in the same step, because the exchange only works whole: {list}.",
 
   "chart.deriv.tree.h":       "The search itself",
   "chart.deriv.tree.note":    "One level per card, one branch per term tried. A short stub is a term rejected on the spot; the line that carries on is the term it kept. Hover any point.",

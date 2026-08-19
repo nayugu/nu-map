@@ -387,6 +387,7 @@ export const strings = {
   "chart.deriv.pass.reclaim-from-filler": "{title} est passé de {from} à {to}, reprenant un semestre du début à un électif libre.",
   "chart.deriv.pass.availability-swap": "{title} est passé de {from} à {to}, vers une saison où il est réellement donné.",
   "chart.deriv.pass.threshold-repair": "{title} est passé de {from} à {to}, pour atteindre un seuil qui manquait au plan.",
+  "chart.deriv.pass.together": "{n} autre(s) cours ont bougé dans la même étape, car l'échange ne fonctionne qu'en entier : {list}.",
 
   "chart.deriv.tree.h": "La recherche elle-même",
   "chart.deriv.tree.note": "Un niveau par carte, une branche par semestre essayé. Un moignon court est un semestre rejeté sur le champ ; la ligne qui continue est le semestre retenu. Survolez n’importe quel point.",

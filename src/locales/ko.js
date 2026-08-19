@@ -387,6 +387,7 @@ export const strings = {
   "chart.deriv.pass.reclaim-from-filler": "{title}을(를) {from}에서 {to}(으)로 옮겨, 이른 학기를 자유 선택 과목에서 되찾았습니다.",
   "chart.deriv.pass.availability-swap": "{title}을(를) {from}에서 {to}(으)로 옮겨, 실제로 열리는 계절에 두었습니다.",
   "chart.deriv.pass.threshold-repair": "{title}을(를) {from}에서 {to}(으)로 옮겨, 플랜에 모자라던 기준을 채웠습니다.",
+  "chart.deriv.pass.together": "같은 단계에서 다른 {n}개 과목도 함께 움직였습니다. 맞바꾸기는 통째로만 성립하기 때문입니다: {list}.",
 
   "chart.deriv.tree.h": "탐색 그 자체",
   "chart.deriv.tree.note": "카드 한 장에 한 단계, 시도한 학기 하나에 한 분기입니다. 짧게 끊긴 것은 그 자리에서 기각된 학기이고, 아래로 이어지는 선이 택한 학기입니다. 어느 점에든 커서를 올려 보세요.",

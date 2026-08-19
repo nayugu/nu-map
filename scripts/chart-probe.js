@@ -33,7 +33,8 @@ import { fileURLToPath } from "node:url";
 import { generatePlan, createTrace } from "../src/engine/index.js";
 import { deriveModel } from "../src/core/derivation/reduce.js";
 import { searchTree } from "../src/core/derivation/tree.js";
-import { buildSteps, orderWhy, orderReason } from "../src/core/derivation/steps.js";
+import { buildSteps, orderWhy, orderReason, frameAt, frameCount, frameLoad }
+  from "../src/core/derivation/steps.js";
 import { buildDepthIndex } from "../src/engine/prereqDepth.js";
 import { loadCatalog } from "../src/adapters/northeastern/courseCatalog.node.js";
 import enginePorts from "../src/adapters/northeastern/enginePorts.js";
@@ -350,8 +351,7 @@ for (const lvl of ["undergraduate", "graduate"]) {
             if (!model) return null;
             const st = buildSteps(snap, model);
             if (!st) return null;
-            const rolled = new Map(st.afterSearch);
-            for (const m of st.swaps) rolled.set(m.card, m.to);
+            const rolled = frameAt(st, frameCount(st));
             const fin = new Map(st.final);
             const wrong = [];
             for (const [c, tt] of fin) {
@@ -427,13 +427,35 @@ for (const lvl of ["undergraduate", "graduate"]) {
                 if (lateSeen) earlyAfterLate += 1;
               } else if (s.term != null) lateSeen += 1;
             }
-            return { via: st.via, place: st.place.length, swaps: st.swaps.length,
+            // ── Is every FRAME a plan the engine could have held? ──────
+            //
+            // Reconciliation above is a claim about the last frame only, and for a long time it
+            // was the only claim anyone made — so the view was free to draw anything on the way
+            // there, and it did: replaying a pass's moves one at a time put 21 SH in a 19 SH
+            // semester for two frames of Physics + Music Technology, over half the corpus
+            // showing something of the kind. Every assignment either phase occupies is screened
+            // by `fitsCapacity`, so a frame above `capSH` or `slots` is a state that never was.
+            const over = [];
+            for (let k = 0; k <= frameCount(st); k++) {
+              const load = frameLoad(st, frameAt(st, k));
+              st.terms.forEach((tm, ti) => {
+                if (tm.capSH != null && load.sh[ti] > tm.capSH) {
+                  over.push(`frame ${k} ${tm.full} ${load.sh[ti]} SH > cap ${tm.capSH}`);
+                }
+                if (tm.slots != null && load.slots[ti] > tm.slots) {
+                  over.push(`frame ${k} ${tm.full} ${load.slots[ti]} slots > ${tm.slots}`);
+                }
+              });
+            }
+            return { via: st.via, place: st.place.length,
+                     moves: st.passes.reduce((n, p) => n + p.moves.length, 0),
                      final: fin.size, rolled: rolled.size,
                      wrong: wrong.slice(0, 6), wrongN: wrong.length, extra: extra.length,
+                     frames: frameCount(st) + 1, over: over.slice(0, 6), overN: over.length,
                      rank: rank.length, rankTop: top, rankTier: st.rankingTier,
                      forced, forcedAfterFree, earlyPlaced, earlyAfterLate,
                      why: [whyAt(0), whyAt(Math.floor(st.place.length / 2))],
-                     passes: [...new Set(st.swaps.map(m => m.pass))] };
+                     passes: st.passes.map(p => `${p.pass}×${p.moves.length}`) };
           })(),
           // ── What the walkthrough can actually DRAW ───────────────────
           //
@@ -631,9 +653,11 @@ if (traceMode) {
       + `  top ${v.topCause ?? "-"}`);
     console.log(`      ${v.stageKeys}`);
     if (v.steps) {
-      console.log(`      steps via=${v.steps.via} place=${v.steps.place} swaps=${v.steps.swaps}`
+      console.log(`      steps via=${v.steps.via} place=${v.steps.place} moves=${v.steps.moves}`
         + ` final=${v.steps.final} rolled=${v.steps.rolled} WRONG=${v.steps.wrongN}`
-        + ` extra=${v.steps.extra}  passes=${v.steps.passes.join(",")}`);
+        + ` extra=${v.steps.extra}  frames=${v.steps.frames} OVER=${v.steps.overN}`
+        + `  passes=${v.steps.passes.join(",")}`);
+      for (const o of v.steps.over) console.log(`        ✗ ${o}`);
       // The ordering question, per plan: how many cells with ONE legal term were decided after
       // a cell that still had a choice, and how many first-four-semester placements happened
       // after a later semester had already been filled.

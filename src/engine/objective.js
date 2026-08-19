@@ -491,11 +491,35 @@ export function improve({
   //
   // Bounded by construction — p50 is 4 moves and the measured maximum is 18 — so the log needs
   // no cap and there is no downsampling to get wrong.
+  //
+  // ── A pass's moves are SIMULTANEOUS, and `seq` is what says so ──────
+  //
+  // The entries of one `note` call are a net DIFF, not a sequence. They have no order between
+  // them — `to` is a Map and this walks it in cell-insertion order — and applying a proper
+  // subset of them describes an assignment the pass never held. `reclaimFromFiller` is the
+  // clearest case, because every change it makes is half of an EXCHANGE: it moves a
+  // requirement earlier and the filler that was sitting there later, in one `trial` that
+  // `fitsCapacity` and `fullLegal` both screen as a whole. Take the first half alone and you
+  // get a term holding both, over the credit cap, which is exactly the state the screening
+  // exists to refuse.
+  //
+  // The walkthrough replayed the log one entry at a time and duly drew that state:
+  // `physics_and_music_with_concentration_in_music_technology_bs` showed a 21 SH first
+  // semester — five courses in a four-slot fall, 2 SH above the registration cap — for two
+  // frames, before a later entry of the SAME pass took the general elective back out.
+  //
+  // So each `note` call stamps its entries with one number. A consumer that groups by it can
+  // only ever show a boundary between passes, and every one of those is an assignment
+  // `improve` actually held. Grouping by the pass NAME would be a second, weaker derivation
+  // of the same fact: two ranked objectives can share a name, and merging them would silently
+  // drop a real checkpoint.
   const moveLog = [];
+  let seq = 0;
   const note = (pass, from, to) => {
+    seq += 1;
     for (const [id, ti] of to) {
       const was = from.get(id);
-      if (was != null && was !== ti) moveLog.push({ pass, cell: id, from: was, to: ti });
+      if (was != null && was !== ti) moveLog.push({ pass, seq, cell: id, from: was, to: ti });
     }
   };
 

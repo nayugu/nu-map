@@ -195,7 +195,7 @@ export function createTrace({ maxNodes = 200_000 } = {}) {
      * attempt and each attempt records its own permutation. Keeping the roster stable
      * is what lets the narrowing matrix and the cause matrix share row identity.
      */
-    roster(cards, terms, work = []) {
+    roster(cards, terms, work = [], caps = null) {
       // ── A second roster means a second PIPELINE, so the recording starts over ──
       //
       // `generatePlan` can run the whole thing twice: a refusal caused by breadth binding
@@ -254,8 +254,14 @@ export function createTrace({ maxNodes = 200_000 } = {}) {
         // cards exactly as the board does. Null for a reservation, which resolves to none.
         courses: c.courses ?? null,
         candidates: c.candidates ?? null,
+        // How many SLOTS the cell occupies, in the engine's own currency — `coursesInCell`,
+        // the count `termSlotCap` is compared against. Copied rather than counted from
+        // `courses` above: a choice cell resolves to no course list and still takes two slots
+        // when the longer of its branches is a corequisite pair, so counting here would let a
+        // frame overfill a term and pass the check that exists to notice.
+        slots: c.slots ?? 1,
       }));
-      termLabels = terms.map(t => ({
+      termLabels = terms.map((t, ti) => ({
         // `termLabel` is the shape's field name for the season, and reading `term` instead gave
         // every row the bare year — which is why the grid showed "Year 1" four times over.
         label: t.label ?? "", term: t.termLabel ?? t.term ?? "", weight: t.weight ?? 1,
@@ -271,6 +277,25 @@ export function createTrace({ maxNodes = 200_000 } = {}) {
         //
         // Free: ~14 terms per run, copied once in `roster()`, nowhere near the node path.
         semTypeId: t.semTypeId ?? "", yearIndex: t.yearIndex ?? null,
+        // ── What the term may HOLD, so a frame can be checked and not just believed ──
+        //
+        // Every assignment the engine occupies passes `fitsCapacity`, so no real state ever
+        // puts more than this in a term. Recording the two bounds is what turns that from an
+        // argument into a test: the walkthrough can be asserted, frame by frame, to be
+        // showing a plan the engine could have held, and a view that invents a state gets
+        // caught by arithmetic rather than by someone noticing a fat semester.
+        //
+        // Computed by the caller through `termCapacity`/`termSlotCap` rather than re-derived
+        // here — `creditCeiling` on an overloaded first semester and the student type are both
+        // the engine's, and a second derivation of a cap is how the walkthrough would come to
+        // disagree with the search about what fits.
+        //
+        // `capSH` is exact: every rung and every pass builds the credit cap the same way.
+        // `slots` is the LOOSEST of the several the ladder uses — the `term-width` rung and
+        // phase 2 both work to the calibrated constant rather than to this program's own worst
+        // published term — so it bounds a fabricated state without calling a legal plan wrong.
+        capSH: caps?.sh?.[ti] ?? null,
+        slots: caps?.slots?.[ti] ?? null,
       }));
       // ── The WORK terms, which the search never sees ──────────────────
       //
@@ -427,9 +452,21 @@ export function createTrace({ maxNodes = 200_000 } = {}) {
      *
      * Plain objects because there are at most a couple of dozen — the measured maximum over
      * the corpus is 18 — so nothing here needs the columnar treatment the node stream gets.
+     *
+     * `seq` is the PASS these moves are the net effect of, and it is the only thing that says
+     * which of them happened together. Entries sharing one `seq` are simultaneous: they are a
+     * diff of two complete assignments, not a sequence, and a consumer that applies part of
+     * one is describing a plan the engine never held. See `note` in `objective.js`.
      */
     moves(list) {
-      moveLog = list.map(m => ({ pass: m.pass, card: m.card, from: m.from, to: m.to }));
+      // `?? null` rather than `?? 0`: a caller with no stamp must leave the field ABSENT so
+      // `buildSteps` falls back to grouping by pass name. Defaulting to a constant would make
+      // every move of every pass share one group and collapse the whole of phase 2 into a
+      // single step — quietly, and only for the caller that had least information to begin
+      // with.
+      moveLog = list.map(m => ({
+        pass: m.pass, seq: m.seq ?? null, card: m.card, from: m.from, to: m.to,
+      }));
     },
 
     /** The answer, as roster index → term. */

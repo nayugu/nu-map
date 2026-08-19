@@ -43,7 +43,7 @@ import enginePorts from "../../src/adapters/northeastern/enginePorts.js";
 import { deriveModel } from "../../src/core/derivation/reduce.js";
 import { searchTree } from "../../src/core/derivation/tree.js";
 import { narrowingMatrix } from "../../src/core/derivation/narrowing.js";
-import { buildSteps } from "../../src/core/derivation/steps.js";
+import { buildSteps, frameAt, frameCount, frameLoad } from "../../src/core/derivation/steps.js";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const { courseMap } = loadCatalog();
@@ -297,8 +297,9 @@ test("the walkthrough reproduces the plan it claims to explain", () => {
       // Reconciliation is a claim about what the GRID ends up holding, and every route that
       // produces a grid owes it.
       if (!steps.reconciles) {
+        const n = steps.passes.reduce((k, q) => k + q.moves.length, 0);
         bad.push(`${p.key}#${vi}: via=${steps.via}, ${steps.place.length} steps + `
-          + `${steps.swaps.length} swaps do not reproduce the ${steps.final.length}-course plan`);
+          + `${n} moves do not reproduce the ${steps.final.length}-course plan`);
       }
       // A search-built plan must have a step per course. The packer legitimately has none — it is
       // a greedy pass with no tree — and the panel says so rather than stepping through nothing.
@@ -318,6 +319,169 @@ test("the walkthrough reproduces the plan it claims to explain", () => {
     });
   }
   assert.deepEqual(bad, [], bad.slice(0, 5).join(" | "));
+});
+
+test("every frame of the walkthrough is a plan the engine could have held", () => {
+  // ── Reconciliation is about the LAST frame, and that was the hole ───
+  //
+  // The test above proves the walkthrough ends on the plan that shipped. It says nothing at all
+  // about the thirty-odd frames before it, and for as long as that was the only claim, those
+  // frames were drawn on the reader's screen with nothing having looked at them once.
+  //
+  // They were wrong on 406 of 786 plans. Phase 2's log is a diff PER PASS — its entries are two
+  // complete assignments subtracted, simultaneous and unordered — and the view stepped through
+  // them one at a time. Every proper prefix of a pass is a state that never existed, and for
+  // `reclaimFromFiller`, whose every move is half of an exchange, it is a term holding both
+  // sides at once: `physics_and_music_with_concentration_in_music_technology_bs_(boston)` drew
+  // a 21 SH first semester — five cards in a four-slot fall, 2 SH over the registration cap —
+  // and then took the general elective back out two frames later.
+  //
+  // ── Why capacity, and not "is it one of the states we recorded" ─────
+  //
+  // Because the second question can only be asked of the recording, and the recording is what
+  // was wrong. `capSH` and `slots` come from `termCapacity` and `termSlotCap`, the same two
+  // functions `fitsCapacity` screens every mutation with, so this is an INDEPENDENT statement:
+  // no assignment the search or the objective ever holds exceeds them, therefore any frame that
+  // does is a plan neither phase built. It catches the next view that invents a state whatever
+  // route it invents it by, including one that groups the passes correctly and then draws
+  // something else.
+  const bad = [];
+  let frames = 0;
+  for (const p of PROGRAMS) {
+    const variants = p.plan?.plans?.length ? p.plan.plans : [null];
+    variants.forEach((variant, vi) => {
+      const trace = createTrace();
+      const out = generate(p, variant, trace);
+      if (out.refused) return;
+      const snap = trace.snapshot();
+      const steps = buildSteps(snap, deriveModel(snap));
+      if (!steps) return;
+      for (let k = 0; k <= frameCount(steps); k++) {
+        frames++;
+        const load = frameLoad(steps, frameAt(steps, k));
+        steps.terms.forEach((tm, ti) => {
+          // `null` only for a recording made without the caps — no route in the engine does
+          // that, and skipping is still better than inventing a bound to compare against.
+          if (tm.capSH != null && load.sh[ti] > tm.capSH) {
+            bad.push(`${p.key}#${vi} frame ${k}: ${tm.full} holds ${load.sh[ti]} SH, cap ${tm.capSH}`);
+          }
+          if (tm.slots != null && load.slots[ti] > tm.slots) {
+            bad.push(`${p.key}#${vi} frame ${k}: ${tm.full} holds ${load.slots[ti]} courses, cap ${tm.slots}`);
+          }
+        });
+      }
+    });
+  }
+  assert.ok(frames > 0, "no frames checked");
+  assert.deepEqual(bad, [], `${bad.length} frames over capacity | ${bad.slice(0, 5).join(" | ")}`);
+});
+
+test("the walkthrough ends on the EMITTED DOCUMENT, not merely on the recorded assignment", () => {
+  // ── One step further out than `reconciles`, deliberately ────────────
+  //
+  // Reconciliation compares the walkthrough with `snapshot.assignment`, and both of those come
+  // out of the recorder. It is a statement about the recording being self-consistent, and there
+  // is a whole stage after it: `emitPlan` turns `improved.termOf` into the plan.json document
+  // that `applySamplePlan` puts on the student's grid. Nothing compared the two ends.
+  //
+  // The reader's complaint is about THAT pair — "the process video differs from the actual final
+  // generated plan" — so that is the pair asserted here: the last frame of the walkthrough
+  // against the artifact, card by card and term by term.
+  //
+  // ── Matched by ORDER, and this is not fussiness ─────────────────────
+  //
+  // The obvious key is the year's heading plus the season, and it is wrong: `nanomedicine_ms#4`
+  // publishes two years both headed "Year 2", so keying on it merges nine cards with three and
+  // reports a plan that agrees perfectly as a mismatch. The first draft of this check did
+  // exactly that and produced two false alarms. `emitPlan` walks the shape in order and trims
+  // only the blank runs at either end, so the non-empty terms line up one for one.
+  const bad = [];
+  let terms = 0;
+  for (const p of PROGRAMS) {
+    const variants = p.plan?.plans?.length ? p.plan.plans : [null];
+    variants.forEach((variant, vi) => {
+      const trace = createTrace();
+      const out = generate(p, variant, trace);
+      if (out.refused) return;
+      const snap = trace.snapshot();
+      const steps = buildSteps(snap, deriveModel(snap));
+      if (!steps) return;
+
+      const last = frameAt(steps, frameCount(steps));
+      const inTerm = steps.terms.map(() => []);
+      for (const [card, ti] of last) {
+        // A card whose term is off the end of the shape has nowhere to be drawn, and losing it
+        // silently is the failure this test exists for — so it is counted as a term short
+        // rather than skipped.
+        if (inTerm[ti]) inTerm[ti].push(steps.roster[card]?.text ?? "");
+      }
+      const video = inTerm.filter(l => l.length);
+      // Co-op markers are not coursework and the search never places them; every other entry is
+      // a cell, printed by the same `cellText` the roster carries.
+      const shipped = [];
+      for (const y of out.plan.plans[0].years) {
+        for (const t of y.terms) {
+          const list = (t.entries ?? []).filter(e => !e.coop).map(e => e.text);
+          if (list.length) shipped.push(list);
+        }
+      }
+      if (video.length !== shipped.length) {
+        bad.push(`${p.key}#${vi}: ${video.length} filled terms in the walkthrough, `
+          + `${shipped.length} in the plan`);
+        return;
+      }
+      terms += shipped.length;
+      for (let k = 0; k < shipped.length; k++) {
+        const a = [...video[k]].sort().join(" | ");
+        const b = [...shipped[k]].sort().join(" | ");
+        if (a !== b) bad.push(`${p.key}#${vi} term ${k}: walkthrough [${a}] vs plan [${b}]`);
+      }
+    });
+  }
+  assert.ok(terms > 0, "no terms compared");
+  assert.deepEqual(bad, [], bad.slice(0, 4).join(" | "));
+});
+
+test("a pass is one step, so the halves of an exchange are never drawn apart", () => {
+  // The structural half of the claim above, and the one that makes it hold by construction
+  // rather than by measurement: `buildSteps` hands out passes, not moves, so a caller cannot
+  // reach a frame inside a pass even if it tries. `frameAt` is the only sequence there is —
+  // `BuildSteps` renders exactly what it returns — so this pins the contract at its source.
+  //
+  // Checked on the plans that actually have a multi-move pass, because on a plan whose passes
+  // each moved one course the property is true of the broken code too.
+  let multi = 0;
+  for (const p of PROGRAMS) {
+    const variants = p.plan?.plans?.length ? p.plan.plans : [null];
+    variants.forEach((variant, vi) => {
+      const trace = createTrace();
+      const out = generate(p, variant, trace);
+      if (out.refused) return;
+      const snap = trace.snapshot();
+      const steps = buildSteps(snap, deriveModel(snap));
+      if (!steps || !steps.passes.some(q => q.moves.length > 1)) return;
+      multi++;
+      // Consecutive frames past the placements differ by a WHOLE pass: every move of it, and
+      // nothing else. A view stepping move-by-move would show a difference of one here.
+      const base = steps.place.length;
+      for (let i = 0; i < steps.passes.length; i++) {
+        const before = frameAt(steps, base + i);
+        const after = frameAt(steps, base + i + 1);
+        const moved = [...after].filter(([c, tm]) => before.get(c) !== tm).map(([c]) => c);
+        const expect = steps.passes[i].moves.filter(m => before.get(m.card) !== m.to)
+          .map(m => m.card);
+        assert.deepEqual(new Set(moved), new Set(expect),
+          `${p.key}#${vi}: frame ${base + i + 1} does not apply pass ${steps.passes[i].pass} whole`);
+      }
+      // And every move of one pass carries the engine's own stamp for it, so the grouping is
+      // the recording's and not a guess made from the pass's name.
+      for (const q of steps.passes) {
+        assert.equal(new Set(q.moves.map(m => m.seq)).size, 1,
+          `${p.key}#${vi}: pass ${q.pass} groups moves from more than one seq`);
+      }
+    });
+  }
+  assert.ok(multi > 0, "no plan in the corpus has a pass that moved more than one course");
 });
 
 test("a refusal still records a derivation", () => {

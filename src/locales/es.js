@@ -387,6 +387,7 @@ export const strings = {
   "chart.deriv.pass.reclaim-from-filler": "{title} pasó de {from} a {to}, recuperando un semestre temprano de una electiva libre.",
   "chart.deriv.pass.availability-swap": "{title} pasó de {from} a {to}, a una temporada en la que de verdad se imparte.",
   "chart.deriv.pass.threshold-repair": "{title} pasó de {from} a {to} para alcanzar un mínimo que al plan le faltaba.",
+  "chart.deriv.pass.together": "Otro(s) {n} curso(s) se movieron en el mismo paso, porque el intercambio solo funciona entero: {list}.",
 
   "chart.deriv.tree.h": "La búsqueda misma",
   "chart.deriv.tree.note": "Un nivel por tarjeta, una rama por semestre probado. Un tramo corto es un semestre rechazado al instante; la línea que sigue es el semestre que conservó. Pasa el cursor por cualquier punto.",

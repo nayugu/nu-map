@@ -30,8 +30,10 @@
 // Three marks, all of them additive. A card's identity — its colour, its code, its title — never
 // changes with its state, so the reader watches one picture change rather than two alternate.
 //
-//   ONE STEP PER COURSE, and only what changed is bright. Backtracking and swapping are obvious
-//   the first time you watch them and nearly impossible to put in a sentence.
+//   ONE STEP PER COURSE while the search runs and ONE STEP PER PASS afterwards, with only what
+//   changed bright. Backtracking and swapping are obvious the first time you watch them and
+//   nearly impossible to put in a sentence. The step boundary is the engine's own: a pass moves
+//   as many courses as it moves, all at once, because that is how it screened them.
 //   THE BOUNCES, in place — the semesters this course was thrown out of, struck through in the
 //   row it tried. That is what makes the reason real: 92.6% of the engine's own stored reasons
 //   are the useless `load-balance`, where "those two were already full" is checkable.
@@ -52,7 +54,7 @@ import { ICreditSystem } from "../../ports/ICreditSystem.js";
 import { ISpecialTerms } from "../../ports/ISpecialTerms.js";
 import { subjectColor } from "../../core/courseModel.js";
 import { semName }      from "../../core/semGrid.js";
-import { termSemesters, orderReason, orderWhy, headlineWhy, ORDER_KEYS }
+import { termSemesters, orderReason, orderWhy, headlineWhy, ORDER_KEYS, frameAt }
   from "../../core/derivation/steps.js";
 import { SEM_NAME_KEY } from "../SemLabel.jsx";
 import { planRows, MiniPlanGrid } from "../MiniPlanGrid.jsx";
@@ -98,10 +100,19 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
   const fzB = isPhone ? 12 : 15;
 
   const place = steps?.place ?? [];
-  const swaps = steps?.swaps ?? [];
-  // ONE timeline: every placement, then every swap. A reader does not care that the engine changed
-  // algorithm halfway; they care that the plan filled up and then some courses moved.
-  const total = place.length + swaps.length;
+  // ── One step per PASS, not per move ─────────────────────────────────
+  //
+  // Phase 2's log is a diff per pass, and the moves inside one are simultaneous — they are two
+  // complete assignments subtracted, and the engine screened the whole difference as a unit.
+  // Stepping through them individually drew the halves of an exchange as separate events, which
+  // put a course in a term the plan never had it in: Physics + Music Technology showed a 21 SH
+  // first semester for two frames before a later entry of the same pass removed the elective
+  // that was double-counted. `buildSteps` hands them over grouped so that frame is not
+  // expressible here at all.
+  const passes = steps?.passes ?? [];
+  // ONE timeline: every placement, then every pass. A reader does not care that the engine
+  // changed algorithm halfway; they care that the plan filled up and then some courses moved.
+  const total = place.length + passes.length;
 
   const [at, setAt] = useState(0);
   const [playing, setPlaying] = useState(false);
@@ -217,19 +228,17 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
   // movement that did not happen.
   const view = useMemo(() => {
     const n = Math.max(0, Math.min(at, total));
-    // ── The grid starts from whatever phase 2 was handed ──────────────
+    // ── The frame comes from CORE, and is the frame the test checks ───
     //
-    // Empty for a searched plan, because the placement steps below build it up card by card and
-    // watching that happen is the whole point.
+    // `frameAt` seeds an empty grid for a searched plan — the placement steps build it up card
+    // by card and watching that happen is the whole point — and the packer's own reconstructed
+    // assignment for a packed one, which has no placement steps to build anything from. It then
+    // applies whole passes, never part of one.
     //
-    // NOT empty for a PACKED plan. `packCells` emits no placement steps, so seeding empty left the
-    // grid holding only the cards a phase-2 move happened to touch — the walkthrough ended on a
-    // plan with 9 of 34 courses while the panel beside it showed all 34. `buildSteps` reconstructs
-    // the packer's assignment by rolling its recorded moves back off the final plan, so the honest
-    // starting frame is that assignment, with the moves then animated over it.
-    const where = new Map(place.length ? [] : (steps?.afterSearch ?? []));
-    for (let i = 0; i < Math.min(n, place.length); i++) where.set(place[i].card, place[i].term);
-    for (let i = 0; i < Math.max(0, n - place.length); i++) where.set(swaps[i].card, swaps[i].to);
+    // Built there rather than here because this loop is what the guard could not see. It lived
+    // inline, `reconciles` only ever spoke about the last frame, and so every state in between
+    // was drawn on the reader's screen without anything having looked at it once.
+    const where = frameAt(steps, n);
     const occupants = {};
     for (const [c, term] of where) {
       const semId = semIds[term];
@@ -243,7 +252,7 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
     }
     const cur = n === 0 ? null
       : n <= place.length ? { kind: "place", step: place[n - 1] }
-      : { kind: "swap", step: swaps[n - place.length - 1] };
+      : { kind: "swap", step: passes[n - place.length - 1] };
     // What was already placed when this step STARTED. The queue beside the grid is the engine's
     // to-do list at that moment, so the course the step is about has to still be on it — showing
     // the list after the placement would answer "why this one" with the one already gone.
@@ -257,7 +266,7 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
     return { view: { occupants, cards }, cur, done: n >= total, placedBefore };
     // `steps` joins the list because `occupants` now reads the roster to know how many cards a
     // cell resolves to. Omitting it would freeze the expansion at whatever the first render saw.
-  }, [at, total, place, swaps, semIds, cards, steps]);
+  }, [at, total, place, passes, semIds, cards, steps]);
 
   // ── Work terms, as the runs the planner draws them as ───────────────
   //
@@ -296,14 +305,35 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
 
   // ── The three marks ─────────────────────────────────────────────────
   const cur = view.cur;
-  const liveId = cur ? cardId(cur.step.card) : null;
+  // The card a PLACEMENT is about. One cell, so one primary card — the ghosts below are drawn
+  // from it, and a bounce belongs to the decision rather than to each course of a pair.
+  const liveId = cur?.kind === "place" ? cardId(cur.step.card) : null;
+  // ── Everything the step lights up ───────────────────────────────────
+  //
+  // A pass moves as many courses as it moves, and all of them are this step. Lighting one and
+  // dimming the rest would say the others were already there, which for an exchange is the one
+  // thing that is not true.
+  //
+  // Expanded per COURSE, because that is what the board holds: `cardId(c)` alone matches only
+  // the first card of a corequisite pair, so `PHYS 1161 and PHYS 1162 and PHYS 1163` lit one
+  // third of itself and the other two dimmed as though they belonged to some earlier step.
+  const liveIds = useMemo(() => {
+    const idsOf = (card) => {
+      const k = steps?.roster?.[card]?.courses?.length ?? 0;
+      return k > 1 ? Array.from({ length: k }, (_, j) => cardId(card, j)) : [cardId(card)];
+    };
+    if (!cur) return new Set();
+    return new Set(cur.kind === "place"
+      ? idsOf(cur.step.card)
+      : cur.step.moves.flatMap(m => idsOf(m.card)));
+  }, [cur, steps]);
   // The last step is not a step, it is the finished plan: nothing is dimmed, nothing is ringed and
   // nothing is struck through, because that is the frame a reader stops on and reads.
   const done = view.done;
   const dimming = !!cur && !done;
   const decor = useMemo(() => ({
     cardState: (card) => (done ? undefined
-      : card.id === liveId ? "live" : dimming ? "dim" : undefined),
+      : liveIds.has(card.id) ? "live" : dimming ? "dim" : undefined),
     // ── The bounces belong to the step in flight, and to nothing else ──
     //
     // They are what this course tried on its way here, not a running tally, so they clear the
@@ -314,13 +344,17 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
     ghostsIn: (semId) => (cur?.kind === "place" && !done
       ? cur.step.rejected.filter(r => semIds[r.term] === semId).map(() => cards[liveId])
       : []).filter(Boolean),
+    // Every row this step lands something in, for the same reason `liveIds` is a set: a pass
+    // that moves three courses into three semesters has three targets, and lifting one of them
+    // would point the reader at an arbitrary third of what just happened.
     rowState: (semId) => {
-      if (done) return undefined;
-      const target = cur?.kind === "place" ? cur.step.term
-        : cur?.kind === "swap" ? cur.step.to : -1;
-      return semIds[target] === semId ? "target" : undefined;
+      if (done || !cur) return undefined;
+      const targets = cur.kind === "place"
+        ? [semIds[cur.step.term]]
+        : cur.step.moves.map(m => semIds[m.to]);
+      return targets.includes(semId) ? "target" : undefined;
     },
-  }), [cur, liveId, dimming, done, semIds, cards]);
+  }), [cur, liveId, liveIds, dimming, done, semIds, cards]);
 
   if (!total) return null;
 
@@ -771,8 +805,36 @@ function caption(cur, t, at, total, steps, view, nameOf) {
   }
   if (cur?.kind === "swap") {
     const key = cur.step.pass.startsWith("rank:") ? "rank" : cur.step.pass;
-    return t(`chart.deriv.pass.${key}`,
-             { title: cur.step.title, from: nameOf(cur.step.from), to: nameOf(cur.step.to) });
+    // ── Which move the sentence is ABOUT, when a pass made several ────
+    //
+    // The one landing earliest. Every pass here has a direction — reclaim an early semester,
+    // pull major coursework forward, fill a light term — so the move that goes furthest towards
+    // the front of the plan is the one the sentence already describes, and the others are what
+    // had to give way for it.
+    //
+    // Chosen rather than taken in log order deliberately: the log walks a Map and its order is
+    // the roster's, so "the first one" would name a different course for the same pass on a
+    // program whose cells happen to be built in another sequence. It is a PRESENTATION order.
+    // The engine made these simultaneously and the second sentence says exactly that.
+    const ranked = [...cur.step.moves].sort((a, b) => a.to - b.to
+      || a.from - b.from
+      || String(a.title).localeCompare(String(b.title)));
+    const [lead, ...rest] = ranked;
+    let line = t(`chart.deriv.pass.${key}`,
+                 { title: lead.title, from: nameOf(lead.from), to: nameOf(lead.to) });
+    if (rest.length) {
+      // The count is exact and the list is capped: `rank:level-order` moved eight courses at
+      // once on the packed Physics + Music Technology plan, and eight titles with their
+      // semesters is a paragraph under a picture rather than a caption. Every one of them is
+      // lit on the grid beside it, which is where a reader is looking anyway.
+      const SHOWN = 3;
+      const list = rest.slice(0, SHOWN).map(m => `${m.title} → ${nameOf(m.to)}`).join(", ");
+      line += ` ${t("chart.deriv.pass.together", {
+        n: rest.length,
+        list: rest.length > SHOWN ? `${list} …` : list,
+      })}`;
+    }
+    return line;
   }
   const s = cur.step;
   let line = t("chart.deriv.step.place", { title: s.title, term: nameOf(s.term) });

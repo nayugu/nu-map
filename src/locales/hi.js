@@ -387,6 +387,7 @@ export const strings = {
   "chart.deriv.pass.reclaim-from-filler": "{title} को {from} से {to} में ले जाया गया, एक शुरुआती सत्र मुक्त वैकल्पिक विषय से वापस लेकर।",
   "chart.deriv.pass.availability-swap": "{title} को {from} से {to} में ले जाया गया, उस मौसम में जब यह सचमुच पढ़ाया जाता है।",
   "chart.deriv.pass.threshold-repair": "{title} को {from} से {to} में ले जाया गया, ताकि योजना में छूट रही एक शर्त पूरी हो।",
+  "chart.deriv.pass.together": "इसी चरण में {n} और पाठ्यक्रम भी हटे, क्योंकि अदला-बदली पूरी होने पर ही चलती है: {list}।",
 
   "chart.deriv.tree.h": "खोज स्वयं",
   "chart.deriv.tree.note": "हर कार्ड के लिए एक स्तर, हर आज़माए सत्र के लिए एक शाखा। छोटी ठूँठ वह सत्र है जो तुरंत अस्वीकार हुआ; आगे बढ़ती रेखा वह सत्र जो रखा गया। किसी भी बिंदु पर कर्सर ले जाएँ।",

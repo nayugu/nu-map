@@ -387,6 +387,7 @@ export const strings = {
   "chart.deriv.pass.reclaim-from-filler": "{title} 从 {from} 挪到 {to}，把一个较早的学期从自由选修课手里要了回来。",
   "chart.deriv.pass.availability-swap": "{title} 从 {from} 挪到 {to}，放进它真正开课的季节。",
   "chart.deriv.pass.threshold-repair": "{title} 从 {from} 挪到 {to}，补上方案还差的一项门槛。",
+  "chart.deriv.pass.together": "同一步里还有 {n} 门课一起挪动，因为这次对调只有整体成立：{list}。",
 
   "chart.deriv.tree.h": "搜索本身",
   "chart.deriv.tree.note": "每张卡片一层，每个试过的学期一个分支。短枝是当场被否的学期，往下延伸的那条线是留下的学期。可将指针移到任一点上。",

@@ -387,6 +387,7 @@ export const strings = {
   "chart.deriv.pass.reclaim-from-filler": "نُقل {title} من {from} إلى {to}، مستعيدًا فصلًا مبكرًا من مقرر حرّ.",
   "chart.deriv.pass.availability-swap": "نُقل {title} من {from} إلى {to}، إلى موسم يُطرح فيه فعلًا.",
   "chart.deriv.pass.threshold-repair": "نُقل {title} من {from} إلى {to} لبلوغ حدّ كان ينقص الخطة.",
+  "chart.deriv.pass.together": "وانتقل {n} مقرر آخر في الخطوة نفسها، لأن التبادل لا يصحّ إلا كاملًا: {list}.",
 
   "chart.deriv.tree.h": "البحث نفسه",
   "chart.deriv.tree.note": "مستوى لكل بطاقة، وفرع لكل فصل جُرِّب. الفرع القصير فصل رُفض في الحال، والخط الممتد هو الفصل الذي أُبقي عليه. مرّر المؤشر على أي نقطة.",

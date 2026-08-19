@@ -34,7 +34,7 @@ import { seedFromPlan } from "./seed.js";
 import {
   adoptEarlyTerms, applyEarlyTerms, EARLY_TERMS, FIRST_TERM_OVERLOAD_SH,
 } from "./earlyTerms.js";
-import { buildDomains, wideAtFor, termCapacity } from "./domains.js";
+import { buildDomains, wideAtFor, termCapacity, termSlotCap, coursesInCell } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
 import { preflight, tightestTerms, MAX_DERIVED_GE_SHARE } from "./preflight.js";
 import {
@@ -655,10 +655,35 @@ function generateOnce({
   // right: an over-cap term is "an overload petition the plan does not mention". The
   // petition is the student's to file and ours to disclose, so a first semester above the
   // ordinary cap has to SAY it is, in the panel and in the report.
+  //
+  // ── And the same ceiling on the REST of the early window ───────────
+  //
+  // The overload case below is one half of one rule. The other half is a department that
+  // publishes a term LIGHTER than the cap: nothing held those terms to their published size,
+  // so the search filled them to the registration cap with general electives. Measured, 202
+  // of 1,725 early terms shipped heavier than printed and 160 of them had no over-adopted
+  // choice in them at all — `game_design_bfa` prints 15 SH and shipped 19, the cap exactly.
+  //
+  // `publishedLoad` is the printed load plus the decomposition slack, floored by what repair
+  // actually placed. Applied to terms 1..3 here; term 0 keeps its own line below because it
+  // is the one term allowed to exceed the cap, and that has to stay a separate, disclosed
+  // decision rather than being folded into a general ceiling.
+  for (const [ti, ceiling] of (early.publishedLoad ?? new Map())) {
+    if (ti === 0 || !terms[ti] || !(ceiling > 0)) continue;
+    // Replaced rather than mutated, for the reason spelled out on term 0 below: `studyTerms`
+    // hands back the SHAPE's own term objects for full-weight terms.
+    terms[ti] = { ...terms[ti], creditCeiling: ceiling };
+  }
   let earlyOverload = null;
   if (terms[0] && (early.load?.get(0) ?? 0) > 0) {
     const want = early.load.get(0);
     const base = termCapacity(terms[0], { creditMax: ports.creditMax, studentType });
+    // Term 0 gets the published ceiling too when it is UNDER the cap — the same rule as the
+    // window above. Above the cap it falls through to the overload branch, which discloses.
+    const ceil0 = early.publishedLoad?.get(0) ?? 0;
+    if (want <= base && ceil0 > 0 && ceil0 < base) {
+      terms[0] = { ...terms[0], creditCeiling: ceil0 };
+    }
     if (want > base) {
       // ── Replaced, not mutated in place ──────────────────────────────
       //
@@ -699,6 +724,9 @@ function generateOnce({
       ...p.cell,
       candidates: p.candidates?.length ?? null,
       subject: cellSubject(p, courseMap),
+      // The slot cost `fitsCapacity` charges this cell, so a frame of the walkthrough can be
+      // checked against `termSlotCap` in the same currency the engine bounds it in.
+      slots: coursesInCell(p.cell),
       // ── The card reads EXACTLY as the preview's does ─────────────────
       //
       // `cellText` is `emit`'s own derivation, imported rather than repeated. This was a second
@@ -754,7 +782,38 @@ function generateOnce({
       // place in a term the student spends on co-op. The derivation view draws the whole plan
       // though, and a four-year degree drawn with its two co-ops missing is a picture of a
       // different degree. They go in as their own list so no term index moves.
-    })), terms, shape.terms.filter(t => t.work));
+      // ── The two bounds every assignment the engine holds obeys ───────
+      //
+      // `fitsCapacity` screens every phase-2 mutation against exactly these, and the search
+      // enforces the same pair at placement, so no state either phase occupies exceeds them.
+      // Recorded so the derivation view's frames can be CHECKED against them instead of
+      // argued about — see `capSH`/`slots` in `trace.roster`.
+      //
+      // Read through the engine's own two functions, with the finalised `terms`: term 0 may
+      // carry a `creditCeiling` the department published above the registration cap, and a
+      // walkthrough holding that term to 19 SH would report the plan we deliberately shipped
+      // as a violation.
+      //
+      // ── The two bounds are not equally sharp, and saying which is which matters ──
+      //
+      // CREDITS are one number for the whole run: `search` and `improve` both build `cap` from
+      // `termCapacity` with no rung variation and no slack, so a term over it is over it.
+      //
+      // SLOTS are not. The strict rungs hold a term to this program's own worst published one
+      // (`shape.maxCoursesFull`), the `term-width` rung passes `shape: null` and falls back to
+      // the calibrated constant, and phase 2's `fitsCapacity` calls mostly pass no shape at all
+      // — so the constant is what actually gates the objective. Recording the strict number
+      // reported 37 frames of three real plans as violations when the plans are legal: game
+      // design's nine-course first fall is the `term-width` rung doing exactly what that rung
+      // exists for.
+      //
+      // So what goes in the recording is the LOOSEST bound any phase enforces. A frame above it
+      // is a state no rung and no pass would have accepted, which is the claim worth making;
+      // holding the view to a tier the engine itself did not use would be inventing a rule.
+    })), terms, shape.terms.filter(t => t.work), {
+      sh: terms.map(t => termCapacity(t, { creditMax: ports.creditMax, studentType })),
+      slots: terms.map(t => Math.max(termSlotCap(t, shape), termSlotCap(t, null))),
+    });
     trace.domains(plans.map(p => ({
       id: p.cell.id, legal: p.domain, excluded: p.excluded ?? [],
     })));
@@ -889,8 +948,12 @@ function generateOnce({
     // The swaps themselves, so the walkthrough can play them out on the grid. Bounded by
     // construction (p50 4, max 18), and mapped to roster indices here rather than in the
     // reducer so the model never has to know about cell ids.
+    //
+    // `seq` travels with them: it is the pass each is the net effect of, and therefore which
+    // of them are simultaneous. Dropping it would leave the view free to replay a pass's
+    // moves one at a time, which is a plan the engine never held.
     trace.moves((improved.moveLog ?? [])
-      .map(m => ({ pass: m.pass, card: trace.cardOf(m.cell), from: m.from, to: m.to }))
+      .map(m => ({ pass: m.pass, seq: m.seq, card: trace.cardOf(m.cell), from: m.from, to: m.to }))
       .filter(m => m.card >= 0));
     // Where every card ended up, as roster index → term. The search's own answer and the
     // improved one can differ, and this is the improved one — the plan the student reads.

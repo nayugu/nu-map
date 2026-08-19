@@ -2,8 +2,8 @@
 // DERIVATION · the walkthrough, as steps on the reader's own grid  (pure)
 //
 // One step per course: it went HERE, it tried THESE first, and this is what threw it out of
-// each of them. Then the swaps phase 2 made. That is the whole view, and it replaces a page of
-// six charts whose verdict was "looks cool, but I have no idea what it means".
+// each of them. Then one step per PASS of phase 2. That is the whole view, and it replaces a
+// page of six charts whose verdict was "looks cool, but I have no idea what it means".
 //
 // ── Why the winning path, and what that would hide if left alone ─────
 //
@@ -26,11 +26,18 @@
 //               and this one. Zero for most steps in an easy degree, thousands in a hard one —
 //               so the struggle appears exactly where it happened rather than as a headline.
 //
-// ── The invariant that keeps it honest ──────────────────────────────
+// ── The two invariants that keep it honest ──────────────────────────
 //
-// The search's assignment plus every recorded swap must equal the plan that shipped. If it does
-// not, the walkthrough is describing a plan the reader is not looking at, and that is worse
-// than showing nothing. Asserted in `test/unit/derivation-steps.test.js` and over the corpus.
+// THE LAST FRAME. The search's assignment plus every recorded move must equal the plan that
+// shipped. If it does not, the walkthrough is describing a plan the reader is not looking at,
+// and that is worse than showing nothing. That is `reconciles`, asserted over the corpus.
+//
+// EVERY OTHER FRAME. For a long time the endpoint was the only claim, so the frames in between
+// were drawn with nothing having examined them — and on 406 of 786 plans they showed a term
+// fuller than the plan was ever allowed to be. The cause was that phase 2's log is a diff PER
+// PASS and the view stepped through it per MOVE; see the note above `passes`. Two things close
+// it: the unit handed out is the pass, so a mid-pass frame is not expressible, and `frameAt` is
+// the one place the sequence lives, so the panel draws exactly what the invariant checks.
 // ═══════════════════════════════════════════════════════════════════
 
 import { NODE, CAUSES } from "./events.js";
@@ -112,12 +119,44 @@ export function buildSteps(snapshot, model) {
   // Recorded by diffing each named pass rather than by instrumenting the hill climber, so what
   // shows here is the NET effect of each pass — "the depth trade pulled this course forward
   // three semesters" — instead of every move the climber made and unmade on the way.
-  const swaps = (snapshot.moveLog ?? []).map(m => ({
+  const moves = (snapshot.moveLog ?? []).map(m => ({
     ...m,
     title: title(m.card),
     fromLabel: labelOf(terms[m.from]),
     toLabel: labelOf(terms[m.to]),
   }));
+
+  // ── A PASS is the step, because a pass is the atom ──────────────────
+  //
+  // A pass's entries are a diff of two complete assignments. They are simultaneous and they
+  // have no order among themselves — the log walks a Map, so their sequence here is cell
+  // insertion order, which is the roster's and has nothing to do with the engine.
+  //
+  // This used to be handed out flat and the view stepped through it one entry at a time, which
+  // manufactured a state for every proper prefix of every pass. Not a theoretical state either:
+  // `reclaimFromFiller` only ever moves courses in EXCHANGES, so half of one is a term holding
+  // both sides at once. On
+  // `physics_and_music_with_concentration_in_music_technology_bs_(boston)` the walkthrough
+  // showed Fall of year one at 21 SH — five cards in a four-slot row, 2 SH over the cap the
+  // engine screens every trial against — and then took the general elective back out two frames
+  // later. The reader is told the plan they are looking at is the one that shipped, and for
+  // those two frames it was a plan that never existed.
+  //
+  // So the unit handed out is the pass, moves and all. A caller cannot draw the intermediate
+  // state because the intermediate state is no longer expressible: every frame it can reach is
+  // `improve`'s own assignment after some whole number of passes, and every one of those was
+  // screened by `fitsCapacity` and `isLegal` before `improve` kept it.
+  //
+  // Grouped on `seq`, the engine's own stamp, and only on the pass NAME for a recording old
+  // enough to predate it. That fallback merges two adjacent passes that happen to share a name,
+  // which drops a checkpoint and can never invent one — the safe direction.
+  const passes = [];
+  let openKey = null;
+  for (const m of moves) {
+    const key = m.seq != null ? `#${m.seq}` : `@${m.pass}`;
+    if (passes.length && key === openKey) passes[passes.length - 1].moves.push(m);
+    else { passes.push({ pass: m.pass, seq: m.seq ?? null, moves: [m] }); openKey = key; }
+  }
 
   const final = new Map((snapshot.assignment ?? []).map(([c, t]) => [c, t]));
 
@@ -140,8 +179,8 @@ export function buildSteps(snapshot, model) {
     ? new Map(place.map(s => [s.card, s.term]))
     : (() => {
         const base = new Map(final);
-        for (let i = swaps.length - 1; i >= 0; i -= 1) {
-          const m = swaps[i];
+        for (let i = moves.length - 1; i >= 0; i -= 1) {
+          const m = moves[i];
           if (m && base.has(m.card)) base.set(m.card, m.from);
         }
         return base;
@@ -165,7 +204,8 @@ export function buildSteps(snapshot, model) {
 
   return {
     place,
-    swaps,
+    // Phase 2, one entry per PASS. Never the flat move list: see the note above `passes`.
+    passes,
     ranking,
     // Which rung produced it, so the panel can say the order it is showing is the order that
     // worked rather than one of the four that did not.
@@ -192,7 +232,7 @@ export function buildSteps(snapshot, model) {
     //
     // Now that `afterSearch` reconstructs the packer's own assignment, reconciliation is a real
     // claim for both routes and is asserted for both.
-    reconciles: reconciles(afterSearch, swaps, final),
+    reconciles: reconciles(afterSearch, moves, final),
     // `full` beside `label`, NOT over it. Overwriting `label` with "Year 1 Fall" while `term` still
     // said "Fall" made every consumer that composes the two print "Year 1 Fall Fall" — including
     // the row names for a shape that runs past the timeline.
@@ -207,12 +247,87 @@ export function buildSteps(snapshot, model) {
       // catalog in hand; deriving any of them here would be the second derivation that let the
       // walkthrough and the preview disagree in the first place.
       text: r.text ?? null, named: !!r.named, courses: r.courses ?? null,
+      // What the cell costs a term's slot budget, in `coursesInCell`'s currency. Only
+      // `frameLoad` reads it; the grid expands `courses` instead, because a choice cell is one
+      // card to the reader and two slots to the engine and those are different questions.
+      slots: r.slots ?? 1,
     })),
     // Subject per card, by roster index. Computed in the engine by `cellSubject` rather than
     // scraped from the title here: a pool spanning several departments has NO one subject, and a
     // regex would confidently give it the first one it saw.
     subjects: roster.map(r => r.subject ?? null),
   };
+}
+
+/**
+ * How many frames the walkthrough has. Frame 0 is what phase 2 was handed; the last is the plan.
+ *
+ * One per placement, then one per PASS — never one per move. See the note above `passes`.
+ */
+export const frameCount = (steps) =>
+  (steps?.place?.length ?? 0) + (steps?.passes?.length ?? 0);
+
+/**
+ * The plan at frame `n`, as card → term.
+ *
+ * ── One derivation, drawn by the view and checked by the test ───────
+ *
+ * The view used to build this itself, inline, and that is where the fabricated frames came
+ * from: the guard could only see `reconciles`, which is a claim about the LAST frame, so
+ * whatever the view did in between was unexamined by construction. Reproducing the loop in a
+ * test would only have given two places to be wrong in.
+ *
+ * So the sequence lives here, `BuildSteps` renders what it returns, and
+ * `chart-derivation-neutral` asserts every `n` of it against the engine's own capacities. A
+ * frame the view can draw is a frame the test has already checked, because they are the same
+ * frame.
+ *
+ * Out-of-range `n` is clamped rather than refused: the player seeks, and a frame is defined
+ * everywhere between the start and the finished plan.
+ *
+ * @param {object} steps  a `buildSteps()` result
+ * @param {number} n      0 … `frameCount(steps)`
+ * @returns {Map<number, number>} card index → study-term index
+ */
+export function frameAt(steps, n) {
+  const place = steps?.place ?? [];
+  const passes = steps?.passes ?? [];
+  const k = Math.max(0, Math.min(n | 0, place.length + passes.length));
+  // Empty for a searched plan — the placement steps below build it up card by card, and
+  // watching that happen is the whole point. The packer's own assignment for a packed one,
+  // which has no placement steps to build anything from.
+  const where = new Map(place.length ? [] : (steps?.afterSearch ?? []));
+  for (let i = 0; i < Math.min(k, place.length); i++) where.set(place[i].card, place[i].term);
+  // Whole passes only. A pass's moves are a diff of two complete assignments, so a proper
+  // subset of them is not a state anything ever held.
+  for (let i = 0; i < Math.max(0, k - place.length); i++) {
+    for (const m of passes[i].moves) where.set(m.card, m.to);
+  }
+  return where;
+}
+
+/**
+ * What a frame puts in each term — credits and slots, the two currencies `fitsCapacity` bounds.
+ *
+ * Compared against `steps.terms[i].capSH` and `steps.terms[i].slots`, both recorded by the
+ * engine through `termCapacity`/`termSlotCap`. Every assignment either phase occupies passes
+ * that check, so a frame that fails it is a frame of a plan that never existed.
+ *
+ * @param {object} steps
+ * @param {Map<number, number>} where  a `frameAt` result
+ * @returns {{sh: number[], slots: number[]}} by study-term index
+ */
+export function frameLoad(steps, where) {
+  const n = steps?.terms?.length ?? 0;
+  const sh = new Array(n).fill(0);
+  const slots = new Array(n).fill(0);
+  for (const [card, term] of where ?? []) {
+    if (!(term >= 0 && term < n)) continue;
+    const r = steps?.roster?.[card];
+    sh[term] += r?.sh ?? 0;
+    slots[term] += r?.slots ?? 1;
+  }
+  return { sh, slots };
 }
 
 /**
@@ -241,11 +356,17 @@ export function winningSpine(snapshot) {
   return out.reverse();
 }
 
-/** Does the search's answer plus the recorded swaps equal the plan that shipped? */
-function reconciles(afterSearch, swaps, final) {
+/**
+ * Does the search's answer plus every recorded move equal the plan that shipped?
+ *
+ * Takes the FLAT move list on purpose. Grouping is about which frames may be drawn; this is
+ * about the endpoint, and the endpoint is the same however the moves are bundled — so running
+ * it over the raw log keeps it independent of the grouping it is meant to outlive.
+ */
+function reconciles(afterSearch, moves, final) {
   if (!final.size) return !afterSearch.size;
   const rolled = new Map(afterSearch);
-  for (const m of swaps) rolled.set(m.card, m.to);
+  for (const m of moves) rolled.set(m.card, m.to);
   if (rolled.size !== final.size) return false;
   for (const [c, t] of final) if (rolled.get(c) !== t) return false;
   return true;

@@ -388,6 +388,7 @@ export const strings = {
   "chart.deriv.pass.reclaim-from-filler": "{title}を{from}から{to}へ。早い学期を自由選択科目から取り戻しました。",
   "chart.deriv.pass.availability-swap": "{title}を{from}から{to}へ。実際に開講される季節に移しました。",
   "chart.deriv.pass.threshold-repair": "{title}を{from}から{to}へ。プランに足りていなかった基準を満たすためです。",
+  "chart.deriv.pass.together": "同じステップで他に{n}科目も動きました。入れ替えは全体でしか成り立たないためです：{list}。",
 
   "chart.deriv.tree.h": "探索そのもの",
   "chart.deriv.tree.note": "カード1枚につき1段、試した学期1つにつき1本の枝。短い枝はその場で却下された学期、先へ延びる線が採った学期です。どの点にもカーソルを合わせられます。",
