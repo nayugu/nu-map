@@ -898,6 +898,34 @@ the norm for a business core.
 | Term 4 | 38 of 267 — 14.2% | +73 SH |
 | **total** | **202 of 1,725 — 11.7%** | **+463 SH**, worst +8 |
 
+> **Correction, 2026-08-19, same day — cardinality is a MINORITY of this.** The heading
+> above named the cause after diagnosing one program by hand, and a classification of all 202
+> heavy terms says otherwise:
+>
+> | heavy term contains | count | share |
+> |---|---|---|
+> | a multi-option "pick one" row | 42 | 20.8% |
+> | neither a choice row nor a "take N" parent | **160** | **79.2%** |
+>
+> The majority are not over-consumed choices at all — they are terms the search **fills to
+> the credit cap** because the department published them lighter. `game_design_bfa` prints
+> 15 SH and gets 19; `interdisciplinary_studies_bs_(oakland)` prints 16 and gets 19. Nineteen
+> is the undergraduate cap, which is the tell. `creditCeiling` is only ever *raised* for a
+> published overload and never *lowered* to a published underload, so an early term the
+> department left light is treated as free space.
+>
+> Business Administration, diagnosed below, is a genuine cardinality case and is in the 42.
+> It is not representative, and it was chosen because it tripped a cap — which is exactly the
+> selection bias that produced the wrong headline.
+>
+> (The "take N" count reads 0, which is not credible given BSBA's own "Take two:" row — that
+> detector looked for 0 SH *children* and the catalog emits them as *siblings*. Treat the 42
+> as a floor, not a partition.)
+>
+> **The proposed fix is unchanged and now covers more:** a published-load ceiling on early
+> terms addresses both mechanisms, because both are the same failure to treat the department's
+> printed SH as the target. Only the causal story here was wrong.
+
 **Why both existing checks miss it.** `chart-gate` checks term 0 against
 `max(cap, firstTermOverload)` where `firstTermOverload` is the figure the *engine* disclosed,
 so the engine declaring 21 SH makes 21 SH legal — that check catches an **undisclosed**
