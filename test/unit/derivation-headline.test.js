@@ -64,6 +64,44 @@ test("headline › junk in returns null rather than throwing inside a render", (
   }
 });
 
+test("headline › a key inherited from Object.prototype is not a reason", () => {
+  // A REAL leak, found by probing: `HEADLINE_RANK[key] !== undefined` is TRUE for every one of
+  // these, so each was headlined. The renderer then asked for
+  // `chart.deriv.rank.why2.constructor`, which no locale defines, and `t()` ends in `?? key` —
+  // so the reader would have been shown that literal string mid-sentence in all eight
+  // languages. Exactly the defect that already shipped once as
+  // `chart.deriv.retry.department-early-terms`.
+  for (const key of ["constructor", "toString", "valueOf", "hasOwnProperty",
+                     "__proto__", "isPrototypeOf", "propertyIsEnumerable", "toLocaleString"]) {
+    assert.equal(headlineWhy([{ key, value: 1, beat: 1 }]), null,
+      `"${key}" was accepted as a ranking key and would print its own locale key`);
+  }
+});
+
+test("headline › a claim value is 0 or 1, not anything that coerces below 2", () => {
+  // The second leak, and it survived the first fix. `(v ?? 2) < 2` admitted every string and
+  // array below; `Number.isInteger(v) && v < 2` still admitted -1. Each built a locale key that
+  // does not exist — `claim.true`, `claim.`, `claim.-1`.
+  for (const value of ["0", "1", "", true, false, [], [0], [1], {}, -1, -0.5, 1.5,
+                       NaN, Infinity, null, undefined]) {
+    assert.equal(headlineWhy([{ key: "claim", value, beat: 1 }]), null,
+      `claim value ${JSON.stringify(value)} was accepted and would build claim.${value}`);
+  }
+  // And the two real ones still lead.
+  assert.equal(headlineWhy([{ key: "claim", value: 0, beat: 1 }])?.value, 0);
+  assert.equal(headlineWhy([{ key: "claim", value: 1, beat: 1 }])?.value, 1);
+});
+
+test("headline › a junk key never displaces a real reason", () => {
+  // The dangerous composition: junk alongside something true. If the junk wins the reduce, a
+  // reader loses the real sentence AND gets a raw key in its place.
+  const real = { key: "depth", value: 12, beat: 3 };
+  for (const key of ["constructor", "toString", "__proto__"]) {
+    assert.equal(headlineWhy([{ key, value: 0, beat: 9 }, real]), real,
+      `"${key}" displaced a real depth claim`);
+  }
+});
+
 test("headline › every comparator key is either a headline or an absence, none unclassified", () => {
   // Guards the pair against drift: if a sixth test is added to the comparator, this fails until
   // someone decides which side of the line it falls on, rather than it silently never leading.

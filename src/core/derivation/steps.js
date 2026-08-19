@@ -415,11 +415,27 @@ const HEADLINE_RANK = { claim: 0, terms: 1, depth: 2, options: 3 };
  * @returns {{key: string, value?: number, beat: number}|null}
  */
 export function headlineWhy(whys) {
-  const earns = (whys ?? []).filter(w => (
+  // ── `Object.hasOwn`, and not `!== undefined` ───────────────────────
+  //
+  // `HEADLINE_RANK[w.key] !== undefined` is TRUE for `constructor`, `toString`, `valueOf`,
+  // `hasOwnProperty` and `__proto__`, inherited from `Object.prototype`. So any of those as a key
+  // was headlined, and the renderer then asked for `chart.deriv.rank.why2.constructor` — a key no
+  // locale defines. `t()` ends in `?? key`, so the reader would have been shown that literal
+  // string, mid-sentence, in all eight languages. That exact defect has already shipped once here
+  // (`chart.deriv.retry.department-early-terms`), which is why this is a hard membership test.
+  const ranked = (key) => typeof key === "string" && Object.hasOwn(HEADLINE_RANK, key);
+  const earns = (whys ?? []).filter(w => {
+    if (!ranked(w?.key)) return false;
     // `claim` is one key carrying three different statements and only the first two are claims
     // about the degree. Value 2 ("it names a course") is decidedness, which is bookkeeping.
-    w?.key === "claim" ? (w.value ?? 2) < 2 : HEADLINE_RANK[w?.key] !== undefined
-  ));
+    //
+    // An explicit MEMBERSHIP test, not a range. `< 2` admitted `"0"`, `true`, `[]` and `""` by
+    // coercion, and `Number.isInteger(v) && v < 2` still admitted `-1` — each of which then built
+    // a locale key (`claim.true`, `claim.`, `claim.-1`) that no locale defines. `claimRank` only
+    // ever returns 0, 1 or 2, so naming the two that are claims is both narrower and truthful.
+    if (w.key !== "claim") return true;
+    return w.value === 0 || w.value === 1;
+  });
   if (!earns.length) return null;
   return earns.reduce((best, w) => (
     HEADLINE_RANK[w.key] < HEADLINE_RANK[best.key] ? w : best));

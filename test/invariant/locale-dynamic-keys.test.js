@@ -33,6 +33,24 @@ import { EXCLUSION } from "../../src/core/derivation/events.js";
 import {
   MOVED_AVAILABILITY, MOVED_PREREQ, MOVED_CAPACITY,
 } from "../../src/engine/earlyTerms.js";
+import { ORDER_KEYS } from "../../src/core/derivation/steps.js";
+
+// ── The walkthrough's REASON sentences, which had no guard at all ────
+//
+// `whyText` and `reasonText` in `BuildSteps.jsx` build their key from the comparator key, and for
+// `claim` they append the rank as well — `why2.claim.1`, `why.claim.2`. `whyText` also appends
+// `.one` where a count of one needs its own sentence. Every one of those is assembled at runtime
+// from something the ENGINE decided, which is precisely the shape this file exists for, and the
+// family was not listed here. Probing it found real leaks: `constructor` and `-1` both reached
+// `headlineWhy`, and each would have printed its own key to the reader.
+//
+// `claimRank` returns 0, 1 or 2 — all three are reachable, because `whyText` defaults a missing
+// value to 2 — so all three sentences must exist.
+const CLAIM_RANKS = ["0", "1", "2"];
+// The keys whose singular reads differently enough to need its own sentence. From `whyText`.
+const COUNTABLE = ["terms", "options", "depth", "tie"];
+/** One comparator key as the locale suffixes it actually produces. */
+const expand = (k) => (k === "claim" ? CLAIM_RANKS.map(v => `claim.${v}`) : [k]);
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "../..");
 
@@ -87,6 +105,30 @@ const families = [
     prefix: "chart.deriv.stage.early.",
     members: ["department", "similar-programs", "chart"],
     why: "the spine titles the stage by the source the engine recorded",
+  },
+  {
+    what: "the ranking ladder's rungs",
+    prefix: "chart.deriv.rank.rung.",
+    // `RUNGS` in BuildSteps is exactly this: a tie is not a test, so it carries no rung.
+    members: ORDER_KEYS.filter(k => k !== "tie"),
+    why: "the ladder lists one line per comparator key, numbered by the order it consults them",
+  },
+  {
+    what: "the headline reason, in prose",
+    prefix: "chart.deriv.rank.why2.",
+    members: [
+      ...ORDER_KEYS.flatMap(expand),
+      ...COUNTABLE.flatMap(k => expand(k).map(b => `${b}.one`)),
+    ],
+    why: "`whyText` builds this from the comparator key, the claim rank, and whether the count is 1",
+  },
+  {
+    what: "the terse reason, for the queue rows and the small print",
+    prefix: "chart.deriv.rank.why.",
+    // `last` is not a comparator key — `orderReason` returns it when there is no row below to be
+    // ahead of — so it is added here rather than coming from `ORDER_KEYS`.
+    members: [...ORDER_KEYS.flatMap(expand), "last"],
+    why: "`reasonText` renders every queue row's reason, and now the demoted keys in the small print",
   },
 ];
 
