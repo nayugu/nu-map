@@ -569,3 +569,99 @@ test("early › a course repeated across terms keeps its EARLIER placement", () 
     publishedPlan: plan, shape, plans: [named("a", ["A"], wide())], precedence: NOPREC });
   assert.equal(placed.get("a"), 0, "the earlier copy is what the prereq chain was built around");
 });
+
+// ── The published SIZE of a term, not just its contents ────────────
+//
+// `offers` is flat: "take two of these three" and "one of these three" both arrive as three
+// courses with no count attached. The printed SH is the only thing that carries the count.
+
+/** A published plan whose rows have CREDITS: `[[["A",4],["B",4]]]` is one 8 SH fall. */
+const sizedPlan = (termRows) => {
+  const years = [];
+  termRows.forEach((rows, i) => {
+    const yi = Math.floor(i / 2);
+    years[yi] ??= { terms: [] };
+    years[yi].terms.push({
+      type: i % 2 === 0 ? "fall" : "spring",
+      entries: rows.map(([id, sh]) => ({ sh, options: [[id]] })),
+    });
+  });
+  return { years };
+};
+const budgeted = (id, courses, domain, sh) =>
+  ({ cell: { id, kind: "named", groups: [courses], sh }, domain });
+
+test("early › adoption spends no more credit than the department PRINTED", () => {
+  // The department printed 8 SH here. Our degree separately requires all three courses the
+  // row offers, at 4 SH each — the Business Administration shape, where a "Take two:" worth
+  // 8 SH was adopted as three cells worth 12. Budget is printed + ADOPT_SH_SLACK = 10, so
+  // two cells fit and the third does not.
+  const shape = shapeOf(2);
+  const plan = sizedPlan([[["A", 4], ["B", 4]]]);   // one fall term, 8 SH printed
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, precedence: NOPREC,
+    plans: [budgeted("a", ["A"], wide(), 4), budgeted("b", ["B"], wide(), 4), budgeted("c", ["A"], wide(), 4)],
+  });
+  const inTerm0 = [...placed.values()].filter(t => t === 0).length;
+  assert.equal(inTerm0, 2, "a third 4 SH cell was pinned into an 8 SH published term");
+});
+
+test("early › a cell that misses the budget is NOT dropped, it is left to the search", () => {
+  // Under-adopting costs a hint; over-adopting costs the student a term they cannot
+  // register for. The unbudgeted cell must simply be absent from `placed`, never recorded
+  // as unplaced or moved — it has a full domain and the ordinary search will site it.
+  const shape = shapeOf(2);
+  const plan = sizedPlan([[["A", 4]]]);
+  const out = adoptEarlyTerms({
+    publishedPlan: plan, shape, precedence: NOPREC,
+    plans: [budgeted("a", ["A"], wide(), 4), budgeted("b", ["A"], wide(), 4)],
+  });
+  assert.equal(out.unplaced.length, 0, "a budget miss was reported as an unplaceable cell");
+  assert.ok(!out.moves.some(m => m.cell === "b"), "a budget miss was reported as a correction");
+});
+
+test("early › a 0 SH cell always fits, whatever the budget", () => {
+  // It is a requirement the department put here and it costs the term nothing. Excluding it
+  // would drop a real placement for no credit saved.
+  const shape = shapeOf(2);
+  const plan = sizedPlan([[["A", 1], ["Z", 0]]]);
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, precedence: NOPREC,
+    plans: [budgeted("a", ["A"], wide(), 1), budgeted("z", ["Z"], wide(), 0)],
+  });
+  assert.equal(placed.get("z"), 0, "a 0 SH cell was refused for want of budget");
+});
+
+test("early › publishedLoad is UNCLAMPED — the caller must not let it raise a cap", () => {
+  // The 13-plan regression, pinned. `publishedLoad` is printed + slack, and that sum can sit
+  // ABOVE the term's own registration cap — a department's 8 SH summer half plus 2 is 10
+  // against a 9.5 half-term cap. Applied unclamped it does not lower a ceiling, it RAISES
+  // one, and `computer_science_and_biology_bs` shipped a 10 SH summer half because of it.
+  //
+  // This function deliberately does not know the cap for terms it is not repairing, so the
+  // clamp belongs at the call site in `index.js`. What is asserted here is the contract that
+  // makes the clamp necessary, so nobody removes it believing this value is already safe.
+  const shape = shapeOf(2);
+  const plan = sizedPlan([[["A", 9]]]);
+  const { publishedLoad } = adoptEarlyTerms({
+    publishedPlan: plan, shape, precedence: NOPREC,
+    plans: [budgeted("a", ["A"], wide(), 9)],
+  });
+  assert.ok(publishedLoad.get(0) > 9,
+    "publishedLoad should exceed the printed load by the decomposition slack");
+});
+
+test("early › publishedLoad is floored by what repair actually placed", () => {
+  // Repair may legitimately push a course INTO a later early term to fix a prerequisite. A
+  // ceiling below the load we just arranged ourselves would make the search refuse it.
+  const shape = shapeOf(2);
+  const plan = sizedPlan([[["A", 4]], [["B", 4]]]);
+  const { publishedLoad, load } = adoptEarlyTerms({
+    publishedPlan: plan, shape, precedence: NOPREC,
+    plans: [budgeted("a", ["A"], wide(), 4), budgeted("b", ["B"], wide(), 4)],
+  });
+  for (const [ti, placedSH] of load) {
+    assert.ok((publishedLoad.get(ti) ?? Infinity) >= placedSH,
+      `term ${ti}: ceiling ${publishedLoad.get(ti)} is below the ${placedSH} SH repair placed`);
+  }
+});

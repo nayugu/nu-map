@@ -668,8 +668,16 @@ function generateOnce({
   // actually placed. Applied to terms 1..3 here; term 0 keeps its own line below because it
   // is the one term allowed to exceed the cap, and that has to stay a separate, disclosed
   // decision rather than being folded into a general ceiling.
+  //
+  // ⚠ This ceiling may only ever LOWER. Applied unclamped it raised 13 plans over the
+  // registration cap, because the published load plus its decomposition slack can exceed the
+  // term's own limit — a department's 8 SH summer half plus 2 is 10 against a 9.5 half-term
+  // cap, and `computer_science_and_biology_bs` shipped exactly that. Term 0 is the only term
+  // permitted above the cap, and only through the disclosed branch below.
   for (const [ti, ceiling] of (early.publishedLoad ?? new Map())) {
     if (ti === 0 || !terms[ti] || !(ceiling > 0)) continue;
+    const base = termCapacity(terms[ti], { creditMax: ports.creditMax, studentType });
+    if (!(ceiling < base)) continue;
     // Replaced rather than mutated, for the reason spelled out on term 0 below: `studyTerms`
     // hands back the SHAPE's own term objects for full-weight terms.
     terms[ti] = { ...terms[ti], creditCeiling: ceiling };
