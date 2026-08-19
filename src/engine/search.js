@@ -26,6 +26,23 @@
 // whole catalog is filler by definition. This is `decide late` used as a search
 // order, and it is the honest version of what MRV was supposed to deliver.
 //
+// ── Forced cells are not part of that argument at all ───────────────
+//
+// Everything above is about cells with a CHOICE. A cell whose domain is one term —
+// which is every cell `applyEarlyTerms` adopted from the department's plan — has no
+// choice, and assigning it is unit propagation rather than a decision. It goes
+// first, above both the filler and claim keys.
+//
+// It did not, for a long time, because those two keys were consulted before domain
+// width: 22 of 82 forced cells over 19 traced plans were decided after a cell that
+// still had alternatives. The cost was not cosmetic. Until a forced cell is
+// assigned, every capacity check on its term reads room the cell is certain to
+// take, so the search fills the term with something else and backtracks into the
+// arrangement it would have had anyway. Lifting it above them, over the same 19
+// plans: 121,126 search nodes → 19,693, attempts 73 → 38, and five plans that had
+// fallen through the whole ladder to `packCells` were answered by the strict search
+// instead. No program that generated stopped generating.
+//
 // ── The witness is the propagator, not a verification pass ──────────
 //
 // Distinctness across cells — no two answered by the same course — is an
@@ -1101,11 +1118,12 @@ function attemptPlacement({
 
   // Deterministic order before any heuristic reorders: two runs must agree.
   //
-  // `fillerOf` is what lets rule 4 reach the ordering at all. `byConstraint`'s first key puts
-  // fillers last UNCONDITIONALLY, and a general elective is a filler by the only test available
-  // there — `candidates === null`. So a depth elective could be ranked 1 all day and never be
-  // compared on it, because the filler key decides first. Passing the predicate in keeps the
-  // decision here, next to the comparison that makes it, instead of teaching a module-level
+  // `fillerOf` is what lets rule 4 reach the ordering at all. `byConstraint`'s FILLER key — the
+  // first one that can separate two cells with a choice, now that forced cells are lifted above
+  // it — puts fillers last unconditionally, and a general elective is a filler by the only test
+  // available there: `candidates === null`. So a depth elective could be ranked 1 all day and
+  // never be compared on it, because the filler key decides first. Passing the predicate in keeps
+  // the decision here, next to the comparison that makes it, instead of teaching a module-level
   // helper about elective roles.
   const fillerOf = (p) => p.candidates === null && !isCompetingDepthElective(p);
   const order = [...plans].sort((a, b) => byConstraint(a, b, terms.length, rankOf, fillerOf));
@@ -2566,13 +2584,39 @@ export function describe(f) {
 
 
 /**
- * Search order: fewest legal terms first, then fewest candidates.
+ * Search order: forced cells first, then fillers last, then claim, width, candidates.
  *
- * The second key is the one that does the work here — see the header. A cell that
- * admits any course sorts last on BOTH keys, so it is placed into whatever room
- * is left rather than claiming a term a specific course needed.
+ * Two different jobs, in that order. A cell with ONE legal term is not a decision and goes first,
+ * so the capacity it is certain to consume is on the board before anything else is judged against
+ * that term. Everything after it is about cells that DO have a choice, and there the candidate-set
+ * key is what does the work — see the header. A cell that admits any course sorts last on both
+ * width and candidates, so it takes whatever room is left rather than claiming a term a specific
+ * course needed.
  */
 function byConstraint(a, b, termCount, rankOf = () => 0, fillerOf = isFiller) {
+  // ── A cell with ONE legal term is not a decision ──────────────────
+  //
+  // `applyEarlyTerms` collapses an adopted cell to `domain = [at]`, and narrowing collapses
+  // others. Assigning such a cell is unit propagation, not a choice: there is exactly one value,
+  // so nothing about search order can change where it lands.
+  //
+  // It was nonetheless decided LATE, because `filler` and `claim` are consulted before domain
+  // width. Measured over 19 traced plans: 22 of 82 forced cells (26.8%) were decided after a cell
+  // that still had a choice, and half of all placements into the first four semesters (73 of 146,
+  // in 11 of 19 plans) happened after a later semester had already been filled.
+  //
+  // The cost is not aesthetic. Until a forced cell is assigned, every capacity check on its term
+  // reads room the cell is already certain to consume — so the search fills that term with
+  // something else, discovers the forced cell has nowhere to go, and backtracks to the same
+  // arrangement it would have reached by deciding the forced cell first.
+  //
+  // This CANNOT weaken the two keys below it. `filler` and `claim` exist to settle which cell
+  // claims a scarce early term, and that is a question about cells with genuine alternatives; a
+  // forced cell is not competing for anything, it is already there. An empty domain is excluded
+  // deliberately — that cell has already failed, and the width key below sorts it last.
+  const sa = a.domain.length === 1 ? 0 : 1, sb = b.domain.length === 1 ? 0 : 1;
+  if (sa !== sb) return sa - sb;
+
   // Fillers last. This is the ordering the whole engine exists for, and it must not
   // be left to emerge from a tie-break: the motivating complaint is that departments
   // spend the general electives before the first co-op, so the courses with

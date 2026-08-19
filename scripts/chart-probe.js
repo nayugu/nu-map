@@ -400,10 +400,38 @@ for (const lvl of ["undergraduate", "graduate"]) {
                        principalIsFirst: principal === (why[0]?.key ?? null),
                        bullets: why.map(w => `${w.key}${w.value != null ? `=${w.value}` : ""}x${w.beat}`) };
             };
+            // ── Are FORCED cells decided FIRST? ────────────────────────
+            //
+            // `applyEarlyTerms` collapses an adopted cell to `domain = [at]`, so a cell the
+            // department already placed is a variable with exactly ONE legal value. Assigning
+            // it is not a decision — it is unit propagation, and standard practice is to do it
+            // immediately, because until it is assigned every capacity check on that term is
+            // reading room the cell is already going to consume.
+            //
+            // But `byConstraint` consults `filler` and then `rankOf` (claim) BEFORE domain
+            // width, so a claim-bearing cell with eight legal terms outranks a forced one. This
+            // counts how often that actually happens: `forcedAfterFree` is forced cells decided
+            // after at least one cell that still had a choice, and `earlyAfterLate` is the
+            // symptom a reader SEES — a card landing in the first four semesters after a card
+            // has already landed in semester five or later.
+            const width = new Map(rank.map(r => [r.card, r.terms ?? 0]));
+            let forced = 0, forcedAfterFree = 0, freeSeen = 0;
+            let earlyAfterLate = 0, lateSeen = 0, earlyPlaced = 0;
+            for (const s of st.place) {
+              if (width.get(s.card) === 1) {
+                forced += 1;
+                if (freeSeen) forcedAfterFree += 1;
+              } else freeSeen += 1;
+              if (s.term != null && s.term <= 3) {
+                earlyPlaced += 1;
+                if (lateSeen) earlyAfterLate += 1;
+              } else if (s.term != null) lateSeen += 1;
+            }
             return { via: st.via, place: st.place.length, swaps: st.swaps.length,
                      final: fin.size, rolled: rolled.size,
                      wrong: wrong.slice(0, 6), wrongN: wrong.length, extra: extra.length,
                      rank: rank.length, rankTop: top, rankTier: st.rankingTier,
+                     forced, forcedAfterFree, earlyPlaced, earlyAfterLate,
                      why: [whyAt(0), whyAt(Math.floor(st.place.length / 2))],
                      passes: [...new Set(st.swaps.map(m => m.pass))] };
           })(),
@@ -606,6 +634,12 @@ if (traceMode) {
       console.log(`      steps via=${v.steps.via} place=${v.steps.place} swaps=${v.steps.swaps}`
         + ` final=${v.steps.final} rolled=${v.steps.rolled} WRONG=${v.steps.wrongN}`
         + ` extra=${v.steps.extra}  passes=${v.steps.passes.join(",")}`);
+      // The ordering question, per plan: how many cells with ONE legal term were decided after
+      // a cell that still had a choice, and how many first-four-semester placements happened
+      // after a later semester had already been filled.
+      console.log(`      order forced=${v.steps.forced}`
+        + ` afterFree=${v.steps.forcedAfterFree}`
+        + `   early=${v.steps.earlyPlaced} afterLate=${v.steps.earlyAfterLate}`);
       for (const w of v.steps.wrong) console.log(`        ${w}`);
     }
     if (v.modelErr) console.error(`      ✗ deriveModel threw: ${v.modelErr}`);
