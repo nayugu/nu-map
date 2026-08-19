@@ -285,11 +285,20 @@ test("the walkthrough reproduces the plan it claims to explain", () => {
       const model = deriveModel(snap);
       const steps = buildSteps(snap, model);
       if (!steps) { bad.push(`${p.key}#${vi}: no steps for a plan that generated`); return; }
-      // Only the search builds a per-course sequence; the packer is a greedy pass with no tree,
-      // and the panel says so rather than stepping through nothing.
-      if (steps.via === "search" && !steps.reconciles) {
-        bad.push(`${p.key}#${vi}: ${steps.place.length} steps + ${steps.swaps.length} swaps `
-          + `do not reproduce the ${steps.final.length}-course plan`);
+      // ── Asserted for the PACKER too, which is how this shipped broken ──
+      //
+      // This read `steps.via === "search" && !steps.reconciles`, excusing packed plans on the
+      // grounds that they have no per-course sequence to check. True of the spine and false of the
+      // GRID: the panel still drew a grid and still animated phase 2's moves over it, so it did
+      // show a plan — one missing every course no move happened to touch.
+      // `environmental_studies_and_philosophy_ba` ended its walkthrough showing 9 of 34 courses
+      // and this test passed. The exemption was the bug.
+      //
+      // Reconciliation is a claim about what the GRID ends up holding, and every route that
+      // produces a grid owes it.
+      if (!steps.reconciles) {
+        bad.push(`${p.key}#${vi}: via=${steps.via}, ${steps.place.length} steps + `
+          + `${steps.swaps.length} swaps do not reproduce the ${steps.final.length}-course plan`);
       }
       // A search-built plan must have a step per course. The packer legitimately has none — it is
       // a greedy pass with no tree — and the panel says so rather than stepping through nothing.

@@ -217,7 +217,17 @@ export default function BuildSteps({ steps, isPhone, controlsSlot = null }) {
   // movement that did not happen.
   const view = useMemo(() => {
     const n = Math.max(0, Math.min(at, total));
-    const where = new Map();
+    // ── The grid starts from whatever phase 2 was handed ──────────────
+    //
+    // Empty for a searched plan, because the placement steps below build it up card by card and
+    // watching that happen is the whole point.
+    //
+    // NOT empty for a PACKED plan. `packCells` emits no placement steps, so seeding empty left the
+    // grid holding only the cards a phase-2 move happened to touch — the walkthrough ended on a
+    // plan with 9 of 34 courses while the panel beside it showed all 34. `buildSteps` reconstructs
+    // the packer's assignment by rolling its recorded moves back off the final plan, so the honest
+    // starting frame is that assignment, with the moves then animated over it.
+    const where = new Map(place.length ? [] : (steps?.afterSearch ?? []));
     for (let i = 0; i < Math.min(n, place.length); i++) where.set(place[i].card, place[i].term);
     for (let i = 0; i < Math.max(0, n - place.length); i++) where.set(swaps[i].card, swaps[i].to);
     const occupants = {};
@@ -747,7 +757,15 @@ function termName(semId, semesters, steps, termIndex, t) {
 
 /** The current step, in one line. Written per kind: four different events, four sentences. */
 function caption(cur, t, at, total, steps, view, nameOf) {
-  if (at === 0) return t("chart.deriv.step.start", { n: steps.place.length });
+  // A packed plan has no placement steps, so "an empty plan, and 0 courses to place" was two wrong
+  // sentences at once: the grid is not empty (it holds the packer's whole assignment) and there is
+  // nothing to place. `packed` already says exactly why there is no order to show, so it belongs at
+  // the START, where the reader is asking, and not only at the end.
+  if (at === 0) {
+    return steps.via === "packer"
+      ? t("chart.deriv.step.packed")
+      : t("chart.deriv.step.start", { n: steps.place.length });
+  }
   if (view.done) {
     return steps.via === "packer" ? t("chart.deriv.step.packed") : t("chart.deriv.step.done");
   }

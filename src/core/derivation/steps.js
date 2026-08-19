@@ -119,10 +119,33 @@ export function buildSteps(snapshot, model) {
     toLabel: labelOf(terms[m.to]),
   }));
 
-  // The state the search handed to phase 2. Derived from the steps rather than stored, so it
-  // cannot disagree with what the walkthrough just showed.
-  const afterSearch = new Map(place.map(s => [s.card, s.term]));
   const final = new Map((snapshot.assignment ?? []).map(([c, t]) => [c, t]));
+
+  // ── The state phase 2 STARTED from, whoever produced it ─────────────
+  //
+  // For a searched plan this is the placement steps, derived from them rather than stored so it
+  // cannot disagree with what the walkthrough just showed.
+  //
+  // For a PACKED plan there are no placement steps, and reading this as an empty map is what made
+  // the walkthrough end on a different plan than the one it shipped. `packCells` is a greedy pass
+  // with no tree, so it emits no steps — but phase 2 still ran on its output and its moves ARE
+  // recorded. So the grid was seeded empty and only ever received the handful of cards a swap
+  // touched: `environmental_studies_and_philosophy_ba` finished the walkthrough showing 9 of its
+  // 34 courses, and `cultural_anthropology_and_philosophy_ba` 5 of 21.
+  //
+  // The packer's own assignment is recoverable exactly, without asking it to emit anything: roll
+  // the recorded moves BACK off the final assignment. In reverse order, so a card moved twice
+  // returns to where the packer put it rather than to its intermediate stop.
+  const afterSearch = place.length
+    ? new Map(place.map(s => [s.card, s.term]))
+    : (() => {
+        const base = new Map(final);
+        for (let i = swaps.length - 1; i >= 0; i -= 1) {
+          const m = swaps[i];
+          if (m && base.has(m.card)) base.set(m.card, m.from);
+        }
+        return base;
+      })();
 
   // ── The variable ordering, for the attempt that ANSWERED ────────────
   //
@@ -157,15 +180,19 @@ export function buildSteps(snapshot, model) {
     via: place.length ? "search" : (model?.summary.packed ? "packer" : "none"),
     // Whether the walkthrough reproduces the plan that shipped. `false` is a defect, and it is
     // surfaced rather than swallowed: a walkthrough of a different plan is worse than none.
-    // ── Vacuously true where there is no walkthrough ─────────────────
     //
-    // A packer plan has no spine, so there are no steps and the panel shows none. "What I show
-    // adds up" is then trivially satisfied — there is nothing shown to contradict the plan. The
-    // first version asserted reconciliation unconditionally and duly flagged every packer plan as
-    // broken, which is the test being wrong rather than the view.
-    reconciles: place.length
-      ? reconciles(afterSearch, swaps, final)
-      : true,
+    // ── No longer excused for a packed plan ──────────────────────────
+    //
+    // This used to short-circuit to `true` whenever there were no placement steps, on the
+    // argument that a packer plan shows nothing and so cannot contradict anything. That was true
+    // of the SPINE and false of the GRID: the panel still drew a grid and still animated phase
+    // 2's moves over it, so it did show a plan, and the plan it showed was missing every course
+    // no move happened to touch. The exemption is what let that ship — a guard that excuses the
+    // one case it should have caught.
+    //
+    // Now that `afterSearch` reconstructs the packer's own assignment, reconciliation is a real
+    // claim for both routes and is asserted for both.
+    reconciles: reconciles(afterSearch, swaps, final),
     // `full` beside `label`, NOT over it. Overwriting `label` with "Year 1 Fall" while `term` still
     // said "Fall" made every consumer that composes the two print "Year 1 Fall Fall" — including
     // the row names for a shape that runs past the timeline.
