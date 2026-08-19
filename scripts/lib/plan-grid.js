@@ -410,6 +410,61 @@ function disambiguate(plans) {
   return plans;
 }
 
+/**
+ * Is this code cell INDENTED — an alternative under the row above it?
+ *
+ * CourseLeaf marks them with an inline `margin-left` on a wrapping div rather than a class,
+ * so this reads the style. Verified against the live page for `physics-music-bs`: the
+ * "Select one of the following:" row is flush and carries the hours, and both alternatives
+ * beneath it are wrapped in `<div style="margin-left: 20px;">` and carry none.
+ *
+ * Matched on the property rather than the exact `20px`, since the depth is presentational
+ * and a second level would still be an alternative of what precedes it.
+ */
+function indentedCell(cell) {
+  for (const div of cell.querySelectorAll("div")) {
+    if (/margin-left\s*:\s*[1-9]/i.test(div.getAttribute("style") ?? "")) return true;
+  }
+  return false;
+}
+
+/**
+ * Does this header mean PICK ONE of the rows indented beneath it?
+ *
+ * Deliberately narrow, and the narrowness is the point. `options` in this schema means
+ * "alternative groups, take one", so folding rows into it is only correct for a header that
+ * says exactly that. The `bsba` fixture says **"Take two:"** — absorbing its rows would have
+ * modelled two required courses as a choice between them and quietly halved the requirement.
+ * The contract test caught it, which is what that test is for.
+ *
+ * So anything plural, and anything this does not recognise, is left exactly as it was: two
+ * ordinary rows the student reads as written. Under-folding costs a nicer card; over-folding
+ * costs credits off a degree.
+ */
+function picksOne(text) {
+  const s = (text ?? "").trim();
+  if (/\b(two|three|four|2|3|4)\b/i.test(s)) return false;
+  return /^(select|choose|complete|take)\b[^.]*\bone\b/i.test(s)
+      || /^select\s+from\s+the\s+following\b/i.test(s);
+}
+
+/**
+ * The entry an indented row belongs to: the last one that can hold options.
+ *
+ * Not simply the last entry. A heading, a co-op marker or a vacation cannot own an
+ * alternative, and attaching one to them would bury a real course inside a row the planner
+ * draws as a label. Nor one whose own wording does not promise a choice — see `picksOne`.
+ */
+function lastOptionBearing(entries) {
+  for (let i = entries.length - 1; i >= 0; i -= 1) {
+    const e = entries[i];
+    if (e.heading || e.coop || e.vacation || e.either) continue;
+    if (!Array.isArray(e.options) || !picksOne(e.text)) return null;
+    return e;
+  }
+  return null;
+}
+
 /** Parse one <table class="sc_plangrid"> into years. */
 function parseGridTable(table) {
   const years = [];
@@ -469,7 +524,37 @@ function parseGridTable(table) {
         const next = cells[i + 1];
         const hoursCell = (next?.getAttribute("class") ?? "").includes("hourscol") ? next : null;
         const entry = readCell(cell, hoursCell);
-        if (entry) year.terms[termIndex].entries.push(entry);
+        if (entry) {
+          // ── An INDENTED row is an option of the row above it ──────────
+          //
+          // CourseLeaf writes "Select one of the following:" as an ordinary row carrying the
+          // credits, then indents each alternative beneath it with
+          // `<div style="margin-left: 20px">`. Read flat, that produced a header naming no
+          // course — an empty card the student could not click or read — and every
+          // alternative as a SEPARATE required course, so Physics and Music's first term
+          // showed `MUSC 1001` and `MUSC 1002 and MUSC 1003` as two 4 SH cards when the
+          // degree requires one of them. The term read 26 SH and was really 22.
+          //
+          // Folding them in makes the header what it always was: one choice with real
+          // options. The alternatives carry no hours of their own — the header holds them —
+          // so nothing is double-counted by absorbing them.
+          //
+          // Guarded on the parent existing and being option-bearing: an indented row with
+          // nothing above it is malformed, and standing it up on its own loses less than
+          // attaching it to a heading or a co-op marker would.
+          const into = indentedCell(cell) ? lastOptionBearing(year.terms[termIndex].entries) : null;
+          if (into && entry.options?.length) {
+            into.options.push(...entry.options);
+            // The row's own WORDING, kept beside its codes. Absorbing the entry would
+            // otherwise discard "MUSC 1002 and MUSC 1003" and leave a consumer to rebuild
+            // the phrase from ids — and the whole reason to fold these in is that a student
+            // clicking the card should see the actual choices. It is also what lets the
+            // naive-reading contract test still account for every cell on the page.
+            (into.optionLabels ??= []).push(entry.text);
+          } else {
+            year.terms[termIndex].entries.push(entry);
+          }
+        }
         // Its hours cell belongs to the same term; step over it if present.
         i += (cells[i + 1]?.getAttribute("class") ?? "").includes("hourscol") ? 2 : 1;
       } else {

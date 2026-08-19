@@ -432,7 +432,12 @@ test('a second, naive reading of the HTML agrees cell for cell', () => {
     const plan = parsed.plans[0];            // naiveTerms reads the first table
     for (const y of plan.years) {
       for (const t of y.terms) {
-        const mine = t.entries.map(e => e.text);
+        // Plus the wording of any row FOLDED INTO a "select one of the following" header.
+        // The naive reader knows nothing about indentation, so it still sees those rows as
+        // cells of their own; `optionLabels` is exactly what they said, kept for that reason
+        // as much as for the UI. Without this the comparison would report a cell lost every
+        // time the parser correctly recognised a choice.
+        const mine = t.entries.flatMap(e => [e.text, ...(e.optionLabels ?? [])]);
         const theirs = naive.find(o => o.year === y.label && o.term === t.term)?.cells ?? [];
         // Compare as multisets of visible text: the naive reader knows nothing
         // about headings, groups or co-ops, only what the cell said.

@@ -19,7 +19,9 @@
 //
 // ── MEASURED: this is a WEAK constraint, and the design must not lean on it ──
 //
-// Over the 7,966-course catalog, depth is 0 for **5,627 (71%)** and ≥4 for 118.
+// Over the 7,966-course catalog, depth is 0 for **5,784 (72.6%)** and ≥4 for 118.
+// (It read 5,627 before concurrent-eligible references stopped costing a term —
+// see the `course` leaf below. 152 courses list nothing but concurrent options.)
 // Per program, the bound leaves every study term legal for **52–65%** of the
 // courses the program names outright (CS+Math 11/21, Industrial Engineering
 // 18/32, Biology 13/20). CS+Math's deepest required course is depth 2.
@@ -189,6 +191,22 @@ export function buildDepthIndex(courseMap = {}, { unresolvedDepth = UNRESOLVED_A
       // costs no terms — neutral, as the satisfaction algebra treats it.
       note: () => 0,
       course: (tok) => {
+        // ── A CONCURRENT prerequisite costs no term ──────────────────
+        //
+        // `concurrent: true` means the catalog permits the two in the SAME semester, so the
+        // reference bounds what must be *underway*, not what must be *finished*. Charging it
+        // a term is charging for an ordering the registrar does not require.
+        //
+        // Not academic. `PHYS 1161` lists `MATH 1341` concurrent and its department puts
+        // both in the first fall; depth said 1, and since PHYS 1161 is fall-only that pushed
+        // Intro Physics to YEAR TWO. `precedence.js` already knew (`concurrentOk`) — depth
+        // did not, and depth is what `buildDomains` turns into `before-prereqs`. So a rule
+        // the engine models correctly in one place was contradicted in another.
+        //
+        // 251 of 2,614 courses with prerequisites (9.6%) carry a concurrent-eligible option
+        // and 152 (5.8%) have nothing but. This is the same "systematically later than the
+        // department" bias the early-terms window exists to fight, arriving from underneath.
+        const cost = tok?.concurrent ? 0 : 1;
         const rid = refId(tok);
         if (!courseMap[rid]) {
           unresolvableRefs.add(rid);
@@ -197,11 +215,11 @@ export function buildDepthIndex(courseMap = {}, { unresolvedDepth = UNRESOLVED_A
           const d = unresolvedDepth(rid);
           // null propagates as "not an operand", so the resolvable siblings of an
           // OR decide the bound instead of this branch collapsing it to zero.
-          return d === null ? null : d + 1;
+          return d === null ? null : d + cost;
         }
         const d = compute(rid);
         if (tainted.has(rid)) taintedBelow = true;
-        return d + 1;
+        return d + cost;
       },
     });
 
