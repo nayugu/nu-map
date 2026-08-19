@@ -28,26 +28,21 @@
                 {
                   "text": "Select ONE of the following CHEM course sequences:",
                   "sh": 5,
-                  "options": []
-                },
-                {
-                  "text": "CHEM 1101 and CHEM 1102 and CHEM 1103",
                   "options": [
                     [
                       "CHEM1101",
                       "CHEM1102",
                       "CHEM1103"
-                    ]
-                  ]
-                },
-                {
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
-                  "options": [
+                    ],
                     [
                       "CHEM1161",
                       "CHEM1162",
                       "CHEM1163"
                     ]
+                  ],
+                  "optionLabels": [
+                    "CHEM 1101 and CHEM 1102 and CHEM 1103",
+                    "CHEM 1161 and CHEM 1162 and CHEM 1163"
                   ]
                 },
                 {
@@ -505,26 +500,21 @@
                 {
                   "text": "Select ONE of the following CHEM course sequences:",
                   "sh": 5,
-                  "options": []
-                },
-                {
-                  "text": "CHEM 1101 and CHEM 1102 and CHEM 1103",
                   "options": [
                     [
                       "CHEM1101",
                       "CHEM1102",
                       "CHEM1103"
-                    ]
-                  ]
-                },
-                {
-                  "text": "CHEM 1161 and CHEM 1162 and CHEM 1163",
-                  "options": [
+                    ],
                     [
                       "CHEM1161",
                       "CHEM1162",
                       "CHEM1163"
                     ]
+                  ],
+                  "optionLabels": [
+                    "CHEM 1101 and CHEM 1102 and CHEM 1103",
+                    "CHEM 1161 and CHEM 1162 and CHEM 1163"
                   ]
                 },
                 {

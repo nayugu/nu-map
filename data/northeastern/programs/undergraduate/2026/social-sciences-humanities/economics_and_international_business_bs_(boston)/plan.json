@@ -208,10 +208,6 @@
                 {
                   "text": "Complete one of the approved business core:",
                   "sh": 4,
-                  "options": []
-                },
-                {
-                  "text": "ACCT 2301, INNO 2301, MISM 2301, or SCHM 2301",
                   "options": [
                     [
                       "ACCT2301"
@@ -225,6 +221,9 @@
                     [
                       "SCHM2301"
                     ]
+                  ],
+                  "optionLabels": [
+                    "ACCT 2301, INNO 2301, MISM 2301, or SCHM 2301"
                   ]
                 },
                 {
@@ -329,10 +328,6 @@
                 {
                   "text": "Complete one of the following:",
                   "sh": 4,
-                  "options": []
-                },
-                {
-                  "text": "FINA 4320, INTB 3310, INTB 3330, INTB 4983, MKTG 4512, SCHM 3301, or STRT 3301",
                   "options": [
                     [
                       "FINA4320"
@@ -355,6 +350,9 @@
                     [
                       "STRT3301"
                     ]
+                  ],
+                  "optionLabels": [
+                    "FINA 4320, INTB 3310, INTB 3330, INTB 4983, MKTG 4512, SCHM 3301, or STRT 3301"
                   ]
                 }
               ]

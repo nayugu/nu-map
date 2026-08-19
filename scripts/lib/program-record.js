@@ -13,6 +13,7 @@
  */
 import { parse as parseHTML } from 'node-html-parser';
 import { markSharedSections } from './major-integrity.js';
+import { applySharedSections } from './shared-sections.js';
 import { extractPlanGrid }    from './plan-grid.js';
 import {
   parseRequirements, parseTotalCredits,
@@ -215,6 +216,20 @@ async function buildOne(root, url, pageName, group, deps) {
   // Mark cross-count sections (integrative / GPA re-lists / shared credit) that
   // would otherwise be impossible to satisfy under single-use allocation.
   markSharedSections(data);
+  // ── Then the ones no rule can derive ──────────────────────────────
+  //
+  // `markSharedSections` finds a section whose courses an earlier one ate. It cannot find
+  // two alternative TRACKS, because nothing in the data says a student picks one — they
+  // allocate side by side perfectly well. Those calls are adjudicated by hand and committed;
+  // see `shared-sections.js` for why, and for the measured cost of leaving them out.
+  //
+  // Second so the derived marking still wins where it applies: the manifest is for what the
+  // rule misses, not a replacement for it.
+  const shared = applySharedSections(data, { url, slug });
+  // Carried non-enumerably, like `_slug`, so it reaches the scrape's rails without ever
+  // reaching the JSON. An unmatched title means the catalog moved under the adjudication.
+  Object.defineProperty(data, '_sharedMissing', {
+    value: shared.missing, enumerable: false });
 
   // The folder this record must be written to. Carried on the record rather
   // than recomputed by the caller, so the name and the path stay one decision.

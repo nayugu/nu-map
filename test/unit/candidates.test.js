@@ -310,13 +310,26 @@ test("a seed naming a course the catalog lacks contributes nothing", () => {
 });
 
 // ═══════════════════════════════════════════════════════════════════
-// Option GROUPS — the 36 cells design rule 2 exists for
+// Option GROUPS — the 42 cells design rule 2 exists for
 // ═══════════════════════════════════════════════════════════════════
 
-test("CORPUS FACT: 36 named cells have a multi-course option group", () => {
+test("CORPUS FACT: 42 named cells have a multi-course option group", () => {
   // "PSYC 3200 or PT 5410 and PT 5411" — PT 5410 alone does not answer it.
   // Pinned so that if the parser ever flattens groups again, this fails here
   // rather than in a student's plan.
+  //
+  // 36 → 42 on 2026-08-19, and the direction is the point: this number may only
+  // go UP from a parser change. All six are the "select one" fold (plan-grid.js
+  // `picksOne`), which absorbs rows the catalog indents under a pick-one header
+  // instead of leaving them as separate required cells. Verified against the
+  // live pages, not inferred — Nursing BSN publishes "Select ONE of the
+  // following CHEM course sequences: 5" over CHEM 1101/1102/1103 and CHEM
+  // 1161/1162/1163, so unfolded it charged 10 SH of chemistry for a 5 SH
+  // requirement. The other four are the same shape in Physics & Music and
+  // Electrical Engineering & Music (MUSC 1001 or MUSC 1002 + 1003), twice each
+  // because both plan variants carry the cell.
+  //
+  // A DROP here still means flattening and is still the bug this guards.
   let cells = 0, multi = 0;
   const walk = function* (es) { for (const e of es ?? []) { yield e; yield* walk(e.children); } };
   for (const root of ["data/northeastern/programs/undergraduate/2026", "data/northeastern/programs/graduate/2026"]) {
@@ -343,7 +356,10 @@ test("CORPUS FACT: 36 named cells have a multi-course option group", () => {
     }
   }
   assert.ok(cells > 1300, `only ${cells} named cells found — corpus missing`);
-  assert.equal(multi, 36, `${multi} cells have a compound option; the entry model may have flattened`);
+  assert.ok(multi >= 42,
+    `${multi} cells have a compound option, down from 42 — the entry model flattened a group`);
+  assert.equal(multi, 42,
+    `${multi} compound cells, expected 42; if a scrape legitimately added more, verify each new one against its catalog page before re-pinning`);
 });
 
 test("a compound option is answered as a group, never course by course", () => {

@@ -114,30 +114,21 @@
                 {
                   "text": "Take one:",
                   "sh": 4,
-                  "options": []
-                },
-                {
-                  "text": "MGSC 2301 (AD)",
                   "options": [
                     [
                       "MGSC2301"
-                    ]
-                  ]
-                },
-                {
-                  "text": "ACCT 1201",
-                  "options": [
+                    ],
                     [
                       "ACCT1201"
-                    ]
-                  ]
-                },
-                {
-                  "text": "INTB 1203 (IC and ER)",
-                  "options": [
+                    ],
                     [
                       "INTB1203"
                     ]
+                  ],
+                  "optionLabels": [
+                    "MGSC 2301 (AD)",
+                    "ACCT 1201",
+                    "INTB 1203 (IC and ER)"
                   ]
                 }
               ]
@@ -537,30 +528,21 @@
                 {
                   "text": "Take one:",
                   "sh": 4,
-                  "options": []
-                },
-                {
-                  "text": "MGSC 2301 (AD)",
                   "options": [
                     [
                       "MGSC2301"
-                    ]
-                  ]
-                },
-                {
-                  "text": "ACCT 1201",
-                  "options": [
+                    ],
                     [
                       "ACCT1201"
-                    ]
-                  ]
-                },
-                {
-                  "text": "INTB 1203 (IC and ER)",
-                  "options": [
+                    ],
                     [
                       "INTB1203"
                     ]
+                  ],
+                  "optionLabels": [
+                    "MGSC 2301 (AD)",
+                    "ACCT 1201",
+                    "INTB 1203 (IC and ER)"
                   ]
                 }
               ]

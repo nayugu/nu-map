@@ -2,7 +2,7 @@
   "name": "Civil Engineering, BSCE (Boston)",
   "metadata": {
     "verified": true,
-    "lastEdited": "8/15/2026",
+    "lastEdited": "8/19/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
@@ -59,7 +59,7 @@
       "level": "verified",
       "kind": "major",
       "score": 1,
-      "checkedAt": "2026-08-15",
+      "checkedAt": "2026-08-19",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/civil-environmental/civil-engineering-bsce/",
       "sourcesAvailable": [
         "requirement-tables",

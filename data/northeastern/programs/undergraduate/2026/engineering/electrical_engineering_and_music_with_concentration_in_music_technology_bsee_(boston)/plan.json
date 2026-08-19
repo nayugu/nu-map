@@ -250,23 +250,18 @@
                 {
                   "text": "Select from the following:",
                   "sh": 4,
-                  "options": []
-                },
-                {
-                  "text": "MUSC 1001",
                   "options": [
                     [
                       "MUSC1001"
-                    ]
-                  ]
-                },
-                {
-                  "text": "MUSC 1002 and MUSC 1003",
-                  "options": [
+                    ],
                     [
                       "MUSC1002",
                       "MUSC1003"
                     ]
+                  ],
+                  "optionLabels": [
+                    "MUSC 1001",
+                    "MUSC 1002 and MUSC 1003"
                   ]
                 },
                 {
@@ -744,23 +739,18 @@
                 {
                   "text": "Select from the following:",
                   "sh": 4,
-                  "options": []
-                },
-                {
-                  "text": "MUSC 1001",
                   "options": [
                     [
                       "MUSC1001"
-                    ]
-                  ]
-                },
-                {
-                  "text": "MUSC 1002 and MUSC 1003",
-                  "options": [
+                    ],
                     [
                       "MUSC1002",
                       "MUSC1003"
                     ]
+                  ],
+                  "optionLabels": [
+                    "MUSC 1001",
+                    "MUSC 1002 and MUSC 1003"
                   ]
                 },
                 {

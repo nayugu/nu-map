@@ -122,3 +122,41 @@ export function checkPlanRail(nowPlans, prevPlans, ratio = MAX_PLAN_LOSS_RATIO) 
             `Check whether the catalog dropped its plans or the grid parser stopped matching.`,
   };
 }
+
+/**
+ * ── The cross-count repairs must survive the scrape ─────────────────
+ *
+ * `shared: true` marks a section the demand model SKIPS — an integrative requirement, a GPA
+ * re-list, one of two alternative tracks. Drop it and the degree is charged twice for the
+ * same courses; measured, that took 21 of 1,078 shapes from a plan to
+ * `mostly-unschedulable`.
+ *
+ * Most of those flags cannot be re-derived from the page (see `shared-sections.js`), so they
+ * live in a committed manifest applied on every run. This rail checks the manifest still
+ * FITS: a title it names that matches no section means the catalog reorganised underneath a
+ * hand adjudication, and the repair silently stopped applying.
+ *
+ * ── Why this fails the run rather than warning ──────────────────────
+ *
+ * Nothing in `update-majors.yml` generates a plan, so no other guard in that workflow can
+ * see the damage — the scrape, the integrity check and the verification ratchet all passed
+ * on the run that dropped 21 degrees. A warning in a log nobody reads is how it stayed
+ * invisible in the first place. The workflow pushes straight to main unattended, and a month
+ * of stale-but-correct requirements is a far smaller wrong than a month of degrees a student
+ * cannot schedule.
+ *
+ * The fix is always cheap and local: re-adjudicate that one entry in `shared-sections.json`.
+ *
+ * @param {Iterable<object>} results  freshly built records, each carrying `_sharedMissing`
+ * @returns {{ok: boolean, misses: {slug: string, titles: string[]}[]}}
+ */
+export function checkSharedSectionsRail(results) {
+  const misses = [];
+  for (const rec of results ?? []) {
+    const titles = rec?._sharedMissing;
+    if (Array.isArray(titles) && titles.length) {
+      misses.push({ slug: rec._slug ?? rec?.name ?? '(unknown)', titles });
+    }
+  }
+  return { ok: misses.length === 0, misses };
+}

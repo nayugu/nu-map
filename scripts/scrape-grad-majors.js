@@ -30,7 +30,7 @@ import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
 import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
-import { checkScrapeRails, checkPlanRail } from './lib/scrape-rails.js';
+import { checkScrapeRails, checkPlanRail, checkSharedSectionsRail } from './lib/scrape-rails.js';
 import { verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
 import { parseEditionArg, editionBasePath, assertEdition,
          isFatalScrapeError }        from './lib/catalog-edition.js';
@@ -502,6 +502,21 @@ async function main() {
       console.error(`\n❌  Refusing to write — this run looks like upstream breakage:\n`);
       for (const f of failures) console.error(`   • ${f}`);
       console.error(`\n    Nothing was written. Inspect the catalog markup before re-running.\n`);
+      process.exit(1);
+    }
+
+    // A hand-adjudicated cross-count repair that no longer matches its section. Fails the
+    // run because nothing downstream in this workflow can see the damage — see
+    // `checkSharedSectionsRail`.
+    const sharedRail = checkSharedSectionsRail(pending.values());
+    if (!sharedRail.ok) {
+      console.error(`\n❌  Refusing to write — a shared-section adjudication no longer matches:\n`);
+      for (const m of sharedRail.misses) {
+        console.error(`   • ${m.slug}: ${m.titles.map(t => JSON.stringify(t)).join(', ')}`);
+      }
+      console.error(`\n    These sections are SKIPPED by the demand model; losing the mark charges`);
+      console.error(`    the degree twice for the same courses. Re-adjudicate the entry in`);
+      console.error(`    scripts/lib/shared-sections.json against the live page, then re-run.\n`);
       process.exit(1);
     }
   }

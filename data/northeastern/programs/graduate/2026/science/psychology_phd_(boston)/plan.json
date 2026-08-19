@@ -89,46 +89,29 @@
                     {
                       "text": "Complete one of the following:",
                       "sh": 3,
-                      "options": []
-                    },
-                    {
-                      "text": "PSYC 5120",
                       "options": [
                         [
                           "PSYC5120"
-                        ]
-                      ]
-                    },
-                    {
-                      "text": "PSYC 5130",
-                      "options": [
+                        ],
                         [
                           "PSYC5130"
-                        ]
-                      ]
-                    },
-                    {
-                      "text": "PSYC 5140",
-                      "options": [
+                        ],
                         [
                           "PSYC5140"
-                        ]
-                      ]
-                    },
-                    {
-                      "text": "PSYC 5150",
-                      "options": [
+                        ],
                         [
                           "PSYC5150"
-                        ]
-                      ]
-                    },
-                    {
-                      "text": "PSYC 5115",
-                      "options": [
+                        ],
                         [
                           "PSYC5115"
                         ]
+                      ],
+                      "optionLabels": [
+                        "PSYC 5120",
+                        "PSYC 5130",
+                        "PSYC 5140",
+                        "PSYC 5150",
+                        "PSYC 5115"
                       ]
                     }
                   ]

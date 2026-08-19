@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-15",
+ "generatedAt": "2026-08-19",
  "note": "Derived from the committed catalog corpus. Tier A is scoped to the programs listed in `e.p`; tier C is inference and requires advisor approval. See docs/substitutions-design.md.",
  "tierCMinEvidence": 5,
  "counts": {

@@ -2,7 +2,7 @@
   "name": "Chemical Engineering and Physics, BSChE (Boston)",
   "metadata": {
     "verified": false,
-    "lastEdited": "8/15/2026",
+    "lastEdited": "8/19/2026",
     "branch": "main",
     "tablesPresent": 6,
     "tablesConsumed": 6,
@@ -74,7 +74,7 @@
       "level": "review",
       "kind": "major",
       "score": 0.6,
-      "checkedAt": "2026-08-15",
+      "checkedAt": "2026-08-19",
       "sourceUrl": "https://catalog.northeastern.edu/undergraduate/engineering/chemical/chemical-engineering-physics-bsche/",
       "sourcesAvailable": [
         "requirement-tables",
