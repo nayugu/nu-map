@@ -847,3 +847,85 @@ stable against the next ordering change.
 Related: `chart-bench.js` shows IB's Year 1 Fall holding **7 cells / 17 SH** against the
 department's own 5. Legal — the cap is 19 — and worth a look alongside this, since two of
 those seven are the 1 SH `BUSN 1102` and the 0 SH `COOP 3948`.
+
+> **Diagnosed 2026-08-19 — see §17.** That trailing observation was the symptom of a
+> separate defect, not of this one. IB's first term is overfull because a published row's
+> cardinality is discarded, and it is now measured at **7 cells / 21 SH against a published
+> 17**. Entry 16's own defect stands unchanged; only the "related" note is explained.
+
+---
+
+### 17. A published row's CARDINALITY is discarded, so early terms run heavy
+
+Found 2026-08-19 by `scripts/early-terms-probe.js`, written for this question. Nothing in
+`verify-chart` reports it, and it is invisible to the fidelity metric that exists to check
+exactly this — see *Why both existing checks miss it* below.
+
+**The department says pick some of these; we schedule all of them.**
+`earlyTermsOf` (`earlyTerms.js:198`) collapses a published term into one flat `offers` set:
+
+```js
+const offers = new Set();
+for (const e of entries) {
+  if (e.coop || e.vacation || e.heading) continue;
+  for (const group of (e.options ?? [])) for (const id of group) offers.add(id);
+}
+```
+
+`answerableGroup` (`earlyTerms.js:224`) then fixes **every** degree cell that set can answer
+into that term. How many courses the row asked for is nowhere in the data by that point.
+
+Business Administration BSBA, Year 1 Fall, published **17 SH**:
+
+| published row | SH | what we scheduled |
+|---|---|---|
+| BUSN 1101, BUSN 1102 | 5 | neither — not parsed requirements, already a `verify-majors` discrepancy |
+| ENGW 1111, ECON 1116, **or** MATH 1231 | 4 | **ECON 1116 *and* MATH** — 8 SH |
+| **Take two:** MGSC 2301 / ACCT 1201 / INTB 1203 | 8 | **all three** — 12 SH |
+
+Result **20 SH against a published 17**. The reasoning in the code is sound for the case it
+was written for — "CS 2500 or CS 2510 still tells us *when* that requirement happens" — and
+breaks whenever the degree separately requires more than one course the row offers, which is
+the norm for a business core.
+
+**Scale, over 1,725 published early terms in 523 shapes:**
+
+| | terms heavier than published | extra |
+|---|---|---|
+| Term 1 | 44 of 522 — 8.4% | +137 SH |
+| Term 2 | **89 of 522 — 17.0%** | +168 SH |
+| Term 3 | 31 of 414 — 7.5% | +85 SH |
+| Term 4 | 38 of 267 — 14.2% | +73 SH |
+| **total** | **202 of 1,725 — 11.7%** | **+463 SH**, worst +8 |
+
+**Why both existing checks miss it.** `chart-gate` checks term 0 against
+`max(cap, firstTermOverload)` where `firstTermOverload` is the figure the *engine* disclosed,
+so the engine declaring 21 SH makes 21 SH legal — that check catches an **undisclosed**
+overload and is blind by construction to an unjustified one. And the fidelity metric *scores
+this defect as a success*: pinning both ECON and MATH from a pick-one row is 2 of 2 courses
+landing in the term their department named. The 93.7% figure the probe prints is therefore an
+overstatement, which is why the probe now prints credit weight beside it and why the two must
+not be quoted apart.
+
+**Only 5 plans trip a ceiling** — `business_administration_bsba` (both campuses, both
+variants) and `international_business_bsib_(boston)`, the last at 21 SH against a published
+17. Every one is disclosed and none exceeds the `cap + FIRST_TERM_OVERLOAD_SH` bound, so no
+hard rule fails. The other ~197 terms are silent because later terms have room. Do not read
+the small over-cap count as the size of this defect; it is the 3% of it that happens to hit a
+cap.
+
+**The fix.** Bound the credits adopted into each early term by what the department printed
+for that term, plus the existing decomposition headroom. That is the rule as stated —
+"go with whatever the sample plan has for that semester's hours" — applied to all four terms
+rather than asserted about the first, and it needs one comparison in `adoptEarlyTerms` and no
+new data. Parsing per-row cardinality out of "Take two:" prose is the more precise fix and
+should be measured *after* the bound, not instead of it: the bound is robust to rows we parse
+imperfectly, and a row whose count we misread is exactly the case that would go wrong.
+
+**S2, not S1.** The plan is registrable — the courses are real, offered, prerequisite-clean,
+and inside the cap wherever a cap applies. What is wrong is that it is heavier than the
+curriculum it claims to be reproducing, and the panel tells the student their department
+publishes it that way, which for these terms is false.
+
+Deferred by agreement on 2026-08-19 rather than forgotten: the fix lands in `earlyTerms.js`,
+which sits beside `engine/index.js` while that was being edited in a second session.
