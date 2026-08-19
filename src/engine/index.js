@@ -30,7 +30,8 @@
 
 import { deriveCells, cellsSH, substitutePrereqs, withdrawWorkTermCells, assignRegistrations, GENERAL_ELECTIVE } from "./demand.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
-import { seedFromPlan, EARLY_SEED_TERMS } from "./seed.js";
+import { seedFromPlan } from "./seed.js";
+import { adoptEarlyTerms, applyEarlyTerms, EARLY_TERMS } from "./earlyTerms.js";
 import { buildDomains, wideAtFor } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
 import { preflight, tightestTerms, MAX_DERIVED_GE_SHARE } from "./preflight.js";
@@ -109,6 +110,38 @@ export { createTrace, NULL_TRACE, CAUSES, EXCLUSION, NODE } from "./trace.js";
  */
 export function generatePlan(args = {}) {
   const first = withPackerRetry(args);
+  // ── Following the department may never COST a plan ────────────────
+  //
+  // Fixing the first four terms to the department's arrangement is a constraint, and
+  // `docs/chart-success-criteria.md` §2 is explicit that a refusal is not a safe default:
+  // the alternative a student is left with is the published plan itself, which this corpus
+  // measures at 7.7% prereq-order and 31.9% season violations. Refusing to print a plan
+  // while recommending a measurably wrong one is not conservatism.
+  //
+  // So a refusal is not the answer, it is the signal to try again without the arrangement —
+  // the same shape as the breadth-guidance retry below, and for the same reason. One
+  // fallback, not a ladder: the arrangement is either followed or it is not.
+  //
+  // Skipped where it cannot help. A pre-flight refusal is about the requirement DATA rather
+  // than about where courses go, so re-deriving cells would reach the identical verdict at
+  // twice the cost.
+  if (first.refused && args.followDepartment !== false
+      && !PREFLIGHT_REASONS.has(first.refused.reason)) {
+    if (args.trace) args.trace.stage("retry", { because: "department-early-terms" });
+    const own = generatePlan({ ...args, followDepartment: false });
+    // The FIRST refusal is the one reported if both fail: it describes the degree, where the
+    // retry's describes a degree we deliberately handicapped.
+    if (!own.refused) {
+      return {
+        ...own,
+        report: {
+          ...own.report,
+          relaxed: [...(own.report?.relaxed ?? []), "department-early-terms"],
+        },
+      };
+    }
+    return first;
+  }
   // ── Breadth guidance is a PREFERENCE, and this is what makes it one ──
   //
   // Binding an elective to an unmet competency gives it a real candidate set, which is the
@@ -246,13 +279,18 @@ function generateOnce({
   // supplies CONTENT only. The shape still comes from `defaultShape`, because the donor's
   // co-op cycle is the donor's own.
   donorPlan = null,
-  // How many study terms the department's own placement outranks our preferences for.
+  // ── The department plans the first four terms ─────────────────────
   //
-  // A measurement hatch in the spirit of `propagateChains`, not a tuning knob: the claim
-  // "following the department early beats inferring from course level" is a claim about a
-  // corpus, and it can only be checked by running the same corpus both ways. Production
-  // uses the default.
-  earlySeedTerms = EARLY_SEED_TERMS,
+  // Off only as the FALLBACK: fixing a term is a constraint, and a constraint can refuse a
+  // degree that would otherwise have planned. `generatePlan` turns it off and retries rather
+  // than letting that happen, and records `relaxed: ["department-early-terms"]` so a plan
+  // built without the department's arrangement never silently claims to have followed it.
+  // Production's first attempt is always true.
+  followDepartment = true,
+  // How many study terms the department plans. A measurement hatch in the spirit of
+  // `propagateChains` — "following the department beats inferring from a course number" is a
+  // claim about a corpus and has to be runnable both ways — not a tuning knob.
+  earlyTerms = EARLY_TERMS,
   // ── Where the derivation view gets its material ───────────────────
   //
   // A recording sink from `src/engine/trace.js`, or null. Null is the production default for
@@ -568,6 +606,32 @@ function generateOnce({
   }
   const warnings = gate?.warn ? [{ kind: gate.warn, ...gate.data }] : [];
 
+  // ── 5b. The department plans the first four terms ───────────────
+  //
+  // Here, and not earlier, because this is the first point at which the shape, the domains and
+  // the precedence index are all final — a stretched shape or a stranded cell rebuilds the
+  // layout, and a term fixed against a layout that was then thrown away would aim at nothing.
+  //
+  // `donorPlan` is the stand-in for a program whose department publishes nothing, and the
+  // department's own plan always wins where there is one. Both are read the same way and
+  // repaired the same way, which is the point of emitting the donor in a published plan's
+  // shape: there is one mechanism here, not two.
+  //
+  // See `earlyTerms.js`. This narrows domains to a unit and so is the one thing in this
+  // function that can turn a plan into a refusal — which is exactly why `generatePlan`
+  // retries with `followDepartment: false` and says so in `report.relaxed`.
+  const early = followDepartment
+    ? adoptEarlyTerms({
+        publishedPlan: publishedPlan ?? donorPlan, shape, plans, precedence,
+        through: earlyTerms,
+      })
+    : { placed: new Map(), moves: [], unplaced: [] };
+  // The exclusion reason is recorded only when something is RECORDING — the same condition
+  // the critical-path narrowing above uses. `verify-chart` generates 1,031 plans untraced in
+  // the monthly workflow, and an exclusion row per term per fixed cell is pure cost there.
+  const earlyFixed = applyEarlyTerms(plans, early.placed,
+    trace ? EXCLUSION.DEPARTMENT_TERM : null);
+
   // ── 6. A legal plan ────────────────────────────────────────────
   //
   // The roster and the domains are recorded HERE and once, from the cell set and the layout the
@@ -675,7 +739,6 @@ function generateOnce({
     // `donorPlan` is the stand-in for a program whose department publishes nothing,
     // and the department's own plan always wins where there is one.
     seed: seedFromPlan(publishedPlan ?? donorPlan, shape),
-    earlySeedTerms,
     // Off only so the claim "a pruning propagator does not move an existing plan" can be
     // TESTED rather than argued — see `chart-propagator-neutral.test.js`. Production never
     // passes false, and the invariant it protects is the whole basis of §17's placement rule.
@@ -860,6 +923,16 @@ function generateOnce({
       unusedTerms: shape.terms.filter(t => t.unused).length,
       shapeSource: shape.source,
       nodes: placed.nodes,
+      // ── Which of the early terms are the department's, and which are corrections ──
+      //
+      // Reported rather than hidden because this is the engine CONTRADICTING the catalog, and
+      // a student is entitled to know which of their first two years an advisor arranged and
+      // which we moved out from under them. `source` is what the UI says out loud: a plan
+      // modelled on similar programs must never be described as the department's own.
+      earlyTerms: earlyTermsReport({
+        followDepartment, publishedPlan, donorPlan, earlyTerms, earlyFixed, early,
+        plans, terms, courseMap,
+      }),
       // The four-course bar that ACTUALLY applies, after student type. Zero for a graduate
       // degree, which is the whole point of exposing it: the explainer stated "four courses in
       // every full fall and spring" to master's and PhD students, for whom it is false and
@@ -1045,6 +1118,59 @@ function generateOnce({
  * undergraduate convention and `minCoursesFor` returns 0 for graduates, which switches the
  * first check off for them rather than inventing a rule their departments do not follow.
  */
+/**
+ * What to tell the student about who planned their first two years.
+ *
+ * The engine core stays free of presentation — `earlyTerms.js` speaks in cell ids and term
+ * indices, because that is what it reasons about. Turning those into "CHEM 1211, moved from
+ * Year 1 Fall" happens HERE, once, where the course map and the term labels already are.
+ * Both the explainer and the MCP server read this, so a cell id would make each of them
+ * re-derive the same label and disagree about it.
+ *
+ * `source` is the load-bearing field, and it is the one thing that must never be generous:
+ * a plan modelled on OTHER programs may not be described as this department's, and a plan
+ * built after the arrangement was dropped may not be described as the department's at all.
+ */
+function earlyTermsReport({
+  followDepartment, publishedPlan, donorPlan, earlyTerms, earlyFixed, early,
+  plans, terms, courseMap,
+}) {
+  // A term as DATA, never as an English phrase. `termLabel` is the catalog's own wording and
+  // says "Summer 1", which every locale renders as "Summer A" through `SEM_NAME_KEY` — so
+  // baking a label here would ship the one string the terminology rule forbids, in all eight
+  // languages at once. The UI composes the name; this says which term it is.
+  const where = (ti) => {
+    const t = terms?.[ti];
+    return t ? { year: (t.yearIndex ?? 0) + 1, semTypeId: t.semTypeId ?? null } : null;
+  };
+  const cellOf = new Map((plans ?? []).map(p => [p.cell.id, p.cell]));
+  const name = (id) => {
+    const cell = cellOf.get(id);
+    return cell ? cellText(cell, courseMap) : String(id);
+  };
+  return {
+    // Not `publishedPlan ? …` alone: the fallback retry sets `followDepartment` false while
+    // the published plan is still sitting right there in the arguments, and reporting
+    // "department" for a plan we arranged ourselves is the one lie this field can tell.
+    source: !followDepartment ? "chart"
+      : publishedPlan ? "department"
+      : donorPlan ? "similar-programs"
+      : "chart",
+    through: earlyTerms,
+    fixed: earlyFixed,
+    // Every course moved out of the term its department names, and why. Not truncated —
+    // a correction is rare by construction, and a half-list reads as the whole one.
+    moves: (early?.moves ?? []).map(m => ({
+      ...m, course: name(m.cell), fromWhere: where(m.from), toWhere: where(m.to),
+    })),
+    // Named early and legal in no term at or after it, so handed back to the ordinary
+    // search — the behaviour that predates all of this, and never an illegal placement.
+    unplaced: (early?.unplaced ?? []).map(u => ({
+      ...u, course: name(u.cell), fromWhere: where(u.from),
+    })),
+  };
+}
+
 function criteriaFailures(plan, { studentType, cal, courseMap }) {
   const out = [];
   let minCourses = minCoursesFor(cal, studentType);

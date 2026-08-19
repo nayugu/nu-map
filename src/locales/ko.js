@@ -265,6 +265,18 @@ export const strings = {
   "chart.limits.substituted": "학위에 없는 {courses}을(를) 추가했습니다. 계획의 어떤 과목이 이를 필요로 하기 때문이며, 자유 선택 한 자리를 썼습니다",
   "chart.limits.optional": "학과 계획이 비워 둔 {terms}을(를) 사용했습니다. 필수 과목이 그때만 개설되기 때문입니다",
   "chart.limits.nodata": "과목의 난이도·부담·담당 교수에 대해서는 아무것도 알지 못하므로, 그 어느 것도 고려하지 않았습니다",
+
+  // ── 어느 학기를 누가 짰는지 ─────────────────────────────────────
+  "chart.early.h":            "어느 학기를 누가 짰는지",
+  "chart.early.term":         "{y}학년 {season}",
+  "chart.early.department":   "처음 {n}개 학기는 학과가 공개한 이수 계획을 그대로 사용했습니다. {rest}번째 학기부터는 모두 이 도구가 배치했습니다.",
+  "chart.early.similar":      "학과가 이수 계획을 공개하지 않아, 처음 {n}개 학기는 이수 요건의 구조가 가장 비슷한 프로그램을 참고했습니다. 배치한 것은 본인 학위가 실제로 요구하는 과목뿐입니다 — 비슷한 프로그램은 '언제'를 제안할 수 있을 뿐 '무엇을'은 정할 수 없습니다. {rest}번째 학기부터는 모두 이 도구가 배치했습니다.",
+  "chart.early.own":          "참고할 수 있는 이수 계획이 공개되어 있지 않아, 모든 학기를 이 도구가 배치했습니다.",
+  "chart.early.relaxed":      "학과의 이수 계획을 학위의 나머지 부분과 함께 배치할 수 없어, 모든 학기를 이 도구가 직접 짰습니다.",
+  "chart.early.moved.h":      "해당 학기로는 성립하지 않아, 학과가 지정한 학기에서 옮긴 과목:",
+  "chart.early.moved.not-offered-then":       "{course} — {from}에서 {to}(으)로. 그 학기에는 개설되지 않기 때문입니다",
+  "chart.early.moved.after-its-prerequisite": "{course} — {from}에서 {to}(으)로. 선수 과목 뒤에 오도록 하기 위해서입니다",
+  "chart.early.unplaced":     "{course}은(는) {from} 및 그 이후 어느 학기에도 배치할 수 없어, 이 도구가 위치를 정했습니다.",
   // ── 과정 페이지 ─────────────────────────────────────────────────
   "chart.explain.tab.text": "규칙",
   "chart.explain.tab.process": "만들어진 과정",
@@ -380,6 +392,7 @@ export const strings = {
   "chart.deriv.fate.order": "앞이나 뒤에 와야 할 것 때문에 제외",
   "chart.deriv.fate.outside-precedence-window": "선수 과목 연쇄가 남기는 구간의 밖",
   "chart.deriv.fate.coop-prep-bound": "코업 준비 과목은 코업보다 앞에 와야 합니다",
+  "chart.deriv.fate.department-plans-this-term": "학과의 이수 계획은 이 과목을 다른 학기에 두고 있습니다",
   "chart.deriv.fate.learned-nogood": "그 자리에서 한 번 실패해 제외했습니다",
   "chart.deriv.cell": "“{title}”을(를) {term}에: {why}.",
   "chart.deriv.cell.tried": "{tried}회 시도, {entered}회 채택.",

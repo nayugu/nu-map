@@ -64,6 +64,10 @@ export const FATE_GROUP = Object.freeze({
   [EXCLUSION.NOT_OFFERED]: "offered",
   [EXCLUSION.PRECEDENCE_WINDOW]: "order",
   [EXCLUSION.COOP_PREP_BOUND]: "order",
+  // Grouped with `order` because that is what it is — a sequencing decision — and because
+  // inventing a colour for it would give the department's arrangement more visual weight in
+  // the tree than the prerequisite chains it has to obey.
+  [EXCLUSION.DEPARTMENT_TERM]: "order",
   [EXCLUSION.LEARNED]: "learned",
 });
 

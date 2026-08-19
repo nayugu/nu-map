@@ -265,6 +265,18 @@ export const strings = {
   "chart.limits.substituted": "أضافت {courses}، وهو غير مذكور في درجتك، لأن مقررًا في الخطة يحتاجه — فأُنفقت عليه مادة اختيارية حرة",
   "chart.limits.optional": "استخدمت {terms}، وهو ما تتركه خطة قسمك فارغًا، لأن مقررًا مطلوبًا لا يُطرح إلا فيه",
   "chart.limits.nodata": "لا تعرف شيئًا عن صعوبة المقررات أو عبئها أو أساتذتها، فلم يدخل أي من ذلك في الحساب",
+
+  // ── من خطّط كل فصل ──────────────────────────────────────────────
+  "chart.early.h":            "من خطّط كل فصل",
+  "chart.early.term":         "{season} السنة {y}",
+  "chart.early.department":   "فصولك {n} الأولى هي خطة الدراسة المنشورة من قسمك، كما نُشرت تمامًا. أما بدءًا من الفصل {rest} فقد رتّبته هذه الأداة.",
+  "chart.early.similar":      "لا ينشر قسمك أي خطة دراسة، لذلك تتبع الفصول {n} الأولى برامج تشبه بنية متطلباتها بنيةَ متطلباتك. لم تُوضع سوى مقررات تشترطها درجتك أنت — فالبرنامج المشابه قد يقترح متى، لا ماذا. أما بدءًا من الفصل {rest} فقد رتّبته هذه الأداة.",
+  "chart.early.own":          "رتّبت هذه الأداة كل الفصول، إذ لا توجد خطة دراسة منشورة لبرنامجك يمكن اتّباعها.",
+  "chart.early.relaxed":      "تعذّر ترتيب خطة قسمك مع بقية الدرجة، لذلك رتّبت هذه الأداة كل الفصول بنفسها.",
+  "chart.early.moved.h":      "نُقلت من الفصل الذي يحدّده قسمك، لأن ذلك الفصل لا يصلح:",
+  "chart.early.moved.not-offered-then":       "{course} — من {from} إلى {to}، لأنه لا يُطرح حينها",
+  "chart.early.moved.after-its-prerequisite": "{course} — من {from} إلى {to}، ليبقى بعد مقرر يشترطه",
+  "chart.early.unplaced":     "تعذّر وضع {course} في {from} أو في أي فصل بعده، لذلك اختارت هذه الأداة موضعه.",
   // ── صفحة المسار ─────────────────────────────────────────────────
   "chart.explain.tab.text": "القواعد",
   "chart.explain.tab.process": "المسار",
@@ -380,6 +392,7 @@ export const strings = {
   "chart.deriv.fate.order": "مستبعَد بسبب ما يجب أن يسبقه أو يليه",
   "chart.deriv.fate.outside-precedence-window": "خارج النافذة التي تتركها سلاسل المتطلبات",
   "chart.deriv.fate.coop-prep-bound": "التحضير للتدريب التعاوني يجب أن يسبق التدريب",
+  "chart.deriv.fate.department-plans-this-term": "خطة قسمك تضع هذا المقرر في فصل آخر",
   "chart.deriv.fate.learned-nogood": "أُبعد بعد فشل محاولة هناك",
   "chart.deriv.cell": "«{title}» في {term}: {why}.",
   "chart.deriv.cell.tried": "جُرِّب {tried} مرة، وأُبقي على {entered}.",

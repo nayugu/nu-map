@@ -296,6 +296,26 @@ export const strings = {
   "chart.limits.optional": "It used {terms}, which your department’s plan leaves empty, because a required course only runs then",
   "chart.limits.nodata": "It knows nothing about course difficulty, workload or instructors, so none of that was considered",
 
+  // ── Who planned which semester ──────────────────────────────────
+  //
+  // The single most important thing this panel says, so it is stated plainly and first.
+  // A plan modelled on OTHER programs must never read as this department's own, and a
+  // plan built after the department's arrangement was dropped must not claim to follow
+  // it — hence three separate sentences rather than one with a caveat.
+  "chart.early.h":            "Who planned which semester",
+  // Plan-RELATIVE, so it is "Year 2 Fall" and never a calendar date: this panel talks about
+  // the shape of a degree, not about a student's dates. A format string because the word
+  // order moves per locale, exactly as `sem.name.format` does for calendar terms.
+  "chart.early.term":         "Year {y} {season}",
+  "chart.early.department":   "Your first {n} semesters are your department’s published plan, kept as published. Everything from semester {rest} on was arranged by this tool.",
+  "chart.early.similar":      "Your department publishes no plan of study, so the first {n} semesters follow programs whose requirements are structured most like yours. Only courses your own degree requires were placed — a similar program can suggest when, never what. Everything from semester {rest} on was arranged by this tool.",
+  "chart.early.own":          "This tool arranged every semester, because there is no published plan of study for your program to follow.",
+  "chart.early.relaxed":      "Your department’s plan could not be scheduled alongside the rest of your degree, so this tool arranged every semester itself.",
+  "chart.early.moved.h":      "Moved out of the semester your department names, because that semester would not work:",
+  "chart.early.moved.not-offered-then":    "{course} — {from} to {to}, because it is not offered then",
+  "chart.early.moved.after-its-prerequisite": "{course} — {from} to {to}, to keep it after a course it requires",
+  "chart.early.unplaced":     "{course} could not be placed in {from} or any semester after it, so this tool chose where it goes.",
+
   // ── The process page ────────────────────────────────────────────
   // A record of one search rather than prose about every plan. See
   // src/ui/derivation/ and docs/chart-derivation-design.md.
@@ -450,6 +470,7 @@ export const strings = {
   "chart.deriv.fate.order":   "ruled out by what must come before or after",
   "chart.deriv.fate.outside-precedence-window": "outside the window the prerequisite chains leave",
   "chart.deriv.fate.coop-prep-bound": "co-op preparation has to come before the co-op",
+  "chart.deriv.fate.department-plans-this-term": "your department’s plan puts this course in another term",
   "chart.deriv.fate.learned-nogood": "set aside after an attempt failed there",
   "chart.deriv.cell":         "“{title}” in {term}: {why}.",
   "chart.deriv.cell.tried":   "Tried {tried} time(s), kept {entered}.",

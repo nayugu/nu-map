@@ -30,30 +30,17 @@
 // index. Drift between the two would aim every hint one term off.
 // ═══════════════════════════════════════════════════════════════════
 
-/**
- * How many study terms the department's own arrangement OUTRANKS our preferences for.
- *
- * Four, and the number is measured rather than chosen. Comparing each program's own
- * published variants against each other — the department arguing with itself — the
- * share that place a course in the same term runs:
- *
- *     term             1       2       3       4       5
- *     variants agree   76.2%   73.2%   50.6%   36.3%    4.2%
- *
- * Where a program's variants agree, the placement does not depend on which co-op cycle
- * the student picked, which is the only sense in which a published term is a fact about
- * the degree rather than about one route through it. The collapse from 36.3% to 4.2% is
- * the boundary: past term 4 a published position is a consequence of one co-op pattern
- * and says nothing about a student on another, so the level and unlock preferences —
- * 12,848 measured placements — are the better guide and keep it.
- *
- * Inside the window it is the reverse. Those preferences infer where a course belongs
- * from its number and its unlock value; the department STATES where it put this course
- * in this degree, and for the first two years it states it consistently. CHART's
- * measured weakness is exactly here: of the courses a department puts in its first
- * term, it agreed 53.4%, placed 37.3% LATER and 0% earlier.
- */
-export const EARLY_SEED_TERMS = 4;
+// ── `EARLY_SEED_TERMS` lived here, and has moved ────────────────────
+//
+// It named the window in which this hint outranked the sequencing preferences. The window
+// is right and the mechanism was not: a hint is the thing a search may ignore, so it could
+// never deliver "the department's first four terms are kept". That claim now lives in
+// `earlyTerms.js` as `EARLY_TERMS`, where it is enforced by narrowing a domain instead of
+// by sorting one — measured over the same corpus at 54.5% → 73.0% agreement across terms
+// 1-4, with coverage rising rather than falling.
+//
+// What remains in this file is the older and narrower job it always did well: an ordering
+// for `preferenceFree`, the rung where the ladder has already given the preferences up.
 
 /** Every entry in a term, including nested `either` children. */
 function flatten(entries, out = []) {

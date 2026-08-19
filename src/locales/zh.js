@@ -265,6 +265,18 @@ export const strings = {
   "chart.limits.substituted": "加入了你的学位并未列出的 {courses}，因为计划中的某门课需要它——为此占用了一门自由选修",
   "chart.limits.optional": "使用了你所在院系计划留空的 {terms}，因为某门必修课只在那时开设",
   "chart.limits.nodata": "它对课程难度、作业量和授课教师一无所知，因此这些都未被考虑",
+
+  // ── 每个学期由谁安排 ─────────────────────────────────────────────
+  "chart.early.h":            "每个学期由谁安排",
+  "chart.early.term":         "第 {y} 学年{season}",
+  "chart.early.department":   "前 {n} 个学期完全采用你所在系公布的教学计划，原样保留。从第 {rest} 个学期起，均由本工具安排。",
+  "chart.early.similar":      "你所在的系没有公布教学计划，因此前 {n} 个学期参考了课程结构与你最相似的专业。只会放入你自己学位要求的课程——相似专业只能提示“何时修”，绝不能决定“修什么”。从第 {rest} 个学期起，均由本工具安排。",
+  "chart.early.own":          "本工具安排了全部学期，因为你的专业没有公布可供参考的教学计划。",
+  "chart.early.relaxed":      "你所在系的教学计划无法与学位其余部分相衔接，因此全部学期均由本工具自行安排。",
+  "chart.early.moved.h":      "以下课程被移出你所在系指定的学期，因为那个学期行不通：",
+  "chart.early.moved.not-offered-then":       "{course} —— 由{from}移至{to}，因为当时不开课",
+  "chart.early.moved.after-its-prerequisite": "{course} —— 由{from}移至{to}，以确保排在其先修课之后",
+  "chart.early.unplaced":     "{course} 无法安排在{from}或其后的任何学期，因此由本工具决定其位置。",
   // ── 过程页 ──────────────────────────────────────────────────────
   "chart.explain.tab.text": "规则",
   "chart.explain.tab.process": "编排过程",
@@ -380,6 +392,7 @@ export const strings = {
   "chart.deriv.fate.order": "因为必须在前或在后的课程而排除",
   "chart.deriv.fate.outside-precedence-window": "在先修链条留出的区间之外",
   "chart.deriv.fate.coop-prep-bound": "实习准备课必须排在实习之前",
+  "chart.deriv.fate.department-plans-this-term": "你所在系的教学计划把这门课放在另一个学期",
   "chart.deriv.fate.learned-nogood": "在那里失败过一次后被搁下",
   "chart.deriv.cell": "“{title}”放在{term}：{why}。",
   "chart.deriv.cell.tried": "试过 {tried} 次，留下 {entered} 次。",

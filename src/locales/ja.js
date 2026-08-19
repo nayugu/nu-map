@@ -266,6 +266,18 @@ export const strings = {
   "chart.limits.substituted": "学位に載っていない {courses} を追加しました。プラン内の科目がこれを必要とするためで、自由選択の枠を充てています",
   "chart.limits.optional": "学科のプランが空けている {terms} を使いました。必修科目がそこでしか開講されないためです",
   "chart.limits.nodata": "科目の難易度・負荷・担当教員については何も分からないため、いずれも考慮していません",
+
+  // ── どの学期を誰が組んだか ───────────────────────────────────────
+  "chart.early.h":            "どの学期を誰が組んだか",
+  "chart.early.term":         "{y}年次 {season}",
+  "chart.early.department":   "最初の {n} 学期は、所属学科が公表している履修計画をそのまま用いています。{rest} 学期目以降はすべて本ツールが組み立てました。",
+  "chart.early.similar":      "所属学科が履修計画を公表していないため、最初の {n} 学期は、要件の構成が最も近いプログラムを参考にしています。配置したのはあなたの学位が実際に求める科目だけです——類似プログラムが示せるのは「いつ」であって、「何を」ではありません。{rest} 学期目以降はすべて本ツールが組み立てました。",
+  "chart.early.own":          "参考にできる履修計画が公表されていないため、すべての学期を本ツールが組み立てました。",
+  "chart.early.relaxed":      "所属学科の履修計画は学位の残りと両立できなかったため、すべての学期を本ツールが組み立てました。",
+  "chart.early.moved.h":      "その学期では成立しないため、所属学科が指定する学期から移した科目：",
+  "chart.early.moved.not-offered-then":       "{course} — {from}から{to}へ。その学期には開講されないため",
+  "chart.early.moved.after-its-prerequisite": "{course} — {from}から{to}へ。前提科目の後に置くため",
+  "chart.early.unplaced":     "{course} は{from}以降のどの学期にも置けなかったため、配置は本ツールが決めました。",
   // ── 過程のページ ────────────────────────────────────────────────
   "chart.explain.tab.text": "ルール",
   "chart.explain.tab.process": "組み立ての過程",
@@ -381,6 +393,7 @@ export const strings = {
   "chart.deriv.fate.order": "前後に来るべきものの都合で除外",
   "chart.deriv.fate.outside-precedence-window": "前提科目の連なりが残す範囲の外",
   "chart.deriv.fate.coop-prep-bound": "コープの準備科目はコープより前に置く必要がある",
+  "chart.deriv.fate.department-plans-this-term": "所属学科の履修計画はこの科目を別の学期に置いている",
   "chart.deriv.fate.learned-nogood": "そこで一度失敗したため外した",
   "chart.deriv.cell": "「{title}」を{term}に：{why}。",
   "chart.deriv.cell.tried": "{tried}回試し、{entered}回採用。",

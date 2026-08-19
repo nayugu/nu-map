@@ -265,6 +265,18 @@ export const strings = {
   "chart.limits.substituted": "Añadió {courses}, que tu titulación no incluye, porque un curso del plan lo necesita: se gastó en él una optativa libre",
   "chart.limits.optional": "Usó {terms}, que el plan de tu departamento deja vacío, porque un curso obligatorio solo se imparte entonces",
   "chart.limits.nodata": "No sabe nada sobre dificultad, carga de trabajo ni profesorado, así que nada de eso se tuvo en cuenta",
+
+  // ── Quién planificó cada semestre ───────────────────────────────
+  "chart.early.h":            "Quién planificó cada semestre",
+  "chart.early.term":         "{season} del año {y}",
+  "chart.early.department":   "Tus primeros {n} semestres son el plan de estudios publicado por tu departamento, tal cual se publicó. Todo a partir del semestre {rest} lo organizó esta herramienta.",
+  "chart.early.similar":      "Tu departamento no publica ningún plan de estudios, así que los primeros {n} semestres siguen a programas cuyos requisitos tienen una estructura parecida a la tuya. Solo se colocaron asignaturas que tu propia titulación exige: un programa parecido puede sugerir cuándo, nunca qué. Todo a partir del semestre {rest} lo organizó esta herramienta.",
+  "chart.early.own":          "Esta herramienta organizó todos los semestres, porque no hay ningún plan de estudios publicado para tu programa.",
+  "chart.early.relaxed":      "El plan de tu departamento no se podía encajar con el resto de la titulación, así que esta herramienta organizó todos los semestres.",
+  "chart.early.moved.h":      "Movidas fuera del semestre que indica tu departamento, porque ese semestre no funcionaría:",
+  "chart.early.moved.not-offered-then":       "{course} — de {from} a {to}, porque no se imparte entonces",
+  "chart.early.moved.after-its-prerequisite": "{course} — de {from} a {to}, para mantenerla después de una asignatura que requiere",
+  "chart.early.unplaced":     "{course} no se pudo colocar en {from} ni en ningún semestre posterior, así que esta herramienta eligió su lugar.",
   // ── La página del proceso ───────────────────────────────────────
   "chart.explain.tab.text": "Las reglas",
   "chart.explain.tab.process": "El proceso",
@@ -380,6 +392,7 @@ export const strings = {
   "chart.deriv.fate.order": "descartado por lo que debe ir antes o después",
   "chart.deriv.fate.outside-precedence-window": "fuera de la ventana que dejan las cadenas de prerrequisitos",
   "chart.deriv.fate.coop-prep-bound": "la preparación de co-op tiene que ir antes del co-op",
+  "chart.deriv.fate.department-plans-this-term": "el plan de tu departamento sitúa esta asignatura en otro semestre",
   "chart.deriv.fate.learned-nogood": "apartado tras fallar un intento ahí",
   "chart.deriv.cell": "«{title}» en {term}: {why}.",
   "chart.deriv.cell.tried": "Probado {tried} vez/veces, conservado {entered}.",

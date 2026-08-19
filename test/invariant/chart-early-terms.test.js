@@ -21,7 +21,7 @@ import { buildDepthIndex } from "../../src/engine/prereqDepth.js";
 import { loadCatalog } from "../../src/adapters/northeastern/courseCatalog.node.js";
 import enginePorts from "../../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../../src/adapters/northeastern/chartCalibration.js";
-import { EARLY_SEED_TERMS } from "../../src/engine/seed.js";
+import { EARLY_TERMS } from "../../src/engine/earlyTerms.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "../..");
 
@@ -138,13 +138,13 @@ test("early terms › the sample generated something to measure", () => {
 
 test("early terms › the window is four, and the engine agrees it is", () => {
   // A guard against the constant being tuned without the ratchet below being re-measured.
-  assert.equal(EARLY_SEED_TERMS, 4);
+  assert.equal(EARLY_TERMS, 4);
 });
 
 test("early terms › CHART puts the department's first-term courses in term one", () => {
   const rate = judged ? agreed / judged : 0;
   assert.ok(rate >= MIN_FIRST_TERM_AGREEMENT,
     `first-term agreement ${(100 * rate).toFixed(1)}% is below the ${(100 * MIN_FIRST_TERM_AGREEMENT)}% `
-    + `floor — the seed is no longer reaching the search, or its term index has drifted `
-    + `out of the domain's space again (see seed.js)`);
+    + `floor — the department's arrangement is no longer reaching the search, or its term `
+    + `index has drifted out of the domain's space again (see earlyTerms.js)`);
 });

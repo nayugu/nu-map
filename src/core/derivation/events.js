@@ -98,6 +98,15 @@ export const EXCLUSION = Object.freeze({
   COOP_PREP_BOUND: "coop-prep-bound",
   /** Outside the window the precedence chains leave (`criticalPath`). */
   PRECEDENCE_WINDOW: "outside-precedence-window",
+  /**
+   * The department published this course in one of the first four terms, so that term is
+   * the only one left (`earlyTerms.js`).
+   *
+   * Distinct from every reason above, and it has to be: those are all the ENGINE ruling a
+   * term out, and this is the engine standing aside. A card drawn with one legal term and
+   * no explanation reads as a bug in a view whose entire purpose is showing the process.
+   */
+  DEPARTMENT_TERM: "department-plans-this-term",
   /** Removed between restarts because an earlier attempt failed there. */
   LEARNED: "learned-nogood",
 });
@@ -153,5 +162,9 @@ export const EXCLUSION_PRIORITY = Object.freeze([
   EXCLUSION.NOT_OFFERED,
   EXCLUSION.COOP_PREP_BOUND,
   EXCLUSION.PRECEDENCE_WINDOW,
+  // Above `LEARNED` and below every hard reason. A term the department did not choose was
+  // still legal, so this must never outrank an explanation of why a term was impossible —
+  // but it is a better answer than "an attempt failed there".
+  EXCLUSION.DEPARTMENT_TERM,
   EXCLUSION.LEARNED,
 ]);

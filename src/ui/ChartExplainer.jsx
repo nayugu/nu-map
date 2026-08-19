@@ -28,6 +28,63 @@ import { createPortal } from "react-dom";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import DerivationPanel from "./derivation/DerivationPanel.jsx";
 
+/** Season names, written per locale rather than engine-translated — see `SemLabel.jsx`. */
+const SEASON_KEY = {
+  fall: "claude.sem.fall", spring: "claude.sem.spring",
+  sumA: "claude.sem.sum1", sumB: "claude.sem.sum2",
+};
+
+/**
+ * Which half of this plan the department arranged, and every course we moved.
+ *
+ * Module scope rather than a closure inside the panel, so it can be rendered — and read —
+ * on its own. It takes `t` rather than calling `useLanguage`, matching how the rest of this
+ * file passes translation down.
+ */
+function EarlyTerms({ early, relaxed, t }) {
+  // Plan-RELATIVE and localized: "Year 2 Summer A", never "Year 2 Summer 1" and never a
+  // calendar date. The engine hands over `{ year, semTypeId }` precisely so this decision
+  // is made once, here, by the layer that knows the reader's language.
+  const term = (w) => {
+    if (!w) return "";
+    const key = SEASON_KEY[w.semTypeId];
+    return t("chart.early.term", { y: w.year, season: key ? t(key) : (w.semTypeId ?? "") });
+  };
+  const dropped = (relaxed ?? []).includes("department-early-terms");
+  const n = early.through ?? 4;
+
+  // Four sources, four sentences, and no sentence that has to be qualified by the next one.
+  const lead = dropped ? "chart.early.relaxed"
+    : early.source === "department" ? "chart.early.department"
+    : early.source === "similar-programs" ? "chart.early.similar"
+    : "chart.early.own";
+
+  return (
+    <>
+      <p style={{ margin: 0, lineHeight: 1.6 }}>{t(lead, { n, rest: n + 1 })}</p>
+      {!dropped && (early.moves ?? []).length > 0 && (
+        <>
+          <p style={{ margin: "9px 0 3px" }}>{t("chart.early.moved.h")}</p>
+          <ul style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
+            {early.moves.map((m, i) => (
+              <li key={`${m.cell}-${i}`} style={{ marginBottom: 2 }}>
+                {t(`chart.early.moved.${m.why ?? "not-offered-then"}`, {
+                  course: m.course, from: term(m.fromWhere), to: term(m.toWhere),
+                })}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+      {!dropped && (early.unplaced ?? []).map((u, i) => (
+        <p key={`${u.cell}-${i}`} style={{ margin: "9px 0 0", color: "var(--warn)" }}>
+          {t("chart.early.unplaced", { course: u.course, from: term(u.fromWhere) })}
+        </p>
+      ))}
+    </>
+  );
+}
+
 export default function ChartExplainer({ report, program, derivation, onClose, isPhone }) {
   const { t } = useLanguage();
   // ── Two pages, not two dialogs ────────────────────────────────────
@@ -459,6 +516,25 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
             ))}
           </ul>
         </Section>
+
+        {/* ── Who planned which semester ────────────────────────────
+          *
+          * The headline claim of the whole generator, so it is its own section and sits
+          * above the caveats rather than inside them. The rule it states is one sentence —
+          * the department plans the first four semesters, CHART plans the rest — and a
+          * student who reads nothing else should still come away knowing which half of
+          * their plan an advisor arranged.
+          *
+          * `source` is read rather than inferred from `publishedPlan` being present,
+          * because the fallback drops the department's arrangement while the plan itself is
+          * still there. Inferring here is exactly how this panel would come to claim an
+          * authority the plan does not have.
+          */}
+        {report.earlyTerms && (
+          <Section title={t("chart.early.h")}>
+            <EarlyTerms early={report.earlyTerms} relaxed={report.relaxed} t={t} />
+          </Section>
+        )}
 
         {/* ── What it takes as given, and what it cannot know ─────────
           *
