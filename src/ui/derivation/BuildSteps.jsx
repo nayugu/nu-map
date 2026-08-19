@@ -52,7 +52,8 @@ import { ICreditSystem } from "../../ports/ICreditSystem.js";
 import { ISpecialTerms } from "../../ports/ISpecialTerms.js";
 import { subjectColor } from "../../core/courseModel.js";
 import { semName }      from "../../core/semGrid.js";
-import { termSemesters, orderReason, orderWhy, ORDER_KEYS } from "../../core/derivation/steps.js";
+import { termSemesters, orderReason, orderWhy, headlineWhy, ORDER_KEYS }
+  from "../../core/derivation/steps.js";
 import { SEM_NAME_KEY } from "../SemLabel.jsx";
 import { planRows, MiniPlanGrid } from "../MiniPlanGrid.jsx";
 
@@ -565,48 +566,75 @@ function RankQueue({ ranking, cards, placed, liveCard, t, fz, totalTerms }) {
                         overflow: "hidden", textOverflow: "ellipsis" }} title={live.title}>
             {name(live)}
           </div>
-          {/* ── One bullet per key that actually beat something ─────────
-            * Not one reason and not five columns: the keys that DECIDED this card against the
-            * rest, each with the number of cards it settled and the value it was settled on. The
-            * counts sum to the size of the queue behind it, which is what makes the list a
-            * derivation rather than a description of one. */}
-          {/* An ordered list, numbered by RUNG rather than by position — `value` sets each item's
-              number, so a card decided by tests 2 and 4 shows "2." and "4." and the gap says the
-              missing tests were never reached. A plain 1,2,3 would say the reasons are ranked by
-              this card, which is exactly the misreading the ladder above exists to prevent. */}
-          <ol style={{ margin: "3px 0 0", paddingInlineStart: 17 }}>
-            {orderWhy(live, left).map(w => (
-              <li key={w.key} style={{
-                fontSize: fz, lineHeight: 1.45, marginTop: 1,
-                // ── The principal reason, in bold ──────────────────────
-                //
-                // Several of these can be true at once and they are not equal. The one that puts
-                // this card AT THE TOP is the key that separates it from the RUNNER-UP: lose that
-                // key and it is second, whatever the other bullets say. The rest explain why it is
-                // ahead of cards further down, which is a weaker claim and reads as one.
-                //
-                // Taken from `orderReason` against the next card in the queue rather than from the
-                // first bullet in the list: the two usually agree and they come apart exactly when
-                // it matters — where a low-numbered test beats a crowd at the back while a
-                // higher-numbered one settles the card in second place.
-                fontWeight: w.key === principal ? 700 : 400,
-                color: w.key === principal ? "var(--text-1)" : "var(--text-3)",
-                // The tie is not a rung — it is what is left when all five tests have failed to
-                // separate two cards — so it carries no number rather than a "0" or a phantom "6".
-                listStyle: w.key === "tie" ? "none" : undefined,
-                marginInlineStart: w.key === "tie" ? -13 : undefined,
-              }} value={w.key === "tie" ? undefined : RUNGS.indexOf(w.key) + 1}>
-                {whyText(w, totalTerms, t)}
-                {/* The tally, quietly, after the reason. A tie beat nobody — it is the absence of a
-                    reason — so it gets no count, which is also how it reads. */}
-                {w.key !== "tie" && (
-                  <span style={{ color: "var(--text-5)" }}>
-                    {" · "}{t("chart.deriv.rank.why2.ahead", { beat: w.beat })}
-                  </span>
+          {/* ── What EARNS the slot, then the bookkeeping ───────────────
+            *
+            * This was five equal bullets with one of them bolded, and the bolded one was
+            * whichever key separated this card from the runner-up. That is the mechanically
+            * correct answer to "why is it first" and often a terrible answer to "why does it
+            * deserve to be here": `filler` reads "It is not an open elective" and `tie` reads
+            * "Nothing tells it apart from the others". A panel whose whole job is showing the
+            * reasoning led, on those steps, with a non-reason — the absence of an objection
+            * dressed as a justification.
+            *
+            * So the headline is the strongest thing the course CLAIMS: other courses depend on
+            * it, it carries the major's depth, only n semesters still fit it, n courses have to
+            * follow it. Those are the facts that make a slot deserved.
+            *
+            * The mechanical keys are not deleted, because the derivation has to stay checkable —
+            * they drop to one small muted line in the terse wording (`why.*`, which already
+            * exists for the queue rows below), with the rung numbers kept so they still tie back
+            * to the ladder, and the DECIDING key still marked. What a reader takes for granted
+            * from a tool — that it did not violate anything — is sidenote-sized; what they
+            * cannot infer is the headline. */}
+          {(() => {
+            const whys = orderWhy(live, left);
+            const head = headlineWhy(whys);
+            // Everything not in the headline, including the deciding key when that is a
+            // mechanical one. Falls back to the principal so a card with nothing to claim
+            // still says the true thing rather than nothing at all.
+            const rest = whys.filter(w => w !== head);
+            const lead = head ?? whys.find(w => w.key === principal) ?? whys[0];
+            const small = (head ? rest : rest.filter(w => w !== lead));
+            return (
+              <>
+                {!!lead && (
+                  <div style={{
+                    fontSize: fz, lineHeight: 1.45, marginTop: 2,
+                    fontWeight: 600, color: "var(--text-1)",
+                  }}>
+                    {whyText(lead, totalTerms, t)}
+                    {lead.key !== "tie" && (
+                      <span style={{ color: "var(--text-5)", fontWeight: 400 }}>
+                        {" · "}{t("chart.deriv.rank.why2.ahead", { beat: lead.beat })}
+                      </span>
+                    )}
+                  </div>
                 )}
-              </li>
-            ))}
-          </ol>
+                {!!small.length && (
+                  <div style={{
+                    fontSize: fz - 1, lineHeight: 1.4, marginTop: 3, color: "var(--text-5)",
+                    display: "flex", flexWrap: "wrap", gap: "0 7px",
+                  }}>
+                    {small.map(w => (
+                      <span key={w.key} style={{
+                        // The key that actually settled it against the runner-up stays marked
+                        // even down here: demoting it must not make it disappear, or the panel
+                        // would assert a reason the comparator never used.
+                        fontWeight: w.key === principal ? 700 : 400,
+                      }}>
+                        {w.key !== "tie" && (
+                          <span style={{ fontVariantNumeric: "tabular-nums", opacity: 0.75 }}>
+                            {RUNGS.indexOf(w.key) + 1}{" "}
+                          </span>
+                        )}
+                        {reasonText(w, t)}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </>
+            );
+          })()}
         </div>
       )}
 

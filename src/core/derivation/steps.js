@@ -374,6 +374,57 @@ export function orderWhy(a, rest) {
   return ORDER_KEYS.filter(k => groups.has(k)).map(k => groups.get(k));
 }
 
+/**
+ * ── What EARNS a slot, as opposed to what merely settled the queue ──
+ *
+ * `orderWhy` returns every key that beat something, and `orderReason` says which one separated
+ * this card from the runner-up. That second one is the honest answer to "why is it first" and it is
+ * routinely a non-answer to "why does it belong here", because three of the six keys state an
+ * ABSENCE rather than a reason:
+ *
+ *     filler     it is not an open elective
+ *     claim.2    it names a course, rather than being a choice still to make
+ *     tie        nothing tells it apart from the others
+ *
+ * A reader takes for granted that the tool did not put an open elective ahead of a required course.
+ * Leading with that is the absence of an objection dressed up as a justification. The other keys
+ * are facts about the DEGREE that a reader cannot work out alone — courses depend on it, it carries
+ * the major's depth, only two semesters can still hold it, twelve courses follow it — and those are
+ * what deserve the headline.
+ *
+ * ── The order among them is NOT the comparator's ───────────────────
+ *
+ * Deliberately: this ranks by how much a fact explains, not by which test runs first.
+ *
+ *     claim    others depend on it / it carries the major's depth   — why the slot is deserved
+ *     terms    only n semesters still fit it                        — why it cannot wait
+ *     depth    n courses have to come after it                      — how far it reaches
+ *     options  only n courses could fill it                         — a fact about the REQUIREMENT
+ *                                                                     rather than the course, so last
+ *
+ * The comparator's own verdict is not discarded: callers keep showing it, marked, in small print.
+ * Demoting it must never delete it, or the panel would assert a reason the engine never used.
+ */
+const HEADLINE_RANK = { claim: 0, terms: 1, depth: 2, options: 3 };
+
+/**
+ * The reason to LEAD with, or `null` where the card claims nothing and only the queue's mechanics
+ * put it in front.
+ *
+ * @param {{key: string, value?: number, beat: number}[]} whys  as returned by `orderWhy`
+ * @returns {{key: string, value?: number, beat: number}|null}
+ */
+export function headlineWhy(whys) {
+  const earns = (whys ?? []).filter(w => (
+    // `claim` is one key carrying three different statements and only the first two are claims
+    // about the degree. Value 2 ("it names a course") is decidedness, which is bookkeeping.
+    w?.key === "claim" ? (w.value ?? 2) < 2 : HEADLINE_RANK[w?.key] !== undefined
+  ));
+  if (!earns.length) return null;
+  return earns.reduce((best, w) => (
+    HEADLINE_RANK[w.key] < HEADLINE_RANK[best.key] ? w : best));
+}
+
 /** The row theme a term type is drawn in — `semGrid`'s `type`, not its `semTypeId`. */
 const themeOf = (semTypeId) =>
   (semTypeId === "sumA" || semTypeId === "sumB") ? "summer" : (semTypeId || "special");
