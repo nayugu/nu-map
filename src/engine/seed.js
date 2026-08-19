@@ -147,11 +147,18 @@ export function seedFromPlan(publishedPlan, shape = null) {
       for (const e of entries) {
         if (e.coop || e.vacation || e.heading) continue;
         const ids = e.options?.length === 1 ? e.options[0] : null;
-        if (ids?.length === 1) {
-          // First placement wins: a course repeated across terms (rare, and always a
-          // department's own duplicate row) should not have its hint overwritten by the
-          // later copy, since the earlier one is what the prereq chain was built around.
-          if (!courseTerm.has(ids[0])) courseTerm.set(ids[0], ti);
+        if (ids?.length) {
+          // Every course in the group, not just a lone one. `options.length === 1` already
+          // means this row is FORCED — one way to satisfy it — and a corequisite pair merged
+          // into that one group ("CS 1800 and CS 1802", "CHEM 1161 and CHEM 1162 and CHEM
+          // 1163") is exactly as forced as a single course. Reading `ids.length === 1` as the
+          // test for "is this named" excluded every such pair from seeding — CS 1800 got no
+          // hint at all and drifted to wherever the unlock ordering sent it, four terms past
+          // where the department's own plan (and every variant of it) puts it.
+          //
+          // First placement wins per course, same reasoning as before: a course repeated
+          // across terms should keep the hint from its earlier appearance.
+          for (const id of ids) if (!courseTerm.has(id)) courseTerm.set(id, ti);
           continue;
         }
         // Everything else is a row the student fills themselves — an elective, a
