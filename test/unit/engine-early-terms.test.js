@@ -276,17 +276,30 @@ test("early › repair is monotone — no course is ever moved EARLIER than publ
 // ── Determinism, and the shape of the answer ───────────────────────
 
 test("early › the same input gives the same answer whatever order cells arrive in", () => {
+  // ── With CONTENTION, which is the only case that can differ ────────
+  //
+  // An earlier version of this test used cells that each matched a distinct course, so
+  // reversing the array could not change the answer and it passed over a real defect: the
+  // scan ran in `plans` order, so when two cells could both be answered by one course the
+  // winner was decided by array position. A change to how `buildDomains` orders cells would
+  // then have silently re-planned the first two years of every affected degree.
+  //
+  // `zzz` is listed FIRST and must still lose to `aaa`, so this fails if the scan ever goes
+  // back to reading positions.
   const shape = shapeOf(3);
-  const plan = planOf([["A", "B"], ["C"]]);
+  const plan = planOf([["X", "B"], ["C"]]);
   const build = () => [
-    named("a", ["A"], wide()), named("b", ["B"], wide()), named("c", ["C"], wide()),
-    choice("x", [["A"], ["C"]], wide()),
+    named("zzz", ["X"], wide()), named("aaa", ["X"], wide()),
+    named("b", ["B"], wide()), named("c", ["C"], wide()),
+    choice("x-choice", [["X"], ["C"]], wide()),
   ];
   const one = adoptEarlyTerms({
     publishedPlan: plan, shape, plans: build(), precedence: NOPREC });
   const two = adoptEarlyTerms({
     publishedPlan: plan, shape, plans: build().reverse(), precedence: NOPREC });
   assert.deepEqual([...one.placed.entries()].sort(), [...two.placed.entries()].sort());
+  assert.equal(one.placed.get("aaa"), 0, "the lowest id claims the contested course");
+  assert.ok(!one.placed.has("zzz"), "and the other gets nothing, whatever its position");
 });
 
 test("early › junk in, nothing out — never a throw", () => {

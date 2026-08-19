@@ -70,6 +70,7 @@ export function deriveModel(snapshot) {
   const stage = (name) => (snapshot.stages ?? []).find(s => s.name === name) ?? null;
   const demand = stage("demand-done");
   const narrowed = stage("narrowing-done");
+  const early = stage("early-terms");
   const searchDone = stage("search-done");
   const improved = stage("improve-done");
   const refused = stage("refused");
@@ -80,8 +81,8 @@ export function deriveModel(snapshot) {
   return {
     // ── The spine, in the order the pipeline runs ───────────────────
     stages: buildSpine({
-      demand, narrowed, attempts, searchDone, improved, refused, packer, retries, nogoods,
-      snapshot, solved,
+      demand, narrowed, early, attempts, searchDone, improved, refused, packer, retries,
+      nogoods, snapshot, solved,
     }),
     profile,
     marks,
@@ -165,8 +166,8 @@ export function deriveModel(snapshot) {
  * stage instead, which says what actually happened — an arrangement was found and rejected
  * afterwards — and `answered` on nothing.
  */
-function buildSpine({ demand, narrowed, attempts, searchDone, improved, refused, packer,
-                      retries, nogoods, snapshot, solved }) {
+function buildSpine({ demand, narrowed, early, attempts, searchDone, improved, refused,
+                      packer, retries, nogoods, snapshot, solved }) {
   const out = [];
   out.push({
     key: "demand", kind: "fixed",
@@ -179,6 +180,21 @@ function buildSpine({ demand, narrowed, attempts, searchDone, improved, refused,
     terms: narrowed?.terms ?? (snapshot.terms?.length ?? 0),
     legalPairs: narrowed?.legalPairs ?? null,
   });
+  // Between narrowing and the search, because that is where it happens and because a reader
+  // otherwise watches a search that never considers most of year one with no account of why.
+  // Absent when the department publishes nothing to follow, rather than shown as a zero — a
+  // stage that says "kept 0 semesters" describes a decision nobody made.
+  if (early) {
+    out.push({
+      key: "early", kind: "fixed",
+      source: early.source ?? "chart",
+      through: early.through ?? 0,
+      fixed: early.fixed ?? 0,
+      moved: early.moved ?? 0,
+      unplaced: early.unplaced ?? 0,
+      overloaded: !!early.overloaded,
+    });
+  }
 
   // The strict tier is ONE stage with a restart count, not 41 stages. Each restart is the
   // same constraint set with one nogood removed, so calling them separate stages would

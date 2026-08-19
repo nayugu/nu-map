@@ -358,6 +358,15 @@ export const strings = {
   "chart.deriv.stage.rung.d": "{nodes} tries",
   "chart.deriv.stage.restarts": "{n} fresh start(s)",
   "chart.deriv.stage.improve.d": "{n} change(s)",
+  // The early-terms step. Named by SOURCE, because "kept your department's plan" and
+  // "followed similar programs" are different claims and only one of them is authoritative.
+  "chart.deriv.stage.early.department":      "Keep your department’s first {n} semesters",
+  "chart.deriv.stage.early.similar-programs": "Model the first {n} semesters on similar programs",
+  "chart.deriv.stage.early.chart":            "Plan the first {n} semesters",
+  "chart.deriv.stage.early.d":          "{n} course(s) kept",
+  "chart.deriv.stage.early.moved":      "{n} moved to make it work",
+  "chart.deriv.stage.early.unplaced":   "{n} left to this tool",
+  "chart.deriv.stage.early.overloaded": "first semester over the usual credit limit",
   "chart.deriv.gave":         "Gave up {what}",
   "chart.deriv.gave.sequencing-preferences": "the preferred order",
   "chart.deriv.gave.term-width": "the limit on same-requirement cards per term",
@@ -365,6 +374,7 @@ export const strings = {
   "chart.deriv.gave.packed-largest-first": "searching, and packed by size",
   "chart.deriv.retry.breadth-guidance": "electives were unbound and the search run again",
   "chart.deriv.retry.fails-hard-criteria": "the first plan broke a hard requirement",
+  "chart.deriv.retry.department-early-terms": "your department’s first semesters could not be scheduled, so they were dropped and the plan built from scratch",
   "chart.deriv.refused.space": "every arrangement was tried; none is legal",
   "chart.deriv.refused.budget": "the search ran out of time before proving anything",
 

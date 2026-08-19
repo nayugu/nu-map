@@ -28,6 +28,29 @@
 // ═══════════════════════════════════════════════════════════════════
 import { useLanguage } from "../../context/LanguageContext.jsx";
 
+/**
+ * The one-line detail under a setup step.
+ *
+ * A lookup rather than a ternary. The ternary it replaced read "demand ? … : narrowing",
+ * which is correct for exactly two stages and silently captions any third one as narrowing
+ * — and there is now a third. An unknown key returns null and draws nothing, which is a
+ * missing line rather than a wrong one.
+ */
+function setupDetail(s, t) {
+  if (s.key === "demand") return t("chart.deriv.stage.demand.d", { n: s.cards, sh: s.sh ?? 0 });
+  if (s.key === "narrowing") return t("chart.deriv.stage.narrowing.d2", { terms: s.terms ?? 0 });
+  if (s.key === "early") {
+    // Only the parts that happened. "11 kept" is the fact; "1 moved" and "2 left to CHART"
+    // are corrections, and printing them as zeroes reads as a defect rather than a clean run.
+    const parts = [t("chart.deriv.stage.early.d", { n: s.fixed ?? 0 })];
+    if (s.moved > 0) parts.push(t("chart.deriv.stage.early.moved", { n: s.moved }));
+    if (s.unplaced > 0) parts.push(t("chart.deriv.stage.early.unplaced", { n: s.unplaced }));
+    if (s.overloaded) parts.push(t("chart.deriv.stage.early.overloaded"));
+    return parts.join(" · ");
+  }
+  return null;
+}
+
 export default function StageSpine({ stages, isPhone }) {
   const { t } = useLanguage();
   const fz = isPhone ? 9 : 11;
@@ -63,13 +86,15 @@ export default function StageSpine({ stages, isPhone }) {
 
   return (
     <div>
+      {/* One detail line per setup stage, keyed by stage rather than by a ternary. It was
+        * `demand ? … : narrowing`, which silently gave any third stage the narrowing
+        * caption — and there is now a third. A lookup fails loudly instead. */}
       {setup.map(s => (
-        <Step
-          key={s.key}
-          detail={s.key === "demand"
-            ? t("chart.deriv.stage.demand.d", { n: s.cards, sh: s.sh ?? 0 })
-            : t("chart.deriv.stage.narrowing.d2", { terms: s.terms ?? 0 })}
-        >{t(`chart.deriv.stage.${s.key}`)}</Step>
+        <Step key={s.key} detail={setupDetail(s, t)}>
+          {s.key === "early"
+            ? t(`chart.deriv.stage.early.${s.source}`, { n: s.through })
+            : t(`chart.deriv.stage.${s.key}`)}
+        </Step>
       ))}
 
       {rungs.length > 0 && (

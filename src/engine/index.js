@@ -660,7 +660,18 @@ function generateOnce({
     const want = early.load.get(0);
     const base = termCapacity(terms[0], { creditMax: ports.creditMax, studentType });
     if (want > base) {
-      terms[0].creditCeiling = want;
+      // ── Replaced, not mutated in place ──────────────────────────────
+      //
+      // `studyTerms` returns the SHAPE's own term objects by reference for full-weight
+      // terms, so assigning here would write the ceiling onto the shape — which outlives
+      // this layout and is re-read by every later `studyTerms` call. It happens to be safe
+      // today only because both shape constructors allocate fresh terms per generate, and
+      // that is far too quiet a thing to rest a correctness property on.
+      //
+      // The `terms` ARRAY is freshly mapped, so swapping an element is contained to this
+      // attempt. Identity between a study term and its shape term is already broken for
+      // `unused` and half terms (`{ ...t, optional: true }`), so nothing can depend on it.
+      terms[0] = { ...terms[0], creditCeiling: want };
       earlyOverload = { term: 0, sh: want, cap: base };
     }
   }
@@ -755,6 +766,27 @@ function generateOnce({
       // stage boundary is what lets the spine say what narrowing BOUGHT.
       legalPairs: plans.reduce((n, p) => n + p.domain.length, 0),
     });
+    // ── The decision the spine could not otherwise show ───────────────
+    //
+    // Narrowing and the search are both visible, and between them sits the single largest
+    // choice this engine makes about a plan: the first four semesters are the department's,
+    // not ours. Without a stage of its own a reader watching the process sees a search that
+    // mysteriously never considers most of year one, and no account of why.
+    //
+    // Emitted after `narrowing-done` because that is the order it happens in — `legalPairs`
+    // above already counts the narrowed domains — and only when something was actually
+    // fixed, so a program whose department publishes nothing does not get a stage saying so
+    // twice over.
+    if (early.placed.size) {
+      trace.stage("early-terms", {
+        source: publishedPlan ? "department" : donorPlan ? "similar-programs" : "chart",
+        through: earlyTerms,
+        fixed: earlyFixed,
+        moved: early.moves.length,
+        unplaced: early.unplaced.length,
+        overloaded: !!earlyOverload,
+      });
+    }
   }
   const placed = placeCells({
     plans, terms, ports, studentType, courseMap, repeatable, nodeBudget, timeBudgetMs,

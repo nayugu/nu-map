@@ -226,7 +226,7 @@ function answerableGroup(cell, offers) {
  * department stacked in one term, each requiring the last, come out in three consecutive
  * terms. Monotone — a term only ever moves later — so it converges and cannot cycle.
  */
-function repair(intended, plans, precedence, capOf, through = EARLY_TERMS) {
+function repair({ intended, plans, precedence, capOf, through = EARLY_TERMS }) {
   const byId = new Map(plans.map(p => [p.cell.id, p]));
   const domainOf = new Map(plans.map(p => [p.cell.id, [...p.domain].sort((a, b) => a - b)]));
   const shOf = (id) => byId.get(id)?.cell?.sh ?? 0;
@@ -337,8 +337,26 @@ export function adoptEarlyTerms({
   publishedPlan, shape, plans, precedence, through = EARLY_TERMS, capOf = null,
   firstTermOverload = 0,
 } = {}) {
-  const empty = { placed: new Map(), moves: [], unplaced: [] };
-  if (!publishedPlan || !plans?.length) return empty;
+  // `load` included so every return of this function has one shape. A caller that reads
+  // `early.load` on the empty result should get an empty map, not `undefined` guarded by an
+  // optional chain at each call site.
+  const empty = () => ({ placed: new Map(), moves: [], unplaced: [], load: new Map() });
+  if (!publishedPlan || !plans?.length) return empty();
+
+  // ── Scanned in a STABLE order, not the order they arrived ──────────
+  //
+  // Two cells can be answerable by the same course — a duplicated requirement, or a named
+  // cell beside a choice cell that lists it — and only one may claim it. Which one used to
+  // depend on the position of `plans`, so a change to how `buildDomains` orders cells would
+  // silently re-plan the first two years of every affected degree. Measured: reversing the
+  // array handed the course to a different cell.
+  //
+  // Sorting by id makes the answer a property of the INPUT rather than of an array's shape.
+  // Determinism is a hard requirement in this engine and has twice been lost to exactly this.
+  const byIdOrder = [...plans].sort((a, b) => {
+    const x = String(a.cell?.id ?? ""), y = String(b.cell?.id ?? "");
+    return x < y ? -1 : x > y ? 1 : 0;
+  });
 
   const intended = new Map();
   for (const { at, offers } of earlyTermsOf(publishedPlan, shape, through)) {
@@ -351,7 +369,7 @@ export function adoptEarlyTerms({
     // consumed by a looser choice cell that had alternatives available.
     const available = new Set(offers);
     for (const kind of ["named", "choice"]) {
-      for (const p of plans) {
+      for (const p of byIdOrder) {
         if (intended.has(p.cell.id) || p.cell?.kind !== kind) continue;
         const group = answerableGroup(p.cell, available);
         if (!group) continue;
@@ -360,7 +378,7 @@ export function adoptEarlyTerms({
       }
     }
   }
-  if (!intended.size) return empty;
+  if (!intended.size) return empty();
 
   // ── The first semester's allowance is the DEPARTMENT'S own load ────
   //
@@ -380,7 +398,7 @@ export function adoptEarlyTerms({
   const effectiveCap = capOf ? ((t) => (t === 0 ? cap0 : capOf(t))) : null;
 
   const { placed, unplaced, reasons, load } =
-    repair(intended, plans, precedence, effectiveCap, through);
+    repair({ intended, plans, precedence, capOf: effectiveCap, through });
   const moves = [];
   for (const [id, at] of placed) {
     const from = intended.get(id);

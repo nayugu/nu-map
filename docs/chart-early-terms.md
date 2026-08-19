@@ -239,6 +239,37 @@ The rule is worthless if it is invisible, so `report.earlyTerms` drives a
 Terms are emitted as `{ year, semTypeId }`, never as an English phrase: the catalog's own
 wording is "Summer 1", which every locale must render "Summer A".
 
+### And in "how this was built"
+
+The process view is the other half, and it needs the decision to be a **stage**. Without one
+a reader watches a search that mysteriously never considers most of year one, with no
+account of why. So the engine emits `early-terms` between `narrowing-done` and the search —
+the order it actually happens in — and the spine draws it as a numbered step:
+
+> **3. Keep your department's first 4 semesters**
+> *11 course(s) kept · 1 moved to make it work · first semester over the usual credit limit*
+
+Titled by **source**, because "kept your department's plan" and "modelled on similar
+programs" are different claims and only one is authoritative. Absent entirely when nothing
+was fixed — a stage reading "kept 0 semesters" describes a decision nobody made. The detail
+line prints only the parts that happened, so a clean run does not advertise zeroes.
+
+Two supporting fixes went with it:
+
+- `chart.deriv.retry.department-early-terms` **did not exist**. The fallback fires on 19 of
+  258 plans, the spine renders ``t(`chart.deriv.retry.${because}`)``, and `t()` ends in
+  `?? key` — so those readers would have been shown the literal string
+  `chart.deriv.retry.department-early-terms` mid-sentence, in every language at once.
+- The spine's setup-step detail was a `demand ? … : narrowing` ternary, correct for exactly
+  two stages and silently captioning any third as narrowing. Now a keyed lookup that returns
+  null for an unknown stage — a missing line rather than a wrong one.
+
+`test/invariant/locale-dynamic-keys.test.js` closes that class: for each family of keys built
+at runtime it takes the source of truth (the `EXCLUSION` enum, the `MOVED_*` constants, and
+the `because` literals scraped out of the engine's `trace.stage("retry", …)` calls) and
+asserts every member resolves in `en`. Adding a new retry reason now fails the suite until
+its sentence is written.
+
 ## Measuring it
 
 ```
