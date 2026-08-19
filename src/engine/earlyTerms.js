@@ -132,6 +132,20 @@ export const MOVED_CAPACITY = "term-was-full";
  */
 export const FIRST_TERM_OVERLOAD_SH = 2;
 
+/**
+ * How far past a department's PRINTED load for a term we may still adopt into it.
+ *
+ * Not an overload allowance — that is `FIRST_TERM_OVERLOAD_SH` and it is about the
+ * registrar. This is about the unit mismatch between their rows and our cells: a corequisite
+ * the catalog prints as one row can decompose into two cells here, so an exact equality test
+ * would reject a term that is a faithful copy of theirs.
+ *
+ * Two credits, the same size as the overload allowance and for the same measured reason —
+ * it is one merged partner, not a policy. Deliberately small: this is the number that stops
+ * "the department published a light term" from being read as "the term is free space".
+ */
+export const ADOPT_SH_SLACK = 2;
+
 /** Every entry in a term, including the nested children of an `either`. */
 function flatten(entries, out = []) {
   for (const e of entries ?? []) {
@@ -196,11 +210,18 @@ function earlyTermsOf(publishedPlan, shape, through) {
       if (at >= through) continue;
 
       const offers = new Set();
+      // ── What the department PRINTED for this term ─────────────────────
+      //
+      // Summed off the rows themselves, so a "Take two:" header carrying 8 SH over three
+      // 0 SH children contributes 8 and not 12. That is the whole point: the flat `offers`
+      // set below cannot express "two of these three", and this number can.
+      let sh = 0;
       for (const e of entries) {
         if (e.coop || e.vacation || e.heading) continue;
+        sh += e.sh ?? 0;
         for (const group of (e.options ?? [])) for (const id of group) offers.add(id);
       }
-      if (offers.size) out.push({ at, offers });
+      if (offers.size) out.push({ at, offers, sh });
     }
   }
   // Ascending, so an earlier term claims a course a later one repeats — the earlier
@@ -413,6 +434,7 @@ export function adoptEarlyTerms({
   const empty = () => ({
     placed: new Map(), moves: [], unplaced: [], load: new Map(),
     firstTermCap: capOf ? capOf(0) : Infinity,
+    publishedLoad: new Map(),
   });
   if (!publishedPlan || !plans?.length) return empty();
 
@@ -448,15 +470,43 @@ export function adoptEarlyTerms({
   // repeatability and can place it. Under-claiming costs a hint; over-claiming costs the
   // student a term holding something that is not there twice.
   const spent = new Set();
-  for (const { at, offers } of earlyTermsOf(publishedPlan, shape, through)) {
+  // What the department printed for each early term, by study-term index. Returned to the
+  // caller, which turns it into the term's ceiling — see `publishedLoad` on the result.
+  const printed = new Map();
+  for (const { at, offers, sh } of earlyTermsOf(publishedPlan, shape, through)) {
+    printed.set(at, (printed.get(at) ?? 0) + sh);
     // Named cells go first, so a course that exactly answers one requirement is not
     // consumed by a looser choice cell that had alternatives available.
     const available = new Set([...offers].filter(id => !spent.has(id)));
+    // ── Adopt no MORE credit than the department printed here ──────────
+    //
+    // `offers` is flat: a row reading "take two of these three" and a row reading "one of
+    // these three" both arrive as three courses with no count attached, so a degree that
+    // separately requires several of them had every one of them pinned into this term.
+    // Business Administration's first term is published at 17 SH and was adopted at 20 —
+    // all three of a "Take two", plus both halves of a pick-one.
+    //
+    // The budget is the printed load plus `ADOPT_SH_SLACK`, because our cells are not the
+    // department's rows: a corequisite the catalog prints inside one row can decompose into
+    // two cells here and cost a credit or two more without anything being wrong.
+    //
+    // A cell that does not fit is simply not adopted. It is not dropped — it goes to the
+    // ordinary search with a full domain, which is strictly more freedom than being pinned
+    // to the wrong term. Under-adopting costs a hint; over-adopting costs the student a
+    // term they cannot register for.
+    const budget = sh > 0 ? sh + ADOPT_SH_SLACK : Infinity;
+    let taken = 0;
     for (const kind of ["named", "choice"]) {
       for (const p of byIdOrder) {
         if (intended.has(p.cell.id) || p.cell?.kind !== kind) continue;
         const group = answerableGroup(p.cell, available);
         if (!group) continue;
+        // Measured in the cell's own credits, the same unit the budget is in. A 0 SH cell
+        // never exhausts the budget and is always adopted, which is right: it is a
+        // requirement the department placed here and it costs the term nothing.
+        const cost = p.cell?.sh ?? 0;
+        if (taken + cost > budget + 0.01) continue;
+        taken += cost;
         intended.set(p.cell.id, at);
         for (const id of group) { available.delete(id); spent.add(id); }
       }
@@ -478,7 +528,9 @@ export function adoptEarlyTerms({
   //
   // Note this can only ever RAISE term 0 to hold what was already published there. It is not
   // a licence to pack the term: repair never moves a course earlier, so nothing arrives in
-  // term 0 that the department did not put there.
+  // term 0 that the department did not put there. What it does NOT do is stop the SEARCH
+  // filling a light term afterwards — that is `publishedLoad` below, and the two are
+  // different jobs: this one is a floor under repair, that one is a ceiling over the search.
   const byIdSH = new Map(plans.map(p => [p.cell.id, p.cell?.sh ?? 0]));
   let wanted0 = 0;
   for (const [id, ti] of intended) if (ti === 0) wanted0 += byIdSH.get(id) ?? 0;
@@ -496,10 +548,33 @@ export function adoptEarlyTerms({
     if (at !== from) moves.push({ cell: id, from, to: at, why: reasons.get(id) ?? null });
   }
   moves.sort((a, b) => a.from - b.from || (a.cell < b.cell ? -1 : 1));
+  // ── The ceiling each early term should carry ───────────────────────
+  //
+  // Adoption alone cannot hold a term to its published size. It only decides which cells are
+  // PINNED there; the search runs afterwards against `termCapacity`, and a department that
+  // published a light first year leaves room the search will spend on general electives.
+  // Measured: 160 of 202 over-weight early terms had no over-adopted choice in them at all —
+  // they were simply filled to the registration cap. `game_design_bfa` prints 15 SH and
+  // shipped 19, which is the undergraduate cap exactly.
+  //
+  // So the printed load is handed back as a ceiling per term, floored by what repair actually
+  // placed there. The floor matters: repair may legitimately push a course INTO a later early
+  // term to fix a prerequisite, and a ceiling below the load we just fixed would make the
+  // search refuse an arrangement we chose ourselves.
+  //
+  // Advisory, not enforced here. The caller decides whether to apply it, and `generatePlan`
+  // already retries with `followDepartment: false` when the department's own shape cannot be
+  // satisfied — so the worst case of a ceiling that is too tight is today's behaviour, not a
+  // lost plan.
+  const publishedLoad = new Map();
+  for (const [at, sh] of printed) {
+    if (!(sh > 0)) continue;
+    publishedLoad.set(at, Math.max(sh + ADOPT_SH_SLACK, load.get(at) ?? 0));
+  }
   // `firstTermCap` is the allowance actually used for term 0. Returned rather than left for
   // a caller to re-derive: it is the number the search's ceiling and every cap assertion have
   // to agree with, and two derivations of one figure is one of them being wrong later.
-  return { placed, moves, unplaced, load, firstTermCap: cap0 };
+  return { placed, moves, unplaced, load, firstTermCap: cap0, publishedLoad };
 }
 
 /**
