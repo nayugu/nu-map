@@ -150,12 +150,53 @@ export function checkPlanRail(nowPlans, prevPlans, ratio = MAX_PLAN_LOSS_RATIO) 
  * @param {Iterable<object>} results  freshly built records, each carrying `_sharedMissing`
  * @returns {{ok: boolean, misses: {slug: string, titles: string[]}[]}}
  */
+/**
+ * What to DO when the shared-section rail fires, printed by the rail itself.
+ *
+ * This rail stops a scheduled, unattended job, and it fires rarely enough that nobody will
+ * have the context loaded when it does. A hard stop whose recovery is undocumented gets
+ * recovered by whatever is fastest — deleting the manifest entry — which is the one action
+ * that silently reintroduces the defect the manifest exists to prevent. So the decision is
+ * spelled out at the point of failure rather than in a document that has to be found first.
+ *
+ * Deliberately states the WRONG answer as well as the right ones. "Delete the entry" is the
+ * tempting move and it is only correct when the requirement genuinely stopped being
+ * cross-counted, which is rare; the common case is a retitled section.
+ */
+export const SHARED_RAIL_RUNBOOK = `
+    These sections are SKIPPED by the demand model. Losing the mark charges the degree
+    twice for the same courses, and no other guard in this workflow can see it — nothing
+    here generates a plan.
+
+    Open the page above and decide, per title:
+
+      • the section was RENAMED         → update the title in shared-sections.json
+      • the section is GONE from the page → remove that title from the entry
+      • the whole program is gone         → remove the entry
+      • it is still there and still cross-counted, but we now parse it differently
+                                          → fix the parser, not the manifest
+
+    Only remove a title when the requirement genuinely stopped being cross-counted.
+    Deleting the entry to make the run pass reintroduces the exact defect this rail
+    exists to catch, and the next scrape will not tell you.
+
+    Context and the measured cost of getting this wrong: scripts/lib/shared-sections.js
+`;
+
 export function checkSharedSectionsRail(results) {
   const misses = [];
   for (const rec of results ?? []) {
     const titles = rec?._sharedMissing;
     if (Array.isArray(titles) && titles.length) {
-      misses.push({ slug: rec._slug ?? rec?.name ?? '(unknown)', titles });
+      misses.push({
+        slug: rec._slug ?? rec?.name ?? '(unknown)',
+        titles,
+        // The catalog page, carried so the failure can be ACTED on rather than merely read.
+        // This rail stops an unattended monthly job, and whoever picks it up needs the live
+        // page to re-adjudicate against — without it the first step is hunting for the URL,
+        // which is exactly the friction that turns a hard stop into a rubber stamp.
+        url: rec?.metadata?.sourceUrl ?? null,
+      });
     }
   }
   return { ok: misses.length === 0, misses };

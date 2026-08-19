@@ -15,7 +15,7 @@ import { readFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { applySharedSections, SHARED_SECTIONS } from "../../scripts/lib/shared-sections.js";
-import { checkSharedSectionsRail } from "../../scripts/lib/scrape-rails.js";
+import { checkSharedSectionsRail, SHARED_RAIL_RUNBOOK } from "../../scripts/lib/scrape-rails.js";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "../..");
 
@@ -84,12 +84,36 @@ test("rail › ONE unmatched title fails the run, and names it", () => {
   // Deliberately not a ratio. A single lost repair is one degree a student cannot schedule,
   // and the workflow that would ship it generates no plan to notice.
   const out = checkSharedSectionsRail([
-    { _slug: "accounting_msa_(boston)", _sharedMissing: ["Taxation Track"] },
+    { _slug: "accounting_msa_(boston)", _sharedMissing: ["Taxation Track"],
+      metadata: { sourceUrl: "https://catalog.northeastern.edu/graduate/business/accounting-msa/" } },
     { _slug: "fine", _sharedMissing: [] },
   ]);
   assert.equal(out.ok, false);
-  assert.deepEqual(out.misses, [
-    { slug: "accounting_msa_(boston)", titles: ["Taxation Track"] }]);
+  // The URL is part of the contract, not incidental: this rail halts an unattended monthly
+  // job, and the first thing whoever picks it up needs is the page to re-adjudicate against.
+  assert.deepEqual(out.misses, [{
+    slug: "accounting_msa_(boston)",
+    titles: ["Taxation Track"],
+    url: "https://catalog.northeastern.edu/graduate/business/accounting-msa/",
+  }]);
+});
+
+test("rail › a record with no sourceUrl still reports, with url null", () => {
+  // Degrade to less information, never to wrong information — and never to a throw. A
+  // missing URL must not swallow the miss it was attached to.
+  const out = checkSharedSectionsRail([{ _slug: "x", _sharedMissing: ["A"] }]);
+  assert.equal(out.ok, false);
+  assert.deepEqual(out.misses, [{ slug: "x", titles: ["A"], url: null }]);
+});
+
+test("rail › the runbook states the tempting WRONG recovery, not just the right ones", () => {
+  // The failure mode this text exists for. A hard stop with no documented recovery gets
+  // recovered by whatever is fastest — deleting the manifest entry — which silently
+  // reintroduces the defect the manifest prevents. If that warning is ever dropped, the
+  // runbook has stopped doing the one job it was written for.
+  assert.match(SHARED_RAIL_RUNBOOK, /Deleting the entry/);
+  assert.match(SHARED_RAIL_RUNBOOK, /RENAMED/);
+  assert.match(SHARED_RAIL_RUNBOOK, /shared-sections\.js/);
 });
 
 test("rail › survives records with no marker at all", () => {

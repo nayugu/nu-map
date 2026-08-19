@@ -30,7 +30,8 @@ import { fileURLToPath }            from 'url';
 import { parse as parseHTML }       from 'node-html-parser';
 import { politeFetch, cacheSummary } from './lib/catalog-cache.js';
 import { parseSitemapPrograms }      from './lib/catalog-programs.js';
-import { checkScrapeRails, checkPlanRail, checkSharedSectionsRail } from './lib/scrape-rails.js';
+import { checkScrapeRails, checkPlanRail, checkSharedSectionsRail,
+         SHARED_RAIL_RUNBOOK }   from './lib/scrape-rails.js';
 import { verifyPlanGrid, planGridCourseKeys } from './lib/plan-grid.js';
 import { parseEditionArg, editionBasePath, assertEdition,
          isFatalScrapeError }        from './lib/catalog-edition.js';
@@ -513,10 +514,9 @@ async function main() {
       console.error(`\n❌  Refusing to write — a shared-section adjudication no longer matches:\n`);
       for (const m of sharedRail.misses) {
         console.error(`   • ${m.slug}: ${m.titles.map(t => JSON.stringify(t)).join(', ')}`);
+        if (m.url) console.error(`     ${m.url}`);
       }
-      console.error(`\n    These sections are SKIPPED by the demand model; losing the mark charges`);
-      console.error(`    the degree twice for the same courses. Re-adjudicate the entry in`);
-      console.error(`    scripts/lib/shared-sections.json against the live page, then re-run.\n`);
+      console.error(SHARED_RAIL_RUNBOOK);
       process.exit(1);
     }
   }
