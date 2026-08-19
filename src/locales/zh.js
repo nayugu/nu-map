@@ -276,6 +276,7 @@ export const strings = {
   "chart.early.moved.h":      "以下课程被移出你所在系指定的学期，因为那个学期行不通：",
   "chart.early.moved.not-offered-then":       "{course} —— 由{from}移至{to}，因为当时不开课",
   "chart.early.moved.after-its-prerequisite": "{course} —— 由{from}移至{to}，以确保排在其先修课之后",
+  "chart.early.moved.term-was-full":          "{course} —— 由{from}移至{to}，因为{from}已达到学分上限",
   "chart.early.unplaced":     "{course} 无法安排在{from}或其后的任何学期，因此由本工具决定其位置。",
   // ── 过程页 ──────────────────────────────────────────────────────
   "chart.explain.tab.text": "规则",

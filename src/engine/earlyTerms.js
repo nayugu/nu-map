@@ -67,6 +67,16 @@ export const EARLY_TERMS = 4;
 export const MOVED_AVAILABILITY = "not-offered-then";
 /** A course moved because it sat at or before something it requires. */
 export const MOVED_PREREQ = "after-its-prerequisite";
+/**
+ * A course moved because its term was already at the registration cap.
+ *
+ * The third reason a published term does not work, and the one this module originally
+ * missed. Computer Science and Biology publishes a 20 SH first term against a 19 SH cap:
+ * one credit over, and because the fix was all-or-nothing the whole first two years were
+ * discarded and the student got nothing of their department's arrangement. A term being
+ * one credit too heavy is exactly the kind of flaw this module exists to repair.
+ */
+export const MOVED_CAPACITY = "term-was-full";
 
 /** Every entry in a term, including the nested children of an `either`. */
 function flatten(entries, out = []) {
@@ -187,19 +197,33 @@ function answerableGroup(cell, offers) {
  * department stacked in one term, each requiring the last, come out in three consecutive
  * terms. Monotone — a term only ever moves later — so it converges and cannot cycle.
  */
-function repair(intended, plans, precedence) {
+function repair(intended, plans, precedence, capOf) {
+  const byId = new Map(plans.map(p => [p.cell.id, p]));
   const domainOf = new Map(plans.map(p => [p.cell.id, [...p.domain].sort((a, b) => a - b)]));
+  const shOf = (id) => byId.get(id)?.cell?.sh ?? 0;
   const placed = new Map(intended);
   const unplaced = [];
   // Why each moved course moved, for the student to read. Overwritten rather than
   // accumulated across passes: the last pass is the one that decided the final term.
   const reasons = new Map();
-  // Ascending intended term, then id, so two runs repair identically. Determinism is a hard
-  // requirement of this engine and it has been lost to incidental ordering before.
+
+  // ── Ordering: intended term, then HEAVIEST first, then id ──────────
+  //
+  // The tie-break is load-bearing rather than cosmetic. When a published term is over the
+  // cap something has to leave it, and taking the courses in descending credit means the
+  // 4 SH courses keep the term their department chose and the 1 SH seminar is what moves.
+  // Ascending would evict `CS 2000` to rescue `CS 1200`, which is the same repair and a
+  // much worse plan. Id breaks the remaining ties so two runs repair identically —
+  // determinism is a hard requirement here and has been lost to incidental ordering before.
   const order = [...intended.keys()].sort((a, b) =>
-    (intended.get(a) - intended.get(b)) || (a < b ? -1 : a > b ? 1 : 0));
+    (intended.get(a) - intended.get(b))
+    || (shOf(b) - shOf(a))
+    || (a < b ? -1 : a > b ? 1 : 0));
 
   for (let pass = 0; pass < 8; pass += 1) {
+    // Rebuilt every pass rather than patched, because a cell that moves frees the credit it
+    // was holding. A stale load would keep charging a term for a course that left it.
+    const load = new Map();
     let moved = false;
     for (const id of order) {
       if (!placed.has(id)) continue;
@@ -214,18 +238,34 @@ function repair(intended, plans, precedence) {
         const need = together ? bt : bt + 1;
         if (need > floor) { floor = need; because = MOVED_PREREQ; }
       }
-      const at = (domainOf.get(id) ?? []).find(t => t >= floor);
+      const sh = shOf(id);
+      const fits = (t) => {
+        const cap = capOf ? capOf(t) : Infinity;
+        return (load.get(t) ?? 0) + sh <= cap + 0.01;
+      };
+      const legal = (domainOf.get(id) ?? []).filter(t => t >= floor);
+      // Room first. A term that is legal but already at its registration cap is a term the
+      // student cannot actually add this course to, so it is no more usable than one the
+      // course is not offered in.
+      let at = legal.find(fits);
+      if (at != null && at !== intended.get(id) && because == null) {
+        // Distinguishes "the catalog does not run it then" from "the department's own term
+        // was full", which are different sentences to a reader and different bugs to us.
+        because = legal[0] === at ? MOVED_AVAILABILITY : MOVED_CAPACITY;
+      }
       if (at == null) {
-        // Nothing this side of the plan's end works. Hand it back to the search, which is
-        // the only option left and is at least never illegal.
+        // Nothing this side of the plan's end has both legality and room. Hand it back to
+        // the search, which sees the whole arrangement and is the right thing to resolve a
+        // capacity problem — this module only ever knows about the cells it fixed.
         unplaced.push({ cell: id, from: intended.get(id) });
         placed.delete(id);
         moved = true;
         continue;
       }
+      load.set(at, (load.get(at) ?? 0) + sh);
       if (at !== placed.get(id)) { placed.set(id, at); moved = true; }
       // Attributed to precedence only where precedence actually raised the floor; otherwise
-      // the department's own term simply was not in the domain, which is availability.
+      // it is whichever of availability or capacity `because` recorded above.
       if (at !== intended.get(id)) reasons.set(id, because ?? MOVED_AVAILABILITY);
       else reasons.delete(id);
     }
@@ -248,7 +288,7 @@ function repair(intended, plans, precedence) {
  * @returns {{placed: Map<string, number>, moves: object[], unplaced: object[]}}
  */
 export function adoptEarlyTerms({
-  publishedPlan, shape, plans, precedence, through = EARLY_TERMS,
+  publishedPlan, shape, plans, precedence, through = EARLY_TERMS, capOf = null,
 } = {}) {
   const empty = { placed: new Map(), moves: [], unplaced: [] };
   if (!publishedPlan || !plans?.length) return empty;
@@ -275,7 +315,7 @@ export function adoptEarlyTerms({
   }
   if (!intended.size) return empty;
 
-  const { placed, unplaced, reasons } = repair(intended, plans, precedence);
+  const { placed, unplaced, reasons } = repair(intended, plans, precedence, capOf);
   const moves = [];
   for (const [id, at] of placed) {
     const from = intended.get(id);

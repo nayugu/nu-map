@@ -31,7 +31,7 @@ Three steps, in `src/engine/earlyTerms.js`:
 The published arrangement used to be a branch **order** — try the department's term
 first, take another if the search prefers. That cannot deliver the rule, because branch
 order is precisely the thing a search is free to ignore. Measured over the whole
-undergraduate corpus, it left term-1 agreement at 66.2% with 16.0% of early courses
+undergraduate corpus, it left term-1 agreement at 57.0% with 15.1% of early courses
 landing two or more semesters late.
 
 Adopting instead of hinting, same corpus and same instrument
@@ -39,14 +39,27 @@ Adopting instead of hinting, same corpus and same instrument
 
 | | hint (before) | adopt + repair |
 |---|---|---|
-| generated | 254 | **257** |
-| refused | 93 | **90** |
-| term 1 agreement | 66.2% | **80.8%** |
-| term 2 | 52.2% | **77.4%** |
-| term 3 | 43.0% | **68.0%** |
-| term 4 | 26.4% | **36.1%** |
-| **terms 1–4** | 54.5% | **73.0%** |
-| courses ≥2 terms late | 16.0% | **8.2%** |
+| generated | 254 | **258** |
+| refused | 93 | **89** |
+| plans falling back | — | 19 |
+| term 1 agreement | 57.0% | **72.0%** |
+| term 2 | 40.0% | **65.9%** |
+| term 3 | 35.6% | **66.0%** |
+| term 4 | 22.8% | **34.2%** |
+| **terms 1–4** | 44.5% | **64.3%** |
+| courses ≥2 terms late | 15.1% | **6.2%** |
+
+> ⚠ **An earlier version of this table read 54.5% → 73.0%, and those figures were
+> inflated.** The instrument collected every `options` group from a generated term, so an
+> elective PLACEHOLDER that merely listed `BIOL 2301` among its candidates scored as though
+> `BIOL 2301` had been placed there. It now counts only committed rows
+> (`options.length === 1`) on both sides, which is the honest question: of the courses a
+> department commits to, where did we commit them.
+>
+> The corrected figure is a **lower bound**. A department's `ENGW 1111` answered by our
+> "College Writing — ENGW 1111 or 1102" choice cell counts as missed, because we did not
+> commit to that course. That is most of the ~22% `missing` column. Erring downward is the
+> right direction, but do not quote the missing rate as "courses we failed to place".
 
 Coverage **rose**. That matters more than the agreement figures:
 `chart-success-criteria.md` §2 makes the generated count the first number to check, and
@@ -68,10 +81,10 @@ consequence of one co-op cycle and says nothing about a student on another, so t
 and unlock preferences — 12,848 measured placements — are the better guide and keep the
 job.
 
-> Note the ceiling this implies. Our term-4 agreement is **36.1%** against the
+> Note the ceiling this implies. Our term-4 agreement is **34.2%** against the
 > department's own self-agreement of **36.3%**. You cannot agree with a source more often
-> than it agrees with itself, so term 4 is at its ceiling and the remaining gap is not a
-> defect to chase.
+> than it agrees with itself, so term 4 is within two points of its ceiling and the
+> remaining gap is not a defect to chase.
 
 ## What repair may and may not do
 
@@ -79,12 +92,25 @@ Repair only ever moves a course **later**, and only ever into a term already in 
 cell's own domain. It therefore cannot make an illegal plan legal — every rule the search
 applies still applies, and the fix is a unit domain rather than a placement.
 
-Two harms it repairs, and where each is decided:
+Three harms it repairs, and where each is decided:
 
 | | decided by | note |
 |---|---|---|
 | **availability** | the cell's `domain` | which already encodes season, co-op prep preceding the first work term, and critical-path bounds. None of it is re-implemented. |
 | **order** | `precedence` | the successor moves, never the prerequisite. Departments do publish courses sitting at or before what they require. |
+| **capacity** | `termCapacity` | the same function the search enforces, so the two cannot disagree. A published term may exceed the registration cap. |
+
+> **Capacity was missed in the first version, and it mattered more than the other two.**
+> Computer Science and Biology publishes a **20 SH** first term against a **19 SH** cap.
+> One credit of overshoot made the window unsolvable, the all-or-nothing fallback discarded
+> all four terms, and the student got a plan with none of their department's arrangement in
+> it — first-term agreement 50%, the whole window 20%. With capacity repaired: **87.5%** and
+> no fallback, and the course that moves is `CS 1200`, a 1 SH seminar.
+>
+> That last part is the tie-break doing real work. Within one intended term, cells are
+> repaired **heaviest first**, so the 4 SH courses keep the term their department chose and
+> the 1 SH seminar is what leaves. Ascending order performs the identical repair and
+> produces a visibly worse plan.
 
 Dropping an illegal placement instead of repairing it *sounds* conservative and is not: a
 dropped cell returns to the general search, whose measured bias on exactly these courses
@@ -106,7 +132,9 @@ itself, which this corpus measures at 7.7% prereq-order and 31.9% season violati
 Refusing to print a slightly imperfect plan while recommending a measurably wrong one is
 not conservatism.
 
-Measured: 35 of 257 plans took the fallback.
+Measured: **19 of 258** plans take the fallback. It was 35 before capacity was repaired —
+half the fallbacks were a published term being over the credit cap, not a degree that
+could not be arranged.
 
 ## When the department publishes nothing
 
@@ -174,15 +202,19 @@ cannot silently stop reaching the search.
 - **The early-window hint override** (`EARLY_SEED_TERMS` in `seed.js`, consulted in
   `termPreference`). Right about the trade, wrong instrument — see above. Removed, and the
   removal is **not free**: measured over the full corpus, agreement across terms 1–4 falls
-  73.0% → **72.5%** and courses two or more terms late rise 8.2% → **8.6%**. The residue is
-  concentrated in the 35 plans that take the fallback, where the hint was the only early
-  guidance left. Kept out anyway: 0.5 points against an 18-point gain is a poor reason to
-  run two mechanisms for one idea, and the whole point of this design is that a reader can
-  hold the rule in their head. Restore it only with a number that says it earns its keep.
+  73.0% → 72.5% on the instrument of the day, with coverage unchanged. The residue sits in
+  the plans that take the fallback, where the hint was the only early guidance left. Kept
+  out anyway: half a point against a twenty-point gain is a poor reason to run two
+  mechanisms for one idea, and the whole point of this design is that a reader can hold the
+  rule in their head. Restore it only with a number that says it earns its keep.
 
-  > Corpus coverage is unchanged at 257/90, but that is a NET figure and should not be read
-  > as "no program regresses". On the seeded 60-program sample the count moves 51 → 50, so
-  > at least one program loses its plan and at least one elsewhere gains one. State the
+  > That comparison was measured before capacity repair and before the instrument was
+  > corrected, so treat the 0.5 as an order of magnitude rather than a figure. It has not
+  > been re-run, because the decision does not turn on it.
+  >
+  > Coverage held at the corpus level, and that is a NET figure which should not be read as
+  > "no program regresses". On the seeded 60-program sample the count moved 51 → 50, so at
+  > least one program lost its plan and at least one elsewhere gained one. State the
   > denominator: a net that holds still can hide two moves in opposite directions.
 - **Its measurement hatch never worked.** `earlySeedTerms` was threaded from `generateOnce`
   into `placeCells`, which does not accept that parameter and silently dropped it, so

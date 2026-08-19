@@ -32,7 +32,7 @@ import { deriveCells, cellsSH, substitutePrereqs, withdrawWorkTermCells, assignR
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
 import { seedFromPlan } from "./seed.js";
 import { adoptEarlyTerms, applyEarlyTerms, EARLY_TERMS } from "./earlyTerms.js";
-import { buildDomains, wideAtFor } from "./domains.js";
+import { buildDomains, wideAtFor, termCapacity } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
 import { preflight, tightestTerms, MAX_DERIVED_GE_SHARE } from "./preflight.js";
 import {
@@ -624,6 +624,12 @@ function generateOnce({
     ? adoptEarlyTerms({
         publishedPlan: publishedPlan ?? donorPlan, shape, plans, precedence,
         through: earlyTerms,
+        // The SAME capacity the search enforces, read through the same function, because a
+        // published term may be over the registration cap — Computer Science and Biology
+        // publishes 20 SH against 19 — and fixing a term the student could not register for
+        // makes the whole window unsolvable. Any disagreement between this ceiling and the
+        // search's would be silent: we would fix an arrangement it then refuses.
+        capOf: (ti) => termCapacity(terms[ti], { creditMax: ports.creditMax, studentType }),
       })
     : { placed: new Map(), moves: [], unplaced: [] };
   // The exclusion reason is recorded only when something is RECORDING — the same condition

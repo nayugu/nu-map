@@ -276,6 +276,7 @@ export const strings = {
   "chart.early.moved.h":      "आपके विभाग द्वारा बताए गए सेमेस्टर से हटाए गए, क्योंकि वह सेमेस्टर काम नहीं करता:",
   "chart.early.moved.not-offered-then":       "{course} — {from} से {to}, क्योंकि तब यह पढ़ाया नहीं जाता",
   "chart.early.moved.after-its-prerequisite": "{course} — {from} से {to}, ताकि यह अपनी पूर्वापेक्षा के बाद रहे",
+  "chart.early.moved.term-was-full":          "{course} — {from} से {to}, क्योंकि {from} पहले ही क्रेडिट सीमा पर था",
   "chart.early.unplaced":     "{course} को {from} या उसके बाद किसी भी सेमेस्टर में नहीं रखा जा सका, इसलिए इस टूल ने इसका स्थान चुना।",
   // ── प्रक्रिया वाला पृष्ठ ──────────────────────────────────────────
   "chart.explain.tab.text": "नियम",

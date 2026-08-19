@@ -12,7 +12,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  adoptEarlyTerms, applyEarlyTerms, EARLY_TERMS, MOVED_AVAILABILITY, MOVED_PREREQ,
+  adoptEarlyTerms, applyEarlyTerms, EARLY_TERMS,
+  MOVED_AVAILABILITY, MOVED_PREREQ, MOVED_CAPACITY,
 } from "../../src/engine/earlyTerms.js";
 
 /** A shape of `n` fall/spring years, with work terms wherever `work` names them. */
@@ -285,6 +286,79 @@ test("early › a plan naming nothing we require adopts nothing", () => {
     publishedPlan: planOf([["ZZ9999"]]), shape,
     plans: [named("a", ["A"], wide())], precedence: NOPREC });
   assert.equal(placed.size, 0);
+});
+
+// ── Capacity ───────────────────────────────────────────────────────
+//
+// The third reason a published term does not work, and the one this module shipped without.
+// Computer Science and Biology publishes a 20 SH first term against a 19 SH registration
+// cap; because the fallback is all-or-nothing, one credit of overshoot discarded the whole
+// two years of the department's arrangement and the student got none of it.
+
+/** A named cell carrying credit, for the capacity tests. */
+const sized = (id, courses, sh, domain) =>
+  ({ cell: { id, kind: "named", groups: [courses], sh }, domain });
+
+test("early › an over-cap term sheds its SMALLEST course, not a real one", () => {
+  // The exact CS+Bio shape: four 5 SH cells and a 1 SH seminar against a 19 SH cap.
+  // Evicting `big4` to rescue `tiny` is the same repair and a far worse plan.
+  const shape = shapeOf(3);
+  const plan = planOf([["A", "B", "C", "D", "T"]]);
+  const plans = [
+    sized("big1", ["A"], 5, wide()), sized("big2", ["B"], 5, wide()),
+    sized("big3", ["C"], 5, wide()), sized("big4", ["D"], 4, wide()),
+    sized("tiny", ["T"], 1, wide()),
+  ];
+  const { placed, moves } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC, capOf: () => 19 });
+  for (const id of ["big1", "big2", "big3", "big4"]) {
+    assert.equal(placed.get(id), 0, `${id} should keep the term its department chose`);
+  }
+  assert.equal(placed.get("tiny"), 1, "the 1 SH course is what moves");
+  assert.deepEqual(moves, [{ cell: "tiny", from: 0, to: 1, why: MOVED_CAPACITY }]);
+});
+
+test("early › no term with room anywhere hands the course back, never overfills", () => {
+  const shape = shapeOf(2);
+  const plan = planOf([["A", "B"]]);
+  const plans = [sized("keep", ["A"], 4, wide(4)), sized("evict", ["B"], 4, wide(4))];
+  // A cap of 4 fits exactly ONE of them per term. Both are published in term 0, so one has
+  // to leave — the claim is not which, it is that the cap is never breached and nothing is
+  // silently lost.
+  const { placed, unplaced } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC, capOf: () => 4 });
+  const load = new Map();
+  for (const [id, at] of placed) {
+    const sh = plans.find(p => p.cell.id === id).cell.sh;
+    load.set(at, (load.get(at) ?? 0) + sh);
+  }
+  for (const [ti, v] of load) assert.ok(v <= 4, `term ${ti} was fixed at ${v} SH over a cap of 4`);
+  assert.equal(placed.size + unplaced.length, 2, "every cell is either fixed or handed back");
+});
+
+test("early › capacity never moves a course EARLIER to make room", () => {
+  const shape = shapeOf(4);
+  const plan = planOf([["A"], ["B", "C"]]);
+  const plans = [
+    sized("a", ["A"], 4, wide()), sized("b", ["B"], 10, wide()), sized("c", ["C"], 10, wide()),
+  ];
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC, capOf: () => 12 });
+  assert.equal(placed.get("a"), 0);
+  for (const id of ["b", "c"]) {
+    const at = placed.get(id);
+    if (at != null) assert.ok(at >= 1, `${id} was pulled earlier than its department's term`);
+  }
+});
+
+test("early › with no capacity function nothing is capped — the old behaviour", () => {
+  const shape = shapeOf(2);
+  const plan = planOf([["A", "B", "C"]]);
+  const plans = ["A", "B", "C"].map((c, i) => sized(`c${i}`, [c], 99, wide()));
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC });
+  assert.equal(placed.size, 3);
+  for (const [, at] of placed) assert.equal(at, 0);
 });
 
 test("early › a course repeated across terms keeps its EARLIER placement", () => {

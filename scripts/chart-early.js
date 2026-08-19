@@ -62,7 +62,14 @@ function studyTermsOf(plan) {
         if (e.vacation || e.heading || e.either) return;
         if (e.coop) { coop = true; return; }
         cells += 1;
-        for (const g of (e.options ?? [])) for (const id of g) named.add(id);
+        // ── COMMITTED placements only, never a candidate list ──────────
+        //
+        // `options.length === 1` is the test for "this row is decided". A placeholder offers
+        // many options, and counting them would score an elective slot that merely LISTS
+        // `BIOL 2301` as though we had placed `BIOL 2301` there — inflating agreement with a
+        // course the student was never given. Applied to both sides, so the question stays
+        // symmetrical: of the courses a department commits to, where did we commit them.
+        if ((e.options ?? []).length === 1) for (const id of e.options[0]) named.add(id);
         for (const c of (e.children ?? [])) walk(c);
       };
       for (const e of (term.entries ?? [])) walk(e);
@@ -105,7 +112,13 @@ function sample(list, n) {
 }
 
 const all = undergradWithPlans();
-const PROGRAMS = has("--all") ? all : sample(all, Number(val("--n", 60)));
+// `--explain <key>` answers "why did THIS program not follow its department", which the
+// aggregate cannot: it prints what was adopted, what moved, and what the department asked
+// for term by term. Every question about one bad plan starts here.
+const explainKey = val("--explain", null);
+const PROGRAMS = explainKey
+  ? all.filter(p => p.key.includes(explainKey))
+  : has("--all") ? all : sample(all, Number(val("--n", 60)));
 const { courseMap } = loadCatalog();
 const depthIndex = buildDepthIndex(courseMap);
 const ports = enginePorts(courseMap);
@@ -140,6 +153,28 @@ for (const p of PROGRAMS) {
   const ours = studyTermsOf(out.plan.plans[0]);
   const theirs = studyTermsOf(p.variant);
   const at = (id) => ours.findIndex(s => s.has(id));
+
+  if (explainKey) {
+    const e = out.report?.earlyTerms ?? {};
+    console.log(`\n=== ${p.key}`);
+    console.log(`source=${e.source} through=${e.through} fixed=${e.fixed} `
+      + `moved=${(e.moves ?? []).length} unplaced=${(e.unplaced ?? []).length} `
+      + `relaxed=${JSON.stringify(out.report?.relaxed ?? [])}`);
+    for (const m of (e.moves ?? [])) {
+      console.log(`   moved ${m.course}: ${m.from} -> ${m.to}  (${m.why})`);
+    }
+    for (let t = 0; t < EARLY_TERMS; t += 1) {
+      const want = [...(theirs[t] ?? [])].filter(id => courseMap[id]).sort();
+      const got = [...(ours[t] ?? [])].sort();
+      console.log(`  term ${t}`);
+      console.log(`    department: ${want.join(" ") || "(none)"}`);
+      console.log(`    generated : ${got.join(" ") || "(none)"}`);
+      const missing = want.filter(id => !(ours[t] ?? new Set()).has(id));
+      if (missing.length) {
+        console.log(`    NOT HERE  : ${missing.map(id => `${id}@${at(id)}`).join(" ")}`);
+      }
+    }
+  }
   let late2Here = 0;
   for (let t = 0; t < EARLY_TERMS; t += 1) {
     for (const id of (theirs[t] ?? new Set())) {

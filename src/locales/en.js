@@ -314,6 +314,7 @@ export const strings = {
   "chart.early.moved.h":      "Moved out of the semester your department names, because that semester would not work:",
   "chart.early.moved.not-offered-then":    "{course} — {from} to {to}, because it is not offered then",
   "chart.early.moved.after-its-prerequisite": "{course} — {from} to {to}, to keep it after a course it requires",
+  "chart.early.moved.term-was-full":          "{course} — {from} to {to}, because {from} was already at the credit limit",
   "chart.early.unplaced":     "{course} could not be placed in {from} or any semester after it, so this tool chose where it goes.",
 
   // ── The process page ────────────────────────────────────────────

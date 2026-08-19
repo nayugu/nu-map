@@ -276,6 +276,7 @@ export const strings = {
   "chart.early.moved.h":      "نُقلت من الفصل الذي يحدّده قسمك، لأن ذلك الفصل لا يصلح:",
   "chart.early.moved.not-offered-then":       "{course} — من {from} إلى {to}، لأنه لا يُطرح حينها",
   "chart.early.moved.after-its-prerequisite": "{course} — من {from} إلى {to}، ليبقى بعد مقرر يشترطه",
+  "chart.early.moved.term-was-full":          "{course} — من {from} إلى {to}، لأن {from} كان قد بلغ حدّ الساعات المعتمدة",
   "chart.early.unplaced":     "تعذّر وضع {course} في {from} أو في أي فصل بعده، لذلك اختارت هذه الأداة موضعه.",
   // ── صفحة المسار ─────────────────────────────────────────────────
   "chart.explain.tab.text": "القواعد",

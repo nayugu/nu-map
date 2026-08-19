@@ -276,6 +276,7 @@ export const strings = {
   "chart.early.moved.h":      "Movidas fuera del semestre que indica tu departamento, porque ese semestre no funcionaría:",
   "chart.early.moved.not-offered-then":       "{course} — de {from} a {to}, porque no se imparte entonces",
   "chart.early.moved.after-its-prerequisite": "{course} — de {from} a {to}, para mantenerla después de una asignatura que requiere",
+  "chart.early.moved.term-was-full":          "{course} — de {from} a {to}, porque {from} ya estaba en el límite de créditos",
   "chart.early.unplaced":     "{course} no se pudo colocar en {from} ni en ningún semestre posterior, así que esta herramienta eligió su lugar.",
   // ── La página del proceso ───────────────────────────────────────
   "chart.explain.tab.text": "Las reglas",
