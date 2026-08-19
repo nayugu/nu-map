@@ -239,6 +239,7 @@ export const strings = {
   "chart.contract.hard.7": "Ningún semestre que deba estar completo con espacio sin usar; en un otoño o primavera de este plan, {n} cursos de 3+ créditos",
   "chart.contract.hard.8": "Duración y temporada de inicio del co-op dentro de las reglas de la universidad",
   "chart.contract.soft.h": "Optimización dentro de esos requisitos estrictos",
+  "chart.contract.soft.short": "{n} preferencias, por orden de prioridad — ninguna inferior puede anular una superior.",
   "chart.contract.soft.1": "Coloca las optativas de la especialidad tan pronto como lo permitan sus requisitos previos, para que el reclutamiento de co-op vea trabajo avanzado en tu especialidad",
   "chart.contract.soft.2": "Envía temprano un curso que sirve de base — a todo aquello sobre lo que se apoya el resto de la universidad, no solo esta carrera — y envía el curso que no precede a nada adonde suele situarse su nivel",
   "chart.contract.soft.3": "Nunca coloca un curso antes de donde un plan publicado haya puesto uno de ese nivel",
@@ -271,7 +272,9 @@ export const strings = {
   // ── Quién planificó cada semestre ───────────────────────────────
   "chart.early.h":            "Quién planificó cada semestre",
   "chart.early.term":         "{season} del año {y}",
-  "chart.early.department":   "Tus primeros {n} semestres son el plan de estudios publicado por tu departamento, tal cual se publicó. Todo a partir del semestre {rest} lo organizó esta herramienta.",
+  "chart.early.department":   "Tus primeros {n} semestres siguen el plan de estudios publicado por tu departamento, revisado de nuevo con el catálogo actual en lugar de copiarse sin más. Todo a partir del semestre {rest} lo organizó esta herramienta.",
+  "chart.early.checks.h":     "Qué se vuelve a comprobar, y por qué el tuyo puede diferir",
+  "chart.early.checks.p":     "Que cada curso siga ofreciéndose en la temporada en que el plan lo coloca, y que sus prerrequisitos sigan yendo antes. Cuando ya no es así, el curso se mueve — y cada cambio aparece más abajo, de modo que nada cambia en silencio. El primer semestre también puede llevar más créditos que el límite habitual, pero solo cuando tu departamento lo publica así.",
   "chart.early.similar":      "Tu departamento no publica ningún plan de estudios, así que los primeros {n} semestres siguen a programas cuyos requisitos tienen una estructura parecida a la tuya. Solo se colocaron asignaturas que tu propia titulación exige: un programa parecido puede sugerir cuándo, nunca qué. Todo a partir del semestre {rest} lo organizó esta herramienta.",
   "chart.early.own":          "Esta herramienta organizó todos los semestres, porque no hay ningún plan de estudios publicado para tu programa.",
   "chart.early.relaxed":      "El plan de tu departamento no se podía encajar con el resto de la titulación, así que esta herramienta organizó todos los semestres.",

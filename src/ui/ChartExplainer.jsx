@@ -35,13 +35,53 @@ const SEASON_KEY = {
 };
 
 /**
+ * A summary line that opens into the detail.
+ *
+ * ── Why collapse rather than cut ───────────────────────────────────
+ *
+ * This page states eighteen rules and every one of them is real. The list was already trimmed once
+ * and the trim was reverted, for a reason recorded above the hard list: the first draft had five
+ * hard rules and quietly omitted three, and a list of rules that leaves rules out is worse than no
+ * list at all. So the answer to "the page is too long" cannot be "say less" — it has to be "say it
+ * later", which is what this is.
+ *
+ * The visible line has to carry the part a reader cannot reconstruct from the hidden items. For the
+ * preference list that is the PRIORITY, not the contents: the misreading to prevent is that the
+ * engine weighs ten things together, when a higher preference is never traded away for a lower one.
+ * Same shape, and the same reasoning, as the walkthrough's ladder.
+ *
+ * Module scope, taking `fz`, because both the preference list and the early-terms section need it —
+ * and a second hand-rolled copy of a toggle is a second thing to drift.
+ */
+function Disclosure({ summary, children, open, onToggle, fz }) {
+  return (
+    <>
+      <button
+        onClick={onToggle}
+        aria-expanded={open}
+        style={{
+          fontSize: fz, color: "var(--text-3)", lineHeight: 1.5, textAlign: "start",
+          background: "none", border: "none", padding: 0, cursor: "pointer",
+          display: "flex", gap: 5, alignItems: "baseline", width: "100%",
+        }}
+      >
+        <span aria-hidden="true" style={{ color: "var(--text-5)" }}>{open ? "▾" : "▸"}</span>
+        <span>{summary}</span>
+      </button>
+      {open && <div style={{ marginTop: 4 }}>{children}</div>}
+    </>
+  );
+}
+
+/**
  * Which half of this plan the department arranged, and every course we moved.
  *
  * Module scope rather than a closure inside the panel, so it can be rendered — and read —
  * on its own. It takes `t` rather than calling `useLanguage`, matching how the rest of this
  * file passes translation down.
  */
-function EarlyTerms({ early, relaxed, t }) {
+function EarlyTerms({ early, relaxed, t, fz }) {
+  const [checksOpen, setChecksOpen] = useState(false);
   // Plan-RELATIVE and localized: "Year 2 Summer A", never "Year 2 Summer 1" and never a
   // calendar date. The engine hands over `{ year, semTypeId }` precisely so this decision
   // is made once, here, by the layer that knows the reader's language.
@@ -62,6 +102,37 @@ function EarlyTerms({ early, relaxed, t }) {
   return (
     <>
       <p style={{ margin: 0, lineHeight: 1.6 }}>{t(lead, { n, rest: n + 1 })}</p>
+      {/* ── "Kept as published" is not "copied" ───────────────────────
+        *
+        * The lead used to say the first semesters were the department's plan "kept as published",
+        * and stopped there — so the one question it provoked went unanswered: then why does mine
+        * differ from the PDF? Three real behaviours were invisible until they happened to fire,
+        * and a reader who saw no moves listed had no way to know a check had even run:
+        *
+        *   - every course is re-tested against the CURRENT catalog for its season,
+        *   - and for whether its prerequisites still come first,
+        *   - and the first semester is allowed the overload the department itself published.
+        *
+        * Disclosed rather than inline because it is the answer to a question, and a reader who is
+        * not asking it should not have to read past it — the same trade as the preference list.
+        *
+        * Only where a published or modelled plan was actually followed. With `own` or `relaxed`
+        * this tool arranged every semester, so there is no published arrangement to have checked
+        * and the section would be describing work that did not happen. */}
+      {!dropped && (early.source === "department" || early.source === "similar-programs") && (
+        <div style={{ marginTop: 7 }}>
+          <Disclosure
+            fz={fz}
+            open={checksOpen}
+            onToggle={() => setChecksOpen(v => !v)}
+            summary={t("chart.early.checks.h")}
+          >
+            <p style={{ margin: 0, lineHeight: 1.6, color: "var(--text-3)" }}>
+              {t("chart.early.checks.p")}
+            </p>
+          </Disclosure>
+        </div>
+      )}
       {!dropped && (early.moves ?? []).length > 0 && (
         <>
           <p style={{ margin: "9px 0 3px" }}>{t("chart.early.moved.h")}</p>
@@ -122,6 +193,9 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
   // The header's control slot, as STATE rather than a ref: a ref does not re-render, so the child
   // that portals into it would be told about the node one render too late and draw nothing.
   const [controls, setControls] = useState(null);
+  // Collapsed by default. The early-terms detail keeps its own state inside `EarlyTerms`, which
+  // renders standalone by design — so opening one never opens the other.
+  const [softOpen, setSoftOpen] = useState(false);
 
   // ── Escape closes ONE layer ───────────────────────────────────────
   //
@@ -435,6 +509,16 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
           * own grid.
           */}
         <Section title={t("chart.contract.soft.h")}>
+          {/* The count is computed, not written into the string: the split line is conditional on
+            * the degree having free electives at all, so a hard-coded "ten" would be wrong for the
+            * 178 undergraduate degrees with no general-elective pool. */}
+          <Disclosure
+            open={softOpen}
+            onToggle={() => setSoftOpen(v => !v)}
+            summary={t("chart.contract.soft.short", {
+              n: 9 + (report.generalElectives?.total > 0 ? 1 : 0),
+            })}
+          >
           <ol style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
             {["1", "2", "3", "4", "5", "6"].map(n => (
               <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.soft.${n}`)}</li>
@@ -460,6 +544,7 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
               <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.soft.${n}`)}</li>
             ))}
           </ol>
+          </Disclosure>
         </Section>
 
         {/* ── How it works ───────────────────────────────────────────
@@ -561,7 +646,7 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
           */}
         {report.earlyTerms && (
           <Section title={t("chart.early.h")}>
-            <EarlyTerms early={report.earlyTerms} relaxed={report.relaxed} t={t} />
+            <EarlyTerms early={report.earlyTerms} relaxed={report.relaxed} t={t} fz={fz} />
           </Section>
         )}
 

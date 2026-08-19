@@ -263,6 +263,9 @@ export const strings = {
   "chart.contract.hard.7": "No term that should be full left with unused room — in a fall or spring, {n} courses of 3+ credits",
   "chart.contract.hard.8": "Co-op length and start season within the university’s rules",
   "chart.contract.soft.h": "Optimization within those hard requirements",
+  // The collapsed line carries the PRIORITY, which is the part a reader cannot recover from the
+  // items themselves — the misreading to prevent is that these are weighed together.
+  "chart.contract.soft.short": "{n} preferences, in priority order — nothing lower can overturn something higher.",
   "chart.contract.soft.1": "Places major electives as early as their prerequisites allow, so co-op recruiting sees advanced work in your major",
   // ── "Anywhere", and that word is the rule ────────────────────────
   //
@@ -309,7 +312,12 @@ export const strings = {
   // the shape of a degree, not about a student's dates. A format string because the word
   // order moves per locale, exactly as `sem.name.format` does for calendar terms.
   "chart.early.term":         "Year {y} {season}",
-  "chart.early.department":   "Your first {n} semesters are your department’s published plan, kept as published. Everything from semester {rest} on was arranged by this tool.",
+  // "Kept as published" was the whole sentence, and it left the obvious question unanswered —
+  // then why does mine differ from the PDF? It is followed by its own plan of study, but
+  // re-checked, and the checking is what `chart.early.checks.*` states.
+  "chart.early.department":   "Your first {n} semesters follow your department’s published plan, re-checked against the current catalog rather than copied. Everything from semester {rest} on was arranged by this tool.",
+  "chart.early.checks.h":     "What gets re-checked, and why yours may differ",
+  "chart.early.checks.p":     "That each course still runs in the season the plan puts it in, and that its prerequisites still come first. Where they no longer do, the course moves — and every move is listed below, so nothing changes silently. The first semester may also carry more credits than the usual limit, but only where your department publishes it that way.",
   "chart.early.similar":      "Your department publishes no plan of study, so the first {n} semesters follow programs whose requirements are structured most like yours. Only courses your own degree requires were placed — a similar program can suggest when, never what. Everything from semester {rest} on was arranged by this tool.",
   "chart.early.own":          "This tool arranged every semester, because there is no published plan of study for your program to follow.",
   "chart.early.relaxed":      "Your department’s plan could not be scheduled alongside the rest of your degree, so this tool arranged every semester itself.",
