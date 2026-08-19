@@ -49,7 +49,6 @@ import { generatePlan } from "../../src/engine/index.js";
 import { evalPrereqTree } from "../../src/core/prereqEval.js";
 import { REAL_COURSE_SH, FULL_TERM_MIN_COURSES, fullTermMinCourses } from "../../src/engine/domains.js";
 import { buildDepthIndex } from "../../src/engine/prereqDepth.js";
-import { FIRST_TERM_OVERLOAD_MAX } from "../../src/engine/earlyTerms.js";
 import { loadCatalog } from "../../src/adapters/northeastern/courseCatalog.node.js";
 import enginePorts from "../../src/adapters/northeastern/enginePorts.js";
 // ── The one rule below that this file does NOT re-implement ─────────
@@ -192,16 +191,19 @@ for (const p of PROGRAMS) {
     // exceeds the cap still fails, which is the property worth keeping.
     //
     // Narrow on purpose: the earliest term with courses in it, and never past
-    // `FIRST_TERM_OVERLOAD_MAX`. 4.0% of published first terms exceed the cap and no later
+    // its own load. 4.0% of published first terms exceed the cap and no later
     // term ever does; refusing to reproduce them cost thirteen Khoury combined majors their
     // department's entire first two years.
     const disclosed = out.report?.earlyTerms?.overload ?? null;
     const firstRow = rows.find(r => !r.coop && r.cells > 0) ?? null;
     for (const r of rows) {
       if (r.coop || r.cells === 0) continue;
-      const allowed = (disclosed && r === firstRow)
-        ? Math.max(cap, FIRST_TERM_OVERLOAD_MAX) * (r.half ? 0.5 : 1)
-        : cap * (r.half ? 0.5 : 1);
+      // Bounded by exactly what the plan DISCLOSED, not by a ceiling recomputed here. The
+      // first semester carries whatever its department published, so there is no formula to
+      // re-derive — and checking against the disclosure is tighter anyway: a plan may carry
+      // the load it admitted to and not one credit more.
+      const base = cap * (r.half ? 0.5 : 1);
+      const allowed = (disclosed && r === firstRow) ? Math.max(base, disclosed.sh) : base;
       if (r.sh > allowed + 0.01) overCap.push(`${r.label} ${r.sh} SH`);
       // Per student type. The four-course bar is an UNDERGRADUATE convention: measured, 95.8%
       // of published undergraduate full terms carry four or more and only 16.4% of graduate

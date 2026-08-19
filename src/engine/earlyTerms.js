@@ -79,33 +79,58 @@ export const MOVED_PREREQ = "after-its-prerequisite";
 export const MOVED_CAPACITY = "term-was-full";
 
 /**
- * The most credit a FIRST semester may carry when its department published it that way.
+ * The MINIMUM headroom a first semester gets over the registration cap — a floor, never a
+ * ceiling. Two credit hours, and relative to the cap rather than an absolute figure.
  *
- * 21, and both the number and the fact that it applies to term 0 alone are measured rather
- * than chosen. Over the 349 published undergraduate plans, counting only committed rows:
+ * ── The department sets the number, not us ─────────────────────────
+ *
+ * A first semester may carry whatever its department published there. If a program prints a
+ * 22 SH first term, that is a block schedule its own faculty signed off and told students to
+ * register for; a planner that refuses to reproduce it is not protecting anyone, it is
+ * disagreeing with the registrar's own advice while showing the student a worse plan.
+ *
+ * So the allowance is `max(cap + this, what the plan asks for)`. The published load always
+ * fits, and this constant only matters where there is no published number to defer to — or
+ * where our own decomposition of their term costs a credit or two more than their printed
+ * row, which happens when a corequisite partner is merged into a cell.
+ *
+ * ── Why the floor is 2 ─────────────────────────────────────────────
+ *
+ * Measured over the published corpus, counting committed rows:
+ *
+ *     UNDERGRADUATE (cap 19, 349 first terms)      GRADUATE (cap 16, 36 first terms)
+ *       over cap    14  (4.0%)                       over cap     1  (2.8%)
+ *       max excess   3 SH                            max excess   2 SH  — PharmD at 18
+ *
+ * Thirteen of the fourteen undergraduate cases are 20 SH — Khoury combined majors with the
+ * same skeleton, `CS 1800`+`1802`, `CS 2000`+`2001`, `ENGW 1111`, the partner subject's
+ * intro pair, and `CS 1200`, a one-credit seminar on top. +2 covers every one of those and
+ * the single graduate case without consulting the plan at all.
+ *
+ * RELATIVE because the cap is not one number: undergraduates are capped at 19 and graduate
+ * students at 16. An absolute 21 — the first version of this — silently handed graduate
+ * students a five-credit overload, and `verify-chart` caught it on an 18 SH first term
+ * inside a 16 SH envelope.
+ *
+ * ── And by TERM, which is why this is scoped to the first ──────────
  *
  *     term            0       1       2       3       4
- *     over 19 SH     14      0       0       0       0        <- 4.0%, then nothing
- *     heaviest       22 SH  19 SH   12 SH   18 SH   19 SH
+ *     over cap       14      0       0       0       0
  *
- * An overloaded published term is a FIRST-SEMESTER phenomenon and does not occur once
- * anywhere else, so the allowance is scoped to where the evidence is. Of the 14, thirteen
- * are 20 SH and one is 22.
+ * An overloaded published term is a first-semester phenomenon that does not occur once
+ * anywhere else, so the allowance is scoped to where the evidence is. Every later term is
+ * held to the cap exactly.
  *
- * All thirteen are Khoury combined majors with the same skeleton — `CS 1800`+`1802`,
- * `CS 2000`+`2001`, `ENGW 1111`, the partner subject's intro pair, and `CS 1200`, a
- * one-credit seminar sitting on top. That is a block schedule an advisor signs off, not a
- * degree nobody can register for, and refusing to reproduce it cost every one of those
- * programs its department's entire first two years.
+ * ── What still bounds an absurd term ───────────────────────────────
  *
- * 21 covers thirteen and deliberately leaves the fourteenth. Physics and Music with
- * Concentration in Music Technology publishes 22 SH across NINE courses in one semester;
- * a tool that reproduces that without comment is not being helpful, so it keeps falling
- * back and says so.
+ * Credits are not the only limit. `termSlotCap` bounds how many COURSES a term may hold,
+ * measured from the worst any published plan does, and availability and prerequisites are
+ * unchanged. A first semester is therefore free in credits and still not free in general.
  *
- * Scaled by the term's weight, so a half-summer is not handed a full semester's overload.
+ * Scaled by the term's weight at the call site, so a half-summer is not handed a full
+ * semester's headroom.
  */
-export const FIRST_TERM_OVERLOAD_MAX = 21;
+export const FIRST_TERM_OVERLOAD_SH = 2;
 
 /** Every entry in a term, including the nested children of an `either`. */
 function flatten(entries, out = []) {
@@ -317,6 +342,49 @@ function repair({ intended, plans, precedence, capOf, through = EARLY_TERMS }) {
     }
     if (!moved) break;
   }
+
+  // ── The precedence guarantee, enforced rather than hoped for ────────
+  //
+  // The loop above is capped at 8 passes because a cycle would never converge, and a capped
+  // fixpoint can return before it has settled: a cell placed early in a pass against a
+  // predecessor that then moves LATER in the same pass is stale, and if the cap lands there
+  // the pair ships violating the order. Found by fuzzing at 60,000 instances —
+  // `cell-6@3 must precede cell-4@2`.
+  //
+  // Not harmless. Both cells are unit domains by the time the search sees them, so a
+  // violating pair is unsatisfiable and costs the student the whole plan through the
+  // fallback. So the result is CHECKED, and any successor still out of order is handed back
+  // to the search — the same conservative move as a course with nowhere legal to go.
+  //
+  // The successor is dropped, never the predecessor: the predecessor is sitting in the term
+  // its department chose, and the whole point of this module is to keep that.
+  //
+  // Bounded by the cell count because each sweep removes exactly one, so it terminates even
+  // on precedence that is genuinely cyclic.
+  const outOfOrder = (id) => {
+    const at = placed.get(id);
+    for (const before of (precedence?.before?.get(id) ?? [])) {
+      const bt = placed.get(before);
+      if (bt == null) continue;
+      const together = precedence.concurrentOk?.has(`${before}|${id}`) ?? false;
+      if (together ? at < bt : at <= bt) return true;
+    }
+    return false;
+  };
+  for (let sweep = 0; sweep <= order.length; sweep += 1) {
+    const bad = order.find(id => placed.has(id) && outOfOrder(id));
+    if (bad == null) break;
+    unplaced.push({ cell: bad, from: intended.get(bad) });
+    placed.delete(bad);
+    reasons.delete(bad);
+  }
+
+  // Rebuilt from what SURVIVED, because the caller raises the search's first-term ceiling to
+  // this figure. A load still charging the term for a course the sweep just removed would
+  // licence the search to add one of its own in the gap.
+  load = new Map();
+  for (const [id, at] of placed) load.set(at, (load.get(at) ?? 0) + shOf(id));
+
   return { placed, unplaced, reasons, load };
 }
 
@@ -335,12 +403,17 @@ function repair({ intended, plans, precedence, capOf, through = EARLY_TERMS }) {
  */
 export function adoptEarlyTerms({
   publishedPlan, shape, plans, precedence, through = EARLY_TERMS, capOf = null,
-  firstTermOverload = 0,
+  // The MINIMUM headroom term 0 gets over `capOf(0)` — a floor, not a ceiling. The published
+  // load always fits regardless; see where `cap0` is computed.
+  firstTermHeadroom = 0,
 } = {}) {
   // `load` included so every return of this function has one shape. A caller that reads
   // `early.load` on the empty result should get an empty map, not `undefined` guarded by an
   // optional chain at each call site.
-  const empty = () => ({ placed: new Map(), moves: [], unplaced: [], load: new Map() });
+  const empty = () => ({
+    placed: new Map(), moves: [], unplaced: [], load: new Map(),
+    firstTermCap: capOf ? capOf(0) : Infinity,
+  });
   if (!publishedPlan || !plans?.length) return empty();
 
   // ── Scanned in a STABLE order, not the order they arrived ──────────
@@ -359,22 +432,33 @@ export function adoptEarlyTerms({
   });
 
   const intended = new Map();
+  // ── A course is spent ACROSS the window, not just within a term ─────
+  //
+  // Spending it per term was not enough. A department that lists one course in two of its
+  // early terms — its own duplicate row, which the corpus does contain — let two different
+  // cells each be fixed on it, so the plan asked for one registration to satisfy two
+  // requirements. Found by fuzzing: `C4 answers both cell-3 and cell-8`.
+  //
+  // Whichever cell claims it first keeps it, and the terms are read in ascending order, so
+  // the claim lands in the EARLIER of the two published terms — the same "earliest wins"
+  // rule a repeated course already followed for a single cell.
+  //
+  // Slightly conservative for a genuinely repeatable course that two cells could both take:
+  // the second cell is simply not adopted and goes to the search, which knows about
+  // repeatability and can place it. Under-claiming costs a hint; over-claiming costs the
+  // student a term holding something that is not there twice.
+  const spent = new Set();
   for (const { at, offers } of earlyTermsOf(publishedPlan, shape, through)) {
-    // A course answers ONE cell, so a matched group is spent. Two cells can list the same
-    // course — a choice cell offering CS 2500 beside a named cell requiring it — and
-    // matching both would fix two requirements to one course the student takes once,
-    // filling the term with something that is not there twice.
-    //
     // Named cells go first, so a course that exactly answers one requirement is not
     // consumed by a looser choice cell that had alternatives available.
-    const available = new Set(offers);
+    const available = new Set([...offers].filter(id => !spent.has(id)));
     for (const kind of ["named", "choice"]) {
       for (const p of byIdOrder) {
         if (intended.has(p.cell.id) || p.cell?.kind !== kind) continue;
         const group = answerableGroup(p.cell, available);
         if (!group) continue;
         intended.set(p.cell.id, at);
-        for (const id of group) available.delete(id);
+        for (const id of group) { available.delete(id); spent.add(id); }
       }
     }
   }
@@ -382,19 +466,26 @@ export function adoptEarlyTerms({
 
   // ── The first semester's allowance is the DEPARTMENT'S own load ────
   //
-  // Bounded by what this department published for term 0, not by a flat ceiling. A flat 21
-  // is a licence rather than an allowance: it lets repair pack a first semester to 21 SH for
-  // a program whose department published 18, which is us inventing an overload and signing
-  // the department's name to it. `business_administration_bsba_(oakland)` did exactly that
-  // and the roundtrip invariant caught it.
+  // `max(cap + headroom, what this plan asks for)`. Two rules in one line:
   //
-  // So: raise term 0 to what the department asked for, and no further — capped by
-  // `firstTermOverload` so a 22 SH nine-course term is still refused.
+  //   The published load ALWAYS fits. A department printing a 22 SH first term has told its
+  //   students to register for it, and refusing to reproduce that is disagreeing with the
+  //   faculty while showing the student a worse plan. `wanted0` is their term measured in
+  //   our cells, so it is their number and not one we chose.
+  //
+  //   And never LESS than a small headroom, which is what covers a term our decomposition
+  //   costs a credit or two more than their printed row — a merged corequisite partner, say.
+  //
+  // Note this can only ever RAISE term 0 to hold what was already published there. It is not
+  // a licence to pack the term: repair never moves a course earlier, so nothing arrives in
+  // term 0 that the department did not put there.
   const byIdSH = new Map(plans.map(p => [p.cell.id, p.cell?.sh ?? 0]));
   let wanted0 = 0;
   for (const [id, ti] of intended) if (ti === 0) wanted0 += byIdSH.get(id) ?? 0;
   const base0 = capOf ? capOf(0) : Infinity;
-  const cap0 = Math.max(base0, Math.min(wanted0, firstTermOverload));
+  const cap0 = Number.isFinite(base0)
+    ? Math.max(base0 + firstTermHeadroom, wanted0)
+    : base0;
   const effectiveCap = capOf ? ((t) => (t === 0 ? cap0 : capOf(t))) : null;
 
   const { placed, unplaced, reasons, load } =
@@ -405,7 +496,10 @@ export function adoptEarlyTerms({
     if (at !== from) moves.push({ cell: id, from, to: at, why: reasons.get(id) ?? null });
   }
   moves.sort((a, b) => a.from - b.from || (a.cell < b.cell ? -1 : 1));
-  return { placed, moves, unplaced, load };
+  // `firstTermCap` is the allowance actually used for term 0. Returned rather than left for
+  // a caller to re-derive: it is the number the search's ceiling and every cap assertion have
+  // to agree with, and two derivations of one figure is one of them being wrong later.
+  return { placed, moves, unplaced, load, firstTermCap: cap0 };
 }
 
 /**

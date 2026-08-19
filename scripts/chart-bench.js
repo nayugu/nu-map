@@ -160,6 +160,7 @@ if (out.refused) {
     creditCap: ports.creditMax("undergraduate"),
     minCourses: minCoursesFor(chartCalibration, "undergraduate"),
     realCourseSH: chartCalibration.realCourseSH,
+    firstTermOverload: out.report?.earlyTerms?.overload?.sh ?? null,
   });
   console.log(`  hard rules (independent gate): ${g.ok ? "✓ pass" : `✗ ${JSON.stringify(g.ok)}`}`);
 }

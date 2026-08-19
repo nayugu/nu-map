@@ -20,7 +20,6 @@ import { loadCatalog } from "../../src/adapters/northeastern/courseCatalog.node.
 import enginePorts from "../../src/adapters/northeastern/enginePorts.js";
 import { buildDepthIndex } from "../../src/engine/prereqDepth.js";
 import { generatePlan } from "../../src/engine/index.js";
-import { FIRST_TERM_OVERLOAD_MAX } from "../../src/engine/earlyTerms.js";
 import { evalPrereqTree } from "../../src/core/prereqEval.js";
 import { specForNode, courseEligible } from "../../src/core/programEligibility.js";
 
@@ -240,7 +239,10 @@ test("corpus › no term exceeds the registration cap", () => {
     for (const t of terms) {
       const base = max * ports.termWeight(t.semTypeId);
       const cap = (disclosed && t === first)
-        ? Math.max(base, FIRST_TERM_OVERLOAD_MAX * ports.termWeight(t.semTypeId))
+        // Exactly what the plan DISCLOSED. The first semester carries whatever its department
+        // published, so there is no ceiling to re-derive — and checking the disclosure is
+        // tighter: a plan may carry the load it admitted to and not one credit more.
+        ? Math.max(base, disclosed.sh)
         : base;
       const sh = t.entries.reduce((n, e) => n + (e.sh ?? 0), 0);
       if (sh > cap) bad.push(`${p.key} ${t.label}: ${sh} SH > ${cap}`);

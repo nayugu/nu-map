@@ -103,7 +103,22 @@ export const isUnguided = (text) => {
  */
 export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
                            creditCap, minCourses, realCourseSH,
-                           concentrationOptions = [] }) {
+                           concentrationOptions = [],
+                           // ── A DISCLOSED first-semester overload ──────────────────────
+                           //
+                           // `report.earlyTerms.overload`, or null. A department publishing
+                           // over the cap in semester one is a block schedule an advisor
+                           // signs off — 4.0% of published undergraduate first terms and
+                           // 2.8% of graduate ones do it, and no later term ever does — so
+                           // the engine keeps it and tells the student the term may need
+                           // approval.
+                           //
+                           // Gated on the DISCLOSURE, which is what keeps this from being a
+                           // relaxation. This file's own verdict is that an over-cap term is
+                           // "an overload petition the plan does not mention"; a plan that
+                           // mentions it has answered the objection, and one that does not
+                           // still fails. The bound is the caller's, measured at cap + 2.
+                           firstTermOverload = null }) {
   const placed = {};
   const rows = [];
   const concCells = [];
@@ -234,6 +249,9 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
   }
 
   const overCap = [], thin = [], emptyFull = [];
+  // The first term the plan actually USES — the only one a disclosed overload may apply to.
+  // A co-op-only term is not it, and neither is a calendar term the plan leaves empty.
+  const firstRow = rows.find(r => !r.coop && r.cells > 0) ?? null;
   // Terms whose every cell is an unlabelled elective — criterion 3, in its literal form.
   // Read off `rows`, not `studyRows`, which is declared further down: a `const` used above
   // its declaration is a temporal-dead-zone throw, and this gate runs against every plan in
@@ -267,7 +285,13 @@ export function gatePlan({ plan, courseMap, offered, evalPrereqTree,
     // quietly retired the registration-cap check on exactly the terms whose load this
     // work just changed. Employment does not raise the registrar's limit, so the hard
     // rule is checked here and only the CONVENTIONS below are waived.
-    if (r.sh > creditCap * (r.half ? 0.5 : 1) + 0.01) overCap.push(`${r.label} ${r.sh} SH`);
+    // The first term with courses in it, and only that one, may carry a disclosed overload.
+    // `firstRow` is computed from the same `rows` the loop walks, so "first" here means the
+    // first term the plan actually uses rather than the first the calendar has.
+    const capHere = (firstTermOverload && r === firstRow)
+      ? Math.max(creditCap * (r.half ? 0.5 : 1), firstTermOverload)
+      : creditCap * (r.half ? 0.5 : 1);
+    if (r.sh > capHere + 0.01) overCap.push(`${r.label} ${r.sh} SH`);
     // The four-course bar is not a claim about someone on co-op — the departments
     // themselves schedule one course beside one — so a co-op term is not counted toward
     // it in either direction.

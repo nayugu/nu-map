@@ -100,49 +100,81 @@ Three harms it repairs, and where each is decided:
 | **order** | `precedence` | the successor moves, never the prerequisite. Departments do publish courses sitting at or before what they require. |
 | **capacity** | `termCapacity` | the same function the search enforces, so the two cannot disagree. A published term may exceed the registration cap. |
 
-### The first semester may be overloaded, up to 21 SH
+### The first semester carries what its department published
 
 A department publishing over the registration cap in semester one is a **block schedule an
-advisor signs off**, not a term nobody can register for. So the first semester — and only
-the first — may carry what its department published, to a ceiling of **21 SH**.
+advisor signs off**, not a term nobody can register for. If a program prints a 22 SH first
+term, its own faculty told students to register for it; a planner that refuses to reproduce
+that is disagreeing with the registrar's advice while showing the student a worse plan.
 
-Measured over the 349 published undergraduate plans, counting committed rows only:
+So the allowance for term 0 is:
+
+```
+max( cap + FIRST_TERM_OVERLOAD_SH,  what the plan asks for in term 0 )
+```
+
+A **floor, not a ceiling**. The published load always fits, however heavy. The constant only
+matters where there is no published number to defer to, or where our decomposition of their
+term costs a credit or two more than their printed row — which happens when a corequisite
+partner is merged into a cell.
+
+Measured over the published corpus, counting committed rows:
+
+| | cap | first terms | over cap | max excess |
+|---|---|---|---|---|
+| undergraduate | 19 | 349 | **14 (4.0%)** | 3 SH |
+| graduate | 16 | 36 | **1 (2.8%)** | 2 SH — PharmD at 18 |
+
+And by term, undergraduate — overload is a first-semester phenomenon that **does not occur
+once anywhere else**, which is why the allowance is scoped to term 0 rather than the window:
 
 | published term | 0 | 1 | 2 | 3 | 4 |
 |---|---|---|---|---|---|
-| over 19 SH | **14 (4.0%)** | 0 | 0 | 0 | 0 |
-| heaviest | 22 SH | 19 SH | 12 SH | 18 SH | 19 SH |
+| over cap | **14** | 0 | 0 | 0 | 0 |
 
-Overload is a first-semester phenomenon and **does not occur once anywhere else**, which is
-why the allowance is scoped to term 0 rather than to the window. Of the 14, thirteen are
-20 SH and one is 22.
+Thirteen of the fourteen undergraduate cases are 20 SH — Khoury combined majors with the
+same skeleton, `CS 1800`+`1802`, `CS 2000`+`2001`, `ENGW 1111`, the partner subject's intro
+pair, and `CS 1200`, a one-credit seminar on top. **+2 covers all of those without consulting
+the plan at all**, which is why it is the floor.
 
-All thirteen are Khoury combined majors with the same skeleton — `CS 1800`+`1802`,
-`CS 2000`+`2001`, `ENGW 1111`, the partner subject's intro pair, and `CS 1200`, a one-credit
-seminar on top. 21 covers all thirteen and deliberately leaves the fourteenth: Physics and
-Music with Concentration in Music Technology publishes 22 SH across **nine** courses, and a
-tool that reproduces that without comment is not being helpful. It falls back and says so.
+Four details that are load-bearing:
 
-Three details that are load-bearing:
-
-- **The allowance is the department's own load, not the ceiling.** Term 0 is raised to what
-  *this* department published, bounded above by 21 — never to a flat 21. A flat ceiling is a
-  licence rather than an allowance: it lets repair pack a first semester to 21 SH for a
-  program whose department published 15, which is inventing an overload and signing the
-  department's name to it. `business_administration_bsba_(oakland)` did exactly that, and
-  `engine-roundtrip`'s cap check caught it — the guard was right and the first
-  implementation was wrong.
-- The ceiling is scaled by the term's weight, so a half-summer is not handed a full
-  semester's overload.
+- **RELATIVE to the student's own cap**, which is 19 undergraduate and 16 graduate. An
+  absolute 21 — the first version — silently handed graduate students a five-credit
+  overload, and `verify-chart` caught it on an 18 SH first term inside a 16 SH envelope.
+- **It raises a ceiling; it never packs the term.** Repair only ever moves a course *later*,
+  so nothing arrives in term 0 that the department did not put there. A program publishing a
+  15 SH first term still gets 15, not 21.
+- Scaled by the term's weight, so a half-summer is not handed a full semester's headroom.
 - The search's ceiling is raised to the load **actually adopted**, so the allowance cannot
-  licence the search to add a course of its own on top of an already-heavy term. Read in
-  `termCapacity`, the one function every consumer already asks, so `preflight` cannot refuse
-  a degree the search would have placed.
+  licence the search to add a course of its own. Read in `termCapacity`, the one function
+  every consumer already asks, so `preflight` cannot refuse a degree the search would place.
 
-`engine-roundtrip`'s "no term over the cap once loaded" now asserts this rule rather than
-the old one, and deliberately narrowly: **one** term, the earliest the plan occupies, and a
-hard 21 SH rather than "whatever CHART produced". Every other term is checked exactly as
-before, which is what stops the exemption reading as permission to overfill.
+> **Credits are not the only bound.** `termSlotCap` limits how many *courses* a term may
+> hold, measured from the worst any published plan does, and availability and prerequisites
+> are untouched. A first semester is free in credits and still not free in general.
+
+### The planner still warns, always
+
+The generator following the department and the planner flagging an overload are **different
+questions with different answers**, and they are deliberately on separate paths:
+
+| | reads | behaviour |
+|---|---|---|
+| generator | `ports.creditMax` → `termCapacity` | first semester may exceed the cap |
+| planner | `creditSystem.getSemesterMax` | ⚠ above 19 / 16, in **every** semester |
+
+`SemRow` draws its warning from `creditSystem.getSemesterMax(studentType)`, which the engine
+never touches, and `creditCeiling` lives on the engine's shape term and is **not emitted into
+the plan document** — verified. So a generated 20 SH first semester arrives in the planner
+carrying the same ⚠ any hand-built 20 SH semester would. That is the intended behaviour: the
+generator defers to the department, and the student is still told the term is over the limit.
+
+Three cap invariants and the corpus gate accept the over-cap first term **only when
+`report.earlyTerms.overload` discloses it**, and only up to the disclosed figure. An
+undisclosed over-cap term still fails, which is what keeps this an exception rather than a
+relaxation — `chart-hard-rules` states the objection exactly: an over-cap term is *"an
+overload petition the plan does not mention."*
 
 > **Capacity was missed in the first version, and it mattered more than the other two.**
 > Computer Science and Biology publishes a **20 SH** first term against a **19 SH** cap.

@@ -380,9 +380,18 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
           */}
         <Section title={t("chart.contract.hard.h")}>
           <ol style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
-            {["1", "2", "3", "4", "5"].map(n => (
+            {["1", "2", "3", "4"].map(n => (
               <li key={n} style={{ marginBottom: 3 }}>{t(`chart.contract.hard.${n}`)}</li>
             ))}
+            {/* Rule 5 carries its exception for the same reason rule 6 does. "No term over
+              * the credit cap" is a HARD promise, and it stops being true the moment a first
+              * semester keeps the overload its department published — which this panel then
+              * states plainly two sections down. A guarantee contradicted by the same
+              * document is worse than one that names its exception up front. */}
+            <li style={{ marginBottom: 3 }}>
+              {t(report.earlyTerms?.overload
+                ? "chart.contract.hard.5.overload" : "chart.contract.hard.5")}
+            </li>
             <li style={{ marginBottom: 3 }}>
               {t((report.unschedulable ?? []).length > 0
                 ? "chart.contract.hard.6.gap" : "chart.contract.hard.6")}
@@ -521,10 +530,19 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
             *
             * The last step says where it STOPS, because "improves the order" with no end
             * condition invites exactly the question it got. */}
+          {/* `b3b` is the early-terms step, and it sits between narrowing and placing
+            * because that is where it runs. Shown only when it actually applied: for a
+            * program with no plan and no similar one to model, "keeps your department's
+            * first semesters" describes something that did not happen. */}
           <ul style={{ margin: 0, paddingInlineStart: 22, lineHeight: 1.6 }}>
-            {["b1", "b2", "b3", "b4", "b5", "b6"].map(k => (
-              <li key={k} style={{ marginBottom: 2 }}>{t(`chart.how.${k}`)}</li>
-            ))}
+            {["b1", "b2", "b3", "b3b", "b4", "b5", "b6"]
+              .filter(k => k !== "b3b"
+                || (report.earlyTerms?.source && report.earlyTerms.source !== "chart"))
+              .map(k => (
+                <li key={k} style={{ marginBottom: 2 }}>
+                  {t(`chart.how.${k}`, { n: report.earlyTerms?.through ?? 4 })}
+                </li>
+              ))}
           </ul>
         </Section>
 

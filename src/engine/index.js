@@ -32,7 +32,7 @@ import { deriveCells, cellsSH, substitutePrereqs, withdrawWorkTermCells, assignR
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
 import { seedFromPlan } from "./seed.js";
 import {
-  adoptEarlyTerms, applyEarlyTerms, EARLY_TERMS, FIRST_TERM_OVERLOAD_MAX,
+  adoptEarlyTerms, applyEarlyTerms, EARLY_TERMS, FIRST_TERM_OVERLOAD_SH,
 } from "./earlyTerms.js";
 import { buildDomains, wideAtFor, termCapacity } from "./domains.js";
 import { buildPrecedence, criticalPath } from "./precedence.js";
@@ -632,12 +632,12 @@ function generateOnce({
         // Except in the FIRST semester, where a department publishing over the cap is a
         // block schedule an advisor signs off rather than a term nobody can register for.
         // 4.0% of published first terms exceed 19 SH and no later term ever does; see
-        // `FIRST_TERM_OVERLOAD_MAX` for why the allowance is 21 and why it stops there.
+        // `FIRST_TERM_OVERLOAD_SH` for why the allowance is +2 and why it stops there.
         capOf: (ti) => termCapacity(terms[ti], { creditMax: ports.creditMax, studentType }),
-        // The CEILING on that allowance, not the allowance itself — `adoptEarlyTerms` raises
-        // term 0 only as far as this department's own published load, so we can never invent
-        // an overload for a program that publishes a normal first semester.
-        firstTermOverload: FIRST_TERM_OVERLOAD_MAX * (terms[0]?.weight ?? 1),
+        // The FLOOR on term 0's allowance, not a ceiling. What the department published
+        // there always fits; this only covers a term our own decomposition costs a credit
+        // or two more than their printed row. Weighted, so a half-summer gets half of it.
+        firstTermHeadroom: FIRST_TERM_OVERLOAD_SH * (terms[0]?.weight ?? 1),
       })
     : { placed: new Map(), moves: [], unplaced: [], load: new Map() };
   // ── Let the search hold what the department published ──────────────

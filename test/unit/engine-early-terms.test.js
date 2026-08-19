@@ -105,6 +105,19 @@ test("early › a course the department names once cannot fill two cells", () =>
   assert.ok(!placed.has("loose"));
 });
 
+test("early › a course is spent ACROSS the window, not once per term", () => {
+  // Found by fuzzing. The spend was per term, so a department listing one course in two of
+  // its early terms let two different cells each be fixed on it — one registration asked to
+  // satisfy two requirements, and a term holding something that is not there twice.
+  const shape = shapeOf(3);
+  const plan = planOf([["X"], ["X"]]);          // the department's own duplicate row
+  const plans = [named("aaa", ["X"], wide()), named("bbb", ["X"], wide())];
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC });
+  assert.equal(placed.size, 1, "one course, one cell");
+  assert.equal(placed.get("aaa"), 0, "and it lands in the EARLIER of the two published terms");
+});
+
 test("early › a corequisite group is adopted whole or not at all", () => {
   const shape = shapeOf(2);
   const plans = [named("pair", ["CS1800", "CS1802"], wide())];
@@ -232,6 +245,31 @@ test("early › a course with no legal term at or after is handed back, never fo
   assert.deepEqual(unplaced, [{ cell: "a", from: 1 }]);
 });
 
+test("early › no two FIXED cells are ever left out of order", () => {
+  // Found by fuzzing at 60,000 instances. The repair fixpoint is capped at 8 passes because
+  // a cycle would never converge, and a capped fixpoint can return before it settles — a
+  // cell placed against a predecessor that then moves later in the same pass is stale. Both
+  // are unit domains by the time the search sees them, so a violating pair is unsatisfiable
+  // and costs the student the whole plan through the fallback.
+  //
+  // A chain of 12, each requiring the last, all published in term 0: far longer than the
+  // pass cap can settle, so whatever survives must be checked rather than trusted.
+  const shape = shapeOf(8);
+  const ids = Array.from({ length: 12 }, (_, i) => `c${String(i).padStart(2, "0")}`);
+  const plan = planOf([ids.map((_, i) => `K${i}`)]);
+  const plans = ids.map((id, i) => named(id, [`K${i}`], wide(12)));
+  const before = new Map();
+  for (let i = 1; i < ids.length; i += 1) before.set(ids[i], new Set([ids[i - 1]]));
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: { before, concurrentOk: new Set() } });
+  for (const [id, at] of placed) {
+    for (const b of (before.get(id) ?? [])) {
+      const bt = placed.get(b);
+      if (bt != null) assert.ok(at > bt, `${b}@${bt} must precede ${id}@${at}`);
+    }
+  }
+});
+
 test("early › repair terminates on cyclic precedence rather than spinning", () => {
   // A cycle should be impossible upstream, and this must not be the thing that hangs the
   // browser if it ever is not.
@@ -348,11 +386,13 @@ test("early › a plan naming nothing we require adopts nothing", () => {
 const sized = (id, courses, sh, domain) =>
   ({ cell: { id, kind: "named", groups: [courses], sh }, domain });
 
-test("early › an over-cap term sheds its SMALLEST course, not a real one", () => {
-  // The exact CS+Bio shape: four 5 SH cells and a 1 SH seminar against a 19 SH cap.
-  // Evicting `big4` to rescue `tiny` is the same repair and a far worse plan.
+test("early › an over-cap LATER term sheds its smallest course, not a real one", () => {
+  // Published in term 1, because term 0 is exempt — it carries whatever its department
+  // printed. Every later term is held to the cap exactly, and when one is over, taking the
+  // courses heaviest-first is what makes the 1 SH seminar leave rather than a 5 SH course.
+  // Evicting `big1` to rescue `tiny` is the same repair and a far worse plan.
   const shape = shapeOf(3);
-  const plan = planOf([["A", "B", "C", "D", "T"]]);
+  const plan = planOf([[], ["A", "B", "C", "D", "T"]]);
   const plans = [
     sized("big1", ["A"], 5, wide()), sized("big2", ["B"], 5, wide()),
     sized("big3", ["C"], 5, wide()), sized("big4", ["D"], 4, wide()),
@@ -361,19 +401,19 @@ test("early › an over-cap term sheds its SMALLEST course, not a real one", () 
   const { placed, moves } = adoptEarlyTerms({
     publishedPlan: plan, shape, plans, precedence: NOPREC, capOf: () => 19 });
   for (const id of ["big1", "big2", "big3", "big4"]) {
-    assert.equal(placed.get(id), 0, `${id} should keep the term its department chose`);
+    assert.equal(placed.get(id), 1, `${id} should keep the term its department chose`);
   }
-  assert.equal(placed.get("tiny"), 1, "the 1 SH course is what moves");
-  assert.deepEqual(moves, [{ cell: "tiny", from: 0, to: 1, why: MOVED_CAPACITY }]);
+  assert.equal(placed.get("tiny"), 2, "the 1 SH course is what moves");
+  assert.deepEqual(moves, [{ cell: "tiny", from: 1, to: 2, why: MOVED_CAPACITY }]);
 });
 
 test("early › no term with room anywhere hands the course back, never overfills", () => {
   const shape = shapeOf(2);
-  const plan = planOf([["A", "B"]]);
+  // Published in term 1, so the first-semester exemption does not apply and the cap bites.
+  const plan = planOf([[], ["A", "B"]]);
   const plans = [sized("keep", ["A"], 4, wide(4)), sized("evict", ["B"], 4, wide(4))];
-  // A cap of 4 fits exactly ONE of them per term. Both are published in term 0, so one has
-  // to leave — the claim is not which, it is that the cap is never breached and nothing is
-  // silently lost.
+  // A cap of 4 fits exactly ONE of them per term, so one has to leave — the claim is not
+  // which, it is that the cap is never breached and nothing is silently lost.
   const { placed, unplaced } = adoptEarlyTerms({
     publishedPlan: plan, shape, plans, precedence: NOPREC, capOf: () => 4 });
   const load = new Map();
@@ -403,7 +443,7 @@ test("early › capacity never moves a course EARLIER to make room", () => {
 test("early › the first semester may carry the overload its department published", () => {
   // The Khoury combined-major shape: 19 SH of real courses plus a 1 SH seminar. Thirteen
   // programs publish exactly this, and capping it at 19 cost every one of them their
-  // department's whole first two years. The caller grants term 0 the wider ceiling.
+  // department's whole first two years.
   const shape = shapeOf(3);
   const plan = planOf([["A", "B", "C", "D", "T"]]);
   const plans = [
@@ -413,19 +453,19 @@ test("early › the first semester may carry the overload its department publish
   ];
   const { placed, moves } = adoptEarlyTerms({
     publishedPlan: plan, shape, plans, precedence: NOPREC,
-    capOf: () => 19, firstTermOverload: 21,
+    capOf: () => 19, firstTermHeadroom: 2,
   });
   assert.equal(placed.size, 5);
   for (const [, at] of placed) assert.equal(at, 0, "the whole published term is kept");
   assert.deepEqual(moves, [], "nothing needs repairing when the overload is allowed");
 });
 
-test("early › the allowance never exceeds what the DEPARTMENT published", () => {
-  // The defect the roundtrip invariant caught. A flat ceiling let repair pack a first
-  // semester to 21 SH for a program whose department published 15 — inventing an overload
-  // and signing the department's name to it. The allowance is bounded by their own term.
+test("early › a light first term is not PACKED up to its allowance", () => {
+  // The allowance raises the ceiling; it must never pull courses in. Term 0 is published at
+  // 15 SH and term 1 is heavy and wants somewhere to spill — nothing from term 1 may land in
+  // term 0's headroom, because repair only ever moves a course LATER. Getting this wrong
+  // would invent a first-semester overload and sign the department's name to it.
   const shape = shapeOf(3);
-  // Term 0 is published at 15 SH; term 1 is heavy and wants somewhere to spill.
   const plan = planOf([["A", "B", "C"], ["D", "E", "F", "G"]]);
   const plans = [
     sized("a", ["A"], 5, wide()), sized("b", ["B"], 5, wide()), sized("c", ["C"], 5, wide()),
@@ -434,30 +474,63 @@ test("early › the allowance never exceeds what the DEPARTMENT published", () =
   ];
   const { placed } = adoptEarlyTerms({
     publishedPlan: plan, shape, plans, precedence: NOPREC,
-    capOf: () => 19, firstTermOverload: 21,
+    capOf: () => 19, firstTermHeadroom: 2,
   });
   const inT0 = [...placed.entries()].filter(([, at]) => at === 0)
     .reduce((n, [id]) => n + plans.find(p => p.cell.id === id).cell.sh, 0);
   assert.equal(inT0, 15, `term 0 was fixed at ${inT0} SH; its department published 15`);
 });
 
-test("early › the overload is a CEILING, not a licence — 22 SH still sheds", () => {
-  // Physics and Music publishes 22 SH across nine courses. 21 deliberately does not cover
-  // it: a tool that reproduces that silently is not being helpful.
+test("early › the first semester carries whatever its department published, however heavy", () => {
+  // The rule is `max(cap + headroom, what the plan asks for)` — a floor, not a ceiling.
+  // A department printing a 27 SH first term has told its students to register for it, and
+  // refusing to reproduce that is disagreeing with the faculty while showing a worse plan.
+  // The student is warned about the load elsewhere; the generator does not overrule it.
   const shape = shapeOf(3);
   const plan = planOf([["A", "B", "C", "D", "E"]]);
   const plans = [
     sized("b1", ["A"], 5, wide()), sized("b2", ["B"], 5, wide()),
     sized("b3", ["C"], 5, wide()), sized("b4", ["D"], 5, wide()),
-    sized("b5", ["E"], 2, wide()),
+    sized("b5", ["E"], 7, wide()),
+  ];
+  const { placed, moves, firstTermCap } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC,
+    capOf: () => 19, firstTermHeadroom: 2,
+  });
+  assert.equal(placed.size, 5, "every published course keeps its first semester");
+  for (const [, at] of placed) assert.equal(at, 0);
+  assert.deepEqual(moves, [], "nothing is shed from a first semester");
+  assert.equal(firstTermCap, 27, "the allowance is the published load, not the cap plus two");
+});
+
+test("early › the headroom is a FLOOR — a light first term still gets cap + 2", () => {
+  // The other half of `max(...)`. Our decomposition can cost a credit or two more than the
+  // printed row when a corequisite partner is merged into a cell, and that must still fit.
+  const shape = shapeOf(3);
+  const plan = planOf([["A"]]);
+  const plans = [sized("a", ["A"], 4, wide())];
+  const { firstTermCap } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC,
+    capOf: () => 19, firstTermHeadroom: 2,
+  });
+  assert.equal(firstTermCap, 21, "a 4 SH published term still leaves cap + headroom");
+});
+
+test("early › only the FIRST semester is exempt; later terms are held to the cap", () => {
+  const shape = shapeOf(3);
+  const plan = planOf([[], ["A", "B", "C", "D", "E"]]);   // 27 SH published in term 1
+  const plans = [
+    sized("b1", ["A"], 5, wide()), sized("b2", ["B"], 5, wide()),
+    sized("b3", ["C"], 5, wide()), sized("b4", ["D"], 5, wide()),
+    sized("b5", ["E"], 7, wide()),
   ];
   const { placed } = adoptEarlyTerms({
     publishedPlan: plan, shape, plans, precedence: NOPREC,
-    capOf: () => 19, firstTermOverload: 21,
+    capOf: () => 19, firstTermHeadroom: 2,
   });
-  const inT0 = [...placed.entries()].filter(([, at]) => at === 0)
+  const inT1 = [...placed.entries()].filter(([, at]) => at === 1)
     .reduce((n, [id]) => n + plans.find(p => p.cell.id === id).cell.sh, 0);
-  assert.ok(inT0 <= 21, `term 0 was fixed at ${inT0} SH, past the 21 ceiling`);
+  assert.ok(inT1 <= 19, `term 1 was fixed at ${inT1} SH over a cap of 19`);
 });
 
 test("early › a later term gets no overload allowance, however it was published", () => {
@@ -472,7 +545,7 @@ test("early › a later term gets no overload allowance, however it was publishe
   ];
   const { placed } = adoptEarlyTerms({
     publishedPlan: plan, shape, plans, precedence: NOPREC,
-    capOf: () => 19, firstTermOverload: 21,
+    capOf: () => 19, firstTermHeadroom: 2,
   });
   const inT1 = [...placed.entries()].filter(([, at]) => at === 1)
     .reduce((n, [id]) => n + plans.find(p => p.cell.id === id).cell.sh, 0);

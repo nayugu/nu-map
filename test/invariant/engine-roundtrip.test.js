@@ -22,7 +22,6 @@ import { loadCatalog } from "../../src/adapters/northeastern/courseCatalog.node.
 import enginePorts from "../../src/adapters/northeastern/enginePorts.js";
 import { buildDepthIndex } from "../../src/engine/prereqDepth.js";
 import { generatePlan } from "../../src/engine/index.js";
-import { FIRST_TERM_OVERLOAD_MAX } from "../../src/engine/earlyTerms.js";
 import { applySamplePlan, academicYears } from "../../src/core/applySamplePlan.js";
 import { resolveRequirement, semesterOccupants } from "../../src/core/reservations.js";
 import { candidatesForReservation, courseIds, isUnbounded } from "../../src/core/candidates.js";
@@ -278,13 +277,14 @@ test("roundtrip › no term is over the cap once the plan is actually loaded", (
     // Not a weakening of this check: it is the rule that replaced the one this used to
     // assert. A department publishing over the registration cap in semester one is a block
     // schedule an advisor signs off — 4.0% of published first terms do it and no later term
-    // ever does — so `earlyTerms.js` keeps it, bounded by that department's own load and by
-    // `FIRST_TERM_OVERLOAD_MAX`. Refusing to reproduce it cost thirteen Khoury combined
-    // majors their department's entire first two years.
+    // ever does — so `earlyTerms.js` keeps it. Refusing to reproduce it cost thirteen Khoury
+    // combined majors their department's entire first two years.
     //
-    // The exemption is deliberately narrow: one term, the earliest the plan occupies, and a
-    // hard 21 SH rather than "whatever CHART produced". Every other term is checked exactly
-    // as before, which is what stops this reading as a licence to overfill.
+    // The exemption is narrow in the two ways that matter: ONE term, the earliest the plan
+    // occupies, and bounded by exactly what the plan DISCLOSED rather than by "whatever CHART
+    // produced". A plan that quietly exceeds the cap still fails here, which is the property
+    // this check has always been protecting.
+    const disclosed = out.report?.earlyTerms?.overload ?? null;
     const firstSemId = SEMESTERS
       .filter(s => bySem.has(s.id) && s.semTypeId !== "incoming")
       .map(s => s.id)[0] ?? null;
@@ -292,8 +292,11 @@ test("roundtrip › no term is over the cap once the plan is actually loaded", (
       const sem = SEMESTERS.find(s => s.id === semId);
       if (!sem || sem.semTypeId === "incoming") continue;
       const base = max * (sem.weight ?? 1);
-      const cap = semId === firstSemId
-        ? Math.max(base, FIRST_TERM_OVERLOAD_MAX * (sem.weight ?? 1))
+      const cap = (disclosed && semId === firstSemId)
+        // Exactly what the plan DISCLOSED. The first semester carries whatever its department
+        // published, so there is no ceiling to re-derive — and checking the disclosure is
+        // tighter: a plan may carry the load it admitted to and not one credit more.
+        ? Math.max(base, disclosed.sh)
         : base;
       if (sh > cap) bad.push(`${p.key} ${semId}: ${sh} SH > ${cap} after loading`);
     }

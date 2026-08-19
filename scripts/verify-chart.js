@@ -191,6 +191,19 @@ for (const d of degrees) {
         coopPrep: (observed.coopPrep ?? []).map(x => x.course),
         donorPlan: variant ? null : (earlyDonors[programIdentity(d.data)]?.plan ?? null),
         studentType, calibration: chartCalibration, timeBudgetMs: 5000,
+        // ── A hatch that actually reaches the engine ────────────────────
+        //
+        // `CHART_NO_DEPARTMENT=1` runs the whole gate with the early-terms rule off, so
+        // "following the department does not cost coverage" can be MEASURED over the real
+        // corpus rather than argued from the fallback's existence. The claim is about 1,078
+        // shapes, so it has to be runnable both ways over all of them.
+        //
+        // Threaded and verified, unlike the `earlySeedTerms` hatch this replaces: that one
+        // was passed to a function which does not accept it and silently dropped it, so the
+        // figure its commit quoted was never producible. `followDepartment` is destructured
+        // by `generateOnce` itself, and the printed count of `department-early-terms`
+        // fallbacks drops to zero when this is set — which is the check that it landed.
+        ...(process.env.CHART_NO_DEPARTMENT ? { followDepartment: false } : {}),
       });
     } catch (err) {
       threw++;
@@ -227,6 +240,10 @@ for (const d of degrees) {
       // Every concentration still open to this student. These plans are generated without a
       // pick, so a cell reserved for the concentration has to be answerable under EVERY one.
       concentrationOptions: optionPools(d.data),
+      // The load the engine DISCLOSED for an overloaded first semester, or null. Read from
+      // the report rather than recomputed, so the gate accepts exactly what the plan admits
+      // to and nothing more — an undisclosed over-cap term still fails here.
+      firstTermOverload: out.report?.earlyTerms?.overload?.sh ?? null,
     });
     thin += g.thin.length;
     fullTerms += g.fullTerms;
