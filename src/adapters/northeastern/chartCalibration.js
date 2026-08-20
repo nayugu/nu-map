@@ -95,6 +95,49 @@ export default {
   capstoneAttribute: "CE",
   capstoneFloor: 0.85,
 
+  // ── Designations that carry a POSITIONAL convention, as data ───────
+  //
+  // Read by `src/engine/attributePlacement.js`, which runs after every hard constraint, every
+  // ranked objective and the threshold repair have settled. The engine knows the rule GRAMMAR
+  // (`notBefore`, `swapWith`, both closed vocabularies); the codes and the reasons live here,
+  // because they are facts about Northeastern's curriculum and not about planning.
+  //
+  // Adding a designation is a line in this array. That is the point: the engine used to carry
+  // exactly one of these as a hard-coded field pair (`capstoneAttribute` / `capstoneFloor`, still
+  // read by `settleCapstones`), which is fine for one and duplicates a swap loop for two.
+  attributePlacement: [
+    // ── `WD` — advanced writing belongs after a co-op ────────────────
+    //
+    // NUPath competency 9 is awarded as three codes — `WF` first-year writing, `WD` writing in
+    // the disciplines, `WI` writing-intensive — and only `WD` is the advanced writing requirement
+    // a student meets once, late. It is carried by exactly **16 courses** across 6 subjects
+    // (ENGW 10, ENG 2, COMM/HIST/JRNL/THTR 1 each), all 2000- and 3000-level, so it identifies
+    // the requirement precisely where a title match would not: `ENGW 1111` carries `WF`.
+    //
+    // The reason it goes after employment is a fact about the course, not a corpus artefact: it
+    // is the writing course taken *while on co-op*, about the work. Before the first co-op it is
+    // usually legal — its real gate is junior standing, which the plan may satisfy — and
+    // backwards, because there is nothing to write about yet. `domains.js` records the same
+    // convention from the other side: in 30 of 33 strictly-coded mixed terms, the course sharing
+    // a term with employment is an advanced writing course. The departments agree — of the
+    // programs that place them, 45 put `ENGW 3315` at 0.727 through the plan and 25 put
+    // `ENGW 3302` at 0.778, after the co-op in every co-op program.
+    //
+    // MEASURED on `computer_science_and_physics`: `ENGW 3302 or 3307 or 3315` landed in Year 2
+    // Spring, study term 5 of 9, with the first co-op starting that summer. `reclaimFromFiller`
+    // would refuse to *pull* it there — it reads those same positions as a floor — but the search
+    // placed it there and nothing removed it, because every other swap in `objective.js` moves
+    // cells for a different reason.
+    //
+    // `swapWith: generalElective` and nothing else. The general form of this rule — "any cell
+    // earlier than its corpus position gets pushed back" — was built and measured, and it is
+    // worse: it fires on dozens of cells per plan, and since a swap moves two things it pays for
+    // each push by dragging something else forward. On this program it shoved `PHYS 3602`
+    // (departments 0.636) and `CS 4530` into the final term and pulled three general electives
+    // back to terms 4 and 5, which is precisely what `reclaimFromFiller` exists to undo.
+    { attribute: "WD", notBefore: "firstWork", swapWith: "generalElective" },
+  ],
+
   // The worst any published plan does — 9 courses in a full term, 5 in a summer half, across
   // both corpora. The observed MAXIMUM rather than the p90 of 6, because a seven-course term
   // is unusual and real while an eleven-course one is not.

@@ -64,6 +64,7 @@ import { unlockValues } from "./prereqDepth.js";
 import { cellSubject, majorSubjectsOf } from "./subjects.js";
 import { precedenceViolations, chainHeight } from "./precedence.js";
 import { buildContention } from "./witness.js";
+import { applyAttributePlacement } from "./attributePlacement.js";
 
 /**
  * The default ranking, in order, each with a band in its own units.
@@ -705,6 +706,23 @@ export function improve({
     moves += res.moves;
   }
 
+  // ── And truly last: where a DESIGNATION says a course belongs ─────
+  //
+  // After the threshold repair rather than before it, and that ordering is the argument: a
+  // threshold is a bar and this is a preference, so the bar must not be undone to satisfy it.
+  // Everything above has finished; this reads the plan they produced and asks one question per
+  // declared rule.
+  //
+  // Which designations, and why, is not the engine's business — see `cal.attributePlacement`,
+  // declared by the adapter. At Northeastern that is currently one rule: NUPath `WD`, advanced
+  // writing, which belongs after a co-op because it is the course written *about* the co-op.
+  const attrPlaced = placeByAttribute(repaired, {
+    plans, terms, boundary, courseMap, cal, ports, repeatable, byId, precedence,
+  });
+  note("attribute-placement", repaired, attrPlaced.termOf);
+  repaired = attrPlaced.termOf;
+  moves += attrPlaced.moves;
+
   const finalScores = scorePlan({ ...ctx, termOf: repaired });
   const after = checkThresholds({ plans, terms, termOf: repaired, ports, studentType, thresholds, cal });
 
@@ -735,6 +753,13 @@ export function improve({
     // same reason: this is the pass that answers the complaint CHART exists for, so its
     // effect has to be countable rather than asserted.
     reclaimed: reclaimed.applied,
+    // Which designated courses were moved to where their designation says they belong, and any
+    // declared rule this engine did not understand. The second one is the point: a rule that
+    // silently never fires — because a key was renamed, or a vocabulary grew in the adapter and
+    // not in the engine — is invisible in every corpus metric. A unit test asserts the shipped
+    // rules are all known, and this makes the same fact observable at runtime.
+    attributePlaced: attrPlaced.applied,
+    attributeRulesUnknown: attrPlaced.unknown,
     reasons: reasonsFor({ plans, terms, termOf: repaired, byId, depthOf, ports, trades }),
   };
 }
@@ -1398,6 +1423,50 @@ export function settleCapstones(termOf, {
     }
   }
   return { termOf: current, moves, applied };
+}
+
+/**
+ * Run the declared attribute-placement rules on a finished assignment.
+ *
+ * The rules and the swap live in `attributePlacement.js`, which is pure and knows no institution.
+ * This function supplies the two things that module deliberately does not own: the general-elective
+ * bucket's identity, and a legality predicate — the prerequisite/season witness plus precedence,
+ * both of which need `ports`, `byId` and `repeatable` from this file's pipeline.
+ *
+ * The elective ceiling is the non-erosion shape used three times above (`maxThin`, `maxGE`,
+ * `maxStanding`): whatever clustering the incoming plan already tolerated is the bound, so this
+ * pass can never be the thing that refuses a plan phase 1 legally built.
+ */
+function placeByAttribute(termOf, {
+  plans, terms, boundary, courseMap, cal, ports, repeatable, byId, precedence = null,
+}) {
+  const electiveCeiling = (() => {
+    const per = terms.map(() => 0);
+    for (const p of plans) {
+      if (p.cell.target !== GENERAL_ELECTIVE) continue;
+      const ti = termOf.get(p.cell.id);
+      if (ti != null) per[ti] += 1;
+    }
+    return Math.max(UNGUIDED_PER_TERM_CAP, ...per);
+  })();
+
+  return applyAttributePlacement(termOf, {
+    plans, terms, boundary, courseMap,
+    rules: cal.attributePlacement ?? [],
+    generalElectiveTarget: GENERAL_ELECTIVE,
+    electiveCeiling,
+    isLegal: (trial) => {
+      if (precedence && precedenceViolations(precedence, trial).length) return false;
+      const cells = plans
+        .filter(q => trial.get(q.cell.id) != null)
+        .map(q => ({ ...q.cell, term: trial.get(q.cell.id) }));
+      return witnessPlan({
+        cells, candidatesOf: (c) => byId.get(c.id).candidates,
+        terms, courseMap, offeringProbability: ports.offeringProbability, offered: ports.offered,
+        repeatable, checkPrereqs: true, contention: buildContention(plans),
+      }).ok;
+    },
+  });
 }
 
 export function reclaimFromFiller(termOf, {

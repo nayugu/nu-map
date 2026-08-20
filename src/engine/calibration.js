@@ -147,6 +147,12 @@ export const DEFAULT_CALIBRATION = Object.freeze({
   capstoneAttribute: null,
   capstoneFloor: 0.85,
 
+  // Designations carrying a positional convention, applied by `attributePlacement.js` after
+  // everything else has settled. EMPTY by default, for the same reason `capstoneAttribute` is
+  // null: an institution's designations are not something to guess. See the Northeastern adapter
+  // for the declared rules and the measurements behind them.
+  attributePlacement: [],
+
   slotCapFull: 9,
   slotCapHalf: 5,
 });
