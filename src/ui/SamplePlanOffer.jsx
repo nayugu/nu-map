@@ -253,7 +253,22 @@ export default function SamplePlanOffer({ path, isGrad, programData, concentrati
       publishedPlan: catalogVariants[Math.min(variantIdx, Math.max(catalogVariants.length - 1, 0))] ?? null,
     })
       .then(r => { if (live) setGen(r); })
-      .catch(() => {
+      // ── A throw is not a refusal, and this used to discard the difference ──
+      //
+      // A real refusal carries `derivation`, so the panel offers "what was tried". This
+      // branch carries none — so on screen a CRASH and a considered "this degree cannot be
+      // planned" are the same sentence with no way to tell them apart. On 2026-08-20 that
+      // cost a session: prod showed the generic refusal, the bundle provably contained the
+      // change being looked for, and the error that would have said why had already been
+      // thrown away here. The catch existed so a throw could not strand the panel, which
+      // is right; dropping the argument was not part of that.
+      //
+      // `genKey` goes in the line because the exception alone does not say WHICH program,
+      // variant, concentration or student type produced it, and those are the four things
+      // a reproduction needs. Logged even when `live` is false: the generation still threw,
+      // and an unmounted effect is not a reason to lose a crash.
+      .catch(err => {
+        console.error(`[nu-map] CHART generation threw for ${genKey}:`, err);
         if (live) setGen({ refused: { reason: "error", detail: t("chart.refused") } });
       })
       .finally(() => { if (live) setGenBusy(false); });
