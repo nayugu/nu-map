@@ -22,6 +22,10 @@ import { buildDepthIndex } from "../../src/engine/prereqDepth.js";
 import { generatePlan } from "../../src/engine/index.js";
 import { evalPrereqTree } from "../../src/core/prereqEval.js";
 import { specForNode, courseEligible } from "../../src/core/programEligibility.js";
+// `scripts/` is permitted here — see test-suite-deps.test.js, which allows src/, scripts/ and
+// Node builtins. This module has no external dependency, so the invariant job's no-install
+// constraint still holds.
+import { coveringSample, describeShape } from "../../scripts/lib/chart-sample.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "../..");
 const { courseMap } = loadCatalog();
@@ -132,14 +136,50 @@ const generate = (p, variant) => generatePlan({
 // feeds the same input. Dropping it made the determinism check compare a plan built on a
 // published shape against one built on a derived skeleton and call the engine
 // non-deterministic — a false alarm produced by the harness, not the engine.
-const results = PROGRAMS.flatMap((p) => {
+const ALL_SHAPES = PROGRAMS.flatMap((p) => {
   const variants = p.plan?.plans?.length ? p.plan.plans : [null];
   return variants.map((v, vi) => ({
+    label: `${p.lvl}/${p.key}${variants.length > 1 ? `#${vi}` : ""}`,
     p: { ...p, key: variants.length > 1 ? `${p.key}#${vi}` : p.key },
     variant: v,
-    out: generate(p, v),
+    features: describeShape({ lvl: p.lvl, data: p.data, variant: v, variantCount: variants.length }),
   }));
 });
+
+/**
+ * A COVERING sample of those shapes, not all of them.
+ *
+ * ── Why, measured ───────────────────────────────────────────────────
+ *
+ * This file became the slowest in the suite: 202 s, and since `node --test` runs files
+ * concurrently, the suite's wall time is its longest file — so this one number *is*
+ * `test:invariant`. The cost is `refusals x budget` as the header above says, and worse
+ * than that: a refusal whose reason is not in `PREFLIGHT_REASONS` re-runs generation for
+ * each of the 8 `EARLY_RUNGS`, so one refusal can cost nine budgets. Shape COUNT is
+ * therefore the dominant lever, and cutting it is the only one that does not weaken what
+ * is asserted.
+ *
+ * ── Fewer shapes AND better coverage, which sounds like cheating ────
+ *
+ * A uniform draw spends most of its budget on ordinary programs. The properties a
+ * regression hides behind are rare — concentration disjunctions are 10.4% of the corpus,
+ * shared sections 12.4%, 15+ requirement sections 6.0% — so a random 95 carries only a
+ * handful of each and can miss one entirely. `coveringSample` guarantees a quota of every
+ * stratum and then fills with a uniform draw, so a smaller sample tests strictly more
+ * kinds of program. See `scripts/lib/chart-sample.js` for the 1-0.75^q arithmetic on why
+ * the quota is what it is.
+ *
+ * It also makes the "every published variant" property above a GUARANTEE rather than a
+ * hope: `a non-primary variant` is one of the strata, so the sample cannot consist only of
+ * the pattern departments lead with. That was previously left to chance.
+ *
+ * `CHART_CORPUS=all` still sweeps everything.
+ */
+const SHAPES = process.env.CHART_CORPUS === "all"
+  ? ALL_SHAPES
+  : coveringSample(ALL_SHAPES, { size: 60 }).chosen;
+
+const results = SHAPES.map(({ p, variant }) => ({ p, variant, out: generate(p, variant) }));
 const made = results.filter(r => !r.out.refused);
 
 test("corpus › the engine has programs to work with", () => {
@@ -150,11 +190,23 @@ test("corpus › nothing throws", () => {
   // `generate` already ran; reaching here means none of them threw. Asserted
   // explicitly so the reason this suite exists is visible.
   //
-  // One result per (program, variant), so this is >= the program count — a program
-  // publishing four patterns contributes four. Comparing against `PROGRAMS.length` read as
-  // a throw when the only thing that had changed was the arity.
-  assert.ok(results.length >= PROGRAMS.length,
-    `${results.length} results from ${PROGRAMS.length} programs`);
+  // ── Two separate properties, which used to be one assertion ───────
+  //
+  // It read `results.length >= PROGRAMS.length`, and that conflated "variants were expanded"
+  // with "we generated something". Once the shapes are SAMPLED the two come apart — 60 chosen
+  // shapes is legitimately fewer than 70 programs — and the combined form failed while both
+  // underlying properties held. It caught this change, which is the assertion doing its job;
+  // the fix is to state each property against the set it is actually about.
+  //
+  // 1. Variants are expanded: one shape per (program, variant), so the FULL shape list is at
+  //    least the program count — a program publishing four patterns contributes four.
+  assert.ok(ALL_SHAPES.length >= PROGRAMS.length,
+    `${ALL_SHAPES.length} shapes from ${PROGRAMS.length} programs — variants not expanded`);
+  // 2. `generate` already ran for every sampled shape; reaching here means none threw. The
+  //    non-empty check matters because every other assertion in this file passes trivially
+  //    over an empty corpus — the same reason the generated-share floor exists.
+  assert.equal(results.length, SHAPES.length, "one result per sampled shape");
+  assert.ok(results.length > 0, "the sample must contain shapes to generate");
 });
 
 test("corpus › the generated share does not regress", () => {

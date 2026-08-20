@@ -101,6 +101,40 @@ const generate = (p, variant, trace) => generatePlan({
   now: () => 0,
 });
 
+/**
+ * ONE traced generation per shape, shared by every test below.
+ *
+ * ── Why this is worth doing ─────────────────────────────────────────
+ *
+ * Nine tests here each looped the same 24 programs calling `generate` afresh, so the same
+ * plans were built roughly ten times over and this file was the largest single cost in
+ * `test:invariant` — 48 s for one test, 38 s for another, ~210 s across the file, on a suite
+ * that runs after every change. `engine-corpus.test.js` already does it this way (one
+ * module-scope `results`, fifteen tests asserting over it); this is that pattern applied here.
+ *
+ * ── Safe because nothing here WRITES ────────────────────────────────
+ *
+ * Checked before sharing, because a shared mutable fixture makes tests order-dependent, which
+ * is a worse defect than a slow suite. Every `.push` in this file is onto a local accumulator
+ * (`bad`, `differ`, `lines`) and every `.sort()` is on a spread copy (`[...g].sort()`), so no
+ * test mutates a plan or a trace. If a future test needs to mutate one, it must generate its
+ * own — do not reach for this.
+ *
+ * Memoised rather than precomputed so a `--test-name-pattern` run pays only for the shapes it
+ * actually looks at, and keyed on object identity so no label needs constructing.
+ */
+const traceMemo = new Map();
+function withTrace(p, variant) {
+  let byVariant = traceMemo.get(p);
+  if (!byVariant) traceMemo.set(p, byVariant = new Map());
+  let hit = byVariant.get(variant);
+  if (!hit) {
+    const trace = createTrace();
+    byVariant.set(variant, hit = { out: generate(p, variant, trace), trace });
+  }
+  return hit;
+}
+
 /** The plan as a student sees it. Same canonicalisation as the propagator-neutral suite. */
 const canonical = (out) => {
   if (out.refused) return `REFUSED ${out.refused.reason} :: ${out.refused.detail ?? ""}`;
@@ -128,8 +162,10 @@ test("recording the search does not change the plan", () => {
   for (const p of PROGRAMS) {
     const variants = p.plan?.plans?.length ? p.plan.plans : [null];
     variants.forEach((variant, vi) => {
+      // The untraced side is this test's alone — it is the only place an untraced plan is
+      // needed, and comparing it against the SHARED traced one is exactly the invariant.
       const plain = generate(p, variant, null);
-      const traced = generate(p, variant, createTrace());
+      const traced = withTrace(p, variant).out;
       if (canonical(plain) !== canonical(traced)) {
         differ.push(`${p.lvl}/${p.key}#${vi}`);
       }
@@ -166,8 +202,7 @@ test("every node the engine counted appears in the recording", () => {
   for (const p of PROGRAMS) {
     const variants = p.plan?.plans?.length ? p.plan.plans : [null];
     variants.forEach((variant, vi) => {
-      const trace = createTrace();
-      const out = generate(p, variant, trace);
+      const { out, trace } = withTrace(p, variant);
       const snap = trace.snapshot();
       if (snap.truncated) return;                    // truncation is declared, not a defect
       const label = `${p.lvl}/${p.key}#${vi}`;
@@ -208,8 +243,7 @@ test("every card-term pair gets exactly one fate", () => {
   // grid, on every shape.
   for (const p of PROGRAMS.slice(0, 12)) {
     const variant = p.plan?.plans?.[0] ?? null;
-    const trace = createTrace();
-    generate(p, variant, trace);
+    const { trace } = withTrace(p, variant);
     const snap = trace.snapshot();
     if (!snap.roster.length) continue;
     const m = narrowingMatrix(snap);
@@ -231,8 +265,7 @@ test("the reconstructed tree is a tree, and it is the recorded one", () => {
   // not an error, it is a plausible tree that is not the search's, so it is checked structurally.
   for (const p of PROGRAMS.slice(0, 12)) {
     const variant = p.plan?.plans?.[0] ?? null;
-    const trace = createTrace();
-    generate(p, variant, trace);
+    const { trace } = withTrace(p, variant);
     const snap = trace.snapshot();
     if (!snap.nodes) continue;
     const model = deriveModel(snap);
@@ -278,8 +311,7 @@ test("the walkthrough reproduces the plan it claims to explain", () => {
   for (const p of PROGRAMS) {
     const variants = p.plan?.plans?.length ? p.plan.plans : [null];
     variants.forEach((variant, vi) => {
-      const trace = createTrace();
-      const out = generate(p, variant, trace);
+      const { out, trace } = withTrace(p, variant);
       if (out.refused) return;
       const snap = trace.snapshot();
       const model = deriveModel(snap);
@@ -350,8 +382,7 @@ test("every frame of the walkthrough is a plan the engine could have held", () =
   for (const p of PROGRAMS) {
     const variants = p.plan?.plans?.length ? p.plan.plans : [null];
     variants.forEach((variant, vi) => {
-      const trace = createTrace();
-      const out = generate(p, variant, trace);
+      const { out, trace } = withTrace(p, variant);
       if (out.refused) return;
       const snap = trace.snapshot();
       const steps = buildSteps(snap, deriveModel(snap));
@@ -400,8 +431,7 @@ test("the walkthrough ends on the EMITTED DOCUMENT, not merely on the recorded a
   for (const p of PROGRAMS) {
     const variants = p.plan?.plans?.length ? p.plan.plans : [null];
     variants.forEach((variant, vi) => {
-      const trace = createTrace();
-      const out = generate(p, variant, trace);
+      const { out, trace } = withTrace(p, variant);
       if (out.refused) return;
       const snap = trace.snapshot();
       const steps = buildSteps(snap, deriveModel(snap));
@@ -454,8 +484,7 @@ test("a pass is one step, so the halves of an exchange are never drawn apart", (
   for (const p of PROGRAMS) {
     const variants = p.plan?.plans?.length ? p.plan.plans : [null];
     variants.forEach((variant, vi) => {
-      const trace = createTrace();
-      const out = generate(p, variant, trace);
+      const { out, trace } = withTrace(p, variant);
       if (out.refused) return;
       const snap = trace.snapshot();
       const steps = buildSteps(snap, deriveModel(snap));
@@ -492,8 +521,7 @@ test("a refusal still records a derivation", () => {
   for (const p of PROGRAMS) {
     const variants = p.plan?.plans?.length ? p.plan.plans : [null];
     for (let vi = 0; vi < variants.length; vi++) {
-      const trace = createTrace();
-      const out = generate(p, variants[vi], trace);
+      const { out, trace } = withTrace(p, variants[vi]);
       if (!out.refused) continue;
       const snap = trace.snapshot();
       // A PRE-FLIGHT refusal legitimately records nothing beyond demand: no cards were ever
