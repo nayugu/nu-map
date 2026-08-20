@@ -36,12 +36,60 @@
 // which is exactly what `applySamplePlan` already does with the same three
 // shapes. Nothing downstream needs a case for a generated plan.
 //
-// ── `shared` sections emit nothing ─────────────────────────────────
+// ── A `shared` section emits only what its own PLAN OF STUDY witnesses ──
 //
 // A `shared` section is deliberately cross-counted — satisfied by courses that
 // also answer somewhere else — so `allocateSections` evaluates it permissively
 // and never commits its courses. Emitting cells for one would schedule the same
 // obligation twice.
+//
+// That was the whole rule, and for 53 of the corpus's 136 shared sections it is
+// right. For the other 83 the premise is simply FALSE: nothing else names their
+// courses. Mathematics and Physics BS is the clean case — its "Integrative
+// Courses" section requires MATH 4545 and PHYS 3601, both of them reachable
+// elsewhere only through an open elective RANGE, so skipping the section did not
+// avoid a double-schedule. It deleted the only place those two courses were ever
+// named, the audit reported `Integrative Courses 0/2` against our own generated
+// plan, and the 8 credits came back as two anonymous General Electives. The
+// department's own plan of study names both.
+//
+// ── Why the WITNESS decides, and not the shape ──────────────────────
+//
+// The tempting fix is to emit whenever nothing else forces the course. It is
+// wrong, because the flag has a second population riding on it. `shared` is also
+// the workaround for a requirement pane the parser cannot express as "pick one"
+// — see `scripts/lib/shared-sections.js` — so Accounting MSA's "Taxation Track"
+// (the alternative to "Audit Track") and 34 programs' "Thesis Option" (the
+// alternative to "Project Option") carry it too. Scheduling those would force a
+// thesis on every master's student.
+//
+// Shape cannot tell the two apart. Measured: "Integrative Courses" (min 2 of 2
+// plain COURSE children), "Thesis Option" and "Taxation Track" have the SAME
+// shape, so any structural rule admits all three or none.
+//
+// The Sample Plan of Study can. It is one valid path through the degree, which is
+// exactly why CLAUDE.md allows it to prove we DROPPED a requirement and never to
+// prove we have them all — and "did the department schedule this course" is the
+// dropped-requirement question. An alternative track is a branch the plan did not
+// take, so it names none of its courses; an integrative requirement is on every
+// path, so it does. Measured over the 83: the witness emits 29 sections, every
+// one a genuine cross-count (the `Integrative *` family, Theatre's foundational
+// courses, PharmD's sequential YEAR 3), and skips 54, every one an alternative
+// track. No hand table, and it survives the monthly re-scrape because
+// `metadata.planOfStudyCourses` is re-read with the requirements.
+//
+// Three things keep it conservative. Only a FULL conjunction is eligible, so a
+// "choose N of M" section's children stay options rather than becoming the branch
+// the plan happened to take. Only a top-level `COURSE` or `AND` child counts, so
+// CS and Health Science's `Capstone` — an OR over CS 4530 / CS 4535 — is refused
+// even though the plan names both. And no evidence means no change: 50 of the 54
+// skips are programs publishing no plan at all, which keeps today's behaviour as
+// the default rather than as a special case.
+//
+// The credit takes care of itself. `geSH` below is the RESIDUAL against CHART's
+// own structural total, so naming these courses spends free-elective credit the
+// plan was going to fill with placeholders and the degree total does not move;
+// `poolExcess` still sheds if a section list overruns the degree.
 //
 // ── A named course is scheduled ONCE, however many sections want it ──
 //
@@ -661,6 +709,75 @@ export function specLabel(spec) {
   return first ? `${first} or similar` : "";
 }
 
+// ── `shared` sections: what a section still has to schedule itself ──
+
+/**
+ * Every course key a NON-`shared` section names, at any depth.
+ *
+ * The set a shared section's courses are checked against, and it deliberately
+ * counts a course named as one option of an `OR` as "named". That over-credits
+ * — being an option is not being forced — and it errs toward leaving the
+ * section alone, which is the direction to err in: a course some other section
+ * might answer is one `mergeForcedCells` may be about to merge anyway.
+ */
+function keysNamedElsewhere(sections) {
+  const out = new Set();
+  const walk = (n) => {
+    if (!n || typeof n !== "object") return;
+    if (n.type === "COURSE" && n.subject) out.add(courseKey(n.subject, n.classId));
+    for (const k of ["requirements", "courses"]) {
+      if (Array.isArray(n[k])) n[k].forEach(walk);
+    }
+  };
+  for (const s of sections ?? []) if (s && !s.shared) walk(s);
+  return out;
+}
+
+/**
+ * The children of a `shared` section that this section alone has to schedule.
+ *
+ * The three narrowing conditions are argued in the header block. In order: a
+ * full conjunction only, a top-level conjunctive child only, and then the two
+ * tests that make the child THIS section's business — nothing else names it, and
+ * the department's own plan of study does.
+ *
+ * @param {object} section        a raw requirementSections entry, `shared: true`
+ * @param {Set<string>} elsewhere every key a non-shared section names
+ * @param {Set<string>} witness   `metadata.planOfStudyCourses`
+ * @returns {object[]} the subset of `section.requirements` to emit, possibly empty
+ */
+function witnessedSharedNodes(section, elsewhere, witness) {
+  const reqs = section?.requirements ?? [];
+  if (!reqs.length || !witness.size) return [];
+  // A "choose N of M" section's children are OPTIONS. The plan of study takes one
+  // branch of every choice, so reading its pick as an obligation would promote the
+  // department's example into the degree's requirement — the exact over-reach
+  // CLAUDE.md forbids the witness to be used for.
+  const min = section.minRequirementCount;
+  if (typeof min === "number" && min !== reqs.length) return [];
+  const keep = [];
+  for (const req of reqs) {
+    // A plain course, or an `AND` naming only courses — a co-requisite pair like
+    // `CS 2000 and CS 2001`, where every member is required. Anything else (OR,
+    // XOM, RANGE, SECTION) offers a choice this function must not make.
+    const group = req?.type === "COURSE" ? [courseKey(req.subject, req.classId)]
+      : req?.type === "AND" ? andGroup(req)
+      : null;
+    if (!group?.length) continue;
+    // Whole groups only. Half a co-requisite pair is a cell the student cannot
+    // register for, so one member claimed elsewhere or missing from the plan
+    // withdraws the pair.
+    if (group.some(id => elsewhere.has(id))) continue;
+    if (!group.every(id => witness.has(id))) continue;
+    keep.push(req);
+  }
+  return keep;
+}
+
+/** The courses a kept node names, for the note that records what was emitted. */
+const nodeKeys = (req) =>
+  req?.type === "COURSE" ? [courseKey(req.subject, req.classId)] : (andGroup(req) ?? []);
+
 // ── The public derivation ──────────────────────────────────────────
 
 /**
@@ -701,9 +818,39 @@ export function deriveCells(programData, {
   const obligations = obligationsOf(programData, { placedSet: new Set(), courseMap });
   const byTarget = new Map(obligations.map(o => [o.target, o]));
 
+  // Read once for the whole program, not per section: both are properties of the
+  // requirement list as a whole, and re-deriving them inside the loop is how the
+  // two halves of a cross-count check end up disagreeing.
+  const witness = new Set(programData?.metadata?.planOfStudyCourses ?? []);
+  const namedElsewhere = keysNamedElsewhere(sections);
+
   sections.forEach((section, i) => {
     if (section?.shared) {
-      notes.push({ kind: "shared-section-skipped", target: i, title: section.title ?? "" });
+      const keep = witnessedSharedNodes(section, namedElsewhere, witness);
+      if (!keep.length) {
+        notes.push({ kind: "shared-section-skipped", target: i, title: section.title ?? "" });
+        return;
+      }
+      // Only the witnessed children, as a conjunction of exactly themselves. The
+      // rest of the section stays unscheduled and the note says so — a partial
+      // emission is the honest outcome where the plan witnesses two of three
+      // integrative courses, and padding it to the section's own count would be
+      // inventing the third.
+      const { cells: got, notes: n } = cellsForSection(
+        { ...section, requirements: keep, minRequirementCount: keep.length }, i, courseMap);
+      // `children`/`ofChildren` are counted in requirement NODES and `courses` in
+      // courses, which are not the same unit — one `AND` child is a co-requisite pair.
+      // Named apart so the note cannot be read as "5 of 3".
+      notes.push(...n, {
+        kind: "shared-section-witnessed", target: i, title: section.title ?? "",
+        children: keep.length, ofChildren: (section.requirements ?? []).length,
+        courses: keep.flatMap(nodeKeys),
+      });
+      // Deliberately NOT reconciled against `obligationsOf`. The structural walk
+      // covers the witnessed subset and the arithmetic covers the whole section, so
+      // the two differ BY DESIGN here; logging that as a disagreement would file a
+      // decision this function made on purpose as a misreading of the data.
+      cells.push(...got);
       return;
     }
     const { cells: got, notes: n } = cellsForSection(section, i, courseMap);

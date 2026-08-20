@@ -156,13 +156,113 @@ test("demand › a repeatable course is not merged away", () => {
 
 // ── shared sections ────────────────────────────────────────────────
 
-test("demand › a `shared` section emits NO cells", () => {
+test("demand › a `shared` section whose course another section forces emits NO cells", () => {
   const { cells, notes } = cellsOf([
     SECTION("Core", 1, C("CS", "1800")),
     { ...SECTION("GPA re-list", 1, C("CS", "1800")), shared: true },
   ]);
   assert.equal(cells.filter(c => c.target === 1).length, 0);
   assert.equal(notes.filter(n => n.kind === "shared-section-skipped").length, 1);
+});
+
+// A `shared` section nothing else covers is a DELETED requirement, not a
+// de-duplicated one — Mathematics and Physics BS never scheduled the MATH 4545 and
+// PHYS 3601 its integrative requirement demands. The plan of study is what tells a
+// real cross-count from the "pick one" workaround that rides on the same flag.
+const withPlan = (...planOfStudyCourses) => ({ metadata: { planOfStudyCourses } });
+
+test("demand › a `shared` section nothing else forces emits its witnessed courses", () => {
+  const { cells, notes } = cellsOf([
+    SECTION("Core", 1, C("CS", "1800")),
+    { ...SECTION("Integrative", 2, C("CS", "4300"), C("CS", "4100")), shared: true },
+  ], withPlan("CS4300", "CS4100"));
+  assert.deepEqual(groups(cells.filter(c => c.target === 1)), [[["CS4300"]], [["CS4100"]]]);
+  const note = notes.find(n => n.kind === "shared-section-witnessed");
+  assert.deepEqual(note.courses, ["CS4300", "CS4100"]);
+  assert.equal(notes.filter(n => n.kind === "shared-section-skipped").length, 0);
+});
+
+test("demand › an alternative TRACK the plan never takes stays skipped", () => {
+  // The other population on the flag: "Taxation Track" against "Audit Track", or 34
+  // programs' "Thesis Option". Same shape as the integrative case above — a full
+  // conjunction of plain courses — so only the witness separates them.
+  const { cells, notes } = cellsOf([
+    SECTION("Audit Track", 1, C("CS", "3000")),
+    { ...SECTION("Taxation Track", 2, C("CS", "4300"), C("CS", "4100")), shared: true },
+  ], withPlan("CS3000"));
+  assert.equal(cells.filter(c => c.target === 1).length, 0);
+  assert.equal(notes.filter(n => n.kind === "shared-section-skipped").length, 1);
+});
+
+test("demand › no published plan means no change at all", () => {
+  const { cells, notes } = cellsOf([
+    { ...SECTION("Integrative", 1, C("CS", "4300")), shared: true },
+  ]);
+  assert.equal(cells.filter(c => c.target === 0).length, 0);
+  assert.equal(notes.filter(n => n.kind === "shared-section-skipped").length, 1);
+});
+
+test("demand › a witnessed course inside an OR is an OPTION, never forced", () => {
+  // CS and Health Science's `Capstone` is `OR(CS 4530, CS 4535)` and the plan of study
+  // names BOTH. Emitting them would turn the department's example into the requirement.
+  const { cells, notes } = cellsOf([
+    { ...SECTION("Capstone", 1, OR(C("CS", "4300"), C("CS", "4100"))), shared: true },
+  ], withPlan("CS4300", "CS4100"));
+  assert.equal(cells.filter(c => c.target === 0).length, 0);
+  assert.equal(notes.filter(n => n.kind === "shared-section-skipped").length, 1);
+});
+
+test("demand › a `choose N of M` shared section emits nothing, however well witnessed", () => {
+  const { cells } = cellsOf([
+    { ...SECTION("Pick two", 2, C("CS", "4300"), C("CS", "4100"), C("CS", "3000")),
+      shared: true },
+  ], withPlan("CS4300", "CS4100", "CS3000"));
+  assert.equal(cells.filter(c => c.target === 0).length, 0);
+});
+
+test("demand › a witnessed co-requisite AND emits ONE cell carrying both courses", () => {
+  const { cells } = cellsOf([
+    { ...SECTION("CS Introductory", 1, AND(C("CS", "2000"), C("CS", "2001"))), shared: true },
+  ], withPlan("CS2000", "CS2001"));
+  const got = cells.filter(c => c.target === 0);
+  assert.deepEqual(groups(got), [[["CS2000", "CS2001"]]]);
+  assert.equal(got[0].sh, 5);            // 4 + a 1 SH lab, as the catalog prints it
+});
+
+test("demand › half a witnessed pair withdraws the whole pair", () => {
+  const { cells } = cellsOf([
+    { ...SECTION("CS Introductory", 1, AND(C("CS", "2000"), C("CS", "2001"))), shared: true },
+  ], withPlan("CS2000"));
+  assert.equal(cells.filter(c => c.target === 0).length, 0);
+});
+
+test("demand › emitting a shared section does NOT move the degree total", () => {
+  // The credit comes out of the free-elective residual, so a named integrative course
+  // replaces a placeholder rather than lengthening the degree.
+  const sections = [
+    SECTION("Core", 1, C("CS", "1800")),
+    { ...SECTION("Integrative", 1, C("CS", "4300")), shared: true },
+  ];
+  const before = cellsSH(cellsOf(sections).cells);
+  const after = cellsOf(sections, withPlan("CS4300"));
+  assert.equal(cellsSH(after.cells), before);
+  assert.equal(before, 100);             // the fixture's totalCreditsRequired
+  // ...and the credit came out of the general-elective bucket specifically.
+  const ge = (r) => cellsSH(r.filter(c => c.target === GENERAL_ELECTIVE));
+  assert.equal(ge(after.cells), ge(cellsOf(sections).cells) - 4);
+});
+
+test("demand › a malformed shared section degrades to the skip, never throws", () => {
+  for (const bad of [
+    { ...SECTION("x", 1, null), shared: true },
+    { ...SECTION("x", 1, { type: "COURSE" }), shared: true },
+    { ...SECTION("x", 1, { type: "AND", courses: [] }), shared: true },
+    { ...SECTION("x", 1, { type: "AND", courses: [{ type: "RANGE" }] }), shared: true },
+    { ...SECTION("x", null, C("CS", "4300")), shared: true },
+    { shared: true, type: "SECTION", title: "x" },
+  ]) {
+    assert.doesNotThrow(() => cellsOf([bad], withPlan("CS4300")));
+  }
 });
 
 // ── Labelling ──────────────────────────────────────────────────────

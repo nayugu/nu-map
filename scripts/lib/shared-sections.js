@@ -1,10 +1,19 @@
 // ═══════════════════════════════════════════════════════════════════
 // SHARED SECTIONS — the cross-count repairs a scrape cannot re-derive
 //
-// A requirement section marked `shared: true` is SKIPPED by the demand model
-// (`src/engine/demand.js`) and discounted by the allocator: its courses count toward the
-// degree without being consumed by it. That is how an integrative requirement, a GPA
-// re-list, or one of two alternative tracks stops being charged twice.
+// A requirement section marked `shared: true` is discounted by the allocator: its courses
+// count toward the degree without being consumed by it. That is how an integrative
+// requirement, a GPA re-list, or one of two alternative tracks stops being charged twice.
+//
+// ⚠ It is no longer simply SKIPPED by the demand model, as this said until Aug 2026. That
+// was true and it was also the bug: for 83 of the 136 shared sections in the corpus nothing
+// else names their courses, so skipping deleted the requirement instead of de-duplicating
+// it — Mathematics and Physics BS never scheduled the MATH 4545 and PHYS 3601 its own
+// integrative requirement demands. `src/engine/demand.js` now emits a shared section's
+// conjunctive children when the program's Sample Plan of Study names them, which is what
+// separates a real cross-count from the pick-one workaround this file's own footnote below
+// describes. The two populations riding on one flag is exactly why that fix needed a
+// discriminator; see that file's header for the measurement.
 //
 // ── Why a committed manifest and not a detector ─────────────────────
 //
