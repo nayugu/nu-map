@@ -356,16 +356,6 @@ export const DEFAULT_TIME_BUDGET_MS = 5000;
 export const NODES_PER_MS = 2.5;
 
 /**
- * A/B hatch for the clock-fallthrough guard. See its use below.
- *
- * Read once at module load rather than per call, so it cannot vary within a run — a hatch that
- * could flip mid-sweep would produce a mixture of both behaviours and a number describing
- * neither. Absent in the browser, where `process` does not exist.
- */
-const CLOCK_FALLTHROUGH =
-  typeof process !== "undefined" && !!process.env?.CHART_CLOCK_FALLTHROUGH;
-
-/**
  * The share of the time budget the strict tier may spend, expressed in nodes.
  *
  * 40%, leaving the majority to the fallback, whose whole purpose is protecting coverage.
@@ -648,14 +638,6 @@ export function placeCells({
   const working = plans.map(p => ({ ...p, domain: [...p.domain] }));
   let totalNodes = 0;
   let last = null;
-  /**
-   * Whether the WALL CLOCK — not the node budget — ended any attempt.
-   *
-   * Tracked across every tier because the consequence is the same wherever it happens: from
-   * that point on, which rung answers is decided by machine load rather than by the input. See
-   * the guard before the packer.
-   */
-  let sawTimeout = false;
 
   // Each attempt gets a SMALL slice of the budget, in BOTH currencies.
   //
@@ -689,9 +671,6 @@ export function placeCells({
     totalNodes += r.nodes;
     if (r.ok) return { ...r, nodes: totalNodes, restarts: attempt };
     last = r;
-    // Recorded here as well as in the rung loop: the strict tier refuses on the clock only
-    // when it notices BETWEEN attempts, and an abort inside one falls through to the rungs.
-    if (r.timedOut) sawTimeout = true;
 
     // Node-bounded, so the same input always reaches the fallback at the same point.
     if (totalNodes >= strictNodes) break;
@@ -837,16 +816,7 @@ export function placeCells({
   const given = [];
   for (let ri = 0; ri < RUNGS.length; ri++) {
     const rung = RUNGS[ri];
-    // ── Which of the two budgets stopped the ladder, again ────────────
-    //
-    // These were one condition and they mean opposite things. Out of NODES is a function of the
-    // arguments, so stopping here and letting the packer answer is deterministic. Out of TIME is
-    // a function of machine load, so the packer becomes the answer only on a busy machine — the
-    // same defect as an abort inside an attempt, arriving by a path that abort-marking alone
-    // does not cover. Missing this left the fix half-done: the guard below could not fire for
-    // any run whose clock expired BETWEEN rungs rather than inside one.
-    if (now() > deadline) { sawTimeout = true; break; }
-    if (totalNodes >= nodeBudget) break;
+    if (totalNodes >= nodeBudget || now() > deadline) break;
     given.push(rung.gave);
     // A rung is a different CONSTRAINT SET, so it is a different tree rather than a
     // continuation — which is exactly why the stage spine has to exist and why no single
@@ -892,49 +862,6 @@ export function placeCells({
       };
     }
     last = r.failure ? r : last;
-    if (r.timedOut) sawTimeout = true;
-  }
-
-  // ── A clock that fired means REFUSE, not "try the packer" ──────────
-  //
-  // This is the hole in the rule stated at the top of this file. The strict tier honours it
-  // between attempts, but an abort INSIDE `attemptPlacement` returns an ordinary failure: the
-  // ladder breaks out, and the packer below runs unconditionally and answers. So the plan you
-  // get depends on whether the machine was busy — the search's carefully sequenced plan when
-  // it had time, the packer's largest-first arrangement when it did not.
-  //
-  // Measured on 2026-08-20: `ug/biochemistry_bs_(boston)#2` came out with physics pulled into
-  // the Year 1 summers and its research option moved from Year 4 to Year 2 between two runs
-  // that differed only in how work was spread across processes. That is the packer's shape,
-  // reached because contention expired the clock.
-  //
-  // The packer stays ungated in every other respect — it is 5–36 ms and it exists to turn
-  // refusals into plans, which is worth the whole budget. What it may not do is act as the
-  // rescue for a run that ran out of TIME, because then whether it runs is a property of the
-  // machine. On a node budget it still rescues, deterministically, which is the case it was
-  // built for: of 249 refusals, 132 ended with space unexplored.
-  //
-  // The cost is real and is the point of measuring rather than asserting: plans currently
-  // rescued by the packer after a timeout now refuse. A refusal under load is a cost; a
-  // different plan under load is a correctness failure, and the monthly diff review cannot
-  // tell the second one from a regression.
-  // `CHART_CLOCK_FALLTHROUGH=1` restores the old behaviour, so the coverage cost of this guard
-  // can be measured in the SAME tree rather than by stashing the source. That matters here
-  // specifically: this is a shared checkout, a stash would move the other session's uncommitted
-  // engine work too, and a baseline taken before their edits is not a baseline for mine. Same
-  // reasoning as `chart-probe --no-witness`. A measurement hatch, not a setting — nothing should
-  // ever ship reading it.
-  if (sawTimeout && !CLOCK_FALLTHROUGH) {
-    return {
-      ok: false, nodes: totalNodes, restarts: maxRestarts, timedOut: true,
-      failure: {
-        kind: "search-budget-exhausted", timedOut: true,
-        detail: describe({ kind: "search-budget-exhausted" })
-          + " (the time budget expired; refusing rather than answering from a lower rung, "
-          + "because which rung answers would otherwise depend on machine load)",
-        lastObstruction: last?.failure?.lastObstruction ?? last?.failure ?? null,
-      },
-    };
   }
 
   // ── Last resort: pack it, largest first ─────────────────────────────
@@ -2582,19 +2509,8 @@ function attemptPlacement({
   if (result === "budget" || result === "time") {
     return {
       ok: false, nodes,
-      // ── WHICH allowance ran out, because only one of them is deterministic ──
-      //
-      // Both arrive here as `search-budget-exhausted`, and collapsing them is what let the
-      // clock change the ANSWER rather than merely cost one. A node budget is a function of
-      // the arguments, so a caller may descend to the next rung on it and get the same plan
-      // every time. The clock is a function of how busy the machine is, so descending on it
-      // returns whichever rung the load happened to allow — and the rungs return different
-      // plans by construction. `searchPlacement` needs to tell these apart to honour the rule
-      // this file states for itself: the clock may turn an answer into a refusal, never into
-      // a different answer.
-      timedOut: result === "time",
       failure: {
-        kind: "search-budget-exhausted", nodes, timedOut: result === "time",
+        kind: "search-budget-exhausted", nodes,
         // The last obstruction the search hit is far more useful than the budget
         // itself: it names a cell and a term the student can look at.
         detail: worstFailure

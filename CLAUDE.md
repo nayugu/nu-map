@@ -377,9 +377,22 @@ expensive failure, so the loop is:
     **3:47**, because a covering sample costs 1.9 s/shape against the corpus mean of
     0.56 s/shape: it selects for rare strata, rare strata are the hard programs, and a
     hard program spends its whole 5,000 ms budget before refusing. Selecting for
-    "unusual" selects for "expensive". The remaining cost is paid by `--jobs`, not by
-    shrinking the sample — cutting the quota trades away exactly the detection power
-    stratification was built for (see `chart-sample.js` for the 1-0.75^q arithmetic).
+    "unusual" selects for "expensive". The rest is paid by `--jobs`, not by shrinking the
+    sample — cutting the quota trades away exactly the detection power stratification was
+    built for (see `chart-sample.js` for the 1-0.75^q arithmetic).
+  - **With sharding on, the sampled run is 35.8 s.** Proved equal to serial before being
+    enabled — `moved 0` both serial-vs-serial and serial-vs-sharded, the latter under
+    deliberate contention. `--jobs 1` restores the serial run for a future A/B.
+- **Check `git log` timestamps against your RUN timestamps before trusting a
+  before/after.** This checkout is shared and the partner session commits while your
+  measurements are in flight, so a baseline taken minutes ago may be a different engine.
+  Measured cost of skipping this: two wrong conclusions in one session — "sharding is
+  unsafe", then "a residual non-determinism exists" — both from A/Bs that straddled
+  someone else's uncommitted edits. When a tree cannot be pinned, A/B inside ONE process
+  with an env hatch (`CHART_NO_DEPARTMENT`, `chart-probe --no-witness`) rather than across
+  two runs. That is what settled the clock-guard question in
+  docs/chart-open-defects.md §21 — and note the hatch there was deleted with the change it
+  measured, which is correct: a hatch is scaffolding for one decision, not a setting.
   - The sample is **stratified, not uniform**, and that is the whole design
     (`scripts/lib/chart-sample.js`). The properties a regression hides behind are rare:
     concentration disjunctions are 112 of 1,078 shapes (10.4%), shared sections 134

@@ -1235,67 +1235,67 @@ Whoever takes it should re-measure the runtime against the 15m20s baseline rathe
 than against the 35m one.
 ---
 
-### 21. The clock decides which RUNG answers, so the same input can yield two different plans
+### 21. The clock CAN decide which rung answers — built the guard, measured it, reverted it
 
-Found on 2026-08-20 while parallelising the sweep, by the fingerprint diff that exists for
-exactly this purpose. Over the same 120-shape covering sample,
-`ug/biochemistry_bs_(boston)#2` came out **materially different** between two runs that
-differed only in how the work was partitioned across processes — 8 static shards versus 32
-pooled ones. Same catalog, same requirements, same code. Physics courses moved into the Year 1
-summers and the `Research Option` moved from Year 4 Spring to Year 2 Fall.
+A full worked example of an idea that was correct in principle, unmeasurable in practice, and
+expensive. Kept in full because the reasoning is the useful part and the next person to notice
+this hole will otherwise repeat every step.
 
-**This is not a sharding bug, and it is not new.** `search.js` states the rule it is meant to
-obey — *"the clock may turn an answer into a refusal, never into a different answer"* — and the
-strict tier honours it: on `now() > deadline` between attempts it returns
-`search-budget-exhausted` rather than falling through. But `attemptPlacement` also checks the
-clock **inside** the search (`if ((nodes & 7) === 0 && now() > deadline) return ret(NODE.TIME,
-"time")`) and that returns an ordinary failure. The ladder cannot distinguish it from a genuine
-one, so it advances to the next rung and answers from there — and the rungs return different
-plans by construction, which is the whole reason the strict tier refuses instead of falling
-through. So the clock does not merely cost an answer; it selects which rung produces it.
+**The hole is real.** `search.js` states the rule — *"the clock may turn an answer into a
+refusal, never into a different answer"* — and the strict tier honours it between attempts.
+But `attemptPlacement` also checks the clock from INSIDE the search
+(`if ((nodes & 7) === 0 && now() > deadline) return ret(NODE.TIME, "time")`) and returns an
+ordinary failure, and the rung loop breaks on its own `now() > deadline`. Either way the ladder
+falls out and the packer below runs unconditionally and answers. The packer arranges
+largest-course-first rather than sequencing, so in principle the plan depends on machine load.
 
-Load is what makes it fire. This has therefore been latent all along on a shared or busy
-machine, and the monthly workflow runs on a GitHub runner whose neighbours we do not control.
+**What prompted it was a measurement error, not the hole.** A fingerprint diff showed
+`ug/biochemistry_bs_(boston)#2` differing between two partitionings of the same work. Both of
+those runs straddled the partner session's uncommitted edits to `standingRepair.js` in this
+shared checkout — so "before" and "after" were different engines. Re-measured on a pinned tree,
+serial vs serial and serial vs sharded were both `moved 0`. **There was nothing to fix.**
 
-**Stated at the strength the evidence actually supports.** The mechanism above is read from the
-code, not proved by the observation, and the observation is a single plan. Two *consecutive*
-runs of the same sample produced byte-identical fingerprint files (152,679 bytes, `MOVED 0`),
-so this does not reproduce on demand — it was seen once, between the two partitionings that
-differed most in per-process load. What is established: plans can move with no code change.
-What is not: how often, or that the `NODE.TIME` path is the only route. Anyone picking this up
-should reproduce it deliberately — pin a shape that reaches a fallback rung and vary
-`timeBudgetMs` around its boundary — rather than trusting either the rate or the mechanism here.
+**The guard was built anyway, and it cost ~50% of the invariant suite.** Marking time
+exhaustion distinctly (`timedOut`) and refusing instead of letting the packer answer. Measured
+on `engine-corpus.test.js` via a worktree at the pre-session commit:
 
-**Why it matters more than a moved schedule.** The monthly diff review is the control on data
-that pushes straight to main. If plans can move without a code change, that review cannot tell
-an engine regression from scheduler noise, and `chart-fingerprint-diff`'s `moved` count — the
-category the tool was built to make meaningful — stops being evidence.
+| tree | time |
+|---|---|
+| before everything | 165 s |
+| partner's `standingRepair` change only | 194 s |
+| HEAD, guard disabled via env hatch | 185 s |
+| HEAD, guard enabled | **279 s** |
 
-**What follows, and what does not.**
+**The mechanism, which is the part worth keeping.** A refusal whose reason is not in
+`PREFLIGHT_REASONS` falls into `EARLY_RUNGS` — **8 rungs, each a complete `generatePlan` call
+with a FRESH deadline**. `search-budget-exhausted` is not in that set. So the guard converted
+one cheap packer rescue into up to nine full generations. The comment above `EARLY_RUNGS`
+already warned about exactly this: *"an extra rung costs a full plan generation for every
+refusing program — 280 of them."*
 
-- Sharding is held: `--jobs` defaults to **1** and is opt-in for questions, never for `--all`.
-  The arithmetic is sound (3:47 → 1:15 on 8 jobs, and the merged report is numerically
-  identical); it is the engine underneath that is not reproducible under load.
-- **Partly fixed the same day, and the residual is the interesting half.** A clock abort is now
-  distinguishable from a placement failure (`timedOut`), and `searchPlacement` refuses rather
-  than letting the packer answer for a run that ran out of TIME. Four paths set the flag: an
-  abort inside a strict attempt, an abort inside a rung attempt, and — missed on the first
-  attempt at this, which is why the fix looked done and wasn't — the rung loop's own
-  `now() > deadline` break, which reached the packer without any attempt ever reporting a
-  timeout.
-  - **The coverage cost is zero.** Measured over the 120-shape covering sample, A/B'd in one
-    tree via `CHART_CLOCK_FALLTHROUGH=1` rather than by stashing (a shared checkout — a stash
-    moves the other session's uncommitted work, and a baseline taken before their edits is not
-    a baseline for yours): `lost 0, gained 0`. The packer still rescues on node exhaustion,
-    which is deterministic and the case it was built for.
-  - **It does NOT restore determinism, and the same measurement says so.** `MOVED 1` persisted
-    in the same A/B — `ug/data_science_and_design_bs_(boston)#1`, which also moved in an
-    earlier confounded run. The guard can only convert a plan into a refusal, never move one,
-    so a plan that still moves proves another clock-dependent path remains open. Find it before
-    trusting `--jobs`; it stays defaulted to 1.
-  - A unit test for the guard was written and **dropped as too slow**: pinning it needs a
-    program big enough that the search cannot finish between clock checks, and that cost 2:51
-    in a suite that runs in 6.8 s. It is recorded here instead. A cheap version probably tests
-    `searchPlacement` directly rather than through `generatePlan`.
-- Do **not** respond by raising the budget. That moves the boundary and leaves it, which is the
-  mistake `NODES_PER_MS` has already been through three times.
+**And it never fired where it mattered.** `nodeBudget` is a constant **23,600**, independent of
+`timeBudgetMs`, so at production's 5,000 ms the clock usually loses the race to the node budget,
+while at the suite's 1,200 ms it wins easily. Measured over the 120-shape sample at 5,000 ms
+with the guard on and off, **every reported number was identical** — including
+`packed-largest-first 17` both ways, meaning the packer still answered every time and the guard
+did not fire once. It was a no-op in production and a 50% tax on the tests.
+
+**Reverted.** Three independent reasons, any one sufficient: sharding is deterministic without
+it, plan quality is unchanged by it, and it is a no-op at the production budget.
+
+**If someone wants to close this properly, here is the cheap version and the measurement it
+needs.** The cost is entirely the retry ladder, not the guard. A clock refusal that SKIPPED
+`EARLY_RUNGS` would be both deterministic and cheap — but those plans are currently rescued by
+a retry rung, which is exactly why the guard measured `lost 0`. So the open question is how many
+plans that would cost. Measure it before building it.
+
+**Two process lessons, both paid for.**
+
+1. *Measure the right thing.* The guard was verified with `lost 0, gained 0` and reported as
+   "coverage cost is zero". True, and it settled nothing: plans survived via the retry ladder at
+   several times the cost. Coverage was measured and TIME was never measured.
+2. *Pin the tree before any before/after.* This checkout is shared and the partner session
+   commits while measurements are in flight. It contaminated three separate conclusions in one
+   session — "sharding is unsafe", "a residual non-determinism exists", and the attribution
+   magnitude. Check `git log` timestamps against run timestamps first, and when the tree cannot
+   be pinned, A/B inside ONE process with an env hatch instead of across two runs.

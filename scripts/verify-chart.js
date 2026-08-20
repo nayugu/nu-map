@@ -198,28 +198,44 @@ const selectedAll = ALL ? allShapes : sample.chosen;
  * hand: the child does the same sampling — deterministic, so it selects the same list —
  * takes its stride of it, and writes its accumulators as JSON for the parent to fold in.
  */
-// ── Defaults to 1. Parallelism is OPT-IN, and that is a measurement, not caution ──
+// ── Parallel by default, and only after it was PROVED equal ─────────
 //
-// `--jobs 8` cuts the sample from 3:47 to 1:15, and it also MOVED a plan: over the same 120
-// shapes, `ug/biochemistry_bs_(boston)#2` came out differently under 8 static shards than
-// under 32 pooled ones — same inputs, same code, different partitioning.
+// This was defaulted to 1 for most of a day, because a fingerprint diff caught a plan moving
+// between two partitionings of the same work and a fast number that moves is worth less than a
+// slow one that does not.
 //
-// The cause is not the sharding. `attemptPlacement` aborts on the wall clock from INSIDE the
-// search (`NODE.TIME`) and returns an ordinary failure, so the ladder falls through to the
-// next rung and answers from there. The clock therefore decides WHICH RUNG answers, not
-// merely whether one does — which is the hole in search.js's rule that "the clock may turn an
-// answer into a refusal, never into a different answer". Contention makes that fire more often.
+// That plan move turned out not to be the sharding. It was measured across another session's
+// in-flight edits to `standingRepair.js` in this shared checkout — both comparison runs
+// predated their commit by minutes, so the "before" and "after" were different engines. The
+// lesson is procedural and worth more than the speedup: check `git log` timestamps against run
+// timestamps BEFORE trusting a before/after, not after being surprised by one.
 //
-// So parallelism is sound arithmetic sitting on an engine that is not yet reproducible under
-// load. Until that is fixed, the default must be the reproducible one: the monthly workflow's
-// diff review cannot tell an engine regression from scheduler noise, and a fast number that
-// moves is worth less than a slow one that does not. Pass `--jobs N` deliberately, for a
-// question — never for the `--all` verdict.
+// Re-measured on a pinned tree, over the 120-shape covering sample:
+//
+//     serial vs serial     unchanged 86, moved 0, gained 0, lost 0
+//     serial vs SHARDED    unchanged 86, moved 0, gained 0, lost 0
+//
+// The second ran while the invariant suite was saturating the machine, so it was tested under
+// heavier contention than a normal run — which is the condition that would break it. Confirmed
+// a second time after the clock guard that was briefly added for this was reverted, so the
+// `moved 0` above is a property of the ENGINE as it ships, not of a guard propping it up.
+//
+// ── What is NOT claimed ─────────────────────────────────────────────
+//
+// That the clock cannot change an answer. It can, in principle: an expired clock drops the
+// ladder into the packer, which arranges largest-first, so a loaded machine could in theory
+// answer differently. That hole is real and unclosed — see docs/chart-open-defects.md §21 for
+// why closing it was measured, cost ~50% of the invariant suite, and was reverted. What IS
+// claimed is narrower and measured: at the budgets we actually run, it does not fire.
+//
+// `defaultJobs()` holds two cores back rather than saturating, for that reason: the closer the
+// machine runs to saturation, the closer that theoretical hole gets to being reachable, and an
+// expired clock also costs coverage outright. `--jobs 1` restores the serial run for any A/B.
 const jobsAt = process.argv.indexOf("--jobs");
 const JOBS = jobsAt > -1
   ? (String(process.argv[jobsAt + 1]) === "auto"
       ? defaultJobs() : Math.max(1, Number(process.argv[jobsAt + 1]) || 1))
-  : 1;
+  : defaultJobs();
 const shardAt = process.argv.indexOf("--shard");
 const SHARD = shardAt > -1
   ? (([i, n]) => ({ i: Number(i), n: Number(n) }))(String(process.argv[shardAt + 1]).split("/"))
