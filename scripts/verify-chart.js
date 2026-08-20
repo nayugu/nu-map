@@ -57,6 +57,7 @@ import { coveringSample, describeShape, formatCoverage, DEFAULT_SAMPLE }
   from "./lib/chart-sample.js";
 import { defaultJobs, shardOf, serializeAggregate, mergeAggregate, normalizeAggregate }
   from "./lib/chart-shard.js";
+import { structurePlan, writeSnapshot } from "./lib/corpus-snapshot.js";
 import { spawn } from "node:child_process";
 import { tmpdir } from "node:os";
 import { unlinkSync } from "node:fs";
@@ -126,6 +127,22 @@ const LIMIT = limitAt > -1 ? Number(process.argv[limitAt + 1]) : Infinity;
  */
 const fpAt = process.argv.indexOf("--fingerprint");
 const FINGERPRINT = fpAt > -1 ? process.argv[fpAt + 1] : null;
+
+/**
+ * `--snapshot <path>` also writes every plan in a QUERYABLE shape.
+ *
+ * The sweep already builds these plans and then throws them away, which is why every ad-hoc
+ * question about them has cost a fresh sweep. Written once, `corpus-ask.js` answers those
+ * questions in about a second, and the second and third question cost nothing — the specific
+ * failure being fixed is that three hypotheses about one regression each took a full corpus
+ * run to disprove, and all three were asking about the same plans.
+ *
+ * Separate from `--fingerprint` because it is much larger (structure, not a hash), so it is
+ * opt-in rather than free. Both travel on the same `prints` channel, so sharding needs no new
+ * merge rule.
+ */
+const snapAt = process.argv.indexOf("--snapshot");
+const SNAPSHOT = snapAt > -1 ? process.argv[snapAt + 1] : null;
 const prints = {};
 
 /**
@@ -414,12 +431,15 @@ for (const { label, d, variant } of IS_PARENT ? [] : selected) {
     // the named conventions cannot go stale, because the names come from the ladder itself.
     if (out.report.cardinalityRelaxed) relaxed++;
     for (const g of out.report.relaxed ?? []) gave.set(g, (gave.get(g) ?? 0) + 1);
-    if (FINGERPRINT) {
+    if (FINGERPRINT || SNAPSHOT) {
       prints[label] = {
         hash: fingerprintPlan(out.plan.plans[0]),
         // The readable form too, so a moved hash can be explained rather than merely
         // detected. A pair of hashes says something changed and nothing about what.
         canonical: canonicalPlan(out.plan.plans[0]),
+        // The queryable form, only when asked: it is the bulk of the file, and a
+        // fingerprint run wants to stay small enough to keep several of around.
+        ...(SNAPSHOT ? { plan: structurePlan(out.plan.plans[0]) } : {}),
       };
     }
 
@@ -569,6 +589,16 @@ if (FINGERPRINT) {
     meta: { shapes, made, at: new Date().toISOString() }, plans: prints,
   }, null, 1));
   console.log(`  fingerprints for ${Object.keys(prints).length} plans → ${FINGERPRINT}`);
+}
+if (SNAPSHOT) {
+  // Provenance is recorded here rather than by the caller, because the thing worth knowing is
+  // the state of the tree that GENERATED these plans. `corpus-ask.js` re-derives it on read and
+  // shouts if it has moved — a snapshot answering for code you no longer have is the expensive
+  // failure this whole file is organised against.
+  writeSnapshot(SNAPSHOT, { root: ROOT, plans: prints,
+                            meta: { shapes, made, sampled: !ALL } });
+  console.log(`  snapshot of ${Object.keys(prints).length} plans → ${SNAPSHOT}`
+    + `   (query it: node scripts/corpus-ask.js --snapshot ${SNAPSHOT} --js '…')`);
 }
 
 if (threw) {

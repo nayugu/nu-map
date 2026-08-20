@@ -327,6 +327,34 @@ expensive failure, so the loop is:
     `chart-probe.js` says the sweep is 4–10 minutes, so refusals cannot average the
     full 5,000 ms budget. That took no run at all. Reach for a script when the
     arithmetic genuinely runs out, not before.
+  - **Never write a corpus loop inline. Ask `corpus-ask.js`.** This is the rule that
+    addresses the actual complaint: the expensive verifications here were never the
+    committed ones, they were scripts written in a chat to answer one question and
+    deleted afterwards. `verify-attr` for the designation change cost minutes and did not
+    survive, so the next designation question pays again.
+    - Those scripts were not slow because they were ad-hoc. The question is five lines;
+      the minutes were spent rebuilding 1,078 plans to have something to ask it of, and
+      that rebuild is identical every time. The sweep was *already* building those plans
+      and discarding them — `--fingerprint` even wrote a readable copy of every one and
+      nothing ever read it.
+    - **Course/requirement questions need no plans at all**: `node scripts/corpus-ask.js
+      --js '…'` is ~0.5 s. Measured: three questions in a row at 0.59 / 0.45 / 0.45 s,
+      one of which was wrong and corrected by looking at the real field names — that
+      guess-look-retry loop used to cost a run per try.
+    - **Plan questions** read a file written once by `verify-chart --snapshot`. A
+      before/after that used to be two full sweeps is `corpus-ask.js --diff a.json b.json`,
+      and it separates "different courses" from "same courses, rearranged" — which one
+      number never could.
+    - If the question cannot be expressed, add the accessor to `corpus-snapshot.js`. That
+      is what makes the NEXT question cheaper instead of equally expensive, and it is the
+      missing half of the rule below: six `*probe*` scripts exist because there was
+      nowhere to put the extension.
+    - A saved file that answers for code you have since edited is worse than no file,
+      because it sounds right. The snapshot records a hash of `src/engine` + `src/core`
+      and the data and shouts on read if either moved. It still answers — an old file is
+      exactly what a before/after wants — but it cannot pass as current.
+    - What this does NOT fix: "did my engine change alter the output" requires
+      regenerating. The floor there is the sample (~4 min), not a second.
   - Prefer ONE reusable instrument over a stream of throwaway scripts.
     `scripts/chart-probe.js` answers the same questions over a named list of plans in
     ~13 seconds where the corpus sweep takes ten minutes. Extend the instrument, do not
