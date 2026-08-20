@@ -1153,3 +1153,37 @@ carries. Heading text and credit arithmetic were both considered and neither sep
 `Thesis Option` from `Integrative Courses`; the plan of study does, costs nothing to read
 (`metadata.planOfStudyCourses` is already written by the scrape), and cannot drift from the
 requirements because it is re-read with them every month.
+
+---
+
+### 20. Scheduling conventions: shipped, with two costs worth naming
+
+The first-year seminar is pinned to the opening term and co-op prep bounded to
+sophomore fall (`cal.firstYearSeminarTitle`, `cal.coopPrepBy`). Coverage is exactly
+neutral — 798 generated / 280 refused / 0 threw, hard rules pass, same as before —
+and seminar-first placement goes 94.0% → 95.5% over the 134 programs naming one.
+Two things got worse, and neither is a reason to revert:
+
+**Thin full terms 55 → 65 of 3247 (1.7% → 2.0%).** Pinning a 1 SH seminar into the
+most contested term in the plan displaces a real course. Reported, not gated. The
+trade is deliberate: the seminar carries a `FR` gate for part of the family, so a
+late placement can be unregistrable, while a thin term is legal and merely
+unbalanced. Worth revisiting if the count climbs.
+
+**`verify:chart` runtime 15m20s → 35m (2.3×), and this one is a real defect.** The
+`scheduling-conventions` rung sits first on `EARLY_RUNGS`, so all **280** refusing
+programs attempt it before failing — while it is *reached* by exactly **1**. The
+ladder spends ~280 extra plan generations to rescue 3 programs (Mathematics BA,
+Mathematics BS, English and Criminal Justice, each of which the rung does recover).
+
+The fix is not to remove the rung: without it those 3 lose their plans, which is a
+coverage regression the gate would catch. It is to stop attempting a rung that
+cannot change the answer — a `when` predicate on the rung, satisfied only when some
+cell's domain was actually narrowed by a convention, which is knowable at
+`buildDomains` time and false for the great majority of programs. That makes the
+ladder skip it for every program with no seminar and no co-op prep cell.
+
+Not done here because it is engine surgery on the retry ladder plus another
+35-minute verification, and the shipped behaviour is correct meanwhile — just slow.
+Whoever takes it should re-measure the runtime against the 15m20s baseline rather
+than against the 35m one.
