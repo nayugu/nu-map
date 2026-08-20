@@ -42,6 +42,43 @@ import { termCapacity } from "./domains.js";
 import { requiredSHFor, earnedSHBefore, meetsStanding } from "../core/classStanding.js";
 
 /**
+ * Trace hatch for the "could not fix it" branch below.
+ *
+ * ── Why this is a module constant and not an inline `process.env` read ──
+ *
+ * It was `if (process.env.CHART_STANDING_DEBUG)`, read inline, and in the BROWSER
+ * `process` does not exist — so that line threw `ReferenceError: process is not
+ * defined` and took the whole generation down with it. Worse, it threw from inside
+ * the one branch that runs when a standing gate cannot be reached, which is exactly
+ * the case the report beneath it was written for: the feature crashed precisely
+ * where it was supposed to speak.
+ *
+ * It survived review because the two environments disagree, in the direction that
+ * hides it. `vite build` substitutes `process.env` with `{}`, so the production
+ * bundle reads `{}.CHART_STANDING_DEBUG` — undefined, falsy, harmless. The DEV
+ * SERVER performs no such substitution, so only `npm run dev` threw. `test:boot`
+ * mounts the built app and therefore cannot catch this class at all; the guard
+ * that can is `test/invariant/browser-globals.test.js`, which reads the source.
+ *
+ * `typeof` first, and read once at module load — the same shape as
+ * `CLOCK_FALLTHROUGH` in search.js, which got it right.
+ */
+const STANDING_DEBUG =
+  typeof process !== "undefined" && !!process.env?.CHART_STANDING_DEBUG;
+
+/**
+ * Where a trace line goes, or nothing.
+ *
+ * Captured here rather than written inline so that the branch below mentions no Node
+ * global at all — `STANDING_DEBUG` proves `process` exists, but a reader (and a static
+ * check) cannot see that from four hundred lines away, and "provably safe if you trace
+ * the flag" is what the ReferenceError above already cost us once. Every reference to
+ * a Node builtin in browser-reachable source now sits inside its own `typeof` guard,
+ * which is a rule a test can enforce; "guarded somewhere upstream" is not.
+ */
+const STDERR = typeof process !== "undefined" ? process.stderr : null;
+
+/**
  * The courses a gated cell could be answered by, for naming it in a report.
  *
  * Groups first, candidates second, and capped: the corpus has cells with 247
@@ -210,14 +247,17 @@ export function repairStanding({
       if (to !== null) break;
     }
     if (to === null) {
-      if (process.env.CHART_STANDING_DEBUG) {
+      if (STANDING_DEBUG) {
         const why = (g.p.domain ?? []).filter(t => t > from).map(cand => {
           const okStd = meetsStanding(earnedSHBefore(cand, without, 0), g.code);
           const fits  = without[cand] + shOf(g.p) <= ceilingOf(cand);
           const ord   = orderOk(g.p, cand);
           return `t${cand}[std=${okStd?"y":"n"} fit=${fits?"y":"n"}(${without[cand]}+${shOf(g.p)}<=${ceilingOf(cand)}) ord=${ord?"y":"n"}]`;
         });
-        process.stderr.write(`  [standing-repair] ${id} need ${g.need} at t${from} (earned ${earnedSHBefore(from, load, 0)}) `
+        // Optional-chained as well as captured: a bundler-injected `process` shim has the
+        // object and none of the streams. A trace line is never worth a throw on the path
+        // between a solved plan and the student.
+        STDERR?.write?.(`  [standing-repair] ${id} need ${g.need} at t${from} (earned ${earnedSHBefore(from, load, 0)}) `
           + `domain=[${(g.p.domain ?? []).join(",")}] → ${why.join(" ") || "NO LATER TERM IN DOMAIN"}\n`);
       }
         // ── Enough to NAME the problem, not just count it ────────────────
