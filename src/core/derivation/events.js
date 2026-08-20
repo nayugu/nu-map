@@ -106,6 +106,26 @@ export const EXCLUSION = Object.freeze({
   BEFORE_STANDING: "before-class-standing",
   /** Co-op preparation must precede the co-op (`coopBoundary`). */
   COOP_PREP_BOUND: "coop-prep-bound",
+  /**
+   * The first-year seminar — a 1 SH "<Subject> at Northeastern" course — is pinned to the
+   * opening term, where 99.3% of published placements put it and where the `FR` class-standing
+   * gate several of them carry requires it.
+   *
+   * Its own reason rather than `DEPARTMENT_TERM`, which is the closest existing code and would
+   * have been cheaper: that one says "your department's plan puts this course in another term",
+   * and this rule fires precisely for programs whose plan never printed the course at all.
+   * Applied only when the opening term survives every hard bound; see `buildDomains`.
+   */
+  FIRST_YEAR_SEMINAR: "first-year-seminar-term",
+  /**
+   * Co-op preparation left later than the deadline we hold it to (`cal.coopPrepBy`,
+   * sophomore fall at Northeastern).
+   *
+   * Distinct from `COOP_PREP_BOUND`, which is the registrar's rule that prep must precede the
+   * work term and is HARD. This is our own convention on top of it, applied only when it
+   * leaves the domain non-empty, and it defers to any term the department published.
+   */
+  COOP_PREP_DEADLINE: "coop-prep-deadline",
   /** Outside the window the precedence chains leave (`criticalPath`). */
   PRECEDENCE_WINDOW: "outside-precedence-window",
   /**
@@ -172,6 +192,12 @@ export const EXCLUSION_PRIORITY = Object.freeze([
   EXCLUSION.NOT_OFFERED,
   EXCLUSION.COOP_PREP_BOUND,
   EXCLUSION.PRECEDENCE_WINDOW,
+  // Above `DEPARTMENT_TERM` and below every hard reason, for the same reason that one is
+  // placed there: a term this rule rules out was still LEGAL, so it must never outrank an
+  // explanation of why a term was impossible. It outranks the department's arrangement only
+  // because it fires when the department has no arrangement to state.
+  EXCLUSION.FIRST_YEAR_SEMINAR,
+  EXCLUSION.COOP_PREP_DEADLINE,
   // Above `LEARNED` and below every hard reason. A term the department did not choose was
   // still legal, so this must never outrank an explanation of why a term was impossible —
   // but it is a better answer than "an attempt failed there".

@@ -74,6 +74,10 @@ export const FATE_GROUP = Object.freeze({
   // inventing a colour for it would give the department's arrangement more visual weight in
   // the tree than the prerequisite chains it has to obey.
   [EXCLUSION.DEPARTMENT_TERM]: "order",
+  // Also `order`: pinning the first-year seminar to the opening term is a sequencing decision,
+  // not an obstruction, and the same argument against a fourth hue applies.
+  [EXCLUSION.FIRST_YEAR_SEMINAR]: "order",
+  [EXCLUSION.COOP_PREP_DEADLINE]: "order",
   [EXCLUSION.LEARNED]: "learned",
 });
 

@@ -436,6 +436,28 @@ export function buildDomains(cells, terms, {
   offered = () => true,
   planDepthOf = null, wideAt = wideAtFor((cells ?? []).length),
   coopPrep = null, coopBoundary = Infinity, studentType = "undergraduate",
+  // Course ids the department printed in its own early terms (`earlyPublishedCourses`).
+  //
+  // Read by the first-year-seminar rule for one purpose: to STAND ASIDE. `adoptEarlyTerms`
+  // runs after this function and narrows a published course's domain to a unit, so a
+  // convention that had already pinned the same course to a different term would collide
+  // with the department's own arrangement — and since that narrowing "is the one thing that
+  // can turn a plan into a refusal", the collision is paid for in coverage, not in a
+  // warning. Measured: 3 of 421 published seminar placements are not in term 0, so this is
+  // rare and it is exactly the case where the department outranks the corpus.
+  departmentPlaced = null,
+  // Whether the institution's own scheduling conventions apply at all — the first-year
+  // seminar pin and the co-op prep deadline below.
+  //
+  // Dropped by the first rung of `EARLY_RUNGS`. Both rules guarantee they cannot empty a
+  // single cell's domain, and that guarantee is real but insufficient: capacity COUPLES
+  // cells, so pinning two seminars into a first term that was already full makes the plan
+  // unschedulable without either domain being empty. Measured, that cost 3 programs their
+  // plan entirely — Mathematics BA, Mathematics BS and English and Criminal Justice, each of
+  // which carries both a college and a major seminar and each of which was already placing
+  // them correctly. A convention that can refuse a plan has to be relaxable, and this is the
+  // ladder that exists for it.
+  conventions = true,
   // The institution's conventions. Defaulted so an existing caller is unaffected, and named
   // `cal` at every use site so it is obvious a value came from outside rather than from a
   // constant two hundred lines up. See calibration.js.
@@ -572,6 +594,69 @@ export function buildDomains(cells, terms, {
       }
     }
 
+    // ── Soft rules: they may narrow a domain, never empty one ────────────
+    //
+    // Every rule below this point is a PREFERENCE the institution holds, not a condition the
+    // registrar enforces, and they all narrow through this one function. A soft rule that can
+    // empty a domain turns a taste into an infeasibility: the same filter applied to the
+    // level-DIGIT proxy cost 15 points of coverage (77.4% -> 62.6%) for exactly that reason.
+    // So `kept` is adopted only when something survives, and one implementation means no rule
+    // can lose that clause on its own.
+    //
+    // Narrowed HERE rather than preferred in `search.js` because a preference only breaks ties
+    // and capacity pressure outranks it — measured, 54 of 585 standing-gated placements sat
+    // earlier than the credits allow while the rule was a preference. Year 1 Fall is the most
+    // contested term in a plan, so a 1 SH seminar is the first thing a preference gives up,
+    // which is how INSC 1000 ended up in Year 1 Spring.
+    //
+    // Per-cell non-emptiness is not global feasibility — capacity couples cells — so a soft
+    // rule can still make a PLAN unschedulable. That is what the `scheduling-conventions` rung
+    // of `EARLY_RUNGS` exists for, and why these are measured with verify-chart.
+    const narrowTo = (kept, reason) => {
+      if (!kept.length || kept.length >= domain.length) return;
+      const keep = new Set(kept);
+      for (const ti of domain) if (!keep.has(ti)) drop(ti, reason);
+      domain.length = 0;
+      domain.push(...kept);
+    };
+
+    // ── Where the institution schedules two 1 SH courses ─────────────────
+    //
+    // Both conventions live in `chartCalibration.js` with their measurements. Both apply only
+    // when the cell's EVERY option is one of the courses in question — so that however the
+    // cell is answered, the answer is one — read off the cell's groups rather than its
+    // candidates, so a pool that merely admits one is never dragged along. `OR(INSC 1000,
+    // POLS 1000)`, the shape combined majors use, is the case that makes "every" rather than
+    // "the only one" the right test.
+    //
+    // And both stand aside where the department printed the course itself: `adoptEarlyTerms`
+    // runs after this and narrows a published course to a single term, and that narrowing is
+    // the one step in the engine that can turn a plan into a refusal.
+    if (conventions && domain.length > 1) {
+      const groups = liveGroups(cell, courseMap) ?? [];
+      const isFamily = (re) => groups.length > 0 && re
+        && groups.every(g => g.length > 0
+             && g.every(id => re.test(courseMap[id]?.title ?? "")))
+        && !groups.some(g => g.some(id => departmentPlaced?.has(id)));
+
+      // The seminar is PINNED to the opening term: 99.3% is not a tendency, and the `FR` gates
+      // several of the family carry make a later one unregistrable.
+      if (isFamily(cal.firstYearSeminarTitle)) {
+        narrowTo(domain.filter(ti => ti === 0), EXCLUSION.FIRST_YEAR_SEMINAR);
+      }
+
+      // Co-op prep gets a DEADLINE, not a slot. `isPrep` above already bounds it by the co-op
+      // itself and that bound is hard; this one only says how late within it we are willing to
+      // leave the course, so every earlier term stays legal. Identified by `coopPrep` — the
+      // set the published plans already yield — rather than by a second title pattern that
+      // could disagree with the first.
+      if (isPrep && cal.coopPrepBy && !groups.some(g => g.some(id => departmentPlaced?.has(id)))) {
+        const by = terms.findIndex(t => (t.yearIndex ?? 0) === cal.coopPrepBy.yearIndex
+                                     && t.semTypeId === cal.coopPrepBy.semTypeId);
+        if (by >= 0) narrowTo(domain.filter(ti => ti <= by), EXCLUSION.COOP_PREP_DEADLINE);
+      }
+    }
+
     // ── Class standing, as a CONSTRAINT that can never refuse a plan ──────
     //
     // Banner states some courses' entry condition as class standing, and the
@@ -583,16 +668,9 @@ export function buildDomains(cells, terms, {
     // 64 SH gate and MUSI 4601 in term 1 against 96. A preference cannot fix that,
     // because it only breaks ties and capacity pressure outranks it.
     //
-    // So it narrows the domain here, where the search forward-checks it. What makes
-    // that safe is the guard, not the rule: the narrowed domain is adopted ONLY if
-    // something survives. The equivalent filter on the level-DIGIT proxy cost 15
-    // points of coverage (77.4% → 62.6%) precisely because it could empty a domain
-    // and turn a taste into an infeasibility. Here, a cell whose every legal term is
-    // below the standing floor keeps all of them and falls back to the preference —
-    // less information, never wrong information, and no refusal this rule caused.
-    //
-    // Per-cell non-emptiness is not a global feasibility proof (capacity couples
-    // cells), which is why this is measured with verify-chart rather than asserted.
+    // So it narrows the domain here, where the search forward-checks it, through the
+    // same `narrowTo` guard as the conventions above — which is where the argument for
+    // adopting a narrowing only when something survives now lives.
     if (studentType !== "graduate" && domain.length) {
       const stdCode = cellStanding({ cell, candidates }, courseMap);
       if (stdCode) {
@@ -609,13 +687,7 @@ export function buildDomains(cells, terms, {
           // credits, so it is strictly the least-bad placement, and keeping one term
           // rather than zero preserves the no-refusal guarantee.
           const kept = domain.filter(ti => ti >= stdFloor);
-          const chosen = kept.length ? kept : domain.slice(-1);
-          if (chosen.length < domain.length) {
-            const keepSet = new Set(chosen);
-            for (const ti of domain) if (!keepSet.has(ti)) drop(ti, EXCLUSION.BEFORE_STANDING);
-            domain.length = 0;
-            domain.push(...chosen);
-          }
+          narrowTo(kept.length ? kept : domain.slice(-1), EXCLUSION.BEFORE_STANDING);
         }
       }
     }

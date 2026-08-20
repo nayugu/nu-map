@@ -270,7 +270,35 @@ function withPackerRetry(args) {
  * never silently claim to have followed it.
  */
 export const EARLY_RUNGS = [
-  // ── First, the courses their plan IMPLIES but does not print ────────
+  // ── First, OUR OWN conventions, because they are ours ───────────────
+  //
+  // The first-year seminar pin and the co-op prep deadline. They come off before anything
+  // that reads the department's plan, and the ordering rule the rest of this list follows is
+  // exactly why: each rung drops the least valuable remaining constraint, and a convention we
+  // derived from the corpus is worth strictly less than any reading of what THIS department
+  // printed. Dropping it first also costs the least — the plan keeps every published
+  // placement and gives up only a preference about two 1 SH courses.
+  //
+  // They have to be on the ladder at all because either can refuse a plan despite neither
+  // being able to empty a single domain: capacity couples cells, and pinning both the college
+  // and the major seminar into an already-full first term is unschedulable. Measured over the
+  // 134 programs naming a seminar, the pin alone cost 3 plans — Mathematics BA, Mathematics BS
+  // and English and Criminal Justice — each of which this rung recovers, and each of which was
+  // already placing its seminar correctly, so the pin was pure loss for them.
+  //
+  // ── ONE rung, not two ───────────────────────────────────────────────
+  //
+  // The seminar pin and the co-op deadline were briefly separate rungs, so that the weaker
+  // claim could be given up first. Removed: no program in the corpus needs the separation, and
+  // an extra rung costs a full plan generation for every refusing program — 280 of them.
+  //
+  // The case that motivated splitting them was Architecture BS, on the strength of one A/B
+  // where it refused without the pin and generated with it. That was measurement noise: in
+  // isolation it refuses under all four combinations at both an 8 s and a 40 s budget, always
+  // with "Year 2 Spring carries 3 courses of 3+ credits". Its refusal predates this work.
+  // Split them again when a program actually demands it, and say which.
+  { name: "scheduling-conventions", args: { followConventions: false } },
+  // ── Then the courses their plan IMPLIES but does not print ──────────
   //
   // Reading a corequisite bundle off one of its members — `PHYS 1161 and PHYS 1162` standing for
   // `[1161, 1162, 1163]` — is the strongest reading of a published term, and therefore also the
@@ -291,15 +319,21 @@ export const EARLY_RUNGS = [
   // course is an inference about a row the plan does not print, which makes it the weakest thing
   // here and the right thing to give up first. The ceiling and the decisions are both readings
   // of text that IS printed, so they outrank it however recently they were added.
-  { name: "department-implied-courses", args: { earlyPartial: false } },
+  // Every rung below RESTATES `followConventions: false`. The ladder's monotonicity is manual
+  // — see the note further down — so omitting it would make rung 2 stronger than rung 1,
+  // re-imposing a constraint rung 1 had just given up, which is not a ladder.
+  { name: "department-implied-courses",
+    args: { followConventions: false, earlyPartial: false } },
   // Then the credit ceiling: it LOWERS a term's capacity to the printed load, which pre-flight
   // also sizes the degree against, so a degree that barely fits can be refused by arithmetic
   // alone.
-  { name: "department-term-load",     args: { earlyPartial: false, earlyCeiling: false } },
+  { name: "department-term-load",
+    args: { followConventions: false, earlyPartial: false, earlyCeiling: false } },
   // Then the branch decisions. Pinning one option of a choice removes the search's freedom to
   // answer that cell another way, which can strand a later term.
   { name: "department-course-choice",
-    args: { earlyPartial: false, earlyCeiling: false, earlyDecide: false } },
+    args: { followConventions: false, earlyPartial: false, earlyCeiling: false,
+            earlyDecide: false } },
   // ── Then the WINDOW, one semester at a time from the back ───────────
   //
   // The step the ladder was missing, and the one that matters most. Some degrees genuinely
@@ -326,14 +360,18 @@ export const EARLY_RUNGS = [
   // anyway ("three terms with the labs" against "four terms without them"), at seven full plan
   // generations per refusing program.
   { name: "department-first-three",
-    args: { earlyCeiling: false, earlyDecide: false, earlyPartial: false, earlyTerms: 3 } },
+    args: { followConventions: false, earlyCeiling: false, earlyDecide: false,
+            earlyPartial: false, earlyTerms: 3 } },
   { name: "department-first-two",
-    args: { earlyCeiling: false, earlyDecide: false, earlyPartial: false, earlyTerms: 2 } },
+    args: { followConventions: false, earlyCeiling: false, earlyDecide: false,
+            earlyPartial: false, earlyTerms: 2 } },
   { name: "department-first-only",
-    args: { earlyCeiling: false, earlyDecide: false, earlyPartial: false, earlyTerms: 1 } },
+    args: { followConventions: false, earlyCeiling: false, earlyDecide: false,
+            earlyPartial: false, earlyTerms: 1 } },
   // And only then the arrangement itself — the thing this module exists to do. Reached now only
   // where not even the FIRST semester of the department's plan can be scheduled.
-  { name: "department-early-terms",   args: { followDepartment: false } },
+  { name: "department-early-terms",
+    args: { followConventions: false, followDepartment: false } },
 ];
 
 const PREFLIGHT_REASONS = new Set([
@@ -404,6 +442,10 @@ function generateOnce({
   // `propagateChains` — "following the department beats inferring from a course number" is a
   // claim about a corpus and has to be runnable both ways — not a tuning knob.
   earlyTerms = EARLY_TERMS,
+  // The institution's scheduling conventions — the first-year seminar pin
+  // (`cal.firstYearSeminarTitle`) and the co-op prep deadline (`cal.coopPrepBy`). Default on;
+  // dropped by the ladder's first rung. See `EARLY_RUNGS`.
+  followConventions = true,
   // ── Where the derivation view gets its material ───────────────────
   //
   // A recording sink from `src/engine/trace.js`, or null. Null is the production default for
@@ -541,6 +583,11 @@ function generateOnce({
       wideAt: wideAtFor(cells.length),
       coopPrep: prepSet.size ? prepSet : null,
       coopBoundary: firstWorkBoundary(sh),
+      // Empty when `followDepartment` is false, which is correct rather than incidental: on a
+      // fallback rung the department's arrangement has already been abandoned, so there is
+      // nothing left for the seminar rule to defer to and the convention should apply freely.
+      departmentPlaced: publishedEarly.length ? new Set(publishedEarly) : null,
+      conventions: followConventions,
       // So an undergraduate's pools are not answered by doctoral courses. See
       // `registrable` — this feeds both the witness and the reachable share.
       studentType,

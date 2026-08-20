@@ -153,6 +153,33 @@ export const DEFAULT_CALIBRATION = Object.freeze({
   // for the declared rules and the measurements behind them.
   attributePlacement: [],
 
+  // ── Two courses the institution schedules by convention ─────────────
+  //
+  // Both `null` by default, which disables the rule — the honest default for an institution
+  // with no such course rather than a guess about its curriculum, as `capstoneAttribute`
+  // above. The measurements behind Northeastern's values are in the adapter that owns them.
+  //
+  // NOT expressible through `attributePlacement` above, and the difference is the mechanism
+  // rather than the taste. That table states a POSITION and is applied by
+  // `attributePlacement.js` once every hard constraint has settled, as a swap; these two are
+  // DOMAIN bounds in `buildDomains`, applied before the search runs. Measured, the late form
+  // cannot hold them: as an ordering preference the seminar loses Year 1 Fall to capacity
+  // pressure every time, which is the defect this fixes. They also key off a course title and
+  // off `coopPrep`, not off a registrar designation — there is no NUPath code for "first-year
+  // seminar".
+  //
+  // The first-year seminar is matched by TITLE rather than by a course list because the family
+  // is 31 courses today and gains one with every new major; a committed list would silently
+  // stop covering the newest programs after a monthly re-scrape. The title is also the stable
+  // part — the subject prefix is not (`INSC`, `INSH`, `INAM`, `CLTR`, `MSCR` are all one), and
+  // neither is the number.
+  firstYearSeminarTitle: null,
+  // The LATEST co-op prep should be left, as `{ yearIndex, semTypeId }` with a 0-based year —
+  // a deadline, not a slot, so every earlier term stays legal. Which courses it applies to is
+  // deliberately NOT configured here: `coopPrep` already carries that set, derived from the
+  // published plans, and a second identification could disagree with the first.
+  coopPrepBy: null,
+
   slotCapFull: 9,
   slotCapHalf: 5,
 });

@@ -138,6 +138,37 @@ export default {
     { attribute: "WD", notBefore: "firstWork", swapWith: "generalElective" },
   ],
 
+  // ── The first-year seminar: the sharpest positional signal here ──────
+  //
+  // 31 courses, one per college, all 1 SH, all titled "<Subject> at Northeastern". Where the
+  // published plans put them: Year 1 Fall 418 (99.3%), Year 1 Spring 2, Year 2 Spring 1.
+  // Sharper than the capstone and than any level target, and the only one of the three with a
+  // registrar behind it — ANTH/ARCH/ARTF/BIOL 1000 and others carry a Banner `FR` gate, so a
+  // late placement is unregistrable rather than merely odd.
+  //
+  // CHART placed it first in 126 of 134 programs (94.0%) before this rule; the misses included
+  // Mathematics and Physics BS, which parked INSC 1000 in Year 1 Spring behind a published
+  // plan that never printed the course at all.
+  firstYearSeminarTitle: / at Northeastern\b/i,
+
+  // ── Co-op prep: no later than sophomore fall ─────────────────────────
+  //
+  // A deadline, and the only value in this file that is a JUDGEMENT rather than a measured
+  // central tendency — so it is marked as one. Departments publish these at Year 2 Spring
+  // 41.6%, Year 2 Fall 35.7%, Year 1 Spring 20.8%, Year 3 Fall 1.6% (485 placements), so
+  // sophomore year is a 77.3% convention and not a rule. Nothing enforces even that: EESC,
+  // EEAM and SLPA 2000 carry no prerequisite and no standing gate, so Year 1 Fall is legal.
+  // ENCP 2000 is the exception and needs no help — its prerequisite IS the seminar family
+  // above, so the prerequisite graph already bars it from term 0.
+  //
+  // A bound rather than a slot because the requirement is purely relational: any term before
+  // the work term satisfies it, `coopBoundary` already enforces that, and the only real risk
+  // is leaving it too late — the failure co-op advisors report students regretting. Pinning
+  // would additionally have fought the 62.4% who publish somewhere other than sophomore fall.
+  // The 43.5% who publish later than this bound keep their own arrangement, via
+  // `departmentPlaced`.
+  coopPrepBy: { yearIndex: 1, semTypeId: "fall" },
+
   // The worst any published plan does — 9 courses in a full term, 5 in a summer half, across
   // both corpora. The observed MAXIMUM rather than the p90 of 6, because a seven-course term
   // is unusual and real while an eleven-course one is not.
