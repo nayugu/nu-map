@@ -843,20 +843,36 @@ export function adoptEarlyTerms({
  * `repair` only ever returns a term drawn from the cell's own domain, so the guard here is
  * belt-and-braces against a caller that skipped it.
  */
-export function applyEarlyTerms(plans, placed, exclusionReason = null, decided = null) {
+export function applyEarlyTerms(plans, placed, exclusionReason = null, decided = null,
+                                standingOk = null) {
   if (!placed?.size) return 0;
   let n = 0;
   for (const p of plans) {
     const at = placed.get(p.cell.id);
     if (at == null || !p.domain.includes(at)) continue;
+    // ── The department's pick may not smuggle in a class-standing gate ──
+    //
+    // `buildDomains` vetted the WIDER cell. A cell offering an ungated option is
+    // ungated — the student can pick it — so the standing floor removed nothing.
+    // Narrowing below to the department's `decided` pick can replace that with a
+    // GATED course, in a term the floor was never asked about. Measured: this is
+    // how ENVR 3150 (sophomore standing, 32 SH) reached term 1 of a plan holding
+    // 17 SH, and every one of the catalog's ten Advanced Writing courses is gated
+    // to juniors, so the same route would seat one of those in first year.
+    //
+    // The department's own plan normally wins; it does not win this. A term the
+    // registrar will not let the student register for is not a plan. Declining the
+    // pick leaves the cell WIDE and the search places it normally, so the cost is
+    // one card losing its published position, never a refusal.
+    const picked = decided?.get(p.cell.id);
+    if (standingOk && !standingOk(picked?.length ? [picked] : p.cell.groups, at)) continue;
     // ── The department's own pick, applied to the cell ────────────────
     //
     // REPLACED, never mutated: the cell object is reachable from the precedence index and the
     // depth index, both built before this runs, and editing it in place would change what
     // those were computed from after the fact. Narrowing to one group only ever makes the
     // cell more specific, so a domain derived from the wider set stays sound.
-    const pick = decided?.get(p.cell.id);
-    if (pick?.length) p.cell = { ...p.cell, groups: [pick] };
+    if (picked?.length) p.cell = { ...p.cell, groups: [picked] };
     // Recorded BEFORE the narrowing, and only for terms actually lost, so the derivation
     // view can say why a card has one legal term left. Without this the tree draws a
     // single-term card with no explanation, which reads as a defect in the one view whose

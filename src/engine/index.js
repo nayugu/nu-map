@@ -42,7 +42,8 @@ import {
   placeCells, describe, DEFAULT_NODE_BUDGET, DEFAULT_TIME_BUDGET_MS,
   POOL_MIN_CANDIDATES, unlockUniverse, unlockOfCell, isPoolCell,
 } from "./search.js";
-import { unlockValues } from "./prereqDepth.js";
+import { unlockValues, cellStanding } from "./prereqDepth.js";
+import { standingFloorTerm, requiredSHFor } from "../core/classStanding.js";
 import { improve, DEFAULT_PREFERENCES } from "./objective.js";
 import { emitPlan, cellText } from "./emit.js";
 import { buildDepthIndex } from "./prereqDepth.js";
@@ -927,8 +928,17 @@ function generateOnce({
   // The exclusion reason is recorded only when something is RECORDING — the same condition
   // the critical-path narrowing above uses. `verify-chart` generates 1,031 plans untraced in
   // the monthly workflow, and an exclusion row per term per fixed cell is pure cost there.
+  // The department's published position is followed unless it would seat a
+  // class-standing-gated course in a term the plan has not earned the credits for.
+  // Same floor `buildDomains` uses, re-asked here because the `decided` narrowing
+  // below can turn an ungated cell into a gated one after the domain was vetted.
+  const standingOk = studentType === "graduate" ? null : (groups, at) => {
+    const code = cellStanding({ cell: { groups } }, courseMap);
+    if (!code) return true;
+    return at >= standingFloorTerm(requiredSHFor(code), terms.map(t => t.targetSH || 0));
+  };
   const earlyFixed = applyEarlyTerms(plans, early.placed,
-    trace ? EXCLUSION.DEPARTMENT_TERM : null, earlyDecide ? early.decided : null);
+    trace ? EXCLUSION.DEPARTMENT_TERM : null, earlyDecide ? early.decided : null, standingOk);
 
   // ── 6. A legal plan ────────────────────────────────────────────
   //

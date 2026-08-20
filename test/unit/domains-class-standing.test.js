@@ -88,16 +88,30 @@ test("co-op terms earn nothing, so the floor moves later", () => {
 
 // ── The guard: never empty, never refuse ─────────────────────────────
 
-test("a plan too short to reach the standing keeps ALL its terms", () => {
+test("a plan too short to reach the standing keeps only its LAST term", () => {
   // THE case that cost 15 points of coverage when the level-digit filter had no
-  // such guard. Three 16 SH terms never reach 96, so a senior-gated course would
-  // have an empty domain and the whole plan would be refused. Degrade to the
-  // preference instead: less information, never a refusal this rule caused.
+  // guard: three 16 SH terms never reach 96, so a senior-gated course would have an
+  // empty domain and the plan would be refused.
+  //
+  // The first fix kept ALL terms, which is safe and also wrong — it left a
+  // junior-gated course legal in first year, and every one of the catalog's ten
+  // Advanced Writing courses is gated JR. When the constraint cannot be satisfied
+  // the least-bad placement is the LATEST legal term, not any of them: it is as
+  // close to the credits as the plan can get. Keeping one term rather than zero
+  // still preserves the no-refusal guarantee.
   const terms = evenTerms(3);
   const { plans } = run([cell("CAP4999")], terms, mapOf(course("CAP4999", "SR")));
-  assert.deepEqual(plans[0].domain, [0, 1, 2]);
-  assert.equal((plans[0].excluded ?? []).some(e => e.reason === EXCLUSION.BEFORE_STANDING), false,
-    "nothing was actually excluded, so nothing may be reported as excluded");
+  assert.deepEqual(plans[0].domain, [2]);
+  const dropped = (plans[0].excluded ?? [])
+    .filter(e => e.reason === EXCLUSION.BEFORE_STANDING).map(e => e.term);
+  assert.deepEqual(dropped, [0, 1], "the terms actually lost, and only those");
+});
+
+test("an unsatisfiable gate still never empties a domain", () => {
+  // The guarantee restated for the hardest input: one term, a senior gate.
+  const { plans, impossible } = run([cell("CAP4999")], evenTerms(1), mapOf(course("CAP4999", "SR")));
+  assert.deepEqual(plans[0].domain, [0]);
+  assert.equal(impossible.length, 0);
 });
 
 test("no cell is ever made impossible by the standing rule alone", () => {

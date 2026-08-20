@@ -601,11 +601,20 @@ export function buildDomains(cells, terms, {
         // plan's length cannot express either.
         const stdFloor = standingFloorTerm(requiredSHFor(stdCode), terms.map(t => t.targetSH || 0));
         if (stdFloor > 0) {
+          // Terms at or after the floor, if any. When NONE qualify the cell keeps its
+          // LATEST legal term rather than all of them: every Advanced Writing course
+          // in the catalog — all ten ENGW 3xxx — is gated to juniors, so "sophomore
+          // year is as wrong as first year" is the wrong reading of an impossible
+          // constraint. The latest legal term is the closest the plan can get to the
+          // credits, so it is strictly the least-bad placement, and keeping one term
+          // rather than zero preserves the no-refusal guarantee.
           const kept = domain.filter(ti => ti >= stdFloor);
-          if (kept.length && kept.length < domain.length) {
-            for (const ti of domain) if (ti < stdFloor) drop(ti, EXCLUSION.BEFORE_STANDING);
+          const chosen = kept.length ? kept : domain.slice(-1);
+          if (chosen.length < domain.length) {
+            const keepSet = new Set(chosen);
+            for (const ti of domain) if (!keepSet.has(ti)) drop(ti, EXCLUSION.BEFORE_STANDING);
             domain.length = 0;
-            domain.push(...kept);
+            domain.push(...chosen);
           }
         }
       }
