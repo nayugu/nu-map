@@ -16,7 +16,8 @@
  *       dow: [80, 0, 80, 60, 20],              // % of sections meeting each weekday [M,T,W,Th,F]
  *       pat: [["MWR",60],["TF",20]],           // [day-pattern, % of sections], top 6, most common first
  *       lab: false,                            // any section requires a linked lab/co-section
- *       prof: { "fall": [["Gregory Aloupis", 54]] } // primary instructors per SEMESTER TYPE [name, avg % of enrolment], top 4
+ *       prof: { "fall": [["Gregory Aloupis", 54]] }, // primary instructors per SEMESTER TYPE [name, avg % of enrolment], top 4
+ *       std: "JR"                              // class standing required: FR|SH|JR|SR (absent = none)
  *     }
  *   }
  *
@@ -26,6 +27,11 @@
  * Summer) is derived in the app since the term code carries the semester type. Still well under
  * 1 MB — three small int maps are no larger than the old fill%/open pair.
  *
+ * `std` is the class-standing gate — the registrar's own restriction, which the catalog
+ * states only in prose. It is folded here rather than at capture time because the two
+ * rules it needs (every section gated; most lenient standing) are presentation
+ * decisions over the raw per-section tally. See scripts/lib/class-standing.js.
+ *
  * Usage:
  *   node scripts/derive-offering-summary.js            # dry run — prints size + samples
  *   node scripts/derive-offering-summary.js --write    # write offering-summary.json
@@ -34,6 +40,7 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname } from "path";
 import { fileURLToPath } from "url";
+import { courseGate, STANDING_LADDER } from "./lib/class-standing.js";
 
 const __dirname   = dirname(fileURLToPath(import.meta.url));
 const ROOT        = resolve(__dirname, "..");
@@ -144,6 +151,13 @@ for (const [courseId, byTerm] of Object.entries(details)) {
       .map(([name, w]) => [name, Math.round((w / total) * 100)]);
   }
   if (Object.keys(prof).length) summary[courseId].prof = prof;
+
+  // Class-standing gate. Absent for the ~79% of courses with no restriction, and
+  // absent — deliberately — whenever the terms we looked at disagree: this field
+  // becomes a floor in the generator, and a floor invented from conflicting
+  // evidence can refuse a plan outright.
+  const gate = courseGate(byTerm);
+  if (gate) summary[courseId].std = gate.standing;
 }
 
 const json  = JSON.stringify(summary);
@@ -153,6 +167,45 @@ console.log(`Size:    ${(bytes / 1048576).toFixed(2)} MB`);
 for (const id of ["CS3500", "MATH1341", "ENGW1111"]) {
   if (summary[id]) console.log(`  ${id}: ${JSON.stringify(summary[id])}`);
 }
+
+// ── Class-standing gates: report, then refuse a silent collapse ────
+//
+// Same principle as fetch-nupath's 5% rule. The failure this guards is specific and
+// quiet: Banner renames a heading or changes the markup, `parseRestrictions` matches
+// nothing, every gate disappears, and the generator goes back to guessing from the
+// level digit with no error anywhere. Losing gates in bulk is never a legitimate
+// outcome of a derive run — the input file only ever gains restriction data.
+const gated = Object.entries(summary).filter(([, v]) => v.std);
+const byStanding = {};
+for (const [, v] of gated) byStanding[v.std] = (byStanding[v.std] ?? 0) + 1;
+console.log(`\nClass-standing gates: ${gated.length} courses` +
+  (gated.length ? `  (${STANDING_LADDER.filter(s => byStanding[s]).map(s => `${s} ${byStanding[s]}`).join(", ")})` : ""));
+for (const id of ["ENGW3302", "ENGW3307", "MEIE4702", "BIOL4701"]) {
+  if (summary[id]?.std) console.log(`  sample ${id}: std=${summary[id].std}`);
+}
+
+let prevGated = 0, lost = 0;
+if (existsSync(SUMMARY_OUT)) {
+  try {
+    const prev = JSON.parse(readFileSync(SUMMARY_OUT, "utf8"));
+    for (const [id, v] of Object.entries(prev)) {
+      if (!v?.std) continue;
+      prevGated += 1;
+      if (!summary[id]?.std) lost += 1;
+    }
+  } catch { /* unreadable previous file cannot accuse this one */ }
+}
+// A floor of 50 so the very first run — which legitimately goes from 0 gates to many —
+// and a tiny --term test corpus are not treated as a collapse.
+const LOSS_LIMIT = 0.05;
+if (prevGated >= 50 && lost / prevGated > LOSS_LIMIT) {
+  console.error(`\nREFUSING TO WRITE: ${lost} of ${prevGated} class-standing gates ` +
+    `(${(100 * lost / prevGated).toFixed(1)}%) disappeared — limit ${LOSS_LIMIT * 100}%.`);
+  console.error("A derive run only ever gains restriction data, so this means the scrape " +
+    "or the Banner parse broke. Check parseRestrictions against a live getRestrictions page.");
+  process.exit(1);
+}
+if (lost) console.log(`  (${lost} of ${prevGated} previous gates gone — within the ${LOSS_LIMIT * 100}% limit)`);
 
 if (doWrite) {
   writeFileSync(SUMMARY_OUT, json);

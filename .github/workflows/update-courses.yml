@@ -23,9 +23,9 @@ on:
 # majors, because the majors verifier validates every course reference against
 # the course data — stale courses produce false "unknown course" findings).
 # But a stagger is not a guarantee: update-courses also runs a Banner
-# availability scrape with --prof, one call per section, plus ~700 RateMyHusky
-# requests, and can overrun two hours. This makes the ordering enforced rather
-# than hoped for.
+# availability scrape with --prof and --restrictions, each one call per section,
+# plus ~700 RateMyHusky requests, and can overrun two hours. This makes the
+# ordering enforced rather than hoped for.
 concurrency:
   group: nu-map-data
   cancel-in-progress: false
@@ -72,8 +72,18 @@ jobs:
 
       # ── Step 2: Fetch term availability from nubanner.neu.edu ─────────────────
       #   Writes term-history.json (offered?) + term-details.json (enrollment/schedule).
+      #
+      #   --restrictions is a SECOND per-section pass (one getRestrictions call per
+      #   CRN, ~30 min for one term) capturing the class-standing gate — "Junior
+      #   (JR), Senior(SR)" — that the catalog states only in prose. Like --prof it
+      #   does ONE completed term per run and caches forever, so the two together
+      #   add ~60 min to this job, inside the 300-minute budget above.
+      #
+      #   Backfill is therefore gradual: one term a month. That is deliberate — the
+      #   fold in derive-offering-summary refuses a gate whenever the terms it can
+      #   see disagree, so gate coverage is expected to move as terms accumulate.
       - name: Scrape term availability
-        run: node scripts/scrape-availability.js --write --prof 2>&1 | tee /tmp/availability-log.txt
+        run: node scripts/scrape-availability.js --write --prof --restrictions 2>&1 | tee /tmp/availability-log.txt
 
       # ── Step 2b: Derive the slim offering summary the app loads ───────────────
       - name: Derive offering summary

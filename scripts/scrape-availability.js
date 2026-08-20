@@ -27,6 +27,11 @@
  *   stable-only; a running term's seats churn hourly). Waitlist is intentionally omitted —
  *   Northeastern does not expose Banner waitlist capacity/counts (always 0).
  *
+ *   With --restrictions, each aggregate also carries `std` (and `stdNot`): a tally of
+ *   sections per class-standing gate, {"JR|SR": 24}, from Banner's getRestrictions.
+ *   This is the class standing the catalog only ever states in prose — see the
+ *   "Class-standing restrictions" section below for why the engine needs it.
+ *
  * Keys are Banner term codes (YYYY = AY end year; 10=Fall, 30=Spring,
  * 40=Summer 1, 60=Summer 2).
  *
@@ -35,9 +40,11 @@
  *   node scripts/scrape-availability.js --write      # write both JSON files
  *   node scripts/scrape-availability.js --write --details-only  # write only term-details.json
  *   node scripts/scrape-availability.js --term=202610,202630   # restrict terms (testing)
+ *   node scripts/scrape-availability.js --write --restrictions  # + class-standing gates, 1 term
  *
  * Rate limiting: 500 ms between page requests by default.
  * Override: BANNER_DELAY_MS=200 node scripts/scrape-availability.js --write
+ * Per-section passes: BANNER_PROF_DELAY_MS, BANNER_RESTR_DELAY_MS (250 ms each).
  *
  * The session flow required by Banner SSB:
  *   1. GET /classSearch/getTerms  →  seed session cookies
@@ -50,6 +57,9 @@
 import { readFileSync, writeFileSync, existsSync } from "fs";
 import { resolve, dirname }                         from "path";
 import { fileURLToPath }                            from "url";
+import { parseRestrictions, classesOf }             from "./lib/class-standing.js";
+import { knownTermCodes, buildTermHistory, mergePreviousHistory }
+                                                    from "./lib/term-history.js";
 
 const __dirname      = dirname(fileURLToPath(import.meta.url));
 const ROOT           = resolve(__dirname, "..");
@@ -66,6 +76,9 @@ const DELAY_MS  = parseInt(process.env.BANNER_DELAY_MS || "500", 10);
 // Instructor fetches are one light request per SECTION (Banner strips faculty
 // from the bulk search feed), so they get their own, tighter pacing.
 const PROF_DELAY_MS = parseInt(process.env.BANNER_PROF_DELAY_MS || "250", 10);
+// Class-standing restrictions are the same shape of request — one per section,
+// nothing in the bulk feed — so they share the instructor pacing.
+const RESTR_DELAY_MS = parseInt(process.env.BANNER_RESTR_DELAY_MS || "250", 10);
 
 // ── Term code logic ──────────────────────────────────────────────
 // Banner YYYY = AY end year.  Suffixes: 10=Fall, 30=Spring, 40=Sum1, 60=Sum2.
@@ -342,6 +355,8 @@ function serializeDetail(agg) {
     linked: agg.linked,
     ...(agg.fullSummer && { fullSummer: true }),
     ...(agg.prof && { prof: agg.prof }),
+    ...(agg.std && { std: agg.std }),
+    ...(agg.stdNot && { stdNot: agg.stdNot }),
   };
 }
 
@@ -466,6 +481,80 @@ async function fetchTermProfessors(termCode, detail) {
   return calls;
 }
 
+// ── Class-standing restrictions ──────────────────────────────────
+//
+// "Must be enrolled in one of the following Classes: Junior (JR), Senior(SR)" —
+// the gate the catalog only ever states in prose, which `RESTRICTION_ONLY` in
+// courseNorm.js discards. Parsing, the measured prevalence and the fold rules all
+// live in scripts/lib/class-standing.js; this file only captures.
+//
+// Stored as a section tally per value set — `std: {"JR|SR": 24}` — exactly like
+// `days`, and for the same reason: the fold is a presentation decision, and burying
+// it here would cost a 29-minute re-scrape per term to revisit. PJM 4850 is gated on
+// 1 of its 2 sections and BIOL 4701 carries two different gates across its 7;
+// neither fact survives a fold done at capture time.
+//
+// NOT merged into the instructor walk. Both passes are one call per CRN, so running
+// them together saves only the term activation and cooldown, not a single request —
+// and it would couple two independently-cached datasets.
+
+/**
+ * Fetch class-standing restrictions for every section of every course in `detail`
+ * via getRestrictions — one call per CRN. Mutates each aggregate:
+ *   agg.std    = { "JR|SR": sections, … }   must be enrolled in
+ *   agg.stdNot = { "FR": sections, … }      cannot be enrolled in
+ * Absent when the course's sections carry no Classes restriction at all.
+ *
+ * Only run this for COMPLETED terms, same as the instructor pass: a published
+ * term's sections are still being edited, while a finished term is frozen, so it
+ * is fetched once ever and carried forward. A capstone's gate does not move
+ * year to year, which is what makes the older term an acceptable source.
+ */
+async function fetchTermRestrictions(termCode, detail) {
+  await fetchRetry(`${BASE}/term/search?mode=search`, {
+    method:  "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded", "Cookie": cookieHeader() },
+    body:    `term=${termCode}&studyPath=&studyPathText=&startDatepicker=&endDatepicker=`,
+  });
+  await sleep(DELAY_MS);
+  let calls = 0;
+  let gated = 0;
+  let consecutiveFailures = 0;
+  for (const agg of detail.values()) {
+    const must = new Map();
+    const not  = new Map();
+    for (const [crn] of agg.crns ?? []) {
+      try {
+        const res = await fetchRetry(
+          `${BASE}/searchResults/getRestrictions?term=${termCode}&courseReferenceNumber=${crn}`,
+          { headers: { "Cookie": cookieHeader() } }
+        );
+        updateJar(res);
+        const { must: mk, not: nk } = classesOf(parseRestrictions(await res.text()));
+        if (mk) { must.set(mk, (must.get(mk) ?? 0) + 1); gated += 1; }
+        if (nk) { not.set(nk, (not.get(nk) ?? 0) + 1); }
+        consecutiveFailures = 0;
+      } catch {
+        // Same rule as the instructor pass: one section failing must not kill the
+        // term, but a long streak means Banner has stopped talking to us. A term
+        // with restriction marks is treated as complete forever after, so partial
+        // data would permanently understate the gates — leave NONE.
+        consecutiveFailures += 1;
+        if (consecutiveFailures >= 25) {
+          for (const a of detail.values()) { delete a.std; delete a.stdNot; }
+          throw new Error(`aborted after ${consecutiveFailures} consecutive failures (${calls} calls in) — no partial data kept`);
+        }
+      }
+      calls += 1;
+      if (calls % 1000 === 0) process.stdout.write(`    …${calls} sections\n`);
+      await sleep(RESTR_DELAY_MS);
+    }
+    if (must.size) agg.std    = Object.fromEntries([...must].sort());
+    if (not.size)  agg.stdNot = Object.fromEntries([...not].sort());
+  }
+  return { calls, gated };
+}
+
 /**
  * Fetch the set of subject codes offered by a given college in a term.
  * Uses Banner's college filter (txt_college) to get only that college's sections.
@@ -522,6 +611,12 @@ async function main() {
   const profArg = process.argv.find(a => a === "--prof" || a.startsWith("--prof="));
   const profTermLimit = profArg
     ? (profArg.includes("=") ? Math.max(0, parseInt(profArg.split("=")[1], 10) || 0) : 1)
+    : 0;
+  // --restrictions[=N]: same shape and cost as --prof (one getRestrictions call per
+  // section, ~29 min a term), capped and cached the same way.
+  const restrArg = process.argv.find(a => a === "--restrictions" || a.startsWith("--restrictions="));
+  const restrTermLimit = restrArg
+    ? (restrArg.includes("=") ? Math.max(0, parseInt(restrArg.split("=")[1], 10) || 0) : 1)
     : 0;
 
   // Load catalog so we only track courses the app knows about
@@ -584,14 +679,26 @@ async function main() {
     process.stdout.write(`\n[${termCode}] ${meta?.description ?? ""} — `);
     try {
       const { offered, detail, termEnd } = await fetchTermOfferings(termCode);
-      termResults[termCode]   = offered;
-      termDetail[termCode]    = detail;
-      termEndByCode[termCode] = termEnd;
-      const ended = termEnd && termEnd < new Date();
-      console.log(`${offered.size} courses${ended ? " (ended — detail kept)" : " (in progress — detail skipped)"}`);
+      // A term that yields NO sections is not evidence that nothing was offered.
+      // Banner intermittently answers the first page with success:true, totalCount:0
+      // — observed twice in a row on 202530, which really has 6,699 sections — and
+      // the old code stored the empty set, so every course in the term was written
+      // `false`: a wiped semester of real offering history, silently, on a job that
+      // pushes to main unattended. Recording NOTHING leaves the term unknown, which
+      // is the honest reading and what the history builder now skips.
+      if (offered.size === 0) {
+        console.log(`NO SECTIONS — treating as unknown, not as "nothing offered"`);
+      } else {
+        termResults[termCode]   = offered;
+        termDetail[termCode]    = detail;
+        termEndByCode[termCode] = termEnd;
+        const ended = termEnd && termEnd < new Date();
+        console.log(`${offered.size} courses${ended ? " (ended — detail kept)" : " (in progress — detail skipped)"}`);
+      }
     } catch (err) {
+      // Leave the term absent for the same reason — a thrown fetch says nothing
+      // about what was offered.
       console.warn(`FAILED: ${err.message}`);
-      termResults[termCode] = new Set();
     }
     await sleep(DELAY_MS);
   }
@@ -621,6 +728,15 @@ async function main() {
     await sleep(DELAY_MS);
   }
   const allCodes = [...toQuery, ...syntheticCodes];
+  // Terms that actually returned sections. Everything that writes a per-term VERDICT
+  // ("offered" / "not offered") must range over these, never over allCodes: a term we
+  // failed to read is unknown, and `false` is a claim we have no evidence for.
+  // Rationale and the observed failure: scripts/lib/term-history.js.
+  const knownCodes = knownTermCodes(allCodes, termResults);
+  if (knownCodes.length < allCodes.length) {
+    console.warn(`\n⚠ ${allCodes.length - knownCodes.length} term(s) returned no sections and are left UNKNOWN: ` +
+      allCodes.filter(c => !knownCodes.includes(c)).join(", "));
+  }
 
   // Build subject→college map using Banner's college filter.
   // Uses the most recent successfully-queried term.
@@ -647,33 +763,21 @@ async function main() {
     }
   }
 
-  // Build term-history: only for courses in our catalog
-  const termHistory = {};
-  for (const courseId of catalogIds) {
-    const hist = {};
-    for (const termCode of allCodes) {
-      hist[termCode] = termResults[termCode]?.has(courseId) ?? false;
-    }
-    // Only store if the course appeared in at least one queried term
-    if (Object.values(hist).some(Boolean)) {
-      termHistory[courseId] = hist;
-    }
-  }
-  // A --term-restricted run must not wipe the other terms' history.
+  // Build term-history: only for courses in our catalog, only for known terms.
+  let termHistory = buildTermHistory(catalogIds, termResults, knownCodes);
+  // A --term-restricted run must not wipe the other terms' history — and neither
+  // must a term that came back empty.
   if (termArgs.length && !detailsOnly && existsSync(HISTORY_OUT)) {
     try {
       const prevHist = JSON.parse(readFileSync(HISTORY_OUT, "utf8"));
-      for (const [cid, hist] of Object.entries(prevHist)) {
-        const kept = Object.fromEntries(Object.entries(hist).filter(([tc]) => !allCodes.includes(tc)));
-        termHistory[cid] = { ...kept, ...(termHistory[cid] ?? {}) };
-      }
+      termHistory = mergePreviousHistory(termHistory, prevHist, knownCodes);
     } catch {}
   }
 
   // Build term-details: enrollment/format/campus/meeting aggregate, ONLY for terms whose end
   // date has passed (final, stable numbers) and only for catalog courses.
   const now = new Date();
-  const completedTerms = allCodes.filter(c => termEndByCode[c] && termEndByCode[c] < now);
+  const completedTerms = knownCodes.filter(c => termEndByCode[c] && termEndByCode[c] < now);
 
   // Previous file: source for carrying forward instructor data (fetched once per
   // completed term, ever) and for preserving terms outside a --term test window.
@@ -682,8 +786,16 @@ async function main() {
     try { prevDetails = JSON.parse(readFileSync(DETAILS_OUT, "utf8")); } catch {}
   }
   const termsWithProf = new Set();
+  // A course with no class restriction has no `std` key at all — 79% of sections —
+  // so presence-on-a-course cannot mark a term done. Presence ANYWHERE in the term
+  // can: a scraped term yields hundreds of gated courses, and a term with none would
+  // mean Banner published no restriction at all that semester.
+  const termsWithRestr = new Set();
   for (const byTerm of Object.values(prevDetails)) {
-    for (const [tc, d] of Object.entries(byTerm)) if (d.prof) termsWithProf.add(tc);
+    for (const [tc, d] of Object.entries(byTerm)) {
+      if (d.prof) termsWithProf.add(tc);
+      if (d.std || d.stdNot) termsWithRestr.add(tc);
+    }
   }
 
   // Instructor pass: newest completed terms that don't have prof data yet, capped per run.
@@ -707,6 +819,27 @@ async function main() {
     await sleep(30_000);
   }
 
+  // Restriction pass: newest completed terms without restriction data, capped per run.
+  const restrTargets = [...completedTerms]
+    .filter(tc => !termsWithRestr.has(tc))
+    .sort()
+    .reverse()
+    .slice(0, restrTermLimit);
+  for (const termCode of restrTargets) {
+    const sections = [...(termDetail[termCode] ?? new Map()).values()]
+      .reduce((s, a) => s + (a.crns?.length ?? 0), 0);
+    console.log(`\n[${termCode}] fetching class restrictions for ${sections} sections (~${Math.round(sections * RESTR_DELAY_MS / 60000)} min)…`);
+    try {
+      // Synthetic summer codes must talk to Banner via their real merged term.
+      const { calls, gated } = await fetchTermRestrictions(bannerCodeOf[termCode] ?? termCode, termDetail[termCode] ?? new Map());
+      const pct = calls ? (100 * gated / calls).toFixed(1) : "0.0";
+      console.log(`  done (${calls} section lookups, ${gated} class-gated — ${pct}%)`);
+    } catch (err) {
+      console.warn(`  restriction fetch FAILED: ${err.message}`);
+    }
+    await sleep(30_000);
+  }
+
   const termDetails = {};
   for (const termCode of completedTerms) {
     for (const [courseId, agg] of (termDetail[termCode] ?? new Map())) {
@@ -717,6 +850,15 @@ async function main() {
         const prev = prevDetails[courseId]?.[termCode]?.prof;
         if (prev) entry.prof = prev;
       }
+      // Restrictions carry forward on whether the TERM was fetched, not on whether
+      // this course has a `std` key: absence is the normal case (79% of sections are
+      // ungated), so `!entry.std` cannot distinguish "no gate" from "not looked up"
+      // and would overwrite a real gate with silence on every subsequent run.
+      if (!restrTargets.includes(termCode)) {
+        const prev = prevDetails[courseId]?.[termCode];
+        if (prev?.std)    entry.std    = prev.std;
+        if (prev?.stdNot) entry.stdNot = prev.stdNot;
+      }
       (termDetails[courseId] ??= {})[termCode] = entry;
     }
   }
@@ -724,7 +866,9 @@ async function main() {
   if (termArgs.length) {
     for (const [courseId, byTerm] of Object.entries(prevDetails)) {
       for (const [tc, d] of Object.entries(byTerm)) {
-        if (!allCodes.includes(tc)) ((termDetails[courseId] ??= {})[tc] ??= d);
+        // knownCodes for the same reason as the history carry-forward: a term we
+        // could not read must keep the detail it already had, not lose it.
+        if (!knownCodes.includes(tc)) ((termDetails[courseId] ??= {})[tc] ??= d);
       }
     }
   }
@@ -784,6 +928,7 @@ async function main() {
       detailTerms:   completedTerms,
       detailCovered: Object.keys(termDetails).length,
       ...(profTargets.length && { profTerms: profTargets }),
+      ...(restrTargets.length && { restrictionTerms: restrTargets }),
     });
     if (changeLog.runs.length > CHANGE_LOG_MAX) changeLog.runs = changeLog.runs.slice(0, CHANGE_LOG_MAX);
     writeFileSync(CHANGE_LOG, JSON.stringify(changeLog, null, 2) + "\n", "utf8");

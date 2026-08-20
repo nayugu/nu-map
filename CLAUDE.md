@@ -7,7 +7,7 @@ updates course data. Two workflows are legacy and easy to mistake for the live p
 
 | Workflow | Cadence | Role |
 |---|---|---|
-| `update-courses.yml` | Monthly (1st, 06:00 UTC) | **The main pipeline.** Full catalog scrape of all ~130 subjects — titles, descriptions, credits, prereqs/coreqs — plus **NUPath from Tableau** (`fetch-nupath --tableau` → `merge-nupath`), Banner availability, **primary instructors** (`--prof`: one newest completed term per run, cached forever after — one getFacultyMeetingTimes call per section), offering summary, **term windows** (`derive-term-windows`), and manual patches. Pushes directly to main. |
+| `update-courses.yml` | Monthly (1st, 06:00 UTC) | **The main pipeline.** Full catalog scrape of all ~130 subjects — titles, descriptions, credits, prereqs/coreqs — plus **NUPath from Tableau** (`fetch-nupath --tableau` → `merge-nupath`), Banner availability, **primary instructors** (`--prof`), **class-standing restrictions** (`--restrictions`) — each one newest completed term per run, cached forever after, one Banner call per section — offering summary, **term windows** (`derive-term-windows`), and manual patches. Pushes directly to main. |
 | `update-majors.yml` | Bimonthly (odd months) | Undergrad program requirements. Scrape → `check-major-integrity` → `verify-majors --report --write` → ratchet → push. |
 | `update-grad-majors.yml` | Bimonthly (odd months) | Graduate program requirements, same four steps. |
 | `catalog-rotate.yml` | **LEGACY — manual only** | Superseded by the monthly full scrape above. Old design: one subject every 3 days via PR review; its schedule was disabled because GitHub Actions here cannot open PRs. Do not re-enable. |
@@ -78,6 +78,41 @@ Facts that follow from this:
   needs fixing, the cheap route is gating the words "in progress"
   (`planModel.js` prints them literally) on the end dates, which already
   exist — not moving the pointer.
+- **Class standing is READ from Banner now, not guessed from the level digit.**
+  `getRestrictions` publishes the gate the catalog only ever states in prose
+  ("Must be enrolled in one of the following Classes: Junior (JR), Senior(SR)").
+  Measured over Fall 2025's 7,430 sections: **21–23% carry one**, over a closed
+  five-value vocabulary (FR/SH/JR/SR/GR). It matters because the stand-in was
+  wrong in both directions — ENGW 3302 is level 3, so `levelFloor[3]` put it at
+  0.22 through the plan (term 2 of 8) while all 24 of its sections say junior;
+  4000-level courses got 0.67 where a JR/SR gate is nearer 0.50. Six modules
+  carried comments apologising for the gap (`search.js`, `objective.js` ×3,
+  `prereqDepth.js`, `chartCalibration.js`). Rules, all in
+  `scripts/lib/class-standing.js`:
+  1. The scrape stores the **raw per-section tally** (`std: {"JR|SR": 24}`), like
+     `days`; the fold lives in `derive-offering-summary`. Folding at capture time
+     costs a 29-minute re-scrape per term to revisit.
+  2. A course is gated only when **every** section is — PJM 4850 is gated on 1 of
+     2, so a student can just take the other one.
+  3. Across sections and across terms, take the **most lenient** standing. A gate
+     means "the earliest the student could take this at all", not "every section
+     admits this". BIOL 4701 carries two different gates across its 7 sections.
+  4. **GR is not a rung** on the undergraduate ladder. A master's student takes
+     5000-level courses in their first term; mapping GR onto a floor is how they
+     get barred from it.
+  5. Disagreement → **no gate**, never a guess. A false gate can refuse a plan;
+     a missing one only sequences a course early. Same reason `derive-offering-summary`
+     refuses to write if >5% of existing gates vanish (a Banner markup change would
+     otherwise silently restore the old wrong behaviour).
+- **`false` in term-history means "Banner answered and it wasn't there"; absent
+  means "we didn't read it".** These were the same value until Aug 2026. Banner
+  intermittently answers the first page of `searchResults` with
+  `success:true, totalCount:0` — observed twice consecutively on 202530, which
+  really has 6,699 sections — and the empty set was stored, writing `false` for
+  every course in the term. On the monthly unattended run that silently replaced a
+  semester of real history. Only terms that returned sections may produce a verdict
+  (`knownTermCodes` in `scripts/lib/term-history.js`); never reintroduce a default
+  of `false` for a term that failed to read.
 - The runtime file is `public/northeastern/catalog-courses.json` (browser app,
   Node MCP server, and Cloudflare worker all load it). `all-courses.json` is the
   scrape intermediate; `merge-nupath.js` backfills nuPath from it at build time.
