@@ -761,13 +761,20 @@ export function allocateSection(section, placedSet, used, originalUsed, courseMa
   const normalized = normalizePooledSection(section);
 
   // Enhanced pool detection: treat SECTIONs with a single XOM or RANGE child (with numCreditsMin or similar) as pools
+  //
+  // The `reqs[0] &&` guard is not defensive noise. `allocateSections` deliberately turns a
+  // hole in the SECTION array into a placeholder rather than a crash, and `cellsForSection`
+  // notes-and-skips a hole where a REQUIREMENT belongs — but this read of `reqs[0].type`
+  // sat in between and threw on `requirements: [null]`, taking down `obligationsOf` and so
+  // the whole audit and every generated plan. A monthly re-scrape is exactly what produces
+  // one bad node, and one bad node must not cost the other 500 programs.
   let children, satCount, total;
   const reqs = normalized.requirements ?? [];
   let isPool = false;
   if (normalized.minRequirementCount && reqs.length > 1 && normalized.minRequirementCount < reqs.length) {
     isPool = true;
   } else if (
-    reqs.length === 1 &&
+    reqs.length === 1 && reqs[0] && typeof reqs[0] === 'object' &&
     (
       (reqs[0].type === 'XOM' && (reqs[0].numCreditsMin || reqs[0].numCreditsMin === 0)) ||
       (reqs[0].type === 'RANGE' && (normalized.numCreditsMin || reqs[0].numCreditsMin))
