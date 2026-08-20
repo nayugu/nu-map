@@ -165,8 +165,12 @@ jobs:
       # around, because the registrar refuses the enrolment. The four-course convention is
       # reported and not gated: CHART relaxes it where it is unsatisfiable, and 4.2% of
       # published full terms miss it too.
+      # `--all` is REQUIRED and load-bearing. Without it the script runs a covering sample
+      # and exits 3, because a sample is the right default for a question asked in a chat and
+      # the wrong one for the gate that decides whether a month of scraped data ships. The
+      # flag is what distinguishes the two, so do not drop it to make this step faster.
       - name: Verify CHART can still plan this catalog
-        run: node scripts/verify-chart.js 2>&1 | tee /tmp/chart-verify-log.txt
+        run: node scripts/verify-chart.js --all 2>&1 | tee /tmp/chart-verify-log.txt
 
       # ── Commit and push directly to main ──────────────────────────────────────
       - name: Check for changes

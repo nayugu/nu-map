@@ -308,11 +308,65 @@ expensive failure, so the loop is:
     getting it wrong would be expensive to unwind — landing a change on main,
     or a measurement that decides whether to keep or revert work already built.
     That is rare. Default to carrying on.
+  - **A poll loop is idling, and it is the loophole this rule keeps losing to.**
+    `until [ -s out.txt ]; do sleep 20; done` backgrounds the job and then spends a
+    whole turn waiting for it, at 20-second granularity. That satisfies the letter of
+    "background it" and defeats the point. There is no correct version of this: launch
+    the run, make the next edit, and collect the result when the completion
+    notification arrives. Measured on 2026-08-20, an audit of *this very rule* burned
+    ~25 minutes of session time on poll loops against scripts that cost 10.
+  - **Never run two heavy things at once.** Two concurrent full sweeps on this machine
+    (10 cores) had not finished at 13 minutes when either alone is 4–10, and worse, the
+    engine's clock can turn an answer into a refusal by design
+    (`search.js`, `search-budget-exhausted`) — so a contended run produces DIFFERENT
+    refusals. Both numbers were unusable. One heavy run at a time, or the result is not
+    evidence.
+  - **Derive before you measure.** The cheapest measurement is arithmetic on numbers
+    already written down. "Refusals cost 23 minutes" was asserted in that same audit
+    and was wrong by 3–8×, and the thing that disproved it was already in the repo:
+    `chart-probe.js` says the sweep is 4–10 minutes, so refusals cannot average the
+    full 5,000 ms budget. That took no run at all. Reach for a script when the
+    arithmetic genuinely runs out, not before.
   - Prefer ONE reusable instrument over a stream of throwaway scripts.
-    `scripts/chart-probe.js` answers the same questions over a named list of
-    plans in ~13 seconds where the corpus sweep takes ten minutes; every `node -e`
-    heredoc instead reloads the 8,000-course catalog from scratch. Extend the
-    instrument, do not write another script.
+    `scripts/chart-probe.js` answers the same questions over a named list of plans in
+    ~13 seconds where the corpus sweep takes ten minutes. Extend the instrument, do not
+    write another script — and when a question needs a new one, COMMIT it. `verify-attr`
+    was written inline to check the designation change, cost minutes, and was thrown
+    away; commit `c69758aa22` kept its 257-line unit test and none of the instrument, so
+    the next designation question pays full price again. Six `*probe*` scripts have
+    already accreted this way.
+    - The reason is reuse, **not** load time. This bullet used to claim a `node -e`
+      heredoc "reloads the 8,000-course catalog from scratch" as if that were the cost.
+      Measured: `loadCatalog` is **364 ms** for 7,966 courses. It is nothing, and citing
+      it sent readers to the wrong file. The cost is `refusals × budget` and the missing
+      parallelism — the sweep runs at 94% of ONE core with nine idle.
+- **Sample by default; the full corpus is opt-in and needs a reason.**
+  `node scripts/verify-chart.js` runs a covering sample of 120 of 1,078 shapes and
+  exits **3**, never 0. `--all` is the corpus verdict and is what
+  `update-courses.yml` passes. Do not run `--all` in a chat without saying why —
+  it is a verdict, and a question does not need one.
+  - **Sampling alone is only a 2x win, and that is measured.** 120 shapes took
+    **3:47**, because a covering sample costs 1.9 s/shape against the corpus mean of
+    0.56 s/shape: it selects for rare strata, rare strata are the hard programs, and a
+    hard program spends its whole 5,000 ms budget before refusing. Selecting for
+    "unusual" selects for "expensive". The remaining cost is paid by `--jobs`, not by
+    shrinking the sample — cutting the quota trades away exactly the detection power
+    stratification was built for (see `chart-sample.js` for the 1-0.75^q arithmetic).
+  - The sample is **stratified, not uniform**, and that is the whole design
+    (`scripts/lib/chart-sample.js`). The properties a regression hides behind are rare:
+    concentration disjunctions are 112 of 1,078 shapes (10.4%), shared sections 134
+    (12.4%), 15+ requirement sections 65 (6.0%), 40–79 SH 80 (7.4%). A uniform 120
+    carries ~7 of the third, and a guard that fires half the time is a coin. Quotas per
+    stratum, filled greedily because the strata overlap, then a uniform draw for
+    ordinary-case power.
+  - A clean sample **cannot** exit 0, for the same reason `--limit` cannot: it is
+    designed to look like a real verification, so it is the run most likely to be quoted
+    as "verify-chart is green". It proves the absence of a regression in what it covered
+    and nothing about the corpus.
+  - Strata are earned by measurement. Two candidates were dropped rather than shipped:
+    `nested requirement sections` matched 0 shapes (a stratum that is always empty is a
+    check that always passes) and `plan-of-study witness` matched 1,078 of 1,078 (a
+    stratum every sample hits for free discriminates nothing).
 - **Re-anchor these rules as a session runs long.** Drift is the default, not
   the exception — the shell creeps back in, tests get gentler, claims get
   confident again. Re-read this section periodically and after any long stretch

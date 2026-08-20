@@ -53,6 +53,13 @@ import { fingerprintPlan, canonicalPlan } from "./lib/chart-fingerprint.js";
 import { specForNode } from "../src/core/programEligibility.js";
 import { programIdentity } from "../src/core/programIdentity.js";
 import { materialize } from "../src/core/candidateSpec.js";
+import { coveringSample, describeShape, formatCoverage, DEFAULT_SAMPLE }
+  from "./lib/chart-sample.js";
+import { defaultJobs, shardOf, serializeAggregate, mergeAggregate, normalizeAggregate }
+  from "./lib/chart-shard.js";
+import { spawn } from "node:child_process";
+import { tmpdir } from "node:os";
+import { unlinkSync } from "node:fs";
 
 const ROOT = join(fileURLToPath(new URL(".", import.meta.url)), "..");
 
@@ -121,7 +128,91 @@ const fpAt = process.argv.indexOf("--fingerprint");
 const FINGERPRINT = fpAt > -1 ? process.argv[fpAt + 1] : null;
 const prints = {};
 
-const degrees = Number.isFinite(LIMIT) ? degreePrograms().slice(0, LIMIT) : degreePrograms();
+/**
+ * `--all` sweeps the corpus. WITHOUT it, this runs a covering sample.
+ *
+ * The default is inverted from what it was, and deliberately. A full sweep is 4–10
+ * minutes; a question asked at ten minutes a cycle gets three more changes in flight
+ * before the first number comes back, which is exactly how an empty-term regression
+ * survived three wrong hypotheses in a row (docs/chart-success-criteria.md). Measured
+ * against that, the corpus run was the default for the 95% of invocations that were
+ * questions and the 5% that were verdicts alike.
+ *
+ * So the verdict is opt-in. `--all` is what the monthly workflow passes, and a sample
+ * run exits 3 — never 0 — for the same reason `--limit` does: a green tick over 120
+ * shapes is worse than no tick, because someone will quote it.
+ */
+const ALL = process.argv.includes("--all");
+const sizeAt = process.argv.indexOf("--sample");
+const SAMPLE_SIZE = sizeAt > -1 && Number(process.argv[sizeAt + 1])
+  ? Number(process.argv[sizeAt + 1]) : DEFAULT_SAMPLE;
+
+const allDegrees = degreePrograms();
+const degrees = Number.isFinite(LIMIT) ? allDegrees.slice(0, LIMIT) : allDegrees;
+
+/**
+ * Every (degree, variant) pair, flattened, because the SHAPE is the unit of sampling.
+ *
+ * Sampling degrees instead would take a program's variants as a block — and variants of
+ * one page are near-identical, so a 120-degree draw buys markedly less coverage than a
+ * 120-shape one while looking the same size.
+ */
+const allShapes = [];
+for (const d of degrees) {
+  const variants = d.plan?.plans?.length ? d.plan.plans : [null];
+  variants.forEach((variant, vi) => {
+    allShapes.push({
+      label: `${d.lvl === "graduate" ? "grad" : "ug"}/${d.key}`
+        + (variants.length > 1 ? `#${vi}` : ""),
+      d, variant,
+      features: describeShape({ lvl: d.lvl, data: d.data, variant, variantCount: variants.length }),
+    });
+  });
+}
+
+const sample = ALL ? null : coveringSample(allShapes, { size: SAMPLE_SIZE });
+const selectedAll = ALL ? allShapes : sample.chosen;
+
+/**
+ * `--jobs N` runs the shapes across N child processes; `--jobs 1` is the old serial run.
+ *
+ * Defaults to cores-2 (see `chart-shard.js` for why not cores). `--shard i/n` and
+ * `--emit path` are the child's side of the protocol and are not meant to be typed by
+ * hand: the child does the same sampling — deterministic, so it selects the same list —
+ * takes its stride of it, and writes its accumulators as JSON for the parent to fold in.
+ */
+// ── Defaults to 1. Parallelism is OPT-IN, and that is a measurement, not caution ──
+//
+// `--jobs 8` cuts the sample from 3:47 to 1:15, and it also MOVED a plan: over the same 120
+// shapes, `ug/biochemistry_bs_(boston)#2` came out differently under 8 static shards than
+// under 32 pooled ones — same inputs, same code, different partitioning.
+//
+// The cause is not the sharding. `attemptPlacement` aborts on the wall clock from INSIDE the
+// search (`NODE.TIME`) and returns an ordinary failure, so the ladder falls through to the
+// next rung and answers from there. The clock therefore decides WHICH RUNG answers, not
+// merely whether one does — which is the hole in search.js's rule that "the clock may turn an
+// answer into a refusal, never into a different answer". Contention makes that fire more often.
+//
+// So parallelism is sound arithmetic sitting on an engine that is not yet reproducible under
+// load. Until that is fixed, the default must be the reproducible one: the monthly workflow's
+// diff review cannot tell an engine regression from scheduler noise, and a fast number that
+// moves is worth less than a slow one that does not. Pass `--jobs N` deliberately, for a
+// question — never for the `--all` verdict.
+const jobsAt = process.argv.indexOf("--jobs");
+const JOBS = jobsAt > -1
+  ? (String(process.argv[jobsAt + 1]) === "auto"
+      ? defaultJobs() : Math.max(1, Number(process.argv[jobsAt + 1]) || 1))
+  : 1;
+const shardAt = process.argv.indexOf("--shard");
+const SHARD = shardAt > -1
+  ? (([i, n]) => ({ i: Number(i), n: Number(n) }))(String(process.argv[shardAt + 1]).split("/"))
+  : null;
+const emitAt = process.argv.indexOf("--emit");
+const EMIT = emitAt > -1 ? process.argv[emitAt + 1] : null;
+
+/** True when this process fans out rather than generating anything itself. */
+const IS_PARENT = JOBS > 1 && !SHARD;
+const selected = SHARD ? shardOf(selectedAll, SHARD.i, SHARD.n) : selectedAll;
 const violations = [];
 const refusals = new Map();
 /** `fails-hard-criteria` split by the criterion that actually failed. See `criteriaKinds`. */
@@ -200,17 +291,75 @@ function optionPools(programData) {
   return pools;
 }
 
-for (const d of degrees) {
-  const variants = d.plan?.plans?.length ? d.plan.plans : [null];
-  variants.forEach((variant, vi) => {
+/**
+ * Fan out to N children, then fold their accumulators into this process's.
+ *
+ * The parent generates nothing. It re-runs itself with `--shard i/N --emit`, which is
+ * why every other flag is forwarded verbatim: the child must reach the same `selected`
+ * list, and it does because the sample is deterministic.
+ *
+ * A child that fails is fatal and says so. Silently merging seven shards of eight would
+ * report a clean, complete-looking run over 7/8 of the corpus — the same vacuous-pass
+ * failure mode `MIN_GENERATED_RATIO` exists to catch, arriving by a different door.
+ */
+async function fanOut() {
+  const drop = new Set(["--jobs", "--shard", "--emit"]);
+  const passthrough = [];
+  for (let i = 2; i < process.argv.length; i++) {
+    if (drop.has(process.argv[i])) { i++; continue; }   // flag and its value
+    passthrough.push(process.argv[i]);
+  }
+  const stamp = `${process.pid}-${Date.now()}`;
+  const runShard = (s, total) => new Promise((resolve, reject) => {
+    const out = join(tmpdir(), `chart-shard-${stamp}-${s}.json`);
+    const child = spawn(process.execPath,
+      [fileURLToPath(import.meta.url), ...passthrough, "--shard", `${s}/${total}`, "--emit", out],
+      { stdio: ["ignore", "ignore", "inherit"] });
+    child.on("error", reject);
+    child.on("exit", (code) => {
+      if (code !== 0) return reject(new Error(`shard ${s}/${total} exited ${code}`));
+      try { resolve(JSON.parse(readFileSync(out, "utf8"))); }
+      catch (e) { reject(new Error(`shard ${s}/${total} wrote no result: ${e.message}`)); }
+      finally { try { unlinkSync(out); } catch { /* best effort */ } }
+    });
+  });
+
+  // ── More shards than workers, drained by a pool ──────────────────
+  //
+  // One shard per worker is the obvious split and it wastes most of the machine.
+  // Measured: 120 shapes over 8 static shards ran 1:28.9 at **284% CPU** — under 3 of 8
+  // cores busy, 32% efficiency — because per-shape cost spans two orders of magnitude
+  // (~50 ms to the full 5,000 ms budget) and 15 shapes is far too few to average out. The
+  // run ends with seven cores idle, waiting on whichever shard drew the hard shapes.
+  //
+  // So the unit of work is smaller than the worker and handed out on completion, which is
+  // a work queue at shard granularity — no IPC, same argv protocol. The cost is one extra
+  // catalog load per shard (364 ms), which is why the multiplier is 4 and not 40.
+  const SHARDS = JOBS === 1 ? 1 : JOBS * 4;
+  const parts = [];
+  let next = 0;
+  await Promise.all(Array.from({ length: Math.min(JOBS, SHARDS) }, async () => {
+    for (let s = next++; s < SHARDS; s = next++) parts.push(await runShard(s, SHARDS));
+  }));
+
+  const agg = normalizeAggregate(parts.reduce((acc, p) => mergeAggregate(acc, p), {
+    counters: { shapes: 0, made: 0, threw: 0, relaxed: 0, thin: 0, fullTerms: 0, emptyFull: 0 },
+    // The live objects, so merging fills the very accumulators the report reads.
+    Q, R, refusals, criteria, gave, violations, prints,
+  }));
+  ({ shapes, made, threw, relaxed, thin, fullTerms, emptyFull } = agg.counters);
+}
+if (IS_PARENT) await fanOut();
+
+// The LEVEL is part of the identity, which is why the label is built in `allShapes` above
+// and carried rather than re-derived. Without it the sweep reported 647 plans and only 643
+// fingerprints: an undergraduate and a graduate program can share a folder key
+// (`cybersecurity_*`), so four snapshot entries silently overwrote each other and four
+// plans were exempt from the very comparison the snapshot exists to make.
+for (const { label, d, variant } of IS_PARENT ? [] : selected) {
+  {
     shapes++;
     const studentType = d.lvl === "graduate" ? "graduate" : "undergraduate";
-    // The LEVEL is part of the identity. Without it the sweep reported 647 plans and only
-    // 643 fingerprints: an undergraduate and a graduate program can share a folder key
-    // (`cybersecurity_*`), so four snapshot entries silently overwrote each other and four
-    // plans were exempt from the very comparison the snapshot exists to make.
-    const label = `${d.lvl === "graduate" ? "grad" : "ug"}/${d.key}`
-      + (variants.length > 1 ? `#${vi}` : "");
     let out;
     try {
       out = generatePlan({
@@ -237,7 +386,7 @@ for (const d of degrees) {
     } catch (err) {
       threw++;
       violations.push({ label, kind: "threw", detail: String(err?.message ?? err) });
-      return;
+      continue;
     }
     if (out.refused) {
       refusals.set(out.refused.reason, (refusals.get(out.refused.reason) ?? 0) + 1);
@@ -256,7 +405,7 @@ for (const d of degrees) {
       for (const kind of criteriaKinds(out.refused)) {
         criteria.set(kind, (criteria.get(kind) ?? 0) + 1);
       }
-      return;
+      continue;
     }
     made++;
     // What a fallback rung actually gave up, per plan. Counting `cardinalityRelaxed` here
@@ -322,11 +471,28 @@ for (const d of degrees) {
         overCap: g.overCap.slice(0, 4), reservations: g.reservations.slice(0, 4),
       });
     }
-  });
+  }
+}
+
+// ── The child's exit ────────────────────────────────────────────────
+//
+// Before the report and before the fingerprint write, both deliberately. A shard must not
+// print a partial verdict — a log carrying eight "✓ every generated plan passes" lines for
+// one run is worse than no log — and it must not touch `--fingerprint`, because eight
+// children racing on one path leaves whichever finished last. The prints travel in the
+// aggregate and the parent writes the file once.
+if (EMIT) {
+  writeFileSync(EMIT, JSON.stringify(serializeAggregate({
+    counters: { shapes, made, threw, relaxed, thin, fullTerms, emptyFull },
+    Q, R, refusals, criteria, gave, violations, prints,
+  })));
+  process.exit(0);
 }
 
 const ratio = shapes ? made / shapes : 0;
-console.log(`\nCHART verification — ${degrees.length} degrees, ${shapes} shapes`);
+console.log(`\nCHART verification — ${degrees.length} degrees, ${shapes} shapes`
+  + (ALL ? "" : ` of ${allShapes.length} (COVERING SAMPLE — not a verdict)`));
+if (!ALL) console.log(formatCoverage(sample, allShapes.length));
 console.log(`  generated ${made} (${(100 * ratio).toFixed(1)}%)   refused ${shapes - made - threw}   threw ${threw}`);
 console.log(`  reached a fallback rung ${gave.size ? [...gave.entries()]
   .sort((a, b) => b[1] - a[1]).map(([k, n]) => `${k} ${n}`).join(", ") : "0 plans"}`
@@ -409,8 +575,11 @@ if (threw) {
   console.error(`\n✗ ${threw} shapes threw. Generation must return a refusal, never throw.`);
 }
 // Not on a `--limit` run: on ten degrees the ratio is sampling noise, and a rail that fires
-// on noise trains people to pass a flag to silence it.
-if (!Number.isFinite(LIMIT) && ratio < MIN_GENERATED_RATIO) {
+// on noise trains people to pass a flag to silence it. The covering sample is exempt for a
+// SECOND reason and not the same one — it is deliberately weighted toward the rare, hard
+// shapes, so its generation ratio is expected to sit below the corpus figure and comparing
+// it to the corpus floor would fire on the sample working correctly.
+if (ALL && !Number.isFinite(LIMIT) && ratio < MIN_GENERATED_RATIO) {
   console.error(`\n✗ only ${(100 * ratio).toFixed(1)}% of shapes generated (floor `
     + `${(100 * MIN_GENERATED_RATIO).toFixed(0)}%). Every check below passes trivially when `
     + `nothing is emitted, so this is treated as a broken run rather than a coverage figure.`);
@@ -439,6 +608,19 @@ if (Number.isFinite(LIMIT)) {
   console.log(`\n~ ${degrees.length} degrees checked and clean — but this was a --limit run. `
     + `The plumbing works; the corpus is NOT verified. Exiting 3 so nothing mistakes this `
     + `for a pass.`);
+  process.exit(3);
+}
+
+// ── A clean sample is not a pass, and must not be able to read as one ──
+//
+// Same rule as `--limit`, for a stronger reason: this run is DESIGNED to look like a real
+// verification — it covers every stratum and prints the full quality vector — so it is the
+// one most likely to be quoted as "verify-chart is green". It cannot exit 0. What it proves
+// is bounded exactly by its coverage, and the coverage is printed above.
+if (!ALL) {
+  console.log(`\n~ ${shapes} of ${allShapes.length} shapes clean, every stratum covered — `
+    + `but a sample can only show the absence of a regression in what it covered, never `
+    + `that no violating plan exists. Run \`--all\` for the verdict. Exiting 3.`);
   process.exit(3);
 }
 

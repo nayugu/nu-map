@@ -11,7 +11,9 @@ Two sections matter as much as the defect list and are easy to skip:
 re-hunts them, and **§Dead ends** records fixes that were built, measured, and
 removed.
 
-Corpus figures come from `node scripts/verify-chart.js`. The audit's own baseline was
+Corpus figures come from `node scripts/verify-chart.js --all`. The flag is required as of
+2026-08-20: without it the script runs a covering sample and exits 3, so a figure quoted
+here must come from an `--all` run. The audit's own baseline was
 **774 of 1,031 shapes (75.1%)**, 257 refused, 0 thrown. As of **2026-08-19** the corpus
 is larger and the figure is **787 of 1,078 (73.0%)**, 291 refused, 0 thrown — the rate
 fell because the denominator grew, not because fewer plans are produced.
@@ -1187,3 +1189,53 @@ Not done here because it is engine surgery on the retry ladder plus another
 35-minute verification, and the shipped behaviour is correct meanwhile — just slow.
 Whoever takes it should re-measure the runtime against the 15m20s baseline rather
 than against the 35m one.
+---
+
+### 21. The clock decides which RUNG answers, so the same input can yield two different plans
+
+Found on 2026-08-20 while parallelising the sweep, by the fingerprint diff that exists for
+exactly this purpose. Over the same 120-shape covering sample,
+`ug/biochemistry_bs_(boston)#2` came out **materially different** between two runs that
+differed only in how the work was partitioned across processes — 8 static shards versus 32
+pooled ones. Same catalog, same requirements, same code. Physics courses moved into the Year 1
+summers and the `Research Option` moved from Year 4 Spring to Year 2 Fall.
+
+**This is not a sharding bug, and it is not new.** `search.js` states the rule it is meant to
+obey — *"the clock may turn an answer into a refusal, never into a different answer"* — and the
+strict tier honours it: on `now() > deadline` between attempts it returns
+`search-budget-exhausted` rather than falling through. But `attemptPlacement` also checks the
+clock **inside** the search (`if ((nodes & 7) === 0 && now() > deadline) return ret(NODE.TIME,
+"time")`) and that returns an ordinary failure. The ladder cannot distinguish it from a genuine
+one, so it advances to the next rung and answers from there — and the rungs return different
+plans by construction, which is the whole reason the strict tier refuses instead of falling
+through. So the clock does not merely cost an answer; it selects which rung produces it.
+
+Load is what makes it fire. This has therefore been latent all along on a shared or busy
+machine, and the monthly workflow runs on a GitHub runner whose neighbours we do not control.
+
+**Stated at the strength the evidence actually supports.** The mechanism above is read from the
+code, not proved by the observation, and the observation is a single plan. Two *consecutive*
+runs of the same sample produced byte-identical fingerprint files (152,679 bytes, `MOVED 0`),
+so this does not reproduce on demand — it was seen once, between the two partitionings that
+differed most in per-process load. What is established: plans can move with no code change.
+What is not: how often, or that the `NODE.TIME` path is the only route. Anyone picking this up
+should reproduce it deliberately — pin a shape that reaches a fallback rung and vary
+`timeBudgetMs` around its boundary — rather than trusting either the rate or the mechanism here.
+
+**Why it matters more than a moved schedule.** The monthly diff review is the control on data
+that pushes straight to main. If plans can move without a code change, that review cannot tell
+an engine regression from scheduler noise, and `chart-fingerprint-diff`'s `moved` count — the
+category the tool was built to make meaningful — stops being evidence.
+
+**What follows, and what does not.**
+
+- Sharding is held: `--jobs` defaults to **1** and is opt-in for questions, never for `--all`.
+  The arithmetic is sound (3:47 → 1:15 on 8 jobs, and the merged report is numerically
+  identical); it is the engine underneath that is not reproducible under load.
+- The fix belongs in the engine, not the runner: a clock abort inside `attemptPlacement` has to
+  be distinguishable from a placement failure, so the ladder can refuse on it rather than
+  descend. That is a narrow change with a real coverage question attached — the rungs below
+  exist to rescue programs, and refusing instead of descending will cost some of them.
+  Measure before choosing.
+- Do **not** respond by raising the budget. That moves the boundary and leaves it, which is the
+  mistake `NODES_PER_MS` has already been through three times.
