@@ -1039,3 +1039,45 @@ publishes it that way, which for these terms is false.
 
 Deferred by agreement on 2026-08-19 rather than forgotten: the fix lands in `earlyTerms.js`,
 which sits beside `engine/index.js` while that was being edited in a second session.
+
+### 18. Pruning changes the variable order, so it can cost a concession
+
+`chart-propagator-neutral.test.js` argues in its header that a **pruning** propagator
+cannot change which plan the search reaches first: cutting branches that contain no
+solution leaves the *order of the solutions* alone. That argument is wrong, and §17's
+original worry — which the header rebuts — was right.
+
+`byConstraint` orders cells **most-constrained-first, by domain LENGTH**. Pruning changes
+lengths. So the variable order changes, a different legal plan is encountered first, and
+it can be a plan that spent one more concession.
+
+**Measured**, on the one program that shows it:
+
+```
+ug/environmental_engineering_and_health_science_bsenve_(boston)#2
+  without pruning   []                        rung 0, no concessions
+  with pruning      [sequencing-preferences]  one concession
+```
+
+**How it surfaced.** The class-standing guard in `applyEarlyTerms` declined this
+program's published position for `PHTH 2414` — sophomore standing, 32 earned SH, printed
+in a term where the plan holds 17. Declining leaves the cell wide instead of pinned,
+which enlarges the search space enough for the ordering effect to bite. The guard is not
+the defect: a term the registrar will not let the student register for is not a plan, and
+the sensitivity was always present, merely unexercised. 25 of the other 26 sampled plans
+are bit-identical with pruning on and off, and `moved` is still 0 — the stronger
+neutrality claim holds.
+
+**Severity S3.** The plan is registrable and correct; it gives up one convention it did
+not strictly have to. Nothing a student sees is wrong, which is exactly why only an
+invariant catches it.
+
+**The fix, when someone takes it.** Either make the variable order independent of pruned
+domain length (order on the *unpruned* length, or on a tie-broken key that pruning cannot
+move), or accept the sensitivity and stop claiming neutrality in the header. The first is
+principled and the second is honest; the current state — claiming neutrality while
+carrying a named exception — is neither, and should not survive long.
+
+**Do not convert the exception to a threshold.** `KNOWN_DEGRADED` lists the program by
+name, and a second entry appearing is a new fact about the search. A count-based tolerance
+would swallow it silently, which is the failure mode this whole file exists to prevent.
