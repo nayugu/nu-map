@@ -44,6 +44,7 @@ import {
 } from "./search.js";
 import { unlockValues, cellStanding } from "./prereqDepth.js";
 import { standingFloorTerm, requiredSHFor } from "../core/classStanding.js";
+import { repairStanding } from "./standingRepair.js";
 import { improve, DEFAULT_PREFERENCES } from "./objective.js";
 import { emitPlan, cellText } from "./emit.js";
 import { buildDepthIndex } from "./prereqDepth.js";
@@ -1214,10 +1215,48 @@ function generateOnce({
     registersAt.set(runStarts[a.runIndex], a.key);
   }
 
-  const plan = emitPlan({
-    shape, plans, termOf: improved.termOf, program, courseMap,
+  // ── Class standing, against the credits the plan ACTUALLY carries ────
+  //
+  // The domain narrowing upstream can only use `targetSH` — what a term intends to
+  // hold — because it runs before anything is assigned. Where the emitted plan comes
+  // in lighter, a floor computed on intent is one course too generous. Here every
+  // cell has a term, so the credit before any term is exact. Repairs only where a
+  // provably safe later term exists and returns the assignment untouched otherwise;
+  // see standingRepair.js for why this is a repair rather than a wider margin.
+  const stdRepair = repairStanding({
+    plans, termOf: improved.termOf, terms, courseMap, precedence, studentType,
+    creditMax: ports.creditMax,
+  });
+  if (trace && stdRepair.moved.length) {
+    trace.stage("standing-repair", { moved: stdRepair.moved, unfixed: stdRepair.unfixed });
+  }
+
+  let plan = emitPlan({
+    shape, plans, termOf: stdRepair.termOf, program, courseMap,
     reasons: improved.reasons, registersAt,
   });
+
+  // ── The repair may not cost a plan ──────────────────────────────
+  //
+  // `repairStanding` checks the axes the search enforces — domain, precedence, credit
+  // cap — but the hard CRITERIA below are checked on the emitted document, and a
+  // moved or swapped cell could trip one (a term dropping under four real courses is
+  // the obvious way). A refusal is the worst outcome available here and it would be
+  // caused by a fix for a one-credit shortfall, so the repaired plan has to earn its
+  // place: if it fails and the original would not have, the original ships.
+  //
+  // Costs a second emit only for the plans that actually moved something, which is
+  // 1 in 278 measured. Everything else takes the `moved.length` early exit.
+  if (stdRepair.moved.length && criteriaFailures(plan, { studentType, cal, courseMap }).length) {
+    const fallback = emitPlan({
+      shape, plans, termOf: improved.termOf, program, courseMap,
+      reasons: improved.reasons, registersAt,
+    });
+    if (!criteriaFailures(fallback, { studentType, cal, courseMap }).length) {
+      if (trace) trace.stage("standing-repair-reverted", { moved: stdRepair.moved });
+      plan = fallback;
+    }
+  }
 
   // ── 9. The criteria are HARD, so a plan that fails one is not offered ──
   //
