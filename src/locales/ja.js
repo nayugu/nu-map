@@ -325,6 +325,8 @@ export const strings = {
   "chart.deriv.gave.packed-largest-first": "探索そのもの。大きい順に詰めた",
   "chart.deriv.retry.breadth-guidance": "選択科目の指定を外して探し直した",
   "chart.deriv.retry.fails-hard-criteria": "最初のプランが必須条件を破っていた",
+  "chart.deriv.retry.department-term-load": "学科が示す最初の学期は履修可能な単位数を超えていたため、単位の上限を緩めて科目はそのまま残しました",
+  "chart.deriv.retry.department-course-choice": "学科が示す科目の選択の一つに従えなかったため、その選択は未決定のままにし、科目はそのまま残しました",
   "chart.deriv.retry.department-early-terms": "所属学科の最初の学期を学位の残りと両立できなかったため、これを外して一から組み直した",
   "chart.deriv.refused.space": "すべての並べ方を試したが、成立するものはない",
   "chart.deriv.refused.budget": "何も確かめられないまま探索の時間が尽きた",

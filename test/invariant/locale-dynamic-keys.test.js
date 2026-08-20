@@ -66,6 +66,18 @@ function retryReasons() {
     for (const m of src.matchAll(/trace\.stage\(\s*"retry"\s*,\s*\{\s*because:\s*"([^"]+)"/g)) {
       out.add(m[1]);
     }
+    // ── And the rungs a retry LADDER passes by name ────────────────────
+    //
+    // The department fallback stopped being one inline literal and became `EARLY_RUNGS`, a
+    // table whose `name` is what reaches `trace.stage("retry", { because: rung.name })` and
+    // `report.relaxed`. A regex that only reads literals at the call site found the two new
+    // rungs nowhere and would have shipped `chart.deriv.retry.department-term-load` to the
+    // panel as raw text in all eight locales.
+    //
+    // Scoped to a `name:` inside a `_RUNGS` array so it cannot drift into unrelated tables.
+    for (const block of src.matchAll(/const\s+\w*RUNGS\w*\s*=\s*\[([\s\S]*?)\n\];/g)) {
+      for (const m of block[1].matchAll(/name:\s*"([^"]+)"/g)) out.add(m[1]);
+    }
   }
   return [...out];
 }

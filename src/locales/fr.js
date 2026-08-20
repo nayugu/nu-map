@@ -324,6 +324,8 @@ export const strings = {
   "chart.deriv.gave.packed-largest-first": "la recherche, et a rempli par taille",
   "chart.deriv.retry.breadth-guidance": "les électifs ont été déliés et la recherche relancée",
   "chart.deriv.retry.fails-hard-criteria": "le premier plan enfreignait une exigence stricte",
+  "chart.deriv.retry.department-term-load": "les premiers semestres de votre département comportent plus de crédits que le plan ne pouvait accueillir, leur plafond de crédits a donc été assoupli et leurs cours conservés",
+  "chart.deriv.retry.department-course-choice": "l’un des choix de cours de votre département n’a pu être suivi, ce choix reste donc ouvert et leurs cours sont conservés",
   "chart.deriv.retry.department-early-terms": "les premiers semestres de votre département ne pouvaient pas être articulés : ils ont été abandonnés et le plan reconstruit de zéro",
   "chart.deriv.refused.space": "tous les agencements ont été essayés ; aucun n’est légal",
   "chart.deriv.refused.budget": "la recherche a manqué de temps avant de rien démontrer",

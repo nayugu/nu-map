@@ -324,6 +324,8 @@ export const strings = {
   "chart.deriv.gave.packed-largest-first": "搜索本身，改为按大小装填",
   "chart.deriv.retry.breadth-guidance": "解除选修课的指定后重新搜索",
   "chart.deriv.retry.fails-hard-criteria": "第一份方案违反了一条硬性要求",
+  "chart.deriv.retry.department-term-load": "你所在系前几个学期的学分超出了方案可容纳的上限，因此放宽了学分限制，保留了原有课程",
+  "chart.deriv.retry.department-course-choice": "无法采用你所在系的某一门课程选择，因此该选择保持开放，其余课程照旧保留",
   "chart.deriv.retry.department-early-terms": "你所在系的前几个学期无法与学位其余部分相衔接，因此被舍弃，方案重新从头构建",
   "chart.deriv.refused.space": "所有排法都试过了，没有一种成立",
   "chart.deriv.refused.budget": "还没能证明什么，搜索时间就用尽了",

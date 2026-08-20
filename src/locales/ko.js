@@ -324,6 +324,8 @@ export const strings = {
   "chart.deriv.gave.packed-largest-first": "탐색 자체. 크기 순으로 채웠습니다",
   "chart.deriv.retry.breadth-guidance": "선택 과목의 지정을 풀고 다시 탐색했습니다",
   "chart.deriv.retry.fails-hard-criteria": "첫 플랜이 필수 요건을 어겼습니다",
+  "chart.deriv.retry.department-term-load": "학과가 제시한 첫 학기들의 학점이 계획에 담기지 않아, 학점 상한을 완화하고 과목은 그대로 유지했습니다",
+  "chart.deriv.retry.department-course-choice": "학과가 제시한 과목 선택 중 하나를 따를 수 없어, 그 선택은 열어 두고 과목은 그대로 유지했습니다",
   "chart.deriv.retry.department-early-terms": "학과의 초반 학기를 학위의 나머지와 함께 배치할 수 없어, 이를 버리고 처음부터 다시 구성했습니다",
   "chart.deriv.refused.space": "모든 배열을 시도했으나 성립하는 것이 없습니다",
   "chart.deriv.refused.budget": "무엇도 확인하지 못한 채 탐색 시간이 끝났습니다",

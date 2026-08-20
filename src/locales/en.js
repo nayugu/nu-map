@@ -384,6 +384,8 @@ export const strings = {
   "chart.deriv.gave.packed-largest-first": "searching, and packed by size",
   "chart.deriv.retry.breadth-guidance": "electives were unbound and the search run again",
   "chart.deriv.retry.fails-hard-criteria": "the first plan broke a hard requirement",
+  "chart.deriv.retry.department-term-load": "your department’s first semesters carry more credits than the plan could fit, so their credit limit was eased and their courses kept",
+  "chart.deriv.retry.department-course-choice": "one of your department’s course choices could not be followed, so that choice was left open and their courses kept",
   "chart.deriv.retry.department-early-terms": "your department’s first semesters could not be scheduled, so they were dropped and the plan built from scratch",
   "chart.deriv.refused.space": "every arrangement was tried; none is legal",
   "chart.deriv.refused.budget": "the search ran out of time before proving anything",

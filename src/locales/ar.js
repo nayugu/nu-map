@@ -324,6 +324,8 @@ export const strings = {
   "chart.deriv.gave.packed-largest-first": "البحث، ووزّعت حسب الحجم",
   "chart.deriv.retry.breadth-guidance": "فُصلت المقررات الحرة عن التوجيه وأُعيد البحث",
   "chart.deriv.retry.fails-hard-criteria": "خالفت الخطة الأولى شرطًا ملزمًا",
+  "chart.deriv.retry.department-term-load": "تحمل فصول قسمك الأولى وحدات أكثر مما تتيحه الخطة، فخُفِّف حدّ الوحدات مع الإبقاء على مقرراتها",
+  "chart.deriv.retry.department-course-choice": "لم يتسنَّ اتباع أحد خيارات المقررات في قسمك، فتُرك ذلك الخيار مفتوحًا مع الإبقاء على مقرراتها",
   "chart.deriv.retry.department-early-terms": "تعذّر ترتيب فصول قسمك الأولى مع بقية الدرجة، فأُسقطت وأُعيد بناء الخطة من الصفر",
   "chart.deriv.refused.space": "جُرِّبت كل الترتيبات، ولا واحد منها مسموح",
   "chart.deriv.refused.budget": "نفد وقت البحث قبل أن يُثبت شيئًا",

@@ -121,28 +121,51 @@ export function generatePlan(args = {}) {
   // measures at 7.7% prereq-order and 31.9% season violations. Refusing to print a plan
   // while recommending a measurably wrong one is not conservatism.
   //
-  // So a refusal is not the answer, it is the signal to try again without the arrangement —
-  // the same shape as the breadth-guidance retry below, and for the same reason. One
-  // fallback, not a ladder: the arrangement is either followed or it is not.
+  // So a refusal is not the answer, it is the signal to try again with LESS of the
+  // arrangement — and it has to be a ladder, not a switch.
+  //
+  // ── Why a ladder, having said "one fallback, not a ladder" ─────────
+  //
+  // That sentence was written when the arrangement was one thing: fix each cell to its
+  // published term. It is now three, and they are not equally load-bearing:
+  //
+  //   the published CEILING   holds a term to the credits the department printed
+  //   the published DECISION  takes their branch of a choice they resolved
+  //   the ADOPTION itself     puts each course in the term they named
+  //
+  // A switch throws away all three the moment any one of them cannot be satisfied, and that
+  // is measurably what happened: as the ceiling and the decisions were added, programs
+  // abandoning their department's plan entirely went 29 → 37 → 42 of 347. Every one of those
+  // is a plan bearing no resemblance to the catalog — CS+Physics lost its whole first two
+  // years, including CS 3000, over a constraint that has nothing to do with CS 3000.
+  //
+  // So the rungs come off in order of how recently they were added and how little they carry.
+  // The adoption is the point of the whole module and is the LAST thing to go.
   //
   // Skipped where it cannot help. A pre-flight refusal is about the requirement DATA rather
   // than about where courses go, so re-deriving cells would reach the identical verdict at
   // twice the cost.
-  if (first.refused && args.followDepartment !== false
+  // `_onEarlyRung` makes this NON-REENTRANT, and it has to be. Dropping a rung does not stop
+  // the nested call from re-entering here and starting the ladder over from rung 0 with
+  // identical arguments — only `followDepartment: false` terminated, so the first two rungs
+  // recursed without bound and CS+Physics died on `Maximum call stack size exceeded` inside
+  // the search's DFS. A ladder that can restart itself is not a ladder.
+  if (first.refused && args.followDepartment !== false && !args._onEarlyRung
       && !PREFLIGHT_REASONS.has(first.refused.reason)) {
-    if (args.trace) args.trace.stage("retry", { because: "department-early-terms" });
-    const own = generatePlan({ ...args, followDepartment: false });
-    // The FIRST refusal is the one reported if both fail: it describes the degree, where the
-    // retry's describes a degree we deliberately handicapped.
-    if (!own.refused) {
+    for (const rung of EARLY_RUNGS) {
+      if (args.trace) args.trace.stage("retry", { because: rung.name });
+      const next = generatePlan({ ...args, ...rung.args, _onEarlyRung: true });
+      if (next.refused) continue;
       return {
-        ...own,
+        ...next,
         report: {
-          ...own.report,
-          relaxed: [...(own.report?.relaxed ?? []), "department-early-terms"],
+          ...next.report,
+          relaxed: [...(next.report?.relaxed ?? []), rung.name],
         },
       };
     }
+    // The FIRST refusal is the one reported if every rung fails: it describes the degree,
+    // where a later one describes a degree we deliberately handicapped.
     return first;
   }
   // ── Breadth guidance is a PREFERENCE, and this is what makes it one ──
@@ -233,6 +256,29 @@ function withPackerRetry(args) {
 }
 
 /** Refusals decided before any course is placed, which breadth binding cannot have caused. */
+/**
+ * How the department's arrangement is given up, one piece at a time.
+ *
+ * Tried in order, and the ORDER is the design: each rung drops the least valuable remaining
+ * constraint, so a program that cannot satisfy the credit ceiling still keeps its published
+ * courses in its published terms. Only the last rung abandons the arrangement.
+ *
+ * The names reach the panel through `report.relaxed` and `chart.deriv.retry.*`, so a plan
+ * always says which of these it is — a plan built without the department's arrangement must
+ * never silently claim to have followed it.
+ */
+const EARLY_RUNGS = [
+  // The credit ceiling is the newest and the most likely to bind: it LOWERS a term's capacity
+  // to the printed load, which pre-flight also sizes the degree against, so a degree that
+  // barely fits can be refused by arithmetic alone.
+  { name: "department-term-load",     args: { earlyCeiling: false } },
+  // Then the branch decisions. Pinning one option of a choice removes the search's freedom to
+  // answer that cell another way, which can strand a later term.
+  { name: "department-course-choice", args: { earlyCeiling: false, earlyDecide: false } },
+  // And only then the arrangement itself — the thing this module exists to do.
+  { name: "department-early-terms",   args: { followDepartment: false } },
+];
+
 const PREFLIGHT_REASONS = new Set([
   "no-requirements", "no-total-credits", "no-cells", "mostly-unlabelled",
   "no-study-terms", "does-not-fit", "sections-exceed-degree",
@@ -290,6 +336,10 @@ function generateOnce({
   // built without the department's arrangement never silently claims to have followed it.
   // Production's first attempt is always true.
   followDepartment = true,
+  // The two rungs of the department ladder that come off before the arrangement itself. See
+  // `EARLY_RUNGS`: both default ON, and each is dropped only after a refusal.
+  earlyCeiling = true,
+  earlyDecide = true,
   // How many study terms the department plans. A measurement hatch in the spirit of
   // `propagateChains` — "following the department beats inferring from a course number" is a
   // claim about a corpus and has to be runnable both ways — not a tuning knob.
@@ -739,7 +789,7 @@ function generateOnce({
   // term's own limit — a department's 8 SH summer half plus 2 is 10 against a 9.5 half-term
   // cap, and `computer_science_and_biology_bs` shipped exactly that. Term 0 is the only term
   // permitted above the cap, and only through the disclosed branch below.
-  for (const [ti, ceiling] of (early.publishedLoad ?? new Map())) {
+  for (const [ti, ceiling] of (earlyCeiling ? (early.publishedLoad ?? new Map()) : new Map())) {
     if (ti === 0 || !terms[ti] || !(ceiling > 0)) continue;
     const base = termCapacity(terms[ti], { creditMax: ports.creditMax, studentType });
     if (!(ceiling < base)) continue;
@@ -753,7 +803,7 @@ function generateOnce({
     const base = termCapacity(terms[0], { creditMax: ports.creditMax, studentType });
     // Term 0 gets the published ceiling too when it is UNDER the cap — the same rule as the
     // window above. Above the cap it falls through to the overload branch, which discloses.
-    const ceil0 = early.publishedLoad?.get(0) ?? 0;
+    const ceil0 = earlyCeiling ? (early.publishedLoad?.get(0) ?? 0) : 0;
     if (want <= base && ceil0 > 0 && ceil0 < base) {
       terms[0] = { ...terms[0], creditCeiling: ceil0 };
     }
@@ -777,7 +827,7 @@ function generateOnce({
   // the critical-path narrowing above uses. `verify-chart` generates 1,031 plans untraced in
   // the monthly workflow, and an exclusion row per term per fixed cell is pure cost there.
   const earlyFixed = applyEarlyTerms(plans, early.placed,
-    trace ? EXCLUSION.DEPARTMENT_TERM : null, early.decided);
+    trace ? EXCLUSION.DEPARTMENT_TERM : null, earlyDecide ? early.decided : null);
 
   // ── 6. A legal plan ────────────────────────────────────────────
   //
