@@ -216,12 +216,18 @@ function earlyTermsOf(publishedPlan, shape, through) {
       // 0 SH children contributes 8 and not 12. That is the whole point: the flat `offers`
       // set below cannot express "two of these three", and this number can.
       let sh = 0;
+      // Courses named by a row that offers NO alternative. The department stated these
+      // outright; everything else in `offers` came from a row that stated a choice. Once a
+      // term's budget binds, that difference is what decides which cells keep their slot —
+      // see the adoption loop.
+      const solo = new Set();
       for (const e of entries) {
         if (e.coop || e.vacation || e.heading) continue;
         sh += e.sh ?? 0;
         for (const group of (e.options ?? [])) for (const id of group) offers.add(id);
+        if (e.options?.length === 1 && e.options[0].length === 1) solo.add(e.options[0][0]);
       }
-      if (offers.size) out.push({ at, offers, sh });
+      if (offers.size) out.push({ at, offers, sh, solo });
     }
   }
   // Ascending, so an earlier term claims a course a later one repeats — the earlier
@@ -242,6 +248,29 @@ function earlyTermsOf(publishedPlan, shape, through) {
  * An `open` cell — a general elective — is never matched. It is the search's slack, and
  * holding it still is what turns a heavy published term into a refusal.
  */
+/**
+ * The one course a POOL cell can be answered by in this published term.
+ *
+ * Restricted to `solo` — courses the department named with no alternative. A pool cell is
+ * generic by nature, so letting it absorb one branch of a published choice would decide for
+ * the student something their department left open, and would pick by whichever option was
+ * written first. An outright statement carries no such ambiguity.
+ *
+ * Sorted, because `available` is a Set in insertion order and which course a pool claims must
+ * be a property of the input rather than of iteration order — the same determinism argument
+ * `byIdOrder` exists for one level up.
+ */
+function poolGroup(cell, offers, poolAnswerable, solo) {
+  if (cell?.kind !== "open" || !poolAnswerable) return null;
+  // An UNBOUNDED cell is the search's slack and stays untouched; `poolAnswerable` is what
+  // knows the difference, and it answers false for a cell with no candidate set.
+  for (const id of [...offers].sort()) {
+    if (!solo?.has(id)) continue;
+    if (poolAnswerable(cell, id)) return [id];
+  }
+  return null;
+}
+
 function answerableGroup(cell, offers) {
   if (cell?.kind !== "named" && cell?.kind !== "choice") return null;
   for (const group of (cell.groups ?? [])) {
@@ -427,6 +456,24 @@ export function adoptEarlyTerms({
   // The MINIMUM headroom term 0 gets over `capOf(0)` — a floor, not a ceiling. The published
   // load always fits regardless; see where `cap0` is computed.
   firstTermHeadroom = 0,
+  // ── Can this POOL cell be answered by this course? ─────────────────
+  //
+  // Supplied by the caller because it needs the catalog to answer, and this function is
+  // deliberately pure. Omitted, nothing changes: pool cells are simply not adopted, which is
+  // the behaviour that predates it.
+  //
+  // The distinction it draws is between a BOUNDED open cell — a subject elective, a breadth
+  // pool, a concentration union, all carrying a real candidate set — and an UNBOUNDED one,
+  // the general-elective bucket that admits anything. The comment on `answerableGroup` says
+  // an open cell is "the search's slack", and that is true of the unbounded kind only. A
+  // pool cell is a requirement with a candidate list, and when the department's own plan puts
+  // one of those candidates in a term, that is where the requirement happens.
+  //
+  // Measured: of the courses a department names outright in its first four terms, 33.9%
+  // reached no plan at all, and the bulk were pool members — CHEM 1151, PHYS 1151/1152/1153
+  // and PHTH 1260 each in 55 or more programs, sitting in science-elective pools that
+  // adoption refused to touch.
+  poolAnswerable = null,
 } = {}) {
   // `load` included so every return of this function has one shape. A caller that reads
   // `early.load` on the empty result should get an empty map, not `undefined` guarded by an
@@ -473,7 +520,7 @@ export function adoptEarlyTerms({
   // What the department printed for each early term, by study-term index. Returned to the
   // caller, which turns it into the term's ceiling — see `publishedLoad` on the result.
   const printed = new Map();
-  for (const { at, offers, sh } of earlyTermsOf(publishedPlan, shape, through)) {
+  for (const { at, offers, sh, solo } of earlyTermsOf(publishedPlan, shape, through)) {
     printed.set(at, (printed.get(at) ?? 0) + sh);
     // Named cells go first, so a course that exactly answers one requirement is not
     // consumed by a looser choice cell that had alternatives available.
@@ -496,10 +543,28 @@ export function adoptEarlyTerms({
     // term they cannot register for.
     const budget = sh > 0 ? sh + ADOPT_SH_SLACK : Infinity;
     let taken = 0;
-    for (const kind of ["named", "choice"]) {
+    // ── An outright statement outranks one branch of a choice ──────────
+    //
+    // Two passes over each kind: cells answerable by a course the department named with NO
+    // alternative, then the rest. It only matters once the budget binds, and then it decides
+    // the term's whole composition — which was previously settled by cell-id order, i.e. by
+    // nothing. Business Administration prints `BUSN 1101` outright and offers a "take two of
+    // three"; adopting in id order spent the budget on all three of the choice and dropped
+    // the course the department stated flatly, for the same 17 SH total.
+    //
+    // `solo` is per TERM, so a course stated outright in term 1 and offered as an
+    // alternative in term 2 is treated correctly in each.
+    const rank = (p) => ((p.cell.groups ?? []).some(g => g.every(id => solo?.has(id))) ? 0 : 1);
+    // Pool cells go LAST, after every named and choice cell has had its pick, so a specific
+    // requirement never loses its course to a generic pool that merely happens to contain it.
+    for (const kind of ["named", "choice", "open"]) {
+     for (const tier of [0, 1]) {
       for (const p of byIdOrder) {
         if (intended.has(p.cell.id) || p.cell?.kind !== kind) continue;
-        const group = answerableGroup(p.cell, available);
+        if (rank(p) !== tier) continue;
+        const group = kind === "open"
+          ? poolGroup(p.cell, available, poolAnswerable, solo)
+          : answerableGroup(p.cell, available);
         if (!group) continue;
         // Measured in the cell's own credits, the same unit the budget is in. A 0 SH cell
         // never exhausts the budget and is always adopted, which is right: it is a
@@ -510,6 +575,7 @@ export function adoptEarlyTerms({
         intended.set(p.cell.id, at);
         for (const id of group) { available.delete(id); spent.add(id); }
       }
+     }
     }
   }
   if (!intended.size) return empty();

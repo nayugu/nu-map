@@ -158,6 +158,9 @@ const fid = Array.from({ length: EARLY_TERMS }, () => ({ placed: 0, same: 0 }));
 const bloat = Array.from({ length: EARLY_TERMS },
   () => ({ terms: 0, over: 0, sh: 0, worst: 0, worstAt: null }));
 const moveReasons = new Map();
+// Courses the department named outright in an early term: how many reach the plan at all.
+const content = { named: 0, missing: 0 };
+const missingFreq = new Map();
 const rows = [];
 const overPublished = [], overHeadroom = [], undisclosed = [];
 let shapes = 0, made = 0, refused = 0, threw = 0, withPublished = 0, sourceCount = new Map();
@@ -241,6 +244,23 @@ for (const d of degrees) {
         //
         // Matched by calendar key, never by position — a published plan may leave a summer
         // blank that the shape keeps, so the i-th study term of each is not the same term.
+        // ── Present ANYWHERE in the plan, never mind the term ──────────
+        //
+        // Fidelity above only speaks about courses we placed; a course the plan drops
+        // entirely is invisible to it, and that was the larger failure. A major's
+        // requirement pane lists major requirements, so first-year writing, co-op
+        // professional development and the 1 SH intro seminars matched no cell and were
+        // never scheduled at all — 165 of 385 published plans named at least one.
+        //
+        // Counted only for rows naming exactly ONE course: a row offering alternatives
+        // states a choice, and "did we schedule it" is not a question about a choice.
+        for (const id of pt.definite) {
+          content.named += 1;
+          if (!genAt.has(id)) {
+            content.missing += 1;
+            missingFreq.set(id, (missingFreq.get(id) ?? 0) + 1);
+          }
+        }
         const gt = genByKey.get(pt.key);
         if (!gt || !(pt.sh > 0)) return;
         const d = gt.sh - pt.sh;
@@ -264,6 +284,14 @@ fid.forEach((f, i) => {
 });
 const tot = fid.reduce((a, f) => ({ same: a.same + f.same, placed: a.placed + f.placed }), { same: 0, placed: 0 });
 console.log(`    ALL 1–4  ${String(tot.same).padStart(5)} / ${String(tot.placed).padStart(5)} placed   ${pct(tot.same, tot.placed)}`);
+
+console.log(`\n  ── courses the department NAMED outright in terms 1-4 ──`);
+console.log(`    reached the plan   ${content.named - content.missing} of ${content.named}`
+  + `   ${pct(content.named - content.missing, content.named)}`);
+console.log(`    MISSING entirely   ${content.missing}   ${pct(content.missing, content.named)}`);
+for (const [id, n] of [...missingFreq].sort((a, b) => b[1] - a[1]).slice(0, 10)) {
+  console.log(`      ${String(n).padStart(4)}  ${id}`);
+}
 
 console.log(`\n  ── credit weight vs what the department PRINTED in that term ──`);
 bloat.forEach((b, i) => {

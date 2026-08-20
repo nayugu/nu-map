@@ -414,6 +414,122 @@ function cellsForSection(section, target, courseMap) {
  */
 export const MAX_PREREQ_SUBSTITUTIONS = 3;
 
+/**
+ * How many courses from the published plan's early terms may be adopted this way.
+ *
+ * Six, against three for prerequisite gaps, because these are not a guess. A prerequisite
+ * substitution infers a course the degree *implies*; this one reads a course the department
+ * *printed* in a specific term of its own plan. The evidence is stronger, so the bound is
+ * looser — but it is still a bound, because a degree whose first two years are mostly
+ * courses its requirements never mention is telling us about our parse, not the student's
+ * schedule, and spending every free elective on that guess would rewrite the plan around a
+ * data defect. Measured: 165 of 385 published plans have at least one, and the mean is 1.7.
+ */
+export const MAX_PUBLISHED_ADOPTIONS = 6;
+
+/**
+ * Courses the department PUTS in its own early terms that no requirement asks for.
+ *
+ * ── The gap this closes ─────────────────────────────────────────────
+ *
+ * `adoptEarlyTerms` can only place a published course onto a cell that already exists. A
+ * major's requirement pane lists MAJOR requirements, so the university-wide and college-wide
+ * courses its sample plan schedules — first-year writing, co-op professional development,
+ * the 1 SH "introduction to the major" seminars — match no cell and simply vanished from the
+ * generated plan. Measured over the 385 programs publishing a plan: **165 (42.9%)** name at
+ * least one such course in their first four terms, `ENGW 1111` in 136 of them and
+ * `EEAM 2000` in 46.
+ *
+ * The student takes those courses. A plan that silently omits them is not a simpler plan,
+ * it is a wrong one — and it also reads as incomplete, because the credits went nowhere.
+ *
+ * ── Why a general-elective slot is the right currency ───────────────
+ *
+ * Exactly the argument `substitutePrereqs` makes one function up: such a course counts
+ * toward the degree total without answering a named requirement, which is what the
+ * general-elective bucket IS. So this spends a slot the student was going to fill with
+ * something arbitrary on something their own department already told them to take.
+ *
+ * It is an approximation and worth naming: `ENGW 1111` is a university core requirement, not
+ * free-elective credit, so the binding a reader sees says "general elective" for something
+ * that is really core. That is the honest trade — the alternative is the course not appearing
+ * at all, and a plan missing a course the student must pass is the worse error. The cell
+ * keeps `target: GENERAL_ELECTIVE` rather than claiming a requirement it does not answer.
+ *
+ * ── What it does not do ─────────────────────────────────────────────
+ *
+ * It never invents capacity: no free slot means nothing is adopted, so the plan can never
+ * exceed the degree total on account of this. It carries the course's OWN credits and leaves
+ * the remainder in the pool, because a 1 SH seminar replacing a 4 SH placeholder would leave
+ * the degree three credits short — the `POLS 1000` for `POLS 1150` case the function above
+ * was written for. And it never adopts a work-experience registration, for the same reason
+ * `substitutePrereqs` does not: those are recorded by a co-op term, not attended.
+ *
+ * @param {object[]} cells
+ * @param {string[]} wanted    course ids the published early terms name, in plan order
+ * @param {Record<string,object>} courseMap
+ * @returns {{cells: object[], adopted: object[]}}
+ */
+export function adoptPublishedCourses(cells, wanted, courseMap,
+    { workExperience = () => null, covered = null } = {}) {
+  if (!wanted?.length) return { cells, adopted: [] };
+
+  const out = [...cells];
+  const adopted = [];
+  // Every course any cell can already be answered by. `groups` covers named and choice
+  // cells; `covered` is the caller's wider set, which must include what BOUNDED open cells
+  // (a concentration union, a labelled breadth pool) can take — without it a course sitting
+  // in a concentration pool would be scheduled here as well as reserved there.
+  const already = new Set(cells.flatMap(c => c.groups?.flat() ?? []));
+
+  for (const id of wanted) {
+    if (adopted.length >= MAX_PUBLISHED_ADOPTIONS) break;
+    const course = courseMap[id];
+    if (!course) continue;                       // renumbered away; nothing to schedule
+    if (already.has(id)) continue;
+    if (covered?.has(id)) continue;
+    if (workExperience(id)) continue;
+    // A 0 SH course would consume a whole slot and return nothing to the pool, which is a
+    // credit the degree then cannot account for. The co-op RECORDS are the 0 SH courses here
+    // and they are excluded above; anything else at 0 SH is a data oddity, not a course.
+    if (!(course.sh > 0)) continue;
+
+    const slot = out.findIndex(c =>
+      c.target === GENERAL_ELECTIVE && c.kind === "open" && !c.substitutedFor);
+    if (slot < 0) break;                         // no elective left to spend
+
+    const slotSH = out[slot].sh ?? 0;
+    const courseSH = course.sh ?? slotSH;
+    out[slot] = {
+      ...out[slot],
+      kind: "named",
+      groups: [[id]],
+      spec: null,
+      sh: courseSH,
+      title: course.title ? `${id} ${course.title}` : id,
+      // Distinct from `substitutedFor`, which means "a prerequisite the degree implies".
+      // This says "a course the department's own plan schedules", and the explainer needs to
+      // be able to tell a reader which of the two it is looking at.
+      publishedExtra: true,
+    };
+    already.add(id);
+    adopted.push({ course: id, sh: courseSH, remainderSH: Math.max(0, slotSH - courseSH) });
+
+    if (courseSH < slotSH) {
+      out.push({
+        ...out[slot],
+        id: `${out[slot].id}~rem`,
+        kind: "open", groups: null, spec: null,
+        sh: slotSH - courseSH,
+        title: cells.find(c => c.target === GENERAL_ELECTIVE)?.title ?? out[slot].title,
+        publishedExtra: false,
+        substitutedFor: null,
+      });
+    }
+  }
+  return { cells: out, adopted };
+}
+
 export function substitutePrereqs(cells, unscheduled, courseMap,
     { depthOf = () => 0, workExperience = () => null } = {}) {
   if (!unscheduled?.length) return { cells, substituted: [] };

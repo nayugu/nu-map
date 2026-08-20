@@ -28,7 +28,8 @@
 // outcome, and the official plan still loads beside it.
 // ═══════════════════════════════════════════════════════════════════
 
-import { deriveCells, cellsSH, substitutePrereqs, withdrawWorkTermCells, assignRegistrations, GENERAL_ELECTIVE } from "./demand.js";
+import { deriveCells, cellsSH, substitutePrereqs, adoptPublishedCourses, withdrawWorkTermCells, assignRegistrations, GENERAL_ELECTIVE } from "./demand.js";
+import { materialize } from "../core/candidateSpec.js";
 import { shapeFromPlan, defaultShape, studyTerms, firstWorkBoundary, extendShape } from "./shape.js";
 import { seedFromPlan } from "./seed.js";
 import {
@@ -385,6 +386,38 @@ function generateOnce({
     precedence = buildPrecedence(cells, courseMap, { observed: observedOrder });
   }
 
+  // ── And a course the DEPARTMENT'S OWN early terms name ─────────────
+  //
+  // The sibling of the substitution above, and the same currency for the same reason. A
+  // major's requirement pane lists major requirements, so the university- and college-wide
+  // courses its sample plan schedules early — first-year writing, co-op professional
+  // development, the 1 SH "introduction to the major" seminars — matched no cell, and
+  // `adoptEarlyTerms` can only place a published course onto a cell that exists. They
+  // vanished. Measured: 165 of 385 published plans name at least one in their first four
+  // terms, `ENGW 1111` in 136 of them.
+  //
+  // Done HERE rather than inside `adoptEarlyTerms` because the fix is a missing CELL, not a
+  // missing placement: once the cell exists, ordinary adoption puts it in the term the
+  // department printed, and it gets a domain, prerequisites and precedence edges like any
+  // other named course. Rebuilt afterwards for exactly that reason.
+  const publishedEarly = followDepartment
+    ? earlyPublishedCourses(publishedPlan ?? donorPlan, earlyTerms)
+    : [];
+  if (publishedEarly.length) {
+    const adoptedOut = adoptPublishedCourses(cells, publishedEarly, courseMap, {
+      workExperience: ports.workExperience,
+      // What a BOUNDED cell can already take. Without this a course inside a concentration
+      // union would be scheduled here as well as reserved there — one course answering two
+      // requirements, which is the accounting error `adoptEarlyTerms` spends a whole `spent`
+      // set avoiding one layer down.
+      covered: boundedCellCourses(cells, courseMap),
+    });
+    if (adoptedOut.adopted.length) {
+      cells = adoptedOut.cells;
+      precedence = buildPrecedence(cells, courseMap, { observed: observedOrder });
+    }
+  }
+
   // ── 4. Where each cell could go, for a given shape ──────────────
   const layout = (sh) => {
     // How many REAL courses this degree has to place decides how many summers are surplus.
@@ -622,6 +655,9 @@ function generateOnce({
   // See `earlyTerms.js`. This narrows domains to a unit and so is the one thing in this
   // function that can turn a plan into a refusal — which is exactly why `generatePlan`
   // retries with `followDepartment: false` and says so in `report.relaxed`.
+  // Materialised candidate sets for pool cells, memoised for this attempt only — the cells
+  // are rebuilt per generate, so a longer-lived cache would key on stale objects.
+  const poolSets = new Map();
   const early = followDepartment
     ? adoptEarlyTerms({
         publishedPlan: publishedPlan ?? donorPlan, shape, plans, precedence,
@@ -638,6 +674,23 @@ function generateOnce({
         // there always fits; this only covers a term our own decomposition costs a credit
         // or two more than their printed row. Weighted, so a half-summer gets half of it.
         firstTermHeadroom: FIRST_TERM_OVERLOAD_SH * (terms[0]?.weight ?? 1),
+        // A BOUNDED pool cell — subject elective, breadth pool, concentration union — may be
+        // answered by a course the department's own plan puts in this term. An UNBOUNDED one
+        // (`spec: null`, the general-elective bucket) may not: that is the search's slack, and
+        // holding it still is what keeps a heavy published term from becoming a refusal.
+        //
+        // Memoised per cell because `materialize` walks the catalog and this is asked once per
+        // (cell, course) pair over the whole early window.
+        poolAnswerable: (cell, id) => {
+          if (!cell?.spec) return false;
+          let set = poolSets.get(cell);
+          if (!set) {
+            try { set = materialize(cell.spec, courseMap); }
+            catch { set = new Set(); }        // an unreadable spec claims nothing
+            poolSets.set(cell, set);
+          }
+          return set.has(id);
+        },
       })
     : { placed: new Map(), moves: [], unplaced: [], load: new Map() };
   // ── Let the search hold what the department published ──────────────
@@ -1272,6 +1325,68 @@ function generateOnce({
  * a plan modelled on OTHER programs may not be described as this department's, and a plan
  * built after the arrangement was dropped may not be described as the department's at all.
  */
+/**
+ * Every course the published plan names UNAMBIGUOUSLY in its first `through` terms.
+ *
+ * Only rows resolved to exactly one course. A row offering alternatives states a choice, not
+ * a course, and adopting one branch of it here would decide for the student something their
+ * department deliberately left open — and would do it by picking whichever option happened to
+ * be written first.
+ *
+ * Term counting matches `earlyTermsOf`: a term that is nothing but co-op is a work term and
+ * consumes no index, which is why this counts course cells rather than testing for the
+ * marker. Returned in plan order, so `adoptPublishedCourses`' bound spends itself on the
+ * earliest terms — the ones the student reaches first and the ones this is about.
+ */
+function earlyPublishedCourses(publishedPlan, through) {
+  const out = [];
+  const seen = new Set();
+  const flat = (es, acc = []) => {
+    for (const e of es ?? []) { if (e && typeof e === "object") { acc.push(e); flat(e.children, acc); } }
+    return acc;
+  };
+  let ti = 0;
+  for (const year of publishedPlan?.years ?? []) {
+    for (const term of year?.terms ?? []) {
+      if (!term || typeof term !== "object") continue;
+      const es = flat(term.entries);
+      const coop = es.filter(e => e.coop).length;
+      const courses = es.filter(e => !e.coop && !e.vacation && !e.heading && !e.either).length;
+      if (coop > 0 && courses === 0) continue;
+      if (ti >= through) return out;
+      for (const e of es) {
+        if (e.coop || e.vacation || e.heading) continue;
+        if (e.options?.length !== 1 || e.options[0].length !== 1) continue;
+        const id = e.options[0][0];
+        if (!seen.has(id)) { seen.add(id); out.push(id); }
+      }
+      ti += 1;
+    }
+  }
+  return out;
+}
+
+/**
+ * Every course a BOUNDED cell can already be answered by.
+ *
+ * `groups` is not enough on its own: a concentration cell is `kind: "open"` carrying the
+ * union of its options as a `spec`, so a course sitting in that union appears in no group and
+ * would look unclaimed. Scheduling it as a published extra as well would have one course
+ * answering two requirements.
+ *
+ * Unbounded cells (`spec: null` — the general-elective bucket) contribute nothing here, which
+ * is the point: they are the capacity this is allowed to spend.
+ */
+function boundedCellCourses(cells, courseMap) {
+  const out = new Set();
+  for (const c of cells ?? []) {
+    for (const id of (c.groups ?? []).flat()) out.add(id);
+    if (!c.spec) continue;
+    try { for (const id of materialize(c.spec, courseMap)) out.add(id); } catch { /* unreadable spec claims nothing */ }
+  }
+  return out;
+}
+
 function earlyTermsReport({
   followDepartment, publishedPlan, donorPlan, earlyTerms, earlyFixed, early,
   plans, terms, courseMap, overload = null,
