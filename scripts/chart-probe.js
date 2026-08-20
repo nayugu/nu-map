@@ -65,6 +65,13 @@ const jsonOut = flag("--json");
 const concentration = flag("--concentration");
 // Per-term detail for one plan, so "why is this term short" does not need a fresh script.
 const showTerms = argv.includes("--terms");
+// A/B the `shared`-section witness without touching the tree. `deriveCells` reads the plan
+// of study from `metadata.planOfStudyCourses`, and an EMPTY witness is exactly the engine's
+// pre-Aug-2026 behaviour of skipping every shared section — so dropping the field
+// reproduces the old plans in the same process as the new ones. Stashing the source to get
+// a baseline is the alternative, and in a shared checkout that also moves the other
+// session's `HEAD`.
+const stripWitness = argv.includes("--no-witness");
 // Raise the search budget, to tell "no arrangement exists" from "we stopped looking".
 // 53% of refusals exhaust the node budget with space left, so this is the difference
 // between a fact about the degree and a weakness in the search.
@@ -255,6 +262,7 @@ for (const lvl of ["undergraduate", "graduate"]) {
     if (!electivesMode && !concentrationsMode
         && ![...wanted].some(w => w === prefix || w.startsWith(`${prefix}#`))) continue;
     const data = JSON.parse(readFileSync(rf, "utf8"));
+    if (stripWitness && data.metadata) delete data.metadata.planOfStudyCourses;
     if (electivesMode) {
       // Undergraduate only. NUPath is an undergraduate framework, so `remaining` is not a
       // meaningful quantity for a master's and printing one would invite a rule to be fitted
