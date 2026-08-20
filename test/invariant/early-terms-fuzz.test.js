@@ -168,6 +168,12 @@ test(`early fuzz › ${RUNS} adversarial instances hold every invariant`, () => 
       // 3. Inside the window.
       assert.ok(at < EARLY_TERMS, `${id} fixed at ${at}, outside the window — ${where}`);
       // 4. Never earlier than published, for the ones we know the intent of.
+      //
+      // Briefly relaxed while a SWAP step existed — a term a course had to leave being refilled
+      // from the department's own window. That step was measured over the corpus and removed for
+      // being worse or flat on every metric, including the two built to see its benefit, so the
+      // strict form is back. See `earlyTerms.js`'s header for the numbers: repair is monotone
+      // again, and this is the assertion that keeps it so.
       if (intendedOf.has(id)) {
         assert.ok(at >= intendedOf.get(id),
           `${id} moved EARLIER: ${intendedOf.get(id)} -> ${at} — ${where}`);

@@ -30,7 +30,7 @@
 import { readFileSync, readdirSync, existsSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { generatePlan, createTrace } from "../src/engine/index.js";
+import { generatePlan, createTrace, EARLY_RUNGS } from "../src/engine/index.js";
 import { deriveModel } from "../src/core/derivation/reduce.js";
 import { searchTree } from "../src/core/derivation/tree.js";
 import { buildSteps, orderWhy, orderReason, frameAt, frameCount, frameLoad }
@@ -104,6 +104,15 @@ const traceMode = argv.includes("--trace");
 // Compares against the DEPARTMENTS in the same run rather than against a remembered number, since
 // their figure moves whenever the plan corpus is re-scraped.
 const concentrationsMode = argv.includes("--concentrations");
+// ── `--rungs`: WHICH rung of the early ladder answered, and why the ones above it did not ──
+//
+// `report.relaxed` says a plan abandoned its department's arrangement. It does not say what
+// refused, and that difference is the whole diagnosis: "the credit ceiling refused" and "no
+// arrangement of these four terms exists" call for opposite fixes. So this runs each rung
+// DELIBERATELY, with `_onEarlyRung` set so the ladder cannot restart underneath us, and prints
+// the refusal reason and detail at each — plus how many cells adoption managed to fix, which is
+// the number that says whether the arrangement was even read.
+const rungsMode = argv.includes("--rungs");
 const wanted = new Set(listFile
   ? JSON.parse(readFileSync(listFile, "utf8"))
   : argv.filter(a => !a.startsWith("--") && a !== listFile && a !== jsonOut));
@@ -280,6 +289,38 @@ for (const lvl of ["undergraduate", "graduate"]) {
       const label = prefix + (variants.length > 1 ? `#${vi}` : "");
       if (!wanted.has(label)) return;
       const studentType = lvl === "graduate" ? "graduate" : "undergraduate";
+      if (rungsMode) {
+        const base = {
+          program: data, publishedPlan: variant, courseMap, ports, depthIndex,
+          observedOrder: observed.edges, coopPrep: (observed.coopPrep ?? []).map(x => x.course),
+          studentType, calibration: chartCalibration, timeBudgetMs: timeMs,
+          ...(nodeBudget ? { nodeBudget } : {}),
+          ...(concentration ? { concentration } : {}),
+          // The ladder must not restart underneath a rung we chose on purpose — that is the
+          // same non-reentrancy `generatePlan` relies on, used here to isolate one rung.
+          _onEarlyRung: true,
+        };
+        const steps = [{ name: "(all on)", args: {} }, ...EARLY_RUNGS];
+        console.log(`\n── ${label} ──`);
+        for (const step of steps) {
+          let res;
+          try { res = generatePlan({ ...base, ...step.args }); }
+          catch (e) { console.log(`  ${step.name.padEnd(26)} THREW ${String(e?.message ?? e)}`); continue; }
+          const et = res.report?.earlyTerms;
+          const tag = res.refused
+            ? `REFUSED ${res.refused.reason} ${res.refused.detail ?? ""}`
+            : `ok  fixed=${et?.fixed ?? 0} moved=${et?.moves?.length ?? 0}`
+              + ` unplaced=${et?.unplaced?.length ?? 0} source=${et?.source}`;
+          console.log(`  ${step.name.padEnd(26)} ${tag}`);
+          // WHICH cells the tight term is holding. The sentence "must hold 20 but allows 19"
+          // names neither the cells nor who fixed them there, and those are the two facts that
+          // separate "the department published a heavy term" from "we pinned one of our own".
+          for (const t of (res.refused?.data?.tightestTerms ?? [])) {
+            console.log(`      ${t.label}: forced ${t.forcedSH}SH vs cap ${t.cap} — ${(t.cells ?? []).join(", ")}`);
+          }
+        }
+        return;
+      }
       let r;
       const tPlain = Date.now();
       try {

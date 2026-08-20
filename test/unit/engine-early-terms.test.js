@@ -118,7 +118,21 @@ test("early › a course is spent ACROSS the window, not once per term", () => {
   assert.equal(placed.get("aaa"), 0, "and it lands in the EARLIER of the two published terms");
 });
 
-test("early › a corequisite group is adopted whole or not at all", () => {
+// ── Reading a plan printed in the CATALOG'S units, not ours ────────
+//
+// This block replaces a test that asserted the opposite — "a corequisite group is adopted
+// whole or not at all" — and that rule was wrong for the very shape it named. A coreq group
+// is INDIVISIBLE: a student cannot register for CS 1800 without CS 1802, so a plan printing
+// one half of it has said where the whole thing goes. Requiring every course of the group
+// meant a recitation the catalog omits from its plan text blocked the adoption entirely, and
+// CS+Physics lost its whole first two years to it — `PHYS 1161 and PHYS 1162` against a group
+// of `[1161, 1162, 1163]`. The same file already had the right test for the same evidence and
+// used it only to DECIDE a choice, never to adopt.
+//
+// What must still hold is the thing that rule was reaching for: partial evidence may not
+// claim a cell where it is genuinely AMBIGUOUS. The next three tests are that guard.
+
+test("early › half a corequisite group names the whole of it", () => {
   const shape = shapeOf(2);
   const plans = [named("pair", ["CS1800", "CS1802"], wide())];
   const both = adoptEarlyTerms({
@@ -127,7 +141,60 @@ test("early › a corequisite group is adopted whole or not at all", () => {
 
   const half = adoptEarlyTerms({
     publishedPlan: planOf([["CS1800"]]), shape, plans, precedence: NOPREC });
-  assert.equal(half.placed.size, 0, "half a coreq group is not an answer to the cell");
+  assert.equal(half.placed.get("pair"), 0,
+    "the lab is a corequisite, so scheduling the lecture schedules the pair");
+});
+
+test("early › a choice touched in TWO branches stays the student's", () => {
+  // The ambiguity the old whole-group rule was really guarding. One course from each of two
+  // alternatives is not a statement about which alternative — it is a term that happens to
+  // name courses from both, and deciding it would pick by option order.
+  const shape = shapeOf(2);
+  const plans = [choice("pick", [["A1", "A2"], ["B1", "B2"]], wide())];
+  const { placed, decided } = adoptEarlyTerms({
+    publishedPlan: planOf([["A1", "B1"]]), shape, plans, precedence: NOPREC });
+  assert.equal(placed.size, 0, "two branches named is no branch named");
+  assert.equal(decided.size, 0);
+});
+
+test("early › one branch named outright fixes the term AND the branch", () => {
+  const shape = shapeOf(2);
+  const plans = [choice("pick", [["A1", "A2"], ["B1", "B2"]], wide())];
+  const { placed, decided } = adoptEarlyTerms({
+    publishedPlan: planOf([["A1"]]), shape, plans, precedence: NOPREC,
+    branchLegalAt: () => true,
+  });
+  assert.equal(placed.get("pick"), 0);
+  assert.deepEqual(decided.get("pick"), ["A1", "A2"],
+    "and the partner course comes with it, exactly as the coreq pair does");
+});
+
+test("early › a course offered as ONE OPTION of a published row claims nothing", () => {
+  // `solo` is the whole safety margin of the partial test. A row reading "A1 or Z" does not
+  // state that A1 happens here, so it may not hand a two-course bundle to a cell on the
+  // strength of naming one member. Without this, partial matching would claim a cell from a
+  // choice the department deliberately left open.
+  const shape = shapeOf(2);
+  const plans = [named("pair", ["A1", "A2"], wide())];
+  const plan = { years: [{ terms: [{ type: "fall",
+    entries: [{ options: [["A1"], ["Z"]] }] }] }] };
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans, precedence: NOPREC });
+  assert.equal(placed.size, 0, "an alternative is not a statement");
+});
+
+test("early › partial evidence cannot claim a course another cell already took", () => {
+  // The `spent` invariant, arriving by the new door. `A1` answers the named cell outright;
+  // the bundle cell must not then use the same `A1` as evidence for taking `A1`+`A2` here.
+  const shape = shapeOf(2);
+  const plans = [
+    named("exact", ["A1"], wide()),
+    named("bundle", ["A1", "A2"], wide()),
+  ];
+  const { placed } = adoptEarlyTerms({
+    publishedPlan: planOf([["A1"]]), shape, plans, precedence: NOPREC });
+  assert.equal(placed.size, 1, "one course, one cell");
+  assert.equal(placed.get("exact"), 0, "the cell it answers exactly keeps it");
 });
 
 test("early › a general elective is never fixed — it is the search's slack", () => {
@@ -744,4 +811,26 @@ test("early › a genuinely ambiguous row is left to the student", () => {
     precedence: NOPREC, branchLegalAt: () => true,
   });
   assert.equal(out.decided.size, 0, "an ambiguous row was decided for the student");
+});
+
+test("early › partialEvidence off falls back to the whole-group reading", () => {
+  // The rung. `department-implied-courses` releases the bundle-from-one-member reading and keeps
+  // all four published semesters, which is a smaller loss than keeping the reading and losing
+  // two semesters — measured at 8 programs rescued against 2 over-constrained.
+  const shape = shapeOf(2);
+  const plans = () => [named("pair", ["CS1800", "CS1802"], wide())];
+  const on = adoptEarlyTerms({
+    publishedPlan: planOf([["CS1800"]]), shape, plans: plans(), precedence: NOPREC });
+  assert.equal(on.placed.get("pair"), 0, "on, the lecture names its lab");
+
+  const off = adoptEarlyTerms({
+    publishedPlan: planOf([["CS1800"]]), shape, plans: plans(), precedence: NOPREC,
+    partialEvidence: false });
+  assert.equal(off.placed.size, 0, "off, only a fully-named group is adopted");
+
+  // And the CONTAINED reading is untouched either way — that is the test being kept, not relaxed.
+  const both = adoptEarlyTerms({
+    publishedPlan: planOf([[["CS1800", "CS1802"]]]), shape, plans: plans(), precedence: NOPREC,
+    partialEvidence: false });
+  assert.equal(both.placed.get("pair"), 0, "a fully-named group is adopted at every rung");
 });

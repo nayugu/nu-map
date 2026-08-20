@@ -16,6 +16,27 @@
 //   FIX      narrow each surviving cell to that one term, so the ordinary search enforces
 //            it and `improve()` cannot quietly move it afterwards.
 //
+// ── A fourth step was built, measured, and removed ──────────────────
+//
+// A SWAP: refill the term a slide emptied from the department's own window, so a gap our repair
+// opened is not handed to the search to fill from elsewhere in the degree. It reads like an
+// obvious improvement and it is not one. Measured twice over the whole corpus, on identical
+// configurations with it on and off:
+//
+//     all-term agreement   85.7%  →  86.1%      (off is better)
+//     published courses captured in the window   2742  →  2743
+//     window courses the department published there   85.8%  →  85.9%
+//
+// Worse or flat on every column, including the two metrics built specifically to see its
+// benefit. The reason is that the benefit was already there: `publishedLoad` holds each early
+// term to its PRINTED size, so the gap is small, and the search's own sequencing preferences
+// already favour the department's own courses to fill it. The swap moved a course off its
+// published term to win something that was won anyway.
+//
+// Recorded rather than deleted silently, because "fill the gap with their next course" is the
+// most natural thing to propose here and it will be proposed again. Do not rebuild it without
+// re-running that A/B.
+//
 // ── Why adopt rather than hint ──────────────────────────────────────
 //
 // The department's arrangement used to be a branch ORDER: the search tried its term first
@@ -44,9 +65,16 @@
 //
 // It may never turn a plan into a refusal. `docs/chart-success-criteria.md` §2 is explicit
 // that a change reducing the generated count has to pay for itself, and fixing a term is a
-// CONSTRAINT — the one kind of change that can. So `generatePlan` retries with the whole
-// mechanism off and reports `relaxed: ["department-early-terms"]`. One fallback, not a
-// ladder.
+// CONSTRAINT — the one kind of change that can. So `generatePlan` retries, and it retries
+// down a LADDER: `EARLY_RUNGS` gives the arrangement up one piece at a time — the credit
+// ceiling, then the branch decisions, then the window itself shrinking 4 → 3 → 2 → 1 — and
+// only reaches `relaxed: ["department-early-terms"]` when not even the first semester can be
+// scheduled.
+//
+// This comment used to read "one fallback, not a ladder", and that was written when the
+// arrangement was one property. It is now several, and a switch throwing away all of them the
+// moment any one fails is measurably how a degree came back with none of its published first
+// two years over a credit limit that had nothing to do with them.
 //
 // It is also why the Sample Plan of Study stays a WITNESS and not a source, exactly as
 // CLAUDE.md requires. We never assert our requirements are a subset of the plan, and we
@@ -268,25 +296,62 @@ function earlyTermsOf(publishedPlan, shape, through) {
 /**
  * The one option branch this term's published rows point at, or null.
  *
- * A cell with alternatives is DECIDED when the department named at least one course from
- * exactly one of them and nothing from any other. That is a weaker test than "named every
- * course in the branch" and it has to be: a catalog plan row prints the courses a student
- * registers for, not our decomposition of the requirement, so "PHYS 1161 and PHYS 1162"
- * points unambiguously at the branch `[1161, 1162, 1163]` without listing the recitation.
+ * The department named at least one course from exactly one branch and nothing from any
+ * other. That is a weaker test than "named every course in the branch" and it has to be: a
+ * catalog plan row prints the courses a student registers for, not our decomposition of the
+ * requirement, so "PHYS 1161 and PHYS 1162" points unambiguously at the branch
+ * `[1161, 1162, 1163]` without listing the recitation.
  *
  * Null when two branches are touched — that is genuinely ambiguous and the student keeps the
- * choice — and null for a cell that never had alternatives, which has nothing to decide.
+ * choice.
+ *
+ * ── This is the test for ADOPTING as well as for DECIDING ───────────
+ *
+ * It used to be for deciding only, and the two tests disagreeing about the same evidence is
+ * what cost CS+Physics its entire first two years. `answerableGroup` required the published
+ * term to name EVERY course of a branch, so the recitation the catalog does not print in its
+ * plan meant "Introductory Physics" was never adopted at all — and then the choice this
+ * function would have made for it never came up, because an unadopted cell has no term to be
+ * legal in. Term 0 was left holding 15 SH of adopted courses beside a 5 SH cell the critical
+ * path forced there anyway, its ceiling was raised to the 15 it knew about, and all three
+ * rungs of the ladder refused on a 20 SH term that allowed 19.
+ *
+ * One test, asked once. Whether a cell may be adopted and which branch it lands on are the
+ * same question about the same rows, and two answers to it is one of them being wrong.
  */
-function uniqueBranch(cell, solo) {
+/**
+ * The one group of `cell` whose courses this term states OUTRIGHT, or null.
+ *
+ * `spent` is not an optimisation. Partial evidence claims a WHOLE group off ONE named member,
+ * so unlike the containment test it can claim a bundle whose other courses are already taken —
+ * and the containment test used to guarantee that could not happen, because a spent course is
+ * absent from `offers`. Found by fuzzing at 4,000 instances, `C5 answers both cell-5 and
+ * cell-1`: one cell claimed `C5` outright in term 0, and in term 1 a second cell claimed the
+ * bundle `[C5, C7]` on the strength of `C7`. One registration, two requirements.
+ *
+ * So a group holding any spent course is not a candidate, however plainly the rest of it was
+ * named. The courses a term never printed at all are still fine — the recitation of a
+ * corequisite bundle is the case this whole function exists for.
+ */
+function namedBranch(cell, solo, spent) {
   const groups = cell?.groups ?? [];
-  if (groups.length <= 1 || !solo?.size) return null;
+  if (!solo?.size) return null;
   let found = null;
   for (const g of groups) {
-    if (!g.some(id => solo.has(id))) continue;
+    if (!g.length || !g.some(id => solo.has(id))) continue;
+    if (spent && g.some(id => spent.has(id))) continue;
     if (found) return null;                 // two branches named — the choice is still open
     found = g;
   }
   return found;
+}
+
+function uniqueBranch(cell, solo, spent) {
+  // A cell that never had alternatives has nothing to DECIDE, however plainly its one group
+  // was named. That is the only difference between this and the adoption test above, and it
+  // is a difference about the CELL rather than about the evidence.
+  if ((cell?.groups ?? []).length <= 1) return null;
+  return namedBranch(cell, solo, spent);
 }
 
 function poolGroup(cell, offers, poolAnswerable, solo) {
@@ -300,12 +365,35 @@ function poolGroup(cell, offers, poolAnswerable, solo) {
   return null;
 }
 
-function answerableGroup(cell, offers) {
+/**
+ * The one option group of a cell this published term can answer, or null.
+ *
+ * Two tests, strongest first, and they answer different shapes of evidence:
+ *
+ *   CONTAINED  the term names every course of a group. Unambiguous whatever else it names,
+ *              so it needs no `solo` and can be met by one branch of a published choice.
+ *   NAMED      the term states courses from exactly one group OUTRIGHT. This is what reads a
+ *              row the catalog prints in its own units rather than ours — "PHYS 1161 and
+ *              PHYS 1162" for a group of three, "CHEM 1211" for a lecture/lab/recitation
+ *              triple — and `solo` is what keeps it honest: a course offered as one option
+ *              of a choice row is not a statement that the requirement happens here.
+ *
+ * An `open` cell is never matched here. It is the search's slack, and holding it still is what
+ * turns a heavy published term into a refusal; `poolGroup` handles the BOUNDED kind.
+ *
+ * `partial` switches the second test off, which is what makes it a RUNG of the ladder rather
+ * than a rule. Reading a bundle off one named member adopts strictly more of the department's
+ * plan, and more adoption is more CONSTRAINT: measured over the corpus it rescued 8 programs
+ * from abandoning their arrangement entirely and over-constrained 2 others into losing two whole
+ * semesters of it. Releasing the implied courses and keeping all four terms is a smaller loss
+ * than keeping the implied courses and losing two terms, so the ladder tries it first.
+ */
+function answerableGroup(cell, offers, solo, spent, partial = true) {
   if (cell?.kind !== "named" && cell?.kind !== "choice") return null;
   for (const group of (cell.groups ?? [])) {
     if (group.length > 0 && group.every(id => offers.has(id))) return group;
   }
-  return null;
+  return partial ? namedBranch(cell, solo, spent) : null;
 }
 
 /**
@@ -515,6 +603,13 @@ export function adoptEarlyTerms({
   // Supplied by the caller because it needs the catalog. Omitted, no cell is ever decided,
   // which is the behaviour that predates this.
   branchLegalAt = null,
+  // ── May a bundle be read off ONE of its courses? ────────────────────
+  //
+  // On, a term naming `PHYS 1161 and PHYS 1162` adopts the group `[1161, 1162, 1163]`, because a
+  // corequisite bundle is indivisible and the catalog's plan text prints what a student
+  // registers for rather than our decomposition of the requirement. That is the correct reading
+  // and it is also strictly more CONSTRAINT, so it is a rung: see `answerableGroup`.
+  partialEvidence = true,
 } = {}) {
   // `load` included so every return of this function has one shape. A caller that reads
   // `early.load` on the empty result should get an empty map, not `undefined` guarded by an
@@ -569,6 +664,11 @@ export function adoptEarlyTerms({
     // Named cells go first, so a course that exactly answers one requirement is not
     // consumed by a looser choice cell that had alternatives available.
     const available = new Set([...offers].filter(id => !spent.has(id)));
+    // `solo` filtered by the same `spent` set, and for the same reason. `namedBranch` reads
+    // this one rather than `offers`, so without the filter a course already claimed by an
+    // earlier cell could still be the evidence that hands its whole corequisite bundle to a
+    // second cell — the exact double-claim `spent` exists to stop, arriving by the other door.
+    const statedHere = new Set([...(solo ?? [])].filter(id => !spent.has(id)));
     // ── Adopt no MORE credit than the department printed here ──────────
     //
     // `offers` is flat: a row reading "take two of these three" and a row reading "one of
@@ -598,7 +698,7 @@ export function adoptEarlyTerms({
     //
     // `solo` is per TERM, so a course stated outright in term 1 and offered as an
     // alternative in term 2 is treated correctly in each.
-    const rank = (p) => ((p.cell.groups ?? []).some(g => g.every(id => solo?.has(id))) ? 0 : 1);
+    const rank = (p) => ((p.cell.groups ?? []).some(g => g.every(id => statedHere.has(id))) ? 0 : 1);
     // Pool cells go LAST, after every named and choice cell has had its pick, so a specific
     // requirement never loses its course to a generic pool that merely happens to contain it.
     for (const kind of ["named", "choice", "open"]) {
@@ -607,8 +707,8 @@ export function adoptEarlyTerms({
         if (intended.has(p.cell.id) || p.cell?.kind !== kind) continue;
         if (rank(p) !== tier) continue;
         const group = kind === "open"
-          ? poolGroup(p.cell, available, poolAnswerable, solo)
-          : answerableGroup(p.cell, available);
+          ? poolGroup(p.cell, available, poolAnswerable, statedHere)
+          : answerableGroup(p.cell, available, statedHere, spent, partialEvidence);
         if (!group) continue;
         // Measured in the cell's own credits, the same unit the budget is in. A 0 SH cell
         // never exhausts the budget and is always adopted, which is right: it is a
@@ -635,8 +735,16 @@ export function adoptEarlyTerms({
         // `[1161, 1162, 1163]`, so a recitation the catalog did not spell out in its plan
         // blocked a choice the department had plainly made. If they named nothing from any
         // other branch, the branch is decided.
-        if (group === uniqueBranch(p.cell, solo)) decided.set(p.cell.id, [...group]);
-        for (const id of group) { available.delete(id); spent.add(id); }
+        // Not gated on `partialEvidence`. Deciding a choice from one named branch is a separate
+        // concern with its own rung (`earlyDecide`), and folding the two together would make one
+        // rung silently do the other's job.
+        if (group === uniqueBranch(p.cell, statedHere, spent)) decided.set(p.cell.id, [...group]);
+        // Spent in BOTH sets. `namedBranch` can return a group holding a course this term
+        // never printed — the recitation of a corequisite bundle — and that course is now
+        // taken by this cell as surely as the ones that were printed.
+        for (const id of group) {
+          available.delete(id); statedHere.delete(id); spent.add(id);
+        }
       }
      }
     }

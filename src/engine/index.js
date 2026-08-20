@@ -267,15 +267,70 @@ function withPackerRetry(args) {
  * always says which of these it is — a plan built without the department's arrangement must
  * never silently claim to have followed it.
  */
-const EARLY_RUNGS = [
-  // The credit ceiling is the newest and the most likely to bind: it LOWERS a term's capacity
-  // to the printed load, which pre-flight also sizes the degree against, so a degree that
-  // barely fits can be refused by arithmetic alone.
-  { name: "department-term-load",     args: { earlyCeiling: false } },
+export const EARLY_RUNGS = [
+  // ── First, the courses their plan IMPLIES but does not print ────────
+  //
+  // Reading a corequisite bundle off one of its members — `PHYS 1161 and PHYS 1162` standing for
+  // `[1161, 1162, 1163]` — is the strongest reading of a published term, and therefore also the
+  // tightest. Measured, both directions are real: it rescues 8 programs from abandoning their
+  // arrangement entirely, and over-constrains 2 others.
+  //
+  // ── Why FIRST, ahead of the ceiling that used to lead ───────────────
+  //
+  // Because it is the CAUSE, and the rungs above it were nearly dead. Over the corpus, exactly
+  // 1 program of 259 ever needed the credit ceiling relaxed and 0 needed the choice rung — while
+  // 9 landed past both, on a window-shrink rung, having lost the branch decisions on the way
+  // down for nothing. Data Science and Ecology is the case: its refusal is caused by the implied
+  // courses, neither the ceiling nor the choices could help, and descending past
+  // `earlyDecide: false` to reach the fix cost it `DS 2500`, `DS 2501` and `ENGW 1111` — three
+  // committed placements traded for a constraint that was never the problem.
+  //
+  // Ordered by how far the mechanism is from what the department actually WROTE. An implied
+  // course is an inference about a row the plan does not print, which makes it the weakest thing
+  // here and the right thing to give up first. The ceiling and the decisions are both readings
+  // of text that IS printed, so they outrank it however recently they were added.
+  { name: "department-implied-courses", args: { earlyPartial: false } },
+  // Then the credit ceiling: it LOWERS a term's capacity to the printed load, which pre-flight
+  // also sizes the degree against, so a degree that barely fits can be refused by arithmetic
+  // alone.
+  { name: "department-term-load",     args: { earlyPartial: false, earlyCeiling: false } },
   // Then the branch decisions. Pinning one option of a choice removes the search's freedom to
   // answer that cell another way, which can strand a later term.
-  { name: "department-course-choice", args: { earlyCeiling: false, earlyDecide: false } },
-  // And only then the arrangement itself — the thing this module exists to do.
+  { name: "department-course-choice",
+    args: { earlyPartial: false, earlyCeiling: false, earlyDecide: false } },
+  // ── Then the WINDOW, one semester at a time from the back ───────────
+  //
+  // The step the ladder was missing, and the one that matters most. Some degrees genuinely
+  // cannot be solved with all four semesters pinned — Data Science and Ecology refuses on
+  // `term-at-credit-cap` with "every term that could hold Ecology is already at its credit
+  // cap", which is a fact about the degree and not about a ceiling or a choice. Every rung above
+  // was about HOW we hold the four terms, so none could help, and the plan fell
+  // straight through to abandoning all four: the student's Year 1 Fall came back holding
+  // `CHEM 1161` where their department published `CS 1800`, `CS 2000` and `ENGW 1111`, with
+  // `CS 1800` landing in semester 5 and `ENGW 1111` nowhere at all.
+  //
+  // Giving up the fourth semester and keeping the first three is a strictly smaller loss than
+  // giving up all four, and it is what the department's own data supports: their published
+  // variants agree with each other 76.2% / 73.2% / 50.6% / 36.3% across the four, so the back
+  // of the window is both the least certain and the cheapest thing to release. Shrinking from
+  // the back therefore sheds the weakest evidence first.
+  //
+  // Everything already released stays released, so the ladder is MONOTONE — each rung keeps
+  // strictly less of the department's plan than the one above it. A program that needed the
+  // ceiling relaxed at four terms still needs it at three, so re-testing that combination is a
+  // retry that cannot succeed; and re-adding the implied courses at three terms would make one
+  // rung stronger than the last, which is not a ladder. The alternative — every combination of
+  // window size and evidence strength — is ten rungs to explore an ordering that is ambiguous
+  // anyway ("three terms with the labs" against "four terms without them"), at seven full plan
+  // generations per refusing program.
+  { name: "department-first-three",
+    args: { earlyCeiling: false, earlyDecide: false, earlyPartial: false, earlyTerms: 3 } },
+  { name: "department-first-two",
+    args: { earlyCeiling: false, earlyDecide: false, earlyPartial: false, earlyTerms: 2 } },
+  { name: "department-first-only",
+    args: { earlyCeiling: false, earlyDecide: false, earlyPartial: false, earlyTerms: 1 } },
+  // And only then the arrangement itself — the thing this module exists to do. Reached now only
+  // where not even the FIRST semester of the department's plan can be scheduled.
   { name: "department-early-terms",   args: { followDepartment: false } },
 ];
 
@@ -336,10 +391,13 @@ function generateOnce({
   // built without the department's arrangement never silently claims to have followed it.
   // Production's first attempt is always true.
   followDepartment = true,
-  // The two rungs of the department ladder that come off before the arrangement itself. See
-  // `EARLY_RUNGS`: both default ON, and each is dropped only after a refusal.
+  // The rungs of the department ladder that come off before the window itself starts shrinking.
+  // See `EARLY_RUNGS`: all default ON, and each is dropped only after a refusal.
   earlyCeiling = true,
   earlyDecide = true,
+  // Whether a corequisite bundle may be read off ONE of its courses — the strongest reading of
+  // a published term, and therefore also the tightest. See `answerableGroup`.
+  earlyPartial = true,
   // How many study terms the department plans. A measurement hatch in the spirit of
   // `propagateChains` — "following the department beats inferring from a course number" is a
   // claim about a corpus and has to be runnable both ways — not a tuning knob.
@@ -753,6 +811,7 @@ function generateOnce({
           }
           return set.has(id);
         },
+        partialEvidence: earlyPartial,
       })
     : { placed: new Map(), moves: [], unplaced: [], load: new Map() };
   // ── Let the search hold what the department published ──────────────
@@ -789,21 +848,63 @@ function generateOnce({
   // term's own limit — a department's 8 SH summer half plus 2 is 10 against a 9.5 half-term
   // cap, and `computer_science_and_biology_bs` shipped exactly that. Term 0 is the only term
   // permitted above the cap, and only through the disclosed branch below.
+  // ── What a term is OBLIGED to hold, which is not only what we adopted ──
+  //
+  // No ceiling may sit below this figure, and every one of them used to be able to. The
+  // obligation is the union of two sets, and only the first was ever counted:
+  //
+  //   PINNED  a cell adoption fixed to this term.
+  //   ONLY    a cell the layout had already narrowed to this one term — the critical path
+  //           does that, and so does a course the catalog runs in a single season.
+  //
+  // CS+Physics is the measured case, and it cost the degree its whole first two years: 15 SH
+  // adopted into Year 1 Fall beside a 5 SH `Introductory Physics` whose domain was already
+  // `{0}`. The allowance was raised to the 15 it knew about, and `tightestTerms` then refused
+  // a 20 SH term that allowed 19 — at EVERY rung of the ladder, because no rung of it is about
+  // a cell we never pinned. That is what makes this a defect rather than a tuning question: no
+  // amount of giving the department's plan up can fix a figure computed from the wrong set.
+  //
+  // Read off the domains and `early.placed`, which is the same fact `tightestTerms` reads.
+  // Two derivations of one figure is one of them being wrong later, and this was that.
+  //
+  // It cannot licence the search to add anything. A unit domain is not room, it is an
+  // obligation the search has no choice about; everything else in the term is still held by
+  // the ordinary cap. And it is a FLOOR under a ceiling, never a target.
+  const obligedSHAt = (ti) => (plans ?? []).reduce((n, p) => {
+    const pinned = early.placed?.get(p.cell?.id) === ti;
+    const only = p.domain?.length === 1 && p.domain[0] === ti;
+    return (pinned || only) ? n + (p.cell?.sh ?? 0) : n;
+  }, 0);
   for (const [ti, ceiling] of (earlyCeiling ? (early.publishedLoad ?? new Map()) : new Map())) {
     if (ti === 0 || !terms[ti] || !(ceiling > 0)) continue;
     const base = termCapacity(terms[ti], { creditMax: ports.creditMax, studentType });
-    if (!(ceiling < base)) continue;
+    // Never below what the term must hold anyway — a ceiling that refuses an arrangement we
+    // did not choose and cannot change is a ceiling that refuses the degree.
+    const floor = obligedSHAt(ti);
+    const held = Math.max(ceiling, floor);
+    if (!(held < base)) continue;
     // Replaced rather than mutated, for the reason spelled out on term 0 below: `studyTerms`
     // hands back the SHAPE's own term objects for full-weight terms.
-    terms[ti] = { ...terms[ti], creditCeiling: ceiling };
+    terms[ti] = { ...terms[ti], creditCeiling: held };
   }
   let earlyOverload = null;
-  if (terms[0] && (early.load?.get(0) ?? 0) > 0) {
-    const want = early.load.get(0);
+  const obliged0 = obligedSHAt(0);
+  if (terms[0] && obliged0 > 0) {
+    const want = obliged0;
     const base = termCapacity(terms[0], { creditMax: ports.creditMax, studentType });
     // Term 0 gets the published ceiling too when it is UNDER the cap — the same rule as the
     // window above. Above the cap it falls through to the overload branch, which discloses.
-    const ceil0 = earlyCeiling ? (early.publishedLoad?.get(0) ?? 0) : 0;
+    // Floored by the obligation for the same reason as the window above: a ceiling below what
+    // the term must hold anyway refuses an arrangement we cannot change.
+    //
+    // ⚠ And only where a published ceiling EXISTS. Flooring unconditionally reads a missing
+    // ceiling as a ceiling of `want`, which is not a relaxation but the tightest possible
+    // clamp: with `followDepartment: false` there is no `publishedLoad` at all, so the last
+    // rung of the ladder — the one that must always be able to answer — capped Year 1 Fall at
+    // the 5 SH one cell happened to be forced to hold, and CS+Physics refused on
+    // `named-prereq` two terms later. A floor under a ceiling that is not there is a ceiling.
+    const pub0 = early.publishedLoad?.get(0) ?? 0;
+    const ceil0 = earlyCeiling && pub0 > 0 ? Math.max(pub0, want) : 0;
     if (want <= base && ceil0 > 0 && ceil0 < base) {
       terms[0] = { ...terms[0], creditCeiling: ceil0 };
     }
