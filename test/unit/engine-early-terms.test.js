@@ -665,3 +665,83 @@ test("early › publishedLoad is floored by what repair actually placed", () => 
       `term ${ti}: ceiling ${publishedLoad.get(ti)} is below the ${placedSH} SH repair placed`);
   }
 });
+
+// ── Deciding the department's option, and the legality that bounds it ──
+//
+// A choice cell used to be fixed in TIME and left undecided. That is safe and it is not what
+// a student sees: the catalog names PHYS 1161 in Year 1 Fall and we drew "Introductory
+// Physics", a placeholder listing four alternatives, for a term the department had resolved.
+//
+// Deciding it needs a guard the cell's own DOMAIN cannot give. A domain says "some option is
+// legal here", because it was computed over every option; pinning one option needs "THIS
+// option is legal here". Without that distinction, five plans shipped a course the student
+// could not register for.
+
+test("early › the department's branch is adopted when it is legal there", () => {
+  const shape = shapeOf(2);
+  const plan = planOf([["A"]]);                       // the department names A, not B
+  const c = choice("pick", [["A"], ["B"]], wide());
+  const { decided } = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans: [c], precedence: NOPREC,
+    branchLegalAt: () => true,
+  });
+  assert.deepEqual(decided.get("pick"), ["A"], "the department's own option was not adopted");
+});
+
+test("early › a branch ILLEGAL where it landed is dropped, not pinned", () => {
+  // The regression, pinned. `BIOL 1143` in a Year 1 Fall it is not offered in, and
+  // `ENGL 1450` where its prerequisites cannot be met. The cell must keep every option so the
+  // ordinary search can pick one that works — losing the department's preference and keeping a
+  // registrable plan, never the other way round.
+  const shape = shapeOf(2);
+  const plan = planOf([["A"]]);
+  const c = choice("pick", [["A"], ["B"]], wide());
+  const out = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans: [c], precedence: NOPREC,
+    branchLegalAt: () => false,
+  });
+  assert.equal(out.decided.size, 0, "an unregistrable branch was pinned to the plan");
+  assert.equal(out.placed.get("pick"), 0, "the cell should still be FIXED in its term");
+  assert.deepEqual(c.cell.groups, [["A"], ["B"]], "the cell lost options it must keep");
+});
+
+test("early › no legality test supplied means nothing is decided", () => {
+  // The default has to be the behaviour that predates this. A caller that cannot answer
+  // "is this branch legal there" must not get decisions it cannot vouch for.
+  const shape = shapeOf(2);
+  const plan = planOf([["A"]]);
+  const out = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans: [choice("pick", [["A"], ["B"]], wide())],
+    precedence: NOPREC,
+  });
+  assert.equal(out.decided.size, 0);
+});
+
+test("early › legality is checked where the cell LANDED, not where it was published", () => {
+  // Repair may slide a cell later, and a branch legal in the published term is not necessarily
+  // legal in the one the cell ends up in. Checking the intended term would approve a decision
+  // for a placement that no longer exists. Here A is only available from term 2, so repair
+  // moves it there, and the legality question must be asked about term 2.
+  const shape = shapeOf(3);
+  const plan = planOf([["A"]]);                       // department says term 0
+  const asked = [];
+  const out = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans: [choice("pick", [["A"], ["B"]], [2, 3])],
+    precedence: NOPREC,
+    branchLegalAt: (group, ti) => { asked.push(ti); return true; },
+  });
+  assert.equal(out.placed.get("pick"), 2, "repair should have moved it to its first legal term");
+  assert.deepEqual(asked, [2], "legality was asked about the published term, not the real one");
+});
+
+test("early › a genuinely ambiguous row is left to the student", () => {
+  // The department named a course from BOTH branches. That is a choice they did not make, and
+  // picking one would decide it by option order.
+  const shape = shapeOf(2);
+  const plan = planOf([["A", "B"]]);                  // both branches named in one term
+  const out = adoptEarlyTerms({
+    publishedPlan: plan, shape, plans: [choice("pick", [["A"], ["B"]], wide())],
+    precedence: NOPREC, branchLegalAt: () => true,
+  });
+  assert.equal(out.decided.size, 0, "an ambiguous row was decided for the student");
+});

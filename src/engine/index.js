@@ -681,6 +681,18 @@ function generateOnce({
         //
         // Memoised per cell because `materialize` walks the catalog and this is asked once per
         // (cell, course) pair over the whole early window.
+        // Whether the department's own option can be TAKEN in the term it lands in. Both
+        // halves are the same two rules `buildDomains` applies per cell — the course runs
+        // that season, and its prerequisite chain fits before that term — asked here of one
+        // specific branch rather than of the cell's whole option set. That difference is the
+        // entire point: a domain says "some option works here", and pinning one option needs
+        // "THIS option works here".
+        branchLegalAt: (group, ti) => {
+          const t = terms[ti];
+          if (!t) return false;
+          return group.every(id =>
+            ports.offered(id, t.semTypeId) && (depth.depthOf(id) ?? 0) <= ti);
+        },
         poolAnswerable: (cell, id) => {
           if (!cell?.spec) return false;
           let set = poolSets.get(cell);
@@ -765,7 +777,7 @@ function generateOnce({
   // the critical-path narrowing above uses. `verify-chart` generates 1,031 plans untraced in
   // the monthly workflow, and an exclusion row per term per fixed cell is pure cost there.
   const earlyFixed = applyEarlyTerms(plans, early.placed,
-    trace ? EXCLUSION.DEPARTMENT_TERM : null);
+    trace ? EXCLUSION.DEPARTMENT_TERM : null, early.decided);
 
   // ── 6. A legal plan ────────────────────────────────────────────
   //

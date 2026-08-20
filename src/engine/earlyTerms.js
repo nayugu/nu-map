@@ -225,7 +225,12 @@ function earlyTermsOf(publishedPlan, shape, through) {
         if (e.coop || e.vacation || e.heading) continue;
         sh += e.sh ?? 0;
         for (const group of (e.options ?? [])) for (const id of group) offers.add(id);
-        if (e.options?.length === 1 && e.options[0].length === 1) solo.add(e.options[0][0]);
+        // ONE option group means no alternative was offered, however many courses that group
+        // holds. The catalog writes a corequisite pair as a single row — "CS 1800 and
+        // CS 1802", "PHYS 1161 and PHYS 1162" — and requiring a single COURSE here meant
+        // every such row read as ambiguous, so the cell it answered was never decided and the
+        // student saw a placeholder for a term the department had fully resolved.
+        if (e.options?.length === 1) for (const id of e.options[0]) solo.add(id);
       }
       if (offers.size) out.push({ at, offers, sh, solo });
     }
@@ -260,6 +265,30 @@ function earlyTermsOf(publishedPlan, shape, through) {
  * be a property of the input rather than of iteration order — the same determinism argument
  * `byIdOrder` exists for one level up.
  */
+/**
+ * The one option branch this term's published rows point at, or null.
+ *
+ * A cell with alternatives is DECIDED when the department named at least one course from
+ * exactly one of them and nothing from any other. That is a weaker test than "named every
+ * course in the branch" and it has to be: a catalog plan row prints the courses a student
+ * registers for, not our decomposition of the requirement, so "PHYS 1161 and PHYS 1162"
+ * points unambiguously at the branch `[1161, 1162, 1163]` without listing the recitation.
+ *
+ * Null when two branches are touched — that is genuinely ambiguous and the student keeps the
+ * choice — and null for a cell that never had alternatives, which has nothing to decide.
+ */
+function uniqueBranch(cell, solo) {
+  const groups = cell?.groups ?? [];
+  if (groups.length <= 1 || !solo?.size) return null;
+  let found = null;
+  for (const g of groups) {
+    if (!g.some(id => solo.has(id))) continue;
+    if (found) return null;                 // two branches named — the choice is still open
+    found = g;
+  }
+  return found;
+}
+
 function poolGroup(cell, offers, poolAnswerable, solo) {
   if (cell?.kind !== "open" || !poolAnswerable) return null;
   // An UNBOUNDED cell is the search's slack and stays untouched; `poolAnswerable` is what
@@ -474,6 +503,18 @@ export function adoptEarlyTerms({
   // and PHTH 1260 each in 55 or more programs, sitting in science-elective pools that
   // adoption refused to touch.
   poolAnswerable = null,
+  // ── Is this exact branch legal in this term? ────────────────────────
+  //
+  // Adopting the department's option is only sound if the courses in it can actually be taken
+  // then. A cell's DOMAIN cannot answer that: it was computed over every option, so a term is
+  // in it if ANY branch is legal there. Deciding on the department's branch and trusting that
+  // domain shipped `BIOL 1143` into a Year 1 Fall it is not offered in, and `ENGL 1450` into
+  // one where its prerequisites could not be met — five plans that could not be registered
+  // for, caught by `verify-chart`'s hard rules.
+  //
+  // Supplied by the caller because it needs the catalog. Omitted, no cell is ever decided,
+  // which is the behaviour that predates this.
+  branchLegalAt = null,
 } = {}) {
   // `load` included so every return of this function has one shape. A caller that reads
   // `early.load` on the empty result should get an empty map, not `undefined` guarded by an
@@ -481,7 +522,7 @@ export function adoptEarlyTerms({
   const empty = () => ({
     placed: new Map(), moves: [], unplaced: [], load: new Map(),
     firstTermCap: capOf ? capOf(0) : Infinity,
-    publishedLoad: new Map(),
+    publishedLoad: new Map(), decided: new Map(),
   });
   if (!publishedPlan || !plans?.length) return empty();
 
@@ -520,6 +561,9 @@ export function adoptEarlyTerms({
   // What the department printed for each early term, by study-term index. Returned to the
   // caller, which turns it into the term's ceiling — see `publishedLoad` on the result.
   const printed = new Map();
+  // Cells the published plan RESOLVED: the department named every course of one option group,
+  // so the choice is theirs and already made. Applied by `applyEarlyTerms`.
+  const decided = new Map();
   for (const { at, offers, sh, solo } of earlyTermsOf(publishedPlan, shape, through)) {
     printed.set(at, (printed.get(at) ?? 0) + sh);
     // Named cells go first, so a course that exactly answers one requirement is not
@@ -573,6 +617,25 @@ export function adoptEarlyTerms({
         if (taken + cost > budget + 0.01) continue;
         taken += cost;
         intended.set(p.cell.id, at);
+        // ── And DECIDED, when the department said which option ───────────
+        //
+        // A choice cell used to be fixed in time and left undecided, on the reasoning that
+        // the search still has to answer it legally so nothing is lost. What is lost is what
+        // the student SEES: the catalog names `PHYS 1161` in Year 1 Fall and we drew
+        // "Introductory Physics", a placeholder listing four alternatives, for a term the
+        // department had already resolved. Same for `ENGW 1111` as "College Writing".
+        //
+        // Only when EVERY course in the group was named outright (`solo`) in this term, and
+        // only for a cell that genuinely had alternatives. A row stating a choice stays a
+        // choice — deciding that would pick for the student by option order.
+        //
+        // The test is that the department named courses from exactly ONE branch — not that
+        // they named every course in it. Requiring the whole group failed on the commonest
+        // shape there is: CS+Physics publishes "PHYS 1161 and PHYS 1162" while our group is
+        // `[1161, 1162, 1163]`, so a recitation the catalog did not spell out in its plan
+        // blocked a choice the department had plainly made. If they named nothing from any
+        // other branch, the branch is decided.
+        if (group === uniqueBranch(p.cell, solo)) decided.set(p.cell.id, [...group]);
         for (const id of group) { available.delete(id); spent.add(id); }
       }
      }
@@ -632,6 +695,23 @@ export function adoptEarlyTerms({
   // already retries with `followDepartment: false` when the department's own shape cannot be
   // satisfied — so the worst case of a ceiling that is too tight is today's behaviour, not a
   // lost plan.
+  // ── A decision is only kept where it is LEGAL where it landed ──────
+  //
+  // Validated after `repair`, never before it. Repair may slide a cell one or more terms
+  // later, and a branch legal in the term the department printed is not necessarily legal in
+  // the term the cell ends up in — nor the reverse. Checking the intended term would approve
+  // a decision for a placement that no longer exists.
+  //
+  // A branch that fails here is DROPPED, not relocated: the cell keeps all its options and
+  // the ordinary search picks one that works in that term. That is the conservative direction
+  // — we lose the department's preference and keep a plan the student can register for, rather
+  // than pinning a course they cannot take. Degrade to less information, never to wrong
+  // information.
+  for (const [id, group] of [...decided]) {
+    const at = placed.get(id);
+    if (at == null || !branchLegalAt || !branchLegalAt(group, at)) decided.delete(id);
+  }
+
   const publishedLoad = new Map();
   for (const [at, sh] of printed) {
     if (!(sh > 0)) continue;
@@ -640,7 +720,7 @@ export function adoptEarlyTerms({
   // `firstTermCap` is the allowance actually used for term 0. Returned rather than left for
   // a caller to re-derive: it is the number the search's ceiling and every cap assertion have
   // to agree with, and two derivations of one figure is one of them being wrong later.
-  return { placed, moves, unplaced, load, firstTermCap: cap0, publishedLoad };
+  return { placed, moves, unplaced, load, firstTermCap: cap0, publishedLoad, decided };
 }
 
 /**
@@ -655,12 +735,20 @@ export function adoptEarlyTerms({
  * `repair` only ever returns a term drawn from the cell's own domain, so the guard here is
  * belt-and-braces against a caller that skipped it.
  */
-export function applyEarlyTerms(plans, placed, exclusionReason = null) {
+export function applyEarlyTerms(plans, placed, exclusionReason = null, decided = null) {
   if (!placed?.size) return 0;
   let n = 0;
   for (const p of plans) {
     const at = placed.get(p.cell.id);
     if (at == null || !p.domain.includes(at)) continue;
+    // ── The department's own pick, applied to the cell ────────────────
+    //
+    // REPLACED, never mutated: the cell object is reachable from the precedence index and the
+    // depth index, both built before this runs, and editing it in place would change what
+    // those were computed from after the fact. Narrowing to one group only ever makes the
+    // cell more specific, so a domain derived from the wider set stays sound.
+    const pick = decided?.get(p.cell.id);
+    if (pick?.length) p.cell = { ...p.cell, groups: [pick] };
     // Recorded BEFORE the narrowing, and only for terms actually lost, so the derivation
     // view can say why a card has one legal term left. Without this the tree draws a
     // single-term card with no explanation, which reads as a defect in the one view whose
