@@ -573,6 +573,8 @@ export const strings = {
   "course.tooltip.prereq.missing":"Prérequis pas encore placé dans le plan",
   "course.badge.prereq.grade":    "! note",
   "course.badge.gpa.gate":        "! GPA",
+  "course.badge.standing":        "{standing} ?",
+  "course.tooltip.standing":      "Banner réserve toutes les sections au niveau {standing}, qui exige {need} crédits acquis. Ce plan atteint {have} à l'inscription de ce semestre — les crédits de ce semestre-là ne comptent pas. Le niveau s'acquiert par crédits : une charge plus lourde ou des cours d'été peuvent y remédier ; vérifiez avec votre conseiller.",
   "course.tooltip.prereq.grade":  "Une note saisie n'atteint pas le minimum exigé par le prérequis",
   "course.tooltip.gpa.gate":      "Ce cours exige un GPA de {gpa} ; les notes saisies sont en dessous",
   "course.grade.tooltip":         "Saisissez votre note (facultatif)",

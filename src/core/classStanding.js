@@ -34,16 +34,140 @@ export const STANDING_LADDER = ["FR", "SH", "JR", "SR"];
 export const KNOWN_STANDINGS = new Set([...STANDING_LADDER, "GR"]);
 
 /**
- * Fraction of an undergraduate plan completed before each standing is reached.
+ * ── THE RULE, as the registrar states it ────────────────────────────
  *
- * A standing is earned with credits, not terms, so the honest mapping for a
- * 4-year/8-term plan is quarter markers: sophomore at 1/4, junior at 1/2, senior
- * at 3/4. Deliberately NOT fitted to observed placements — `levelFloor` already
- * is a fit, and the entire point of this data is to replace a fit with the
- * registrar's stated rule. Expressed as a position 0..1 to match
- * `cellLevelFloor`'s contract, so a plan of any length converts the same way.
+ * Northeastern's undergraduate catalog, Academic Progression Standards:
+ *
+ *   "For undergraduate day students, freshman, sophomore, junior, and senior
+ *    standing are determined by earned semester hours:"
+ *      Freshman   less than 32 semester hours
+ *      Sophomore  at least 32 but less than 64
+ *      Junior     at least 64 but less than 96
+ *      Senior     at least 96
+ *
+ * MINIMUM earned semester hours for each standing. Two words in that quotation
+ * decide the whole design:
+ *
+ *   **earned** — not registered, not in progress. The credits for the term you
+ *   are registering INTO have not been earned, so they cannot raise the standing
+ *   that lets you register. Hence `earnedSHBefore` sums terms STRICTLY BEFORE the
+ *   one being checked, the same `sidx < currentSemIdx` rule `totalSHDone` uses.
+ *
+ *   **semester hours** — not terms, not years. This is why the old fixed
+ *   fractions (sophomore at 1/4 of the plan, junior at 1/2) were wrong rather
+ *   than merely rough: a student who overloads reaches junior standing a term
+ *   early, and one who spends a year on co-op earning no credit reaches it a year
+ *   late. Both are common at Northeastern, and the fractions describe neither.
+ */
+export const STANDING_SH = Object.freeze({ FR: 0, SH: 32, JR: 64, SR: 96 });
+
+/**
+ * Fraction-of-plan positions, kept ONLY as the generator's fallback ordering
+ * hint for the case where no credit projection is available.
+ *
+ * These are what `STANDING_SH` replaced for any real judgement. They assume a
+ * 4-year/8-term plan at an even load, which is exactly the assumption co-op
+ * breaks. Do not use them to decide whether a placement is legal — use
+ * `meetsStanding` against a real credit total.
  */
 export const STANDING_FLOOR = Object.freeze({ FR: 0.00, SH: 0.25, JR: 0.50, SR: 0.75 });
+
+/** Minimum earned semester hours a standing requires. 0 for anything unknown. */
+export function requiredSHFor(code) {
+  return STANDING_SH[code] ?? 0;
+}
+
+/**
+ * The standing a given number of earned semester hours confers.
+ *
+ * @param {number} sh  earned semester hours
+ * @returns {string} a STANDING_LADDER member ("FR" below 32)
+ */
+export function standingAtSH(sh) {
+  const n = Number.isFinite(sh) ? sh : 0;
+  let best = "FR";
+  for (const code of STANDING_LADDER) {
+    if (n >= STANDING_SH[code]) best = code;
+  }
+  return best;
+}
+
+/**
+ * Does `earnedSH` satisfy a required standing?
+ *
+ * TRUE when the requirement is unknown or unreadable — the conservative
+ * direction. This answer becomes a warning on a student's plan, and a false
+ * warning about a gate we cannot even name is worse than a missed one.
+ *
+ * @param {number} earnedSH
+ * @param {string} required  a standing code
+ * @returns {boolean}
+ */
+export function meetsStanding(earnedSH, required) {
+  if (!STANDING_LADDER.includes(required)) return true;
+  return (Number.isFinite(earnedSH) ? earnedSH : 0) >= STANDING_SH[required];
+}
+
+/**
+ * Semester hours earned BEFORE a given term — the number the registrar would see
+ * when the student registers for it.
+ *
+ * `shByTermIndex` is a term-index → credits map or array; anything at an index
+ * < `termIndex` counts, anything at or after it does not. `bonusSH` is credit
+ * that exists before the timeline starts (transfer, AP, placement), which counts
+ * toward standing from day one — a student arriving with 32 transfer credits is a
+ * sophomore in their first term, and that is precisely the case a term-fraction
+ * model can never express.
+ *
+ * @param {number} termIndex
+ * @param {Record<number,number>|number[]} shByTermIndex
+ * @param {number} [bonusSH]
+ * @returns {number}
+ */
+/**
+ * The earliest TERM INDEX at which a plan has earned `requiredSH`.
+ *
+ * The generator's version of the same rule. `termSH` is the plan's per-term credit
+ * target in order, and co-op terms are 0 there (`shape.js` sets `targetSH: 0` for
+ * work terms) — which is the whole reason this exists rather than a fraction of
+ * the plan's length: a plan with two co-op terms reaches junior standing a year
+ * later than one without, and no fraction can know that.
+ *
+ * Returns `termSH.length` when the plan never accumulates enough. That is a real
+ * conflict — the plan cannot legally contain the course at all — but it is
+ * expressed as "last" rather than "nowhere" because this feeds an ORDERING. If it
+ * is ever promoted to a domain filter, this return needs revisiting first: it
+ * would forbid every term rather than merely disprefer them.
+ *
+ * @param {number} requiredSH
+ * @param {number[]} termSH  credits per term, in plan order
+ * @param {number} [bonusSH] credit already held before term 0 (transfer/AP)
+ * @returns {number} term index
+ */
+export function standingFloorTerm(requiredSH, termSH, bonusSH = 0) {
+  const need = Number.isFinite(requiredSH) ? requiredSH : 0;
+  if (need <= 0) return 0;
+  const list = Array.isArray(termSH) ? termSH : [];
+  let sum = Number.isFinite(bonusSH) ? bonusSH : 0;
+  for (let ti = 0; ti < list.length; ti++) {
+    if (sum >= need) return ti;
+    sum += Number.isFinite(list[ti]) ? list[ti] : 0;
+  }
+  return list.length;
+}
+
+export function earnedSHBefore(termIndex, shByTermIndex, bonusSH = 0) {
+  let sum = Number.isFinite(bonusSH) ? bonusSH : 0;
+  if (!shByTermIndex) return sum;
+  const entries = Array.isArray(shByTermIndex)
+    ? shByTermIndex.map((v, i) => [i, v])
+    : Object.entries(shByTermIndex).map(([k, v]) => [Number(k), v]);
+  for (const [ti, sh] of entries) {
+    if (!Number.isFinite(ti) || ti >= termIndex) continue;
+    if (Number.isFinite(sh)) sum += sh;
+  }
+  return sum;
+}
 
 /**
  * Canonical English names, for surfaces that are not localized — the MCP tools

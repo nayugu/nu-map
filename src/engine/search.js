@@ -82,7 +82,8 @@ import { NODE, causeCode } from "./trace.js";
 import { termCapacity, termSlotCap, coursesInCell } from "./domains.js";
 import { chainHeight, precedenceViolations } from "./precedence.js";
 import { DEFAULT_CALIBRATION, minCoursesFor, termIsFull } from "./calibration.js";
-import { cellLevelTarget, cellLevelFloor, unlockValues } from "./prereqDepth.js";
+import { cellLevelTarget, cellLevelFloor, cellStanding, unlockValues } from "./prereqDepth.js";
+import { standingFloorTerm, requiredSHFor } from "../core/classStanding.js";
 
 /**
  * Above how many candidates a cell is a pool rather than a choice.
@@ -1697,15 +1698,27 @@ function attemptPlacement({
           || f(a) - f(b) || a - b);
       }
       // Earliest, but not before a real plan has ever put a course of this level.
-      // The floor stands in for class standing, which the catalog states only in
-      // prose and our data therefore does not have — without it, "as early as
-      // possible" put a 4000-level CS course in the first term.
-      // A PREFERENCE, expressed as ordering and never as a filter. Filtering the
-      // domain to terms at or after the floor cost 15 percentage points of coverage
-      // — 77.4% down to 62.6% — because it removed legal terms the search needed for
-      // capacity and turned a taste into an infeasibility. Terms below the floor are
-      // tried last, not excluded.
-      const floor = cellLevelFloor(plan, courseMap, studentType) * span;
+      // The floor stands in for class standing. Where Banner STATES the standing we
+      // now compute the floor from credits instead of guessing from the level digit:
+      // the registrar sets standing by earned semester hours (32/64/96), so the
+      // floor is the first term by which the plan's own per-term credits reach the
+      // threshold. That is strictly better than a fraction of the plan's length
+      // because `shape.js` gives a co-op term `targetSH: 0` — a plan with two work
+      // terms reaches junior standing a year later than one without, and a fraction
+      // cannot express that. The level-digit p10 remains the fallback for the ~79%
+      // of courses Banner does not restrict.
+      //
+      // Still a PREFERENCE, expressed as ordering and never as a filter. Filtering
+      // the domain to terms at or after the floor cost 15 percentage points of
+      // coverage — 77.4% down to 62.6% — because it removed legal terms the search
+      // needed for capacity and turned a taste into an infeasibility. Terms below
+      // the floor are tried last, not excluded. Note `standingFloorTerm` returns
+      // terms.length when the plan never earns enough credit, which is harmless as
+      // an ordering and would forbid everything as a filter — see its comment.
+      const stdCode = studentType === "graduate" ? null : cellStanding(plan, courseMap);
+      const floor = stdCode
+        ? standingFloorTerm(requiredSHFor(stdCode), terms.map(t => t.targetSH || 0))
+        : cellLevelFloor(plan, courseMap, studentType) * span;
       return [...plan.domain].sort((a, b) =>
         byOptional(a, b) || crowdsOutAReal(plan, a) - crowdsOutAReal(plan, b)
           || (a < floor ? 1 : 0) - (b < floor ? 1 : 0)

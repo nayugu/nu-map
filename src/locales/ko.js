@@ -573,6 +573,8 @@ export const strings = {
   "course.tooltip.prereq.missing":"선수 과목이 계획에 배치되지 않았습니다",
   "course.badge.prereq.grade":    "! 성적",
   "course.badge.gpa.gate":        "! GPA",
+  "course.badge.standing":        "{standing}?",
+  "course.tooltip.standing":      "Banner는 모든 분반을 {standing} 이상으로 제한하며 취득 학점 {need}이 필요합니다. 이 계획은 해당 학기 수강신청 시점에 {have}학점입니다 — 그 학기 자체의 학점은 포함되지 않습니다. 학년은 학점으로 결정되므로 수강 부담을 늘리거나 여름 학기를 들으면 해결됩니다. 지도교수와 확인하세요.",
   "course.tooltip.prereq.grade":  "입력한 성적이 선수 과목의 최소 기준에 미치지 못합니다",
   "course.tooltip.gpa.gate":      "이 과목은 GPA {gpa} 이상이 필요합니다. 입력한 성적은 그에 미치지 못합니다",
   "course.grade.tooltip":         "성적 입력 (선택 사항)",

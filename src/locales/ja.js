@@ -574,6 +574,8 @@ export const strings = {
   "course.tooltip.prereq.missing":"先修科目がプランに未配置です",
   "course.badge.prereq.grade":    "!成績",
   "course.badge.gpa.gate":        "!GPA",
+  "course.badge.standing":        "{standing}?",
+  "course.tooltip.standing":      "Banner は全セクションを{standing}以上に限定しており、修得単位 {need} が必要です。この計画では当該学期の登録時点で {have} 単位——その学期自身の単位は算入されません。学年は単位で決まるため、履修を増やすか夏学期を取れば解消できます。アドバイザーに確認してください。",
   "course.tooltip.prereq.grade":  "入力された成績が先修科目の最低基準に達していません",
   "course.tooltip.gpa.gate":      "この科目はGPA {gpa}以上が必要です。入力済みの成績はそれを下回っています",
   "course.grade.tooltip":         "成績を入力（任意）",

@@ -17,6 +17,7 @@ import { evalPrereqTree } from "../core/prereqEval.js";
 import { pruneSemOrders } from "../core/planSchema.js";
 import { RATINGS_KEY, readRatings, setRatingField, getRating } from "../core/ratingStore.js";
 import { planConditions } from "../core/prereqConditions.js";
+import { STANDING_LADDER, earnedSHBefore, meetsStanding } from "../core/classStanding.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline, concurrentCapOf } from "../core/planModel.js";
 import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
 import { reservationEdges } from "../core/reservationEdges.js";
@@ -1772,6 +1773,57 @@ const { locale, setLocale, locales, t } = useLanguage();
     });
     return v;
   }, [courses, pvPlacements, effectivePlacements, pvPlacedOut, SEM_INDEX, takesOf, prereqConditions, reservations, courseMap]);
+
+  // ── Class-standing violations ───────────────────────────────────
+  //
+  // Banner restricts some courses by class standing — capstones and Advanced
+  // Writing especially — and the registrar sets standing by EARNED semester
+  // hours: 32 sophomore, 64 junior, 96 senior. So this is a credit question, not
+  // a "which year of the plan is it" question, and the two genuinely disagree at
+  // Northeastern: two co-op terms earn nothing, so the midpoint of an eight-term
+  // plan can be 32 SH rather than the 64 a fraction-of-plan model assumes.
+  //
+  // Credit is counted STRICTLY BEFORE the course's own term, because "earned" is
+  // the registrar's word: the credits you are registering for have not been
+  // earned and cannot qualify you for the thing you are registering for.
+  //
+  // Reservations COUNT toward the projection even though they are undecided. That
+  // is the direction of error that matters: an undecided cell sitting in an
+  // earlier term will be filled with something worth credit, so omitting it would
+  // under-count the student's standing and invent warnings on healthy plans. This
+  // is a warning surface, so it must lean toward silence.
+  const standingViolations = useMemo(() => {
+    const v = new Map();
+    // A graduate plan has no undergraduate standing ladder — a master's student
+    // takes 5000-level courses in their first term. GR is not on the ladder, so
+    // grad-only gates are already skipped below, but a stray undergraduate gate
+    // inside a graduate plan must not warn either.
+    if ((pv?.studentType ?? studentType) === "graduate") return v;
+
+    const shByTerm = {};
+    const addSH = (sid, sh) => {
+      if (!inTimeline(sid, SEM_INDEX)) return;
+      const ti = SEM_INDEX[sid];
+      if (!Number.isFinite(ti)) return;
+      shByTerm[ti] = (shByTerm[ti] ?? 0) + (Number.isFinite(sh) ? sh : 0);
+    };
+    for (const [id, sid] of Object.entries(pvPlacements)) {
+      if (pvPlacedOut.has(id) || supersededTakes.has(id)) continue;
+      addSH(sid, effectiveCourseMap[id]?.sh ?? 0);
+    }
+    for (const r of Object.values(reservations)) addSH(r.semId, r.sh ?? 0);
+
+    for (const [id, sid] of Object.entries(pvPlacements)) {
+      if (pvPlacedOut.has(id) || supersededTakes.has(id)) continue;
+      if (sid === "incoming" || !inTimeline(sid, SEM_INDEX)) continue;
+      const required = effectiveCourseMap[id]?.offering?.std;
+      if (!STANDING_LADDER.includes(required)) continue;
+      const earned = earnedSHBefore(SEM_INDEX[sid], shByTerm, pvBonusSH);
+      if (!meetsStanding(earned, required)) v.set(id, { required, earned });
+    }
+    return v;
+  }, [pvPlacements, pvPlacedOut, supersededTakes, reservations, effectiveCourseMap,
+      SEM_INDEX, pvBonusSH, pv?.studentType, studentType]);
 
   const coreqViolations = useMemo(() => {
     const v = new Map();
@@ -4892,7 +4944,7 @@ const { locale, setLocale, locales, t } = useLanguage();
     currentSemIdx, placedIds, specialTermStartMap, specialTermContMap,
     gradSemId, coopGradConflicts,
     isGraduated, setIsGraduated,
-    prereqViolations, coreqViolations, connectedIds, prereqConditions,
+    prereqViolations, coreqViolations, standingViolations, connectedIds, prereqConditions,
     grades, setGrade, enteredGpaStat,
     ratings, setRating, ratingFor,
     ratingConsent, setRatingConsent, mayShareRatings,

@@ -687,6 +687,8 @@ export const strings = {
   "course.tooltip.prereq.missing":"Prerequisite not yet placed in plan",
   "course.badge.prereq.grade":    "! grade",
   "course.badge.gpa.gate":        "! GPA",
+  "course.badge.standing":        "{standing}?",
+  "course.tooltip.standing":      "Banner restricts every section to {standing} standing, which needs {need} earned credits. This plan reaches {have} by this term's registration — credits from this term itself don't count. Standing is earned by credits, so a heavier load or summer courses can fix it; check with your advisor.",
   "course.tooltip.prereq.grade":  "An entered grade doesn't meet this course's prerequisite minimum",
   "course.tooltip.gpa.gate":      "This course requires a {gpa} GPA; the grades you entered are below it",
   "course.grade.tooltip":         "Enter your grade (optional)",

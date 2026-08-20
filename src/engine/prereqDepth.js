@@ -97,7 +97,7 @@ import { foldPrereqTree, refId } from "../core/prereqFold.js";
 // its own published plans, so they are owned by the calibration; a second literal here would
 // drift from it silently, which is the whole reason the calibration exists.
 import { DEFAULT_CALIBRATION } from "./calibration.js";
-import { standingFloorOf }     from "../core/classStanding.js";
+import { standingFloorOf, STANDING_LADDER } from "../core/classStanding.js";
 
 /**
  * Depth is capped so a pathological chain cannot dominate every domain. A degree
@@ -453,6 +453,41 @@ export function cellLevelFloor(plan, courseMap, studentType = "undergraduate") {
   if (studentType === "graduate") return 0;
   const floors = optionFloors(plan, courseMap);
   return floors.length ? Math.min(...floors) : 0;
+}
+
+/**
+ * The class standing a whole cell requires, or null when it requires none.
+ *
+ * Combines like `optionFloors`, and for the same reasons: strictest WITHIN a group
+ * (an AND needs every member, so the latest gate governs), most lenient ACROSS
+ * options (the student may pick that option). One consequence worth stating —
+ * a single UNGATED option makes the whole cell ungated, because the student can
+ * simply choose it. That is not a loophole; it is what the requirement means.
+ *
+ * @param {object} plan   a cell plan from deriveCells
+ * @param {Record<string,object>} courseMap
+ * @returns {string|null} a STANDING_LADDER member
+ */
+export function cellStanding(plan, courseMap) {
+  const cell = plan?.cell ?? plan;
+  const options = cell?.groups?.length
+    ? cell.groups
+    : (plan?.candidates ?? []).map(id => [id]);
+  if (!options.length) return null;
+  let lenient = null;
+  for (const group of options) {
+    let strictest = null;
+    for (const id of group) {
+      const code = courseMap?.[id]?.offering?.std;
+      if (!STANDING_LADDER.includes(code)) continue;
+      if (strictest === null
+          || STANDING_LADDER.indexOf(code) > STANDING_LADDER.indexOf(strictest)) strictest = code;
+    }
+    if (strictest === null) return null;   // an ungated option ungates the cell
+    if (lenient === null
+        || STANDING_LADDER.indexOf(strictest) < STANDING_LADDER.indexOf(lenient)) lenient = strictest;
+  }
+  return lenient;
 }
 
 /**

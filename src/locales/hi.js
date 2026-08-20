@@ -573,6 +573,8 @@ export const strings = {
   "course.tooltip.prereq.missing":"पूर्वापेक्षा अभी योजना में नहीं रखी गई है",
   "course.badge.prereq.grade":    "! ग्रेड",
   "course.badge.gpa.gate":        "! GPA",
+  "course.badge.standing":        "{standing}?",
+  "course.tooltip.standing":      "Banner हर सेक्शन को {standing} श्रेणी तक सीमित करता है, जिसके लिए {need} अर्जित क्रेडिट चाहिए। यह योजना इस सेमेस्टर के पंजीकरण तक {have} तक पहुँचती है — इसी सेमेस्टर के क्रेडिट नहीं गिने जाते। श्रेणी क्रेडिट से बनती है, इसलिए अधिक भार या ग्रीष्मकालीन कोर्स से यह सुलझ सकता है; अपने सलाहकार से पुष्टि करें।",
   "course.tooltip.prereq.grade":  "दर्ज किया गया ग्रेड इस कोर्स की पूर्वापेक्षा की न्यूनतम सीमा को पूरा नहीं करता",
   "course.tooltip.gpa.gate":      "इस कोर्स के लिए {gpa} GPA चाहिए; दर्ज ग्रेड इससे कम हैं",
   "course.grade.tooltip":         "अपना ग्रेड दर्ज करें (वैकल्पिक)",

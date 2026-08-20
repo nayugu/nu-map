@@ -854,6 +854,8 @@ export const strings = {
   "course.tooltip.prereq.missing":"\u5148\u4fee\u8bfe\u7a0b\u5c1a\u672a\u52a0\u5165\u8ba1\u5212",
   "course.badge.prereq.grade":    "! 成绩",
   "course.badge.gpa.gate":        "! GPA",
+  "course.badge.standing":        "{standing}？",
+  "course.tooltip.standing":      "Banner 将所有班次限定为{standing}，需已修满 {need} 学分。本计划到该学期选课时只有 {have} 学分——本学期自身的学分不计入。年级由学分决定，因此加重课业或修暑期课程即可解决；请与学业顾问确认。",
   "course.tooltip.prereq.grade":  "已输入的成绩未达到该课程先修要求的最低标准",
   "course.tooltip.gpa.gate":      "该课程要求 GPA 达到 {gpa}；已输入的成绩低于此标准",
   "course.grade.tooltip":         "输入你的成绩（可选）",

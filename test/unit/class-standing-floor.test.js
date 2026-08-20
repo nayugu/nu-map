@@ -13,7 +13,7 @@
 
 import { test } from "node:test";
 import assert   from "node:assert/strict";
-import { cellLevelFloor, LEVEL_FLOOR } from "../../src/engine/prereqDepth.js";
+import { cellLevelFloor, cellStanding, LEVEL_FLOOR } from "../../src/engine/prereqDepth.js";
 import { STANDING_FLOOR, standingFloorOf } from "../../src/core/classStanding.js";
 
 /** A course record shaped like the normalized Course the engine sees. */
@@ -131,4 +131,53 @@ test("a GR-only course falls back to its level digit rather than losing its floo
   // GR yields null from standingFloorOf, so the cell must still get the 5xxx floor.
   const map = mapOf(course("CS7980", "GR"));
   assert.equal(cellLevelFloor(cellOf("CS7980"), map), LEVEL_FLOOR[5]);
+});
+
+// ── cellStanding: what standing a whole CELL requires ────────────────
+//
+// This is what the generator asks, and it combines the opposite way in each
+// direction: strictest within an AND group, most lenient across OR options.
+
+test("cellStanding reads a single gated course", () => {
+  const map = mapOf(course("ENGW3302", "JR"));
+  assert.equal(cellStanding(cellOf("ENGW3302"), map), "JR");
+});
+
+test("one ungated option ungates the whole cell", () => {
+  // The student can simply choose the open course, so the requirement does not
+  // gate the cell. Not a loophole — it is what "one of these" means.
+  const map = mapOf(course("ENGW3302", "JR"), course("ENGW1111"));
+  assert.equal(cellStanding(cellOf("ENGW3302", "ENGW1111"), map), null);
+});
+
+test("across gated options the most lenient wins", () => {
+  const map = mapOf(course("A", "SR"), course("B", "JR"), course("C", "SH"));
+  assert.equal(cellStanding(cellOf("A", "B", "C"), map), "SH");
+});
+
+test("within an AND group the strictest wins", () => {
+  const map = mapOf(course("A", "SH"), course("B", "SR"));
+  assert.equal(cellStanding(groupCell(["A", "B"]), map), "SR");
+});
+
+test("groups combine strictest-within, most-lenient-across", () => {
+  const map = mapOf(
+    course("A", "SH"), course("B", "SR"),   // group 1 → SR
+    course("C", "JR"), course("D", "JR"),   // group 2 → JR
+  );
+  assert.equal(cellStanding(groupCell(["A", "B"], ["C", "D"]), map), "JR");
+});
+
+test("a group with any ungated member is still gated by its gated members", () => {
+  // An AND group needs BOTH courses, so an ungated member cannot rescue it.
+  const map = mapOf(course("A"), course("B", "SR"));
+  assert.equal(cellStanding(groupCell(["A", "B"]), map), "SR");
+});
+
+test("cellStanding is null for GR, empty and malformed cells", () => {
+  assert.equal(cellStanding(cellOf("CS7980"), mapOf(course("CS7980", "GR"))), null);
+  assert.equal(cellStanding(cellOf(), {}), null);
+  assert.equal(cellStanding({ cell: {} }, {}), null);
+  assert.equal(cellStanding(undefined, undefined), null);
+  assert.equal(cellStanding(cellOf("X"), mapOf(course("X", "XX"))), null);
 });

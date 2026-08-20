@@ -15,6 +15,7 @@ import { reservationNameSource, reservationSubline, optionGroupsText, cardOption
 import GradePopover from "./GradePopover.jsx";
 import { CardHover } from "./HoverCard.jsx";
 import { takeConsumesSlot } from "../core/gradeSystem.js";
+import { requiredSHFor } from "../core/classStanding.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
 import { useTheme }    from "../context/ThemeContext.jsx";
 import { useTranslatedText, scaleLatinRuns } from "../context/TranslationContext.jsx";
@@ -109,7 +110,7 @@ function GradeChip({ pid, courseId, semId, grade, setGrade, t, pop, setPop, comp
 export default function CourseCard({ course, inSem, semId, noSubject = false }) {
   const {
     selectedId, setSelectedId, setShowPanel,
-    connectedIds, prereqViolations, coreqViolations,
+    connectedIds, prereqViolations, coreqViolations, standingViolations,
     dragInfo, hoveredCardId, setHoveredCardId,
     getSemStatus, offeredOverrides, SEMESTERS, SEM_INDEX,
     starredIds, toggleStar,
@@ -219,6 +220,11 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
   const isViolated    = prereqViolations.has(course.id);
   const violationType = prereqViolations.get(course.id);
   const coreqViol     = inSem ? coreqViolations.get(course.id) : undefined;
+  // Banner restricts this course by class standing and the plan does not reach it
+  // by this term's registration — { required, earned }. A WARNING, never an error:
+  // the credit total is a projection of a plan the student has not lived yet, and
+  // Banner itself notes that not all restrictions apply to every student.
+  const standingViol  = inSem ? standingViolations?.get(course.id) : undefined;
   const isDone        = inSem && semId ? getSemStatus(semId) === "completed" : false;
   const hasSel        = selectedId !== null;
   const isCardHov     = hoveredCardId === course.id && dragInfo?.id !== course.id;
@@ -440,6 +446,18 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
             </span>
           )
         )}
+        {/* Compact cards get their own mark rather than sharing the one above:
+            a standing warning is independent of the prereq/offered trio, so
+            folding it into that condition would hide it whenever a card already
+            had one of those, which is exactly when a capstone is misplaced. */}
+        {standingViol && !isViolated && (
+          <span title={t("course.tooltip.standing", {
+                  standing: t(`standing.${standingViol.required}`),
+                  need:     requiredSHFor(standingViol.required),
+                  have:     standingViol.earned,
+                })}
+            style={{ fontSize: 11, color: "var(--warn)", flexShrink: 0 }}>⌛</span>
+        )}
       </div>
     );
   }
@@ -627,6 +645,16 @@ export default function CourseCard({ course, inSem, semId, noSubject = false }) 
           <span title={t("course.tooltip.gpa.gate", { gpa: course.minGPA.toFixed(3) })}
             style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", border: "1px solid var(--warn-bright)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
             {t("course.badge.gpa.gate")}
+          </span>
+        )}
+        {standingViol && (
+          <span title={t("course.tooltip.standing", {
+                  standing: t(`standing.${standingViol.required}`),
+                  need:     requiredSHFor(standingViol.required),
+                  have:     standingViol.earned,
+                })}
+            style={{ fontSize: 9, fontWeight: 700, color: "var(--warn)", background: "var(--warn-bg)", border: "1px solid var(--warn-bright)", borderRadius: 3, padding: "1px 3px", lineHeight: 1 }}>
+            {t("course.badge.standing", { standing: t(`standing.${standingViol.required}`) })}
           </span>
         )}
         {coreqViol === "alone" && (

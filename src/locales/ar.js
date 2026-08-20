@@ -572,6 +572,8 @@ export const strings = {
   "course.tooltip.prereq.missing":"المتطلب السابق لم يُضَف إلى الخطة بعد",
   "course.badge.prereq.grade":    "! درجة",
   "course.badge.gpa.gate":        "! المعدل",
+  "course.badge.standing":        "؟{standing}",
+  "course.tooltip.standing":      "يقصر Banner جميع الشُعب على مستوى {standing}، وهو يتطلب {need} ساعة مكتسبة. تصل هذه الخطة إلى {have} عند التسجيل لهذا الفصل — ساعات الفصل نفسه لا تُحسب. يُحدَّد المستوى بالساعات المكتسبة، لذا قد يحلّ الأمر عبء أثقل أو مقررات صيفية؛ راجع مرشدك الأكاديمي.",
   "course.tooltip.prereq.grade":  "الدرجة المُدخلة لا تحقق الحد الأدنى المطلوب للمتطلب السابق",
   "course.tooltip.gpa.gate":      "يتطلب هذا المقرر معدلاً {gpa}؛ الدرجات المُدخلة أقل من ذلك",
   "course.grade.tooltip":         "أدخل درجتك (اختياري)",
