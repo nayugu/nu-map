@@ -1783,6 +1783,40 @@ const { locale, setLocale, locales, t } = useLanguage();
   // Northeastern: two co-op terms earn nothing, so the midpoint of an eight-term
   // plan can be 32 SH rather than the 64 a fraction-of-plan model assumes.
   //
+  // ── Declared HERE because `standingViolations` below reads it ─────
+  //
+  // This memo used to sit ~130 lines further down, after the consumer on the next line. A
+  // `const` read before its own initializer in the same scope is a TEMPORAL DEAD ZONE error, so
+  // `standingViolations` threw `ReferenceError: Cannot access 'supersededTakes' before
+  // initialization` on EVERY render — the provider never mounted and the app went straight to the
+  // recovery screen. It reached production, because nothing that runs in Node can see it: the
+  // build succeeds, and 2,018 unit / 93 contract / 254 invariant tests all pass. Only rendering
+  // the component reaches the line.
+  //
+  // Moved rather than reordered around, because its three dependencies — `pvPlacements` (325),
+  // `courseMap` (351) and `SEM_INDEX` (693) — are all established long before this point, so it
+  // has no reason to be late.
+  const supersededTakes = useMemo(() => {
+    const byBase = new Map();
+    for (const pid of Object.keys(pvPlacements)) {
+      if (!isInstanceId(pid)) continue;
+      const b = baseId(pid);
+      if (courseMap[b]?.repeatable) continue;
+      byBase.set(b, []);
+    }
+    const out = new Set();
+    if (!byBase.size) return out;
+    for (const [pid, sid] of Object.entries(pvPlacements)) {
+      const b = baseId(pid);
+      if (byBase.has(b)) byBase.get(b).push([pid, SEM_INDEX[sid] ?? -1]);
+    }
+    for (const takes of byBase.values()) {
+      takes.sort((a, b) => a[1] - b[1]);
+      for (let i = 0; i < takes.length - 1; i++) out.add(takes[i][0]);
+    }
+    return out;
+  }, [pvPlacements, courseMap, SEM_INDEX]);
+
   // Credit is counted STRICTLY BEFORE the course's own term, because "earned" is
   // the registrar's word: the credits you are registering for have not been
   // earned and cannot qualify you for the thing you are registering for.
@@ -1918,26 +1952,6 @@ const { locale, setLocale, locales, t } = useLanguage();
   // rule. Degree totals exclude every take but the latest; per-semester
   // load still counts each take (the student sits in the seat both times).
   // Repeatable courses are untouched — their takes accumulate by design.
-  const supersededTakes = useMemo(() => {
-    const byBase = new Map();
-    for (const pid of Object.keys(pvPlacements)) {
-      if (!isInstanceId(pid)) continue;
-      const b = baseId(pid);
-      if (courseMap[b]?.repeatable) continue;
-      byBase.set(b, []);
-    }
-    const out = new Set();
-    if (!byBase.size) return out;
-    for (const [pid, sid] of Object.entries(pvPlacements)) {
-      const b = baseId(pid);
-      if (byBase.has(b)) byBase.get(b).push([pid, SEM_INDEX[sid] ?? -1]);
-    }
-    for (const takes of byBase.values()) {
-      takes.sort((a, b) => a[1] - b[1]);
-      for (let i = 0; i < takes.length - 1; i++) out.add(takes[i][0]);
-    }
-    return out;
-  }, [pvPlacements, courseMap, SEM_INDEX]);
 
   // Grade axis: F/U/W/X takes already carry sh 0 in effectiveCourseMap (the
   // choke point — see its comment), so the projection needs no grade filter
