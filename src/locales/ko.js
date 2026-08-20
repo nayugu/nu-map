@@ -227,6 +227,8 @@ export const strings = {
   "chart.explain.complete.credits": "학점 배치 (이 학위가 요구하는 학점은 {required})",
   "chart.explain.complete.excess": "이 프로그램의 요건 합계가 학위로 명시한 {total}학점보다 {over}학점 많습니다. 계획은 전부 배치했으니 지도교수와 확인해 보세요.",
   "chart.explain.complete.unschedulable": "{n}개 요건이 카탈로그에 더 이상 개설되지 않는 과목을 지정합니다({courses}). 계획은 자리를 남겨 두었으니, 지금 무엇으로 충족되는지 지도교수에게 확인하세요.",
+  "chart.explain.complete.standing": "{courses}은(는) {standing} 이상(이수 학점 {need}학점)이 필요하지만, 이 계획에는 그 전에 거기에 도달하는 학기가 없습니다. 계획이 허용하는 가장 늦은 자리에 두었습니다 — 예외 승인은 지도교수에게 문의하세요.",
+  "chart.explain.complete.standing.season": "{courses}은(는) {standing} 이상(이수 학점 {need}학점)이 필요하고 {seasons}에만 개설됩니다. 이 계획에는 충분히 늦은 {seasons} 학기가 없어 가능한 가장 늦은 자리에 두었습니다 — 다른 코업 방식이라면 들어갈 수 있으며, 예외 승인은 지도교수에게 문의하세요.",
   "chart.contract.hard.h": "먼저 확인하는 필수 요건",
   "chart.contract.hard.1": "선수과목은 그것을 요구하는 과목보다 먼저",
   "chart.contract.hard.2": "동시수강 과목은 같은 학기에",

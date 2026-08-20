@@ -483,6 +483,50 @@ property needs a stratified sample; a uniform one reports "clean" on tails.**
 
 ## Not defects — do not re-hunt
 
+- **An unreachable class-standing gate is not a broken standing check.** Investigated
+  2026-08-20 on Mechanical Engineering and Bioengineering, reported as "CHART ignores
+  standing". It does not. The engine's own exclusion record for the cell is exact:
+
+  ```
+  s3#4  (BIOE 5640, gate JR = 64 SH)
+    not-offered-then:      terms [1,2,3,5,6,7,8,9,10,11]
+    before-class-standing: terms [0]
+    legal: [4]
+  ```
+
+  BIOE 5640 is **fall-only** (sections in 202410/202510/202610; Banner answered *no
+  sections* for 202430/202530/202630). The five-year/three-co-op variant spends **all
+  three later falls on co-op**, so only two fall class terms exist — Year 1 and Year 2.
+  Standing correctly removed Year 1; it could not also remove Year 2 without emptying the
+  domain, so `narrowTo` took its documented `domain.slice(-1)` fallback and
+  `repairStanding` reported `NO LATER TERM IN DOMAIN`. Every layer behaved as designed.
+  The requirement is genuinely unsatisfiable in that shape, and the student cannot load
+  their way out: the cap is 19 SH with half-weight summers, so everything before Year 2
+  Fall is **19+19+9.5+9.5 = 57** against the 64 needed. Substitution is out too —
+  `minRequirementCount: 5` over 5 requirements, and no equivalences recorded.
+
+  **What WAS wrong was the silence.** `repairStanding` computed the shortfall and it went
+  only to `trace.stage`, which nothing renders, so the plan looked no different from a
+  legal one. Now on `report.standingUnmet` and rendered by `ChartExplainer` beside
+  `unschedulable`. Not a refusal: a marked impossible term beats no plan, and an advisor
+  can grant an override the student would otherwise never know to ask for.
+
+  Two things to carry forward rather than rediscover:
+
+  1. **The other five-year, three-co-op variant places the same course with 104 SH in
+     hand.** Variants are not near-duplicates — co-ops in Summer-2/Fall consume every
+     later fall, co-ops in Spring/Summer-1 do not. One label apart, one schedulable.
+  2. **`standing-probe.js` planned `plans[0]` only** and reported 690 gated placements,
+     **0 too early**, over all 278 degrees while this sat in variant 2. It now sweeps
+     every published variant and passes the adapter's own `observedOrder`/`positions`/
+     `coopPrep`, and it counts **unreported** violations separately — silence is the
+     number to drive to zero, not `too early`.
+
+  Open question, and the only thing that would overturn any of this: the department's own
+  variant-2 plan puts BIOE 5640 in a **spring** term. If it has quietly run in spring and
+  our three years of history are too thin, the availability data is the bug and the rest
+  of this entry is moot.
+
 - **`mostly-unlabelled` is not a parser failure.** Measured 2026-08-19 over the 106
   programs it refuses (45 graduate, 61 undergraduate): **`tablesUnaccounted > 0` in 0,
   `tablesConsumed < tablesPresent` in 0, `unconsumedHeadings > 0` in 0**, and the

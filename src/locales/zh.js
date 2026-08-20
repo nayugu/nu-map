@@ -227,6 +227,8 @@ export const strings = {
   "chart.explain.complete.credits": "已安排学分，本学位要求 {required} 学分",
   "chart.explain.complete.excess": "该专业各部分要求合计比其声明的 {total} 学分多出 {over} 学分。计划已全部安排——建议与学业顾问确认。",
   "chart.explain.complete.unschedulable": "有 {n} 项要求指定了课程目录已不再开设的课程（{courses}）。计划保留了该占位，但请向学业顾问确认现在由什么来满足它。",
+  "chart.explain.complete.standing": "{courses} 要求{standing}及以上（已修 {need} 学分），而本计划中没有任何学期能在此之前达到。已尽计划所能安排在最晚的位置——请向学业顾问咨询能否破例。",
+  "chart.explain.complete.standing.season": "{courses} 要求{standing}及以上（已修 {need} 学分），且只在{seasons}开设。本计划没有足够晚的{seasons}学期，因此已安排在尽可能晚的位置——换一种co-op安排也许放得下，或向学业顾问咨询能否破例。",
   "chart.contract.hard.h": "先检查的硬性要求",
   "chart.contract.hard.1": "先修课排在需要它的课程之前",
   "chart.contract.hard.2": "同修课排在同一学期",

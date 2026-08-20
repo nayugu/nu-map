@@ -34,6 +34,7 @@ import {
   MOVED_AVAILABILITY, MOVED_PREREQ, MOVED_CAPACITY,
 } from "../../src/engine/earlyTerms.js";
 import { ORDER_KEYS } from "../../src/core/derivation/steps.js";
+import { STANDING_LADDER } from "../../src/core/classStanding.js";
 
 // ── The walkthrough's REASON sentences, which had no guard at all ────
 //
@@ -94,6 +95,26 @@ const families = [
     prefix: "chart.deriv.fate.",
     members: Object.values(EXCLUSION),
     why: "the derivation tree names why each term was ruled out",
+  },
+  {
+    // Two surfaces build this key from a code the SCRAPER chooses: the course card's
+    // tooltip and the explainer's unmet-standing line. `STANDING_LADDER` is the source of
+    // truth, so a fifth rung — or a rename — fails here rather than printing the literal
+    // `standing.XX` inside a sentence about a course the student cannot register for.
+    // Caught during review: the explainer first asked for `classStanding.JR`, which exists
+    // in no locale, and every locale would have been equally broken.
+    what: "class-standing rungs the registrar's gate can name",
+    prefix: "standing.",
+    members: STANDING_LADDER,
+    why: "`ChartExplainer` and `CourseCard` render t(`standing.${code}`)",
+  },
+  {
+    what: "season names the unmet-standing line prints",
+    prefix: "claude.sem.",
+    // The KEY suffixes, not the `semTypeId` values — `sumA` reads a key named `sum1`.
+    // `ChartExplainer.SEASON_KEY` is the map; these are its values' tails.
+    members: ["fall", "spring", "sum1", "sum2"],
+    why: "the unmet-standing line names which seasons a gated course actually runs in",
   },
   {
     what: "why the early terms moved a course",

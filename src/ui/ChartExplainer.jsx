@@ -696,6 +696,33 @@ export default function ChartExplainer({ report, program, derivation, onClose, i
               })}
             </p>
           )}
+          {/* ── A term the registrar would refuse ──────────────────────
+            *
+            * Rendered beside `unschedulable` because it is the same KIND of fact: the
+            * plan is real and followable except in one named place, and saying so is
+            * the whole point. The planner's own badge catches this once the plan is
+            * applied; this is the only warning BEFORE the student accepts it.
+            *
+            * The season clause is dropped rather than faked when the engine had no
+            * claim to make (`seasons: null` for a cell that admits any course) — the
+            * gate alone is still worth stating.
+            */}
+          {(report.standingUnmet ?? []).length > 0 && (
+            <p style={{ margin: "9px 0 0", color: "var(--warn)" }}>
+              {report.standingUnmet.map((u, i) => (
+                <span key={u.cell ?? i} style={{ display: "block" }}>
+                  {t(u.seasons?.length
+                    ? "chart.explain.complete.standing.season"
+                    : "chart.explain.complete.standing", {
+                    courses: (u.courses ?? []).join(" / ") || u.title || "",
+                    standing: t(`standing.${u.code}`),
+                    need: u.need,
+                    seasons: (u.seasons ?? []).map(s => t(SEASON_KEY[s] ?? s)).join(" / "),
+                  })}
+                </span>
+              ))}
+            </p>
+          )}
         </Section>
         </>)}
 

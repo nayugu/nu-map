@@ -251,6 +251,8 @@ export const strings = {
   "chart.explain.complete.credits": "credits scheduled, against the {required} this degree requires",
   "chart.explain.complete.excess": "This program’s own requirements total {over} credits more than the {total} it states as the degree. The plan schedules all of them — worth raising with an advisor.",
   "chart.explain.complete.unschedulable": "{n} requirement(s) name a course the catalog no longer offers ({courses}). The plan keeps the placeholder, but ask an advisor what satisfies it now.",
+  "chart.explain.complete.standing": "{courses} requires {standing} standing ({need} earned credits) and no term in this plan reaches that beforehand. It is placed as late as the plan allows — ask an advisor about an override.",
+  "chart.explain.complete.standing.season": "{courses} requires {standing} standing ({need} earned credits) and only runs in {seasons}. This plan has no {seasons} term late enough, so it is placed as late as possible — another co-op pattern may fit it, or ask an advisor about an override.",
   "chart.contract.hard.h": "Hard requirements, checked first",
   "chart.contract.hard.1": "Prerequisites before the courses that need them",
   "chart.contract.hard.2": "Co-requisites in the same term",

@@ -1277,6 +1277,10 @@ function generateOnce({
   if (trace && stdRepair.moved.length) {
     trace.stage("standing-repair", { moved: stdRepair.moved, unfixed: stdRepair.unfixed });
   }
+  // What the report will say. Mutable because the revert below can put a repaired cell
+  // back where it was short, and a shortfall that exists in the SHIPPED plan has to be
+  // reported whether or not the repair briefly fixed it.
+  let standingUnmet = stdRepair.unfixed;
 
   let plan = emitPlan({
     shape, plans, termOf: stdRepair.termOf, program, courseMap,
@@ -1302,6 +1306,13 @@ function generateOnce({
     if (!criteriaFailures(fallback, { studentType, cal, courseMap }).length) {
       if (trace) trace.stage("standing-repair-reverted", { moved: stdRepair.moved });
       plan = fallback;
+      // Reverting un-fixes every cell the repair had moved, so they rejoin the report.
+      // `from` is where each one lands again; the shortfall there is what the repair
+      // measured before moving it.
+      standingUnmet = [...standingUnmet, ...stdRepair.moved.map(m => ({
+        cell: m.cell, code: m.code, need: requiredSHFor(m.code),
+        earned: null, term: m.from, title: null, courses: null, seasons: null,
+      }))];
     }
   }
 
@@ -1457,6 +1468,20 @@ function generateOnce({
         courses: x.courses ?? null,
         sh: x.sh ?? null,
       })),
+      // Placements the registrar would refuse, that nothing could move.
+      //
+      // The same principle as `unschedulable` above and the reason this exists at all:
+      // `repairStanding` already computed the exact shortfall and it went only to the
+      // trace, which nothing renders. So a plan could state a term the student cannot
+      // register for and look no different from one that could — "looks authoritative
+      // and says nothing", one layer down.
+      //
+      // Empty on all but the plans where a gate is genuinely unreachable: the domain
+      // narrowing and the repair between them fix every case that has a fix, and this
+      // is only what survives both. It is not a refusal — a plan with one marked
+      // impossible term is worth more than no plan, and an advisor can grant the
+      // override the student would otherwise never know to ask for.
+      standingUnmet,
       // WHICH conventions were spent to get a plan at all, in the order they were given up.
       // A plan that stops following a rule it claims to follow, without saying so, is worse
       // than one that says so.

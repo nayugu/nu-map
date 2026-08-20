@@ -227,6 +227,8 @@ export const strings = {
   "chart.explain.complete.credits": "crédits programmés, sur les {required} exigés par le diplôme",
   "chart.explain.complete.excess": "Les exigences de ce programme totalisent {over} crédits de plus que les {total} annoncés pour le diplôme. Le plan les programme toutes — à signaler à un conseiller.",
   "chart.explain.complete.unschedulable": "{n} exigence(s) nomment un cours que le catalogue ne propose plus ({courses}). Le plan garde l’emplacement, mais demandez à un conseiller ce qui le remplit désormais.",
+  "chart.explain.complete.standing": "{courses} exige le niveau {standing} ({need} crédits acquis) et aucun semestre de ce plan ne l’atteint avant. Le cours est placé aussi tard que le plan le permet — demandez une dérogation à un conseiller.",
+  "chart.explain.complete.standing.season": "{courses} exige le niveau {standing} ({need} crédits acquis) et n’est proposé qu’en {seasons}. Ce plan n’a aucun semestre de {seasons} assez tardif, donc le cours est placé le plus tard possible — un autre rythme de co-op pourrait convenir, ou demandez une dérogation à un conseiller.",
   "chart.contract.hard.h": "Exigences strictes, vérifiées d’abord",
   "chart.contract.hard.1": "Les prérequis avant les cours qui en ont besoin",
   "chart.contract.hard.2": "Les corequis dans le même semestre",

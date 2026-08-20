@@ -67,6 +67,18 @@ const { courseMap } = await loadCatalog();
 const ports = enginePorts(courseMap);
 const depthIndex = buildDepthIndex(courseMap);
 
+/**
+ * The prerequisites and position floors recovered from the published plans.
+ *
+ * Loaded because the ADAPTER loads them: `planGenerator.js` fetches `plan-order.json`
+ * and passes `observedOrder`, `positions` and `coopPrep` on every generate. Measuring
+ * without them measures an engine configuration no student is ever served.
+ */
+const observed = (() => {
+  const f = join(ROOT, "public/northeastern/plan-order.json");
+  return existsSync(f) ? JSON.parse(readFileSync(f, "utf8")) : { edges: [], coopPrep: [], positions: null };
+})();
+
 // Which courses carry a gate at all, so the summary can say what share of the
 // gated catalog each run actually exercised.
 const gatedCatalog = Object.values(courseMap)
@@ -175,13 +187,33 @@ for (const [col, key] of targets) {
   const data = JSON.parse(readFileSync(join(base, col, key, "requirements.json"), "utf8"));
   const pf = join(base, col, key, "plan.json");
   const doc = existsSync(pf) ? JSON.parse(readFileSync(pf, "utf8")) : null;
-  const pub = (doc?.plans ?? [])[0] ?? null;
+  // ── EVERY published variant, not just the first ──────────────────────
+  //
+  // This probe planned `plans[0]` and reported 690 gated placements with zero too
+  // early, over all 278 degrees — while Mechanical Engineering and Bioengineering
+  // variant 2 seated BIOE 5640 twenty-nine credits short. The app plans
+  // `catalogVariants[variantIdx]`, whichever the student picked in the picker, so a
+  // verdict on variant 0 is a verdict on a plan most students are never served.
+  //
+  // The variants are not near-duplicates: co-ops in Summer-2/Fall consume every later
+  // fall, so a fall-only gated course has nowhere legal to go, while the SAME five-year,
+  // three-co-op degree with co-ops in Spring/Summer-1 places it with 104 credits in hand.
+  // One label apart, and only one of them is schedulable.
+  for (const [vi, pub] of ((doc?.plans ?? [null]).entries())) {
+  const variantLabel = pub?.label ? ` [${pub.label}]` : "";
 
   let r;
   try {
     r = generatePlan({
       program: data, publishedPlan: pub, courseMap, ports, depthIndex,
       calibration: chartCalibration, timeBudgetMs: 8000,
+      // The arguments the ADAPTER passes. Omitting them measured an argument set no
+      // user is ever given: `planGenerator.js` and `verify-chart.js` both supply the
+      // recovered order and position floors, which move where cells land.
+      observedOrder: observed.edges,
+      positions: observed.positions ?? null,
+      coopPrep: (observed.coopPrep ?? []).map(x => x.course),
+      repeatable: (id) => !!courseMap[id]?.repeatable,
     });
   } catch (e) { refused++; continue; }
   if (r.refused) { refused++; continue; }
@@ -212,24 +244,46 @@ for (const [col, key] of targets) {
         const short = requiredSHFor(req) - earned;
         const label = e.text ?? (e.options?.[0]?.join("+") ?? "?");
         const prev = perCourse.get(label);
-        if (!prev || short > prev.short) perCourse.set(label, { req, earned, short, term: ti, key });
+        if (!prev || short > prev.short) {
+          perCourse.set(label, { req, earned, short, term: ti, key: `${key}${variantLabel}` });
+        }
       }
     }
   });
   gatedCells += localGated;
   violations += localViol;
-  rows.push({ key, terms: terms.length, gated: localGated, viol: localViol,
+  // The engine's own verdict, alongside ours. They should agree: `standingUnmet` is
+  // what `repairStanding` could not fix, and a violation the probe sees that the report
+  // does not is a hole in the reporting rather than in the plan — which is the whole
+  // defect this probe was extended for.
+  const reported = (r.report?.standingUnmet ?? []).length;
+  rows.push({ key: `${key}${variantLabel}`, variant: vi, terms: terms.length,
+              gated: localGated, viol: localViol, reported,
               totalSH: shByTerm.reduce((a, b) => a + b, 0) });
+  }
 }
 
 console.log(`\ncatalog: ${gatedCatalog} courses carry a class-standing gate`);
 console.log(`plans generated ${plans}   refused ${refused}\n`);
-console.log(`${"program".padEnd(42)} terms  totalSH  gated  early`);
+console.log(`${"program".padEnd(42)} terms  totalSH  gated  early  said`);
 for (const r of rows.sort((a, b) => b.viol - a.viol || b.gated - a.gated)) {
-  console.log(`${r.key.slice(0, 42).padEnd(42)} ${String(r.terms).padStart(5)} ${String(r.totalSH).padStart(8)} ${String(r.gated).padStart(6)} ${String(r.viol).padStart(6)}`);
+  console.log(`${r.key.slice(0, 42).padEnd(42)} ${String(r.terms).padStart(5)} ${String(r.totalSH).padStart(8)} ${String(r.gated).padStart(6)} ${String(r.viol).padStart(6)} ${String(r.reported).padStart(5)}`);
 }
 console.log(`\ngated placements ${gatedCells}   placed too early ${violations}` +
   (gatedCells ? `  (${(100 * violations / gatedCells).toFixed(1)}%)` : ""));
+
+// ── Silence is the defect, so count it separately ────────────────────
+//
+// A violation the plan does not mention is worse than one it does: the student cannot
+// ask an advisor about a problem nobody told them about. So the number to drive to zero
+// is not `too early` — some gates are genuinely unreachable and the plan is still the
+// best available — it is UNREPORTED.
+const unreported = rows.filter(r => r.viol > r.reported);
+console.log(`plans stating their shortfall ${rows.filter(r => r.viol && r.reported).length}` +
+  `   silently violating ${unreported.length}`);
+for (const r of unreported.slice(0, 10)) {
+  console.log(`  UNREPORTED  ${r.key.slice(0, 56)}  ${r.viol} violation(s), report named ${r.reported}`);
+}
 
 if (perCourse.size) {
   console.log(`\nworst offenders (shortfall in SH at the term they were placed):`);

@@ -228,6 +228,8 @@ export const strings = {
   "chart.explain.complete.credits": "単位を配置（この学位が求めるのは {required} 単位）",
   "chart.explain.complete.excess": "このプログラムの要件合計は、学位として掲げる {total} 単位より {over} 単位多くなっています。プランはすべてを配置しています——アドバイザーに確認する価値があります。",
   "chart.explain.complete.unschedulable": "{n} 件の要件が、カタログにもう開講されていない科目を指定しています（{courses}）。プランは枠を残していますが、何がこれを満たすかはアドバイザーに確認してください。",
+  "chart.explain.complete.standing": "{courses} は{standing}以上（修得済み {need} 単位）が条件ですが、このプランではその前にそこへ届く学期がありません。プランで可能なかぎり後ろに置いています——例外の可否はアドバイザーに確認してください。",
+  "chart.explain.complete.standing.season": "{courses} は{standing}以上（修得済み {need} 単位）が条件で、開講は{seasons}のみです。このプランには十分に遅い{seasons}の学期がないため、可能なかぎり後ろに置いています——別のコープの型なら収まるかもしれません。例外の可否はアドバイザーに確認してください。",
   "chart.contract.hard.h": "まず確認される厳格な要件",
   "chart.contract.hard.1": "前提科目は、それを必要とする科目より先に",
   "chart.contract.hard.2": "同時履修科目は同じ学期に",

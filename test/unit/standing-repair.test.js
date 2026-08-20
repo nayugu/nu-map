@@ -202,3 +202,94 @@ test("no creditMax port means no cap check, not a crash", () => {
   const r = repairStanding({ plans, termOf, terms: T([16, 16, 16, 16, 16]), courseMap });
   assert.equal(r.termOf.get("g"), 4);
 });
+
+// ── What `unfixed` has to SAY ────────────────────────────────────────
+//
+// The shortfall was computed correctly all along and went only to the trace, which
+// nothing renders — so a plan could state a term the registrar refuses and look no
+// different from one that could. Measured on Mechanical Engineering and Bioengineering,
+// the five-year/three-co-op variant: BIOE 5640 runs only in fall, that variant spends
+// all three later falls on co-op, and the two remaining falls are freshman and sophomore
+// year. The gate is unreachable, the placement is the least-bad one, and the only real
+// defect was the silence. These pin the payload the report is built from.
+
+/** A cell plan with per-season candidate lists, the way `buildDomains` returns them. */
+const PS = (cid, courseId, domain, seasonOk, sh = 4) => ({
+  cell: { id: cid, kind: "named", sh, title: "Required Bioengineering Courses",
+          groups: [[courseId]] },
+  domain, seasonOk: seasonOk === undefined ? undefined : new Map(Object.entries(seasonOk)),
+});
+
+const stuck = (gatedPlan) => {
+  const plans = [gatedPlan, ...[0, 1].map(i => P(`f${i}`, `FILL${i}`, [i], 16))];
+  const termOf = new Map([[gatedPlan.cell.id, 1], ["f0", 0], ["f1", 1]]);
+  const courseMap = mapOf(course("BIOE5640", "JR"), course("OTHER", "JR"),
+    ...[0, 1].map(i => course(`FILL${i}`, null, 16)));
+  return repairStanding({ plans, termOf, terms: T([16, 16]), courseMap, creditMax: CAP });
+};
+
+test("an unfixable shortfall names the course, the requirement and the season", () => {
+  const r = stuck(PS("g", "BIOE5640", [1], { fall: ["BIOE5640"], spring: [] }));
+  assert.equal(r.moved.length, 0, "nowhere legal to go");
+  assert.equal(r.unfixed.length, 1);
+  const u = r.unfixed[0];
+  assert.equal(u.code, "JR");
+  assert.equal(u.need, 64);
+  assert.deepEqual(u.courses, ["BIOE5640"], "the student needs the COURSE, not a cell id");
+  assert.equal(u.title, "Required Bioengineering Courses");
+  assert.deepEqual(u.seasons, ["fall"], "spring has no candidates, so it is not claimed");
+  assert.equal(typeof u.earned, "number");
+});
+
+test("a cell that admits ANY course claims no season at all", () => {
+  // `seasonOk` holds null for an open cell — it means "admits any course", and reading
+  // that as a season list would print a confident wrong answer about a requirement that
+  // has no season constraint. Degrade to less information, never to wrong information.
+  const r = stuck(PS("g", "BIOE5640", [1], { fall: null, spring: null }));
+  assert.equal(r.unfixed.length, 1);
+  assert.equal(r.unfixed[0].seasons, null);
+});
+
+test("one unconstrained season poisons the whole claim, not just its own entry", () => {
+  // A cell open in spring but listed in fall must not be reported as "fall only".
+  const r = stuck(PS("g", "BIOE5640", [1], { fall: ["BIOE5640"], spring: null }));
+  assert.equal(r.unfixed[0].seasons, null);
+});
+
+test("every season empty is no claim either, and never an empty list", () => {
+  const r = stuck(PS("g", "BIOE5640", [1], { fall: [], spring: [] }));
+  assert.equal(r.unfixed[0].seasons, null, "null, not [] — the UI branches on length");
+});
+
+test("a missing or junk seasonOk degrades rather than throwing", () => {
+  for (const bad of [undefined, null, {}, [], "fall", 7]) {
+    const p = PS("g", "BIOE5640", [1], undefined);
+    p.seasonOk = bad === undefined ? undefined : bad;
+    const r = stuck(p);
+    assert.equal(r.unfixed.length, 1, `seasonOk=${JSON.stringify(bad)} still reports`);
+    assert.equal(r.unfixed[0].seasons, null);
+  }
+});
+
+test("a pool's course list is capped, so a 247-candidate cell is not an explanation", () => {
+  const many = Array.from({ length: 20 }, (_, i) => `BIOE56${String(i).padStart(2, "0")}`);
+  const p = { cell: { id: "g", kind: "open", sh: 4, title: "Bioengineering Electives" },
+              domain: [1], candidates: many, seasonOk: new Map([["fall", many]]) };
+  const plans = [p, ...[0, 1].map(i => P(`f${i}`, `FILL${i}`, [i], 16))];
+  const termOf = new Map([["g", 1], ["f0", 0], ["f1", 1]]);
+  const courseMap = mapOf(...many.map(id => course(id, "JR")),
+    ...[0, 1].map(i => course(`FILL${i}`, null, 16)));
+  const r = repairStanding({ plans, termOf, terms: T([16, 16]), courseMap, creditMax: CAP });
+  assert.equal(r.unfixed.length, 1);
+  assert.equal(r.unfixed[0].courses.length, 4, "capped, same as domains.js `impossible`");
+});
+
+test("a cell with no courses at all reports null rather than an empty array", () => {
+  const p = { cell: { id: "g", kind: "open", sh: 4 }, domain: [1], candidates: [],
+              seasonOk: new Map([["fall", ["BIOE5640"]]]) };
+  // Ungated by `cellStanding` (no candidates), so nothing is reported — the point is
+  // that asking costs nothing and cannot throw.
+  const r = repairStanding({ plans: [p], termOf: new Map([["g", 1]]), terms: T([16, 16]),
+                             courseMap: {}, creditMax: CAP });
+  assert.deepEqual(r.unfixed, []);
+});

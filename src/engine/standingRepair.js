@@ -42,6 +42,36 @@ import { termCapacity } from "./domains.js";
 import { requiredSHFor, earnedSHBefore, meetsStanding } from "../core/classStanding.js";
 
 /**
+ * The courses a gated cell could be answered by, for naming it in a report.
+ *
+ * Groups first, candidates second, and capped: the corpus has cells with 247
+ * candidates and a pool named in full is not an explanation. Same cap and same
+ * reasoning as `impossible.courses` in domains.js.
+ */
+function cellCourses(p) {
+  const groups = p?.cell?.groups;
+  const ids = groups?.length ? [...new Set(groups.flat())] : (p?.candidates ?? []);
+  return ids.length ? ids.slice(0, 4) : null;
+}
+
+/**
+ * The seasons a gated cell can actually run in, read off `seasonOk`.
+ *
+ * Null when the cell admits any course, because then the season list says nothing
+ * about the requirement — see the note at the `unfixed` push.
+ */
+function cellSeasons(p) {
+  const ok = p?.seasonOk;
+  if (!(ok instanceof Map)) return null;
+  const out = [];
+  for (const [season, list] of ok) {
+    if (list === null) return null;          // unconstrained cell — no claim to make
+    if (list.length) out.push(season);
+  }
+  return out.length ? out.sort() : null;
+}
+
+/**
  * Move class-standing-gated cells later where the assignment's REAL credits leave
  * them short and a safe later term exists.
  *
@@ -190,8 +220,24 @@ export function repairStanding({
         process.stderr.write(`  [standing-repair] ${id} need ${g.need} at t${from} (earned ${earnedSHBefore(from, load, 0)}) `
           + `domain=[${(g.p.domain ?? []).join(",")}] → ${why.join(" ") || "NO LATER TERM IN DOMAIN"}\n`);
       }
+        // ── Enough to NAME the problem, not just count it ────────────────
+      //
+      // A shortfall the student cannot see is the defect, not the placement. Measured on
+      // Mechanical Engineering and Bioengineering, five-year/three-co-op: BIOE 5640 runs
+      // only in fall, that variant spends all three later falls on co-op, and the only
+      // remaining falls are freshman and sophomore year — so the gate is unreachable and
+      // the domain narrowing kept the least-bad term. Nothing in the plan said so.
+      //
+      // `seasons` is the actionable half and it costs nothing: `seasonOk` is already on
+      // the plan, mapping season → the candidates allowed then. A cell admitting ANY
+      // course (`null`) is unconstrained, so it contributes no season claim at all —
+      // reporting "runs in fall" for a cell that merely happens to hold a fall course
+      // would be a confident wrong answer, which is worse here than saying nothing.
       unfixed.push({ cell: id, code: g.code, need: g.need,
-                     earned: earnedSHBefore(from, load, 0), term: from });
+                     earned: earnedSHBefore(from, load, 0), term: from,
+                     title: g.p.cell?.title ?? null,
+                     courses: cellCourses(g.p),
+                     seasons: cellSeasons(g.p) });
       continue;
     }
     at.set(id, to);

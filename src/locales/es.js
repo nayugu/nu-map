@@ -227,6 +227,8 @@ export const strings = {
   "chart.explain.complete.credits": "créditos programados, frente a los {required} que exige la titulación",
   "chart.explain.complete.excess": "Los requisitos de este programa suman {over} créditos más que los {total} que declara como titulación. El plan los programa todos: conviene consultarlo con un asesor.",
   "chart.explain.complete.unschedulable": "{n} requisito(s) nombran un curso que el catálogo ya no ofrece ({courses}). El plan conserva el espacio, pero pregunta a un asesor qué lo satisface ahora.",
+  "chart.explain.complete.standing": "{courses} exige nivel de {standing} ({need} créditos obtenidos) y ningún semestre de este plan lo alcanza antes. Se coloca lo más tarde que el plan permite; pregunta a un asesor por una excepción.",
+  "chart.explain.complete.standing.season": "{courses} exige nivel de {standing} ({need} créditos obtenidos) y solo se ofrece en {seasons}. Este plan no tiene un semestre de {seasons} lo bastante tardío, así que se coloca lo más tarde posible: otro patrón de co-op podría acomodarlo, o pregunta a un asesor por una excepción.",
   "chart.contract.hard.h": "Requisitos estrictos, comprobados primero",
   "chart.contract.hard.1": "Requisitos previos antes de los cursos que los necesitan",
   "chart.contract.hard.2": "Correquisitos en el mismo semestre",
