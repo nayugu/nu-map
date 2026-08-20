@@ -31,7 +31,8 @@
 // department's habit is not evidence. 333 courses clear it, and departments agree with each
 // other far more than expected — median MADN 0.000, and 304 of 333 under 0.10.
 //
-// Usage:  node scripts/chart-drift.js [--json out.json]
+// Usage:  node scripts/chart-drift.js [--json out.json]      # covering sample, seconds
+//         node scripts/chart-drift.js --all                   # the corpus figure, minutes
 // ═══════════════════════════════════════════════════════════════════
 import { readFileSync, readdirSync, existsSync, statSync, writeFileSync } from "node:fs";
 import { join, dirname } from "node:path";
@@ -41,6 +42,7 @@ import { buildDepthIndex } from "../src/engine/prereqDepth.js";
 import { loadCatalog } from "../src/adapters/northeastern/courseCatalog.node.js";
 import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
+import { coveringSample, describeShape, formatCoverage } from "./lib/chart-sample.js";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..");
 const argv = process.argv.slice(2);
@@ -114,15 +116,43 @@ for (const [id, xs] of obs) {
   home.set(id, med(xs.map(x => x.pos)));
 }
 
-// ── Score every generated plan against it ──────────────────────────
-let plans = 0, scored = 0, sumAbs = 0, late = 0, early = 0;
-const worst = [];
+// ── Score every generated plan against it, on a sample by default ──
+//
+// This was the last script that could only run all-or-nothing: it generated every shape in the
+// corpus on every invocation, which is the wrong cost for the question it answers. It is a
+// SCORE, not a gate — nothing here refuses a build — so a sample is the natural default and
+// `--all` is for the figure you quote.
+//
+// The witness above is deliberately NOT sampled. It only reads published plans, so it costs
+// nothing, and thinning it would weaken the baseline every score is measured against — the
+// support bar of five distinct programs per course is exactly what a sampled witness would
+// start failing. Sample what is expensive; keep what is cheap whole.
+const ALL = argv.includes("--all");
+const allShapes = [];
 for (const d of degrees) {
   const variants = d.plan?.plans?.length ? d.plan.plans : [null];
   variants.forEach((variant, vi) => {
+    allShapes.push({
+      label: `${d.lvl === "graduate" ? "grad" : "ug"}/${d.key}`
+        + (variants.length > 1 ? `#${vi}` : ""),
+      d, variant,
+      features: describeShape({ lvl: d.lvl, data: d.data, variant, variantCount: variants.length }),
+    });
+  });
+}
+const sample = ALL ? null : coveringSample(allShapes);
+const selected = ALL ? allShapes : sample.chosen;
+if (!ALL) {
+  console.log(`\n  SAMPLED — ${selected.length} of ${allShapes.length} shapes. `
+    + `Pass --all for the corpus figure.`);
+  console.log(formatCoverage(sample, allShapes.length));
+}
+
+let plans = 0, scored = 0, sumAbs = 0, late = 0, early = 0;
+const worst = [];
+for (const { label, d, variant } of selected) {
+  {
     const studentType = d.lvl === "graduate" ? "graduate" : "undergraduate";
-    const label = `${d.lvl === "graduate" ? "grad" : "ug"}/${d.key}`
-      + (variants.length > 1 ? `#${vi}` : "");
     let out;
     try {
       out = generatePlan({
@@ -132,8 +162,8 @@ for (const d of degrees) {
         coopPrep: (observed.coopPrep ?? []).map(x => x.course),
         studentType, calibration: chartCalibration, timeBudgetMs: 5000,
       });
-    } catch { return; }
-    if (out.refused) return;
+    } catch { continue; }
+    if (out.refused) continue;
     plans++;
     const doc = out.plan.plans[0];
     const terms = [];
@@ -160,7 +190,7 @@ for (const d of degrees) {
       } };
       walk(t.entries);
     });
-  });
+  }
 }
 worst.sort((a, b) => b.delta - a.delta);
 const result = {
