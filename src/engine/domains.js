@@ -35,7 +35,8 @@
 // ═══════════════════════════════════════════════════════════════════
 
 import { materialize } from "../core/candidateSpec.js";
-import { groupDepth, courseLevel } from "./prereqDepth.js";
+import { groupDepth, courseLevel, cellStanding } from "./prereqDepth.js";
+import { standingFloorTerm, requiredSHFor } from "../core/classStanding.js";
 // Every institution CONVENTION below is derived from `DEFAULT_CALIBRATION` rather than
 // written twice. Extracting them into calibration.js and leaving the literals here would have
 // recreated, on the same afternoon, the duplication the extraction exists to remove — the
@@ -568,6 +569,45 @@ export function buildDomains(cells, terms, {
       if (excluded) {
         drop(ti, options.some(g => g.every(id => depthBoth(id) <= ti))
           ? EXCLUSION.NOT_OFFERED : EXCLUSION.BEFORE_PREREQS);
+      }
+    }
+
+    // ── Class standing, as a CONSTRAINT that can never refuse a plan ──────
+    //
+    // Banner states some courses' entry condition as class standing, and the
+    // registrar sets standing by EARNED semester hours: 32 sophomore, 64 junior,
+    // 96 senior, counted strictly before the term being registered for. As an
+    // ordering preference in `search.js` this leaked badly — MEASURED over all 279
+    // generable undergraduate plans, 54 of 585 gated placements (9.2%) sat earlier
+    // than the credits allow, including ENGW 3302 in term 1 with 17 SH against a
+    // 64 SH gate and MUSI 4601 in term 1 against 96. A preference cannot fix that,
+    // because it only breaks ties and capacity pressure outranks it.
+    //
+    // So it narrows the domain here, where the search forward-checks it. What makes
+    // that safe is the guard, not the rule: the narrowed domain is adopted ONLY if
+    // something survives. The equivalent filter on the level-DIGIT proxy cost 15
+    // points of coverage (77.4% → 62.6%) precisely because it could empty a domain
+    // and turn a taste into an infeasibility. Here, a cell whose every legal term is
+    // below the standing floor keeps all of them and falls back to the preference —
+    // less information, never wrong information, and no refusal this rule caused.
+    //
+    // Per-cell non-emptiness is not a global feasibility proof (capacity couples
+    // cells), which is why this is measured with verify-chart rather than asserted.
+    if (studentType !== "graduate" && domain.length) {
+      const stdCode = cellStanding({ cell, candidates }, courseMap);
+      if (stdCode) {
+        // The plan's OWN per-term credits, so co-op terms (targetSH 0) push the
+        // floor later and a front-loaded plan pulls it earlier. A fraction of the
+        // plan's length cannot express either.
+        const stdFloor = standingFloorTerm(requiredSHFor(stdCode), terms.map(t => t.targetSH || 0));
+        if (stdFloor > 0) {
+          const kept = domain.filter(ti => ti >= stdFloor);
+          if (kept.length && kept.length < domain.length) {
+            for (const ti of domain) if (ti < stdFloor) drop(ti, EXCLUSION.BEFORE_STANDING);
+            domain.length = 0;
+            domain.push(...kept);
+          }
+        }
       }
     }
 

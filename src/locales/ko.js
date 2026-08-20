@@ -410,6 +410,7 @@ export const strings = {
   "chart.deriv.fate.chosen": "채택",
   "chart.deriv.fate.legal": "가능했지만 택하지 않음",
   "chart.deriv.fate.before-prereqs": "그때까지 선수 과목이 끝나지 않습니다",
+  "chart.deriv.fate.before-class-standing": "그때까지 요구되는 학년에 필요한 학점을 채우지 못합니다",
   "chart.deriv.fate.not-offered-then": "그 계절에는 열리지 않습니다",
   "chart.deriv.fate.order": "앞이나 뒤에 와야 할 것 때문에 제외",
   "chart.deriv.fate.outside-precedence-window": "선수 과목 연쇄가 남기는 구간의 밖",

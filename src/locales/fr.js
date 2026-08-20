@@ -410,6 +410,7 @@ export const strings = {
   "chart.deriv.fate.chosen": "retenu",
   "chart.deriv.fate.legal": "légal, non retenu",
   "chart.deriv.fate.before-prereqs": "ses prérequis ne sont pas remplis d’ici là",
+  "chart.deriv.fate.before-class-standing": "d’ici là le plan n’a pas acquis les crédits du niveau d’études exigé",
   "chart.deriv.fate.not-offered-then": "pas donné à cette saison",
   "chart.deriv.fate.order": "écarté par ce qui doit venir avant ou après",
   "chart.deriv.fate.outside-precedence-window": "hors de la fenêtre laissée par les chaînes de prérequis",

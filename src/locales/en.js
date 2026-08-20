@@ -497,6 +497,7 @@ export const strings = {
   "chart.deriv.fate.chosen":  "taken",
   "chart.deriv.fate.legal":   "legal, not taken",
   "chart.deriv.fate.before-prereqs": "its prerequisites are not met by then",
+  "chart.deriv.fate.before-class-standing": "the plan has not earned the credits for the required class standing by then",
   "chart.deriv.fate.not-offered-then": "not offered that season",
   "chart.deriv.fate.order":   "ruled out by what must come before or after",
   "chart.deriv.fate.outside-precedence-window": "outside the window the prerequisite chains leave",

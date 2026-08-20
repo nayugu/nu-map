@@ -410,6 +410,7 @@ export const strings = {
   "chart.deriv.fate.chosen": "चुना गया",
   "chart.deriv.fate.legal": "वैध, चुना नहीं गया",
   "chart.deriv.fate.before-prereqs": "तब तक इसकी पूर्वापेक्षाएँ पूरी नहीं होतीं",
+  "chart.deriv.fate.before-class-standing": "तब तक योजना अपेक्षित श्रेणी के लिए क्रेडिट अर्जित नहीं कर पाती",
   "chart.deriv.fate.not-offered-then": "उस मौसम में नहीं चलता",
   "chart.deriv.fate.order": "जो पहले या बाद में आना चाहिए, उसके कारण हटा",
   "chart.deriv.fate.outside-precedence-window": "पूर्वापेक्षा-श्रृंखलाओं से बची अवधि के बाहर",

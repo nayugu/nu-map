@@ -410,6 +410,7 @@ export const strings = {
   "chart.deriv.fate.chosen": "已选中",
   "chart.deriv.fate.legal": "可行，但未选",
   "chart.deriv.fate.before-prereqs": "到那时它的先修课还没修完",
+  "chart.deriv.fate.before-class-standing": "到那时该计划尚未修满所需年级的学分",
   "chart.deriv.fate.not-offered-then": "那个季节不开课",
   "chart.deriv.fate.order": "因为必须在前或在后的课程而排除",
   "chart.deriv.fate.outside-precedence-window": "在先修链条留出的区间之外",

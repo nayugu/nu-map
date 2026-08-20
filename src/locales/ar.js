@@ -410,6 +410,7 @@ export const strings = {
   "chart.deriv.fate.chosen": "مُختار",
   "chart.deriv.fate.legal": "مسموح، غير مُختار",
   "chart.deriv.fate.before-prereqs": "متطلباته السابقة لا تكتمل قبل ذلك",
+  "chart.deriv.fate.before-class-standing": "لا تكون الخطة قد حصّلت ساعات المستوى الدراسي المطلوب قبل ذلك",
   "chart.deriv.fate.not-offered-then": "لا يُطرح في ذلك الموسم",
   "chart.deriv.fate.order": "مستبعَد بسبب ما يجب أن يسبقه أو يليه",
   "chart.deriv.fate.outside-precedence-window": "خارج النافذة التي تتركها سلاسل المتطلبات",

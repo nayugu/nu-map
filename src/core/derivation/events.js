@@ -94,6 +94,16 @@ export const EXCLUSION = Object.freeze({
   BEFORE_PREREQS: "before-prereqs",
   /** No whole option runs in that season. */
   NOT_OFFERED: "not-offered-then",
+  /**
+   * The plan has not earned the semester hours the course's class-standing
+   * restriction requires (Banner: "Must be enrolled in one of the following
+   * Classes"). 32/64/96 SH for sophomore/junior/senior, counted STRICTLY BEFORE
+   * the term — "earned" is the registrar's word, so the credits you are
+   * registering for cannot qualify you for that registration.
+   *
+   * Applied only when it leaves the domain non-empty; see `buildDomains`.
+   */
+  BEFORE_STANDING: "before-class-standing",
   /** Co-op preparation must precede the co-op (`coopBoundary`). */
   COOP_PREP_BOUND: "coop-prep-bound",
   /** Outside the window the precedence chains leave (`criticalPath`). */

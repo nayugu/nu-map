@@ -61,6 +61,12 @@ export const FATE_GROUP = Object.freeze({
   [FATE.CHOSEN]: "chosen",
   [FATE.LEGAL]: "legal",
   [EXCLUSION.BEFORE_PREREQS]: "prereqs",
+  // Grouped with `prereqs` because in substance that is what a class-standing gate
+  // is — an entry condition the student has not met yet, differing from a course
+  // prerequisite only in being counted in credits rather than in courses. A fourth
+  // obstruction hue is also not available: the palette validates three, and the
+  // hovered cell already names the specific reason.
+  [EXCLUSION.BEFORE_STANDING]: "prereqs",
   [EXCLUSION.NOT_OFFERED]: "offered",
   [EXCLUSION.PRECEDENCE_WINDOW]: "order",
   [EXCLUSION.COOP_PREP_BOUND]: "order",

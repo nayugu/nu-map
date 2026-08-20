@@ -411,6 +411,7 @@ export const strings = {
   "chart.deriv.fate.chosen": "採用",
   "chart.deriv.fate.legal": "置けたが選ばれなかった",
   "chart.deriv.fate.before-prereqs": "その時点では前提科目が終わらない",
+  "chart.deriv.fate.before-class-standing": "その時点では必要な学年に必要な単位が足りない",
   "chart.deriv.fate.not-offered-then": "その季節には開講されない",
   "chart.deriv.fate.order": "前後に来るべきものの都合で除外",
   "chart.deriv.fate.outside-precedence-window": "前提科目の連なりが残す範囲の外",
