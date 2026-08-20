@@ -26,6 +26,7 @@ import {
   calculateGeneralElectives,
 } from "../../core/gradRequirements.js";
 import { baseId } from "../../core/repeatInstances.js";
+import { STANDING_NAMES } from "../../core/classStanding.js";
 import { buildCohortSemesters, deriveSemMaps } from "../../core/semGrid.js";
 import { getSemSH, getOrderedCourses, filterInTimeline } from "../../core/planModel.js";
 import { isOverCap } from "../../core/creditLoad.js";
@@ -314,6 +315,22 @@ export function createPlannerQuery(deps) {
 
     const { offering, ...base } = course;
     const out = { ...base, level: courseLevel(course), college: subjectColleges[course.subject] ?? null };
+
+    // Class standing is a planning FACT, not an offering statistic, so it is
+    // unconditional rather than behind include:["offerings"] — a model advising on
+    // when to take a capstone needs it whether or not it asked for seat history.
+    // `note` because Banner prints its own hedge on every restrictions page, and a
+    // model relaying "juniors and seniors only" as absolute would overstate it.
+    const standing = offering?.std;
+    if (standing && STANDING_NAMES[standing]) {
+      out.classStanding = {
+        code:    standing,
+        minimum: STANDING_NAMES[standing],
+        note: `Banner restricts every section of this course to ${STANDING_NAMES[standing]} standing or above. ` +
+              `Banner itself notes that not all restrictions apply to all students, and standing is earned by ` +
+              `credits rather than by elapsed terms — the student's academic advisor is the authority.`,
+      };
+    }
 
     if (include.includes("offerings")) {
       // Primary instructors (from the monthly Banner scrape — historical

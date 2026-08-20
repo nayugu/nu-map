@@ -97,6 +97,7 @@ import { foldPrereqTree, refId } from "../core/prereqFold.js";
 // its own published plans, so they are owned by the calibration; a second literal here would
 // drift from it silently, which is the whole reason the calibration exists.
 import { DEFAULT_CALIBRATION } from "./calibration.js";
+import { standingFloorOf }     from "../core/classStanding.js";
 
 /**
  * Depth is capped so a pathological chain cannot dominate every domain. A degree
@@ -394,6 +395,27 @@ export const LEVEL_POSITION = DEFAULT_CALIBRATION.levelPosition;
  *
  * p10 rather than the minimum, because the minimum is one department's outlier and
  * a floor built on it would not constrain anything.
+ *
+ * ── The proxy is now a FALLBACK, not the answer ─────────────────────
+ *
+ * The paragraph above is still the reason this table exists, but its premise —
+ * "class standing, a hard constraint we do not have" — stopped being true in
+ * August 2026. Banner's getRestrictions publishes the gate directly and the scrape
+ * reads it (`course.offering.std`, see src/core/classStanding.js), so where the
+ * registrar has stated a standing we use the stated one and this table is what we
+ * fall back to for the ~79% of courses with no restriction.
+ *
+ * MEASURED, and it corrects the proxy in BOTH directions — which one applies depends
+ * on the GATE, not on the level:
+ *
+ *   ENGW 3302   level 3, gated JR    0.22 → 0.50   ~2.2 terms LATER  (proxy too loose)
+ *   EECE 4792   level 4, gated JR    0.67 → 0.50   ~1.4 terms EARLIER (proxy too strict)
+ *   MEIE 4702   level 4, gated SR    0.67 → 0.75   ~0.6 terms LATER
+ *
+ * The third line is worth keeping because it contradicts the obvious summary of this
+ * change: a senior-only capstone is held LATER by the registrar than by the p10 of
+ * observed placements. Do not re-fit `levelFloor` to close any of these gaps — the
+ * two disagree because one is a statistical proxy and the other is the rule.
  */
 export const LEVEL_FLOOR = DEFAULT_CALIBRATION.levelFloor;
 
@@ -429,23 +451,46 @@ export const GRADUATE_LEVEL = DEFAULT_CALIBRATION.graduateStudyLevel;
  */
 export function cellLevelFloor(plan, courseMap, studentType = "undergraduate") {
   if (studentType === "graduate") return 0;
-  const lv = shallowestLevel(plan);
-  if (!lv) return 0;
+  const floors = optionFloors(plan, courseMap);
+  return floors.length ? Math.min(...floors) : 0;
+}
+
+/**
+ * One course's floor: the registrar's stated standing if there is one, else the
+ * level-digit p10. Null means "no information", which is NOT the same as 0 — a
+ * course with an unparseable number must drop out of the combination rather than
+ * pull the whole cell's floor to zero, which is what `.filter(Boolean)` did when
+ * this worked on levels.
+ */
+function courseFloor(id, courseMap) {
+  const stated = standingFloorOf(courseMap?.[id]);
+  if (stated !== null) return stated;
+  const lv = courseLevel(id);
+  if (!lv) return null;
   return LEVEL_FLOOR[Math.min(5, lv)] ?? LEVEL_FLOOR[5];
 }
 
 /**
- * The shallowest level among a cell's options.
+ * The floor of each of a cell's options.
  *
- * Shallowest, not deepest: the student may pick that option, and a floor must not
- * forbid a placement some legal choice makes perfectly fine.
+ * A GROUP is an AND — every member must be taken, so the group cannot start before
+ * its latest member and its floor is the MAX. Across options it is the caller's job
+ * to take the MIN: shallowest, not deepest, because the student may pick that
+ * option and a floor must not forbid a placement some legal choice makes perfectly
+ * fine. Same shape as the levels version this replaced, computed per course so a
+ * stated gate and a level estimate can sit side by side in one cell.
  */
-function shallowestLevel(plan) {
+function optionFloors(plan, courseMap) {
   const cell = plan.cell ?? plan;
-  const levels = (cell.groups?.length
-    ? cell.groups.map(g => Math.max(...g.map(courseLevel)))
-    : (plan.candidates ?? []).map(courseLevel)).filter(Boolean);
-  return levels.length ? Math.min(...levels) : 0;
+  const options = cell.groups?.length
+    ? cell.groups
+    : (plan.candidates ?? []).map(id => [id]);
+  const out = [];
+  for (const group of options) {
+    const memberFloors = group.map(id => courseFloor(id, courseMap)).filter(f => f !== null);
+    if (memberFloors.length) out.push(Math.max(...memberFloors));
+  }
+  return out;
 }
 
 

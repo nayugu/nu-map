@@ -828,7 +828,11 @@ async function main() {
   for (const termCode of restrTargets) {
     const sections = [...(termDetail[termCode] ?? new Map()).values()]
       .reduce((s, a) => s + (a.crns?.length ?? 0), 0);
-    console.log(`\n[${termCode}] fetching class restrictions for ${sections} sections (~${Math.round(sections * RESTR_DELAY_MS / 60000)} min)…`);
+    // Delay PLUS round-trip: Banner answers getRestrictions in ~240 ms, so counting
+    // only the pacing delay halves the estimate (6,699 sections read "28 min" and
+    // took nearly an hour). The workflow log is the only place anyone sees this.
+    const perCall = RESTR_DELAY_MS + 240;
+    console.log(`\n[${termCode}] fetching class restrictions for ${sections} sections (~${Math.round(sections * perCall / 60000)} min)…`);
     try {
       // Synthetic summer codes must talk to Banner via their real merged term.
       const { calls, gated } = await fetchTermRestrictions(bannerCodeOf[termCode] ?? termCode, termDetail[termCode] ?? new Map());

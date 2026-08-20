@@ -49,38 +49,16 @@
 // plan outright.
 // ═══════════════════════════════════════════════════════════════════
 
+// The ladder, the floor positions and `lenientStanding` are DOMAIN facts, not
+// scrape facts — the course card and the MCP tools need them at runtime — so they
+// live in src/core/classStanding.js and are re-exported here for the scripts and
+// tests that treat this file as the whole subject.
+import { STANDING_LADDER, KNOWN_STANDINGS, lenientStanding } from "../../src/core/classStanding.js";
+export { STANDING_LADDER, KNOWN_STANDINGS, STANDING_FLOOR, lenientStanding, standingFloorOf }
+  from "../../src/core/classStanding.js";
+
 /** Only the "Classes" restriction, positive or negative. */
 const CLASSES_HEADING = /following Classes:$/;
-
-/**
- * The standing ladder, most junior first. Position IS the ordering — `indexOf`
- * on this array is what makes "most lenient" computable.
- *
- * GR is deliberately NOT on it. Graduate standing is not a rung above senior; it
- * is a different ladder, reached by admission rather than by accumulating terms
- * (prereqDepth.js measures the p10 of a graduate placement at 0.00 for every
- * level 5xxx–8xxx). A GR-only section is a graduate course, which the level digit
- * already says, and mapping it onto an undergraduate floor is how a master's
- * student gets barred from their own first term.
- */
-export const STANDING_LADDER = ["FR", "SH", "JR", "SR"];
-
-/** Every code Banner is known to print in a Classes restriction. */
-export const KNOWN_STANDINGS = new Set([...STANDING_LADDER, "GR"]);
-
-/**
- * Fraction of an undergraduate plan completed before each standing is reached.
- *
- * A standing is earned with credits, not terms, so the honest mapping for a
- * 4-year/8-term plan is thirds-of-the-way markers: sophomore at 1/4, junior at
- * 1/2, senior at 3/4. Deliberately NOT fitted to observed placements — those are
- * what `levelFloor` already is, and the whole point of this data is to replace a
- * fit with the registrar's stated rule.
- *
- * Expressed as a position 0..1 to match `cellLevelFloor`'s contract, so a plan of
- * any length converts the same way.
- */
-export const STANDING_FLOOR = Object.freeze({ FR: 0.00, SH: 0.25, JR: 0.50, SR: 0.75 });
 
 /**
  * Parse a getRestrictions page into { heading: [values] }.
@@ -148,27 +126,6 @@ export function classesOf(parsed) {
     if (/^Cannot/i.test(head)) not = key; else must = key;
   }
   return { must, not };
-}
-
-/**
- * The most lenient standing in a `|`-joined key, or null.
- *
- * "Most lenient" is the earliest rung the key admits, because a student holding it
- * satisfies the restriction. GR is skipped for the reason on STANDING_LADDER: a
- * GR|JR|SR section is open to juniors, so its floor is junior; a GR-ONLY section
- * has no undergraduate floor at all and returns null.
- *
- * @param {string} key
- * @returns {string|null} a STANDING_LADDER member
- */
-export function lenientStanding(key) {
-  let best = null;
-  for (const code of String(key ?? "").split("|")) {
-    const i = STANDING_LADDER.indexOf(code);
-    if (i === -1) continue;
-    if (best === null || i < STANDING_LADDER.indexOf(best)) best = code;
-  }
-  return best;
 }
 
 /**

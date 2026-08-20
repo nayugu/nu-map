@@ -16,6 +16,9 @@ import { ISpecialTerms }            from "../ports/ISpecialTerms.js";
 import { REL_STYLE } from "../core/constants.js";
 import { getConnections } from "../core/planModel.js";
 import { conditionStatus } from "../core/prereqConditions.js";
+// Pure core, like prereqConditions beside it — the codes and their ordering, never
+// the display names: those are localized and come from `t`.
+import { STANDING_NAMES } from "../core/classStanding.js";
 import { baseId } from "../core/repeatInstances.js";
 import { useCourseInk } from "./useSubjectInk.js";
 import { useLanguage } from "../context/LanguageContext.jsx";
@@ -585,6 +588,18 @@ function CourseInfo({ selCourse, navTo }) {
         <div style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: "calc(1.9 * var(--lh-scale, 1))" }}>
           <span style={{ color: "var(--error)", fontWeight: 700 }}>{t("info.prereqs")} </span>
           <PrereqChips nodes={selCourse.prereqs} courseMap={courseMap} navTo={navTo} onDragStart={onDragStart} />
+        </div>
+      )}
+      {/* Class standing — beside the prereqs because that is what it IS: the real
+          entry condition for a capstone or Advanced Writing, which the catalog
+          states only in prose and Banner states properly. Shown as information, not
+          as a violation: standing is earned by credits and we do not know the
+          student's, so a warning colour here would accuse people we cannot assess. */}
+      {STANDING_NAMES[selCourse.offering?.std] && (
+        <div title={t("info.standing.note")}
+             style={{ fontSize: 10, color: "var(--text-4)", background: "var(--badge-bg)", border: "1px solid var(--border-1)", borderRadius: 4, padding: "4px 8px", marginTop: 4, lineHeight: "calc(1.9 * var(--lh-scale, 1))" }}>
+          <span style={{ color: "var(--text-3)", fontWeight: 700 }}>{t("info.standing.title")} </span>
+          {t("info.standing.min", { standing: t(`standing.${selCourse.offering.std}`) })}
         </div>
       )}
     </div>

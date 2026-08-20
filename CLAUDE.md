@@ -83,9 +83,12 @@ Facts that follow from this:
   ("Must be enrolled in one of the following Classes: Junior (JR), Senior(SR)").
   Measured over Fall 2025's 7,430 sections: **21–23% carry one**, over a closed
   five-value vocabulary (FR/SH/JR/SR/GR). It matters because the stand-in was
-  wrong in both directions — ENGW 3302 is level 3, so `levelFloor[3]` put it at
-  0.22 through the plan (term 2 of 8) while all 24 of its sections say junior;
-  4000-level courses got 0.67 where a JR/SR gate is nearer 0.50. Six modules
+  wrong in both directions, and which way depends on the GATE rather than the
+  level: ENGW 3302 (level 3, gated JR) moves 0.22 → 0.50, about 2.2 terms later;
+  EECE 4792 (level 4, gated JR) moves 0.67 → 0.50, about 1.4 terms earlier; but
+  MEIE 4702 (level 4, gated **SR**) moves 0.67 → **0.75**, i.e. later — a
+  senior-only capstone is held back further by the registrar than by the p10 of
+  observed placements, which contradicts the obvious summary of the change. Six modules
   carried comments apologising for the gap (`search.js`, `objective.js` ×3,
   `prereqDepth.js`, `chartCalibration.js`). Rules, all in
   `scripts/lib/class-standing.js`:
