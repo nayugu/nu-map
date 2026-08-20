@@ -260,6 +260,24 @@ expensive failure, so the loop is:
   the scraper. `CS 3500` does not exist. Four core modules were imported by
   nothing at all. Each was found by *checking*, and each would have shipped in
   silence.
+- **A green Node suite says nothing about whether the app RENDERS.** On
+  2026-08-20 a `const` read before its initializer in `PlannerContext` threw on
+  every render; every visitor got the recovery screen. `npm run build` succeeded
+  and 2,018 unit + 93 contract + 254 invariant tests passed, plus `verify-chart`
+  at 794 plans — because nothing that runs in Node evaluates a React component
+  body. HTTP status was no help either: `/`, the bundle and every JSON asset
+  returned 200 while the app was unusable. So **before pushing a change under
+  `src/ui/` or `src/context/`, render it** — `npm run test:boot` builds and mounts
+  the app in headless Chromium and takes ~5 s, or use the `/run` skill. The older
+  `test/browser/*` files `skip` unless a dev server is already listening and CI
+  never starts one, so they were a no-op in CI; `test:boot` fails instead of
+  skipping, which is the whole point.
+- **Declare a memo above its consumer.** The same outage, stated as the rule that
+  would have prevented it: `standingViolations` read `supersededTakes` in its body
+  AND its dependency array while `const supersededTakes = useMemo(...)` sat 126
+  lines below, in one scope. `PlannerContext` is ~5,000 lines of hooks in a single
+  function, so nothing about proximity is obvious — check the declaration line of
+  every identifier a new memo touches.
 - **Be hardest on your most confident claim.** "Two plans need 262 SH" was
   rhetoric — a second major consumes the free electives, so the real gap is
   three courses, not double. "Provenance proves replacing is safe" was false; it

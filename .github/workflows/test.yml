@@ -77,6 +77,34 @@ jobs:
       - run: npm --prefix mcp-server ci
       - run: npm run test:mcp
 
+  boot:
+    # ── The layer that was missing, and it cost an outage ─────────────
+    #
+    # On 2026-08-20 a `const` read before its initializer in PlannerContext threw on
+    # every render. Every visitor got the recovery screen. The build succeeded and
+    # 2,018 unit / 93 contract / 254 invariant tests passed, because nothing that
+    # runs in Node evaluates a React component body — and the existing browser tests
+    # SKIP unless a dev server is already listening, which CI never starts, so they
+    # were a no-op here.
+    #
+    # This job builds and renders. It asserts only that the app mounts without a page
+    # error, which is the cheapest guard against the app being dead for everyone, and
+    # verified to fail on the offending commit.
+    #
+    # It DOES install scripts, unlike contract/live above: vite needs esbuild's, and
+    # playwright needs its browser. That is why it is a separate job — the
+    # dependency-free constraint on the other jobs stays intact.
+    if: github.event_name != 'schedule'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: "24", cache: npm }
+      - run: npm ci
+      - run: npx playwright install --with-deps chromium
+      - run: npm run build
+      - run: npm run test:boot
+
   live:
     # Non-deterministic (hits catalog.northeastern.edu). Scheduled + manual only,
     # never gating a PR. Catches NEU markup changes that break the scrape parser.

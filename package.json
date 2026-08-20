@@ -64,6 +64,7 @@
     "test:split": "npm --prefix cloudflare/stripe-split test",
     "test:live": "cd test/live && node --test",
     "test:browser": "cd test/browser && node --test",
+    "test:boot": "cd test/browser && node --test boot-smoke.browser.test.js",
     "test:all": "npm test && npm run test:mcp && npm run test:split && npm run test:live",
     "test:baseline:update": "node test/invariant/regen-baselines.mjs",
     "gen:donate-qr": "node scripts/gen-donate-qr.mjs",
