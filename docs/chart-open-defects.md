@@ -1276,10 +1276,26 @@ category the tool was built to make meaningful — stops being evidence.
 - Sharding is held: `--jobs` defaults to **1** and is opt-in for questions, never for `--all`.
   The arithmetic is sound (3:47 → 1:15 on 8 jobs, and the merged report is numerically
   identical); it is the engine underneath that is not reproducible under load.
-- The fix belongs in the engine, not the runner: a clock abort inside `attemptPlacement` has to
-  be distinguishable from a placement failure, so the ladder can refuse on it rather than
-  descend. That is a narrow change with a real coverage question attached — the rungs below
-  exist to rescue programs, and refusing instead of descending will cost some of them.
-  Measure before choosing.
+- **Partly fixed the same day, and the residual is the interesting half.** A clock abort is now
+  distinguishable from a placement failure (`timedOut`), and `searchPlacement` refuses rather
+  than letting the packer answer for a run that ran out of TIME. Four paths set the flag: an
+  abort inside a strict attempt, an abort inside a rung attempt, and — missed on the first
+  attempt at this, which is why the fix looked done and wasn't — the rung loop's own
+  `now() > deadline` break, which reached the packer without any attempt ever reporting a
+  timeout.
+  - **The coverage cost is zero.** Measured over the 120-shape covering sample, A/B'd in one
+    tree via `CHART_CLOCK_FALLTHROUGH=1` rather than by stashing (a shared checkout — a stash
+    moves the other session's uncommitted work, and a baseline taken before their edits is not
+    a baseline for yours): `lost 0, gained 0`. The packer still rescues on node exhaustion,
+    which is deterministic and the case it was built for.
+  - **It does NOT restore determinism, and the same measurement says so.** `MOVED 1` persisted
+    in the same A/B — `ug/data_science_and_design_bs_(boston)#1`, which also moved in an
+    earlier confounded run. The guard can only convert a plan into a refusal, never move one,
+    so a plan that still moves proves another clock-dependent path remains open. Find it before
+    trusting `--jobs`; it stays defaulted to 1.
+  - A unit test for the guard was written and **dropped as too slow**: pinning it needs a
+    program big enough that the search cannot finish between clock checks, and that cost 2:51
+    in a suite that runs in 6.8 s. It is recorded here instead. A cheap version probably tests
+    `searchPlacement` directly rather than through `generatePlan`.
 - Do **not** respond by raising the budget. That moves the boundary and leaves it, which is the
   mistake `NODES_PER_MS` has already been through three times.
