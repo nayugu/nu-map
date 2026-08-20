@@ -1081,3 +1081,75 @@ carrying a named exception — is neither, and should not survive long.
 **Do not convert the exception to a threshold.** `KNOWN_DEGRADED` lists the program by
 name, and a second entry appearing is a new fact about the search. A count-based tolerance
 would swallow it silently, which is the failure mode this whole file exists to prevent.
+
+---
+
+### 19. A `shared` section deleted the requirement instead of de-duplicating it — FIXED, with a named residual
+
+`scripts/lib/shared-sections.js` has pointed at this file for the alternative-track work
+since it was written. The entry never existed; this is it, plus the defect found while
+looking for it.
+
+**What was wrong.** `deriveCells` skipped every `shared: true` section outright, on the
+stated premise that such a section is "satisfied by courses that also answer somewhere
+else", so emitting cells "would schedule the same obligation twice". For **53 of the
+corpus's 136** shared sections that is true. For the other **83 it is false**: nothing
+else names their courses.
+
+Mathematics and Physics BS is the clean case. Its `Integrative Courses` section requires
+MATH 4545 **and** PHYS 3601 (`minRequirementCount: 2` over two plain `COURSE` children),
+and both are reachable elsewhere only through an open elective `RANGE` — so skipping did
+not avoid a double-schedule, it deleted the only place either course was ever named. The
+audit run against our own generated plan reported `Integrative Courses 0/2` while the
+catalog's published plan scored `2/2`, and the 8 credits reappeared as two anonymous
+General Electives.
+
+**Why the fix could not be structural.** The flag carries two populations. It is also the
+workaround for a requirement pane the parser cannot express as "pick one", so Accounting
+MSA's `Taxation Track` (the alternative to `Audit Track`) and 34 programs' `Thesis Option`
+(the alternative to `Project Option`) wear it too. Measured: those have the *same shape* as
+the integrative case — a full conjunction of plain courses — so every structural rule
+admits all three or none, and admitting them forces a thesis on every master's student.
+
+**What decides instead: the Sample Plan of Study.** It is one valid path, which is why
+CLAUDE.md lets it prove we *dropped* a requirement and never that we have them all — and
+"did the department schedule this course" is exactly the dropped-requirement question. An
+alternative track is a branch the plan did not take, so it names none of its courses; an
+integrative requirement is on every path, so it does. Three narrowing conditions keep it
+conservative: full conjunctions only, top-level `COURSE`/`AND` children only (so CS and
+Health Science's `Capstone` — an `OR` over CS 4530 / CS 4535 whose plan names *both* — is
+still refused), and no evidence means no change.
+
+**Measured.** 26 sections across 23 programs now emit; **zero** Thesis Options, Taxation
+Tracks or MAT+ tracks do. Over the 37 affected plans, refusals **12 → 8** (Computer
+Engineering and Computer Science, Design and Theatre, and History and Economics went from
+*unplannable* to clean), terms leaving 3+ cells unguided **15 → 2**, terms with 3+ general
+electives **13 → 1**. The degree total does not move, because `geSH` is the residual
+against CHART's own structural total — a named integrative course is spent out of the
+free-elective bucket, not added to the degree.
+
+**The one regression, and why it is the right trade.** Behavioral Neuroscience and Design
+goes from 2 short terms to 4 (Oakland variant 1). It is structural, not a search-budget
+artifact — deterministic, and unchanged at a 20 s budget. The plan now schedules ARTG 5310,
+a top-level `COURSE` in a `min=3/3` section that it previously omitted entirely, and pays
+for it with the flexible general-elective cell that used to fill those terms. A missing
+required course is a correctness defect; a term carrying 3 rather than 4 big courses is a
+load preference. Note also that the *before* plan had a `big=1` term and the after plan's
+short terms are all `big=3`, so per-term it is less lopsided, not more.
+
+**The residual — 54 sections still skipped.** 50 are in programs that publish no plan at
+all, so the witness cannot speak; 4 have a plan that names none of the section (an untaken
+branch). The great majority of both groups are genuine alternative tracks that *should*
+stay skipped, but a handful are probably real requirements going unscheduled — Analytics
+MPS's `Evidence-Based Management` (`min=5/5`), Digital Media MPS's `Required Courses`, the
+Business Administration certificate's `Eight-Month International Study`. Those need what
+`shared-sections.js` already names as its own piece of work: teaching the parser that two
+panes are **alternatives**, so a track becomes a choice the student makes rather than a
+section that has to be hidden to stop being charged twice. Until then the flag is doing two
+jobs and the witness is what tells them apart.
+
+**Do not replace the witness with a classifier.** The same warning `program-variants.js`
+carries. Heading text and credit arithmetic were both considered and neither separates
+`Thesis Option` from `Integrative Courses`; the plan of study does, costs nothing to read
+(`metadata.planOfStudyCourses` is already written by the scrape), and cannot drift from the
+requirements because it is re-read with them every month.
