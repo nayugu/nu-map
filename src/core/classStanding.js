@@ -156,6 +156,69 @@ export function standingFloorTerm(requiredSH, termSH, bonusSH = 0) {
   return list.length;
 }
 
+/**
+ * Every placed course whose class-standing gate the plan does not reach by that
+ * term's registration.
+ *
+ * Extracted from PlannerContext so the panel and the probes run the SAME code. A
+ * probe that recomputed this would measure its own opinion of the rule, which is
+ * exactly the trap `standing-probe.js` avoids by importing `cellStanding` instead
+ * of restating it.
+ *
+ * ── The three conservatism choices, all in one direction ────────────
+ *
+ *   1. RESERVATIONS COUNT toward the projection even though undecided. An
+ *      undecided cell in an earlier term will be filled with something worth
+ *      credit, so omitting it would under-count standing and invent warnings on
+ *      healthy plans.
+ *   2. Graduate plans are exempt entirely — a master's student takes 5000-level
+ *      courses in their first term.
+ *   3. An unreadable gate never warns (`meetsStanding` returns true for anything
+ *      off the ladder, GR included).
+ *
+ * @param {object} args
+ * @param {Record<string,string>} args.placements       courseId → semId
+ * @param {Record<string,number>} args.semIndex         semId → term index
+ * @param {Record<string,object>} args.courseMap
+ * @param {object[]} [args.reservations]                [{ semId, sh }]
+ * @param {number} [args.bonusSH]                       transfer/AP credit
+ * @param {string} [args.studentType]
+ * @param {(semId: string) => boolean} [args.inTimeline] defaults to "has an index"
+ * @param {Set<string>} [args.skip]                     placed-out / superseded ids
+ * @returns {Map<string, {required: string, earned: number}>}
+ */
+export function standingViolationsOf({
+  placements = {}, semIndex = {}, courseMap = {}, reservations = [],
+  bonusSH = 0, studentType = "undergraduate", inTimeline = null, skip = null,
+} = {}) {
+  const out = new Map();
+  if (studentType === "graduate") return out;
+  const live = inTimeline ?? ((sid) => Number.isFinite(semIndex[sid]));
+  const skipped = (id) => !!skip?.has(id);
+
+  const shByTerm = {};
+  const addSH = (sid, sh) => {
+    if (!live(sid)) return;
+    const ti = semIndex[sid];
+    if (!Number.isFinite(ti)) return;
+    shByTerm[ti] = (shByTerm[ti] ?? 0) + (Number.isFinite(sh) ? sh : 0);
+  };
+  for (const [id, sid] of Object.entries(placements)) {
+    if (skipped(id)) continue;
+    addSH(sid, courseMap[id]?.sh ?? 0);
+  }
+  for (const r of reservations ?? []) addSH(r?.semId, r?.sh ?? 0);
+
+  for (const [id, sid] of Object.entries(placements)) {
+    if (skipped(id) || sid === "incoming" || !live(sid)) continue;
+    const required = courseMap[id]?.offering?.std;
+    if (!STANDING_LADDER.includes(required)) continue;
+    const earned = earnedSHBefore(semIndex[sid], shByTerm, bonusSH);
+    if (!meetsStanding(earned, required)) out.set(id, { required, earned });
+  }
+  return out;
+}
+
 export function earnedSHBefore(termIndex, shByTermIndex, bonusSH = 0) {
   let sum = Number.isFinite(bonusSH) ? bonusSH : 0;
   if (!shByTermIndex) return sum;

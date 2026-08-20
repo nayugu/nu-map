@@ -18,9 +18,20 @@
  * Measured, not assumed — and the answer decides whether the preference needs
  * promoting to a constraint.
  *
+ * ── Two paths, and only one of them goes through the engine ─────────
+ *
+ * `--sample` checks the DEPARTMENTS' OWN published plans instead of generated ones.
+ * That path never touches `buildDomains`, so the standing constraint cannot help
+ * it: a student who loads a sample plan gets whatever the department published,
+ * and the only thing standing between them and an unregisterable term is the
+ * planner badge. So this mode is really a test of two things at once — whether
+ * `standingViolationsOf` (the exact function the panel calls) fires on real data,
+ * and whether NEU's own plans satisfy NEU's own registration rule.
+ *
  * Usage:
  *   node scripts/standing-probe.js                    # a default spread of degrees
  *   node scripts/standing-probe.js --all              # every undergraduate degree (slow)
+ *   node scripts/standing-probe.js --sample           # published sample plans, all degrees
  *   node scripts/standing-probe.js ug/computer_science_bscs_'(boston)'
  */
 
@@ -32,12 +43,13 @@ import { buildDepthIndex, cellStanding } from "../src/engine/prereqDepth.js";
 import { loadCatalog } from "../src/adapters/northeastern/courseCatalog.node.js";
 import enginePorts from "../src/adapters/northeastern/enginePorts.js";
 import chartCalibration from "../src/adapters/northeastern/chartCalibration.js";
-import { earnedSHBefore, meetsStanding, requiredSHFor, standingAtSH, STANDING_LADDER }
+import { earnedSHBefore, meetsStanding, requiredSHFor, standingAtSH, STANDING_LADDER, standingViolationsOf }
   from "../src/core/classStanding.js";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const args = process.argv.slice(2);
 const wantAll = args.includes("--all");
+const sampleMode = args.includes("--sample");
 const named = args.filter(a => !a.startsWith("--"));
 
 const DEFAULTS = [
@@ -65,9 +77,94 @@ const targets = [];
 for (const col of readdirSync(base)) {
   for (const key of readdirSync(join(base, col))) {
     if (!existsSync(join(base, col, key, "requirements.json"))) continue;
-    if (!wantAll && !(named.length ? named : DEFAULTS).some(n => key === n || `ug/${key}` === n)) continue;
+    if (!wantAll && !sampleMode
+        && !(named.length ? named : DEFAULTS).some(n => key === n || `ug/${key}` === n)) continue;
     targets.push([col, key]);
   }
+}
+
+/**
+ * Sample-plan mode: run the PANEL's own function over the departments' published
+ * plans. `standingViolationsOf` is imported rather than reimplemented — a probe
+ * that recomputed the rule would be measuring its own opinion of it.
+ */
+if (sampleMode) {
+  let plansSeen = 0, gated = 0, viol = 0, noPlan = 0;
+  const rows = [], worst = new Map();
+  for (const [col, key] of targets) {
+    const pf = join(base, col, key, "plan.json");
+    if (!existsSync(pf)) { noPlan++; continue; }
+    const doc = JSON.parse(readFileSync(pf, "utf8"));
+    for (const pl of doc.plans ?? []) {
+      const terms = [];
+      for (const y of pl.years ?? []) for (const t of y.terms ?? []) terms.push(t);
+      if (!terms.length) continue;
+      plansSeen++;
+
+      // Rebuild the planner's inputs from the published plan: a synthetic semId per
+      // term, one placement per DECIDED entry, and a reservation for every undecided
+      // one so its credit still counts toward standing (the panel's rule 1).
+      const semIndex = {}, placements = {}, reservations = [];
+      const localMap = {};
+      terms.forEach((t, ti) => {
+        const sid = `s${ti}`;
+        semIndex[sid] = ti;
+        (t.entries ?? []).forEach((e, ei) => {
+          const opts = e.options ?? [];
+          const decided = opts.length === 1 && opts[0].length >= 1;
+          if (decided) {
+            // An AND group is several courses in one entry; each is placed.
+            opts[0].forEach((cid, ci) => {
+              const pid = `${cid}`;
+              placements[pid] = sid;
+              localMap[pid] = { ...(courseMap[cid] ?? {}), id: pid,
+                                sh: ci === 0 ? (e.sh ?? courseMap[cid]?.sh ?? 0) : 0,
+                                offering: courseMap[cid]?.offering };
+            });
+          } else {
+            reservations.push({ semId: sid, sh: e.sh ?? 0 });
+          }
+        });
+      });
+
+      const v = standingViolationsOf({
+        placements, semIndex, courseMap: localMap, reservations,
+        bonusSH: 0, studentType: "undergraduate",
+      });
+      const localGated = Object.keys(placements)
+        .filter(id => STANDING_LADDER.includes(localMap[id]?.offering?.std)).length;
+      gated += localGated;
+      viol  += v.size;
+      if (v.size) {
+        for (const [id, info] of v) {
+          const short = requiredSHFor(info.required) - info.earned;
+          const prev = worst.get(id);
+          if (!prev || short > prev.short) worst.set(id, { ...info, short, key });
+        }
+        rows.push({ key: `${key}${(doc.plans ?? []).length > 1 ? ` [${pl.label ?? "?"}]` : ""}`,
+                    gated: localGated, viol: v.size });
+      }
+    }
+  }
+  console.log(`\nSAMPLE-PLAN MODE — the departments' own published plans`);
+  console.log(`(this path never reaches buildDomains, so the planner badge is the only guard)\n`);
+  console.log(`published plans checked ${plansSeen}   programs with no plan ${noPlan}`);
+  console.log(`gated placements ${gated}   flagged as too early ${viol}` +
+    (gated ? `  (${(100 * viol / gated).toFixed(1)}%)` : ""));
+  if (rows.length) {
+    console.log(`\nplans containing at least one flagged course (${rows.length}):`);
+    for (const r of rows.sort((a, b) => b.viol - a.viol).slice(0, 20)) {
+      console.log(`  ${String(r.viol).padStart(3)} of ${String(r.gated).padStart(3)} gated  ${r.key.slice(0, 56)}`);
+    }
+  }
+  if (worst.size) {
+    console.log(`\nworst shortfalls:`);
+    for (const [id, v] of [...worst.entries()].sort((a, b) => b[1].short - a[1].short).slice(0, 15)) {
+      console.log(`  ${id.padEnd(10)} needs ${requiredSHFor(v.required)} (${v.required}) · plan has ${v.earned} ` +
+        `(${standingAtSH(v.earned)}) · short ${v.short}  [${v.key.slice(0, 30)}]`);
+    }
+  }
+  process.exit(0);
 }
 
 let plans = 0, refused = 0, gatedCells = 0, violations = 0;

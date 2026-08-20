@@ -17,7 +17,7 @@ import { evalPrereqTree } from "../core/prereqEval.js";
 import { pruneSemOrders } from "../core/planSchema.js";
 import { RATINGS_KEY, readRatings, setRatingField, getRating } from "../core/ratingStore.js";
 import { planConditions } from "../core/prereqConditions.js";
-import { STANDING_LADDER, earnedSHBefore, meetsStanding } from "../core/classStanding.js";
+import { standingViolationsOf } from "../core/classStanding.js";
 import { getSemSH, getOrderedCourses, getConnectionsToDepth, applySubstitutions, inTimeline, concurrentCapOf } from "../core/planModel.js";
 import { semesterOccupants, occupantCards, moveReservation, removeReservation, isReservationId } from "../core/reservations.js";
 import { reservationEdges } from "../core/reservationEdges.js";
@@ -1792,38 +1792,20 @@ const { locale, setLocale, locales, t } = useLanguage();
   // earlier term will be filled with something worth credit, so omitting it would
   // under-count the student's standing and invent warnings on healthy plans. This
   // is a warning surface, so it must lean toward silence.
-  const standingViolations = useMemo(() => {
-    const v = new Map();
-    // A graduate plan has no undergraduate standing ladder — a master's student
-    // takes 5000-level courses in their first term. GR is not on the ladder, so
-    // grad-only gates are already skipped below, but a stray undergraduate gate
-    // inside a graduate plan must not warn either.
-    if ((pv?.studentType ?? studentType) === "graduate") return v;
-
-    const shByTerm = {};
-    const addSH = (sid, sh) => {
-      if (!inTimeline(sid, SEM_INDEX)) return;
-      const ti = SEM_INDEX[sid];
-      if (!Number.isFinite(ti)) return;
-      shByTerm[ti] = (shByTerm[ti] ?? 0) + (Number.isFinite(sh) ? sh : 0);
-    };
-    for (const [id, sid] of Object.entries(pvPlacements)) {
-      if (pvPlacedOut.has(id) || supersededTakes.has(id)) continue;
-      addSH(sid, effectiveCourseMap[id]?.sh ?? 0);
-    }
-    for (const r of Object.values(reservations)) addSH(r.semId, r.sh ?? 0);
-
-    for (const [id, sid] of Object.entries(pvPlacements)) {
-      if (pvPlacedOut.has(id) || supersededTakes.has(id)) continue;
-      if (sid === "incoming" || !inTimeline(sid, SEM_INDEX)) continue;
-      const required = effectiveCourseMap[id]?.offering?.std;
-      if (!STANDING_LADDER.includes(required)) continue;
-      const earned = earnedSHBefore(SEM_INDEX[sid], shByTerm, pvBonusSH);
-      if (!meetsStanding(earned, required)) v.set(id, { required, earned });
-    }
-    return v;
-  }, [pvPlacements, pvPlacedOut, supersededTakes, reservations, effectiveCourseMap,
-      SEM_INDEX, pvBonusSH, pv?.studentType, studentType]);
+  const standingViolations = useMemo(() => standingViolationsOf({
+    placements:   pvPlacements,
+    semIndex:     SEM_INDEX,
+    courseMap:    effectiveCourseMap,
+    reservations:  Object.values(reservations),
+    bonusSH:      pvBonusSH,
+    studentType:  pv?.studentType ?? studentType,
+    inTimeline:   (sid) => inTimeline(sid, SEM_INDEX),
+    // Placed-out (AP/transfer-satisfied) and superseded retakes are not courses
+    // the student sits in this term, so they neither earn credit here nor need a
+    // standing. `pvBonusSH` is where transfer credit enters instead.
+    skip:         new Set([...pvPlacedOut, ...supersededTakes]),
+  }), [pvPlacements, pvPlacedOut, supersededTakes, reservations, effectiveCourseMap,
+       SEM_INDEX, pvBonusSH, pv?.studentType, studentType]);
 
   const coreqViolations = useMemo(() => {
     const v = new Map();
