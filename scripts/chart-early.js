@@ -127,13 +127,19 @@ const observed = existsSync(orderFile)
   ? JSON.parse(readFileSync(orderFile, "utf8")) : { edges: [], coopPrep: [] };
 
 const per = Array.from({ length: EARLY_TERMS }, () => (
-  { judged: 0, agree: 0, late1: 0, late2: 0, early: 0, missing: 0 }));
+  { judged: 0, agree: 0, late1: 0, late2: 0, early: 0, missing: 0, beyond: 0 }));
 let generated = 0, refused = 0, relaxed = 0, movedTotal = 0, unplacedTotal = 0;
 // Cells repaired PAST the window and fixed there — see the note at the increment.
 let escaped = 0;
 const escapedBy = new Map();
 const escapedEx = [];
 const worst = [];
+/** Per-program rows, keyed by program folder — see the note at the assignment. */
+const rows = {};
+/** The window as a SET — capture and purity. See the note where these are counted.
+ *  Named `win`, not `window`: this repo is also a browser app and shadowing that global in a
+ *  script is a trap for whoever copies the block somewhere it matters. */
+const win = { capture: 0, captureOf: 0, purity: 0, purityOf: 0 };
 
 for (const p of PROGRAMS) {
   const out = generatePlan({
@@ -193,20 +199,79 @@ for (const p of PROGRAMS) {
     }
   }
   let late2Here = 0;
+  // Per-program counts accumulated in the SAME pass as the aggregate, never re-derived from the
+  // same data afterwards. Two derivations of one figure is one of them being wrong later.
+  const row = {
+    agree: per.map(() => 0), judged: per.map(() => 0),
+    fellBack: (out.report?.relaxed ?? []).includes("department-early-terms"),
+    relaxed: out.report?.relaxed ?? [],
+    fixed: out.report?.earlyTerms?.fixed ?? 0,
+    moved: (out.report?.earlyTerms?.moves ?? []).length,
+    unplaced: (out.report?.earlyTerms?.unplaced ?? []).length,
+  };
   for (let t = 0; t < EARLY_TERMS; t += 1) {
     for (const id of (theirs[t] ?? new Set())) {
       if (!courseMap[id]) continue;            // not a course the engine could place at all
       const b = per[t];
       b.judged += 1;
+      row.judged[t] += 1;
       const landed = at(id);
-      if (landed === t) b.agree += 1;
+      if (landed === t) { b.agree += 1; row.agree[t] += 1; }
       else if (landed < 0) b.missing += 1;
       else if (landed < t) b.early += 1;
       else if (landed === t + 1) b.late1 += 1;
       else { b.late2 += 1; late2Here += 1; }
+      // ── Their Nth study term is not always OUR Nth ──────────────────
+      //
+      // This table compares by ORDINAL position; adoption maps by CALENDAR — `studySlots` keys
+      // a term by year and season, deliberately, because a published plan may leave a summer
+      // blank that the student's shape keeps. So a department's 4th study term can be our 5th,
+      // and then `earlyTermsOf` correctly declines to adopt it (`at >= through`) while this
+      // table scores it as a disagreement.
+      //
+      // Marine Biology is the case: its Year 2 Fall is the department's 4th study term and our
+      // 5th, so all four of `EEMB 2302/2303/2400` and `EESC 2000` read as "2+ terms late" for a
+      // window they were never inside. Counted separately, because a number that mixes "we put
+      // it later than they did" with "their term is past our window" cannot tell a regression
+      // from a shape difference — and term 4 is where almost all of it lands.
+      if (landed >= EARLY_TERMS) b.beyond += 1;
     }
   }
   if (late2Here) worst.push({ key: p.key, late2: late2Here });
+
+  // ── The WINDOW as a set, which per-term agreement cannot express ────
+  //
+  // Per-term agreement asks "is this course in the term its department named". That is the right
+  // question for sequencing and the wrong one for "did the first two years come from the
+  // catalog", and the difference is not academic: a repair that slides one course a term later
+  // and pulls another a term earlier to fill the gap scores TWO disagreements while leaving the
+  // window holding exactly the department's own courses. Reading only the per-term number, that
+  // change looks like a regression and is not one.
+  //
+  //   CAPTURE  of the courses a department publishes in its first four terms, how many appear
+  //            SOMEWHERE in our first four. The user-facing promise — "almost 100% of the
+  //            catalog's classes should be in the first four semesters".
+  //   PURITY   of the courses we commit to in our first four terms, how many the department also
+  //            put in its first four. This is the one that catches a foreign course filling a
+  //            gap — `PHYS 2303`, published in Year 2, sitting in Year 1 Summer.
+  //
+  // Both over COMMITTED placements only, the same rule the per-term table uses: an elective slot
+  // that merely lists a course has not placed it.
+  const theirEarly = new Set();
+  for (let t = 0; t < EARLY_TERMS; t += 1) {
+    for (const id of (theirs[t] ?? new Set())) if (courseMap[id]) theirEarly.add(id);
+  }
+  const ourEarly = new Set();
+  for (let t = 0; t < EARLY_TERMS; t += 1) for (const id of (ours[t] ?? new Set())) ourEarly.add(id);
+  for (const id of theirEarly) { win.captureOf += 1; if (ourEarly.has(id)) win.capture += 1; }
+  for (const id of ourEarly) { win.purityOf += 1; if (theirEarly.has(id)) win.purity += 1; }
+  // ── One row PER PROGRAM, so a moved aggregate can be attributed ─────
+  //
+  // Without this the JSON says "15 plans fell back" where the last run said 14 and there is
+  // no way to learn which one — which is the same trap `chart-probe`'s own header describes,
+  // three wrong hypotheses each costing a full corpus run. A summary that cannot be diffed
+  // per program is a summary that can only be argued about.
+  rows[p.key] = row;
 }
 
 const pct = (a, b) => (b ? `${(100 * a / b).toFixed(1)}%` : "  n/a");
@@ -222,17 +287,23 @@ console.log(`${escaped} courses were fixed OUTSIDE the ${EARLY_TERMS}-term windo
     : " (the window is airtight)") + "\n");
 for (const e of escapedEx) console.log(`    ${e}`);
 if (escapedEx.length) console.log("");
-console.log("  term   judged    agree    late1    late2+   missing");
+console.log("  term   judged    agree    late1    late2+   missing   beyond");
 per.forEach((b, i) => {
   console.log(`   ${i + 1}   ${String(b.judged).padStart(6)}   ${pct(b.agree, b.judged).padStart(6)}`
     + `   ${pct(b.late1, b.judged).padStart(6)}   ${pct(b.late2, b.judged).padStart(6)}`
-    + `   ${pct(b.missing, b.judged).padStart(6)}`);
+    + `   ${pct(b.missing, b.judged).padStart(6)}   ${pct(b.beyond, b.judged).padStart(6)}`);
 });
 const J = per.reduce((n, b) => n + b.judged, 0);
 const A = per.reduce((n, b) => n + b.agree, 0);
 const L2 = per.reduce((n, b) => n + b.late2, 0);
 console.log(`\n  all   ${String(J).padStart(6)}   ${pct(A, J).padStart(6)}`
   + `   ${" ".repeat(6)}   ${pct(L2, J).padStart(6)}`);
+
+console.log(`\n  the window as a SET — see the note at the counter`);
+console.log(`    CAPTURE  ${pct(win.capture, win.captureOf)}  `
+  + `(${win.capture}/${win.captureOf} published early courses are somewhere in our window)`);
+console.log(`    PURITY   ${pct(win.purity, win.purityOf)}  `
+  + `(${win.purity}/${win.purityOf} courses we put in the window were published there)`);
 
 worst.sort((a, b) => b.late2 - a.late2);
 if (worst.length) {
@@ -243,6 +314,7 @@ if (worst.length) {
 const outFile = val("--json", null);
 if (outFile) {
   writeFileSync(outFile, JSON.stringify(
-    { generated, refused, relaxed, movedTotal, unplacedTotal, per, worst }, null, 1));
+    { generated, refused, relaxed, movedTotal, unplacedTotal, per, worst, window: win, rows },
+    null, 1));
   console.log(`\nwrote ${outFile}`);
 }
