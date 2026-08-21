@@ -471,6 +471,7 @@
 /data/programs/2026-undergrad-social-sciences-humanities-history-ba-boston /data/majors/history-ba-boston 301
 /data/programs/2026-undergrad-social-sciences-humanities-history-bs-boston /data/majors/history-bs-boston 301
 /data/programs/2026-undergrad-social-sciences-humanities-history-culture-and-law-ba-boston /data/majors/history-culture-and-law-ba-boston 301
+/data/programs/2026-undergrad-social-sciences-humanities-history-minor /data/minors/history-minor 301
 /data/programs/2026-undergrad-social-sciences-humanities-human-services-and-communication-studies-ba-boston /data/majors/human-services-and-communication-studies-ba-boston 301
 /data/programs/2026-undergrad-social-sciences-humanities-human-services-and-criminal-justice-bs-boston /data/majors/human-services-and-criminal-justice-bs-boston 301
 /data/programs/2026-undergrad-social-sciences-humanities-human-services-and-international-affairs-ba-boston /data/majors/human-services-and-international-affairs-ba-boston 301
@@ -858,6 +859,10 @@
 /data/programs/2026-grad-mills-multiple-subject-education-ma-oakland /data/graduate/multiple-subject-education-ma-oakland 301
 /data/programs/2026-grad-mills-single-subject-education-ma-oakland /data/graduate/single-subject-education-ma-oakland 301
 /data/programs/2026-grad-phdprograms-experiential-phd-boston /data/graduate/experiential-phd-boston 301
+/data/programs/2026-grad-phdprograms-interdisciplinary-phd-boston /data/graduate/interdisciplinary-phd-boston 301
+/data/programs/2026-grad-phdprograms-interdisciplinary-phd-portland /data/graduate/interdisciplinary-phd-portland 301
+/data/programs/2026-grad-phdprograms-interdisciplinary-phdadvancedentry-boston /data/graduate/interdisciplinary-phdadvancedentry-boston 301
+/data/programs/2026-grad-phdprograms-interdisciplinary-phdadvancedentry-portland /data/graduate/interdisciplinary-phdadvancedentry-portland 301
 /data/programs/2026-grad-professional-studies-3d-animation-graduate-certificate-boston /data/graduate/3d-animation-graduate-certificate-boston 301
 /data/programs/2026-grad-professional-studies-agile-project-management-graduate-certificate-boston /data/graduate/agile-project-management-graduate-certificate-boston 301
 /data/programs/2026-grad-professional-studies-analytics-mps-arlington /data/graduate/analytics-mps-arlington 301
